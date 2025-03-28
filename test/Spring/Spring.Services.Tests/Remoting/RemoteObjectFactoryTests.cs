@@ -21,66 +21,64 @@
 #region Imports
 
 using System.Runtime.Remoting.Lifetime;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Remoting
+namespace Spring.Remoting;
+
+/// <summary>
+/// Unit tests for the RemoteObjectFactory class.
+/// </summary>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public class RemoteObjectFactoryTests
 {
-    /// <summary>
-    /// Unit tests for the RemoteObjectFactory class.
-    /// </summary>
-    /// <author>Bruno Baia</author>
-    [TestFixture]
-    public class RemoteObjectFactoryTests
+    [Test]
+    public void BailsWhenNotConfigured()
     {
-        [Test]
-        public void BailsWhenNotConfigured()
-        {
-            RemoteObjectFactory factory = new RemoteObjectFactory();
-            Assert.Throws<ArgumentException>(() => factory.AfterPropertiesSet(), "The Target property is required.");
-        }
+        RemoteObjectFactory factory = new RemoteObjectFactory();
+        Assert.Throws<ArgumentException>(() => factory.AfterPropertiesSet(), "The Target property is required.");
+    }
 
-        [Test]
-        public void CreateRemoteObject()
-        {
-            RemoteObjectFactory factory = new RemoteObjectFactory();
-            factory.Target = new SimpleCounter();
-            factory.AfterPropertiesSet();
+    [Test]
+    public void CreateRemoteObject()
+    {
+        RemoteObjectFactory factory = new RemoteObjectFactory();
+        factory.Target = new SimpleCounter();
+        factory.AfterPropertiesSet();
 
-            object obj = factory.GetObject();
+        object obj = factory.GetObject();
 
-            Assert.IsTrue((obj is MarshalByRefObject), "Object should derive from MarshalByRefObject.");
-        }
+        Assert.IsTrue((obj is MarshalByRefObject), "Object should derive from MarshalByRefObject.");
+    }
 
-        [Test]
-        public void ReturnsInterfaceImplementation()
-        {
-            RemoteObjectFactory factory = new RemoteObjectFactory();
-            factory.Target = new SimpleCounter();
-            factory.AfterPropertiesSet();
+    [Test]
+    public void ReturnsInterfaceImplementation()
+    {
+        RemoteObjectFactory factory = new RemoteObjectFactory();
+        factory.Target = new SimpleCounter();
+        factory.AfterPropertiesSet();
 
-            object obj = factory.GetObject();
+        object obj = factory.GetObject();
 
-            Assert.IsTrue((obj is ISimpleCounter), "Object should implement an interface.");
-        }
+        Assert.IsTrue((obj is ISimpleCounter), "Object should implement an interface.");
+    }
 
-        [Test]
-        public void CreateRemoteObjectWithLeaseInfo()
-        {
-            RemoteObjectFactory factory = new RemoteObjectFactory();
-            factory.Target = new SimpleCounter();
-            factory.Infinite = false;
-            factory.InitialLeaseTime = TimeSpan.FromMilliseconds(10000);
-            factory.RenewOnCallTime = TimeSpan.FromMilliseconds(1000);
-            factory.SponsorshipTimeout = TimeSpan.FromMilliseconds(100);
-            MarshalByRefObject remoteObject = (MarshalByRefObject) factory.GetObject();
+    [Test]
+    public void CreateRemoteObjectWithLeaseInfo()
+    {
+        RemoteObjectFactory factory = new RemoteObjectFactory();
+        factory.Target = new SimpleCounter();
+        factory.Infinite = false;
+        factory.InitialLeaseTime = TimeSpan.FromMilliseconds(10000);
+        factory.RenewOnCallTime = TimeSpan.FromMilliseconds(1000);
+        factory.SponsorshipTimeout = TimeSpan.FromMilliseconds(100);
+        MarshalByRefObject remoteObject = (MarshalByRefObject) factory.GetObject();
 
-            ILease lease = (ILease) remoteObject.InitializeLifetimeService();
-            Assert.AreEqual(TimeSpan.FromMilliseconds(10000), lease.InitialLeaseTime, "InitialLeaseTime");
-            Assert.AreEqual(TimeSpan.FromMilliseconds(1000), lease.RenewOnCallTime, "RenewOnCallTime");
-            Assert.AreEqual(TimeSpan.FromMilliseconds(100), lease.SponsorshipTimeout, "SponsorshipTimeout");
-        }
+        ILease lease = (ILease) remoteObject.InitializeLifetimeService();
+        Assert.AreEqual(TimeSpan.FromMilliseconds(10000), lease.InitialLeaseTime, "InitialLeaseTime");
+        Assert.AreEqual(TimeSpan.FromMilliseconds(1000), lease.RenewOnCallTime, "RenewOnCallTime");
+        Assert.AreEqual(TimeSpan.FromMilliseconds(100), lease.SponsorshipTimeout, "SponsorshipTimeout");
     }
 }

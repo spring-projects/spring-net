@@ -1,9 +1,6 @@
+namespace Spring.Data;
 
-
-namespace Spring.Data
+public interface IAccountCreditDao
 {
-    public interface IAccountCreditDao
-    {
-        void CreateCredit(float creditAmount);
-    }
+    void CreateCredit(float creditAmount);
 }

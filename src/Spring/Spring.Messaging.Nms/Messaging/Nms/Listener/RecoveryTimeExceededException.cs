@@ -25,49 +25,48 @@ using Apache.NMS;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Listener
+namespace Spring.Messaging.Nms.Listener;
+
+/// <summary>
+/// Exception thrown when the maximum connection recovery time has been exceeded.
+/// </summary>
+/// <author>Mark Pollack</author>
+[Serializable]
+public class RecoveryTimeExceededException : NMSException
 {
     /// <summary>
-    /// Exception thrown when the maximum connection recovery time has been exceeded.
+    /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    [Serializable]
-    public class RecoveryTimeExceededException : NMSException
+    public RecoveryTimeExceededException()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class.
-        /// </summary>
-        public RecoveryTimeExceededException()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class, with the specified message
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public RecoveryTimeExceededException(string message)
-            : base(message)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class, with the specified message
+    /// </summary>
+    /// <param name="message">The message.</param>
+    public RecoveryTimeExceededException(string message)
+        : base(message)
+    {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class, with the specified message
-        /// and root cause exception
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
-        public RecoveryTimeExceededException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class, with the specified message
+    /// and root cause exception
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="innerException">The inner exception.</param>
+    public RecoveryTimeExceededException(string message, Exception innerException)
+        : base(message, innerException)
+    {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class.
-        /// </summary>
-        /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
-        /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
-        protected RecoveryTimeExceededException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RecoveryTimeExceededException"/> class.
+    /// </summary>
+    /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+    /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+    protected RecoveryTimeExceededException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
     }
 }

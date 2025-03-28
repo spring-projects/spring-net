@@ -18,52 +18,51 @@
 
 #endregion
 
-namespace Spring.Caching
+namespace Spring.Caching;
+
+/// <summary>
+/// This attribute should be used to mark methods whose argument(s)
+/// need to be cached.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This attribute allows application developers to specify that an argument
+/// of the method should be cached, but it will not do any caching by itself.
+/// </p>
+/// <p>
+/// In order to actually cache the result, an application developer
+/// must apply a <c>Spring.Aspects.Cache.CacheParameterAdvice</c> to
+/// all of the members that have this attribute defined.
+/// </p>
+/// <p>
+/// You can specify this attribute multiple times on the same method in order to
+/// cache several method parameters.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true, Inherited = false)]
+[Serializable]
+public sealed class CacheParameterAttribute : BaseCacheAttribute
 {
     /// <summary>
-    /// This attribute should be used to mark methods whose argument(s)
-    /// need to be cached.
+    /// Creates an attribute instance.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// This attribute allows application developers to specify that an argument
-    /// of the method should be cached, but it will not do any caching by itself.
-    /// </p>
-    /// <p>
-    /// In order to actually cache the result, an application developer
-    /// must apply a <c>Spring.Aspects.Cache.CacheParameterAdvice</c> to
-    /// all of the members that have this attribute defined.
-    /// </p>
-    /// <p>
-    /// You can specify this attribute multiple times on the same method in order to
-    /// cache several method parameters.
-    /// </p>
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true, Inherited = false)]
-    [Serializable]
-    public sealed class CacheParameterAttribute : BaseCacheAttribute
+    public CacheParameterAttribute()
     {
-        /// <summary>
-        /// Creates an attribute instance.
-        /// </summary>
-        public CacheParameterAttribute()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Creates an attribute instance.
-        /// </summary>
-        /// <param name="cacheName">
-        /// The name of the cache to use.
-        /// </param>
-        /// <param name="key">
-        /// An expression string that should be evaluated in order to determine
-        /// the cache key for the item.
-        /// </param>
-        public CacheParameterAttribute(string cacheName, string key)
-            : base(cacheName, key)
-        {
-        }
+    /// <summary>
+    /// Creates an attribute instance.
+    /// </summary>
+    /// <param name="cacheName">
+    /// The name of the cache to use.
+    /// </param>
+    /// <param name="key">
+    /// An expression string that should be evaluated in order to determine
+    /// the cache key for the item.
+    /// </param>
+    public CacheParameterAttribute(string cacheName, string key)
+        : base(cacheName, key)
+    {
     }
 }

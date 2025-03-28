@@ -18,18 +18,17 @@
 
 #endregion
 
-namespace Spring.Messaging.Ems.Common
+namespace Spring.Messaging.Ems.Common;
+
+public interface IMessageConsumer
 {
-    public interface IMessageConsumer
-    {
-        MessageConsumer NativeMessageConsumer { get; }
-        event EMSMessageHandler MessageHandler;
-        IMessageListener MessageListener { get; set; }
-        string MessageSelector { get; }
-        void Close();
-        Message Receive();
-        Message Receive(long timeout);
-        Message ReceiveNoWait();
-        string ToString();
-    }
+    MessageConsumer NativeMessageConsumer { get; }
+    event EMSMessageHandler MessageHandler;
+    IMessageListener MessageListener { get; set; }
+    string MessageSelector { get; }
+    void Close();
+    Message Receive();
+    Message Receive(long timeout);
+    Message ReceiveNoWait();
+    string ToString();
 }

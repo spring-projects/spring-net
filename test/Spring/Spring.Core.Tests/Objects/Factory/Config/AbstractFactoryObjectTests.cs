@@ -19,71 +19,69 @@
 #endregion
 
 using FakeItEasy;
-
 using NUnit.Framework;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the basic functionality of the AbstractFactoryObject class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class AbstractFactoryObjectTests
 {
-	/// <summary>
-	/// Unit tests for the basic functionality of the AbstractFactoryObject class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class AbstractFactoryObjectTests
+    [SetUp]
+    public void Setup()
     {
-        [SetUp]
-        public void Setup()
+    }
+
+    [Test]
+    public void DisposeCallbackIsNotInvokedOnDisposeIfInPrototypeMode()
+    {
+        IDisposable disposable = A.Fake<IDisposable>();
+        DummyFactoryObject factory = new DummyFactoryObject(disposable);
+
+        factory.IsSingleton = false;
+        factory.GetObject();
+        factory.Dispose();
+
+        // in prototype mode, so the Dispose() method of the object must not be called...
+        A.CallTo(() => disposable.Dispose()).MustNotHaveHappened();
+    }
+
+    [Test]
+    public void DisposeCallbackIsInvokedOnDispose()
+    {
+        IDisposable disposable = A.Fake<IDisposable>();
+
+        DummyFactoryObject factory = new DummyFactoryObject(disposable);
+        factory.AfterPropertiesSet();
+        factory.Dispose();
+
+        A.CallTo(() => disposable.Dispose()).MustHaveHappenedOnceExactly();
+    }
+
+    private sealed class DummyFactoryObject : AbstractFactoryObject
+    {
+        public object theObject;
+
+        public DummyFactoryObject() : this(new object())
         {
         }
 
-        [Test]
-        public void DisposeCallbackIsNotInvokedOnDisposeIfInPrototypeMode()
+        public DummyFactoryObject(object theObject)
         {
-            IDisposable disposable = A.Fake<IDisposable>();
-            DummyFactoryObject factory = new DummyFactoryObject(disposable);
-
-            factory.IsSingleton = false;
-            factory.GetObject();
-            factory.Dispose();
-
-			// in prototype mode, so the Dispose() method of the object must not be called...
-            A.CallTo(() => disposable.Dispose()).MustNotHaveHappened();
+            this.theObject = theObject;
         }
 
-        [Test]
-        public void DisposeCallbackIsInvokedOnDispose()
+        public override Type ObjectType
         {
-            IDisposable disposable = A.Fake<IDisposable>();
-
-            DummyFactoryObject factory = new DummyFactoryObject(disposable);
-            factory.AfterPropertiesSet();
-            factory.Dispose();
-
-            A.CallTo(() => disposable.Dispose()).MustHaveHappenedOnceExactly();
+            get { return typeof(object); }
         }
 
-        private sealed class DummyFactoryObject : AbstractFactoryObject
+        protected override object CreateInstance()
         {
-            public object theObject;
-
-            public DummyFactoryObject() : this (new object())
-            {
-            }
-
-            public DummyFactoryObject(object theObject)
-            {
-                this.theObject = theObject;
-            }
-
-            public override Type ObjectType
-            {
-                get { return typeof(object); }
-            }
-
-            protected override object CreateInstance()
-            {
-                return theObject;
-            }
+            return theObject;
         }
-	}
+    }
 }

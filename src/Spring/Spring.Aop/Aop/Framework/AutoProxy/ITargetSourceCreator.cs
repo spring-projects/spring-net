@@ -24,28 +24,27 @@ using Spring.Objects.Factory;
 
 #endregion
 
-namespace Spring.Aop.Framework.AutoProxy
+namespace Spring.Aop.Framework.AutoProxy;
+
+/// <summary>
+/// Implementations can create special target sources, such as pooling target
+/// sources, for particular objects. For example, they may base their choice
+/// on attributes, such as a pooling attribute, on the target type.
+/// </summary>
+/// <remarks><p>AbstractAutoProxyCreator can support a number of TargetSourceCreators,
+/// which will be applied in order.</p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Adhari C Mahendra (.NET)</author>
+public interface ITargetSourceCreator
 {
     /// <summary>
-    /// Implementations can create special target sources, such as pooling target
-    /// sources, for particular objects. For example, they may base their choice
-    /// on attributes, such as a pooling attribute, on the target type.
+    /// Create a special TargetSource for the given object, if any.
     /// </summary>
-    /// <remarks><p>AbstractAutoProxyCreator can support a number of TargetSourceCreators,
-    /// which will be applied in order.</p>
-    /// </remarks>
-    /// <author>Rod Johnson</author>
-    /// <author>Adhari C Mahendra (.NET)</author>
-    public interface ITargetSourceCreator
-    {
-        /// <summary>
-        /// Create a special TargetSource for the given object, if any.
-        /// </summary>
-        /// <param name="objectType">The type of the object to create a TargetSource for</param>
-        /// <param name="objectName">the name of the object</param>
-        /// <param name="factory">the containing factory</param>
-        /// <returns>a special TargetSource or null if this TargetSourceCreator isn't
-        ///  interested in the particular object</returns>
-        ITargetSource GetTargetSource(Type objectType, string objectName, IObjectFactory factory);
-    }
+    /// <param name="objectType">The type of the object to create a TargetSource for</param>
+    /// <param name="objectName">the name of the object</param>
+    /// <param name="factory">the containing factory</param>
+    /// <returns>a special TargetSource or null if this TargetSourceCreator isn't
+    ///  interested in the particular object</returns>
+    ITargetSource GetTargetSource(Type objectType, string objectName, IObjectFactory factory);
 }

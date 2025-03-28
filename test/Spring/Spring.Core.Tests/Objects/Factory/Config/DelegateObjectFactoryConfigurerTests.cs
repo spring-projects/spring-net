@@ -22,49 +22,48 @@ using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class DelegateObjectFactoryConfigurerIntegrationTests
 {
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class DelegateObjectFactoryConfigurerIntegrationTests
+    private class MockObjectFactoryPostProcessor : IObjectFactoryPostProcessor
     {
-        private class MockObjectFactoryPostProcessor : IObjectFactoryPostProcessor
+        public bool Called;
+
+        public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
         {
-            public bool Called;
-
-            public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
-            {
-                Called = true;
-            }
+            Called = true;
         }
+    }
 
-        [Test]
-        public void ExecutesBeforeObjectFactoryPostProcessing()
-        {
-            MockObjectFactoryPostProcessor mofp = new MockObjectFactoryPostProcessor();
+    [Test]
+    public void ExecutesBeforeObjectFactoryPostProcessing()
+    {
+        MockObjectFactoryPostProcessor mofp = new MockObjectFactoryPostProcessor();
 
-            IConfigurableApplicationContext ctx = new XmlApplicationContext(false, "name", false, null);
-            ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(of => of.RegisterSingleton("mofp", mofp)));
+        IConfigurableApplicationContext ctx = new XmlApplicationContext(false, "name", false, null);
+        ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(of => of.RegisterSingleton("mofp", mofp)));
 
-            ctx.Refresh();
-            Assert.IsTrue(mofp.Called);
-        }
+        ctx.Refresh();
+        Assert.IsTrue(mofp.Called);
+    }
 
-        [Test]
-        public void CanBeUsedToReconfigureAnApplicationContextOnRefresh()
-        {
-            MockObjectFactoryPostProcessor mofp = new MockObjectFactoryPostProcessor();
+    [Test]
+    public void CanBeUsedToReconfigureAnApplicationContextOnRefresh()
+    {
+        MockObjectFactoryPostProcessor mofp = new MockObjectFactoryPostProcessor();
 
-            IConfigurableApplicationContext ctx = new XmlApplicationContext(false, "name", false, null);
-            ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(of => of.RegisterSingleton("mofp", mofp)));
+        IConfigurableApplicationContext ctx = new XmlApplicationContext(false, "name", false, null);
+        ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(of => of.RegisterSingleton("mofp", mofp)));
 
-            ctx.Refresh();
+        ctx.Refresh();
 
-            mofp.Called = false;
-            ctx.Refresh();
-            Assert.IsTrue(mofp.Called);
-        }
+        mofp.Called = false;
+        ctx.Refresh();
+        Assert.IsTrue(mofp.Called);
     }
 }

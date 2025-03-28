@@ -25,84 +25,83 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Support
+namespace Spring.Objects.Support;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class AbstractSharedStateFactoryTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class AbstractSharedStateFactoryTests
+    private class TestSharedStateFactory : AbstractSharedStateFactory
     {
-        private class TestSharedStateFactory : AbstractSharedStateFactory
+        public static readonly object SPECIAL_OBJECT = new object();
+
+        protected override object GetKey(object instance, string name)
         {
-            public static readonly object SPECIAL_OBJECT = new object();
-
-            protected override object GetKey(object instance, string name)
-            {
-                if (instance == SPECIAL_OBJECT) return null;
-                return name+"|"+instance.GetHashCode();
-            }
+            if (instance == SPECIAL_OBJECT) return null;
+            return name + "|" + instance.GetHashCode();
         }
+    }
 
-        [Test]
-        public void DefaultsToCaseInsensitiveState()
-        {
-            TestSharedStateFactory p = new TestSharedStateFactory();
-            Assert.IsFalse(p.CaseSensitiveState);
-            IDictionary state = p.GetSharedStateFor(new object(), "no name" );
-            state["foo"] = this;
-            Assert.AreSame(this, state["FOO"]);
-        }
+    [Test]
+    public void DefaultsToCaseInsensitiveState()
+    {
+        TestSharedStateFactory p = new TestSharedStateFactory();
+        Assert.IsFalse(p.CaseSensitiveState);
+        IDictionary state = p.GetSharedStateFor(new object(), "no name");
+        state["foo"] = this;
+        Assert.AreSame(this, state["FOO"]);
+    }
 
-        [Test]
-        public void StateDictionaryBehavesAccordingToCaseSensitiveState()
-        {
-            TestSharedStateFactory p = new TestSharedStateFactory();
+    [Test]
+    public void StateDictionaryBehavesAccordingToCaseSensitiveState()
+    {
+        TestSharedStateFactory p = new TestSharedStateFactory();
 
-            // create case-insensitive dict
-            Assert.IsFalse(p.CaseSensitiveState);
-            IDictionary state = p.GetSharedStateFor(new object(), "no name" );
-            state["foo"] = this;
-            Assert.AreSame(this, state["FOO"]);
+        // create case-insensitive dict
+        Assert.IsFalse(p.CaseSensitiveState);
+        IDictionary state = p.GetSharedStateFor(new object(), "no name");
+        state["foo"] = this;
+        Assert.AreSame(this, state["FOO"]);
 
-            // create case-sensitive dict
-            p.CaseSensitiveState = true;
-            state = p.GetSharedStateFor(new object(), "no name" );
-            state["foo"] = this;
-            Assert.IsFalse(state.Contains("FOO"));
-        }
+        // create case-sensitive dict
+        p.CaseSensitiveState = true;
+        state = p.GetSharedStateFor(new object(), "no name");
+        state["foo"] = this;
+        Assert.IsFalse(state.Contains("FOO"));
+    }
 
-        [Test]
-        public void ThrowsOnNullInstance()
-        {
-            TestSharedStateFactory p = new TestSharedStateFactory();
-            // allow "null" for name
-            IDictionary state = p.GetSharedStateFor(new object(), null);
-            Assert.IsNotNull(state);
-            // throws on null for instance
-            Assert.Throws<ArgumentNullException>(() => p.GetSharedStateFor(null, "no name"));
-        }
+    [Test]
+    public void ThrowsOnNullInstance()
+    {
+        TestSharedStateFactory p = new TestSharedStateFactory();
+        // allow "null" for name
+        IDictionary state = p.GetSharedStateFor(new object(), null);
+        Assert.IsNotNull(state);
+        // throws on null for instance
+        Assert.Throws<ArgumentNullException>(() => p.GetSharedStateFor(null, "no name"));
+    }
 
-        [Test]
-        public void SharedStateCacheIsCaseSensitive()
-        {
-            TestSharedStateFactory p = new TestSharedStateFactory();
-            // allow "null" for name
-            IDictionary state = p.GetSharedStateFor(this, "foo");
-            IDictionary state2 = p.GetSharedStateFor(this, "FOO");
-            Assert.IsNotNull(state);
-            Assert.IsNotNull(state2);
-            Assert.AreNotSame(state, state2);
-        }
+    [Test]
+    public void SharedStateCacheIsCaseSensitive()
+    {
+        TestSharedStateFactory p = new TestSharedStateFactory();
+        // allow "null" for name
+        IDictionary state = p.GetSharedStateFor(this, "foo");
+        IDictionary state2 = p.GetSharedStateFor(this, "FOO");
+        Assert.IsNotNull(state);
+        Assert.IsNotNull(state2);
+        Assert.AreNotSame(state, state2);
+    }
 
-        [Test]
-        public void ReturnsNullStateIfKeyIsNull()
-        {
-            TestSharedStateFactory p = new TestSharedStateFactory();            
-            // force provider to produce a null key
-            IDictionary state = p.GetSharedStateFor(TestSharedStateFactory.SPECIAL_OBJECT, null);            
-            Assert.IsNull(state);     
-        }
+    [Test]
+    public void ReturnsNullStateIfKeyIsNull()
+    {
+        TestSharedStateFactory p = new TestSharedStateFactory();
+        // force provider to produce a null key
+        IDictionary state = p.GetSharedStateFor(TestSharedStateFactory.SPECIAL_OBJECT, null);
+        Assert.IsNull(state);
     }
 }

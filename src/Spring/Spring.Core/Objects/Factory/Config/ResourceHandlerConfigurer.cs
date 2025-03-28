@@ -21,76 +21,74 @@
 using System.Collections;
 using Spring.Core.IO;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// <see cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
+/// implementation that allows for convenient registration of custom
+/// IResource implementations.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Because the <see cref="ResourceHandlerConfigurer"/>
+/// class implements the
+/// <see cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
+/// interface, instances of this class that have been exposed in the
+/// scope of an
+/// <see cref="Spring.Context.IApplicationContext"/> will
+/// <i>automatically</i> be picked up by the application context and made
+/// available to the IoC container whenever resolution of IResources is required.
+/// </p>
+/// </remarks>
+/// <author>Mark Pollack</author>
+/// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
+/// <seealso cref="Spring.Context.IApplicationContext"/>
+[Serializable]
+public class ResourceHandlerConfigurer : AbstractConfigurer
 {
+    private IDictionary resourceHandlers;
+
     /// <summary>
-    /// <see cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
-    /// implementation that allows for convenient registration of custom
-    /// IResource implementations.
+    /// The IResource implementations, i.e. resource handlers, to register.
     /// </summary>
     /// <remarks>
     /// <p>
-    /// Because the <see cref="ResourceHandlerConfigurer"/>
-    /// class implements the
-    /// <see cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
-    /// interface, instances of this class that have been exposed in the
-    /// scope of an
-    /// <see cref="Spring.Context.IApplicationContext"/> will
-    /// <i>automatically</i> be picked up by the application context and made
-    /// available to the IoC container whenever resolution of IResources is required.
+    /// The <see cref="System.Collections.IDictionary"/> has the
+    /// contains the resource protocol name as the key and type as the value.
+    /// The key name can either be a string or an object, in which case
+    /// ToString() will be used to obtain the string name.
+    /// The value can be the fully qualified name of the IResource
+    /// implementation, a string, or
+    /// an actual <see cref="System.Type"/> of the IResource class
+    ///
     /// </p>
     /// </remarks>
-    /// <author>Mark Pollack</author>
-    /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
-    /// <seealso cref="Spring.Context.IApplicationContext"/>
-    [Serializable]
-    public class ResourceHandlerConfigurer : AbstractConfigurer
+    public IDictionary ResourceHandlers
     {
-        private IDictionary resourceHandlers;
+        set { resourceHandlers = value; }
+    }
 
-        /// <summary>
-        /// The IResource implementations, i.e. resource handlers, to register.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// The <see cref="System.Collections.IDictionary"/> has the
-        /// contains the resource protocol name as the key and type as the value.
-        /// The key name can either be a string or an object, in which case
-        /// ToString() will be used to obtain the string name.
-        /// The value can be the fully qualified name of the IResource
-        /// implementation, a string, or
-        /// an actual <see cref="System.Type"/> of the IResource class
-        ///
-        /// </p>
-        /// </remarks>
-        public IDictionary ResourceHandlers
+    /// <summary>
+    /// Registers custom IResource implementations.  The supplied
+    /// <paramref name="factory"/> is not used since IResourse implementations
+    /// are registered with a global <see cref="Spring.Core.IO.ResourceHandlerRegistry"/>
+    /// </summary>
+    /// <param name="factory">
+    /// The object factory.
+    /// </param>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// In case of errors.
+    /// </exception>
+    public override void PostProcessObjectFactory(
+        IConfigurableListableObjectFactory factory)
+    {
+        if (resourceHandlers != null)
         {
-            set { resourceHandlers = value; }
-        }
-
-        /// <summary>
-        /// Registers custom IResource implementations.  The supplied
-        /// <paramref name="factory"/> is not used since IResourse implementations
-        /// are registered with a global <see cref="Spring.Core.IO.ResourceHandlerRegistry"/>
-        /// </summary>
-        /// <param name="factory">
-        /// The object factory.
-        /// </param>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// In case of errors.
-        /// </exception>
-        public override void PostProcessObjectFactory(
-            IConfigurableListableObjectFactory factory)
-        {
-            if (resourceHandlers != null)
+            foreach (DictionaryEntry entry in resourceHandlers)
             {
-                foreach (DictionaryEntry entry in resourceHandlers)
-                {
-                    string protocolName = entry.Key.ToString();
-                    Type type = ResolveRequiredType(entry.Value, "value", "custom IResource implementation");
-                    ResourceHandlerRegistry.RegisterResourceHandler(protocolName, type);
-
-                }
+                string protocolName = entry.Key.ToString();
+                Type type = ResolveRequiredType(entry.Value, "value", "custom IResource implementation");
+                ResourceHandlerRegistry.RegisterResourceHandler(protocolName, type);
             }
         }
     }

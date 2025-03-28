@@ -24,198 +24,198 @@ using Spring.Objects.Factory.Config;
 
 #endregion
 
-namespace Spring.Objects.Factory
+namespace Spring.Objects.Factory;
+
+/// <summary>
+/// Simple factory to allow testing of IFactoryObject support in AbstractObjectFactory.
+/// Depending on whether its singleton property is set, it will return a singleton
+/// or a prototype instance.
+/// Implements the IInitializingObject interface, so we can check that factories get
+/// this lifecycle callback if they want.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans (.NET)</author>
+public class DummyFactory :
+    IFactoryObject,
+    IObjectFactoryAware,
+    IObjectNameAware,
+    IInitializingObject,
+    IDisposable
 {
-	/// <summary>
-	/// Simple factory to allow testing of IFactoryObject support in AbstractObjectFactory.
-	/// Depending on whether its singleton property is set, it will return a singleton
-	/// or a prototype instance.
-	/// Implements the IInitializingObject interface, so we can check that factories get
-	/// this lifecycle callback if they want.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Rick Evans (.NET)</author>
-	public class DummyFactory :
-		IFactoryObject,
-		IObjectFactoryAware,
-		IObjectNameAware,
-		IInitializingObject,
-		IDisposable
-	{
-		#region Constants
+    #region Constants
 
-		public const string SINGLETON_NAME = "Factory singleton";
+    public const string SINGLETON_NAME = "Factory singleton";
 
-		#endregion
+    #endregion
 
-		#region Constructor (s) / Destructor
+    #region Constructor (s) / Destructor
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Objects.Factory.DummyFactory"/> class.
-		/// </summary>
-		public DummyFactory()
-		{
-			testObject = new TestObject();
-			testObject.Name = SINGLETON_NAME;
-			testObject.Age = 25;
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Factory.DummyFactory"/> class.
+    /// </summary>
+    public DummyFactory()
+    {
+        testObject = new TestObject();
+        testObject.Name = SINGLETON_NAME;
+        testObject.Age = 25;
+    }
 
-		#endregion
+    #endregion
 
-		#region Properties
+    #region Properties
 
-		/// <summary>
-		/// Was this initialized by invocation of the
-		/// AfterPropertiesSet() method from the IInitializingObject interface?
-		/// </summary>
-		public virtual bool WasInitialized
-		{
-			get { return initialized; }
-		}
+    /// <summary>
+    /// Was this initialized by invocation of the
+    /// AfterPropertiesSet() method from the IInitializingObject interface?
+    /// </summary>
+    public virtual bool WasInitialized
+    {
+        get { return initialized; }
+    }
 
-		public static bool WasPrototypeCreated
-		{
-			get { return prototypeCreated; }
-		}
+    public static bool WasPrototypeCreated
+    {
+        get { return prototypeCreated; }
+    }
 
-		public virtual bool PostProcessed
-		{
-			get { return postProcessed; }
+    public virtual bool PostProcessed
+    {
+        get { return postProcessed; }
 
-			set { postProcessed = value; }
-		}
+        set { postProcessed = value; }
+    }
 
-		public virtual ITestObject OtherTestObject
-		{
-			get { return otherTestObject; }
+    public virtual ITestObject OtherTestObject
+    {
+        get { return otherTestObject; }
 
-			set { otherTestObject = value; }
-		}
+        set { otherTestObject = value; }
+    }
 
-		#endregion
+    #endregion
 
-		#region Methods
+    #region Methods
 
-		/// <summary>
-		/// Clear static state.
-		/// </summary>
-		public static void Reset()
-		{
-			prototypeCreated = false;
-		}
+    /// <summary>
+    /// Clear static state.
+    /// </summary>
+    public static void Reset()
+    {
+        prototypeCreated = false;
+    }
 
-		#endregion
+    #endregion
 
-		#region Fields
+    #region Fields
 
-		/// <summary> Default is for factories to return a singleton instance.</summary>
-		private bool singleton = true;
+    /// <summary> Default is for factories to return a singleton instance.</summary>
+    private bool singleton = true;
 
-		private String objectName;
-		private IAutowireCapableObjectFactory objectFactory;
-		private bool postProcessed;
-		private bool initialized;
-		private static bool prototypeCreated;
-		private TestObject testObject;
-		private ITestObject otherTestObject;
+    private String objectName;
+    private IAutowireCapableObjectFactory objectFactory;
+    private bool postProcessed;
+    private bool initialized;
+    private static bool prototypeCreated;
+    private TestObject testObject;
+    private ITestObject otherTestObject;
 
-		#endregion
+    #endregion
 
-		#region IFactoryObject Members
+    #region IFactoryObject Members
 
-		public Type ObjectType
-		{
-			get
-			{
+    public Type ObjectType
+    {
+        get
+        {
 //				if (!initialized)
 //				{
 //					throw new InvalidOperationException("'ObjectType' must not be called before AfterPropertiesSet()");
 //				}
-				return testObject.GetType();
-			}
-		}
+            return testObject.GetType();
+        }
+    }
 
-		public object GetObject()
-		{
+    public object GetObject()
+    {
 //			if (!initialized)
 //			{
 //				throw new InvalidOperationException("GetObject() must not be called before AfterPropertiesSet()");
 //			}
 
-			if (IsSingleton)
-			{
-				return testObject;
-			}
-			else
-			{
-				TestObject prototype = new TestObject("Prototype created at " + DateTime.Now.Millisecond, 11);
-				if (objectFactory != null)
-				{
-					objectFactory.ApplyObjectPostProcessorsBeforeInitialization(prototype, objectName);
-				}
-				prototypeCreated = true;
-				return prototype;
-			}
-		}
+        if (IsSingleton)
+        {
+            return testObject;
+        }
+        else
+        {
+            TestObject prototype = new TestObject("Prototype created at " + DateTime.Now.Millisecond, 11);
+            if (objectFactory != null)
+            {
+                objectFactory.ApplyObjectPostProcessorsBeforeInitialization(prototype, objectName);
+            }
 
-		public bool IsSingleton
-		{
-			get { return singleton; }
-			set { singleton = value; }
-		}
+            prototypeCreated = true;
+            return prototype;
+        }
+    }
 
-		#endregion
+    public bool IsSingleton
+    {
+        get { return singleton; }
+        set { singleton = value; }
+    }
 
-		#region IObjectFactoryAware Members
+    #endregion
 
-		public IObjectFactory ObjectFactory
-		{
-			get { return objectFactory; }
-			set
-			{
-				objectFactory = (IAutowireCapableObjectFactory) value;
-				objectFactory.ApplyObjectPostProcessorsBeforeInitialization(testObject, objectName);
-			}
-		}
+    #region IObjectFactoryAware Members
 
-		#endregion
+    public IObjectFactory ObjectFactory
+    {
+        get { return objectFactory; }
+        set
+        {
+            objectFactory = (IAutowireCapableObjectFactory) value;
+            objectFactory.ApplyObjectPostProcessorsBeforeInitialization(testObject, objectName);
+        }
+    }
 
-		#region IObjectNameAware Members
+    #endregion
 
-		public string ObjectName
-		{
-			get { return objectName; }
-			set { objectName = value; }
-		}
+    #region IObjectNameAware Members
 
-		#endregion
+    public string ObjectName
+    {
+        get { return objectName; }
+        set { objectName = value; }
+    }
 
-		#region IInitializingObject Members
+    #endregion
 
-		public void AfterPropertiesSet()
-		{
-			if (initialized)
-			{
-				throw new SystemException(
-					"Cannot call AfterPropertiesSet twice on the one object.");
-			}
+    #region IInitializingObject Members
 
-			initialized = true;
-		}
+    public void AfterPropertiesSet()
+    {
+        if (initialized)
+        {
+            throw new SystemException(
+                "Cannot call AfterPropertiesSet twice on the one object.");
+        }
 
-		#endregion
+        initialized = true;
+    }
 
-		#region IDisposable Members
+    #endregion
 
-		public void Dispose()
-		{
-			if (testObject != null)
-			{
-				testObject.Name = null;
-			}
-		}
+    #region IDisposable Members
 
-		#endregion
-	}
+    public void Dispose()
+    {
+        if (testObject != null)
+        {
+            testObject.Name = null;
+        }
+    }
+
+    #endregion
 }

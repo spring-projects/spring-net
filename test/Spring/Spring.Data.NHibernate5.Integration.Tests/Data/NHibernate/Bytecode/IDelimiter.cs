@@ -5,7 +5,7 @@ namespace Spring.Data.NHibernate.Bytecode
         string Delimit(string source);
     }
 
-    public class ParenDelimiter: IDelimiter
+    public class ParenDelimiter : IDelimiter
     {
         public string Delimit(string source)
         {
@@ -13,7 +13,7 @@ namespace Spring.Data.NHibernate.Bytecode
         }
     }
 
-    public class NoOpDelimiter: IDelimiter
+    public class NoOpDelimiter : IDelimiter
     {
         public string Delimit(string source)
         {

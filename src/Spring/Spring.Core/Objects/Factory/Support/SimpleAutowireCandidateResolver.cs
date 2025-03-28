@@ -20,42 +20,40 @@
 
 using Spring.Objects.Factory.Config;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// A <see cref="IAutowireCandidateResolver"/> implementation to use that checks
+/// the object definitions only (no attributes)
+/// </summary>
+/// <author>Mark Fisher</author>
+/// <author>Mark Pollack (.NET)</author>
+[Serializable]
+public class SimpleAutowireCandidateResolver : IAutowireCandidateResolver
 {
     /// <summary>
-    /// A <see cref="IAutowireCandidateResolver"/> implementation to use that checks
-    /// the object definitions only (no attributes)
+    /// Determines whether the given object definition qualifies as an
+    /// autowire candidate for the given dependency.
     /// </summary>
-    /// <author>Mark Fisher</author>
-    /// <author>Mark Pollack (.NET)</author>
-    [Serializable]
-    public class SimpleAutowireCandidateResolver : IAutowireCandidateResolver
+    /// <param name="odHolder">The object definition including object name and aliases.</param>
+    /// <param name="descriptor">The descriptor for the target method parameter or field.</param>
+    /// <returns>
+    /// 	<c>true</c> if the object definition qualifies as autowire candidate; otherwise, <c>false</c>.
+    /// </returns>
+    public bool IsAutowireCandidate(ObjectDefinitionHolder odHolder, DependencyDescriptor descriptor)
     {
-        /// <summary>
-        /// Determines whether the given object definition qualifies as an
-        /// autowire candidate for the given dependency.
-        /// </summary>
-        /// <param name="odHolder">The object definition including object name and aliases.</param>
-        /// <param name="descriptor">The descriptor for the target method parameter or field.</param>
-        /// <returns>
-        /// 	<c>true</c> if the object definition qualifies as autowire candidate; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsAutowireCandidate(ObjectDefinitionHolder odHolder, DependencyDescriptor descriptor)
-        {
-            return odHolder.ObjectDefinition.IsAutowireCandidate;
-        }
+        return odHolder.ObjectDefinition.IsAutowireCandidate;
+    }
 
-
-        /// <summary>
-        /// Determine whether a default value is suggested for the given dependency.
-        /// </summary>
-        /// <param name="descriptor">The descriptor for the target method parameter or field</param>
-        /// <returns>The value suggested (typically an expression String),
-        /// or <c>null</c> if none found
-        /// </returns>
-        public object GetSuggestedValue(DependencyDescriptor descriptor)
-        {
-            return null;
-        }
+    /// <summary>
+    /// Determine whether a default value is suggested for the given dependency.
+    /// </summary>
+    /// <param name="descriptor">The descriptor for the target method parameter or field</param>
+    /// <returns>The value suggested (typically an expression String),
+    /// or <c>null</c> if none found
+    /// </returns>
+    public object GetSuggestedValue(DependencyDescriptor descriptor)
+    {
+        return null;
     }
 }

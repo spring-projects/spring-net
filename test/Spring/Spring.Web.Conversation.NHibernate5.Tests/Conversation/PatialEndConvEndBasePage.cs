@@ -20,32 +20,32 @@
 
 using Spring.Web.UI;
 
-namespace Spring.Web.Conversation
-{
-    /// <summary>
-    /// Base class for test pages for test 
-    /// <see cref="WebConversationStateTest.PatialEndConvTest()"/>.
-    /// </summary>
-    public abstract class PatialEndConvEndBasePage: Page
-    {
-        private IConversationState conversation;
-        /// <summary>
-        /// <see cref="IConversationState"/>
-        /// </summary>
-        public IConversationState Conversation
-        {
-            get { return conversation; }
-            set { conversation = value; }
-        }
+namespace Spring.Web.Conversation;
 
-        /// <summary>
-        /// Common End. 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public virtual void Page_Load(object sender, EventArgs e)
-        {
-            this.Conversation.EndConversation();
-        }
+/// <summary>
+/// Base class for test pages for test
+/// <see cref="WebConversationStateTest.PatialEndConvTest()"/>.
+/// </summary>
+public abstract class PatialEndConvEndBasePage : Page
+{
+    private IConversationState conversation;
+
+    /// <summary>
+    /// <see cref="IConversationState"/>
+    /// </summary>
+    public IConversationState Conversation
+    {
+        get { return conversation; }
+        set { conversation = value; }
+    }
+
+    /// <summary>
+    /// Common End.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    public virtual void Page_Load(object sender, EventArgs e)
+    {
+        this.Conversation.EndConversation();
     }
 }

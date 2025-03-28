@@ -2,8 +2,8 @@
 
   <PropertyGroup>
 
-	<CleanedProjectName>$(MSBuildProjectName.Replace('.2010', ''))</CleanedProjectName>
-  
+    <CleanedProjectName>$(MSBuildProjectName.Replace('.2010', ''))</CleanedProjectName>
+
     <AssemblyName>$(CleanedProjectName)</AssemblyName>
     <PackageId>$(CleanedProjectName)</PackageId>
     <RootNamespace>Spring</RootNamespace>

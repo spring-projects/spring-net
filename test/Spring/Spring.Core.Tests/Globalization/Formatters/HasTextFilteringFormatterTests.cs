@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,38 +24,37 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Globalization.Formatters
+namespace Spring.Globalization.Formatters;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class HasTextFilteringFormatterTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class HasTextFilteringFormatterTests
+    [Test]
+    public void ReplacesNullAndWhitespacesByDefaultValue()
     {
-        [Test]
-        public void ReplacesNullAndWhitespacesByDefaultValue()
-        {
-            string defaultValue = "theDefaultValue";
-            HasTextFilteringFormatter fmt = new HasTextFilteringFormatter(defaultValue, null);
+        string defaultValue = "theDefaultValue";
+        HasTextFilteringFormatter fmt = new HasTextFilteringFormatter(defaultValue, null);
 
-            Assert.AreEqual( defaultValue, fmt.Parse(null));
-            Assert.AreEqual(defaultValue, fmt.Parse(string.Empty));
-            Assert.AreEqual( defaultValue, fmt.Parse("\t \n\r"));
-            Assert.AreEqual(" text \n", fmt.Parse(" text \n"));
-        }
+        Assert.AreEqual(defaultValue, fmt.Parse(null));
+        Assert.AreEqual(defaultValue, fmt.Parse(string.Empty));
+        Assert.AreEqual(defaultValue, fmt.Parse("\t \n\r"));
+        Assert.AreEqual(" text \n", fmt.Parse(" text \n"));
+    }
 
-        [Test]
-        public void DoesntAffectFormat()
-        {
-            string defaultValue = "theDefaultValue";
-            HasTextFilteringFormatter fmt = new HasTextFilteringFormatter(defaultValue, null);
+    [Test]
+    public void DoesntAffectFormat()
+    {
+        string defaultValue = "theDefaultValue";
+        HasTextFilteringFormatter fmt = new HasTextFilteringFormatter(defaultValue, null);
 
-            Assert.AreEqual(null, fmt.Format(null));
-            Assert.AreEqual(string.Empty, fmt.Format(string.Empty));
-            Assert.AreEqual("\t \n\r", fmt.Format("\t \n\r"));
-            object o = new object();
-            Assert.AreEqual(o.ToString(), fmt.Format(o));            
-        }
+        Assert.AreEqual(null, fmt.Format(null));
+        Assert.AreEqual(string.Empty, fmt.Format(string.Empty));
+        Assert.AreEqual("\t \n\r", fmt.Format("\t \n\r"));
+        object o = new object();
+        Assert.AreEqual(o.ToString(), fmt.Format(o));
     }
 }

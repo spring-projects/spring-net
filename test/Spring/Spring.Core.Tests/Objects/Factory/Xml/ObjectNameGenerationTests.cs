@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,59 +25,55 @@ using Spring.Objects.Factory.Support;
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// This class contains tests for the object naming algorithm used when an object name is not specified.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class ObjectNameGenerationTests
 {
-    /// <summary>
-    /// This class contains tests for the object naming algorithm used when an object name is not specified.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class ObjectNameGenerationTests
+    private DefaultListableObjectFactory objectFactory;
+
+    [SetUp]
+    public void Setup()
     {
+        objectFactory = new DefaultListableObjectFactory();
+        XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(objectFactory);
+        reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("objectNameGeneration.xml", GetType()));
+    }
 
-        private DefaultListableObjectFactory objectFactory;
+    [Test]
+    public void AssignObjectNames()
+    {
+        string className = typeof(DependenciesObject).FullName;
 
-        [SetUp]
-        public void Setup()
-        {
-            objectFactory = new DefaultListableObjectFactory();
-            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(objectFactory);
-            reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("objectNameGeneration.xml", GetType()));
-        }
+        string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
+        DependenciesObject topLevel1 = (DependenciesObject) objectFactory.GetObject(targetName);
+        Assert.IsNotNull(topLevel1);
 
-        [Test]
-        public void AssignObjectNames()
-        {
-            string className = typeof (DependenciesObject).FullName;
+        targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "1";
+        DependenciesObject topLevel2 = (DependenciesObject) objectFactory.GetObject(targetName);
+        Assert.IsNotNull(topLevel1);
 
-            string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
-            DependenciesObject topLevel1 = (DependenciesObject) objectFactory.GetObject(targetName);
-            Assert.IsNotNull(topLevel1);
+        targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "2";
+        DependenciesObject topLevel3 = (DependenciesObject) objectFactory.GetObject(targetName);
+        Assert.IsNotNull(topLevel1);
 
-            targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "1";
-            DependenciesObject topLevel2 = (DependenciesObject)objectFactory.GetObject(targetName);
-            Assert.IsNotNull(topLevel1);
+        string childClassName = typeof(TestObject).FullName;
+        TestObject child1 = (TestObject) topLevel1.Spouse;
+        Assert.IsNotNull(child1);
+        Assert.IsTrue(child1.ObjectName.IndexOf(childClassName) != -1);
 
-            targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "2";
-            DependenciesObject topLevel3 = (DependenciesObject)objectFactory.GetObject(targetName);
-            Assert.IsNotNull(topLevel1);
+        TestObject child2 = (TestObject) topLevel2.Spouse;
+        Assert.IsNotNull(child2);
+        Assert.IsTrue(child2.ObjectName.IndexOf(childClassName) != -1);
 
+        TestObject child3 = (TestObject) topLevel3.Spouse;
+        Assert.IsNotNull(child3);
+        Assert.IsTrue(child3.ObjectName.IndexOf(childClassName) != -1);
 
-            string childClassName = typeof(TestObject).FullName;
-            TestObject child1 = (TestObject) topLevel1.Spouse;
-            Assert.IsNotNull(child1);
-            Assert.IsTrue(child1.ObjectName.IndexOf(childClassName) != -1);
-
-            TestObject child2 = (TestObject)topLevel2.Spouse;
-            Assert.IsNotNull(child2);
-            Assert.IsTrue(child2.ObjectName.IndexOf(childClassName) != -1);
-
-            TestObject child3 = (TestObject)topLevel3.Spouse;
-            Assert.IsNotNull(child3);
-            Assert.IsTrue(child3.ObjectName.IndexOf(childClassName) != -1);
-
-            Assert.AreNotEqual(child1.ObjectName, child2.ObjectName);
-        }
-        
+        Assert.AreNotEqual(child1.ObjectName, child2.ObjectName);
     }
 }

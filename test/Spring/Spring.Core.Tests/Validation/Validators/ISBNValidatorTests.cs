@@ -24,39 +24,38 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Validation.Validators
+namespace Spring.Validation.Validators;
+
+/// <summary>
+/// Unit tests for the ISBNValidator class.
+/// </summary>
+/// <author>Goran Milosavljevic</author>
+[TestFixture]
+public sealed class ISBNValidatorTests
 {
-    /// <summary>
-    /// Unit tests for the ISBNValidator class.
-    /// </summary>
-    /// <author>Goran Milosavljevic</author>
-    [TestFixture]
-    public sealed class ISBNValidatorTests
-    {              
-        [Test]
-        public void Validate()
-        {
-            ISBNValidator validator = new ISBNValidator();
-            // validate ISBN10
-            Assert.IsTrue(validator.Validate("90-70002-34-5", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("1575843013", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("81-7525-766-0", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("1905158793", new ValidationErrors()));
+    [Test]
+    public void Validate()
+    {
+        ISBNValidator validator = new ISBNValidator();
+        // validate ISBN10
+        Assert.IsTrue(validator.Validate("90-70002-34-5", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("1575843013", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("81-7525-766-0", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("1905158793", new ValidationErrors()));
 
-            // validate ISBN13
-            Assert.IsTrue(validator.Validate("978-1-905158-79-9", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("978-81-7525-766-5", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("978-90-70002-34-3", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("9789070002343", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("978907000234-3", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("9789070002-34-3", new ValidationErrors()));
+        // validate ISBN13
+        Assert.IsTrue(validator.Validate("978-1-905158-79-9", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("978-81-7525-766-5", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("978-90-70002-34-3", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("9789070002343", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("978907000234-3", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("9789070002-34-3", new ValidationErrors()));
 
-            Assert.IsFalse(validator.Validate("9789g70002-34-3", new ValidationErrors()));
-            Assert.IsFalse(validator.Validate("a789g70002343", new ValidationErrors()));
-            Assert.IsFalse(validator.Validate("978907000234x", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate(" ", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
-        }
+        Assert.IsFalse(validator.Validate("9789g70002-34-3", new ValidationErrors()));
+        Assert.IsFalse(validator.Validate("a789g70002343", new ValidationErrors()));
+        Assert.IsFalse(validator.Validate("978907000234x", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate(" ", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
     }
 }

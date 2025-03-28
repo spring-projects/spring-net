@@ -26,18 +26,17 @@ using Spring.Transaction;
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>Test that the assembly is built with the correct DebugAttributes in release and debug builds.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public sealed class DataCompilerOptionTests : CompilerOptionsTests
 {
-    /// <summary>Test that the assembly is built with the correct DebugAttributes in release and debug builds.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public sealed class DataCompilerOptionTests : CompilerOptionsTests
+    [OneTimeSetUp]
+    public void FixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void FixtureSetUp()
-        {
-            AssemblyToCheck = Assembly.GetAssembly(typeof (CannotCreateTransactionException));
-        }
+        AssemblyToCheck = Assembly.GetAssembly(typeof(CannotCreateTransactionException));
     }
 }

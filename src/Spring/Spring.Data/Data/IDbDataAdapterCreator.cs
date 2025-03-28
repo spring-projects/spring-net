@@ -20,25 +20,24 @@
 
 using System.Data;
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// This interface creates a IDbDataAdapterCommand.
+/// Implementations are responsible
+/// for configuring the created command with appropriate
+/// select and actions commands along with their parameters.
+/// </summary>
+/// <remarks>
+/// Generally used to to support the DataSet functionality in
+/// the Spring.Data.Objects namespace.
+/// </remarks>
+/// <author>Mark Pollack (.NET)</author>
+public interface IDbDataAdapterCreator
 {
-	/// <summary>
-	/// This interface creates a IDbDataAdapterCommand.
-	/// Implementations are responsible
-	/// for configuring the created command with appropriate
-	/// select and actions commands along with their parameters.
-	/// </summary>
-	/// <remarks>
-	/// Generally used to to support the DataSet functionality in
-	/// the Spring.Data.Objects namespace.
-	/// </remarks>
-	/// <author>Mark Pollack (.NET)</author>
-	public interface IDbDataAdapterCreator
-	{
-        /// <summary>
-        /// Creates the data adapter.
-        /// </summary>
-        /// <returns>A new IDbDataAdapter instance</returns>
-	    IDbDataAdapter CreateDataAdapter();
-	}
+    /// <summary>
+    /// Creates the data adapter.
+    /// </summary>
+    /// <returns>A new IDbDataAdapter instance</returns>
+    IDbDataAdapter CreateDataAdapter();
 }

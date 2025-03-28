@@ -18,21 +18,20 @@
 
 #endregion
 
+namespace Spring.Messaging.Listener;
 
-namespace Spring.Messaging.Listener
+/// <summary>
+/// Action to perform on the MessageQueueTransaction when handling message listener exceptions.
+/// </summary>
+public enum TransactionAction
 {
     /// <summary>
-    /// Action to perform on the MessageQueueTransaction when handling message listener exceptions.
+    /// Rollback the MessageQueueTransaction, returning the recieved message back onto the queue.
     /// </summary>
-    public enum TransactionAction
-    {
-        /// <summary>
-        /// Rollback the MessageQueueTransaction, returning the recieved message back onto the queue.
-        /// </summary>
-        Rollback,
-        /// <summary>
-        /// Commit the MessageQueueTransaction, removing the message from the queue.
-        /// </summary>
-        Commit
-    } ;
-}
+    Rollback,
+
+    /// <summary>
+    /// Commit the MessageQueueTransaction, removing the message from the queue.
+    /// </summary>
+    Commit
+};

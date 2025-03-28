@@ -20,47 +20,50 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Generic exception thrown when the current process was
+/// a deadlock loser, and its transaction rolled back.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class DeadlockLoserDataAccessException : PessimisticLockingFailureException
 {
-	/// <summary>
-	/// Generic exception thrown when the current process was
-	/// a deadlock loser, and its transaction rolled back.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class DeadlockLoserDataAccessException : PessimisticLockingFailureException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.DeadlockLoserDataAccessException"/> class.
-		/// </summary>
-		public DeadlockLoserDataAccessException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.DeadlockLoserDataAccessException"/> class.
+    /// </summary>
+    public DeadlockLoserDataAccessException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.DeadlockLoserDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public DeadlockLoserDataAccessException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.DeadlockLoserDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public DeadlockLoserDataAccessException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.DeadlockLoserDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public DeadlockLoserDataAccessException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.DeadlockLoserDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public DeadlockLoserDataAccessException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected DeadlockLoserDataAccessException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected DeadlockLoserDataAccessException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,20 +25,19 @@ using Spring.Web.UI.Validation;
 
 #endregion
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// 
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class ValidationErrorsTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class ValidationErrorsTests
+    [Test]
+    public void DefaultsToSpanValidationErrorsRenderer()
     {
-        [Test]
-        public void DefaultsToSpanValidationErrorsRenderer()
-        {
-            ValidationError vs = new ValidationError();
-            Assert.AreEqual(typeof(SpanValidationErrorsRenderer), vs.Renderer.GetType());
-        }
+        ValidationError vs = new ValidationError();
+        Assert.AreEqual(typeof(SpanValidationErrorsRenderer), vs.Renderer.GetType());
     }
 }

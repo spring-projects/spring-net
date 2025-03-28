@@ -23,75 +23,75 @@ using System.Runtime.Serialization;
 using Spring.Core.TypeResolution;
 using Spring.Expressions.Parser.antlr.collections;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed method node in the navigation expression.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class ArrayConstructorNode : NodeWithArguments
 {
+    private Type arrayType;
+
     /// <summary>
-    /// Represents parsed method node in the navigation expression.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class ArrayConstructorNode : NodeWithArguments
+    public ArrayConstructorNode()
     {
-        private Type arrayType;
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public ArrayConstructorNode()
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected ArrayConstructorNode(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected ArrayConstructorNode(SerializationInfo info, StreamingContext context) : base(info, context)
+    /// <summary>
+    /// Creates new instance of the type defined by this node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        if (arrayType == null)
         {
-        }
-
-        /// <summary>
-        /// Creates new instance of the type defined by this node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            if (arrayType == null)
+            lock (this)
             {
-                lock (this)
+                if (arrayType == null)
                 {
-                    if (arrayType == null)
-                    {
-                        arrayType = TypeResolutionUtils.ResolveType(getText());
-                    }
+                    arrayType = TypeResolutionUtils.ResolveType(getText());
                 }
             }
-
-            AST rankRoot = getFirstChild();
-            int dimensions = rankRoot.getNumberOfChildren();
-            int[] ranks = new int[dimensions];
-            if (dimensions > 0)
-            {
-                int i = 0;
-                AST rankNode = rankRoot.getFirstChild();
-                while (rankNode != null)
-                {
-                    ranks[i++] = (int)GetValue((BaseNode)rankNode, context, evalContext);
-                    rankNode = rankNode.getNextSibling();
-                }
-                return Array.CreateInstance(arrayType, ranks);
-            }
-            else
-            {
-                AST valuesRoot = getFirstChild().getNextSibling();
-                if (valuesRoot != null)
-                {
-                    ArrayList values = (ArrayList)GetValue(((BaseNode)valuesRoot), context, evalContext);
-                    return values.ToArray(arrayType);
-                }
-            }
-
-            throw new ArgumentException("You have to specify either rank or initializer for an array.");
         }
+
+        AST rankRoot = getFirstChild();
+        int dimensions = rankRoot.getNumberOfChildren();
+        int[] ranks = new int[dimensions];
+        if (dimensions > 0)
+        {
+            int i = 0;
+            AST rankNode = rankRoot.getFirstChild();
+            while (rankNode != null)
+            {
+                ranks[i++] = (int) GetValue((BaseNode) rankNode, context, evalContext);
+                rankNode = rankNode.getNextSibling();
+            }
+
+            return Array.CreateInstance(arrayType, ranks);
+        }
+        else
+        {
+            AST valuesRoot = getFirstChild().getNextSibling();
+            if (valuesRoot != null)
+            {
+                ArrayList values = (ArrayList) GetValue(((BaseNode) valuesRoot), context, evalContext);
+                return values.ToArray(arrayType);
+            }
+        }
+
+        throw new ArgumentException("You have to specify either rank or initializer for an array.");
     }
 }

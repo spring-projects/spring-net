@@ -20,72 +20,71 @@
 
 using System.ComponentModel;
 
-namespace Spring.Messaging.Ems.Common
+namespace Spring.Messaging.Ems.Common;
+
+public interface ISession
 {
-    public interface ISession
-    {
-        Session NativeSession { get; }
+    Session NativeSession { get; }
 
-        void Close();
+    void Close();
 
-        void Commit();
+    void Commit();
 
-        QueueBrowser CreateBrowser(Queue queue);
+    QueueBrowser CreateBrowser(Queue queue);
 
-        QueueBrowser CreateBrowser(Queue queue, string messageSelector);
+    QueueBrowser CreateBrowser(Queue queue, string messageSelector);
 
-        IMessageConsumer CreateConsumer(Destination dest);
+    IMessageConsumer CreateConsumer(Destination dest);
 
-        IMessageConsumer CreateConsumer(Destination dest, string messageSelector);
+    IMessageConsumer CreateConsumer(Destination dest, string messageSelector);
 
-        IMessageConsumer CreateConsumer(Destination dest, string messageSelector, bool noLocal);
+    IMessageConsumer CreateConsumer(Destination dest, string messageSelector, bool noLocal);
 
-        ITopicSubscriber CreateDurableSubscriber(Topic topic, string name);
+    ITopicSubscriber CreateDurableSubscriber(Topic topic, string name);
 
-        ITopicSubscriber CreateDurableSubscriber(Topic topic, string name, string messageSelector, bool noLocal);
+    ITopicSubscriber CreateDurableSubscriber(Topic topic, string name, string messageSelector, bool noLocal);
 
-        IMessageProducer CreateProducer(Destination dest);
+    IMessageProducer CreateProducer(Destination dest);
 
-        Queue CreateQueue(string queueName);
+    Queue CreateQueue(string queueName);
 
-        Topic CreateTopic(string topicName);
+    Topic CreateTopic(string topicName);
 
-        TemporaryQueue CreateTemporaryQueue();
+    TemporaryQueue CreateTemporaryQueue();
 
-        TemporaryTopic CreateTemporaryTopic();
+    TemporaryTopic CreateTemporaryTopic();
 
-        Message CreateMessage();
+    Message CreateMessage();
 
-        TextMessage CreateTextMessage();
+    TextMessage CreateTextMessage();
 
-        TextMessage CreateTextMessage(string text);
+    TextMessage CreateTextMessage(string text);
 
-        MapMessage CreateMapMessage();
+    MapMessage CreateMapMessage();
 
-        BytesMessage CreateBytesMessage();
+    BytesMessage CreateBytesMessage();
 
-        ObjectMessage CreateObjectMessage();
+    ObjectMessage CreateObjectMessage();
 
-        ObjectMessage CreateObjectMessage(object obj);
+    ObjectMessage CreateObjectMessage(object obj);
 
-        StreamMessage CreateStreamMessage();
+    StreamMessage CreateStreamMessage();
 
-        void Recover();
+    void Recover();
 
-        void Rollback();
+    void Rollback();
 
-        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Ordinary JMS clients should not use this method.")]
-        void Run();
+    [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Ordinary JMS clients should not use this method.")]
+    void Run();
 
-        void Unsubscribe(string name);
+    void Unsubscribe(string name);
 
-        int AcknowledgeMode { get; }
-        TIBCO.EMS.Connection Connection { get; }
-        bool IsClosed { get; }
-        bool IsTransacted { get; }
+    int AcknowledgeMode { get; }
+    TIBCO.EMS.Connection Connection { get; }
+    bool IsClosed { get; }
+    bool IsTransacted { get; }
 
-        long SessID { get; }
-        SessionMode SessionAcknowledgeMode { get; }
-        bool Transacted { get; }
-    }
+    long SessID { get; }
+    SessionMode SessionAcknowledgeMode { get; }
+    bool Transacted { get; }
 }

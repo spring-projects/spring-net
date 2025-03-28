@@ -18,7 +18,6 @@
 
 #endregion
 
-
 #if NETSTANDARD
 using Experimental.System.Messaging;
 #else
@@ -26,128 +25,129 @@ using System.Messaging;
 #endif
 using Microsoft.Extensions.Logging;
 
-namespace Spring.Messaging.Listener
+namespace Spring.Messaging.Listener;
+
+/// <summary>
+/// detects poison messages by tracking the Message Id  property in memory with a count of how many
+/// times an exception has occurred. If that count is greater than the handler's MaxRetry count it
+/// will be sent to another queue. The queue to send the message to is specified via the property M
+/// essageQueueObjectName.
+/// </summary>
+/// <remarks>Exception handler when using DistributedTxMessageListenerContainer</remarks>
+public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQueueExceptionHandler,
+    IDistributedTransactionExceptionHandler
 {
+    #region Logging Definition
+
+    private static readonly ILogger LOG = LogManager.GetLogger(typeof(SendToQueueDistributedTransactionExceptionHandler));
+
+    #endregion
+
+    #region IDistributedTransactionExceptionHandler Members
+
     /// <summary>
-    /// detects poison messages by tracking the Message Id  property in memory with a count of how many
-    /// times an exception has occurred. If that count is greater than the handler's MaxRetry count it
-    /// will be sent to another queue. The queue to send the message to is specified via the property M
-    /// essageQueueObjectName.
+    /// Determines whether the incoming message is a poison message.  This method is
+    /// called before the <see cref="IMessageListener"/> is invoked.
     /// </summary>
-    /// <remarks>Exception handler when using DistributedTxMessageListenerContainer</remarks>
-    public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQueueExceptionHandler,
-                                                                     IDistributedTransactionExceptionHandler
+    /// <param name="message">The incoming message.</param>
+    /// <returns>
+    /// 	<c>true</c> if it is a poison message; otherwise, <c>false</c>.
+    /// </returns>
+    /// <remarks>
+    /// The <see cref="DistributedTxMessageListenerContainer"/> will call
+    /// <see cref="HandlePoisonMessage"/> if this method returns true and will
+    /// then commit the distibuted transaction (removing the message from the queue).
+    /// </remarks>
+    public bool IsPoisonMessage(Message message)
     {
-        #region Logging Definition
-
-        private static readonly ILogger LOG = LogManager.GetLogger(typeof (SendToQueueDistributedTransactionExceptionHandler));
-
-        #endregion
-
-        #region IDistributedTransactionExceptionHandler Members
-
-        /// <summary>
-        /// Determines whether the incoming message is a poison message.  This method is
-        /// called before the <see cref="IMessageListener"/> is invoked.
-        /// </summary>
-        /// <param name="message">The incoming message.</param>
-        /// <returns>
-        /// 	<c>true</c> if it is a poison message; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// The <see cref="DistributedTxMessageListenerContainer"/> will call
-        /// <see cref="HandlePoisonMessage"/> if this method returns true and will
-        /// then commit the distibuted transaction (removing the message from the queue).
-        /// </remarks>
-        public bool IsPoisonMessage(Message message)
+        string messageId = message.Id;
+        lock (messageMapMonitor)
         {
-            string messageId = message.Id;
-            lock (messageMapMonitor)
+            MessageStats messageStats = null;
+            if (messageMap.Contains(messageId))
             {
-                MessageStats messageStats = null;
-                if (messageMap.Contains(messageId))
+                messageStats = (MessageStats) messageMap[messageId];
+                if (messageStats.Count > MaxRetry)
                 {
-                    messageStats = (MessageStats) messageMap[messageId];
-                    if (messageStats.Count > MaxRetry)
-                    {
-                        LOG.LogWarning("Message with id = [" + message.Id + "] detected as poison message.");
-                        return true;
-                    }
+                    LOG.LogWarning("Message with id = [" + message.Id + "] detected as poison message.");
+                    return true;
                 }
-                return false;
             }
+
+            return false;
         }
+    }
 
-        /// <summary>
-        /// Handles the poison message.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public void HandlePoisonMessage(Message message)
+    /// <summary>
+    /// Handles the poison message.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    public void HandlePoisonMessage(Message message)
+    {
+        SendMessageToQueue(message);
+    }
+
+    /// <summary>
+    /// Called when an exception is thrown in listener processing.
+    /// </summary>
+    /// <param name="exception">The exception.</param>
+    /// <param name="message">The message.</param>
+    public void OnException(Exception exception, Message message)
+    {
+        string messageId = message.Id;
+        lock (messageMapMonitor)
         {
-            SendMessageToQueue(message);
+            MessageStats messageStats = null;
+            if (messageMap.Contains(messageId))
+            {
+                messageStats = (MessageStats) messageMap[messageId];
+            }
+            else
+            {
+                messageStats = new MessageStats();
+                messageMap[messageId] = messageStats;
+            }
+
+            messageStats.Count++;
+            LOG.LogWarning("Message Error Count = [" + messageStats.Count + "] for message id = [" + messageId +
+                           "]");
         }
+    }
 
-        /// <summary>
-        /// Called when an exception is thrown in listener processing.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <param name="message">The message.</param>
-        public void OnException(Exception exception, Message message)
+    #endregion
+
+    /// <summary>
+    /// Sends the message to queue.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    protected virtual void SendMessageToQueue(Message message)
+    {
+        MessageQueue mq = MessageQueueFactory.CreateMessageQueue(MessageQueueObjectName);
+        try
         {
-            string messageId = message.Id;
-            lock (messageMapMonitor)
+            #region Logging
+
+            if (LOG.IsEnabled(LogLevel.Information))
             {
-                MessageStats messageStats = null;
-                if (messageMap.Contains(messageId))
-                {
-                    messageStats = (MessageStats) messageMap[messageId];
-                }
-                else
-                {
-                    messageStats = new MessageStats();
-                    messageMap[messageId] = messageStats;
-                }
-                messageStats.Count++;
-                LOG.LogWarning("Message Error Count = [" + messageStats.Count + "] for message id = [" + messageId +
-                               "]");
+                LOG.LogInformation("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
             }
+
+            #endregion
+
+            mq.Send(message, MessageQueueTransactionType.Automatic);
         }
-
-        #endregion
-
-        /// <summary>
-        /// Sends the message to queue.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        protected virtual void SendMessageToQueue(Message message)
+        catch (Exception e)
         {
-            MessageQueue mq = MessageQueueFactory.CreateMessageQueue(MessageQueueObjectName);
-            try
+            #region Logging
+
+            if (LOG.IsEnabled(LogLevel.Error))
             {
-                #region Logging
-
-                if (LOG.IsEnabled(LogLevel.Information))
-                {
-                    LOG.LogInformation("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
-                }
-
-                #endregion
-
-                mq.Send(message, MessageQueueTransactionType.Automatic);
+                string message1 = "Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].";
+                LOG.LogError(e, message1);
+                LOG.LogError("Message will not be processed.  Message Body = " + message.Body);
             }
-            catch (Exception e)
-            {
-                #region Logging
 
-                if (LOG.IsEnabled(LogLevel.Error))
-                {
-                    string message1 = "Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].";
-                    LOG.LogError(e, message1);
-                    LOG.LogError("Message will not be processed.  Message Body = " + message.Body);
-                }
-
-                #endregion
-            }
+            #endregion
         }
     }
 }

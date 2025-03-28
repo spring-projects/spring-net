@@ -2,18 +2,18 @@
 <objects xmlns="http://www.springframework.net"
          xmlns:db="http://www.springframework.net/database">
 
-  <db:provider id="dbProvider" 
-              provider="System.Data.SqlClient" 
-              connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+    <db:provider id="dbProvider"
+                 provider="System.Data.SqlClient"
+                 connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False" />
 
-  <object id="transactionManager" type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">
-    <property name="DbProvider" ref="dbProvider"/>
-  </object>
-  
-  <object id="adoTemplate" type="Spring.Data.Generic.AdoTemplate, Spring.Data">
-    <property name="DbProvider" ref="dbProvider"/>
-    <property name="DataReaderWrapperType" value="Spring.Data.Support.NullMappingDataReader, Spring.Data"/>
-  </object>
+    <object id="transactionManager" type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">
+        <property name="DbProvider" ref="dbProvider" />
+    </object>
+
+    <object id="adoTemplate" type="Spring.Data.Generic.AdoTemplate, Spring.Data">
+        <property name="DbProvider" ref="dbProvider" />
+        <property name="DataReaderWrapperType" value="Spring.Data.Support.NullMappingDataReader, Spring.Data" />
+    </object>
 
 
 </objects>

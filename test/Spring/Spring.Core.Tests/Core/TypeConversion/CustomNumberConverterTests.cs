@@ -21,102 +21,90 @@
 #region Imports
 
 using System.Globalization;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// Unit tests for the CustomNumberConverter class.
+/// </summary>
+[TestFixture]
+public class CustomNumberConverterTests
 {
-    /// <summary>
-    /// Unit tests for the CustomNumberConverter class.
-    /// </summary>
-    [TestFixture]
-    public class CustomNumberConverterTests
+    [Test]
+    public void Instantiation()
     {
-        [Test]
-        public void Instantiation()
-        {
-            CustomNumberConverter verter
-                = new CustomNumberConverter(typeof(int), null, true);
-            // mmm, this should still pass... it aint a number though
-            verter
-                = new CustomNumberConverter(typeof(bool), null, true);
-        }
+        CustomNumberConverter verter
+            = new CustomNumberConverter(typeof(int), null, true);
+        // mmm, this should still pass... it aint a number though
+        verter
+            = new CustomNumberConverter(typeof(bool), null, true);
+    }
 
-        [Test]
-        public void InstantiationWithNonPrimitiveType()
-        {
-            Assert.Throws<ArgumentException>(() => new CustomNumberConverter(typeof(CustomNumberConverterTests), null, true));
-        }
+    [Test]
+    public void InstantiationWithNonPrimitiveType()
+    {
+        Assert.Throws<ArgumentException>(() => new CustomNumberConverter(typeof(CustomNumberConverterTests), null, true));
+    }
 
-        [Test]
-        public void CanConvertFromString()
-        {
-            CustomNumberConverter verter = new CustomNumberConverter(typeof(int), null, true);
-            Assert.IsTrue(verter.CanConvertFrom(typeof(string)));
-            Assert.IsFalse(verter.CanConvertFrom(null));
-        }
+    [Test]
+    public void CanConvertFromString()
+    {
+        CustomNumberConverter verter = new CustomNumberConverter(typeof(int), null, true);
+        Assert.IsTrue(verter.CanConvertFrom(typeof(string)));
+        Assert.IsFalse(verter.CanConvertFrom(null));
+    }
 
-        [Test]
-        public void ConvertsEmptyStringToZeroWhenAllowed()
-        {
-            CustomNumberConverter verter = new CustomNumberConverter(typeof(int), null, true);
-            int actual = (int) verter.ConvertFrom(null, CultureInfo.CurrentUICulture, string.Empty);
-            Assert.AreEqual(0, actual);
-        }
+    [Test]
+    public void ConvertsEmptyStringToZeroWhenAllowed()
+    {
+        CustomNumberConverter verter = new CustomNumberConverter(typeof(int), null, true);
+        int actual = (int) verter.ConvertFrom(null, CultureInfo.CurrentUICulture, string.Empty);
+        Assert.AreEqual(0, actual);
+    }
 
-        [Test]
-        public void ConvertFromSupportedNumericType()
+    [Test]
+    public void ConvertFromSupportedNumericType()
+    {
+        Type[] numTypes = new Type[] { typeof(int), typeof(uint), typeof(short), typeof(ushort), typeof(long), typeof(ulong), typeof(float), typeof(double), };
+        int expected = 12;
+        foreach (Type numType in numTypes)
         {
-            Type[] numTypes = new Type[]
+            try
             {
-                typeof(int),
-                typeof(uint),
-                typeof(short),
-                typeof(ushort),
-                typeof(long),
-                typeof(ulong),
-                typeof(float),
-                typeof(double),
-            };
-            int expected = 12;
-            foreach (Type numType in numTypes)
+                CustomNumberConverter verter = new CustomNumberConverter(numType, null, true);
+                object actual = verter.ConvertFrom(null, CultureInfo.CurrentUICulture, expected.ToString());
+                Assert.AreEqual(expected, actual);
+            }
+            catch (Exception ex)
             {
-                try
-                {
-                    CustomNumberConverter verter = new CustomNumberConverter(numType, null, true);
-                    object actual = verter.ConvertFrom(null, CultureInfo.CurrentUICulture, expected.ToString());
-                    Assert.AreEqual(expected, actual);
-                }
-                catch (Exception ex)
-                {
-                    Assert.Fail("Bailed when converting type '" + numType + "' : " + ex);
-                }
+                Assert.Fail("Bailed when converting type '" + numType + "' : " + ex);
             }
         }
+    }
 
-        [Test]
-        public void BailsOnEmptyStringWhenNotAllowed()
-        {
-            CustomNumberConverter verter
-                = new CustomNumberConverter(typeof(int), null, false);
-            Assert.Throws<FormatException>(() => verter.ConvertFrom(null, CultureInfo.CurrentUICulture, string.Empty));
-        }
+    [Test]
+    public void BailsOnEmptyStringWhenNotAllowed()
+    {
+        CustomNumberConverter verter
+            = new CustomNumberConverter(typeof(int), null, false);
+        Assert.Throws<FormatException>(() => verter.ConvertFrom(null, CultureInfo.CurrentUICulture, string.Empty));
+    }
 
-        [Test]
-        public void ConvertFromNonSupportedNumericTypeOptionBails()
-        {
-            CustomNumberConverter verter
-                = new CustomNumberConverter(typeof(char), null, false);
-            Assert.Throws<NotSupportedException>(() => verter.ConvertFrom("12"));
-        }
+    [Test]
+    public void ConvertFromNonSupportedNumericTypeOptionBails()
+    {
+        CustomNumberConverter verter
+            = new CustomNumberConverter(typeof(char), null, false);
+        Assert.Throws<NotSupportedException>(() => verter.ConvertFrom("12"));
+    }
 
-        [Test]
-        public void ConvertFromNonSupportedOptionBails()
-        {
-            CustomNumberConverter verter = new CustomNumberConverter(typeof(int), null, false);
-            Assert.Throws<NotSupportedException>(() => verter.ConvertFrom(12));
-        }
+    [Test]
+    public void ConvertFromNonSupportedOptionBails()
+    {
+        CustomNumberConverter verter = new CustomNumberConverter(typeof(int), null, false);
+        Assert.Throws<NotSupportedException>(() => verter.ConvertFrom(12));
     }
 }

@@ -21,9 +21,7 @@
 #region Imports
 
 using FakeItEasy;
-
 using NUnit.Framework;
-
 using Spring.Core.IO;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
@@ -31,107 +29,106 @@ using Spring.Objects.Factory.Xml;
 
 #endregion
 
-namespace Spring.Remoting
+namespace Spring.Remoting;
+
+/// <summary>
+/// Unit tests for the SaoExporter class.
+/// </summary>
+/// <author>Bruno Baia</author>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class SaoExporterTests : BaseRemotingTestFixture
 {
-    /// <summary>
-    /// Unit tests for the SaoExporter class.
-    /// </summary>
-    /// <author>Bruno Baia</author>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class SaoExporterTests : BaseRemotingTestFixture
+    [Test]
+    public void BailsWhenNotConfigured()
     {
-        [Test]
-        public void BailsWhenNotConfigured()
+        SaoExporter exp = new SaoExporter();
+        Assert.Throws<ArgumentException>(() => exp.AfterPropertiesSet());
+    }
+
+    [Test]
+    public void BailsIfTargetNotFound()
+    {
+        using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
         {
-            SaoExporter exp = new SaoExporter();
-            Assert.Throws<ArgumentException>(() => exp.AfterPropertiesSet());
+            SaoExporter saoExporter = new SaoExporter();
+            saoExporter.ObjectFactory = of;
+            saoExporter.TargetName = "DOESNOTEXIST";
+            saoExporter.ServiceName = "RemotedSaoSingletonCounter";
+            Assert.Throws<NoSuchObjectDefinitionException>(() => saoExporter.AfterPropertiesSet());
         }
+    }
 
-        [Test]
-        public void BailsIfTargetNotFound()
+    [Test]
+    public void ExportSingleton()
+    {
+        using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
         {
-            using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
-            {
-                SaoExporter saoExporter = new SaoExporter();
-                saoExporter.ObjectFactory = of;
-                saoExporter.TargetName = "DOESNOTEXIST";
-                saoExporter.ServiceName = "RemotedSaoSingletonCounter";
-                Assert.Throws<NoSuchObjectDefinitionException>(() => saoExporter.AfterPropertiesSet());
-            }
+            of.RegisterSingleton("simpleCounter", new SimpleCounter());
+            SaoExporter saoExporter = new SaoExporter();
+            saoExporter.ObjectFactory = of;
+            saoExporter.TargetName = "simpleCounter";
+            saoExporter.ServiceName = "RemotedSaoSingletonCounter";
+            saoExporter.AfterPropertiesSet();
+            of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
+
+            AssertExportedService(saoExporter.ServiceName, 2);
         }
+    }
 
-        [Test]
-        public void ExportSingleton()
+    [Test]
+    public void ExportSingleCall()
+    {
+        using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
         {
-            using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
-            {
-                of.RegisterSingleton("simpleCounter", new SimpleCounter());
-                SaoExporter saoExporter = new SaoExporter();
-                saoExporter.ObjectFactory = of;
-                saoExporter.TargetName = "simpleCounter";
-                saoExporter.ServiceName = "RemotedSaoSingletonCounter";
-                saoExporter.AfterPropertiesSet();
-                of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
+            of.RegisterObjectDefinition("simpleCounter", new RootObjectDefinition(typeof(SimpleCounter), false));
+            SaoExporter saoExporter = new SaoExporter();
+            saoExporter.ObjectFactory = of;
+            saoExporter.TargetName = "simpleCounter";
+            saoExporter.ServiceName = "RemotedSaoSingleCallCounter";
+            saoExporter.AfterPropertiesSet();
+            of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
 
-                AssertExportedService(saoExporter.ServiceName, 2);
-            }
+            AssertExportedService(saoExporter.ServiceName, 0);
         }
+    }
 
-        [Test]
-        public void ExportSingleCall()
+    /// <summary>
+    /// Checks that we can also export if IFactoryObject.ObjectType returns an interface type,
+    /// </summary>
+    [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
+    public void CanExportFromFactoryObjectIfObjectTypeIsInterface()
+    {
+        using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
         {
-            using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
-            {
-                of.RegisterObjectDefinition("simpleCounter", new RootObjectDefinition(typeof(SimpleCounter), false));
-                SaoExporter saoExporter = new SaoExporter();
-                saoExporter.ObjectFactory = of;
-                saoExporter.TargetName = "simpleCounter";
-                saoExporter.ServiceName = "RemotedSaoSingleCallCounter";
-                saoExporter.AfterPropertiesSet();
-                of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
+            IFactoryObject simpleCounterFactory = A.Fake<IFactoryObject>();
+            A.CallTo(() => simpleCounterFactory.ObjectType).Returns(typeof(ISimpleCounter));
+            A.CallTo(() => simpleCounterFactory.IsSingleton).Returns(true);
+            A.CallTo(() => simpleCounterFactory.GetObject()).Returns(new SimpleCounter());
 
-                AssertExportedService(saoExporter.ServiceName, 0);
-            }
+            of.RegisterSingleton("simpleCounter", simpleCounterFactory);
+            SaoExporter saoExporter = new SaoExporter();
+            saoExporter.ObjectFactory = of;
+            saoExporter.TargetName = "simpleCounter";
+            saoExporter.ServiceName = "RemotedSaoCallCounter";
+            saoExporter.AfterPropertiesSet();
+            of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
+
+            AssertExportedService(saoExporter.ServiceName, 2);
         }
+    }
 
-        /// <summary>
-        /// Checks that we can also export if IFactoryObject.ObjectType returns an interface type,
-        /// </summary>
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
-        public void CanExportFromFactoryObjectIfObjectTypeIsInterface()
+    /// <summary>
+    /// Checks that exp an IFactoryObject.ObjectType returns an interface type,
+    /// </summary>
+    [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
+    public void ThrowsTypeLoadExceptionIfProxyInterfacesValueIsSpecifiedInsteadOfListElement()
+    {
+        using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
         {
-            using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
-            {
-                IFactoryObject simpleCounterFactory = A.Fake<IFactoryObject>();
-                A.CallTo(() => simpleCounterFactory.ObjectType).Returns(typeof (ISimpleCounter));
-                A.CallTo(() => simpleCounterFactory.IsSingleton).Returns(true);
-                A.CallTo(() => simpleCounterFactory.GetObject()).Returns(new SimpleCounter());
-
-
-                of.RegisterSingleton("simpleCounter", simpleCounterFactory);
-                SaoExporter saoExporter = new SaoExporter();
-                saoExporter.ObjectFactory = of;
-                saoExporter.TargetName = "simpleCounter";
-                saoExporter.ServiceName = "RemotedSaoCallCounter";
-                saoExporter.AfterPropertiesSet();
-                of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
-
-                AssertExportedService(saoExporter.ServiceName, 2);
-            }
-        }
-
-        /// <summary>
-        /// Checks that exp an IFactoryObject.ObjectType returns an interface type,
-        /// </summary>
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
-        public void ThrowsTypeLoadExceptionIfProxyInterfacesValueIsSpecifiedInsteadOfListElement()
-        {
-            using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
-            {
-                XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
-                reader.LoadObjectDefinitions(new StringResource(
-                                                 @"<?xml version='1.0' encoding='UTF-8' ?>
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+            reader.LoadObjectDefinitions(new StringResource(
+                @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:r='http://www.springframework.net/remoting'>
 
     <r:saoExporter id='ISimpleCounterExporter' targetName='ISimpleCounterProxy' serviceName='RemotedSaoCounterProxy' />
@@ -144,26 +141,25 @@ namespace Spring.Remoting
     </object>
 </objects>
 "));
-                try
-                {
-                    SaoExporter saoExporter = (SaoExporter) of.GetObject("ISimpleCounterExporter");
-                    Assert.Fail();
-                }
-                catch (ObjectCreationException oce)
-                {
-                    TypeLoadException tle = (TypeLoadException) oce.GetBaseException();
-                    Assert.AreEqual("Could not load type from string value ' Spring.Services.Tests'.", tle.Message);
-                }
+            try
+            {
+                SaoExporter saoExporter = (SaoExporter) of.GetObject("ISimpleCounterExporter");
+                Assert.Fail();
+            }
+            catch (ObjectCreationException oce)
+            {
+                TypeLoadException tle = (TypeLoadException) oce.GetBaseException();
+                Assert.AreEqual("Could not load type from string value ' Spring.Services.Tests'.", tle.Message);
             }
         }
+    }
 
-        private void AssertExportedService(string serviceName, int expectedCount)
-        {
-            ISimpleCounter client = (ISimpleCounter)Activator.GetObject(typeof(ISimpleCounter), "tcp://localhost:8005/" + serviceName);
-            client.Count();
-            client.Count();
+    private void AssertExportedService(string serviceName, int expectedCount)
+    {
+        ISimpleCounter client = (ISimpleCounter) Activator.GetObject(typeof(ISimpleCounter), "tcp://localhost:8005/" + serviceName);
+        client.Count();
+        client.Count();
 
-            Assert.AreEqual(expectedCount, client.Counter);
-        }
+        Assert.AreEqual(expectedCount, client.Counter);
     }
 }

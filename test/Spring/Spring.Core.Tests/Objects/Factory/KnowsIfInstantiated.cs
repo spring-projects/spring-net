@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,24 @@
 
 #endregion
 
-namespace Spring.Objects.Factory
+namespace Spring.Objects.Factory;
+
+internal sealed class KnowsIfInstantiated
 {
-	internal sealed class KnowsIfInstantiated
-	{
-		private static bool _instantiated;
+    private static bool _instantiated;
 
-		public KnowsIfInstantiated() 
-		{
-			_instantiated = true;
-		}
+    public KnowsIfInstantiated()
+    {
+        _instantiated = true;
+    }
 
-		public static void ClearInstantiationRecord() 
-		{
-			_instantiated = false;
-		}
+    public static void ClearInstantiationRecord()
+    {
+        _instantiated = false;
+    }
 
-		public static bool WasInstantiated
-		{
-			get { return _instantiated; }
-		}
-	}
+    public static bool WasInstantiated
+    {
+        get { return _instantiated; }
+    }
 }

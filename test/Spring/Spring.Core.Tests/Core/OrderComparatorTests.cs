@@ -25,55 +25,54 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Unit tests for the OrderComparator class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class OrderComparatorTests
 {
-	/// <summary>
-	/// Unit tests for the OrderComparator class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class OrderComparatorTests
+    [Test]
+    public void OrdersCorrectly()
     {
-        [Test]
-        public void OrdersCorrectly ()
+        Ordered one = new Ordered(1);
+        Ordered fifty = new Ordered(50);
+        string max = "Max"; // should be stuck at the end 'cos it doesnt implement IOrdered
+        object[] list = new object[] { max, one, fifty };
+        Array.Sort(list, new OrderComparator());
+        Assert.AreEqual(one, list[0]);
+        Assert.AreEqual(fifty, list[1]);
+        Assert.AreEqual(max, list[2]);
+    }
+
+    [Test]
+    public void DoesntBailWhenFedNulls()
+    {
+        Ordered one = new Ordered(1);
+        object[] list = new object[] { null, one, null };
+        ArrayUtils.Sort(list, new OrderComparator());
+        Assert.AreEqual(one, list[0], "order comparator instance should be first");
+        Assert.AreEqual(null, list[1]);
+        Assert.AreEqual(null, list[2]);
+    }
+
+    internal sealed class Ordered : IOrdered
+    {
+        public Ordered(int order)
         {
-            Ordered one = new Ordered (1);
-            Ordered fifty = new Ordered (50);
-            string max = "Max"; // should be stuck at the end 'cos it doesnt implement IOrdered
-            object [] list = new object [] {max, one, fifty};
-            Array.Sort (list, new OrderComparator ());
-            Assert.AreEqual (one, list [0]);
-            Assert.AreEqual (fifty, list [1]);
-            Assert.AreEqual (max, list [2]);
+            _order = order;
         }
 
-        [Test]
-        public void DoesntBailWhenFedNulls ()
+        public int Order
         {
-            Ordered one = new Ordered (1);
-            object [] list = new object [] {null, one, null};
-            ArrayUtils.Sort(list, new OrderComparator ());
-            Assert.AreEqual (one, list [0], "order comparator instance should be first");
-            Assert.AreEqual (null, list [1]);
-            Assert.AreEqual (null, list [2]);
-        }
-
-        internal sealed class Ordered : IOrdered
-        {
-            public Ordered (int order) 
+            get
             {
-                _order = order;
+                return _order;
             }
-
-            public int Order
-            {
-                get
-                {
-                    return _order;
-                }
-            }
-
-            private int _order;
         }
-	}
+
+        private int _order;
+    }
 }

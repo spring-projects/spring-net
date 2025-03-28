@@ -25,47 +25,45 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Test the usage of the ObjectFactorySectionHandler.
+/// </summary>
+[TestFixture]
+public class ObjectFactorySectionHandlerTests
 {
+    private XmlElement _xmlElement;
+
+    [SetUp]
+    public void CreateXmlElement()
+    {
+        XmlDocument xmlDoc = new XmlDocument();
+        string xmlData = "<objects xmlns=\"http://www.springframework.net\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd\"><object name=\"TestVersion\"  type=\"System.Version, Mscorlib\"></object></objects>";
+        xmlDoc.Load(new StringReader(xmlData));
+        _xmlElement = xmlDoc.DocumentElement;
+    }
+
     /// <summary>
-    /// Test the usage of the ObjectFactorySectionHandler.
+    /// Test calling the section handler with null values.
     /// </summary>
-	[TestFixture]
-    public class ObjectFactorySectionHandlerTests
-	{
-        private XmlElement _xmlElement;
+    [Test]
+    public void CreateFactoryUnSuccessful()
+    {
+        ObjectFactorySectionHandler objHandler = new ObjectFactorySectionHandler();
+        Assert.Throws<ArgumentNullException>(() => objHandler.Create(null, null, null));
+    }
 
-        [SetUp]
-        public void CreateXmlElement()
-        {
-            XmlDocument xmlDoc = new XmlDocument();
-            string xmlData = "<objects xmlns=\"http://www.springframework.net\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd\"><object name=\"TestVersion\"  type=\"System.Version, Mscorlib\"></object></objects>";
-            xmlDoc.Load(new StringReader(xmlData));
-            _xmlElement = xmlDoc.DocumentElement;
-        }
-
-        /// <summary>
-        /// Test calling the section handler with null values.
-        /// </summary>
-		[Test]
-		public void CreateFactoryUnSuccessful()
-		{
-		    ObjectFactorySectionHandler objHandler = new ObjectFactorySectionHandler();
-		    Assert.Throws<ArgumentNullException>(() => objHandler.Create(null, null, null));
-		}
-
-        /// <summary>
-        /// Test calling the section handler with valid XML and make sure no
-        /// exception occurs and the factory has the right number of
-        /// objects.
-        /// </summary>
-        [Test]
-        public void CreateFactorySuccessful()
-        {
-            ObjectFactorySectionHandler objHandler = new ObjectFactorySectionHandler();
-            IListableObjectFactory factory = (IListableObjectFactory)objHandler.Create( null, null, _xmlElement );
-            Assert.AreEqual(1, factory.ObjectDefinitionCount);
-
-        }
-	}
+    /// <summary>
+    /// Test calling the section handler with valid XML and make sure no
+    /// exception occurs and the factory has the right number of
+    /// objects.
+    /// </summary>
+    [Test]
+    public void CreateFactorySuccessful()
+    {
+        ObjectFactorySectionHandler objHandler = new ObjectFactorySectionHandler();
+        IListableObjectFactory factory = (IListableObjectFactory) objHandler.Create(null, null, _xmlElement);
+        Assert.AreEqual(1, factory.ObjectDefinitionCount);
+    }
 }

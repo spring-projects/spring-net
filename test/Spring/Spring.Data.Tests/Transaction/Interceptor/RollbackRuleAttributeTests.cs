@@ -22,72 +22,71 @@ using System.Data;
 using System.Text;
 using NUnit.Framework;
 
-namespace Spring.Transaction.Interceptor
+namespace Spring.Transaction.Interceptor;
+
+[TestFixture]
+public class RollbackRuleAttributeTests
 {
-    [TestFixture]
-    public class RollbackRuleAttributeTests
+    [Test]
+    public void FoundImmediatelyWithString()
     {
-        [Test]
-        public void FoundImmediatelyWithString()
-        {
-            RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Exception");
-            Assert.IsTrue(rr.GetDepth(typeof (Exception)) == 0);
-        }
+        RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Exception");
+        Assert.IsTrue(rr.GetDepth(typeof(Exception)) == 0);
+    }
 
-        [Test]
-        public void FoundImmediatelyWithClass()
-        {
-            RollbackRuleAttribute rr = new RollbackRuleAttribute(typeof (Exception));
-            Assert.IsTrue(rr.GetDepth(new Exception()) == 0);
-        }
+    [Test]
+    public void FoundImmediatelyWithClass()
+    {
+        RollbackRuleAttribute rr = new RollbackRuleAttribute(typeof(Exception));
+        Assert.IsTrue(rr.GetDepth(new Exception()) == 0);
+    }
 
-        [Test]
-        public void FoundImmediatelyWithType()
-        {
-            RollbackRuleAttribute rr = new RollbackRuleAttribute(typeof (Exception));
-            Assert.IsTrue(rr.GetDepth(typeof (Exception)) == 0);
-        }
+    [Test]
+    public void FoundImmediatelyWithType()
+    {
+        RollbackRuleAttribute rr = new RollbackRuleAttribute(typeof(Exception));
+        Assert.IsTrue(rr.GetDepth(typeof(Exception)) == 0);
+    }
 
-        [Test]
-        public void NotFound()
-        {
-            RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Data.DataException");
-            Assert.IsTrue(rr.GetDepth(typeof (ApplicationException)) == -1);
-        }
+    [Test]
+    public void NotFound()
+    {
+        RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Data.DataException");
+        Assert.IsTrue(rr.GetDepth(typeof(ApplicationException)) == -1);
+    }
 
-        [Test]
-        public void Ancestry()
-        {
-            RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Exception");
-            Assert.IsTrue(rr.GetDepth(typeof (DataException)) == 2);
-        }
+    [Test]
+    public void Ancestry()
+    {
+        RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Exception");
+        Assert.IsTrue(rr.GetDepth(typeof(DataException)) == 2);
+    }
 
-        [Test]
-        public void AlwaysTrue()
-        {
-            RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Exception");
-            Assert.IsTrue(rr.GetDepth(typeof (SystemException)) > 0);
-            Assert.IsTrue(rr.GetDepth(typeof (ApplicationException)) > 0);
-            Assert.IsTrue(rr.GetDepth(typeof (DataException)) > 0);
-            Assert.IsTrue(rr.GetDepth(typeof (TransactionSystemException)) > 0);
-        }
+    [Test]
+    public void AlwaysTrue()
+    {
+        RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Exception");
+        Assert.IsTrue(rr.GetDepth(typeof(SystemException)) > 0);
+        Assert.IsTrue(rr.GetDepth(typeof(ApplicationException)) > 0);
+        Assert.IsTrue(rr.GetDepth(typeof(DataException)) > 0);
+        Assert.IsTrue(rr.GetDepth(typeof(TransactionSystemException)) > 0);
+    }
 
-        [Test]
-        public void ConstructorArgMustBeAExceptionClass()
-        {
-            Assert.Throws<ArgumentException>(() => new RollbackRuleAttribute(typeof(StringBuilder)));
-        }
+    [Test]
+    public void ConstructorArgMustBeAExceptionClass()
+    {
+        Assert.Throws<ArgumentException>(() => new RollbackRuleAttribute(typeof(StringBuilder)));
+    }
 
-        [Test]
-        public void ConstructorArgMustBeAExceptionClassWithNullThrowableType()
-        {
-            Assert.Throws<ArgumentNullException>(() => new RollbackRuleAttribute((Type) null));
-        }
+    [Test]
+    public void ConstructorArgMustBeAExceptionClassWithNullThrowableType()
+    {
+        Assert.Throws<ArgumentNullException>(() => new RollbackRuleAttribute((Type) null));
+    }
 
-        [Test]
-        public void ConstructorArgExceptionStringNameVersionWithNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new RollbackRuleAttribute((String) null));
-        }
+    [Test]
+    public void ConstructorArgExceptionStringNameVersionWithNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => new RollbackRuleAttribute((String) null));
     }
 }

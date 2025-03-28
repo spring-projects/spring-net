@@ -25,95 +25,92 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core.IO
+namespace Spring.Core.IO;
+
+/// <summary>
+/// Unit tests for the ResourceConverter class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ResourceConverterTests
 {
-	/// <summary>
-	/// Unit tests for the ResourceConverter class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class ResourceConverterTests
-	{
-		/// <summary>
-		/// The setup logic executed before the execution of this test fixture.
-		/// </summary>
-		[OneTimeSetUp]
-		public void FixtureSetUp()
-		{
-			// enable (null appender) logging, just to ensure that the logging code is correct
-            LogManager.LoggerFactory = NullLoggerFactory.Instance;
-		}
+    /// <summary>
+    /// The setup logic executed before the execution of this test fixture.
+    /// </summary>
+    [OneTimeSetUp]
+    public void FixtureSetUp()
+    {
+        // enable (null appender) logging, just to ensure that the logging code is correct
+        LogManager.LoggerFactory = NullLoggerFactory.Instance;
+    }
 
-		[Test]
-		public void CanConvertFrom()
-		{
-			ResourceConverter vrt = new ResourceConverter();
-			Assert.IsTrue(vrt.CanConvertFrom(typeof (string)), "Conversion from a string instance must be supported.");
-			Assert.IsFalse(vrt.CanConvertFrom(typeof (int)));
-		}
+    [Test]
+    public void CanConvertFrom()
+    {
+        ResourceConverter vrt = new ResourceConverter();
+        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
+        Assert.IsFalse(vrt.CanConvertFrom(typeof(int)));
+    }
 
-		[Test]
-		public void ConvertFrom()
-		{
-			ResourceConverter vrt = new ResourceConverter();
-			object actual = vrt.ConvertFrom("file://localhost/");
-			Assert.IsNotNull(actual);
-			IResource res = actual as IResource;
-			Assert.IsNotNull(res);
-			Assert.IsFalse(res.Exists);
-		}
+    [Test]
+    public void ConvertFrom()
+    {
+        ResourceConverter vrt = new ResourceConverter();
+        object actual = vrt.ConvertFrom("file://localhost/");
+        Assert.IsNotNull(actual);
+        IResource res = actual as IResource;
+        Assert.IsNotNull(res);
+        Assert.IsFalse(res.Exists);
+    }
 
-		[Test]
-		public void ConvertFromNullReference()
-		{
-			ResourceConverter vrt = new ResourceConverter();
-            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
-		}
+    [Test]
+    public void ConvertFromNullReference()
+    {
+        ResourceConverter vrt = new ResourceConverter();
+        Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
+    }
 
-		[Test]
-		public void ConvertFromNonSupportedOptionBails()
-		{
-			ResourceConverter vrt = new ResourceConverter();
-            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(new TestFixtureAttribute()));
-		}
+    [Test]
+    public void ConvertFromNonSupportedOptionBails()
+    {
+        ResourceConverter vrt = new ResourceConverter();
+        Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(new TestFixtureAttribute()));
+    }
 
-		[Test]
-		[Platform("Win")]
-		public void ConvertFromWithEnvironmentVariableExpansion()
-		{
-            string filename = Guid.NewGuid().ToString();
+    [Test]
+    [Platform("Win")]
+    public void ConvertFromWithEnvironmentVariableExpansion()
+    {
+        string filename = Guid.NewGuid().ToString();
 
-			// TODO : won't pass on anything other than Win9x boxes...
-			ResourceConverter vrt = new ResourceConverter();
-			string path = string.Format(@"${{userprofile}}\{0}.txt", filename);
-			IResource resource = (IResource) vrt.ConvertFrom(path);
+        // TODO : won't pass on anything other than Win9x boxes...
+        ResourceConverter vrt = new ResourceConverter();
+        string path = string.Format(@"${{userprofile}}\{0}.txt", filename);
+        IResource resource = (IResource) vrt.ConvertFrom(path);
 
-			string userprofile = Environment.GetEnvironmentVariable("userprofile");
+        string userprofile = Environment.GetEnvironmentVariable("userprofile");
 
-			Assert.IsFalse(resource.Exists,
-			               string.Format("Darn. Should be supplying a rubbish non-existant resource. " +
-			               	"You don't actually have a file called '{0}.txt' in your user directory do you?", filename));
-			Assert.IsTrue(resource.Description.IndexOf(userprofile) > -1,
-			              "Environment variable not expanded.");
-		}
+        Assert.IsFalse(resource.Exists,
+            string.Format("Darn. Should be supplying a rubbish non-existant resource. " +
+                          "You don't actually have a file called '{0}.txt' in your user directory do you?", filename));
+        Assert.IsTrue(resource.Description.IndexOf(userprofile) > -1,
+            "Environment variable not expanded.");
+    }
 
-		[Test]
-		public void DoesNotChokeOnUnresolvableEnvironmentVariableExpansion()
-		{
-            string foldername = Guid.NewGuid().ToString();
-            string filename = Guid.NewGuid().ToString();
+    [Test]
+    public void DoesNotChokeOnUnresolvableEnvironmentVariableExpansion()
+    {
+        string foldername = Guid.NewGuid().ToString();
+        string filename = Guid.NewGuid().ToString();
 
-			ResourceConverter vrt = new ResourceConverter();
-			string path = string.Format(@"${{{0}}}\{1}.txt", foldername, filename);
-			IResource resource = (IResource) vrt.ConvertFrom(path);
+        ResourceConverter vrt = new ResourceConverter();
+        string path = string.Format(@"${{{0}}}\{1}.txt", foldername, filename);
+        IResource resource = (IResource) vrt.ConvertFrom(path);
 
-			Assert.IsFalse(resource.Exists,
-			               string.Format("Darn. Should be supplying a rubbish non-existant resource. " +
-			               	"You don't actually have a file called '{0}.txt' in your user directory do you?", filename));
-			Assert.IsTrue(resource.Description.IndexOf(foldername) > -1,
-			              "Rubbish environment variable not preserved as-is.");
-
-
-		}
-	}
+        Assert.IsFalse(resource.Exists,
+            string.Format("Darn. Should be supplying a rubbish non-existant resource. " +
+                          "You don't actually have a file called '{0}.txt' in your user directory do you?", filename));
+        Assert.IsTrue(resource.Description.IndexOf(foldername) > -1,
+            "Rubbish environment variable not preserved as-is.");
+    }
 }

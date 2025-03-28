@@ -20,52 +20,50 @@
 
 using Spring.Objects.Factory;
 
-namespace Spring.Messaging.Ems.Jndi
+namespace Spring.Messaging.Ems.Jndi;
+
+/// <summary>
+/// A Spring FactoryObject that returns TIBCO.EMS.ILookupContext.  Use the returned
+/// ILookupContext to do you lookups at runtime.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Important properties to set are JndiProperties and JndiContexType.  JndiContextType is set to
+/// LookupContextFactory.TIBJMS_NAMING_CONT by default.
+/// </para>
+/// <para>To lookup objects at startup time and cache their values, as well as provide a
+/// default value if lookup fail, <see cref="JndiLookupFactoryObject"/>
+/// </para>
+/// </remarks>
+/// <author>Mark Pollack</author>
+public class LookupContextFactoryObject : JndiLocatorSupport, IFactoryObject
 {
+    #region Implementation of IFactoryObject
+
     /// <summary>
-    /// A Spring FactoryObject that returns TIBCO.EMS.ILookupContext.  Use the returned
-    /// ILookupContext to do you lookups at runtime.
+    /// Returns the TIBCO.EMS.ILookupContext
     /// </summary>
-    /// <remarks>
-    /// <para>
-    /// Important properties to set are JndiProperties and JndiContexType.  JndiContextType is set to
-    /// LookupContextFactory.TIBJMS_NAMING_CONT by default.
-    /// </para>
-    /// <para>To lookup objects at startup time and cache their values, as well as provide a 
-    /// default value if lookup fail, <see cref="JndiLookupFactoryObject"/>
-    /// </para>
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public class LookupContextFactoryObject : JndiLocatorSupport, IFactoryObject
+    /// <returns>TIBCO.EMS.ILookupContext</returns>
+    public object GetObject()
     {
-        #region Implementation of IFactoryObject
-
-        /// <summary>
-        /// Returns the TIBCO.EMS.ILookupContext
-        /// </summary>
-        /// <returns>TIBCO.EMS.ILookupContext</returns>
-        public object GetObject()
-        {
-            return this.JndiLookupContext;
-        }
-
-        /// <summary>
-        /// Return typeof(TIBCO.EMS.ILookupContext)
-        /// </summary>
-        public Type ObjectType
-        {
-            get { return typeof (ILookupContext);  }
-        }
-
-        /// <summary>
-        /// Returns true
-        /// </summary>
-        public bool IsSingleton
-        {
-            get { return true; }
-        }
-
-        #endregion
-
+        return this.JndiLookupContext;
     }
+
+    /// <summary>
+    /// Return typeof(TIBCO.EMS.ILookupContext)
+    /// </summary>
+    public Type ObjectType
+    {
+        get { return typeof(ILookupContext); }
+    }
+
+    /// <summary>
+    /// Returns true
+    /// </summary>
+    public bool IsSingleton
+    {
+        get { return true; }
+    }
+
+    #endregion
 }

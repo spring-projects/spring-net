@@ -18,48 +18,47 @@
 
 #endregion
 
-namespace Spring.Aop.Framework.Adapter
+namespace Spring.Aop.Framework.Adapter;
+
+/// <summary>
+/// Provides Singleton-style access to the default
+/// <see cref="IAdvisorAdapterRegistry"/> instance.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+[Serializable]
+public sealed class GlobalAdvisorAdapterRegistry : DefaultAdvisorAdapterRegistry
 {
+    private static readonly GlobalAdvisorAdapterRegistry instance
+        = new GlobalAdvisorAdapterRegistry();
+
     /// <summary>
-    /// Provides Singleton-style access to the default
-    /// <see cref="IAdvisorAdapterRegistry"/> instance.
+    /// The default <see cref="IAdvisorAdapterRegistry"/> instance.
     /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Aleksandar Seovic (.NET)</author>
-    [Serializable]
-    public sealed class GlobalAdvisorAdapterRegistry : DefaultAdvisorAdapterRegistry
+    public static GlobalAdvisorAdapterRegistry Instance
     {
-        private static readonly GlobalAdvisorAdapterRegistry instance
-            = new GlobalAdvisorAdapterRegistry();
-
-        /// <summary>
-        /// The default <see cref="IAdvisorAdapterRegistry"/> instance.
-        /// </summary>
-        public static GlobalAdvisorAdapterRegistry Instance
-        {
-            get { return instance; }
-        }
-
-        #region Constructor (s) / Destructor
-
-        // CLOVER:OFF
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Aop.Framework.Adapter.GlobalAdvisorAdapterRegistry"/> class.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// This contructor is marked as <see langword="private"/> to enforce the
-        /// Singleton pattern
-        /// </p>
-        /// </remarks>
-        private GlobalAdvisorAdapterRegistry()
-        {
-        }
-
-        // CLOVER:ON
-
-        #endregion
+        get { return instance; }
     }
+
+    #region Constructor (s) / Destructor
+
+    // CLOVER:OFF
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Framework.Adapter.GlobalAdvisorAdapterRegistry"/> class.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// This contructor is marked as <see langword="private"/> to enforce the
+    /// Singleton pattern
+    /// </p>
+    /// </remarks>
+    private GlobalAdvisorAdapterRegistry()
+    {
+    }
+
+    // CLOVER:ON
+
+    #endregion
 }

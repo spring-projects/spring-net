@@ -26,18 +26,17 @@ using Spring.Messaging;
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>Test that the Messaging assembly is built with the correct DebugAttributes in release and debug builds.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public sealed class MessagingCompilerOptionTests : CompilerOptionsTests
 {
-    /// <summary>Test that the Messaging assembly is built with the correct DebugAttributes in release and debug builds.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public sealed class MessagingCompilerOptionTests : CompilerOptionsTests
+    [OneTimeSetUp]
+    public void FixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void FixtureSetUp()
-        {
-            AssemblyToCheck = Assembly.GetAssembly(typeof (MessagingException));
-        }
+        AssemblyToCheck = Assembly.GetAssembly(typeof(MessagingException));
     }
 }

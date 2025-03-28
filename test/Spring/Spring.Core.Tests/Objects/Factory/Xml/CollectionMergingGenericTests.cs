@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,38 +25,36 @@ using Spring.Objects.Factory.Support;
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Unit and integration tests for the collection merging support
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans</author>
+/// <author>Mark Pollack (.NET)</author>
+[TestFixture]
+[Description("SPRNET-1242 Support for collection merging with generic collections")]
+public class CollectionMergingGenericTests
 {
-	/// <summary>
-	/// Unit and integration tests for the collection merging support
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Rick Evans</author>
-	/// <author>Mark Pollack (.NET)</author>
-	[TestFixture]
-    [Description("SPRNET-1242 Support for collection merging with generic collections")]
-	public class CollectionMergingGenericTests
-	{
-	    private DefaultListableObjectFactory objectFactory;
+    private DefaultListableObjectFactory objectFactory;
 
-        [SetUp]
-        public void SetUp()
-        {
-            this.objectFactory = new DefaultListableObjectFactory();
-            IObjectDefinitionReader reader = new XmlObjectDefinitionReader(this.objectFactory);
-            reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("collectionMergingGeneric.xml", GetType()));
-        }
+    [SetUp]
+    public void SetUp()
+    {
+        this.objectFactory = new DefaultListableObjectFactory();
+        IObjectDefinitionReader reader = new XmlObjectDefinitionReader(this.objectFactory);
+        reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("collectionMergingGeneric.xml", GetType()));
+    }
 
-        [Test]
-        public void MergeList()
-        {
-            TestObject to = (TestObject) this.objectFactory.GetObject("childWithList");
-            System.Collections.Generic.List<string> list = to.SomeGenericStringList;
-            Assert.That(3, Is.EqualTo(list.Count));
-            Assert.That("Rob Harrop", Is.EqualTo(list[0]));
-            Assert.That("Rod Johnson", Is.EqualTo(list[1]));
-            Assert.That("Juergen Hoeller", Is.EqualTo(list[2]));
-        }
-
-	}
+    [Test]
+    public void MergeList()
+    {
+        TestObject to = (TestObject) this.objectFactory.GetObject("childWithList");
+        System.Collections.Generic.List<string> list = to.SomeGenericStringList;
+        Assert.That(3, Is.EqualTo(list.Count));
+        Assert.That("Rob Harrop", Is.EqualTo(list[0]));
+        Assert.That("Rod Johnson", Is.EqualTo(list[1]));
+        Assert.That("Juergen Hoeller", Is.EqualTo(list[2]));
+    }
 }

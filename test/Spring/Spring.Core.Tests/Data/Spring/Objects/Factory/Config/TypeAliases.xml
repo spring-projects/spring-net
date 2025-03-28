@@ -1,59 +1,60 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <objects xmlns="http://www.springframework.net">
 
-  <object type="Spring.Objects.Factory.Config.TypeAliasConfigurer">
-    <property name="TypeAliases">
-      <dictionary>
-        <entry key="TestObject" value="Spring.Objects.TestObject, Spring.Core.Tests" />
-        <entry key="intAlias" value="System.Int32" />
-        <entry key="TVariablePlaceholderConfigurer" value="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core"/>
-      </dictionary>
-    </property>
-  </object>
+    <object type="Spring.Objects.Factory.Config.TypeAliasConfigurer">
+        <property name="TypeAliases">
+            <dictionary>
+                <entry key="TestObject" value="Spring.Objects.TestObject, Spring.Core.Tests" />
+                <entry key="intAlias" value="System.Int32" />
+                <entry key="TVariablePlaceholderConfigurer"
+                       value="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core" />
+            </dictionary>
+        </property>
+    </object>
 
-  <object id="vpc" type="TVariablePlaceholderConfigurer">
-    <property name="VariableSources">
-      <list>
-        <object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core">
-          <property name="SectionNames" value="PropertyPlaceholderConfigurerSectionTest" />
-        </object>
-      </list>
-    </property>
-  </object>
-  
-  <object lazy-init="true" type="Spring.Objects.Factory.Config.PropertyOverrideConfigurer, Spring.Core">
-    <property name="Order" value="2000"/>
-    <property name="ConfigSections" value="${prop.override.section}" />
-  </object>
+    <object id="vpc" type="TVariablePlaceholderConfigurer">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core">
+                    <property name="SectionNames" value="PropertyPlaceholderConfigurerSectionTest" />
+                </object>
+            </list>
+        </property>
+    </object>
 
-  <object id="testObject1" type="TestObject"/>
+    <object lazy-init="true" type="Spring.Objects.Factory.Config.PropertyOverrideConfigurer, Spring.Core">
+        <property name="Order" value="2000" />
+        <property name="ConfigSections" value="${prop.override.section}" />
+    </object>
 
-  <object id="baseTestObject" type="TestObject" abstract="true"/>
-  <object id="testObject2" parent="baseTestObject"/>
+    <object id="testObject1" type="TestObject" />
 
-  <object id="testObject3" type="TestObject">
-    <constructor-arg name="name" value="Bruno"/>
-    <constructor-arg name="age" value="26"/>
-  </object>
+    <object id="baseTestObject" type="TestObject" abstract="true" />
+    <object id="testObject2" parent="baseTestObject" />
+
+    <object id="testObject3" type="TestObject">
+        <constructor-arg name="name" value="Bruno" />
+        <constructor-arg name="age" value="26" />
+    </object>
 
 
-  <object id="testObject5" type="TestObject">
-    <constructor-arg name="name" value="Joe"/>
-    <constructor-arg name="age" value="26"/>
-  </object>
+    <object id="testObject5" type="TestObject">
+        <constructor-arg name="name" value="Joe" />
+        <constructor-arg name="age" value="26" />
+    </object>
 
-  <object id="testObject6" type="TestObject">
-    <constructor-arg name="name" value="${test.name.1}"/>
-    <constructor-arg name="age" value="27"/>
-  </object>
-  
+    <object id="testObject6" type="TestObject">
+        <constructor-arg name="name" value="${test.name.1}" />
+        <constructor-arg name="age" value="27" />
+    </object>
 
-  <!-- SPRNET-1119 -->
-  <object id="testObject4" type="TestObject">
-    <constructor-arg name="name" value="Bruno"/>
-    <constructor-arg name="age">
-      <value type="intAlias">30</value>
-    </constructor-arg>
-  </object>
+
+    <!-- SPRNET-1119 -->
+    <object id="testObject4" type="TestObject">
+        <constructor-arg name="name" value="Bruno" />
+        <constructor-arg name="age">
+            <value type="intAlias">30</value>
+        </constructor-arg>
+    </object>
 
 </objects>

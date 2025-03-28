@@ -18,13 +18,12 @@
 
 #endregion
 
-namespace Spring.Expressions.Processors
+namespace Spring.Expressions.Processors;
+
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+public interface IMethodCallProcessor
 {
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    public interface IMethodCallProcessor
-    {
-        object Process(object context, object[] args);
-    }
+    object Process(object context, object[] args);
 }

@@ -21,34 +21,33 @@
 using NUnit.Framework;
 using Spring.Core;
 
-namespace Spring.Objects
+namespace Spring.Objects;
+
+/// <summary>
+/// Unit tests for the TypeMismatchException class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class TypeMismatchExceptionTests
 {
-	/// <summary>
-	/// Unit tests for the TypeMismatchException class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class TypeMismatchExceptionTests
+    [Test]
+    public void InstantiationSupplyingPropertyChangeArgsType()
     {
-		[Test]
-		public void InstantiationSupplyingPropertyChangeArgsType()
-		{
-			TypeMismatchException ex = new TypeMismatchException(new PropertyChangeEventArgs("Doctor", new NestedTestObject("Foo"), new TestObject("Hershey", 12)), typeof (INestedTestObject));
-			Assert.AreEqual("typeMismatch", ex.ErrorCode);
-		}
+        TypeMismatchException ex = new TypeMismatchException(new PropertyChangeEventArgs("Doctor", new NestedTestObject("Foo"), new TestObject("Hershey", 12)), typeof(INestedTestObject));
+        Assert.AreEqual("typeMismatch", ex.ErrorCode);
+    }
 
-		[Test]
-		public void InstantiationSupplyingPropertyChangeArgsTypeAndRootException()
-		{
-			TypeMismatchException ex = new TypeMismatchException(new PropertyChangeEventArgs("Doctor", new NestedTestObject("Foo"), new TestObject("Hershey", 12)), typeof (INestedTestObject), null);
-			Assert.AreEqual("typeMismatch", ex.ErrorCode);
-		}
+    [Test]
+    public void InstantiationSupplyingPropertyChangeArgsTypeAndRootException()
+    {
+        TypeMismatchException ex = new TypeMismatchException(new PropertyChangeEventArgs("Doctor", new NestedTestObject("Foo"), new TestObject("Hershey", 12)), typeof(INestedTestObject), null);
+        Assert.AreEqual("typeMismatch", ex.ErrorCode);
+    }
 
-		[Test]
-		public void InstantiationSupplyingNullPropertyChangeArgsAndNullType()
-		{
-			TypeMismatchException ex = new TypeMismatchException(null, null, null);
-			Assert.AreEqual("typeMismatch", ex.ErrorCode);
-		}
-	}
+    [Test]
+    public void InstantiationSupplyingNullPropertyChangeArgsAndNullType()
+    {
+        TypeMismatchException ex = new TypeMismatchException(null, null, null);
+        Assert.AreEqual("typeMismatch", ex.ErrorCode);
+    }
 }

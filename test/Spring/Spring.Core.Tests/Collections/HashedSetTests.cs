@@ -24,23 +24,22 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Collections
+namespace Spring.Collections;
+
+/// <summary>
+/// Unit tests for the HashedSet class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public class HashedSetTests : SetTests
 {
-	/// <summary>
-	/// Unit tests for the HashedSet class.
+    /// <summary>
+    /// The setup logic executed before the execution of each individual test.
     /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    public class HashedSetTests : SetTests
+    [SetUp]
+    public override void SetUp()
     {
-        /// <summary>
-        /// The setup logic executed before the execution of each individual test.
-        /// </summary>
-        [SetUp]
-        public override void SetUp () 
-        {
-            Set = new HashedSet ();
-            SetForSetOps = new HashedSet ();
-        }
-	}
+        Set = new HashedSet();
+        SetForSetOps = new HashedSet();
+    }
 }

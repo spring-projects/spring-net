@@ -21,91 +21,90 @@
 using System.Collections;
 using NUnit.Framework;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the DictionaryFactoryObject class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class DictionaryFactoryObjectTests
 {
-	/// <summary>
-	/// Unit tests for the DictionaryFactoryObject class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class DictionaryFactoryObjectTests
-	{
-		[Test]
-		public void SetTargetDictionaryTypeToNonDictionaryType()
-		{
-			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-            Assert.Throws<ArgumentException>(() => dfo.TargetDictionaryType = typeof (ICollection), "The Type passed to the TargetDictionaryType property must implement the 'System.Collections.IDictionary' interface.");
-		}
+    [Test]
+    public void SetTargetDictionaryTypeToNonDictionaryType()
+    {
+        DictionaryFactoryObject dfo = new DictionaryFactoryObject();
+        Assert.Throws<ArgumentException>(() => dfo.TargetDictionaryType = typeof(ICollection), "The Type passed to the TargetDictionaryType property must implement the 'System.Collections.IDictionary' interface.");
+    }
 
-		[Test]
-		public void SetTargetDictionaryTypeToDerivedIDictionaryInterfaceType()
-		{
-			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-            Assert.Throws<ArgumentException>(() => dfo.TargetDictionaryType = typeof (IExtendedDictionary), "The Type passed to the TargetDictionaryType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IDictionary' interface.");
-		}
+    [Test]
+    public void SetTargetDictionaryTypeToDerivedIDictionaryInterfaceType()
+    {
+        DictionaryFactoryObject dfo = new DictionaryFactoryObject();
+        Assert.Throws<ArgumentException>(() => dfo.TargetDictionaryType = typeof(IExtendedDictionary), "The Type passed to the TargetDictionaryType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IDictionary' interface.");
+    }
 
-		[Test]
-		public void SetTargetDictionaryTypeToAbstractIDictionaryInterfaceType()
-		{
-			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-            Assert.Throws<ArgumentException>(() => dfo.TargetDictionaryType = typeof (AbstractDictionary), "The Type passed to the TargetDictionaryType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IDictionary' interface.");
-		}
+    [Test]
+    public void SetTargetDictionaryTypeToAbstractIDictionaryInterfaceType()
+    {
+        DictionaryFactoryObject dfo = new DictionaryFactoryObject();
+        Assert.Throws<ArgumentException>(() => dfo.TargetDictionaryType = typeof(AbstractDictionary), "The Type passed to the TargetDictionaryType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IDictionary' interface.");
+    }
 
-		private interface IExtendedDictionary : IDictionary
-		{
-		}
+    private interface IExtendedDictionary : IDictionary
+    {
+    }
 
-		private abstract class AbstractDictionary : Hashtable
-		{
-		}
+    private abstract class AbstractDictionary : Hashtable
+    {
+    }
 
-		[Test]
-		public void SetTargetDictionaryTypeToNull()
-		{
-			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-            Assert.Throws<ArgumentNullException>(() => dfo.TargetDictionaryType = null);
-		}
+    [Test]
+    public void SetTargetDictionaryTypeToNull()
+    {
+        DictionaryFactoryObject dfo = new DictionaryFactoryObject();
+        Assert.Throws<ArgumentNullException>(() => dfo.TargetDictionaryType = null);
+    }
 
-		[Test]
-		public void GetObjectWithoutSupplyingASourceDictionary()
-		{
-			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-			dfo.IsSingleton = false;
-            Assert.Throws<ArgumentException>(() => dfo.GetObject(), "The 'SourceDictionary' property cannot be null (Nothing in Visual Basic.NET).");
-		}
+    [Test]
+    public void GetObjectWithoutSupplyingASourceDictionary()
+    {
+        DictionaryFactoryObject dfo = new DictionaryFactoryObject();
+        dfo.IsSingleton = false;
+        Assert.Throws<ArgumentException>(() => dfo.GetObject(), "The 'SourceDictionary' property cannot be null (Nothing in Visual Basic.NET).");
+    }
 
-		[Test]
-		public void ObjectTypeReallyIsIDictionary()
-		{
-			Assert.AreEqual(typeof (IDictionary), new DictionaryFactoryObject().ObjectType);
-		}
+    [Test]
+    public void ObjectTypeReallyIsIDictionary()
+    {
+        Assert.AreEqual(typeof(IDictionary), new DictionaryFactoryObject().ObjectType);
+    }
 
-		[Test]
-		public void GetObjectReallyDoesPopulateANewIDictionaryInstanceWithTheElementsOfTheSourceDictionary()
-		{
-			// man, that has got to be my longest ever test name :D ...
-			IDictionary source = new Hashtable();
-			TestObject rick = new TestObject("Rick", 30);
-			source.Add(rick.Name, rick);
-			TestObject mark = new TestObject("Mark", 35);
-			source.Add(mark.Name, mark);
-			TestObject griffin = new TestObject("Griffin", 21);
-			source.Add(griffin.Name, griffin);
+    [Test]
+    public void GetObjectReallyDoesPopulateANewIDictionaryInstanceWithTheElementsOfTheSourceDictionary()
+    {
+        // man, that has got to be my longest ever test name :D ...
+        IDictionary source = new Hashtable();
+        TestObject rick = new TestObject("Rick", 30);
+        source.Add(rick.Name, rick);
+        TestObject mark = new TestObject("Mark", 35);
+        source.Add(mark.Name, mark);
+        TestObject griffin = new TestObject("Griffin", 21);
+        source.Add(griffin.Name, griffin);
 
-			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-			dfo.SourceDictionary = source;
-			dfo.AfterPropertiesSet();
+        DictionaryFactoryObject dfo = new DictionaryFactoryObject();
+        dfo.SourceDictionary = source;
+        dfo.AfterPropertiesSet();
 
-			IDictionary dic = (IDictionary) dfo.GetObject();
-			Assert.IsNotNull(dic);
-			Assert.AreEqual(source.Count, dic.Count);
-			foreach (DictionaryEntry entry in dic)
-			{
-				string name = (string) entry.Key;
-				TestObject dude = (TestObject) entry.Value;
-				TestObject originalDude = (TestObject) source[name];
-				Assert.IsTrue(object.ReferenceEquals(dude, originalDude));
-			}
-		}
-	}
+        IDictionary dic = (IDictionary) dfo.GetObject();
+        Assert.IsNotNull(dic);
+        Assert.AreEqual(source.Count, dic.Count);
+        foreach (DictionaryEntry entry in dic)
+        {
+            string name = (string) entry.Key;
+            TestObject dude = (TestObject) entry.Value;
+            TestObject originalDude = (TestObject) source[name];
+            Assert.IsTrue(object.ReferenceEquals(dude, originalDude));
+        }
+    }
 }

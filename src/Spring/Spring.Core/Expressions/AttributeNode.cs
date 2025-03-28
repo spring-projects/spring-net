@@ -19,64 +19,63 @@
 #endregion
 
 using System.Runtime.Serialization;
-
 using Spring.Core.TypeResolution;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed attribute node in the navigation expression.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class AttributeNode : ConstructorNode
 {
     /// <summary>
-    /// Represents parsed attribute node in the navigation expression.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class AttributeNode : ConstructorNode
+    public AttributeNode()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public AttributeNode()
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected AttributeNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Tries to determine attribute type based on the specified
+    /// attribute type name.
+    /// </summary>
+    /// <param name="typeName">
+    /// Attribute type name to resolve.
+    /// </param>
+    /// <returns>
+    /// Resolved attribute type.
+    /// </returns>
+    /// <exception cref="TypeLoadException">
+    /// If type cannot be resolved.
+    /// </exception>
+    protected override Type GetObjectType(string typeName)
+    {
+        Type type;
+
+        try
         {
+            type = base.GetObjectType(typeName);
         }
-
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected AttributeNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        catch (TypeLoadException)
         {
-        }
-
-        /// <summary>
-        /// Tries to determine attribute type based on the specified
-        /// attribute type name.
-        /// </summary>
-        /// <param name="typeName">
-        /// Attribute type name to resolve.
-        /// </param>
-        /// <returns>
-        /// Resolved attribute type.
-        /// </returns>
-        /// <exception cref="TypeLoadException">
-        /// If type cannot be resolved.
-        /// </exception>
-        protected override Type GetObjectType(string typeName)
-        {
-            Type type;
-
-            try
+            if (typeName.EndsWith("Attribute"))
             {
-                type = base.GetObjectType(typeName);
-            }
-            catch (TypeLoadException)
-            {
-                if (typeName.EndsWith("Attribute"))
-                {
-                    throw;
-                }
-                type = TypeResolutionUtils.ResolveType(typeName + "Attribute");
+                throw;
             }
 
-            return type;
+            type = TypeResolutionUtils.ResolveType(typeName + "Attribute");
         }
+
+        return type;
     }
 }

@@ -18,55 +18,53 @@
 
 #endregion
 
-namespace Spring.Context.Support
-{  
-    /// <author>Mark Pollack</author>
-    public class Service : IApplicationContextAware, IMessageSourceAware, IDisposable
+namespace Spring.Context.Support;
+
+/// <author>Mark Pollack</author>
+public class Service : IApplicationContextAware, IMessageSourceAware, IDisposable
+{
+    private IApplicationContext applicationContext;
+    private IMessageSource messageSource;
+    private IResourceLoaderAware[] resources;
+    private bool properlyDestroyed = false;
+
+    public IApplicationContext ApplicationContext
     {
-        private IApplicationContext applicationContext;
-        private IMessageSource messageSource;
-        private IResourceLoaderAware[] resources;
-        private bool properlyDestroyed = false;
+        get { return applicationContext; }
+        set { applicationContext = value; }
+    }
 
-        public IApplicationContext ApplicationContext
+    public IMessageSource MessageSource
+    {
+        set
         {
-            get { return applicationContext; }
-            set { applicationContext = value; }
-        }
-
-        public IMessageSource MessageSource
-        {
-            set
+            if (messageSource != null)
             {
-                if (messageSource != null)
-                {
-                    throw new InvalidOperationException("MessageSource should not be set twice");
-                }
-                messageSource = value;
-            }
-            get
-            {
-                return messageSource;
+                throw new InvalidOperationException("MessageSource should not be set twice");
             }
 
+            messageSource = value;
         }
-
-
-        public IResourceLoaderAware[] Resources
+        get
         {
-            get { return resources; }
-            set { resources = value; }
+            return messageSource;
         }
+    }
 
-        public bool ProperlyDestroyed
-        {
-            get { return properlyDestroyed; }
-        }
+    public IResourceLoaderAware[] Resources
+    {
+        get { return resources; }
+        set { resources = value; }
+    }
 
-        public void Dispose()
-        {
-            properlyDestroyed = true;
-            //TODO - try to get object while destroying, expect ObjectCreationNotAllowedException
-        }
+    public bool ProperlyDestroyed
+    {
+        get { return properlyDestroyed; }
+    }
+
+    public void Dispose()
+    {
+        properlyDestroyed = true;
+        //TODO - try to get object while destroying, expect ObjectCreationNotAllowedException
     }
 }

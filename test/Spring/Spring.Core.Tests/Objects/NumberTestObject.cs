@@ -18,49 +18,48 @@
 
 #endregion
 
-namespace Spring.Objects
+namespace Spring.Objects;
+
+/// <summary>
+/// 
+/// </summary>
+/// <author>Juergen Hoeller</author>
+public sealed class NumberTestObject
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	public sealed class NumberTestObject
-	{
-		private short _myShort;
-		private int _myInt;
-		private long _myLong;
+    private short _myShort;
+    private int _myInt;
+    private long _myLong;
 
-		public short MyShort
-		{
-			get { return _myShort; }
-			set { _myShort = value; }
-		}
+    public short MyShort
+    {
+        get { return _myShort; }
+        set { _myShort = value; }
+    }
 
-		public int MyInt
-		{
-			get { return _myInt; }
-			set { _myInt = value; }
-		}
+    public int MyInt
+    {
+        get { return _myInt; }
+        set { _myInt = value; }
+    }
 
-		public long MyLong
-		{
-			get { return _myLong; }
-			set { _myLong = value; }
-		}
+    public long MyLong
+    {
+        get { return _myLong; }
+        set { _myLong = value; }
+    }
 
-		public float MyFloat
-		{
-			get { return _myFloat; }
-			set { _myFloat = value; }
-		}
+    public float MyFloat
+    {
+        get { return _myFloat; }
+        set { _myFloat = value; }
+    }
 
-		public double MyDouble
-		{
-			get { return _myDouble; }
-			set { _myDouble = value; }
-		}
+    public double MyDouble
+    {
+        get { return _myDouble; }
+        set { _myDouble = value; }
+    }
 
-		private float _myFloat;
-		private double _myDouble;
-	}
+    private float _myFloat;
+    private double _myDouble;
 }

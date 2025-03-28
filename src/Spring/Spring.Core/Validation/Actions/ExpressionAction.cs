@@ -20,91 +20,92 @@
 
 using Spring.Expressions;
 
-namespace Spring.Validation.Actions
+namespace Spring.Validation.Actions;
+
+/// <summary>
+/// Implementation of <see cref="IValidationAction"/> that allows you
+/// to define Spring.NET expressions that should be evaluated after
+/// validation.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class ExpressionAction : BaseValidationAction
 {
+    private IExpression onValid;
+    private IExpression onInvalid;
+
     /// <summary>
-    /// Implementation of <see cref="IValidationAction"/> that allows you
-    /// to define Spring.NET expressions that should be evaluated after
-    /// validation.
+    /// Initializes a new instance of the <see cref="ExpressionAction"/> class.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class ExpressionAction : BaseValidationAction
+    public ExpressionAction()
     {
-        private IExpression onValid;
-        private IExpression onInvalid;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExpressionAction"/> class.
-        /// </summary>
-        public ExpressionAction()
-        {}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExpressionAction"/> class.
+    /// </summary>
+    /// <param name="onValid">Expression to execute when validator is valid.</param>
+    /// <param name="onInvalid">Expression to execute when validator is not valid.</param>
+    public ExpressionAction(string onValid, string onInvalid)
+        : this((onValid != null ? Expression.Parse(onValid) : null), (onInvalid != null ? Expression.Parse(onInvalid) : null))
+    {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExpressionAction"/> class.
-        /// </summary>
-        /// <param name="onValid">Expression to execute when validator is valid.</param>
-        /// <param name="onInvalid">Expression to execute when validator is not valid.</param>
-        public ExpressionAction(string onValid, string onInvalid)
-            : this((onValid != null ? Expression.Parse(onValid) : null), (onInvalid != null ? Expression.Parse(onInvalid) : null))
-        {}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExpressionAction"/> class.
+    /// </summary>
+    /// <param name="onValid">Expression to execute when validator is valid.</param>
+    /// <param name="onInvalid">Expression to execute when validator is not valid.</param>
+    public ExpressionAction(IExpression onValid, IExpression onInvalid)
+    {
+        this.onValid = onValid;
+        this.onInvalid = onInvalid;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExpressionAction"/> class.
-        /// </summary>
-        /// <param name="onValid">Expression to execute when validator is valid.</param>
-        /// <param name="onInvalid">Expression to execute when validator is not valid.</param>
-        public ExpressionAction(IExpression onValid, IExpression onInvalid)
+    /// <summary>
+    /// Gets or sets the expression to execute when validator is valid.
+    /// </summary>
+    /// <value>The expression to execute when validator is valid.</value>
+    public IExpression Valid
+    {
+        get { return onValid; }
+        set { onValid = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the expression to execute when validator is not valid.
+    /// </summary>
+    /// <value>The expression to execute when validator is not valid.</value>
+    public IExpression Invalid
+    {
+        get { return onInvalid; }
+        set { onInvalid = value; }
+    }
+
+    /// <summary>
+    /// Called when associated validator is valid.
+    /// </summary>
+    /// <param name="validationContext">Validation context.</param>
+    /// <param name="contextParams">Additional context parameters.</param>
+    /// <param name="errors">Validation errors container.</param>
+    protected override void OnValid(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
+    {
+        if (Valid != null)
         {
-            this.onValid = onValid;
-            this.onInvalid = onInvalid;
+            Valid.GetValue(validationContext, contextParams);
         }
+    }
 
-        /// <summary>
-        /// Gets or sets the expression to execute when validator is valid.
-        /// </summary>
-        /// <value>The expression to execute when validator is valid.</value>
-        public IExpression Valid
+    /// <summary>
+    /// Called when associated validator is invalid.
+    /// </summary>
+    /// <param name="validationContext">Validation context.</param>
+    /// <param name="contextParams">Additional context parameters.</param>
+    /// <param name="errors">Validation errors container.</param>
+    protected override void OnInvalid(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
+    {
+        if (Invalid != null)
         {
-            get { return onValid; }
-            set { onValid = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the expression to execute when validator is not valid.
-        /// </summary>
-        /// <value>The expression to execute when validator is not valid.</value>
-        public IExpression Invalid
-        {
-            get { return onInvalid; }
-            set { onInvalid = value; }
-        }
-
-        /// <summary>
-        /// Called when associated validator is valid.
-        /// </summary>
-        /// <param name="validationContext">Validation context.</param>
-        /// <param name="contextParams">Additional context parameters.</param>
-        /// <param name="errors">Validation errors container.</param>
-        protected override void OnValid(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
-        {
-            if (Valid != null)
-            {
-                Valid.GetValue(validationContext, contextParams);
-            }
-        }
-
-        /// <summary>
-        /// Called when associated validator is invalid.
-        /// </summary>
-        /// <param name="validationContext">Validation context.</param>
-        /// <param name="contextParams">Additional context parameters.</param>
-        /// <param name="errors">Validation errors container.</param>
-        protected override void OnInvalid(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
-        {
-            if (Invalid != null)
-            {
-                Invalid.GetValue(validationContext, contextParams);
-            }
+            Invalid.GetValue(validationContext, contextParams);
         }
     }
 }

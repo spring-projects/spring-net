@@ -1,209 +1,215 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.springframwework.net" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.springframwework.net" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:types>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://www.springframwework.net">
-      <s:element name="SayHelloWorld">
-        <s:complexType />
-      </s:element>
-      <s:element name="SayHelloWorldResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="SayHelloWorldResult" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="SayHello">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="SayHelloResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="out" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="SayHelloArray">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="SayHelloArrayResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="out" type="tns:ArrayOfString" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:complexType name="ArrayOfString">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
-        </s:sequence>
-      </s:complexType>
-      <s:element name="LogHelloWorld">
-        <s:complexType />
-      </s:element>
-      <s:element name="MyLogHello">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="MyLogHelloResponse">
-        <s:complexType />
-      </s:element>
-    </s:schema>
-  </wsdl:types>
-  <wsdl:message name="SayHelloWorldSoapIn">
-    <wsdl:part name="parameters" element="tns:SayHelloWorld" />
-  </wsdl:message>
-  <wsdl:message name="SayHelloWorldSoapOut">
-    <wsdl:part name="parameters" element="tns:SayHelloWorldResponse" />
-  </wsdl:message>
-  <wsdl:message name="SayHelloSoapIn">
-    <wsdl:part name="parameters" element="tns:SayHello" />
-  </wsdl:message>
-  <wsdl:message name="SayHelloSoapOut">
-    <wsdl:part name="parameters" element="tns:SayHelloResponse" />
-  </wsdl:message>
-  <wsdl:message name="SayHelloArraySoapIn">
-    <wsdl:part name="parameters" element="tns:SayHelloArray" />
-  </wsdl:message>
-  <wsdl:message name="SayHelloArraySoapOut">
-    <wsdl:part name="parameters" element="tns:SayHelloArrayResponse" />
-  </wsdl:message>
-  <wsdl:message name="LogHelloWorldSoapIn">
-    <wsdl:part name="parameters" element="tns:LogHelloWorld" />
-  </wsdl:message>
-  <wsdl:message name="MyLogHelloSoapIn">
-    <wsdl:part name="parameters" element="tns:MyLogHello" />
-  </wsdl:message>
-  <wsdl:message name="MyLogHelloSoapOut">
-    <wsdl:part name="parameters" element="tns:MyLogHelloResponse" />
-  </wsdl:message>
-  <wsdl:portType name="HelloWorldServiceSoap">
-    <wsdl:operation name="SayHelloWorld">
-      <wsdl:input message="tns:SayHelloWorldSoapIn" />
-      <wsdl:output message="tns:SayHelloWorldSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="SayHello">
-      <wsdl:input message="tns:SayHelloSoapIn" />
-      <wsdl:output message="tns:SayHelloSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="SayHelloArray">
-      <wsdl:input message="tns:SayHelloArraySoapIn" />
-      <wsdl:output message="tns:SayHelloArraySoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="LogHelloWorld">
-      <wsdl:input message="tns:LogHelloWorldSoapIn" />
-    </wsdl:operation>
-    <wsdl:operation name="LogHello">
-      <wsdl:input name="MyLogHello" message="tns:MyLogHelloSoapIn" />
-      <wsdl:output name="MyLogHello" message="tns:MyLogHelloSoapOut" />
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="HelloWorldServiceSoap" type="tns:HelloWorldServiceSoap">
-    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="SayHelloWorld">
-      <soap:operation soapAction="http://www.springframwework.net/SayHelloWorld" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SayHello">
-      <soap:operation soapAction="http://www.springframwework.net/SayHello" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SayHelloArray">
-      <soap:operation soapAction="http://www.springframwework.net/SayHelloArray" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LogHelloWorld">
-      <soap:operation soapAction="http://www.springframwework.net/LogHelloWorld" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="LogHello">
-      <soap:operation soapAction="http://www.springframwework.net/MyLogHello" style="document" />
-      <wsdl:input name="MyLogHello">
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output name="MyLogHello">
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:binding name="HelloWorldServiceSoap12" type="tns:HelloWorldServiceSoap">
-    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="SayHelloWorld">
-      <soap12:operation soapAction="http://www.springframwework.net/SayHelloWorld" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SayHello">
-      <soap12:operation soapAction="http://www.springframwework.net/SayHello" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SayHelloArray">
-      <soap12:operation soapAction="http://www.springframwework.net/SayHelloArray" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LogHelloWorld">
-      <soap12:operation soapAction="http://www.springframwework.net/LogHelloWorld" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="LogHello">
-      <soap12:operation soapAction="http://www.springframwework.net/MyLogHello" style="document" />
-      <wsdl:input name="MyLogHello">
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output name="MyLogHello">
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="HelloWorldService">
-    <wsdl:port name="HelloWorldServiceSoap" binding="tns:HelloWorldServiceSoap">
-      <soap:address location="http://localhost/HelloWebService.asmx" />
-    </wsdl:port>
-    <wsdl:port name="HelloWorldServiceSoap12" binding="tns:HelloWorldServiceSoap12">
-      <soap12:address location="http://localhost/HelloWebService.asmx" />
-    </wsdl:port>
-  </wsdl:service>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.springframwework.net"
+                  xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.springframwework.net"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <wsdl:types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://www.springframwework.net">
+            <s:element name="SayHelloWorld">
+                <s:complexType />
+            </s:element>
+            <s:element name="SayHelloWorldResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="SayHelloWorldResult" type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="SayHello">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="SayHelloResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="out" type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="SayHelloArray">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="SayHelloArrayResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="out" type="tns:ArrayOfString" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfString">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+                </s:sequence>
+            </s:complexType>
+            <s:element name="LogHelloWorld">
+                <s:complexType />
+            </s:element>
+            <s:element name="MyLogHello">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="MyLogHelloResponse">
+                <s:complexType />
+            </s:element>
+        </s:schema>
+    </wsdl:types>
+    <wsdl:message name="SayHelloWorldSoapIn">
+        <wsdl:part name="parameters" element="tns:SayHelloWorld" />
+    </wsdl:message>
+    <wsdl:message name="SayHelloWorldSoapOut">
+        <wsdl:part name="parameters" element="tns:SayHelloWorldResponse" />
+    </wsdl:message>
+    <wsdl:message name="SayHelloSoapIn">
+        <wsdl:part name="parameters" element="tns:SayHello" />
+    </wsdl:message>
+    <wsdl:message name="SayHelloSoapOut">
+        <wsdl:part name="parameters" element="tns:SayHelloResponse" />
+    </wsdl:message>
+    <wsdl:message name="SayHelloArraySoapIn">
+        <wsdl:part name="parameters" element="tns:SayHelloArray" />
+    </wsdl:message>
+    <wsdl:message name="SayHelloArraySoapOut">
+        <wsdl:part name="parameters" element="tns:SayHelloArrayResponse" />
+    </wsdl:message>
+    <wsdl:message name="LogHelloWorldSoapIn">
+        <wsdl:part name="parameters" element="tns:LogHelloWorld" />
+    </wsdl:message>
+    <wsdl:message name="MyLogHelloSoapIn">
+        <wsdl:part name="parameters" element="tns:MyLogHello" />
+    </wsdl:message>
+    <wsdl:message name="MyLogHelloSoapOut">
+        <wsdl:part name="parameters" element="tns:MyLogHelloResponse" />
+    </wsdl:message>
+    <wsdl:portType name="HelloWorldServiceSoap">
+        <wsdl:operation name="SayHelloWorld">
+            <wsdl:input message="tns:SayHelloWorldSoapIn" />
+            <wsdl:output message="tns:SayHelloWorldSoapOut" />
+        </wsdl:operation>
+        <wsdl:operation name="SayHello">
+            <wsdl:input message="tns:SayHelloSoapIn" />
+            <wsdl:output message="tns:SayHelloSoapOut" />
+        </wsdl:operation>
+        <wsdl:operation name="SayHelloArray">
+            <wsdl:input message="tns:SayHelloArraySoapIn" />
+            <wsdl:output message="tns:SayHelloArraySoapOut" />
+        </wsdl:operation>
+        <wsdl:operation name="LogHelloWorld">
+            <wsdl:input message="tns:LogHelloWorldSoapIn" />
+        </wsdl:operation>
+        <wsdl:operation name="LogHello">
+            <wsdl:input name="MyLogHello" message="tns:MyLogHelloSoapIn" />
+            <wsdl:output name="MyLogHello" message="tns:MyLogHelloSoapOut" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="HelloWorldServiceSoap" type="tns:HelloWorldServiceSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="SayHelloWorld">
+            <soap:operation soapAction="http://www.springframwework.net/SayHelloWorld" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SayHello">
+            <soap:operation soapAction="http://www.springframwework.net/SayHello" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SayHelloArray">
+            <soap:operation soapAction="http://www.springframwework.net/SayHelloArray" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="LogHelloWorld">
+            <soap:operation soapAction="http://www.springframwework.net/LogHelloWorld" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="LogHello">
+            <soap:operation soapAction="http://www.springframwework.net/MyLogHello" style="document" />
+            <wsdl:input name="MyLogHello">
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="MyLogHello">
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="HelloWorldServiceSoap12" type="tns:HelloWorldServiceSoap">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="SayHelloWorld">
+            <soap12:operation soapAction="http://www.springframwework.net/SayHelloWorld" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SayHello">
+            <soap12:operation soapAction="http://www.springframwework.net/SayHello" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="SayHelloArray">
+            <soap12:operation soapAction="http://www.springframwework.net/SayHelloArray" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="LogHelloWorld">
+            <soap12:operation soapAction="http://www.springframwework.net/LogHelloWorld" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="LogHello">
+            <soap12:operation soapAction="http://www.springframwework.net/MyLogHello" style="document" />
+            <wsdl:input name="MyLogHello">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="MyLogHello">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="HelloWorldService">
+        <wsdl:port name="HelloWorldServiceSoap" binding="tns:HelloWorldServiceSoap">
+            <soap:address location="http://localhost/HelloWebService.asmx" />
+        </wsdl:port>
+        <wsdl:port name="HelloWorldServiceSoap12" binding="tns:HelloWorldServiceSoap12">
+            <soap12:address location="http://localhost/HelloWebService.asmx" />
+        </wsdl:port>
+    </wsdl:service>
 </wsdl:definitions>

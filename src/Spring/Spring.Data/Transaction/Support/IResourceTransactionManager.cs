@@ -18,32 +18,31 @@
 
 #endregion
 
-namespace Spring.Transaction.Support
+namespace Spring.Transaction.Support;
+
+/// <summary>
+/// Extension of the <see cref="IPlatformTransactionManager"/>
+/// interface, indicating a native resource transaction manager, operating on a single
+/// target resource. Such transaction managers differ from DTC based transaction managers in
+/// that they do not use transaction enlistment for an open number of resources but
+/// rather focus on leveraging the native power and simplicity of a single target resource.
+/// </summary>
+/// <para>
+/// This interface is mainly used for abstract introspection of a transaction manager,
+/// giving clients a hint on what kind of transaction manager they have been given
+/// and on what concrete resource the transaction manager is operating on.
+/// </para>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack</author>
+public interface IResourceTransactionManager : IPlatformTransactionManager
 {
     /// <summary>
-    /// Extension of the <see cref="IPlatformTransactionManager"/> 
-    /// interface, indicating a native resource transaction manager, operating on a single
-    /// target resource. Such transaction managers differ from DTC based transaction managers in
-    /// that they do not use transaction enlistment for an open number of resources but
-    /// rather focus on leveraging the native power and simplicity of a single target resource.
+    /// Gets the resource factory that this transaction manager operates on,
+    /// e.g. a IDbProvider or a Hibernate ISessionFactory.
     /// </summary>
-    /// <para>
-    /// This interface is mainly used for abstract introspection of a transaction manager,
-    /// giving clients a hint on what kind of transaction manager they have been given
-    /// and on what concrete resource the transaction manager is operating on.
-    /// </para>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack</author>
-    public interface IResourceTransactionManager : IPlatformTransactionManager
+    /// <value>The resource factory.</value>
+    object ResourceFactory
     {
-        /// <summary>
-        /// Gets the resource factory that this transaction manager operates on,
-        /// e.g. a IDbProvider or a Hibernate ISessionFactory.
-        /// </summary>
-        /// <value>The resource factory.</value>
-        object ResourceFactory
-        { 
-            get;
-        }
+        get;
     }
 }

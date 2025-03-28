@@ -25,36 +25,35 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop.Target
+namespace Spring.Aop.Target;
+
+/// <summary>
+/// Unit tests for the EmptyTargetSource class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class EmptyTargetSourceTests
 {
-	/// <summary>
-	/// Unit tests for the EmptyTargetSource class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class EmptyTargetSourceTests
+    [Test]
+    public void Deserialization()
     {
-		[Test]
-		public void Deserialization()
-		{
-			ITargetSource deserializedVersion
-				= (ITargetSource) SerializationTestUtils.SerializeAndDeserialize(
-				EmptyTargetSource.Empty);
-			Assert.IsTrue(Object.ReferenceEquals(EmptyTargetSource.Empty, deserializedVersion),
-				"Singleton instance not being deserialized correctly");
-		}
+        ITargetSource deserializedVersion
+            = (ITargetSource) SerializationTestUtils.SerializeAndDeserialize(
+                EmptyTargetSource.Empty);
+        Assert.IsTrue(Object.ReferenceEquals(EmptyTargetSource.Empty, deserializedVersion),
+            "Singleton instance not being deserialized correctly");
+    }
 
-		[Test]
-		public void IsSerializable()
-		{
-			Assert.IsTrue(SerializationTestUtils.IsSerializable(EmptyTargetSource.Empty),
-				"EmptyTargetSource.Empty must be serializable.");
-		}
+    [Test]
+    public void IsSerializable()
+    {
+        Assert.IsTrue(SerializationTestUtils.IsSerializable(EmptyTargetSource.Empty),
+            "EmptyTargetSource.Empty must be serializable.");
+    }
 
-		[Test]
-		public void IsStatic()
-		{
-			Assert.IsTrue(EmptyTargetSource.Empty.IsStatic, "Must be static.");
-		}
+    [Test]
+    public void IsStatic()
+    {
+        Assert.IsTrue(EmptyTargetSource.Empty.IsStatic, "Must be static.");
     }
 }

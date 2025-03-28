@@ -25,122 +25,121 @@ using System.Runtime.Serialization;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Thrown in response to a failed attempt to write a property.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+[Serializable]
+public class NotWritablePropertyException : InvalidPropertyException
 {
     /// <summary>
-    /// Thrown in response to a failed attempt to write a property.
+    /// Creates a new instance of the NotWritablePropertyException class.
     /// </summary>
-    /// <author>Mark Pollack (.NET)</author>
-    [Serializable]
-    public class NotWritablePropertyException : InvalidPropertyException
+    public NotWritablePropertyException()
     {
-        /// <summary>
-        /// Creates a new instance of the NotWritablePropertyException class.
-        /// </summary>
-        public NotWritablePropertyException()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Creates a new instance of the NotWritablePropertyException class.
-        /// </summary>
-        /// <param name="message">
-        /// A message about the exception.
-        /// </param>
-        public NotWritablePropertyException(string message) : base(message)
-        {
-        }
+    /// <summary>
+    /// Creates a new instance of the NotWritablePropertyException class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public NotWritablePropertyException(string message) : base(message)
+    {
+    }
 
-        /// <summary>
-        /// Creates a new instance of the NotWritablePropertyException class.
-        /// </summary>
-        /// <param name="message">
-        /// A message about the exception.
-        /// </param>
-        /// <param name="rootCause">
-        /// The root exception that is being wrapped.
-        /// </param>
-        public NotWritablePropertyException(string message, Exception rootCause)
-            : base(message, rootCause)
-        {
-        }
+    /// <summary>
+    /// Creates a new instance of the NotWritablePropertyException class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public NotWritablePropertyException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-        /// <summary>
-        /// Creates a new instance of the NotWritablePropertyException class.
-        /// </summary>
-        /// <param name="offendingType">
-        /// The <see cref="System.Type"/> that is (or rather was) the source of the
-        /// offending property.
-        /// </param>
-        /// <param name="offendingProperty">
-        /// The name of the offending property.
-        /// </param>
-        /// <param name="message">
-        /// A message about the exception.
-        /// </param>
-        /// <param name="rootCause">
-        /// The root exception that is being wrapped.
-        /// </param>
-        public NotWritablePropertyException(
-            Type offendingType, string offendingProperty, string message, Exception rootCause)
-            : base(offendingType, offendingProperty, message, rootCause)
-        {
-        }
+    /// <summary>
+    /// Creates a new instance of the NotWritablePropertyException class.
+    /// </summary>
+    /// <param name="offendingType">
+    /// The <see cref="System.Type"/> that is (or rather was) the source of the
+    /// offending property.
+    /// </param>
+    /// <param name="offendingProperty">
+    /// The name of the offending property.
+    /// </param>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public NotWritablePropertyException(
+        Type offendingType, string offendingProperty, string message, Exception rootCause)
+        : base(offendingType, offendingProperty, message, rootCause)
+    {
+    }
 
-        /// <summary>
-        /// Creates a new instance of the NotWritablePropertyException class
-        /// summarizing what property was not writable.
-        /// </summary>
-        /// <param name="offendingProperty">
-        /// The name of the property that is not writable.
-        /// </param>
-        /// <param name="offendingType">
-        /// The <see cref="System.Type"/> in which the property is not writable.
-        /// </param>
-        public NotWritablePropertyException(string offendingProperty, Type offendingType)
-            : base(offendingType, offendingProperty,
-                   string.Format(CultureInfo.InvariantCulture,
-                                 "Property '{0}' is not writable in class [{1}].",
-                                 offendingProperty, offendingType.FullName))
-        {
-        }
+    /// <summary>
+    /// Creates a new instance of the NotWritablePropertyException class
+    /// summarizing what property was not writable.
+    /// </summary>
+    /// <param name="offendingProperty">
+    /// The name of the property that is not writable.
+    /// </param>
+    /// <param name="offendingType">
+    /// The <see cref="System.Type"/> in which the property is not writable.
+    /// </param>
+    public NotWritablePropertyException(string offendingProperty, Type offendingType)
+        : base(offendingType, offendingProperty,
+            string.Format(CultureInfo.InvariantCulture,
+                "Property '{0}' is not writable in class [{1}].",
+                offendingProperty, offendingType.FullName))
+    {
+    }
 
-        /// <summary>
-        /// Creates new NotWritablePropertyException with a root cause.
-        /// </summary>
-        /// <param name="offendingProperty">
-        /// The name of the property that is not writable.
-        /// </param>
-        /// <param name="offendingType">
-        /// The <see cref="System.Type"/> in which the property is not writable.
-        /// </param>
-        /// <param name="rootCause">
-        /// The root cause indicating why the property was not writable.
-        /// </param>
-        public NotWritablePropertyException(string offendingProperty, Type offendingType, Exception rootCause)
-            : base(offendingType, offendingProperty,
-                   string.Format(CultureInfo.InvariantCulture,
-                                 "Property '{0}' is not writable in class [{1}].",
-                                 offendingProperty,
-                                 offendingType != null ? offendingType.FullName : "null"),
-                   rootCause)
-        {
-        }
+    /// <summary>
+    /// Creates new NotWritablePropertyException with a root cause.
+    /// </summary>
+    /// <param name="offendingProperty">
+    /// The name of the property that is not writable.
+    /// </param>
+    /// <param name="offendingType">
+    /// The <see cref="System.Type"/> in which the property is not writable.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root cause indicating why the property was not writable.
+    /// </param>
+    public NotWritablePropertyException(string offendingProperty, Type offendingType, Exception rootCause)
+        : base(offendingType, offendingProperty,
+            string.Format(CultureInfo.InvariantCulture,
+                "Property '{0}' is not writable in class [{1}].",
+                offendingProperty,
+                offendingType != null ? offendingType.FullName : "null"),
+            rootCause)
+    {
+    }
 
-        /// <summary>
-        /// Creates a new instance of the NotWritablePropertyException class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
-        protected NotWritablePropertyException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    /// <summary>
+    /// Creates a new instance of the NotWritablePropertyException class.
+    /// </summary>
+    /// <param name="info">
+    /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
+    /// that holds the serialized object data about the exception being thrown.
+    /// </param>
+    /// <param name="context">
+    /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
+    /// that contains contextual information about the source or destination.
+    /// </param>
+    protected NotWritablePropertyException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
     }
 }

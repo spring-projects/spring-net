@@ -30,306 +30,312 @@ using Spring.Data.Core;
 using Spring.Transaction;
 using Spring.Util;
 
-namespace Spring.Testing.Ado
+namespace Spring.Testing.Ado;
+
+/// <summary>
+/// TBD
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class SimpleAdoTestUtils
 {
+    private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private static readonly RegexOptions REGEX_OPTIONS = RegexOptions.Multiline | RegexOptions.ECMAScript | RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
+
     /// <summary>
     /// TBD
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class SimpleAdoTestUtils
+    public static readonly string BLOCKDELIM_GO = @"^[\s\n\r]*GO[\s\n\r]*$";
+
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public static readonly Regex BLOCKDELIM_GO_EXP = new Regex(BLOCKDELIM_GO, REGEX_OPTIONS);
+
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public static readonly string BLOCKDELIM_SEMICOLON = @";";
+
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public static readonly Regex BLOCKDELIM_SEMICOLON_EXP = new Regex(BLOCKDELIM_SEMICOLON, REGEX_OPTIONS);
+
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public static readonly string BLOCKDELIM_NEWLINE = @"\n";
+
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public static readonly Regex BLOCKDELIM_NEWLINE_EXP = new Regex(BLOCKDELIM_NEWLINE, REGEX_OPTIONS);
+
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public static Regex BLOCKDELIM_DEFAULT_EXP = BLOCKDELIM_GO_EXP;
+
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public static Regex[] BLOCKDELIM_ALL_EXP = { BLOCKDELIM_GO_EXP, BLOCKDELIM_SEMICOLON_EXP, BLOCKDELIM_NEWLINE_EXP };
+
+    static SimpleAdoTestUtils()
     {
-        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private static readonly RegexOptions REGEX_OPTIONS = RegexOptions.Multiline | RegexOptions.ECMAScript | RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
+    }
 
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static readonly string BLOCKDELIM_GO = @"^[\s\n\r]*GO[\s\n\r]*$";
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static readonly Regex BLOCKDELIM_GO_EXP = new Regex(BLOCKDELIM_GO, REGEX_OPTIONS);
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static readonly string BLOCKDELIM_SEMICOLON = @";";
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static readonly Regex BLOCKDELIM_SEMICOLON_EXP = new Regex(BLOCKDELIM_SEMICOLON, REGEX_OPTIONS);
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static readonly string BLOCKDELIM_NEWLINE = @"\n";
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static readonly Regex BLOCKDELIM_NEWLINE_EXP = new Regex(BLOCKDELIM_NEWLINE, REGEX_OPTIONS);
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public static IPlatformTransaction CreateTransaction(IDbProvider dbProvider, ITransactionDefinition txDefinition)
+    {
+        AdoPlatformTransactionManager txMgr = new AdoPlatformTransactionManager(dbProvider);
+        ITransactionStatus txStatus = txMgr.GetTransaction(txDefinition);
+        return new PlatformTransactionHolder(txStatus, txMgr);
+    }
 
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static Regex BLOCKDELIM_DEFAULT_EXP = BLOCKDELIM_GO_EXP;
+    /// <summary>
+    /// Execute the given script
+    /// </summary>
+    public static void ExecuteSqlScript(IAdoOperations adoTemplate, string script, params Regex[] blockDelimiter)
+    {
+        ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(new StringResource(script)), false, blockDelimiter);
+    }
 
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static Regex[] BLOCKDELIM_ALL_EXP = { BLOCKDELIM_GO_EXP, BLOCKDELIM_SEMICOLON_EXP, BLOCKDELIM_NEWLINE_EXP };
+    /// <summary>
+    /// Execute the given script
+    /// </summary>
+    public static void ExecuteSqlScript(IAdoOperations adoTemplate, string script, bool continueOnError, params Regex[] blockDelimiter)
+    {
+        ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(new StringResource(script)), continueOnError, blockDelimiter);
+    }
 
-        static SimpleAdoTestUtils()
-        { }
+    /// <summary>
+    /// Execute the given script
+    /// </summary>
+    public static void ExecuteSqlScript(IAdoOperations adoTemplate, IResourceLoader resourceLoader, string scriptResourcePath, bool continueOnError, params Regex[] blockDelimiter)
+    {
+        ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(resourceLoader.GetResource(scriptResourcePath)), continueOnError, blockDelimiter);
+    }
 
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static IPlatformTransaction CreateTransaction(IDbProvider dbProvider, ITransactionDefinition txDefinition)
+    /// <summary>
+    /// Execute the given script
+    /// </summary>
+    public static void ExecuteSqlScript(IAdoOperations adoTemplate, IResource resource, params Regex[] blockDelimiter)
+    {
+        ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(resource), false, blockDelimiter);
+    }
+
+    /// <summary>
+    /// Execute the given script
+    /// </summary>
+    public static void ExecuteSqlScript(IAdoOperations adoTemplate, IResource resource, bool continueOnError, params Regex[] blockDelimiter)
+    {
+        ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(resource), continueOnError, blockDelimiter);
+    }
+
+    /// <summary>
+    /// Execute the given script
+    /// </summary>
+    public static void ExecuteSqlScript(IAdoOperations adoTemplate, EncodedResource resource, bool continueOnError, params Regex[] blockDelimiter)
+    {
+        ExecuteSqlScriptInternal(adoTemplate, resource, continueOnError, blockDelimiter);
+    }
+
+    /// <summary>
+    /// Execute the given script
+    /// </summary>
+    private static void ExecuteSqlScriptInternal(IAdoOperations adoTemplate, EncodedResource resource, bool continueOnError, params Regex[] blockDelimiter)
+    {
+        AssertUtils.ArgumentNotNull(adoTemplate, "adoTemplate");
+        AssertUtils.ArgumentNotNull(resource, "resource");
+
+        if (!CollectionUtils.HasElements(blockDelimiter))
         {
-            AdoPlatformTransactionManager txMgr = new AdoPlatformTransactionManager(dbProvider);
-            ITransactionStatus txStatus = txMgr.GetTransaction(txDefinition);
-            return new PlatformTransactionHolder(txStatus, txMgr);
+            blockDelimiter = BLOCKDELIM_ALL_EXP;
         }
 
-        /// <summary>
-        /// Execute the given script
-        /// </summary>
-        public static void ExecuteSqlScript(IAdoOperations adoTemplate, string script, params Regex[] blockDelimiter)
+        List<string> statements = new List<string>();
+        try
         {
-            ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(new StringResource(script)), false, blockDelimiter);
+            GetScriptBlocks(resource, statements, blockDelimiter);
+        }
+        catch (Exception ex)
+        {
+            throw new DataAccessResourceFailureException("Failed to open SQL script from " + resource, ex);
         }
 
-        /// <summary>
-        /// Execute the given script
-        /// </summary>
-        public static void ExecuteSqlScript(IAdoOperations adoTemplate, string script, bool continueOnError, params Regex[] blockDelimiter)
+        foreach (string statement in statements)
         {
-            ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(new StringResource(script)), continueOnError, blockDelimiter);
-        }
-
-        /// <summary>
-        /// Execute the given script
-        /// </summary>
-        public static void ExecuteSqlScript(IAdoOperations adoTemplate, IResourceLoader resourceLoader, string scriptResourcePath, bool continueOnError, params Regex[] blockDelimiter)
-        {
-            ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(resourceLoader.GetResource(scriptResourcePath)), continueOnError, blockDelimiter);
-        }
-
-        /// <summary>
-        /// Execute the given script
-        /// </summary>
-        public static void ExecuteSqlScript(IAdoOperations adoTemplate, IResource resource, params Regex[] blockDelimiter)
-        {
-            ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(resource), false, blockDelimiter);
-        }
-
-        /// <summary>
-        /// Execute the given script
-        /// </summary>
-        public static void ExecuteSqlScript(IAdoOperations adoTemplate, IResource resource, bool continueOnError, params Regex[] blockDelimiter)
-        {
-            ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(resource), continueOnError, blockDelimiter);
-        }
-
-        /// <summary>
-        /// Execute the given script
-        /// </summary>
-        public static void ExecuteSqlScript(IAdoOperations adoTemplate, EncodedResource resource, bool continueOnError, params Regex[] blockDelimiter)
-        {
-            ExecuteSqlScriptInternal(adoTemplate, resource, continueOnError, blockDelimiter);
-        }
-
-        /// <summary>
-        /// Execute the given script
-        /// </summary>
-        private static void ExecuteSqlScriptInternal(IAdoOperations adoTemplate, EncodedResource resource, bool continueOnError, params Regex[] blockDelimiter)
-        {
-            AssertUtils.ArgumentNotNull(adoTemplate, "adoTemplate");
-            AssertUtils.ArgumentNotNull(resource, "resource");
-
-            if (!CollectionUtils.HasElements(blockDelimiter))
-            {
-                blockDelimiter = BLOCKDELIM_ALL_EXP;
-            }
-
-            List<string> statements = new List<string>();
             try
             {
-                GetScriptBlocks(resource, statements, blockDelimiter);
+                adoTemplate.ExecuteNonQuery(CommandType.Text, statement);
             }
-            catch (Exception ex)
+            catch (DataAccessException dae)
             {
-                throw new DataAccessResourceFailureException("Failed to open SQL script from " + resource, ex);
-            }
-
-            foreach (string statement in statements)
-            {
-                try
+                if (!continueOnError)
                 {
-                    adoTemplate.ExecuteNonQuery(CommandType.Text, statement);
+                    throw;
                 }
-                catch (DataAccessException dae)
-                {
-                    if (!continueOnError)
-                    {
-                        throw;
-                    }
 
-                    string message = string.Format("SQL statement failed:{0}", statement);
-                    Log.LogWarning(dae, message);
-                }
+                string message = string.Format("SQL statement failed:{0}", statement);
+                Log.LogWarning(dae, message);
             }
         }
+    }
 
-        /// <summary>
-        /// TBD
-        /// </summary>
-        public static void GetScriptBlocks(EncodedResource encodedResource, IList<string> blockCollector, params Regex[] blockDelimiterPatterns)
+    /// <summary>
+    /// TBD
+    /// </summary>
+    public static void GetScriptBlocks(EncodedResource encodedResource, IList<string> blockCollector, params Regex[] blockDelimiterPatterns)
+    {
+        AssertUtils.ArgumentNotNull(blockCollector, "blockCollector");
+
+        using (TextReader sr = encodedResource.OpenReader())
         {
-            AssertUtils.ArgumentNotNull(blockCollector, "blockCollector");
+            string script = sr.ReadToEnd();
 
-            using (TextReader sr = encodedResource.OpenReader())
+            // the first pattern that finds a match will be used, if any
+            Regex patternToUse = BLOCKDELIM_DEFAULT_EXP;
+            if (blockDelimiterPatterns != null)
             {
-                string script = sr.ReadToEnd();
-
-                // the first pattern that finds a match will be used, if any
-                Regex patternToUse = BLOCKDELIM_DEFAULT_EXP;
-                if (blockDelimiterPatterns != null)
+                foreach (Regex pattern in blockDelimiterPatterns)
                 {
-                    foreach (Regex pattern in blockDelimiterPatterns)
+                    if (pattern.IsMatch(script))
                     {
-                        if (pattern.IsMatch(script))
-                        {
-                            patternToUse = pattern;
-                            break;
-                        }
+                        patternToUse = pattern;
+                        break;
                     }
                 }
-
-                Split(script, patternToUse, blockCollector);
             }
+
+            Split(script, patternToUse, blockCollector);
         }
+    }
 
-        private static void Split(string text, Regex exp, IList<string> blockCollector)
+    private static void Split(string text, Regex exp, IList<string> blockCollector)
+    {
+        //            string[] blocks = exp.Split(text);
+        //            foreach(string block in blocks)
+        //            {
+        //                if (StringUtils.HasText(block))
+        //                {
+        //                    blockCollector.Add(block);
+        //                }
+        //            }
+        MatchCollection matches = exp.Matches(text);
+        int curIndexStart = 0;
+        string tmp;
+        for (int i = 0; i < matches.Count; i++)
         {
-            //            string[] blocks = exp.Split(text);
-            //            foreach(string block in blocks)
-            //            {
-            //                if (StringUtils.HasText(block))
-            //                {
-            //                    blockCollector.Add(block);
-            //                }
-            //            }
-            MatchCollection matches = exp.Matches(text);
-            int curIndexStart = 0;
-            string tmp;
-            for (int i = 0; i < matches.Count; i++)
-            {
-                Match match = matches[i];
-                Group group = match.Groups[0];
-                //                Capture cap = group.Captures[0];
-                tmp = text.Substring(curIndexStart, match.Index - curIndexStart);
-                if (tmp.Trim().Length > 0)
-                    blockCollector.Add(tmp);
-                curIndexStart = match.Index + match.Length;
-            }
-
-            tmp = text.Substring(curIndexStart);
+            Match match = matches[i];
+            Group group = match.Groups[0];
+            //                Capture cap = group.Captures[0];
+            tmp = text.Substring(curIndexStart, match.Index - curIndexStart);
             if (tmp.Trim().Length > 0)
                 blockCollector.Add(tmp);
+            curIndexStart = match.Index + match.Length;
         }
 
-        #region To be probably added in a future version
+        tmp = text.Substring(curIndexStart);
+        if (tmp.Trim().Length > 0)
+            blockCollector.Add(tmp);
+    }
 
-        //        public static void ExecuteSqlScript( AdoTemplate adoTemplate, IResource scriptResource, string blockDelimiter, bool continueOnError )
-        //        {
-        //            ExecuteSqlScript( adoTemplate, new EncodedResource(scriptResource), new Regex( Regex.Escape(blockDelimiter), REGEX_OPTIONS ), continueOnError );
-        //        }
-        //
-        //        public static void ExecuteSqlScript( AdoTemplate adoTemplate, EncodedResource resource, string blockDelimiter, bool continueOnError )
-        //        {
-        //            ExecuteSqlScript( adoTemplate, resource, new Regex( Regex.Escape(blockDelimiter), REGEX_OPTIONS ), continueOnError );
-        //        }
+    #region To be probably added in a future version
 
-        //        /// <summary>
-        //        /// Execute the given script
-        //        /// </summary>
-        //        public static void ExecuteSqlScript(AdoTemplate adoTemplate, string script, params string[] blockDelimiter)
-        //        {
-        //            Regex[] exps = CreateRegexpsFromStrings(blockDelimiter);
-        //            ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(new StringResource(script)), false, exps);
-        //        }
+    //        public static void ExecuteSqlScript( AdoTemplate adoTemplate, IResource scriptResource, string blockDelimiter, bool continueOnError )
+    //        {
+    //            ExecuteSqlScript( adoTemplate, new EncodedResource(scriptResource), new Regex( Regex.Escape(blockDelimiter), REGEX_OPTIONS ), continueOnError );
+    //        }
+    //
+    //        public static void ExecuteSqlScript( AdoTemplate adoTemplate, EncodedResource resource, string blockDelimiter, bool continueOnError )
+    //        {
+    //            ExecuteSqlScript( adoTemplate, resource, new Regex( Regex.Escape(blockDelimiter), REGEX_OPTIONS ), continueOnError );
+    //        }
 
-        //        /// <summary>
-        //        /// Creates an array of <see cref="Regex"/> from the given <paramref name="blockDelimiter"/>
-        //        /// </summary>
-        //        private static Regex[] CreateRegexpsFromStrings(string[] blockDelimiter)
-        //        {
-        //            Regex[] exps = null;
-        //            if (!CollectionUtils.IsEmpty(blockDelimiter))
-        //            {
-        //                ArrayList expsList = new ArrayList();
-        //                foreach (string delim in blockDelimiter)
-        //                {
-        //                    expsList.Add(new Regex(Regex.Escape(delim), REGEX_OPTIONS));
-        //                }
-        //                exps = (Regex[])expsList.ToArray(typeof(Regex));
-        //            }
-        //            return exps;
-        //        }
-        //
+    //        /// <summary>
+    //        /// Execute the given script
+    //        /// </summary>
+    //        public static void ExecuteSqlScript(AdoTemplate adoTemplate, string script, params string[] blockDelimiter)
+    //        {
+    //            Regex[] exps = CreateRegexpsFromStrings(blockDelimiter);
+    //            ExecuteSqlScriptInternal(adoTemplate, new EncodedResource(new StringResource(script)), false, exps);
+    //        }
 
-        #endregion
+    //        /// <summary>
+    //        /// Creates an array of <see cref="Regex"/> from the given <paramref name="blockDelimiter"/>
+    //        /// </summary>
+    //        private static Regex[] CreateRegexpsFromStrings(string[] blockDelimiter)
+    //        {
+    //            Regex[] exps = null;
+    //            if (!CollectionUtils.IsEmpty(blockDelimiter))
+    //            {
+    //                ArrayList expsList = new ArrayList();
+    //                foreach (string delim in blockDelimiter)
+    //                {
+    //                    expsList.Add(new Regex(Regex.Escape(delim), REGEX_OPTIONS));
+    //                }
+    //                exps = (Regex[])expsList.ToArray(typeof(Regex));
+    //            }
+    //            return exps;
+    //        }
+    //
 
-        private class PlatformTransactionHolder : IPlatformTransaction
+    #endregion
+
+    private class PlatformTransactionHolder : IPlatformTransaction
+    {
+        private ITransactionStatus txStatus;
+        private IPlatformTransactionManager txMgr;
+        private bool commit;
+
+        public PlatformTransactionHolder(ITransactionStatus txStatus, IPlatformTransactionManager txMgr)
         {
-            private ITransactionStatus txStatus;
-            private IPlatformTransactionManager txMgr;
-            private bool commit;
+            AssertUtils.ArgumentNotNull(txStatus, "txStatus");
+            AssertUtils.ArgumentNotNull(txMgr, "txMgr");
+            this.txStatus = txStatus;
+            this.txMgr = txMgr;
+            this.commit = false;
+        }
 
-            public PlatformTransactionHolder(ITransactionStatus txStatus, IPlatformTransactionManager txMgr)
+        public void Dispose()
+        {
+            try
             {
-                AssertUtils.ArgumentNotNull(txStatus, "txStatus");
-                AssertUtils.ArgumentNotNull(txMgr, "txMgr");
-                this.txStatus = txStatus;
-                this.txMgr = txMgr;
-                this.commit = false;
+                if (txStatus == null)
+                    return;
+
+                if (commit)
+                {
+                    txMgr.Commit(txStatus);
+                    return;
+                }
+
+                txMgr.Rollback(txStatus);
             }
-
-            public void Dispose()
+            finally
             {
-                try
-                {
-                    if (txStatus == null)
-                        return;
-
-                    if (commit)
-                    {
-                        txMgr.Commit(txStatus);
-                        return;
-                    }
-                    txMgr.Rollback(txStatus);
-                }
-                finally
-                {
-                    txMgr = null;
-                    txStatus = null;
-                }
+                txMgr = null;
+                txStatus = null;
             }
+        }
 
-            public void Commit()
+        public void Commit()
+        {
+            commit = true;
+        }
+
+        public void Rollback()
+        {
+            try
             {
-                commit = true;
+                txMgr.Rollback(txStatus);
             }
-
-            public void Rollback()
+            finally
             {
-                try
-                {
-                    txMgr.Rollback(txStatus);
-                }
-                finally
-                {
-                    txStatus = null;
-                }
+                txStatus = null;
             }
         }
     }

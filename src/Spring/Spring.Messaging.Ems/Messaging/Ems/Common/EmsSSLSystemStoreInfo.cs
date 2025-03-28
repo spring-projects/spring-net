@@ -20,38 +20,36 @@
 
 using System.Security.Cryptography.X509Certificates;
 
-namespace Spring.Messaging.Ems.Common
+namespace Spring.Messaging.Ems.Common;
+
+public class EmsSSLSystemStoreInfo : IEmsSSLStoreType
 {
-    public class EmsSSLSystemStoreInfo : IEmsSSLStoreType
+    private EMSSSLSystemStoreInfo emssslSystemStoreInfo;
+
+    public EMSSSLSystemStoreInfo NativeEmssslSystemStoreInfo
     {
+        get { return emssslSystemStoreInfo; }
+        set { emssslSystemStoreInfo = value; }
+    }
 
-        private EMSSSLSystemStoreInfo emssslSystemStoreInfo;
+    public virtual EMSSSLSystemStoreInfo EmssslSystemStoreInfo
+    {
+        get { return emssslSystemStoreInfo; }
+        set { emssslSystemStoreInfo = value; }
+    }
 
-        public EMSSSLSystemStoreInfo NativeEmssslSystemStoreInfo
-        {
-            get { return emssslSystemStoreInfo; }
-            set { emssslSystemStoreInfo = value; }
-        }
+    public string CertificateNameAsFullSubjectDn
+    {
+        set { EmssslSystemStoreInfo.SetCertificateNameAsFullSubjectDN(value); }
+    }
 
-        public virtual EMSSSLSystemStoreInfo EmssslSystemStoreInfo
-        {
-            get { return emssslSystemStoreInfo; }
-            set { emssslSystemStoreInfo = value; }
-        }
+    public StoreLocation CertificateStoreLocation
+    {
+        set { EmssslSystemStoreInfo.SetCertificateStoreLocation(value); }
+    }
 
-        public string CertificateNameAsFullSubjectDn
-        {
-            set { EmssslSystemStoreInfo.SetCertificateNameAsFullSubjectDN(value); }
-        }
-
-        public StoreLocation CertificateStoreLocation {
-
-            set { EmssslSystemStoreInfo.SetCertificateStoreLocation(value); }
-        }
-
-        public string CertificateStoreName
-        {
-            set { EmssslSystemStoreInfo.SetCertificateStoreName(value); }
-        }
+    public string CertificateStoreName
+    {
+        set { EmssslSystemStoreInfo.SetCertificateStoreName(value); }
     }
 }

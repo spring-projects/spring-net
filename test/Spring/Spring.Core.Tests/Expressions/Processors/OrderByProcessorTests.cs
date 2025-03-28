@@ -24,55 +24,55 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Expressions.Processors
+namespace Spring.Expressions.Processors;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class OrderByProcessorTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class OrderByProcessorTests
+    [Test]
+    public void OrderByExpressionString()
     {
-        [Test]
-        public void OrderByExpressionString()
-        {
-            IExpression exp = Expression.Parse("orderBy('ToString()')");
-            object[] input = new object[] { 'b', 1, 2.0, "a" };
+        IExpression exp = Expression.Parse("orderBy('ToString()')");
+        object[] input = new object[] { 'b', 1, 2.0, "a" };
 
-            Assert.AreEqual( new object[] { 1,2.0,"a",'b' }, exp.GetValue(input) );
-        }
+        Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input));
+    }
 
-        [Test]
-        public void OrderByLambdaFunction()
-        {
-            IExpression exp = Expression.Parse("orderBy({|a,b| $a.ToString().CompareTo($b.ToString())})");
-            object[] input = new object[] { 'b', 1, 2.0, "a" };
+    [Test]
+    public void OrderByLambdaFunction()
+    {
+        IExpression exp = Expression.Parse("orderBy({|a,b| $a.ToString().CompareTo($b.ToString())})");
+        object[] input = new object[] { 'b', 1, 2.0, "a" };
 
-            Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input));
+        Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input));
 
-            Dictionary<string, object> vars = new Dictionary<string, object>();
-            Expression.RegisterFunction( "compare", "{|a,b| $a.ToString().CompareTo($b.ToString())}", vars);
-            exp = Expression.Parse("orderBy(#compare)");
-            Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input, vars));
-        }
+        Dictionary<string, object> vars = new Dictionary<string, object>();
+        Expression.RegisterFunction("compare", "{|a,b| $a.ToString().CompareTo($b.ToString())}", vars);
+        exp = Expression.Parse("orderBy(#compare)");
+        Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input, vars));
+    }
 
-        [Test]
-        public void OrderByDelegate()
-        {
-            Dictionary<string, object> vars = new Dictionary<string, object>();
-            vars["compare"] = new CompareCallback(CompareObjects);
+    [Test]
+    public void OrderByDelegate()
+    {
+        Dictionary<string, object> vars = new Dictionary<string, object>();
+        vars["compare"] = new CompareCallback(CompareObjects);
 
-            IExpression exp = Expression.Parse("orderBy(#compare)");
-            object[] input = new object[] { 'b', 1, 2.0, "a" };
+        IExpression exp = Expression.Parse("orderBy(#compare)");
+        object[] input = new object[] { 'b', 1, 2.0, "a" };
 
-            Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input, vars));
-        }
+        Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input, vars));
+    }
 
-        private delegate int CompareCallback(object x, object y);
-        private int CompareObjects(object x, object y)
-        {
-            if (x == y) return 0;
-            return x.ToString().CompareTo(""+y);
-        }
+    private delegate int CompareCallback(object x, object y);
+
+    private int CompareObjects(object x, object y)
+    {
+        if (x == y) return 0;
+        return x.ToString().CompareTo("" + y);
     }
 }

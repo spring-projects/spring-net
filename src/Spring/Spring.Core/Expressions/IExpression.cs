@@ -20,49 +20,48 @@
 
 using System.ComponentModel;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Interface that all navigation expression nodes have to implement.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TypeConverter(typeof(ExpressionConverter))]
+public interface IExpression
 {
     /// <summary>
-    /// Interface that all navigation expression nodes have to implement.
+    /// Returns expression value.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TypeConverter(typeof(ExpressionConverter))]
-    public interface IExpression
-    {
-        /// <summary>
-        /// Returns expression value.
-        /// </summary>
-        /// <returns>Value of the expression.</returns>
-        object GetValue();
+    /// <returns>Value of the expression.</returns>
+    object GetValue();
 
-        /// <summary>
-        /// Returns expression value.
-        /// </summary>
-        /// <param name="context">Object to evaluate expression against.</param>
-        /// <returns>Value of the expression.</returns>
-        object GetValue(object context);
+    /// <summary>
+    /// Returns expression value.
+    /// </summary>
+    /// <param name="context">Object to evaluate expression against.</param>
+    /// <returns>Value of the expression.</returns>
+    object GetValue(object context);
 
-        /// <summary>
-        /// Returns expression value.
-        /// </summary>
-        /// <param name="context">Object to evaluate expression against.</param>
-        /// <param name="variables">Expression variables map.</param>
-        /// <returns>Value of the expression.</returns>
-        object GetValue(object context, IDictionary<string, object> variables);
+    /// <summary>
+    /// Returns expression value.
+    /// </summary>
+    /// <param name="context">Object to evaluate expression against.</param>
+    /// <param name="variables">Expression variables map.</param>
+    /// <returns>Value of the expression.</returns>
+    object GetValue(object context, IDictionary<string, object> variables);
 
-        /// <summary>
-        /// Sets expression value.
-        /// </summary>
-        /// <param name="context">Object to evaluate expression against.</param>
-        /// <param name="newValue">New value for the last node of the expression.</param>
-        void SetValue(object context, object newValue);
+    /// <summary>
+    /// Sets expression value.
+    /// </summary>
+    /// <param name="context">Object to evaluate expression against.</param>
+    /// <param name="newValue">New value for the last node of the expression.</param>
+    void SetValue(object context, object newValue);
 
-        /// <summary>
-        /// Sets expression value.
-        /// </summary>
-        /// <param name="context">Object to evaluate expression against.</param>
-        /// <param name="variables">Expression variables map.</param>
-        /// <param name="newValue">New value for the last node of the expression.</param>
-        void SetValue(object context, IDictionary<string, object> variables, object newValue);
-    }
+    /// <summary>
+    /// Sets expression value.
+    /// </summary>
+    /// <param name="context">Object to evaluate expression against.</param>
+    /// <param name="variables">Expression variables map.</param>
+    /// <param name="newValue">New value for the last node of the expression.</param>
+    void SetValue(object context, IDictionary<string, object> variables, object newValue);
 }

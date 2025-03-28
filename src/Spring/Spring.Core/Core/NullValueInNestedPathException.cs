@@ -27,144 +27,143 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Thrown in response to encountering a <see langword="null"/> value
+/// when traversing a nested path expression.
+/// </summary>
+[Serializable]
+public class NullValueInNestedPathException : FatalReflectionException
 {
+    private string property;
+    private Type type;
+
     /// <summary>
-    /// Thrown in response to encountering a <see langword="null"/> value
-    /// when traversing a nested path expression.
+    /// The name of the offending property.
     /// </summary>
-    [Serializable]
-    public class NullValueInNestedPathException : FatalReflectionException
+    public string PropertyName
     {
-        private string property;
-        private Type type;
-
-        /// <summary>
-        /// The name of the offending property.
-        /// </summary>
-        public string PropertyName
-        {
-            get { return property; }
-        }
-
-        /// <summary>
-        /// The <see cref="System.Type"/> of the class where the property was last looked for.
-        /// </summary>
-        public Type ObjectType
-        {
-            get { return type; }
-        }
-
-        #region Constructor (s) / Destructor
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="NullValueInNestedPathException"/> class.
-        /// </summary>
-        public NullValueInNestedPathException()
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="NullValueInNestedPathException"/> class.
-        /// </summary>
-        /// <param name="message">
-        /// A message about the exception.
-        /// </param>
-        public NullValueInNestedPathException(string message) : base(message)
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="NullValueInNestedPathException"/> class.
-        /// </summary>
-        /// <param name="message">
-        /// A message about the exception.
-        /// </param>
-        /// <param name="rootCause">
-        /// The root exception that is being wrapped.
-        /// </param>
-        public NullValueInNestedPathException(string message, Exception rootCause)
-            : base(message, rootCause)
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="NullValueInNestedPathException"/> class.
-        /// </summary>
-        /// <param name="type">
-        /// The <see cref="System.Type"/> of the object where the property was not found.
-        /// </param>
-        /// <param name="theProperty">The name of the property not found.</param>
-        public NullValueInNestedPathException(Type type, string theProperty)
-            : this(type, theProperty, string.Format(CultureInfo.InvariantCulture,
-                                                    "Value of nested property '{0}' is null in Type [{1}].", theProperty, type))
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="NullValueInNestedPathException"/> class.
-        /// </summary>
-        /// <param name="type">
-        /// The <see cref="System.Type"/> of the object where the property was not found.
-        /// </param>
-        /// <param name="theProperty">The name of the property not found.</param>
-        /// <param name="message">A message about the exception.</param>
-        public NullValueInNestedPathException(Type type, string theProperty, string message)
-            : base(message)
-        {
-            property = theProperty;
-            this.type = type;
-        }
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="NullValueInNestedPathException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
-        protected NullValueInNestedPathException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            type = info.GetValue("ObjectType", typeof (Type)) as Type;
-            property = info.GetString("PropertyName");
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
-        /// the data needed to serialize the target object.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/> to populate
-        /// with data.
-        /// </param>
-        /// <param name="context">
-        /// The destination (see <see cref="System.Runtime.Serialization.StreamingContext"/>)
-        /// for this serialization.
-        /// </param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter=true)]
-        public override void GetObjectData(
-            SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue("ObjectType", ObjectType);
-            info.AddValue("PropertyName", PropertyName);
-        }
-
-        #endregion
+        get { return property; }
     }
+
+    /// <summary>
+    /// The <see cref="System.Type"/> of the class where the property was last looked for.
+    /// </summary>
+    public Type ObjectType
+    {
+        get { return type; }
+    }
+
+    #region Constructor (s) / Destructor
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="NullValueInNestedPathException"/> class.
+    /// </summary>
+    public NullValueInNestedPathException()
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="NullValueInNestedPathException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public NullValueInNestedPathException(string message) : base(message)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="NullValueInNestedPathException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public NullValueInNestedPathException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="NullValueInNestedPathException"/> class.
+    /// </summary>
+    /// <param name="type">
+    /// The <see cref="System.Type"/> of the object where the property was not found.
+    /// </param>
+    /// <param name="theProperty">The name of the property not found.</param>
+    public NullValueInNestedPathException(Type type, string theProperty)
+        : this(type, theProperty, string.Format(CultureInfo.InvariantCulture,
+            "Value of nested property '{0}' is null in Type [{1}].", theProperty, type))
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="NullValueInNestedPathException"/> class.
+    /// </summary>
+    /// <param name="type">
+    /// The <see cref="System.Type"/> of the object where the property was not found.
+    /// </param>
+    /// <param name="theProperty">The name of the property not found.</param>
+    /// <param name="message">A message about the exception.</param>
+    public NullValueInNestedPathException(Type type, string theProperty, string message)
+        : base(message)
+    {
+        property = theProperty;
+        this.type = type;
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="NullValueInNestedPathException"/> class.
+    /// </summary>
+    /// <param name="info">
+    /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
+    /// that holds the serialized object data about the exception being thrown.
+    /// </param>
+    /// <param name="context">
+    /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
+    /// that contains contextual information about the source or destination.
+    /// </param>
+    protected NullValueInNestedPathException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+        type = info.GetValue("ObjectType", typeof(Type)) as Type;
+        property = info.GetString("PropertyName");
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
+    /// the data needed to serialize the target object.
+    /// </summary>
+    /// <param name="info">
+    /// The <see cref="System.Runtime.Serialization.SerializationInfo"/> to populate
+    /// with data.
+    /// </param>
+    /// <param name="context">
+    /// The destination (see <see cref="System.Runtime.Serialization.StreamingContext"/>)
+    /// for this serialization.
+    /// </param>
+    [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+    public override void GetObjectData(
+        SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info, context);
+        info.AddValue("ObjectType", ObjectType);
+        info.AddValue("PropertyName", PropertyName);
+    }
+
+    #endregion
 }

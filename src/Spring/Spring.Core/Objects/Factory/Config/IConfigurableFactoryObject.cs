@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,23 +20,20 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Extension of the <see cref="Spring.Objects.Factory.IFactoryObject"/> interface
+/// that injects dependencies into the object managed by the factory.
+/// </summary>
+/// <author>Bruno Baia</author>
+public interface IConfigurableFactoryObject : IFactoryObject
 {
     /// <summary>
-    /// Extension of the <see cref="Spring.Objects.Factory.IFactoryObject"/> interface 
-    /// that injects dependencies into the object managed by the factory.
+    /// Gets the template object definition that should be used
+    /// to configure the instance of the object managed by this factory.
     /// </summary>
-    /// <author>Bruno Baia</author>
-    public interface IConfigurableFactoryObject : IFactoryObject
-    {
-        /// <summary>
-        /// Gets the template object definition that should be used 
-        /// to configure the instance of the object managed by this factory.
-        /// </summary>
-        IObjectDefinition ProductTemplate { get; }
-    }
+    IObjectDefinition ProductTemplate { get; }
 }

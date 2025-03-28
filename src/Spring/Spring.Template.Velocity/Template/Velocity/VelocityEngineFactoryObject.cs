@@ -22,48 +22,52 @@ using NVelocity.App;
 using Spring.Context;
 using Spring.Objects.Factory;
 
-namespace Spring.Template.Velocity
+namespace Spring.Template.Velocity;
+
+/// <summary>
+/// FactoryObject implementation that configures a VelocityEngine and provides it
+/// as an object reference. This object is intended for any kind of usage of Velocity in
+/// application code, e.g. for generating email content.
+///
+/// See the base class VelocityEngineFactory for configuration details.
+/// </summary>
+/// <see cref="VelocityEngineFactory"/>
+/// <author>Erez Mazor</author>
+public class VelocityEngineFactoryObject : VelocityEngineFactory, IFactoryObject, IInitializingObject, IResourceLoaderAware
 {
+    private VelocityEngine velocityEngine;
+
     /// <summary>
-    /// FactoryObject implementation that configures a VelocityEngine and provides it
-    /// as an object reference. This object is intended for any kind of usage of Velocity in
-    /// application code, e.g. for generating email content.
-    ///
-    /// See the base class VelocityEngineFactory for configuration details.
+    /// Get the velocity engine underlying object
     /// </summary>
-    /// <see cref="VelocityEngineFactory"/>
-    /// <author>Erez Mazor</author>
-    public class VelocityEngineFactoryObject : VelocityEngineFactory, IFactoryObject, IInitializingObject, IResourceLoaderAware
+    /// <returns>An instance of a configured VelocityEngine</returns>
+    /// <see cref="IFactoryObject"/>
+    public object GetObject()
     {
-        private VelocityEngine velocityEngine;
-        /// <summary>
-        /// Get the velocity engine underlying object
-        /// </summary>
-        /// <returns>An instance of a configured VelocityEngine</returns>
-        /// <see cref="IFactoryObject"/>
-        public object GetObject() {
-            return velocityEngine;
-        }
+        return velocityEngine;
+    }
 
-        /// <summary>
-        /// Get the type of the velocity engine
-        /// </summary>
-        public Type ObjectType {
-            get { return velocityEngine.GetType(); }
-        }
+    /// <summary>
+    /// Get the type of the velocity engine
+    /// </summary>
+    public Type ObjectType
+    {
+        get { return velocityEngine.GetType(); }
+    }
 
-        /// <summary>
-        /// Singleton
-        /// </summary>
-        public bool IsSingleton {
-            get { return true; }
-        }
+    /// <summary>
+    /// Singleton
+    /// </summary>
+    public bool IsSingleton
+    {
+        get { return true; }
+    }
 
-        /// <summary>
-        /// Facilitate the creation of the velocity engine object
-        /// </summary>
-        public void AfterPropertiesSet() {
-            velocityEngine = CreateVelocityEngine();
-        }
+    /// <summary>
+    /// Facilitate the creation of the velocity engine object
+    /// </summary>
+    public void AfterPropertiesSet()
+    {
+        velocityEngine = CreateVelocityEngine();
     }
 }

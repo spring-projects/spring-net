@@ -26,79 +26,80 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Expressions;
 
-namespace Spring.Globalization.Localizers
+namespace Spring.Globalization.Localizers;
+
+/// <summary>
+/// Loads a list of resources that should be applied from the .NET <see cref="ResourceSet"/>.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This <see cref="ILocalizer"/> implementation will iterate over all resource managers
+/// within the message source and return a list of all the resources whose name starts with '$this'.
+/// </p>
+/// <p>
+/// All other resources will be ignored, but you can retrieve them by calling one of
+/// <c>GetMessage</c> methods on the message source directly.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public class ResourceSetLocalizer : AbstractLocalizer
 {
+    private static readonly ILogger<ResourceSetLocalizer> log = LogManager.GetLogger<ResourceSetLocalizer>();
+
+    private static readonly IList ignoreList =
+        new string[] { "$this.DefaultModifiers", "$this.TrayAutoArrange", "$this.TrayLargeIcon" };
+
     /// <summary>
-    /// Loads a list of resources that should be applied from the .NET <see cref="ResourceSet"/>.
+    /// Loads resources from the storage and creates a list of <see cref="Resource"/> instances that should be applied to the target.
     /// </summary>
     /// <remarks>
-    /// <p>
-    /// This <see cref="ILocalizer"/> implementation will iterate over all resource managers
-    /// within the message source and return a list of all the resources whose name starts with '$this'.
-    /// </p>
-    /// <p>
-    /// All other resources will be ignored, but you can retrieve them by calling one of
-    /// <c>GetMessage</c> methods on the message source directly.
-    /// </p>
+    /// This feature is not currently supported on version 1.0 of the .NET platform.
     /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    public class ResourceSetLocalizer : AbstractLocalizer
+    /// <param name="target">Target to get a list of resources for.</param>
+    /// <param name="messageSource"><see cref="IMessageSource"/> instance to retrieve resources from.</param>
+    /// <param name="culture">Resource locale.</param>
+    /// <returns>A list of resources to apply.</returns>
+    protected override IList<Resource> LoadResources(object target, IMessageSource messageSource, CultureInfo culture)
     {
-        private static readonly ILogger<ResourceSetLocalizer> log = LogManager.GetLogger<ResourceSetLocalizer>();
+        IList<Resource> resources = new List<Resource>();
 
-        private static readonly IList ignoreList =
-            new string[] {"$this.DefaultModifiers", "$this.TrayAutoArrange", "$this.TrayLargeIcon"};
-
-        /// <summary>
-        /// Loads resources from the storage and creates a list of <see cref="Resource"/> instances that should be applied to the target.
-        /// </summary>
-        /// <remarks>
-        /// This feature is not currently supported on version 1.0 of the .NET platform.
-        /// </remarks>
-        /// <param name="target">Target to get a list of resources for.</param>
-        /// <param name="messageSource"><see cref="IMessageSource"/> instance to retrieve resources from.</param>
-        /// <param name="culture">Resource locale.</param>
-        /// <returns>A list of resources to apply.</returns>
-        protected override IList<Resource> LoadResources(object target, IMessageSource messageSource, CultureInfo culture)
+        if (messageSource is ResourceSetMessageSource)
         {
-            IList<Resource> resources = new List<Resource>();
-
-            if (messageSource is ResourceSetMessageSource)
+            for (int i = 0; i < ((ResourceSetMessageSource) messageSource).ResourceManagers.Count; i++)
             {
-                for (int i = 0; i < ((ResourceSetMessageSource) messageSource).ResourceManagers.Count; i++)
+                ResourceManager rm = ((ResourceSetMessageSource) messageSource).ResourceManagers[i] as ResourceManager;
+                ResourceSet invariantResources = null;
+                try
                 {
-                    ResourceManager rm = ((ResourceSetMessageSource) messageSource).ResourceManagers[i] as ResourceManager;
-                    ResourceSet invariantResources = null;
-                    try
-                    {
-                        invariantResources = rm.GetResourceSet(CultureInfo.InvariantCulture, true, true);
-                    }
-                    catch (MissingManifestResourceException mmrex)
-                    {
-                        // ignore but log missing ResourceSet
-                        log.LogDebug(mmrex, "No ResourceSet available for invariant culture");
-                    }
+                    invariantResources = rm.GetResourceSet(CultureInfo.InvariantCulture, true, true);
+                }
+                catch (MissingManifestResourceException mmrex)
+                {
+                    // ignore but log missing ResourceSet
+                    log.LogDebug(mmrex, "No ResourceSet available for invariant culture");
+                }
 
-                    if (invariantResources != null)
+                if (invariantResources != null)
+                {
+                    foreach (DictionaryEntry resource in invariantResources)
                     {
-                        foreach (DictionaryEntry resource in invariantResources)
+                        string resourceName = (string) resource.Key;
+                        if (resourceName.StartsWith("$this") && !ignoreList.Contains(resourceName))
                         {
-                            string resourceName = (string)resource.Key;
-                            if (resourceName.StartsWith("$this") && !ignoreList.Contains(resourceName))
+                            // redirect resource resolution if necessary
+                            object resourceValue = rm.GetObject(resourceName, culture);
+                            if (resourceValue is String && ((String) resourceValue).StartsWith("$messageSource"))
                             {
-                                // redirect resource resolution if necessary
-                                object resourceValue = rm.GetObject(resourceName, culture);
-                                if (resourceValue is String && ((String)resourceValue).StartsWith("$messageSource"))
-                                {
-                                    resourceValue = messageSource.GetResourceObject(((String)resourceValue).Substring(15), culture);
-                                }
-                                resources.Add(new Resource(Expression.ParsePrimary(resourceName.Substring(6)), resourceValue));
+                                resourceValue = messageSource.GetResourceObject(((String) resourceValue).Substring(15), culture);
                             }
+
+                            resources.Add(new Resource(Expression.ParsePrimary(resourceName.Substring(6)), resourceValue));
                         }
                     }
                 }
             }
-            return resources;
         }
+
+        return resources;
     }
 }

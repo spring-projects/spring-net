@@ -18,24 +18,23 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Used by <see cref="DefaultObjectDefinitionDocumentReader"/> to locate
+/// <see cref="INamespaceParser"/> implementations for a particular namespace URI.
+/// </summary>
+/// <remarks>TODO (EE): clarify naming of INamespaceParser (SPR/NET) vs. INamespaceHandler (SPR/Java), thus internal for now</remarks>
+/// <author>Erich Eichinger</author>
+/// <seealso cref="XmlObjectDefinitionReader.NamespaceParserResolver"/>
+/// <seealso cref="XmlObjectDefinitionReader.CreateDefaultNamespaceParserResolver"/>
+/// <seealso cref="XmlReaderContext.NamespaceParserResolver"/>
+internal interface INamespaceParserResolver
 {
     /// <summary>
-    /// Used by <see cref="DefaultObjectDefinitionDocumentReader"/> to locate
-    /// <see cref="INamespaceParser"/> implementations for a particular namespace URI.
+    /// Lookup a <see cref="INamespaceParser"/> for the given namespace URI.
     /// </summary>
-    /// <remarks>TODO (EE): clarify naming of INamespaceParser (SPR/NET) vs. INamespaceHandler (SPR/Java), thus internal for now</remarks>
-    /// <author>Erich Eichinger</author>
-    /// <seealso cref="XmlObjectDefinitionReader.NamespaceParserResolver"/>
-    /// <seealso cref="XmlObjectDefinitionReader.CreateDefaultNamespaceParserResolver"/>
-    /// <seealso cref="XmlReaderContext.NamespaceParserResolver"/>
-    internal interface INamespaceParserResolver
-    {
-        /// <summary>
-        /// Lookup a <see cref="INamespaceParser"/> for the given namespace URI.
-        /// </summary>
-        /// <param name="namespaceUri">the namespace URI</param>
-        /// <returns>the located namespace handler or <c>null</c></returns>
-        INamespaceParser Resolve(string namespaceUri);
-    }
+    /// <param name="namespaceUri">the namespace URI</param>
+    /// <returns>the located namespace handler or <c>null</c></returns>
+    INamespaceParser Resolve(string namespaceUri);
 }

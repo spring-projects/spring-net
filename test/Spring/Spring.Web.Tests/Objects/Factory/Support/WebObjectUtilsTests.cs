@@ -20,36 +20,35 @@
 
 using NUnit.Framework;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class WebObjectUtilsTests
 {
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class WebObjectUtilsTests
+    [Test]
+    public void GetPageTypeWithNullPageName()
     {
-        [Test]
-        public void GetPageTypeWithNullPageName()
-        {
-            Assert.Throws<ArgumentNullException>(() => WebObjectUtils.GetPageType(null));
-        }
+        Assert.Throws<ArgumentNullException>(() => WebObjectUtils.GetPageType(null));
+    }
 
-        [Test]
-        public void GetPageTypeWithEmptyStringPageName()
-        {
-            Assert.Throws<ArgumentNullException>(() => WebObjectUtils.GetPageType(string.Empty));
-        }
+    [Test]
+    public void GetPageTypeWithEmptyStringPageName()
+    {
+        Assert.Throws<ArgumentNullException>(() => WebObjectUtils.GetPageType(string.Empty));
+    }
 
-        [Test]
-        public void GetPageTypeWithWhitespacedPageName()
-        {
-            Assert.Throws<ArgumentNullException>(() => WebObjectUtils.GetPageType("   "));
-        }
+    [Test]
+    public void GetPageTypeWithWhitespacedPageName()
+    {
+        Assert.Throws<ArgumentNullException>(() => WebObjectUtils.GetPageType("   "));
+    }
 
-        [Test]
-        public void CreatePageInstanceWhenNotRunningInServerContext()
-        {
-            Assert.Throws<ObjectCreationException>(() => WebObjectUtils.CreatePageInstance("foo.aspx"));
-        }
+    [Test]
+    public void CreatePageInstanceWhenNotRunningInServerContext()
+    {
+        Assert.Throws<ObjectCreationException>(() => WebObjectUtils.CreatePageInstance("foo.aspx"));
     }
 }

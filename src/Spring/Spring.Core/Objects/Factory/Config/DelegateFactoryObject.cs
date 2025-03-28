@@ -20,154 +20,159 @@
 
 using Spring.Util;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// <see cref="Spring.Objects.Factory.IFactoryObject"/> implementation that
+/// creates delegates.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Supports the creation of <see cref="System.Delegate"/>s for both
+/// instance and <see langword="static"/> methods.
+/// </p>
+/// </remarks>
+/// <author>Rick Evans</author>
+[Serializable]
+public class DelegateFactoryObject : AbstractFactoryObject
 {
-	/// <summary>
-	/// <see cref="Spring.Objects.Factory.IFactoryObject"/> implementation that
-	/// creates delegates.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Supports the creation of <see cref="System.Delegate"/>s for both
-	/// instance and <see langword="static"/> methods.
-	/// </p>
-	/// </remarks>
-	/// <author>Rick Evans</author>
-    [Serializable]
-    public class DelegateFactoryObject : AbstractFactoryObject
-	{
-		/// <summary>
-		/// Callback method called once all factory properties have been set.
-		/// </summary>
-		/// <exception cref="System.Exception">
-		/// In the event of misconfiguration (such as failure to set an essential
-		/// property) or if initialization fails.
-		/// </exception>
-		/// <seealso cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
-		public override void AfterPropertiesSet()
-		{
-			if (DelegateType == null)
-			{
-				throw new ArgumentException(
-					"The 'DelegateType' property is required.");
-			}
-			if (!typeof (Delegate).IsAssignableFrom(DelegateType))
-			{
-				throw new ArgumentException(
-					"The 'DelegateType' property must (obviously) be a Type derived from [System.Delegate].");
-			}
-			if (TargetType == null && TargetObject == null)
-			{
-				throw new ArgumentException(
-					"Exactly one of either the 'TargetType' or 'TargetObject' properties is required.");
-			}
-			if (TargetType != null && TargetObject != null)
-			{
-				throw new ArgumentException(
-					"Exactly one of either the 'TargetType' or 'TargetObject' properties is required (not both).");
-			}
-			if (StringUtils.IsNullOrEmpty(MethodName))
-			{
-				throw new ArgumentException(
-					"The 'MethodName' property is required.");
-			}
-			base.AfterPropertiesSet();
-		}
+    /// <summary>
+    /// Callback method called once all factory properties have been set.
+    /// </summary>
+    /// <exception cref="System.Exception">
+    /// In the event of misconfiguration (such as failure to set an essential
+    /// property) or if initialization fails.
+    /// </exception>
+    /// <seealso cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
+    public override void AfterPropertiesSet()
+    {
+        if (DelegateType == null)
+        {
+            throw new ArgumentException(
+                "The 'DelegateType' property is required.");
+        }
 
-		/// <summary>
-		/// Creates the delegate.
-		/// </summary>
-		/// <exception cref="System.Exception">
-		/// If an exception occured during object creation.
-		/// </exception>
-		/// <returns>The object returned by this factory.</returns>
-		/// <seealso cref="Spring.Objects.Factory.Config.AbstractFactoryObject.CreateInstance()"/>
-		protected override object CreateInstance()
-		{
-			Delegate instance = null;
-			if (TargetType != null)
-			{
-				instance = Delegate.CreateDelegate(DelegateType, TargetType, MethodName);
-			}
-			else
-			{
-				instance = Delegate.CreateDelegate(DelegateType, TargetObject, MethodName);
-			}
-			return instance;
-		}
+        if (!typeof(Delegate).IsAssignableFrom(DelegateType))
+        {
+            throw new ArgumentException(
+                "The 'DelegateType' property must (obviously) be a Type derived from [System.Delegate].");
+        }
 
-		#region Properties
+        if (TargetType == null && TargetObject == null)
+        {
+            throw new ArgumentException(
+                "Exactly one of either the 'TargetType' or 'TargetObject' properties is required.");
+        }
 
-		/// <summary>
-		/// The <see cref="System.Type"/> of <see cref="System.Delegate"/>
-		/// created by this factory.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// Returns the <see cref="System.Delegate"/> <see cref="System.Type"/>
-		/// if accessed prior to the <see cref="AfterPropertiesSet"/> method
-		/// being called.
-		/// </p>
-		/// </remarks>
-		public override Type ObjectType
-		{
-			get
-			{
-				return (DelegateType != null)
-				       	? DelegateType
-				       	: typeof (Delegate);
-			}
-		}
+        if (TargetType != null && TargetObject != null)
+        {
+            throw new ArgumentException(
+                "Exactly one of either the 'TargetType' or 'TargetObject' properties is required (not both).");
+        }
 
-		/// <summary>
-		/// The <see cref="System.Type"/> of the <see cref="System.Delegate"/>
-		/// created by this factory.
-		/// </summary>
-		public Type DelegateType
-		{
-			get { return _delegateType; }
-			set { _delegateType = value; }
-		}
+        if (StringUtils.IsNullOrEmpty(MethodName))
+        {
+            throw new ArgumentException(
+                "The 'MethodName' property is required.");
+        }
 
-		/// <summary>
-		/// The name of the method that is to be invoked by the created
-		/// delegate.
-		/// </summary>
-		public string MethodName
-		{
-			get { return _methodName; }
-			set { _methodName = value; }
-		}
+        base.AfterPropertiesSet();
+    }
 
-		/// <summary>
-		/// The target <see cref="System.Type"/> if the <see cref="MethodName"/>
-		/// refers to a <see langword="static"/> method.
-		/// </summary>
-		public Type TargetType
-		{
-			get { return _targetType; }
-			set { _targetType = value; }
-		}
+    /// <summary>
+    /// Creates the delegate.
+    /// </summary>
+    /// <exception cref="System.Exception">
+    /// If an exception occured during object creation.
+    /// </exception>
+    /// <returns>The object returned by this factory.</returns>
+    /// <seealso cref="Spring.Objects.Factory.Config.AbstractFactoryObject.CreateInstance()"/>
+    protected override object CreateInstance()
+    {
+        Delegate instance = null;
+        if (TargetType != null)
+        {
+            instance = Delegate.CreateDelegate(DelegateType, TargetType, MethodName);
+        }
+        else
+        {
+            instance = Delegate.CreateDelegate(DelegateType, TargetObject, MethodName);
+        }
 
-		/// <summary>
-		/// The target object if the <see cref="MethodName"/>
-		/// refers to an instance method.
-		/// </summary>
-		public object TargetObject
-		{
-			get { return _targetObject; }
-			set { _targetObject = value; }
-		}
+        return instance;
+    }
 
-		#endregion
+    #region Properties
 
-		#region Fields
+    /// <summary>
+    /// The <see cref="System.Type"/> of <see cref="System.Delegate"/>
+    /// created by this factory.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Returns the <see cref="System.Delegate"/> <see cref="System.Type"/>
+    /// if accessed prior to the <see cref="AfterPropertiesSet"/> method
+    /// being called.
+    /// </p>
+    /// </remarks>
+    public override Type ObjectType
+    {
+        get
+        {
+            return (DelegateType != null)
+                ? DelegateType
+                : typeof(Delegate);
+        }
+    }
 
-		private Type _delegateType;
-		private string _methodName;
-		private Type _targetType;
-		private object _targetObject;
+    /// <summary>
+    /// The <see cref="System.Type"/> of the <see cref="System.Delegate"/>
+    /// created by this factory.
+    /// </summary>
+    public Type DelegateType
+    {
+        get { return _delegateType; }
+        set { _delegateType = value; }
+    }
 
-		#endregion
-	}
+    /// <summary>
+    /// The name of the method that is to be invoked by the created
+    /// delegate.
+    /// </summary>
+    public string MethodName
+    {
+        get { return _methodName; }
+        set { _methodName = value; }
+    }
+
+    /// <summary>
+    /// The target <see cref="System.Type"/> if the <see cref="MethodName"/>
+    /// refers to a <see langword="static"/> method.
+    /// </summary>
+    public Type TargetType
+    {
+        get { return _targetType; }
+        set { _targetType = value; }
+    }
+
+    /// <summary>
+    /// The target object if the <see cref="MethodName"/>
+    /// refers to an instance method.
+    /// </summary>
+    public object TargetObject
+    {
+        get { return _targetObject; }
+        set { _targetObject = value; }
+    }
+
+    #endregion
+
+    #region Fields
+
+    private Type _delegateType;
+    private string _methodName;
+    private Type _targetType;
+    private object _targetObject;
+
+    #endregion
 }

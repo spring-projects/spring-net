@@ -2,25 +2,26 @@
 <objects xmlns="http://www.springframework.net">
 
 
-  <object id="objectPostProcessor" type="Spring.Context.Support.SingletonTestingObjectPostProcessor, Spring.Core.Tests"/>
-  
-  <object id="hasInnerObjects" type="Spring.Objects.TestObject, Spring.Core.Tests">
-  <constructor-arg>
-    <value>hasInner</value>
-  </constructor-arg>
-  <constructor-arg index="1" type="System.Int32">
-    <value>5</value>
-  </constructor-arg>
-  <property name="spouse">
-    <object type="Spring.Objects.TestObject, Spring.Core.Tests">
-      <property name="name">
-        <value>inner1</value>
-      </property>
-      <property name="age">
-        <value>6</value>
-      </property>
+    <object id="objectPostProcessor"
+            type="Spring.Context.Support.SingletonTestingObjectPostProcessor, Spring.Core.Tests" />
+
+    <object id="hasInnerObjects" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <constructor-arg>
+            <value>hasInner</value>
+        </constructor-arg>
+        <constructor-arg index="1" type="System.Int32">
+            <value>5</value>
+        </constructor-arg>
+        <property name="spouse">
+            <object type="Spring.Objects.TestObject, Spring.Core.Tests">
+                <property name="name">
+                    <value>inner1</value>
+                </property>
+                <property name="age">
+                    <value>6</value>
+                </property>
+            </object>
+        </property>
     </object>
-  </property>
-</object>
-    
+
 </objects>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,32 +25,31 @@ using Spring.TestSupport;
 
 #endregion
 
-namespace Spring.Core.IO
+namespace Spring.Core.IO;
+
+/// <summary>
+/// Unit tests for the WebResource class.
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class WebResourceTests : FileSystemResourceCommonTests
 {
-    /// <summary>
-    /// Unit tests for the WebResource class.
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class WebResourceTests : FileSystemResourceCommonTests
+    private VirtualEnvironmentMock testVirtualEnvironment;
+
+    [OneTimeSetUp]
+    public void SetUpFixture()
     {
-        private VirtualEnvironmentMock testVirtualEnvironment;
+        testVirtualEnvironment = new VirtualEnvironmentMock("/some.request", "somepathinfo", null, "/", true);
+    }
 
-        [OneTimeSetUp]
-        public void SetUpFixture()
-        {
-            testVirtualEnvironment = new VirtualEnvironmentMock("/some.request", "somepathinfo", null, "/", true);
-        }
+    [OneTimeTearDown]
+    public void ShutDownFixture()
+    {
+        testVirtualEnvironment.Dispose();
+    }
 
-        [OneTimeTearDown]
-        public void ShutDownFixture()
-        {
-            testVirtualEnvironment.Dispose();
-        }
-
-        protected override FileSystemResource CreateResourceInstance(string resourceName)
-        {
-            return new WebResource(resourceName);
-        }
+    protected override FileSystemResource CreateResourceInstance(string resourceName)
+    {
+        return new WebResource(resourceName);
     }
 }

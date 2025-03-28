@@ -22,76 +22,75 @@
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>
+/// A simple StopWatch implemetion for use in Performance Tests
+/// </summary>
+/// <example>
+/// The following example shows the usage:
+/// <code>
+/// StopWatch watch = new StopWatch();
+/// using (watch.Start("Duration: {0}"))
+/// {
+///    // do some work...
+/// }
+/// </code>
+/// The format string passed to the start method is used to print the result message.
+/// The example above will print <c>Duration: 0.123s</c>.
+/// </example>
+/// <author>Erich Eichinger</author>
+public class StopWatch
 {
-    /// <summary>
-    /// A simple StopWatch implemetion for use in Performance Tests
-    /// </summary>
-    /// <example>
-    /// The following example shows the usage:
-    /// <code>
-    /// StopWatch watch = new StopWatch();
-    /// using (watch.Start("Duration: {0}"))
-    /// {
-    ///    // do some work...
-    /// }
-    /// </code>
-    /// The format string passed to the start method is used to print the result message. 
-    /// The example above will print <c>Duration: 0.123s</c>.
-    /// </example>
-    /// <author>Erich Eichinger</author>
-    public class StopWatch
+    private DateTime _startTime;
+    private TimeSpan _elapsed;
+
+    private class Stopper : IDisposable
     {
-        private DateTime _startTime;
-        private TimeSpan _elapsed;
+        private readonly StopWatch _owner;
+        private readonly string _format;
 
-        private class Stopper : IDisposable
+        public Stopper(StopWatch owner, string format)
         {
-            private readonly StopWatch _owner;
-            private readonly string _format;
-
-            public Stopper(StopWatch owner, string format)
-            {
-                _owner = owner;
-                _format = format;
-            }
-
-            public void Dispose()
-            {
-                _owner.Stop(_format);
-                GC.SuppressFinalize(this);
-            }
+            _owner = owner;
+            _format = format;
         }
 
-        /// <summary>
-        /// Starts the timer and returns and "handle" that must be disposed to stop the timer.
-        /// </summary>
-        /// <param name="outputFormat">the output format string, that is used to render the result message. Use '{0}' to print the elapsed timespan.</param>
-        /// <returns>the handle to dispose for stopping the timer</returns>
-        public IDisposable Start(string outputFormat)
+        public void Dispose()
         {
-            Stopper stopper = new Stopper(this, outputFormat);
-            _startTime = DateTime.Now;
-            return stopper;
+            _owner.Stop(_format);
+            GC.SuppressFinalize(this);
         }
+    }
 
-        private void Stop(string outputFormat)
-        {
-            _elapsed = DateTime.Now.Subtract(_startTime);
-            if (outputFormat != null)
-            {
-                Console.WriteLine(outputFormat, _elapsed);
-            }
-        }
+    /// <summary>
+    /// Starts the timer and returns and "handle" that must be disposed to stop the timer.
+    /// </summary>
+    /// <param name="outputFormat">the output format string, that is used to render the result message. Use '{0}' to print the elapsed timespan.</param>
+    /// <returns>the handle to dispose for stopping the timer</returns>
+    public IDisposable Start(string outputFormat)
+    {
+        Stopper stopper = new Stopper(this, outputFormat);
+        _startTime = DateTime.Now;
+        return stopper;
+    }
 
-        public DateTime StartTime
+    private void Stop(string outputFormat)
+    {
+        _elapsed = DateTime.Now.Subtract(_startTime);
+        if (outputFormat != null)
         {
-            get { return _startTime; }
+            Console.WriteLine(outputFormat, _elapsed);
         }
+    }
 
-        public TimeSpan Elapsed
-        {
-            get { return _elapsed; }
-        }
+    public DateTime StartTime
+    {
+        get { return _startTime; }
+    }
+
+    public TimeSpan Elapsed
+    {
+        get { return _elapsed; }
     }
 }

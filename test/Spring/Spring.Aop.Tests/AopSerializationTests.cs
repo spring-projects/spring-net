@@ -32,104 +32,104 @@ using Spring.Objects.Factory;
 
 #pragma warning disable SYSLIB0050
 
-namespace Spring
+namespace Spring;
+
+/// <summary>
+/// Ensure, that all framework implementations of IAdvice and IAdvisor are serializable
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class AopSerializationTests
 {
-    /// <summary>
-    /// Ensure, that all framework implementations of IAdvice and IAdvisor are serializable
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class AopSerializationTests
+    [Test]
+    public void AllAopInfrastructureTypesAreSerializable()
     {
-        [Test]
-        public void AllAopInfrastructureTypesAreSerializable()
+        ArrayList brokenTypes = new ArrayList();
+
+        foreach (Type t in GetTypesToTest())
         {
-            ArrayList brokenTypes = new ArrayList();
-
-            foreach (Type t in GetTypesToTest())
+            if (!ExcludeTypeFromTest(t)
+                && IsAopInfrastructureType(t))
             {
-                if (!ExcludeTypeFromTest(t)
-                    && IsAopInfrastructureType(t))
+                if (!CheckIsSerializable(t))
                 {
-                    if (!CheckIsSerializable(t))
-                    {
-                        brokenTypes.Add(string.Format("{0} or one of its base classes are not marked as serializable\n", t.FullName));
-                        continue;
-                    }
-                    if (t.IsAbstract) continue;
+                    brokenTypes.Add(string.Format("{0} or one of its base classes are not marked as serializable\n", t.FullName));
+                    continue;
+                }
 
-                    // perform a fast ser/deser check
-                    try
-                    {
-                        object o = FormatterServices.GetSafeUninitializedObject(t);
-                        o = SerializeAndDeserialize(o);
-                    }
-                    catch (SerializationException sex)
-                    {
-                        brokenTypes.Add(string.Format("{0}: {1}\n", t.FullName, sex.Message));
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(string.Format("WARN: {0}: {1}\n", t.FullName, ex));
-                    }
+                if (t.IsAbstract) continue;
+
+                // perform a fast ser/deser check
+                try
+                {
+                    object o = FormatterServices.GetSafeUninitializedObject(t);
+                    o = SerializeAndDeserialize(o);
+                }
+                catch (SerializationException sex)
+                {
+                    brokenTypes.Add(string.Format("{0}: {1}\n", t.FullName, sex.Message));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(string.Format("WARN: {0}: {1}\n", t.FullName, ex));
                 }
             }
-
-            Assert.IsEmpty(brokenTypes);
         }
 
-        protected bool CheckIsSerializable(Type t)
-        {
-            if (t == typeof(object)) return true;
+        Assert.IsEmpty(brokenTypes);
+    }
 
-            return (t.IsSerializable && CheckIsSerializable(t.BaseType));
-        }
+    protected bool CheckIsSerializable(Type t)
+    {
+        if (t == typeof(object)) return true;
 
-        protected virtual ICollection GetTypesToTest()
-        {
-            return GetAssemblyToTest().GetTypes();
-            //            return new Type[] { typeof(DynamicMethodMatcherPointcutAdvisor) };
-        }
+        return (t.IsSerializable && CheckIsSerializable(t.BaseType));
+    }
 
-        protected virtual Assembly GetAssemblyToTest()
-        {
-            return typeof(IAdvice).Assembly;
-        }
+    protected virtual ICollection GetTypesToTest()
+    {
+        return GetAssemblyToTest().GetTypes();
+        //            return new Type[] { typeof(DynamicMethodMatcherPointcutAdvisor) };
+    }
 
-        protected virtual bool ExcludeTypeFromTest(Type t)
-        {
-            return false //t.IsAbstract 
-                || t.IsInterface
-                || typeof(IApplicationContextAware).IsAssignableFrom(t)
-                || typeof(IObjectFactoryAware).IsAssignableFrom(t)
+    protected virtual Assembly GetAssemblyToTest()
+    {
+        return typeof(IAdvice).Assembly;
+    }
+
+    protected virtual bool ExcludeTypeFromTest(Type t)
+    {
+        return false //t.IsAbstract
+               || t.IsInterface
+               || typeof(IApplicationContextAware).IsAssignableFrom(t)
+               || typeof(IObjectFactoryAware).IsAssignableFrom(t)
             ;
-        }
+    }
 
-        protected virtual bool IsAopInfrastructureType(Type t)
+    protected virtual bool IsAopInfrastructureType(Type t)
+    {
+        return typeof(IAdvisedSupportListener).IsAssignableFrom(t)
+               || typeof(ITargetSource).IsAssignableFrom(t)
+               || typeof(IAdvice).IsAssignableFrom(t)
+               || typeof(IAdvisor).IsAssignableFrom(t)
+               || typeof(IMethodMatcher).IsAssignableFrom(t)
+               || typeof(IPointcut).IsAssignableFrom(t);
+    }
+
+    private object SerializeAndDeserialize(object s)
+    {
+        // Serialize the session
+        using (Stream stream = new MemoryStream())
         {
-            return typeof(IAdvisedSupportListener).IsAssignableFrom(t)
-                   || typeof(ITargetSource).IsAssignableFrom(t)
-                   || typeof(IAdvice).IsAssignableFrom(t)
-                   || typeof(IAdvisor).IsAssignableFrom(t)
-                   || typeof(IMethodMatcher).IsAssignableFrom(t)
-                   || typeof(IPointcut).IsAssignableFrom(t);
-        }
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.AssemblyFormat = FormatterAssemblyStyle.Full;
+            formatter.TypeFormat = FormatterTypeStyle.TypesAlways;
+            formatter.Serialize(stream, s);
 
-        private object SerializeAndDeserialize(object s)
-        {
-            // Serialize the session
-            using (Stream stream = new MemoryStream())
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.AssemblyFormat = FormatterAssemblyStyle.Full;
-                formatter.TypeFormat = FormatterTypeStyle.TypesAlways;
-                formatter.Serialize(stream, s);
-
-                // Deserialize the session
-                stream.Position = 0;
-                object res = formatter.Deserialize(stream);
-                return res;
-            }
+            // Deserialize the session
+            stream.Position = 0;
+            object res = formatter.Deserialize(stream);
+            return res;
         }
     }
 }

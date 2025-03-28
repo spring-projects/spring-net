@@ -23,23 +23,21 @@
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Text;
-
 using NUnit.Framework;
-
 using Spring.Core.IO;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the ConfigurationReader class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ConfigurationReaderTests
 {
-    /// <summary>
-    /// Unit tests for the ConfigurationReader class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    public sealed class ConfigurationReaderTests
-    {
-        private const string SunnyDayXml = @"<?xml version='1.0' encoding='UTF-8' ?>
+    private const string SunnyDayXml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <configuration>
     <configSections>
         <section name='foo' type='System.Configuration.NameValueSectionHandler, System'/>
@@ -50,50 +48,50 @@ namespace Spring.Objects.Factory.Config
     </foo>
 </configuration>";
 
-        /// <summary>
-        /// Unfortunately ConfigurationManager doesn't accept uri's.
-        /// </summary>
-        [Test]
-        public void ConfigurationManagerCannotReadFromUrl()
+    /// <summary>
+    /// Unfortunately ConfigurationManager doesn't accept uri's.
+    /// </summary>
+    [Test]
+    public void ConfigurationManagerCannotReadFromUrl()
+    {
+        try
         {
-            try
-            {
-                ConfigurationManager.OpenExeConfiguration("http://localhost/something.config");
-                Assert.Fail();
-            }
-            catch (ConfigurationErrorsException cfgex)
-            {
+            ConfigurationManager.OpenExeConfiguration("http://localhost/something.config");
+            Assert.Fail();
+        }
+        catch (ConfigurationErrorsException cfgex)
+        {
 #if NETFRAMEWORK
-                Assert.IsInstanceOf(typeof(NotSupportedException), cfgex.InnerException);
+            Assert.IsInstanceOf(typeof(NotSupportedException), cfgex.InnerException);
 #else
                 Assert.IsInstanceOf(typeof(ArgumentException), cfgex.InnerException);
 #endif
-            }
         }
+    }
 
-        [Test]
-        public void ReadSunnyDay()
+    [Test]
+    public void ReadSunnyDay()
+    {
+        using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
         {
-            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
-            {
-                NameValueCollection props = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo");
-                Assert.IsNotNull(props,
-                                 "Failed to read in any properties at all (props is null).");
-                Assert.AreEqual(2, props.Count,
-                                "Wrong number of properties read in.");
-                Assert.AreEqual("kiley",
-                                props["rilo"],
-                                "Wrong value for second property");
-                Assert.AreEqual("lewis",
-                                props["jenny"],
-                                "Wrong value for second property");
-            }
+            NameValueCollection props = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo");
+            Assert.IsNotNull(props,
+                "Failed to read in any properties at all (props is null).");
+            Assert.AreEqual(2, props.Count,
+                "Wrong number of properties read in.");
+            Assert.AreEqual("kiley",
+                props["rilo"],
+                "Wrong value for second property");
+            Assert.AreEqual("lewis",
+                props["jenny"],
+                "Wrong value for second property");
         }
+    }
 
-        [Test]
-        public void GetSectionLocalSectionHandler()
-        {
-            string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void GetSectionLocalSectionHandler()
+    {
+        string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <configuration>
     <configSections>
         <section name='connectionStrings' type='System.Configuration.ConnectionStringsSection, System.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' requirePermission='false' />
@@ -105,20 +103,20 @@ namespace Spring.Objects.Factory.Config
     </connectionStrings>
 </configuration>
 ";
-            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
-            {
-                ConnectionStringsSection css = ConfigurationReader.GetSection<ConnectionStringsSection>(new InputStreamResource(stream, ""), "connectionStrings");
-                Assert.IsNotNull(css, "Failed to read in any properties at all (props is null).");
-                Assert.IsNotNull(css.ConnectionStrings["Sales"]);
-                Assert.AreEqual("System.Data.SqlClient", css.ConnectionStrings["Sales"].ProviderName);
-                Assert.AreEqual("server=myserver;database=Products;uid=user name;pwd=secure password", css.ConnectionStrings["Sales"].ConnectionString);
-            }
-        }
-
-        [Test]
-        public void GetSectionMachineInheritedSectionHandler()
+        using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
         {
-            string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+            ConnectionStringsSection css = ConfigurationReader.GetSection<ConnectionStringsSection>(new InputStreamResource(stream, ""), "connectionStrings");
+            Assert.IsNotNull(css, "Failed to read in any properties at all (props is null).");
+            Assert.IsNotNull(css.ConnectionStrings["Sales"]);
+            Assert.AreEqual("System.Data.SqlClient", css.ConnectionStrings["Sales"].ProviderName);
+            Assert.AreEqual("server=myserver;database=Products;uid=user name;pwd=secure password", css.ConnectionStrings["Sales"].ConnectionString);
+        }
+    }
+
+    [Test]
+    public void GetSectionMachineInheritedSectionHandler()
+    {
+        string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <configuration>
     <connectionStrings>
       <add name='Sales' 
@@ -127,108 +125,107 @@ namespace Spring.Objects.Factory.Config
     </connectionStrings>
 </configuration>
 ";
-            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
-            {
-                ConnectionStringsSection css = ConfigurationReader.GetSection<ConnectionStringsSection>(new InputStreamResource(stream, ""), "connectionStrings");
-                Assert.IsNotNull(css, "Failed to read in any properties at all (props is null).");
-                Assert.IsNotNull(css.ConnectionStrings["Sales"]);
-                Assert.AreEqual("System.Data.SqlClient", css.ConnectionStrings["Sales"].ProviderName);
-                Assert.AreEqual("server=myserver;database=Products;uid=user name;pwd=secure password", css.ConnectionStrings["Sales"].ConnectionString);
-            }
-        }
-
-        [Test]
-        public void GetSectionSunnyDay()
+        using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
         {
-            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
-            {
-                NameValueCollection props = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo");
-                Assert.IsNotNull(props,
-                                 "Failed to read in any properties at all (props is null).");
-                Assert.AreEqual(2, props.Count,
-                                "Wrong number of properties read in.");
-                Assert.AreEqual("kiley",
-                                props["rilo"],
-                                "Wrong value for second property");
-                Assert.AreEqual("lewis",
-                                props["jenny"],
-                                "Wrong value for second property");
-            }
+            ConnectionStringsSection css = ConfigurationReader.GetSection<ConnectionStringsSection>(new InputStreamResource(stream, ""), "connectionStrings");
+            Assert.IsNotNull(css, "Failed to read in any properties at all (props is null).");
+            Assert.IsNotNull(css.ConnectionStrings["Sales"]);
+            Assert.AreEqual("System.Data.SqlClient", css.ConnectionStrings["Sales"].ProviderName);
+            Assert.AreEqual("server=myserver;database=Products;uid=user name;pwd=secure password", css.ConnectionStrings["Sales"].ConnectionString);
         }
+    }
 
-        [Test]
-        public void ReadWithOverrideOfPreviouslyExistingValues()
+    [Test]
+    public void GetSectionSunnyDay()
+    {
+        using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
         {
-            using(Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
-            {
-                NameValueCollection defaults = new NameValueCollection();
-                defaults.Add("jenny", "agutter");
-                NameValueCollection props
-                  = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", defaults);
-                Assert.IsTrue(ReferenceEquals(defaults, props), "Must have got same collection as was passed in.");
-                Assert.AreEqual("lewis", props["jenny"], "Wrong value for overridden property (was not overridden");
-            }
+            NameValueCollection props = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo");
+            Assert.IsNotNull(props,
+                "Failed to read in any properties at all (props is null).");
+            Assert.AreEqual(2, props.Count,
+                "Wrong number of properties read in.");
+            Assert.AreEqual("kiley",
+                props["rilo"],
+                "Wrong value for second property");
+            Assert.AreEqual("lewis",
+                props["jenny"],
+                "Wrong value for second property");
         }
+    }
 
-        [Test]
-        public void ReadWithOverrideOfPreviouslyExistingValuesButWithOverrideSwitchedOff()
+    [Test]
+    public void ReadWithOverrideOfPreviouslyExistingValues()
+    {
+        using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
         {
-            using(Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
-            {
-                NameValueCollection defaults = new NameValueCollection();
-                defaults.Add("jenny", "agutter");
-                NameValueCollection props
-                    = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", defaults, false);
-                Assert.IsTrue(ReferenceEquals(defaults, props), "Must have got same collection as was passed in.");
-                Assert.AreEqual("agutter,lewis", props["jenny"], "Wrong value for overridden property (was not overridden");
-            }
+            NameValueCollection defaults = new NameValueCollection();
+            defaults.Add("jenny", "agutter");
+            NameValueCollection props
+                = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", defaults);
+            Assert.IsTrue(ReferenceEquals(defaults, props), "Must have got same collection as was passed in.");
+            Assert.AreEqual("lewis", props["jenny"], "Wrong value for overridden property (was not overridden");
         }
+    }
 
-        [Test]
-        public void ReadWithNullExistingValuesPassedIn()
+    [Test]
+    public void ReadWithOverrideOfPreviouslyExistingValuesButWithOverrideSwitchedOff()
+    {
+        using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
         {
-            using(Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
-            {
-                NameValueCollection props
-                    = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", null);
-                Assert.IsNotNull(props, "Failed to read in any properties at all (props is null).");
-                Assert.AreEqual(2, props.Count, "Wrong number of properties read in.");
-                Assert.AreEqual("kiley", props["rilo"], "Wrong value for second property");
-                Assert.AreEqual("lewis", props["jenny"], "Wrong value for second property");
-            }
+            NameValueCollection defaults = new NameValueCollection();
+            defaults.Add("jenny", "agutter");
+            NameValueCollection props
+                = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", defaults, false);
+            Assert.IsTrue(ReferenceEquals(defaults, props), "Must have got same collection as was passed in.");
+            Assert.AreEqual("agutter,lewis", props["jenny"], "Wrong value for overridden property (was not overridden");
         }
+    }
 
-        [Test]
-        public void ReadWithNoConfigSectionSectionDefaultsToNameValueSectionHandler()
+    [Test]
+    public void ReadWithNullExistingValuesPassedIn()
+    {
+        using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
         {
-            const string NoConfigSectionXml = @"<?xml version='1.0' encoding='UTF-8' ?>
+            NameValueCollection props
+                = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", null);
+            Assert.IsNotNull(props, "Failed to read in any properties at all (props is null).");
+            Assert.AreEqual(2, props.Count, "Wrong number of properties read in.");
+            Assert.AreEqual("kiley", props["rilo"], "Wrong value for second property");
+            Assert.AreEqual("lewis", props["jenny"], "Wrong value for second property");
+        }
+    }
+
+    [Test]
+    public void ReadWithNoConfigSectionSectionDefaultsToNameValueSectionHandler()
+    {
+        const string NoConfigSectionXml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <configuration>
     <foo>
         <add key='rilo' value='kiley'/>
         <add key='jenny' value='lewis'/>
     </foo>
 </configuration>";
-            using(Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(NoConfigSectionXml)))
-            {
-                NameValueCollection props
-                    = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", null);
-                Assert.IsNotNull(props, "Failed to read in any properties at all (props is null).");
-                Assert.AreEqual(2, props.Count, "Wrong number of properties read in.");
-                Assert.AreEqual("kiley", props["rilo"], "Wrong value for second property");
-                Assert.AreEqual("lewis", props["jenny"], "Wrong value for second property");
-            }
-        }
-
-        [Test]
-        public void TryReadFromNonExistantConfigSection()
+        using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(NoConfigSectionXml)))
         {
-            Assert.Throws<ConfigurationErrorsException>(() =>
-            {
-                using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
-                {
-                    ConfigurationReader.Read(new InputStreamResource(stream, ""), "ELNOMBRE", null);
-                }
-            }, "Cannot read config section 'ELNOMBRE' - section not found.");
+            NameValueCollection props
+                = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", null);
+            Assert.IsNotNull(props, "Failed to read in any properties at all (props is null).");
+            Assert.AreEqual(2, props.Count, "Wrong number of properties read in.");
+            Assert.AreEqual("kiley", props["rilo"], "Wrong value for second property");
+            Assert.AreEqual("lewis", props["jenny"], "Wrong value for second property");
         }
+    }
+
+    [Test]
+    public void TryReadFromNonExistantConfigSection()
+    {
+        Assert.Throws<ConfigurationErrorsException>(() =>
+        {
+            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
+            {
+                ConfigurationReader.Read(new InputStreamResource(stream, ""), "ELNOMBRE", null);
+            }
+        }, "Cannot read config section 'ELNOMBRE' - section not found.");
     }
 }

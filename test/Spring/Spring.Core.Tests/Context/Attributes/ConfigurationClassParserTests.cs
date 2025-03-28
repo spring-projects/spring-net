@@ -19,7 +19,6 @@
 #endregion
 
 using NUnit.Framework;
-
 using Spring.Context.Attributes;
 using Spring.Objects.Factory.Parsing;
 

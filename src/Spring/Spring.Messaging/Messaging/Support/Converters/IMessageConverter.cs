@@ -20,29 +20,29 @@
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Support.Converters
+namespace Spring.Messaging.Support.Converters;
+
+/// <summary>
+/// An interface specifying the contract to convert to and from <see cref="Message"/> objects.
+/// </summary>
+public interface IMessageConverter : ICloneable
 {
     /// <summary>
-    /// An interface specifying the contract to convert to and from <see cref="Message"/> objects.
+    /// Convert the given object to a Message.
     /// </summary>
-    public interface IMessageConverter : ICloneable
-    {
-        /// <summary>
-        /// Convert the given object to a Message.
-        /// </summary>
-        /// <param name="obj">The object to send.</param>
-        /// <returns>Message to send</returns>
-        Message ToMessage(object obj);
+    /// <param name="obj">The object to send.</param>
+    /// <returns>Message to send</returns>
+    Message ToMessage(object obj);
 
-        /// <summary>
-        /// Convert the given message to a object.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <returns>the object</returns>
-        object FromMessage(Message message);
-    }
+    /// <summary>
+    /// Convert the given message to a object.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <returns>the object</returns>
+    object FromMessage(Message message);
 }

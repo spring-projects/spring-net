@@ -25,74 +25,75 @@ using System.Web.UI.WebControls;
 
 #endregion
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// This validator allows for validating a CheckBox's "Checked" state.
+/// </summary>
+/// <author>Erich Eichinger</author>
+[ToolboxData("<{0}:RequiredCheckBoxValidator runat=\"server\" ErrorMessage=\"RequiredCheckBoxValidator\"></{0}:RequiredCheckBoxValidator>")]
+public class RequiredCheckBoxValidator : AbstractBaseValidator
 {
-	/// <summary>
-	/// This validator allows for validating a CheckBox's "Checked" state.
-	/// </summary>
-	/// <author>Erich Eichinger</author>
-	[ToolboxData("<{0}:RequiredCheckBoxValidator runat=\"server\" ErrorMessage=\"RequiredCheckBoxValidator\"></{0}:RequiredCheckBoxValidator>")]
-    public class RequiredCheckBoxValidator : AbstractBaseValidator
+    /// <summary>
+    /// Validates this validator's properties are set correctly.
+    /// </summary>
+    /// <returns></returns>
+    protected override bool ControlPropertiesValid()
     {
-		/// <summary>
-		/// Validates this validator's properties are set correctly.
-		/// </summary>
-		/// <returns></returns>
-        protected override bool ControlPropertiesValid()
+        string controlName = this.ControlToValidate;
+        if (controlName.Length == 0)
         {
-            string controlName = this.ControlToValidate;
-            if(controlName.Length == 0)
-            {
-                return base.ControlPropertiesValid();
-            }
-            return true;
+            return base.ControlPropertiesValid();
         }
 
-		/// <summary>
-		/// Returns the state of the checkbox's Checked property
-		/// </summary>
-		/// <returns></returns>
-        protected override bool EvaluateIsValid()
-        {
-            CheckBox controlToValidate = this.NamingContainer.FindControl(this.ControlToValidate) as CheckBox;
-            if(controlToValidate == null)
-            {
-                return false;
-            }
+        return true;
+    }
 
-            return controlToValidate.Checked;
+    /// <summary>
+    /// Returns the state of the checkbox's Checked property
+    /// </summary>
+    /// <returns></returns>
+    protected override bool EvaluateIsValid()
+    {
+        CheckBox controlToValidate = this.NamingContainer.FindControl(this.ControlToValidate) as CheckBox;
+        if (controlToValidate == null)
+        {
+            return false;
         }
 
-		/// <summary>
-		/// Adds attributes required for clientside validation
-		/// </summary>
-		/// <param name="writer"></param>
-        protected override void AddAttributesToRender(HtmlTextWriter writer)
-        {
-            base.AddAttributesToRender(writer);
-            if(base.RenderUplevel)
-            {
-                string controlId = this.ClientID;
-                writer = base.EnableLegacyRendering ? writer : null;
-                base.AddExpandoAttribute(writer, controlId, "evaluationfunction", "RequiredCheckBoxValidatorEvaluateIsChecked", false);
-                base.AddExpandoAttribute(writer, controlId, "initialvalue", "", true);
-            }
-        }
+        return controlToValidate.Checked;
+    }
 
-		/// <summary>
-		/// Ensures the evaluation javascript functionblock is registered
-		/// </summary>
-		/// <param name="e"></param>
-        protected override void OnPreRender(EventArgs e)
+    /// <summary>
+    /// Adds attributes required for clientside validation
+    /// </summary>
+    /// <param name="writer"></param>
+    protected override void AddAttributesToRender(HtmlTextWriter writer)
+    {
+        base.AddAttributesToRender(writer);
+        if (base.RenderUplevel)
         {
-            base.OnPreRender(e);
-            if (!base.IsClientScriptBlockRegistered(typeof(RequiredCheckBoxValidator), "RequiredCheckBoxValidatorEvaluateIsChecked"))
-            {
-                base.RegisterClientScriptBlock(
-                    typeof(RequiredCheckBoxValidator)
-                    , "RequiredCheckBoxValidatorEvaluateIsChecked"
-                    ,
-@"
+            string controlId = this.ClientID;
+            writer = base.EnableLegacyRendering ? writer : null;
+            base.AddExpandoAttribute(writer, controlId, "evaluationfunction", "RequiredCheckBoxValidatorEvaluateIsChecked", false);
+            base.AddExpandoAttribute(writer, controlId, "initialvalue", "", true);
+        }
+    }
+
+    /// <summary>
+    /// Ensures the evaluation javascript functionblock is registered
+    /// </summary>
+    /// <param name="e"></param>
+    protected override void OnPreRender(EventArgs e)
+    {
+        base.OnPreRender(e);
+        if (!base.IsClientScriptBlockRegistered(typeof(RequiredCheckBoxValidator), "RequiredCheckBoxValidatorEvaluateIsChecked"))
+        {
+            base.RegisterClientScriptBlock(
+                typeof(RequiredCheckBoxValidator)
+                , "RequiredCheckBoxValidatorEvaluateIsChecked"
+                ,
+                @"
 <script type=""text/javascript"">
 function RequiredCheckBoxValidatorEvaluateIsChecked(val)
 {
@@ -102,8 +103,7 @@ function RequiredCheckBoxValidatorEvaluateIsChecked(val)
 }
 </script>
 "
-                    );
-            }
+            );
         }
     }
 }

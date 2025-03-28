@@ -24,95 +24,95 @@ using System.Reflection;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Criteria that is satisfied if the return <see cref="System.Type"/> of a given
+/// <see cref="System.Reflection.MethodInfo"/> matches a given <see cref="System.Type"/>.
+/// </summary>
+/// <author>Rick Evans</author>
+public class MethodReturnTypeCriteria : ICriteria
 {
+    #region Constants
+
     /// <summary>
-    /// Criteria that is satisfied if the return <see cref="System.Type"/> of a given
-    /// <see cref="System.Reflection.MethodInfo"/> matches a given <see cref="System.Type"/>.
+    /// The return <see cref="System.Type"/> to match against if no
+    /// <see cref="System.Type"/> is provided explictly.
     /// </summary>
-    /// <author>Rick Evans</author>
-    public class MethodReturnTypeCriteria : ICriteria
+    private static readonly Type DefaultType = typeof(void);
+
+    #endregion
+
+    #region Constructor (s) / Destructor
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="MethodReturnTypeCriteria"/> class.
+    /// </summary>
+    public MethodReturnTypeCriteria()
+        : this(DefaultType)
     {
-        #region Constants
-
-        /// <summary>
-        /// The return <see cref="System.Type"/> to match against if no
-        /// <see cref="System.Type"/> is provided explictly.
-        /// </summary>
-        private static readonly Type DefaultType = typeof (void);
-
-        #endregion
-
-        #region Constructor (s) / Destructor
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="MethodReturnTypeCriteria"/> class.
-        /// </summary>
-        public MethodReturnTypeCriteria()
-            : this(DefaultType)
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="MethodReturnTypeCriteria"/> class.
-        /// </summary>
-        /// <param name="type">
-        /// The <see cref="System.Type"/> that the return type of a given
-        /// <see cref="System.Reflection.MethodInfo"/> must match in order to satisfy
-        /// this criteria.
-        /// </param>
-        public MethodReturnTypeCriteria(Type type)
-        {
-            ReturnType = type;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// The <see cref="System.Type"/> that the return type of a given
-        /// <see cref="System.Reflection.MethodInfo"/> must match in order to satisfy
-        /// this criteria.
-        /// </summary>
-        public Type ReturnType
-        {
-            get { return _type; }
-            set { _type = value == null ? DefaultType : value; }
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
-        /// this instance?
-        /// </summary>
-        /// <param name="datum">The datum to be checked by this criteria instance.</param>
-        /// <returns>
-        /// True if the supplied <paramref name="datum"/> satisfies the criteria encapsulated
-        /// by this instance; false if not or the supplied <paramref name="datum"/> is null.
-        /// </returns>
-        public bool IsSatisfied(object datum)
-        {
-            bool satisfied = false;
-            MethodInfo method = datum as MethodInfo;
-            if (method != null)
-            {
-                satisfied = method.ReturnType.Equals(ReturnType);
-            }
-            return satisfied;
-        }
-
-        #endregion
-
-        #region Fields
-
-        private Type _type;
-
-        #endregion
     }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="MethodReturnTypeCriteria"/> class.
+    /// </summary>
+    /// <param name="type">
+    /// The <see cref="System.Type"/> that the return type of a given
+    /// <see cref="System.Reflection.MethodInfo"/> must match in order to satisfy
+    /// this criteria.
+    /// </param>
+    public MethodReturnTypeCriteria(Type type)
+    {
+        ReturnType = type;
+    }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// The <see cref="System.Type"/> that the return type of a given
+    /// <see cref="System.Reflection.MethodInfo"/> must match in order to satisfy
+    /// this criteria.
+    /// </summary>
+    public Type ReturnType
+    {
+        get { return _type; }
+        set { _type = value == null ? DefaultType : value; }
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
+    /// this instance?
+    /// </summary>
+    /// <param name="datum">The datum to be checked by this criteria instance.</param>
+    /// <returns>
+    /// True if the supplied <paramref name="datum"/> satisfies the criteria encapsulated
+    /// by this instance; false if not or the supplied <paramref name="datum"/> is null.
+    /// </returns>
+    public bool IsSatisfied(object datum)
+    {
+        bool satisfied = false;
+        MethodInfo method = datum as MethodInfo;
+        if (method != null)
+        {
+            satisfied = method.ReturnType.Equals(ReturnType);
+        }
+
+        return satisfied;
+    }
+
+    #endregion
+
+    #region Fields
+
+    private Type _type;
+
+    #endregion
 }

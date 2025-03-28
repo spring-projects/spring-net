@@ -24,85 +24,85 @@ using Spring.Objects.Factory.Config;
 
 #endregion
 
-namespace Spring.Aop.Framework.Adapter
+namespace Spring.Aop.Framework.Adapter;
+
+/// <summary>
+/// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/> implementation
+/// that registers instances of any non-default
+/// <see cref="Spring.Aop.Framework.Adapter.IAdvisorAdapter"/> instances with the
+/// <see cref="Spring.Aop.Framework.Adapter.GlobalAdvisorAdapterRegistry"/>
+/// singleton.
+/// </summary>
+/// <remarks>
+/// <p>
+/// The only requirement for it to work is that it needs to be defined
+/// in an application context along with any arbitrary "non-native" Spring.NET
+/// <see cref="Spring.Aop.Framework.Adapter.IAdvisorAdapter"/> instances that need
+/// to be recognized by Spring.NET's AOP framework.
+/// </p>
+/// </remarks>
+/// <author>Dmitriy Kopylenko</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+public class AdvisorAdapterRegistrationManager : IObjectPostProcessor
 {
     /// <summary>
-    /// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/> implementation
-    /// that registers instances of any non-default
-    /// <see cref="Spring.Aop.Framework.Adapter.IAdvisorAdapter"/> instances with the
-    /// <see cref="Spring.Aop.Framework.Adapter.GlobalAdvisorAdapterRegistry"/>
-    /// singleton.
+    /// Apply this <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>
+    /// to the given new object instance <i>before</i> any object initialization callbacks.
     /// </summary>
     /// <remarks>
     /// <p>
-    /// The only requirement for it to work is that it needs to be defined
-    /// in an application context along with any arbitrary "non-native" Spring.NET
-    /// <see cref="Spring.Aop.Framework.Adapter.IAdvisorAdapter"/> instances that need
-    /// to be recognized by Spring.NET's AOP framework.
+    /// Does nothing, simply returns the supplied <paramref name="instance"/> as is.
     /// </p>
     /// </remarks>
-    /// <author>Dmitriy Kopylenko</author>
-    /// <author>Aleksandar Seovic (.NET)</author>
-    public class AdvisorAdapterRegistrationManager : IObjectPostProcessor
+    /// <param name="instance">
+    /// The new object instance.
+    /// </param>
+    /// <param name="name">
+    /// The name of the object.
+    /// </param>
+    /// <returns>
+    /// The object instance to use, either the original or a wrapped one.
+    /// </returns>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// In case of errors.
+    /// </exception>
+    public virtual object PostProcessBeforeInitialization(object instance, string name)
     {
-        /// <summary>
-        /// Apply this <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>
-        /// to the given new object instance <i>before</i> any object initialization callbacks.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Does nothing, simply returns the supplied <paramref name="instance"/> as is.
-        /// </p>
-        /// </remarks>
-        /// <param name="instance">
-        /// The new object instance.
-        /// </param>
-        /// <param name="name">
-        /// The name of the object.
-        /// </param>
-        /// <returns>
-        /// The object instance to use, either the original or a wrapped one.
-        /// </returns>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// In case of errors.
-        /// </exception>
-        public virtual object PostProcessBeforeInitialization(object instance, string name)
+        return instance;
+    }
+
+    /// <summary>
+    /// Apply this <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/> to the
+    /// given new object instance <i>after</i> any object initialization callbacks.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Registers the supplied <paramref name="instance"/> with the
+    /// <see cref="Spring.Aop.Framework.Adapter.GlobalAdvisorAdapterRegistry"/>
+    /// singleton if it is an <see cref="Spring.Aop.Framework.Adapter.IAdvisorAdapter"/>
+    /// instance.
+    /// </p>
+    /// </remarks>
+    /// <param name="instance">
+    /// The new object instance.
+    /// </param>
+    /// <param name="objectName">
+    /// The name of the object.
+    /// </param>
+    /// <returns>
+    /// The object instance to use, either the original or a wrapped one.
+    /// </returns>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// In case of errors.
+    /// </exception>
+    public virtual object PostProcessAfterInitialization(object instance, string objectName)
+    {
+        IAdvisorAdapter adapter = instance as IAdvisorAdapter;
+        if (adapter != null)
         {
-            return instance;
+            GlobalAdvisorAdapterRegistry.Instance.RegisterAdvisorAdapter(adapter);
         }
 
-        /// <summary>
-        /// Apply this <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/> to the
-        /// given new object instance <i>after</i> any object initialization callbacks.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Registers the supplied <paramref name="instance"/> with the
-        /// <see cref="Spring.Aop.Framework.Adapter.GlobalAdvisorAdapterRegistry"/>
-        /// singleton if it is an <see cref="Spring.Aop.Framework.Adapter.IAdvisorAdapter"/>
-        /// instance.
-        /// </p>
-        /// </remarks>
-        /// <param name="instance">
-        /// The new object instance.
-        /// </param>
-        /// <param name="objectName">
-        /// The name of the object.
-        /// </param>
-        /// <returns>
-        /// The object instance to use, either the original or a wrapped one.
-        /// </returns>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// In case of errors.
-        /// </exception>
-        public virtual object PostProcessAfterInitialization(object instance, string objectName)
-        {
-            IAdvisorAdapter adapter = instance as IAdvisorAdapter;
-            if (adapter != null)
-            {
-                GlobalAdvisorAdapterRegistry.Instance.RegisterAdvisorAdapter(adapter);
-            }
-            return instance;
-        }
+        return instance;
     }
 }

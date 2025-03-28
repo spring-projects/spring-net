@@ -2,82 +2,82 @@
 <objects xmlns="http://www.springframework.net">
 
 
-  <object id='testqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='.\Private$\testqueue'/>
-    <property name='DenySharedReceive' value='true'/>
-    <property name='AccessMode' value='Receive'/>
-    <property name='EnableCache' value='true'/>
-    <property name='ProductTemplate'>
-      <object>
-        <property name='Label' value='MyLabel'/>
-      </object>
-    </property>
-  </object>
+    <object id='testqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+        <property name='Path' value='.\Private$\testqueue' />
+        <property name='DenySharedReceive' value='true' />
+        <property name='AccessMode' value='Receive' />
+        <property name='EnableCache' value='true' />
+        <property name='ProductTemplate'>
+            <object>
+                <property name='Label' value='MyLabel' />
+            </object>
+        </property>
+    </object>
 
-  <object id='testtxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='.\Private$\testtxqueue'/>
-    <property name='ProductTemplate'>
-      <object>
-        <property name='Label' value='MyTxLabel'/>
-      </object>
-    </property>
-  </object>
+    <object id='testtxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+        <property name='Path' value='.\Private$\testtxqueue' />
+        <property name='ProductTemplate'>
+            <object>
+                <property name='Label' value='MyTxLabel' />
+            </object>
+        </property>
+    </object>
 
-  <object id='testremotetxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='FormatName:Direct=OS:MARKT60\Private$\testqueue'/>
-    <property name='RemoteQueue' value="true"/>
-    <property name="RemoteQueueIsTransactional" value="true"/>
-  </object>
+    <object id='testremotetxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+        <property name='Path' value='FormatName:Direct=OS:MARKT60\Private$\testqueue' />
+        <property name='RemoteQueue' value="true" />
+        <property name="RemoteQueueIsTransactional" value="true" />
+    </object>
 
-  <object id='testremotequeue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>    
-    <property name='Path' value='FormatName:Direct=OS:MARKT60\Private$\testqueue'/>
-    <property name='RemoteQueue' value="true"/>
-  </object>
+    <object id='testremotequeue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+        <property name='Path' value='FormatName:Direct=OS:MARKT60\Private$\testqueue' />
+        <property name='RemoteQueue' value="true" />
+    </object>
 
-  <!-- MessageQueueTemplate -->
+    <!-- MessageQueueTemplate -->
 
-  <object id="queue" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="DefaultMessageQueueObjectName" value="testtxqueue"/>
-    <property name="MessageConverterObjectName" value="messageConverter"/>
-  </object>
-
-
-  <object id="queue-noconverter" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="DefaultMessageQueueObjectName" value="testtxqueue"/>
-  </object>
+    <object id="queue" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+        <property name="DefaultMessageQueueObjectName" value="testtxqueue" />
+        <property name="MessageConverterObjectName" value="messageConverter" />
+    </object>
 
 
-  <object id="txqueue" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="DefaultMessageQueueObjectName" value="testtxqueue"/>
-    <property name="MessageConverterObjectName" value="messageConverter"/>
-  </object>
+    <object id="queue-noconverter" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+        <property name="DefaultMessageQueueObjectName" value="testtxqueue" />
+    </object>
 
 
-  <object id="queueTemplate-remote" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="DefaultMessageQueueObjectName" value="testremotequeue"/>
-    <property name="MessageConverterObjectName" value="messageConverter"/>
-  </object>
+    <object id="txqueue" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+        <property name="DefaultMessageQueueObjectName" value="testtxqueue" />
+        <property name="MessageConverterObjectName" value="messageConverter" />
+    </object>
 
 
-  <object id="queueTemplate-remote-tx" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
-    <property name="DefaultMessageQueueObjectName" value="testremotetxqueue"/>
-    <property name="MessageConverterObjectName" value="messageConverter"/>
-  </object>
+    <object id="queueTemplate-remote" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+        <property name="DefaultMessageQueueObjectName" value="testremotequeue" />
+        <property name="MessageConverterObjectName" value="messageConverter" />
+    </object>
 
 
-  <object id="messageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"
-          singleton="false">
-    <property name="TargetTypes" value="System.String"/>
-  </object>
+    <object id="queueTemplate-remote-tx" type="Spring.Messaging.Core.MessageQueueTemplate, Spring.Messaging">
+        <property name="DefaultMessageQueueObjectName" value="testremotetxqueue" />
+        <property name="MessageConverterObjectName" value="messageConverter" />
+    </object>
 
 
-  <object id='msqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='.\Private$\testqueue'/>
-    <property name='ProductTemplate'>
-      <object>
-        <property name='Label' value='MyLabel'/>
-      </object>
-    </property>
-  </object>
- 
+    <object id="messageConverter" type="Spring.Messaging.Support.Converters.XmlMessageConverter, Spring.Messaging"
+            singleton="false">
+        <property name="TargetTypes" value="System.String" />
+    </object>
+
+
+    <object id='msqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+        <property name='Path' value='.\Private$\testqueue' />
+        <property name='ProductTemplate'>
+            <object>
+                <property name='Label' value='MyLabel' />
+            </object>
+        </property>
+    </object>
+
 </objects>

@@ -21,144 +21,144 @@
 using System.Collections;
 using Spring.Util;
 
-namespace Spring.Expressions.Processors
+namespace Spring.Expressions.Processors;
+
+/// <summary>
+/// Implementation of the 'order by' processor.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+/// <author>Erich Eichinger</author>
+public class OrderByProcessor : ICollectionProcessor
 {
-    /// <summary>
-    /// Implementation of the 'order by' processor.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    /// <author>Erich Eichinger</author>
-    public class OrderByProcessor : ICollectionProcessor
+    #region Comparer Helper Implementations
+
+    private class SimpleExpressionComparer : IComparer
     {
-        #region Comparer Helper Implementations
+        private readonly IExpression _expression;
 
-        private class SimpleExpressionComparer : IComparer
+        public SimpleExpressionComparer(IExpression expression)
         {
-            private readonly IExpression _expression;
-
-            public SimpleExpressionComparer(IExpression expression)
-            {
-                _expression = expression;
-            }
-
-            public int Compare(object x, object y)
-            {
-                x = _expression.GetValue(x);
-                y = _expression.GetValue(y);
-
-                if (x==y) return 0;
-
-                if (x != null) return ((IComparable) x).CompareTo(y);
-
-                return ((IComparable)y).CompareTo(x)*-1;
-            }
+            _expression = expression;
         }
 
-        private class LambdaComparer : IComparer
+        public int Compare(object x, object y)
         {
-            private readonly Dictionary<string, object> _variables;
-            private readonly IExpression _fn;
+            x = _expression.GetValue(x);
+            y = _expression.GetValue(y);
 
-            public LambdaComparer(LambdaExpressionNode lambdaExpression)
-            {
-                FunctionNode functionNode = new FunctionNode();
-                functionNode.Text = "compare";
-                VariableNode x = new VariableNode();
-                x.Text = "x";
-                VariableNode y = new VariableNode();
-                y.Text = "y";
+            if (x == y) return 0;
 
-                functionNode.addChild(x);
-                functionNode.addChild(y);
+            if (x != null) return ((IComparable) x).CompareTo(y);
 
-                _fn = functionNode;
-                _variables = new Dictionary<string, object>();
-                _variables.Add( "compare", lambdaExpression );
-            }
+            return ((IComparable) y).CompareTo(x) * -1;
+        }
+    }
 
-            public int Compare(object x, object y)
-            {
-                _variables["x"] = x;
-                _variables["y"] = y;
-                return (int) _fn.GetValue(null, _variables);
-            }
+    private class LambdaComparer : IComparer
+    {
+        private readonly Dictionary<string, object> _variables;
+        private readonly IExpression _fn;
+
+        public LambdaComparer(LambdaExpressionNode lambdaExpression)
+        {
+            FunctionNode functionNode = new FunctionNode();
+            functionNode.Text = "compare";
+            VariableNode x = new VariableNode();
+            x.Text = "x";
+            VariableNode y = new VariableNode();
+            y.Text = "y";
+
+            functionNode.addChild(x);
+            functionNode.addChild(y);
+
+            _fn = functionNode;
+            _variables = new Dictionary<string, object>();
+            _variables.Add("compare", lambdaExpression);
         }
 
-        private class DelegateComparer : IComparer
+        public int Compare(object x, object y)
         {
-            private readonly Delegate _fnCompare;
+            _variables["x"] = x;
+            _variables["y"] = y;
+            return (int) _fn.GetValue(null, _variables);
+        }
+    }
 
-            public DelegateComparer(Delegate fnCompare)
-            {
-                _fnCompare = fnCompare;
-            }
+    private class DelegateComparer : IComparer
+    {
+        private readonly Delegate _fnCompare;
 
-            public int Compare(object x, object y)
-            {
-                return (int)_fnCompare.DynamicInvoke(new object[] { x, y });
-            }
+        public DelegateComparer(Delegate fnCompare)
+        {
+            _fnCompare = fnCompare;
         }
 
-        #endregion
-
-        /// <summary>
-        /// Sorts the source collection using custom sort criteria.
-        /// </summary>
-        /// <remarks>
-        /// Please note that your compare function needs to take care about
-        /// proper conversion of types to be comparable!
-        /// </remarks>
-        /// <param name="source">
-        /// The source collection to sort.
-        /// </param>
-        /// <param name="args">
-        /// Sort criteria to use.
-        /// </param>
-        /// <returns>
-        /// A sorted array containing collection elements.
-        /// </returns>
-        public object Process(ICollection source, object[] args)
+        public int Compare(object x, object y)
         {
-            if (source == null || source.Count == 0)
-            {
-                return source;
-            }
-
-            if (args == null || args.Length != 1)
-            {
-                throw new ArgumentException("compare expression is a required argument for orderBy");
-            }
-
-            object arg = args[0];
-            IComparer comparer = null;
-            if (arg is string)
-            {
-                IExpression expCompare = Expression.Parse((string) arg);
-                comparer = new SimpleExpressionComparer(expCompare);
-            }
-            else if (arg is IComparer)
-            {
-                comparer = (IComparer) arg;
-            }
-            else if (arg is LambdaExpressionNode)
-            {
-                LambdaExpressionNode fnCompare = (LambdaExpressionNode)arg;
-                if (fnCompare.ArgumentNames.Length != 2)
-                {
-                    throw new ArgumentException("compare function must accept 2 arguments");
-                }
-                comparer = new LambdaComparer(fnCompare);
-            }
-            else if (arg is Delegate)
-            {
-                comparer = new DelegateComparer((Delegate) arg);
-            }
-
-            AssertUtils.ArgumentNotNull(comparer, "comparer", "orderBy(comparer) argument 'comparer' does not evaluate to a supported type");
-
-            ArrayList list = new ArrayList(source);
-            list.Sort(comparer);
-            return list;
+            return (int) _fnCompare.DynamicInvoke(new object[] { x, y });
         }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Sorts the source collection using custom sort criteria.
+    /// </summary>
+    /// <remarks>
+    /// Please note that your compare function needs to take care about
+    /// proper conversion of types to be comparable!
+    /// </remarks>
+    /// <param name="source">
+    /// The source collection to sort.
+    /// </param>
+    /// <param name="args">
+    /// Sort criteria to use.
+    /// </param>
+    /// <returns>
+    /// A sorted array containing collection elements.
+    /// </returns>
+    public object Process(ICollection source, object[] args)
+    {
+        if (source == null || source.Count == 0)
+        {
+            return source;
+        }
+
+        if (args == null || args.Length != 1)
+        {
+            throw new ArgumentException("compare expression is a required argument for orderBy");
+        }
+
+        object arg = args[0];
+        IComparer comparer = null;
+        if (arg is string)
+        {
+            IExpression expCompare = Expression.Parse((string) arg);
+            comparer = new SimpleExpressionComparer(expCompare);
+        }
+        else if (arg is IComparer)
+        {
+            comparer = (IComparer) arg;
+        }
+        else if (arg is LambdaExpressionNode)
+        {
+            LambdaExpressionNode fnCompare = (LambdaExpressionNode) arg;
+            if (fnCompare.ArgumentNames.Length != 2)
+            {
+                throw new ArgumentException("compare function must accept 2 arguments");
+            }
+
+            comparer = new LambdaComparer(fnCompare);
+        }
+        else if (arg is Delegate)
+        {
+            comparer = new DelegateComparer((Delegate) arg);
+        }
+
+        AssertUtils.ArgumentNotNull(comparer, "comparer", "orderBy(comparer) argument 'comparer' does not evaluate to a supported type");
+
+        ArrayList list = new ArrayList(source);
+        list.Sort(comparer);
+        return list;
     }
 }

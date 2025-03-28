@@ -18,42 +18,39 @@
 
 #endregion
 
-
 using Spring.Objects.Factory.Xml;
 
-namespace Spring.Transaction.Config
+namespace Spring.Transaction.Config;
+
+/// <summary>
+/// <code>NamespaceParser</code> allowing for the configuration of
+/// declarative transaction management using either XML or using attributes.
+///
+/// This namespace handler is the central piece of functionality in the
+/// Spring transaction management facilities and offers two appraoches
+/// to declaratively manage transactions.
+///
+/// One approach uses transaction semantics defined in XML using the
+/// <code>&lt;tx:advice&gt;</code> elements, the other uses attributes
+/// in combination with the <code>&lt;tx:annotation-driven&gt;</code> element.
+/// Both approached are detailed in the Spring reference manual.
+/// </summary>
+[
+    NamespaceParser(
+        Namespace = "http://www.springframework.net/tx",
+        SchemaLocationAssemblyHint = typeof(TxNamespaceParser),
+        SchemaLocation = "/Spring.Transaction.Config/spring-tx-1.1.xsd"
+    )
+]
+public class TxNamespaceParser : NamespaceParserSupport
 {
     /// <summary>
-    /// <code>NamespaceParser</code> allowing for the configuration of
-    /// declarative transaction management using either XML or using attributes.
-    /// 
-    /// This namespace handler is the central piece of functionality in the
-    /// Spring transaction management facilities and offers two appraoches
-    /// to declaratively manage transactions.
-    /// 
-    /// One approach uses transaction semantics defined in XML using the
-    /// <code>&lt;tx:advice&gt;</code> elements, the other uses attributes
-    /// in combination with the <code>&lt;tx:annotation-driven&gt;</code> element.
-    /// Both approached are detailed in the Spring reference manual.
+    /// Register the <see cref="IObjectDefinitionParser"/> for the '<code>advice</code>' and
+    /// '<code>attribute-driven'</code> tags.
     /// </summary>
-    [
-        NamespaceParser(
-            Namespace = "http://www.springframework.net/tx",
-            SchemaLocationAssemblyHint = typeof(TxNamespaceParser),
-            SchemaLocation = "/Spring.Transaction.Config/spring-tx-1.1.xsd"
-        )
-    ]
-    public class TxNamespaceParser : NamespaceParserSupport
+    public override void Init()
     {
-        /// <summary>
-        /// Register the <see cref="IObjectDefinitionParser"/> for the '<code>advice</code>' and
-        /// '<code>attribute-driven'</code> tags.
-        /// </summary>
-        public override void Init()
-        {
-            RegisterObjectDefinitionParser("advice", new TxAdviceObjectDefinitionParser());
-            RegisterObjectDefinitionParser("attribute-driven", new AttributeDrivenObjectDefinitionParser());
-
-        }
+        RegisterObjectDefinitionParser("advice", new TxAdviceObjectDefinitionParser());
+        RegisterObjectDefinitionParser("attribute-driven", new AttributeDrivenObjectDefinitionParser());
     }
 }

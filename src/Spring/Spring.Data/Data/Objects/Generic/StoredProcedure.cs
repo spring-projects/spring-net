@@ -21,188 +21,187 @@ using Spring.Data.Common;
 using Spring.Data.Generic;
 using Spring.Data.Support;
 
-namespace Spring.Data.Objects.Generic
+namespace Spring.Data.Objects.Generic;
+
+/// <summary>
+/// A superclass for object based abstractions of RDBMS stored procedures.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public abstract class StoredProcedure : AdoOperation
 {
-	/// <summary>
-	/// A superclass for object based abstractions of RDBMS stored procedures.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	public abstract class StoredProcedure : AdoOperation
-	{
-	    //A collection of NamedResultSetProcessor
+    //A collection of NamedResultSetProcessor
 
-        private List<object> resultProcessors = new List<object>();
-	    private bool usingDerivedParameters = false;
+    private List<object> resultProcessors = new List<object>();
+    private bool usingDerivedParameters = false;
 
-	    /// <summary>
-		/// Initializes a new instance of the <see cref="StoredProcedure"/> class.
-        /// </summary>
-		public StoredProcedure()
-		{
-            CommandType = CommandType.StoredProcedure;
-		}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StoredProcedure"/> class.
+    /// </summary>
+    public StoredProcedure()
+    {
+        CommandType = CommandType.StoredProcedure;
+    }
 
-        public StoredProcedure(IDbProvider dbProvider, string procedureName) : base(dbProvider, procedureName)
+    public StoredProcedure(IDbProvider dbProvider, string procedureName) : base(dbProvider, procedureName)
+    {
+        CommandType = CommandType.StoredProcedure;
+    }
+
+    public void DeriveParameters()
+    {
+        DeriveParameters(false);
+    }
+
+    public void DeriveParameters(bool includeReturnParameter)
+    {
+        //TODO does this account for offsets?
+        IDataParameter[] derivedParameters = AdoTemplate.DeriveParameters(Sql, includeReturnParameter);
+        for (int i = 0; i < derivedParameters.Length; i++)
         {
-    	    CommandType = CommandType.StoredProcedure;
+            IDataParameter parameter = derivedParameters[i];
+            DeclaredParameters.AddParameter(parameter);
         }
 
-	    public void DeriveParameters()
-	    {
-	        DeriveParameters(false);
-	    }
+        usingDerivedParameters = true;
+    }
 
-
-        public void DeriveParameters(bool includeReturnParameter)
+    public void AddResultSetExtractor(string name, IResultSetExtractor resultSetExtractor)
+    {
+        if (Compiled)
         {
-            //TODO does this account for offsets?
-            IDataParameter[] derivedParameters = AdoTemplate.DeriveParameters(Sql, includeReturnParameter);
-            for (int i = 0; i < derivedParameters.Length; i++)
-            {
-                IDataParameter parameter = derivedParameters[i];
-                DeclaredParameters.AddParameter(parameter);
-            }
-            usingDerivedParameters = true;
+            throw new InvalidDataAccessApiUsageException("Cannot add ResultSetExtractors once operation is compiled");
         }
 
-	    public void AddResultSetExtractor(string name, IResultSetExtractor resultSetExtractor)
+        resultProcessors.Add(new NamedResultSetProcessor(name, resultSetExtractor));
+    }
+
+    public void AddRowCallback(string name, IRowCallback rowCallback)
+    {
+        if (Compiled)
         {
-            if (Compiled)
-            {
-                throw new InvalidDataAccessApiUsageException("Cannot add ResultSetExtractors once operation is compiled");
-            }
-            resultProcessors.Add(new NamedResultSetProcessor(name, resultSetExtractor));
+            throw new InvalidDataAccessApiUsageException("Cannot add RowCallbacks once operation is compiled");
         }
 
-        public void AddRowCallback(string name, IRowCallback rowCallback)
+        resultProcessors.Add(new NamedResultSetProcessor(name, rowCallback));
+    }
+
+    public void AddRowMapper(string name, IRowMapper rowMapper)
+    {
+        if (Compiled)
         {
-            if (Compiled)
-            {
-                throw new InvalidDataAccessApiUsageException("Cannot add RowCallbacks once operation is compiled");
-            }
-            resultProcessors.Add(new NamedResultSetProcessor(name, rowCallback));
+            throw new InvalidDataAccessApiUsageException("Cannot add RowMappers once operation is compiled");
         }
 
-        public void AddRowMapper(string name, IRowMapper rowMapper)
+        resultProcessors.Add(new NamedResultSetProcessor(name, rowMapper));
+    }
+
+    public void AddResultSetExtractor<T>(string name, IResultSetExtractor<T> resultSetExtractor)
+    {
+        if (Compiled)
         {
-            if (Compiled)
-            {
-                throw new InvalidDataAccessApiUsageException("Cannot add RowMappers once operation is compiled");
-            }
-            resultProcessors.Add(new NamedResultSetProcessor(name, rowMapper));
+            throw new InvalidDataAccessApiUsageException("Cannot add ResultSetExtractors once operation is compiled");
         }
 
-	    public void AddResultSetExtractor<T>(string name, IResultSetExtractor<T> resultSetExtractor)
+        resultProcessors.Add(new NamedResultSetProcessor<T>(name, resultSetExtractor));
+    }
+
+    public void AddRowMapper<T>(string name, IRowMapper<T> rowMapper)
+    {
+        if (Compiled)
         {
-            if (Compiled)
-            {
-                throw new InvalidDataAccessApiUsageException("Cannot add ResultSetExtractors once operation is compiled");
-            }
-            resultProcessors.Add(new NamedResultSetProcessor<T>(name, resultSetExtractor));
+            throw new InvalidDataAccessApiUsageException("Cannot add RowMappers once operation is compiled");
         }
 
+        resultProcessors.Add(new NamedResultSetProcessor<T>(name, rowMapper));
+    }
 
-        public void AddRowMapper<T>(string name, IRowMapper<T> rowMapper)
+    protected virtual IDictionary ExecuteScalar(params object[] inParameterValues)
+    {
+        ValidateParameters(inParameterValues);
+        return AdoTemplate.ExecuteScalar(NewCommandCreatorWithParamValues(inParameterValues));
+    }
+
+    protected virtual IDictionary ExecuteNonQuery(params object[] inParameterValues)
+    {
+        ValidateParameters(inParameterValues);
+        return AdoTemplate.ExecuteNonQuery(NewCommandCreatorWithParamValues(inParameterValues));
+    }
+
+    public IList<T> QueryWithRowMapper<T>(params object[] inParameterValues)
+    {
+        ValidateParameters(inParameterValues);
+        if (resultProcessors.Count == 0)
         {
-            if (Compiled)
-            {
-                throw new InvalidDataAccessApiUsageException("Cannot add RowMappers once operation is compiled");
-            }
-            resultProcessors.Add(new NamedResultSetProcessor<T>(name,rowMapper));
+            throw new InvalidDataAccessApiUsageException("No row mapper is specified.");
         }
 
-	    protected virtual IDictionary ExecuteScalar(params object[] inParameterValues)
-	    {
-            ValidateParameters(inParameterValues);
-            return AdoTemplate.ExecuteScalar(NewCommandCreatorWithParamValues(inParameterValues));
-	    }
-
-        protected virtual IDictionary ExecuteNonQuery(params object[] inParameterValues)
+        NamedResultSetProcessor<T> resultSetProcessor = resultProcessors[0] as NamedResultSetProcessor<T>;
+        if (resultSetProcessor == null)
         {
-            ValidateParameters(inParameterValues);
-            return AdoTemplate.ExecuteNonQuery(NewCommandCreatorWithParamValues(inParameterValues));
+            throw new InvalidDataAccessApiUsageException("No row mapper is specified.");
         }
 
-
-        public IList<T> QueryWithRowMapper<T>(params object[] inParameterValues)
+        if (resultSetProcessor.RowMapper == null)
         {
-            ValidateParameters(inParameterValues);
-            if (resultProcessors.Count == 0)
-            {
-                throw new InvalidDataAccessApiUsageException("No row mapper is specified.");
-            }
-
-            NamedResultSetProcessor<T> resultSetProcessor = resultProcessors[0] as NamedResultSetProcessor<T>;
-            if (resultSetProcessor == null)
-            {
-                throw new InvalidDataAccessApiUsageException("No row mapper is specified.");
-            }
-
-            if (resultSetProcessor.RowMapper == null)
-            {
-                throw new InvalidDataAccessApiUsageException("No row mapper is specified as first result set processor.");
-            }
-            IDictionary outParams = Query<T>(inParameterValues);
-            return outParams[resultSetProcessor.Name] as IList<T>;
-
+            throw new InvalidDataAccessApiUsageException("No row mapper is specified as first result set processor.");
         }
 
-        protected virtual IDictionary Query<T>(params object[] inParameterValues)
+        IDictionary outParams = Query<T>(inParameterValues);
+        return outParams[resultSetProcessor.Name] as IList<T>;
+    }
+
+    protected virtual IDictionary Query<T>(params object[] inParameterValues)
+    {
+        ValidateParameters(inParameterValues);
+        return AdoTemplate.QueryWithCommandCreator<T>(NewCommandCreatorWithParamValues(inParameterValues), resultProcessors);
+    }
+
+    protected virtual IDictionary Query<T, U>(params object[] inParameterValues)
+    {
+        ValidateParameters(inParameterValues);
+        return AdoTemplate.QueryWithCommandCreator<T, U>(NewCommandCreatorWithParamValues(inParameterValues), resultProcessors);
+    }
+
+    /// <summary>
+    /// Execute the stored procedure using 'ExecuteScalar'
+    /// </summary>
+    /// <param name="inParams">Value of input parameters.</param>
+    /// <returns>Dictionary with any named output parameters and the value of the
+    /// scalar under the key "scalar".</returns>
+    protected virtual IDictionary ExecuteScalarByNamedParam(IDictionary inParams)
+    {
+        ValidateNamedParameters(inParams);
+        return AdoTemplate.ExecuteScalar(NewCommandCreator(inParams));
+    }
+
+    protected virtual IDictionary ExecuteNonQueryByNamedParam(IDictionary inParams)
+    {
+        ValidateNamedParameters(inParams);
+        return AdoTemplate.ExecuteNonQuery(NewCommandCreator(inParams));
+    }
+
+    protected virtual IDictionary QueryByNamedParam<T>(IDictionary inParams)
+    {
+        ValidateNamedParameters(inParams);
+        return AdoTemplate.QueryWithCommandCreator<T>(NewCommandCreator(inParams), resultProcessors);
+    }
+
+    protected virtual IDictionary QueryByNamedParam<T, U>(IDictionary inParams)
+    {
+        ValidateNamedParameters(inParams);
+        return AdoTemplate.QueryWithCommandCreator<T, U>(NewCommandCreator(inParams), resultProcessors);
+    }
+
+    protected override bool IsInputParameter(IDataParameter parameter)
+    {
+        if (usingDerivedParameters)
         {
-            ValidateParameters(inParameterValues);
-            return AdoTemplate.QueryWithCommandCreator<T>(NewCommandCreatorWithParamValues(inParameterValues), resultProcessors);
-
+            //Can only count Input, derived output parameters are incorrectly classified as input-output
+            return (parameter.Direction == ParameterDirection.Input);
         }
-
-        protected virtual IDictionary Query<T,U>(params object[] inParameterValues)
+        else
         {
-            ValidateParameters(inParameterValues);
-            return AdoTemplate.QueryWithCommandCreator<T,U>(NewCommandCreatorWithParamValues(inParameterValues), resultProcessors);
-
+            return base.IsInputParameter(parameter);
         }
-
-	    /// <summary>
-	    /// Execute the stored procedure using 'ExecuteScalar'
-	    /// </summary>
-	    /// <param name="inParams">Value of input parameters.</param>
-        /// <returns>Dictionary with any named output parameters and the value of the
-        /// scalar under the key "scalar".</returns>
-	    protected virtual IDictionary ExecuteScalarByNamedParam(IDictionary inParams)
-	    {
-            ValidateNamedParameters(inParams);
-            return AdoTemplate.ExecuteScalar(NewCommandCreator(inParams));
-	    }
-
-        protected virtual IDictionary ExecuteNonQueryByNamedParam(IDictionary inParams)
-        {
-            ValidateNamedParameters(inParams);
-            return AdoTemplate.ExecuteNonQuery(NewCommandCreator(inParams));
-        }
-
-
-        protected virtual IDictionary QueryByNamedParam<T>(IDictionary inParams)
-        {
-            ValidateNamedParameters(inParams);
-            return AdoTemplate.QueryWithCommandCreator<T>(NewCommandCreator(inParams), resultProcessors);
-        }
-
-        protected virtual IDictionary QueryByNamedParam<T,U>(IDictionary inParams)
-        {
-            ValidateNamedParameters(inParams);
-            return AdoTemplate.QueryWithCommandCreator<T,U>(NewCommandCreator(inParams), resultProcessors);
-        }
-
-	    protected override bool IsInputParameter(IDataParameter parameter)
-        {
-            if (usingDerivedParameters)
-            {
-                //Can only count Input, derived output parameters are incorrectly classified as input-output
-                return (parameter.Direction == ParameterDirection.Input);
-            }
-            else
-            {
-                return base.IsInputParameter(parameter);
-            }
-        }
-	}
+    }
 }

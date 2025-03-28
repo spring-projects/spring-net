@@ -24,81 +24,81 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Tests <see cref="UniqueKey"/> functionality.
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class UniqueKeyTests
 {
-    /// <summary>
-    /// Tests <see cref="UniqueKey"/> functionality.
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class UniqueKeyTests
+    private class TestObject
     {
-        private class TestObject
-        {}
+    }
 
-        [Test]
-        public void MustNotCallObjectSignatureWithType()
-        {
-            Type myType = typeof(TestObject);
-            Assert.Throws<ArgumentException>(() => UniqueKey.GetInstanceScopedString( myType, "PartialKey"));
-        }
+    [Test]
+    public void MustNotCallObjectSignatureWithType()
+    {
+        Type myType = typeof(TestObject);
+        Assert.Throws<ArgumentException>(() => UniqueKey.GetInstanceScopedString(myType, "PartialKey"));
+    }
 
-        [Test]
-        public void CreateTypeScopedKeyString()
-        {
-            string typeScopedKey = UniqueKey.GetTypeScopedString(typeof(TestObject), "PartialKey");
-            string expectedKey = string.Format("{0}.{1}", typeof(TestObject).FullName, "PartialKey");
-            Assert.AreEqual(expectedKey, typeScopedKey);
-        }
+    [Test]
+    public void CreateTypeScopedKeyString()
+    {
+        string typeScopedKey = UniqueKey.GetTypeScopedString(typeof(TestObject), "PartialKey");
+        string expectedKey = string.Format("{0}.{1}", typeof(TestObject).FullName, "PartialKey");
+        Assert.AreEqual(expectedKey, typeScopedKey);
+    }
 
-        [Test]
-        public void CreateTypeScopedKey()
-        {
-            UniqueKey typeScopedKey = UniqueKey.GetTypeScoped(typeof(TestObject), "PartialKey");
-            UniqueKey expectedKey = UniqueKey.GetTypeScoped(typeof(TestObject), "PartialKey");
+    [Test]
+    public void CreateTypeScopedKey()
+    {
+        UniqueKey typeScopedKey = UniqueKey.GetTypeScoped(typeof(TestObject), "PartialKey");
+        UniqueKey expectedKey = UniqueKey.GetTypeScoped(typeof(TestObject), "PartialKey");
 
-            string expectedKeyString = string.Format("{0}.{1}", typeof(TestObject).FullName, "PartialKey");
+        string expectedKeyString = string.Format("{0}.{1}", typeof(TestObject).FullName, "PartialKey");
 
-            // I know testing implementation details is not the best strategy,
-            // but I want to receive an error if this fails (oakinger)
-            Assert.AreEqual(expectedKeyString, expectedKey.ToString());
-            Assert.AreEqual(expectedKeyString.GetHashCode(), expectedKey.GetHashCode());
+        // I know testing implementation details is not the best strategy,
+        // but I want to receive an error if this fails (oakinger)
+        Assert.AreEqual(expectedKeyString, expectedKey.ToString());
+        Assert.AreEqual(expectedKeyString.GetHashCode(), expectedKey.GetHashCode());
 
-            // different instances...
-            Assert.AreNotSame(expectedKey, typeScopedKey);
-            // but equal
-            Assert.AreEqual(expectedKey, typeScopedKey);
-            Assert.AreEqual(expectedKey.GetHashCode(), typeScopedKey.GetHashCode());
-        }
+        // different instances...
+        Assert.AreNotSame(expectedKey, typeScopedKey);
+        // but equal
+        Assert.AreEqual(expectedKey, typeScopedKey);
+        Assert.AreEqual(expectedKey.GetHashCode(), typeScopedKey.GetHashCode());
+    }
 
-        [Test]
-        public void CreateInstanceScopedKeyString()
-        {
-            TestObject testObject = new TestObject();
-            string typeScopedKey = UniqueKey.GetInstanceScopedString(testObject, "PartialKey");
-            string expectedKey = string.Format("{0}[{1}].{2}", typeof(TestObject).FullName, testObject.GetHashCode(), "PartialKey");
-            Assert.AreEqual(expectedKey, typeScopedKey);
-        }
+    [Test]
+    public void CreateInstanceScopedKeyString()
+    {
+        TestObject testObject = new TestObject();
+        string typeScopedKey = UniqueKey.GetInstanceScopedString(testObject, "PartialKey");
+        string expectedKey = string.Format("{0}[{1}].{2}", typeof(TestObject).FullName, testObject.GetHashCode(), "PartialKey");
+        Assert.AreEqual(expectedKey, typeScopedKey);
+    }
 
-        [Test]
-        public void CreateInstanceScopedKey()
-        {
-            TestObject testObject = new TestObject();
-            UniqueKey instanceScopedKey = UniqueKey.GetInstanceScoped(testObject, "PartialKey");
-            UniqueKey expectedKey = UniqueKey.GetInstanceScoped(testObject, "PartialKey");
+    [Test]
+    public void CreateInstanceScopedKey()
+    {
+        TestObject testObject = new TestObject();
+        UniqueKey instanceScopedKey = UniqueKey.GetInstanceScoped(testObject, "PartialKey");
+        UniqueKey expectedKey = UniqueKey.GetInstanceScoped(testObject, "PartialKey");
 
-            string expectedKeyString = string.Format("{0}[{1}].{2}", typeof(TestObject).FullName, testObject.GetHashCode(), "PartialKey");
+        string expectedKeyString = string.Format("{0}[{1}].{2}", typeof(TestObject).FullName, testObject.GetHashCode(), "PartialKey");
 
-            // I know testing implementation details is not the best strategy,
-            // but I want to receive an error if this fails (oakinger)
-            Assert.AreEqual(expectedKeyString, expectedKey.ToString());
-            Assert.AreEqual(expectedKeyString.GetHashCode(), expectedKey.GetHashCode());
+        // I know testing implementation details is not the best strategy,
+        // but I want to receive an error if this fails (oakinger)
+        Assert.AreEqual(expectedKeyString, expectedKey.ToString());
+        Assert.AreEqual(expectedKeyString.GetHashCode(), expectedKey.GetHashCode());
 
-            // different instances...
-            Assert.AreNotSame(expectedKey, instanceScopedKey);
-            // but equal
-            Assert.AreEqual(expectedKey, instanceScopedKey);
-            Assert.AreEqual(expectedKey.GetHashCode(), instanceScopedKey.GetHashCode());
-        }
+        // different instances...
+        Assert.AreNotSame(expectedKey, instanceScopedKey);
+        // but equal
+        Assert.AreEqual(expectedKey, instanceScopedKey);
+        Assert.AreEqual(expectedKey.GetHashCode(), instanceScopedKey.GetHashCode());
     }
 }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +20,24 @@
 
 using System.Text;
 
-namespace Spring.Aop.Framework.AutoProxy
+namespace Spring.Aop.Framework.AutoProxy;
+
+public class NoSetterProperties
 {
-    public class NoSetterProperties
+    public string FancyName
     {
-        public string FancyName
+        get
         {
-            get
-            {
-                return "Joe Suave";
-            }
+            return "Joe Suave";
         }
-        
-        public void DoWork()
+    }
+
+    public void DoWork()
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 100; i++)
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 100; i++)
-            {
-                sb.Append(i);
-            }
+            sb.Append(i);
         }
     }
 }

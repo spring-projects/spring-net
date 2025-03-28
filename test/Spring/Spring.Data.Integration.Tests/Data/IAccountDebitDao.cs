@@ -1,8 +1,6 @@
+namespace Spring.Data;
 
-namespace Spring.Data
+public interface IAccountDebitDao
 {
-    public interface IAccountDebitDao
-    {
-        void DebitAccount(float debitAmount);
-    }
+    void DebitAccount(float debitAmount);
 }

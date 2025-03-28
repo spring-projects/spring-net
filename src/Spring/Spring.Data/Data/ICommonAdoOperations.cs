@@ -22,222 +22,213 @@ using System.Collections;
 using System.Data;
 using Spring.Data.Common;
 
-namespace Spring.Data
+namespace Spring.Data;
+
+public interface ICommonAdoOperations
 {
-    public interface ICommonAdoOperations
-    {
-        #region ExecuteScalar
+    #region ExecuteScalar
 
-        /// <summary>
-        /// Execute the query with the specified command text returning a scalar result
-        /// </summary>
-        /// <remarks>No parameters are used.  As with
-        /// IDbCommand.ExecuteScalar, it returns the first column of the first row in the resultset
-        /// returned by the query.  Extra columns or row are ignored.</remarks>
-        /// <param name="cmdType">The command type</param>
-        /// <param name="cmdText">The command text to execute.</param>
-        /// <returns>The first column of the first row in the result set.</returns>
-        object ExecuteScalar(CommandType cmdType, string cmdText);
+    /// <summary>
+    /// Execute the query with the specified command text returning a scalar result
+    /// </summary>
+    /// <remarks>No parameters are used.  As with
+    /// IDbCommand.ExecuteScalar, it returns the first column of the first row in the resultset
+    /// returned by the query.  Extra columns or row are ignored.</remarks>
+    /// <param name="cmdType">The command type</param>
+    /// <param name="cmdText">The command text to execute.</param>
+    /// <returns>The first column of the first row in the result set.</returns>
+    object ExecuteScalar(CommandType cmdType, string cmdText);
 
+    /// <summary>
+    /// Execute the query with the specified command text and parameter returning a scalar result
+    /// </summary>
+    /// <param name="cmdType">The command type</param>
+    /// <param name="cmdText">The command text to execute.</param>
+    /// <param name="parameterName">The name of the parameter to map.</param>
+    /// <param name="dbType">One of the database parameter type enumerations.</param>
+    /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
+    /// <param name="parameterValue">The parameter value.</param>
+    /// <returns>The first column of the first row in the result set</returns>
+    object ExecuteScalar(CommandType cmdType, string cmdText,
+        string parameterName, Enum dbType, int size, object parameterValue);
 
-        /// <summary>
-        /// Execute the query with the specified command text and parameter returning a scalar result
-        /// </summary>
-        /// <param name="cmdType">The command type</param>
-        /// <param name="cmdText">The command text to execute.</param>
-        /// <param name="parameterName">The name of the parameter to map.</param>
-        /// <param name="dbType">One of the database parameter type enumerations.</param>
-        /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
-        /// <param name="parameterValue">The parameter value.</param>
-        /// <returns>The first column of the first row in the result set</returns>
-        object ExecuteScalar(CommandType cmdType, string cmdText,
-                             string parameterName, Enum dbType, int size, object parameterValue);
+    /// <summary>
+    /// Execute the query with the specified command text and parameters returning a scalar result
+    /// </summary>
+    /// <param name="cmdType">The command type</param>
+    /// <param name="cmdText">The command text to execute.</param>
+    /// <param name="parameters">The parameter collection to map.</param>
+    /// <returns>The first column of the first row in the result set</returns>
+    object ExecuteScalar(CommandType cmdType, string cmdText,
+        IDbParameters parameters);
 
-        /// <summary>
-        /// Execute the query with the specified command text and parameters returning a scalar result
-        /// </summary>
-        /// <param name="cmdType">The command type</param>
-        /// <param name="cmdText">The command text to execute.</param>
-        /// <param name="parameters">The parameter collection to map.</param>
-        /// <returns>The first column of the first row in the result set</returns>
-        object ExecuteScalar(CommandType cmdType, string cmdText,
-                             IDbParameters parameters);
+    /// <summary>
+    /// Execute the query with the specified command text and parameters set via the
+    /// command setter, returning a scalar result
+    /// </summary>
+    /// <param name="cmdType">The command type</param>
+    /// <param name="cmdText">The command text to execute.</param>
+    /// <param name="commandSetter">The command setter.</param>
+    /// <returns>The first column of the first row in the result set</returns>
+    object ExecuteScalar(CommandType cmdType,
+        string cmdText,
+        ICommandSetter commandSetter);
 
-        /// <summary>
-        /// Execute the query with the specified command text and parameters set via the
-        /// command setter, returning a scalar result
-        /// </summary>
-        /// <param name="cmdType">The command type</param>
-        /// <param name="cmdText">The command text to execute.</param>
-        /// <param name="commandSetter">The command setter.</param>
-        /// <returns>The first column of the first row in the result set</returns>
-        object ExecuteScalar(CommandType cmdType,
-                             string cmdText,
-                             ICommandSetter commandSetter);
+    /// <summary>
+    /// Execute the query with a command created via IDbCommandCreator and
+    /// parameters
+    /// </summary>
+    /// <remarks>Output parameters can be retrieved via the returned
+    /// dictionary.
+    /// <para>
+    /// More commonly used as a lower level support method within the framework,
+    /// for example StoredProcedure/AdoScalar.
+    /// </para>
+    /// </remarks>
+    /// <param name="commandCreator">The callback to create a IDbCommand.</param>
+    /// <returns>A dictionary containing output parameters, if any</returns>
+    IDictionary ExecuteScalar(IDbCommandCreator commandCreator);
 
-        /// <summary>
-        /// Execute the query with a command created via IDbCommandCreator and
-        /// parameters
-        /// </summary>
-        /// <remarks>Output parameters can be retrieved via the returned
-        /// dictionary.
-        /// <para>
-        /// More commonly used as a lower level support method within the framework,
-        /// for example StoredProcedure/AdoScalar.
-        /// </para>
-        /// </remarks>
-        /// <param name="commandCreator">The callback to create a IDbCommand.</param>
-        /// <returns>A dictionary containing output parameters, if any</returns>
-        IDictionary ExecuteScalar(IDbCommandCreator commandCreator);
+    #endregion
 
-        #endregion
+    #region ExecuteNonQuery
 
-        #region ExecuteNonQuery
+    /// <summary>
+    /// Executes a non query returning the number of rows affected.
+    /// </summary>
+    /// <param name="cmdType">The command type.</param>
+    /// <param name="cmdText">The command text to execute.</param>
+    /// <returns>The number of rows affected.</returns>
+    int ExecuteNonQuery(CommandType cmdType, string cmdText);
 
-        /// <summary>
-        /// Executes a non query returning the number of rows affected.
-        /// </summary>
-        /// <param name="cmdType">The command type.</param>
-        /// <param name="cmdText">The command text to execute.</param>
-        /// <returns>The number of rows affected.</returns>
-        int ExecuteNonQuery(CommandType cmdType, string cmdText);
+    /// <summary>
+    /// Executes a non query returning the number of rows affected.
+    /// </summary>
+    /// <param name="cmdType">The command type.</param>
+    /// <param name="cmdText">The command text to execute.</param>
+    /// <param name="parameterName">The name of the parameter to map.</param>
+    /// <param name="dbType">One of the database parameter type enumerations.</param>
+    /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
+    /// <param name="parameterValue">The parameter value.</param>
+    /// <returns>The number of rows affected.</returns>
+    int ExecuteNonQuery(CommandType cmdType, string cmdText,
+        string parameterName, Enum dbType, int size, object parameterValue);
 
-        /// <summary>
-        /// Executes a non query returning the number of rows affected.
-        /// </summary>
-        /// <param name="cmdType">The command type.</param>
-        /// <param name="cmdText">The command text to execute.</param>
-        /// <param name="parameterName">The name of the parameter to map.</param>
-        /// <param name="dbType">One of the database parameter type enumerations.</param>
-        /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
-        /// <param name="parameterValue">The parameter value.</param>
-        /// <returns>The number of rows affected.</returns>
-        int ExecuteNonQuery(CommandType cmdType, string cmdText,
-                            string parameterName, Enum dbType, int size, object parameterValue);
+    /// <summary>
+    /// Executes a non query returning the number of rows affected.
+    /// </summary>
+    /// <param name="cmdType">The command type.</param>
+    /// <param name="cmdText">The command text to execute.</param>
+    /// <param name="parameters">The parameter collection to map.</param>
+    /// <returns>The number of rows affected.</returns>
+    int ExecuteNonQuery(CommandType cmdType, string cmdText,
+        IDbParameters parameters);
 
-        /// <summary>
-        /// Executes a non query returning the number of rows affected.
-        /// </summary>
-        /// <param name="cmdType">The command type.</param>
-        /// <param name="cmdText">The command text to execute.</param>
-        /// <param name="parameters">The parameter collection to map.</param>
-        /// <returns>The number of rows affected.</returns>
-        int ExecuteNonQuery(CommandType cmdType, string cmdText,
-                            IDbParameters parameters);
+    /// <summary>
+    /// Executes a non query with parameters set via the
+    /// command setter, returning the number of rows affected.
+    /// </summary>
+    /// <param name="cmdType">The command type.</param>
+    /// <param name="cmdText">The command text to execute.</param>
+    /// <param name="commandSetter">The command setter.</param>
+    /// <returns>The number of rows affected.</returns>
+    int ExecuteNonQuery(CommandType cmdType, string cmdText,
+        ICommandSetter commandSetter);
 
-        /// <summary>
-        /// Executes a non query with parameters set via the
-        /// command setter, returning the number of rows affected.
-        /// </summary>
-        /// <param name="cmdType">The command type.</param>
-        /// <param name="cmdText">The command text to execute.</param>
-        /// <param name="commandSetter">The command setter.</param>
-        /// <returns>The number of rows affected.</returns>
-        int ExecuteNonQuery(CommandType cmdType, string cmdText,
-                            ICommandSetter commandSetter);
+    /// <summary>
+    /// Executes a non query with a command created via IDbCommandCreator and
+    /// parameters.
+    /// </summary>
+    /// <remarks>Output parameters can be retrieved via the returned
+    /// dictionary.
+    /// <para>
+    /// More commonly used as a lower level support method within the framework,
+    /// for example StoredProcedure/AdoScalar.
+    /// </para>
+    /// </remarks>
+    /// <param name="commandCreator">The callback to create a IDbCommand.</param>
+    /// <returns>The number of rows affected.</returns>
+    IDictionary ExecuteNonQuery(IDbCommandCreator commandCreator);
 
+    #endregion
 
-        /// <summary>
-        /// Executes a non query with a command created via IDbCommandCreator and
-        /// parameters.
-        /// </summary>
-        /// <remarks>Output parameters can be retrieved via the returned
-        /// dictionary.
-        /// <para>
-        /// More commonly used as a lower level support method within the framework,
-        /// for example StoredProcedure/AdoScalar.
-        /// </para>
-        /// </remarks>
-        /// <param name="commandCreator">The callback to create a IDbCommand.</param>
-        /// <returns>The number of rows affected.</returns>
-        IDictionary ExecuteNonQuery(IDbCommandCreator commandCreator);
+    #region Query with RowCallback
 
+    /// <summary>
+    /// Execute a query given IDbCommand's type and text, reading a
+    /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
+    /// </summary>
+    /// <param name="cmdType">The type of command.</param>
+    /// <param name="cmdText">The text of the query.</param>
+    /// <param name="rowCallback">callback that will extract results
+    /// one row at a time.
+    /// </param>
+    void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback);
 
-        #endregion
+    /// <summary>
+    /// Execute a query given IDbCommand's type and text and provided parameter
+    /// information, reading a
+    /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
+    /// </summary>
+    /// <param name="cmdType">The type of command</param>
+    /// <param name="cmdText">The text of the query.</param>
+    /// <param name="rowCallback">callback that will extract results
+    /// one row at a time.
+    /// </param>
+    /// <param name="parameterName">The name of the parameter to map.</param>
+    /// <param name="dbType">One of the database parameter type enumerations.</param>
+    /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
+    /// <param name="parameterValue">The parameter value.</param>
+    void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
+        string parameterName, Enum dbType, int size, object parameterValue);
 
-        #region Query with RowCallback
+    /// <summary>
+    /// Execute a query given IDbCommand's type and text and provided IDbParameters,
+    /// reading a single result set on a per-row basis with a <see cref="IRowCallback"/>.
+    /// </summary>
+    /// <param name="cmdType">Type of the command.</param>
+    /// <param name="cmdText">The text of the query.</param>
+    /// <param name="rowCallback">callback that will extract results
+    /// one row at a time.</param>
+    /// <param name="parameters">The parameter collection to map.</param>
+    void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
+        IDbParameters parameters);
 
-        /// <summary>
-        /// Execute a query given IDbCommand's type and text, reading a
-        /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
-        /// </summary>
-        /// <param name="cmdType">The type of command.</param>
-        /// <param name="cmdText">The text of the query.</param>
-        /// <param name="rowCallback">callback that will extract results
-        /// one row at a time.
-        /// </param>
-        void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback);
+    /// <summary>
+    /// Execute a query given IDbCommand's type and text by
+    /// passing the created IDbCommand to a ICommandSetter implementation
+    /// that knows how to bind values to the IDbCommand, reading a
+    /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
+    /// </summary>
+    /// <param name="cmdType">The type of command</param>
+    /// <param name="cmdText">The text of the query.</param>
+    /// <param name="rowCallback">callback that will extract results
+    /// one row at a time.
+    /// </param>
+    /// <param name="commandSetter">The command setter.</param>
+    void QueryWithRowCallback(CommandType cmdType, String cmdText, IRowCallback rowCallback,
+        ICommandSetter commandSetter);
 
+    #endregion
 
-        /// <summary>
-        /// Execute a query given IDbCommand's type and text and provided parameter
-        /// information, reading a
-        /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
-        /// </summary>
-        /// <param name="cmdType">The type of command</param>
-        /// <param name="cmdText">The text of the query.</param>
-        /// <param name="rowCallback">callback that will extract results
-        /// one row at a time.
-        /// </param>
-        /// <param name="parameterName">The name of the parameter to map.</param>
-        /// <param name="dbType">One of the database parameter type enumerations.</param>
-        /// <param name="size">The length of the parameter. 0 if not applicable to parameter type.</param>
-        /// <param name="parameterValue">The parameter value.</param>
-        void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
-                                  string parameterName, Enum dbType, int size, object parameterValue);
+    #region Query with RowCallback Delegate
 
-        /// <summary>
-        /// Execute a query given IDbCommand's type and text and provided IDbParameters,
-        /// reading a single result set on a per-row basis with a <see cref="IRowCallback"/>.
-        /// </summary>
-        /// <param name="cmdType">Type of the command.</param>
-        /// <param name="cmdText">The text of the query.</param>
-        /// <param name="rowCallback">callback that will extract results
-        /// one row at a time.</param>
-        /// <param name="parameters">The parameter collection to map.</param>
-        void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback,
-                                  IDbParameters parameters);
+    void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate);
 
-        /// <summary>
-        /// Execute a query given IDbCommand's type and text by
-        /// passing the created IDbCommand to a ICommandSetter implementation
-        /// that knows how to bind values to the IDbCommand, reading a
-        /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
-        /// </summary>
-        /// <param name="cmdType">The type of command</param>
-        /// <param name="cmdText">The text of the query.</param>
-        /// <param name="rowCallback">callback that will extract results
-        /// one row at a time.
-        /// </param>
-        /// <param name="commandSetter">The command setter.</param>
-        void QueryWithRowCallback(CommandType cmdType, String cmdText, IRowCallback rowCallback,
-                                  ICommandSetter commandSetter);
+    void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, ICommandSetter commandSetter);
 
+    void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate,
+        string name, Enum dbType, int size, object parameterValue);
 
-        #endregion
+    void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, IDbParameters parameters);
 
-        #region Query with RowCallback Delegate
+    #endregion
 
-        void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate);
+    #region Query with CommandCreator
 
-        void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, ICommandSetter commandSetter);
+    void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback);
 
+    void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback, IDictionary returnedParameters);
 
-        void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate,
-                        string name, Enum dbType, int size, object parameterValue);
-
-
-        void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, IDbParameters parameters);
-
-        #endregion
-
-        #region Query with CommandCreator
-
-        void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback);
-
-        void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback, IDictionary returnedParameters);
-
-        #endregion
-
-    }
+    #endregion
 }

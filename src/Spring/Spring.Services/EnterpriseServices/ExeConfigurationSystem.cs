@@ -18,137 +18,140 @@
 
 #endregion
 
-namespace Spring.EnterpriseServices
-{
-    using System;
-    using System.Configuration;
-    using System.Reflection;
-    using System.Xml;
-    using Spring.Core.TypeResolution;
-    using Spring.Util;
+namespace Spring.EnterpriseServices;
 
-    using System.Configuration.Internal;
+using System;
+using System.Configuration;
+using System.Reflection;
+using System.Xml;
+using Spring.Core.TypeResolution;
+using Spring.Util;
+using System.Configuration.Internal;
+
+/// <summary>
+/// SUBJECT TO CHANGE -FOR INTERNAL USE ONLY!<br/>
+/// Holds configuration information from a given configuration file, obtained by <see cref="ConfigurationManager.OpenExeConfiguration(string)"/>.
+/// You may use <see cref="ConfigurationUtils.SetConfigurationSystem"/> to replace the active configuration system.
+/// </summary>
+/// <seealso cref="ConfigurationManager.OpenExeConfiguration(string)"/>
+/// <seealso cref="ConfigurationUtils.SetConfigurationSystem"/>
+public class ExeConfigurationSystem : IChainableConfigSystem
+{
+    private string _configPath;
+    private Configuration _configuration;
+    private IInternalConfigSystem _next;
 
     /// <summary>
-    /// SUBJECT TO CHANGE -FOR INTERNAL USE ONLY!<br/>
-    /// Holds configuration information from a given configuration file, obtained by <see cref="ConfigurationManager.OpenExeConfiguration(string)"/>.
-    /// You may use <see cref="ConfigurationUtils.SetConfigurationSystem"/> to replace the active configuration system.
+    /// initializes this instance with a path to be passed into <see cref="ConfigurationManager.OpenExeConfiguration(string)"/>
     /// </summary>
-    /// <seealso cref="ConfigurationManager.OpenExeConfiguration(string)"/>
-    /// <seealso cref="ConfigurationUtils.SetConfigurationSystem"/>
-    public class ExeConfigurationSystem : IChainableConfigSystem
+    /// <param name="configPath"></param>
+    public ExeConfigurationSystem(string configPath)
     {
-        private string _configPath;
-        private Configuration _configuration;
-        private IInternalConfigSystem _next;
+        _configPath = configPath;
+    }
 
-        /// <summary>
-        /// initializes this instance with a path to be passed into <see cref="ConfigurationManager.OpenExeConfiguration(string)"/>
-        /// </summary>
-        /// <param name="configPath"></param>
-        public ExeConfigurationSystem(string configPath)
+    /// <summary>
+    /// Purges cached configuration
+    /// </summary>
+    public void RefreshConfig(string sectionName)
+    {
+        if (_next != null)
         {
-            _configPath = configPath;
+            _next.RefreshConfig(sectionName);
         }
 
-        /// <summary>
-        /// Purges cached configuration
-        /// </summary>
-        public void RefreshConfig(string sectionName)
-        {
-            if (_next != null)
-            {
-                _next.RefreshConfig(sectionName);
-            }
-            _configuration = null;
-        }
+        _configuration = null;
+    }
 
-        ///<summary>
-        /// Only true if the underlying config system supports this.
-        ///</summary>
-        public bool SupportsUserConfig
-        {
-            get
-            {
-                EnsureInit();
-                if (_next != null)
-                {
-                    return _next.SupportsUserConfig;
-                }
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Set the nested configuration system to delegate calls in case we can't resolve a config section ourselves
-        /// </summary>
-        public void SetInnerConfigurationSystem(IInternalConfigSystem innerConfigSystem)
-        {
-            _next = innerConfigSystem;
-        }
-
-        private void EnsureInit()
-        {
-            if (_configuration == null)
-            {
-                lock (this)
-                {
-                    if (_configuration == null)
-                    {
-                        _configuration = ConfigurationManager.OpenExeConfiguration(_configPath);
-                    }
-                }
-            }
-        }
-
-        private delegate object ResolveSectionRuntimeObject(ConfigurationSection section);
-
-        private static ResolveSectionRuntimeObject resolveSectionRuntimeObject =
-            (ResolveSectionRuntimeObject)Delegate.CreateDelegate(typeof(ResolveSectionRuntimeObject),
-                                                                  typeof (ConfigurationSection).GetMethod("GetRuntimeObject",
-                                                                                                          BindingFlags.Instance |
-                                                                                                          BindingFlags.NonPublic));
-
-        /// <summary>
-        /// Get the specified section
-        /// </summary>
-        /// <param name="sectionName"></param>
-        /// <returns></returns>
-        public object GetSection(string sectionName)
+    ///<summary>
+    /// Only true if the underlying config system supports this.
+    ///</summary>
+    public bool SupportsUserConfig
+    {
+        get
         {
             EnsureInit();
-            ConfigurationSection thisSection = _configuration.GetSection(sectionName);
-
-            object parent = null;
             if (_next != null)
             {
-                parent = _next.GetSection(sectionName);
-            }
-            if (thisSection == null)
-            {
-                return parent;
+                return _next.SupportsUserConfig;
             }
 
-            object result = resolveSectionRuntimeObject(thisSection);
-            if (result is DefaultSection)
-            {
-                string rawXml = thisSection.SectionInformation.GetRawXml();
-                if (string.IsNullOrEmpty(rawXml))
-                {
-                    return null;
-                }
-
-                Type t = TypeResolutionUtils.ResolveType(thisSection.SectionInformation.Type);
-                if (typeof(IConfigurationSectionHandler).IsAssignableFrom(t))
-                {
-                    XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(thisSection.SectionInformation.GetRawXml());
-                    IConfigurationSectionHandler handler = (IConfigurationSectionHandler) Activator.CreateInstance(t);
-                    return handler.Create(parent, null, xmlDoc.DocumentElement );
-                }
-                throw new ConfigurationErrorsException(string.Format("missing <section> declaration for section '{0}'", sectionName));
-            }
-            return result;
+            return false;
         }
+    }
+
+    /// <summary>
+    /// Set the nested configuration system to delegate calls in case we can't resolve a config section ourselves
+    /// </summary>
+    public void SetInnerConfigurationSystem(IInternalConfigSystem innerConfigSystem)
+    {
+        _next = innerConfigSystem;
+    }
+
+    private void EnsureInit()
+    {
+        if (_configuration == null)
+        {
+            lock (this)
+            {
+                if (_configuration == null)
+                {
+                    _configuration = ConfigurationManager.OpenExeConfiguration(_configPath);
+                }
+            }
+        }
+    }
+
+    private delegate object ResolveSectionRuntimeObject(ConfigurationSection section);
+
+    private static ResolveSectionRuntimeObject resolveSectionRuntimeObject =
+        (ResolveSectionRuntimeObject) Delegate.CreateDelegate(typeof(ResolveSectionRuntimeObject),
+            typeof(ConfigurationSection).GetMethod("GetRuntimeObject",
+                BindingFlags.Instance |
+                BindingFlags.NonPublic));
+
+    /// <summary>
+    /// Get the specified section
+    /// </summary>
+    /// <param name="sectionName"></param>
+    /// <returns></returns>
+    public object GetSection(string sectionName)
+    {
+        EnsureInit();
+        ConfigurationSection thisSection = _configuration.GetSection(sectionName);
+
+        object parent = null;
+        if (_next != null)
+        {
+            parent = _next.GetSection(sectionName);
+        }
+
+        if (thisSection == null)
+        {
+            return parent;
+        }
+
+        object result = resolveSectionRuntimeObject(thisSection);
+        if (result is DefaultSection)
+        {
+            string rawXml = thisSection.SectionInformation.GetRawXml();
+            if (string.IsNullOrEmpty(rawXml))
+            {
+                return null;
+            }
+
+            Type t = TypeResolutionUtils.ResolveType(thisSection.SectionInformation.Type);
+            if (typeof(IConfigurationSectionHandler).IsAssignableFrom(t))
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(thisSection.SectionInformation.GetRawXml());
+                IConfigurationSectionHandler handler = (IConfigurationSectionHandler) Activator.CreateInstance(t);
+                return handler.Create(parent, null, xmlDoc.DocumentElement);
+            }
+
+            throw new ConfigurationErrorsException(string.Format("missing <section> declaration for section '{0}'", sectionName));
+        }
+
+        return result;
     }
 }

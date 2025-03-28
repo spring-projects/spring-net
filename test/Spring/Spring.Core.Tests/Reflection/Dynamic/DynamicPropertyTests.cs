@@ -21,94 +21,94 @@
 #region Imports
 
 using System.Reflection;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Reflection.Dynamic
+namespace Spring.Reflection.Dynamic;
+
+/// <summary>
+/// Unit tests for the DynamicProperty class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public class DynamicPropertyTests : BasePropertyTests
 {
-    /// <summary>
-    /// Unit tests for the DynamicProperty class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public class DynamicPropertyTests : BasePropertyTests
+    private const BindingFlags BINDANY = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+
+    protected override IDynamicProperty Create(PropertyInfo property)
     {
-        private const BindingFlags BINDANY = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+        return DynamicProperty.Create(property);
+    }
 
-        protected override IDynamicProperty Create(PropertyInfo property)
+    [Test]
+    public void TestNonReadableProperties()
+    {
+        IDynamicProperty nonReadableProperty = Create(typeof(ClassWithNonReadableProperty).GetProperty("MyProperty"));
+        Assert.Throws<InvalidOperationException>(() => nonReadableProperty.GetValue(null));
+    }
+
+    [Test]
+    public void TestNonWritableInstanceProperty()
+    {
+        IDynamicProperty nonWritableProperty = Create(typeof(Inventor).GetProperty("PlaceOfBirth"));
+        Assert.Throws<InvalidOperationException>(() => nonWritableProperty.SetValue(null, null));
+    }
+
+    [Test]
+    public void TestAttemptingToSetPropertyOfValueTypeInstance()
+    {
+        MyStruct myYearHolder = new MyStruct();
+        IDynamicProperty year = Create(typeof(MyStruct).GetProperty("Year"));
+        Assert.Throws<InvalidOperationException>(() => year.SetValue(myYearHolder, 2004));
+    }
+
+    [Test]
+    public void TestNonWritableStaticProperty()
+    {
+        IDynamicProperty nonWritableProperty = Create(typeof(DateTime).GetProperty("Today"));
+        Assert.Throws<InvalidOperationException>(() => nonWritableProperty.SetValue(null, null));
+    }
+
+    [Test]
+    public void TestSetIncompatibleType()
+    {
+        IDynamicProperty inventorPlace = Create(typeof(Inventor).GetProperty("POB"));
+        try
         {
-            return DynamicProperty.Create(property);
+            inventorPlace.SetValue(new Inventor(), new object());
+            Assert.Fail();
+        }
+        catch (InvalidCastException)
+        {
         }
 
-        [Test]
-        public void TestNonReadableProperties()
+        try
         {
-            IDynamicProperty nonReadableProperty = Create(typeof(ClassWithNonReadableProperty).GetProperty("MyProperty"));
-            Assert.Throws<InvalidOperationException>(() => nonReadableProperty.GetValue(null));
+            inventorPlace.SetValue(new Inventor(), new DateTime());
+            Assert.Fail();
+        }
+        catch (InvalidCastException)
+        {
         }
 
-        [Test]
-        public void TestNonWritableInstanceProperty()
+        IDynamicProperty inventorDOB = Create(typeof(Inventor).GetProperty("DOB"));
+        try
         {
-            IDynamicProperty nonWritableProperty = Create(typeof(Inventor).GetProperty("PlaceOfBirth"));
-            Assert.Throws<InvalidOperationException>(() => nonWritableProperty.SetValue(null, null));
+            inventorDOB.SetValue(new Inventor(), 2);
+            Assert.Fail();
+        }
+        catch (InvalidCastException)
+        {
         }
 
-        [Test]
-        public void TestAttemptingToSetPropertyOfValueTypeInstance()
+        try
         {
-            MyStruct myYearHolder = new MyStruct();
-            IDynamicProperty year = Create(typeof(MyStruct).GetProperty("Year"));
-            Assert.Throws<InvalidOperationException>(() => year.SetValue(myYearHolder, 2004));
+            inventorDOB.SetValue(new Inventor(), new Place());
+            Assert.Fail();
         }
-
-        [Test]
-        public void TestNonWritableStaticProperty()
+        catch (InvalidCastException)
         {
-            IDynamicProperty nonWritableProperty = Create(typeof(DateTime).GetProperty("Today"));
-            Assert.Throws<InvalidOperationException>(() => nonWritableProperty.SetValue(null, null));
-        }
-
-        [Test]
-        public void TestSetIncompatibleType()
-        {
-            IDynamicProperty inventorPlace = Create(typeof(Inventor).GetProperty("POB"));
-            try
-            {
-                inventorPlace.SetValue(new Inventor(), new object());
-                Assert.Fail();
-            }
-            catch (InvalidCastException)
-            {
-            }
-            try
-            {
-                inventorPlace.SetValue(new Inventor(), new DateTime());
-                Assert.Fail();
-            }
-            catch (InvalidCastException)
-            {
-            }
-
-            IDynamicProperty inventorDOB = Create(typeof(Inventor).GetProperty("DOB"));
-            try
-            {
-                inventorDOB.SetValue(new Inventor(), 2);
-                Assert.Fail();
-            }
-            catch (InvalidCastException)
-            {
-            }
-            try
-            {
-                inventorDOB.SetValue(new Inventor(), new Place());
-                Assert.Fail();
-            }
-            catch (InvalidCastException)
-            {
-            }
         }
     }
 }

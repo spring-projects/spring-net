@@ -1,5 +1,3 @@
-
-
 #region License
 
 /*
@@ -22,48 +20,47 @@
 
 using Spring.Data.Support;
 
-namespace Spring.Dao.Support
+namespace Spring.Dao.Support;
+
+/// <summary>
+/// Interface implemented by Spring integrations with data access technologies
+/// that throw exceptions.
+/// </summary>
+/// <remarks>
+/// This allows consistent usage of combined exception translation functionality,
+/// without forcing a single translator to understand every single possible type
+/// of exception.
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Mark Pollack (.NET)</author>
+public interface IPersistenceExceptionTranslator
 {
     /// <summary>
-    /// Interface implemented by Spring integrations with data access technologies
-    /// that throw exceptions.
+    /// Translate the given exception thrown by a persistence framework to a
+    /// corresponding exception from Spring's generic DataAccessException hierarchy,
+    /// if possible.
     /// </summary>
     /// <remarks>
-    /// This allows consistent usage of combined exception translation functionality,
-    /// without forcing a single translator to understand every single possible type
-    /// of exception.
+    /// <para>
+    /// Do not translate exceptions that are not understand by this translator:
+    /// for example, if coming from another persistence framework, or resulting
+    /// from user code and unrelated to persistence.
+    /// </para>
+    /// <para>
+    /// Of particular importance is the correct translation to <see cref="DataIntegrityViolationException"/>
+    /// for example on constraint violation.  Implementations may use Spring ADO.NET Framework's
+    /// sophisticated exception translation to provide further information in the event of SQLException as a root cause.
+    /// </para>
     /// </remarks>
+    /// <param name="ex">The exception thrown.</param>
+    /// <returns>the corresponding DataAccessException (or <code>null</code> if the
+    /// exception could not be translated, as in this case it may result from
+    /// user code rather than an actual persistence problem)
+    /// </returns>
+    /// <seealso cref="DataIntegrityViolationException"/>
+    /// <seealso cref="ErrorCodeExceptionTranslator"/>
     /// <author>Rod Johnson</author>
+    /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public interface IPersistenceExceptionTranslator
-    {
-        /// <summary>
-        /// Translate the given exception thrown by a persistence framework to a
-        /// corresponding exception from Spring's generic DataAccessException hierarchy,
-        /// if possible.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Do not translate exceptions that are not understand by this translator:
-        /// for example, if coming from another persistence framework, or resulting
-        /// from user code and unrelated to persistence.
-        /// </para>
-        /// <para>
-        /// Of particular importance is the correct translation to <see cref="DataIntegrityViolationException"/>
-        /// for example on constraint violation.  Implementations may use Spring ADO.NET Framework's
-        /// sophisticated exception translation to provide further information in the event of SQLException as a root cause.
-        /// </para>
-        /// </remarks>
-        /// <param name="ex">The exception thrown.</param>
-        /// <returns>the corresponding DataAccessException (or <code>null</code> if the
-        /// exception could not be translated, as in this case it may result from
-        /// user code rather than an actual persistence problem)
-        /// </returns>
-        /// <seealso cref="DataIntegrityViolationException"/>
-        /// <seealso cref="ErrorCodeExceptionTranslator"/>
-        /// <author>Rod Johnson</author>
-        /// <author>Juergen Hoeller</author>
-        /// <author>Mark Pollack (.NET)</author>
-        DataAccessException TranslateExceptionIfPossible(Exception ex);
-    }
+    DataAccessException TranslateExceptionIfPossible(Exception ex);
 }

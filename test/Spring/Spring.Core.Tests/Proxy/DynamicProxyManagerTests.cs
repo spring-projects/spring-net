@@ -25,104 +25,102 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Proxy
+namespace Spring.Proxy;
+
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class DynamicProxyManagerTests
 {
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class DynamicProxyManagerTests
+    #region WorkerThread Class
+
+    public class WorkerThread
     {
-        #region WorkerThread Class
+        private Exception _exception;
+        private Thread _thread;
+        private WaitCallback _callback;
+        private object _arg;
 
-        public class WorkerThread
+        public WorkerThread(WaitCallback callback, object arg)
         {
-            private Exception _exception;
-            private Thread _thread;
-            private WaitCallback _callback;
-            private object _arg;
-
-            public WorkerThread(WaitCallback callback,object arg)
-            {
-                this._arg = arg;
-                this._callback = callback;
-                _thread = new Thread( new ThreadStart( Run ) );
-            }
-
-            public void Start()
-            {
-                _thread.Start();
-            }
-
-            public void Join()
-            {
-                _thread.Join();
-            }
-
-            public Exception Exception
-            {
-                get { return this._exception; }
-            }
-
-            private void Run()
-            {
-                try
-                {
-                    _callback( _arg );
-                }
-                catch(Exception ex)
-                {
-                    _exception = ex;
-                }
-            }
+            this._arg = arg;
+            this._callback = callback;
+            _thread = new Thread(new ThreadStart(Run));
         }
 
-        #endregion WorkerThread Class
-
-        [Test]
-        public void CreateTypeBuilderMustNotBeCalledTwiceWithSameArguments()
+        public void Start()
         {
-            TypeBuilder tb1 = DynamicProxyManager.CreateTypeBuilder("testtypename", null);
-            
+            _thread.Start();
+        }
+
+        public void Join()
+        {
+            _thread.Join();
+        }
+
+        public Exception Exception
+        {
+            get { return this._exception; }
+        }
+
+        private void Run()
+        {
             try
             {
-                TypeBuilder tb2 = DynamicProxyManager.CreateTypeBuilder("testtypename", typeof(AbstractProxyTypeBuilder));
-                Assert.Fail("Did not throw expected ArgumentException.");
+                _callback(_arg);
             }
-            catch (ArgumentException)
+            catch (Exception ex)
             {
-            }
-            
-        }
-
-        [Test]
-        public void CreateTypeBuilderIsThreadSafe()
-        {
-            const int WORKERS = 20;
-
-            WorkerThread[] workers = new WorkerThread[WORKERS];
-            for(int i=0;i<WORKERS;i++)
-            {
-                workers[i] = new WorkerThread(new WaitCallback(CallCreateTypeBuilder),  i);
-                workers[i].Start();
-            }
-
-            for(int i=0;i<WORKERS;i++)
-            {
-                workers[i].Join();
-                Assert.AreEqual(null, workers[i].Exception);
+                _exception = ex;
             }
         }
+    }
 
-        private static void CallCreateTypeBuilder(object arg)
+    #endregion WorkerThread Class
+
+    [Test]
+    public void CreateTypeBuilderMustNotBeCalledTwiceWithSameArguments()
+    {
+        TypeBuilder tb1 = DynamicProxyManager.CreateTypeBuilder("testtypename", null);
+
+        try
         {
-            int nr = (int) arg;
+            TypeBuilder tb2 = DynamicProxyManager.CreateTypeBuilder("testtypename", typeof(AbstractProxyTypeBuilder));
+            Assert.Fail("Did not throw expected ArgumentException.");
+        }
+        catch (ArgumentException)
+        {
+        }
+    }
 
-            for(int i=0;i<100;i++)
-            {
-                DynamicProxyManager.CreateTypeBuilder( "TestType" + nr + "_" + i,typeof( AbstractProxyTypeBuilder ) );
-                Thread.Sleep(0);
-            }
+    [Test]
+    public void CreateTypeBuilderIsThreadSafe()
+    {
+        const int WORKERS = 20;
+
+        WorkerThread[] workers = new WorkerThread[WORKERS];
+        for (int i = 0; i < WORKERS; i++)
+        {
+            workers[i] = new WorkerThread(new WaitCallback(CallCreateTypeBuilder), i);
+            workers[i].Start();
+        }
+
+        for (int i = 0; i < WORKERS; i++)
+        {
+            workers[i].Join();
+            Assert.AreEqual(null, workers[i].Exception);
+        }
+    }
+
+    private static void CallCreateTypeBuilder(object arg)
+    {
+        int nr = (int) arg;
+
+        for (int i = 0; i < 100; i++)
+        {
+            DynamicProxyManager.CreateTypeBuilder("TestType" + nr + "_" + i, typeof(AbstractProxyTypeBuilder));
+            Thread.Sleep(0);
         }
     }
 }

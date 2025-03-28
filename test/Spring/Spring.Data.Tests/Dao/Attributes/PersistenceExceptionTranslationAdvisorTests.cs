@@ -26,201 +26,200 @@ using Spring.Stereotype;
 
 #pragma warning disable SYSLIB0051
 
-namespace Spring.Dao.Attributes
+namespace Spring.Dao.Attributes;
+
+/// <summary>
+/// This class contains tests for
+/// </summary>
+/// <author>Mark Pollack</author>
+/// <version>$Id:$</version>
+[TestFixture]
+public class PersistenceExceptionTranslationAdvisorTests
 {
-    /// <summary>
-    /// This class contains tests for 
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
-    [TestFixture]
-    public class PersistenceExceptionTranslationAdvisorTests
+    private IndexOutOfRangeException doNotTranslate = new IndexOutOfRangeException();
+
+    private PersistenceException persistenceException = new PersistenceException();
+
+    [SetUp]
+    public void Setup()
     {
+    }
 
-        private IndexOutOfRangeException doNotTranslate = new IndexOutOfRangeException();
+    [Test]
+    public void NoTranslationNeeded()
+    {
+        RepositoryInterfaceImpl target = new RepositoryInterfaceImpl();
+        IRepositoryInterface ri = CreateProxy(target);
 
-        private PersistenceException persistenceException = new PersistenceException();
+        ri.Throws();
 
-        [SetUp]
-        public void Setup()
+        target.Behavior = persistenceException;
+
+        try
         {
-        }
-
-        [Test]
-        public void NoTranslationNeeded()
-        {
-            RepositoryInterfaceImpl target = new RepositoryInterfaceImpl();
-            IRepositoryInterface ri = CreateProxy(target);
-
             ri.Throws();
-
-            target.Behavior = persistenceException;
-
-            try
-            {
-                ri.Throws();
-                Assert.Fail();
-            } catch (Exception ex)
-            {
-                Assert.AreSame(persistenceException, ex);
-            }
+            Assert.Fail();
         }
-
-        [Test]
-        public void TranslationNotNeededForTheseExceptions()
+        catch (Exception ex)
         {
-            RepositoryInterfaceImpl target = new StereotypedRepositoryInterfaceImpl();
-            IRepositoryInterface ri = CreateProxy(target);
+            Assert.AreSame(persistenceException, ex);
+        }
+    }
 
+    [Test]
+    public void TranslationNotNeededForTheseExceptions()
+    {
+        RepositoryInterfaceImpl target = new StereotypedRepositoryInterfaceImpl();
+        IRepositoryInterface ri = CreateProxy(target);
+
+        ri.Throws();
+
+        target.Behavior = doNotTranslate;
+        try
+        {
             ri.Throws();
-
-            target.Behavior = doNotTranslate;
-            try
-            {
-                ri.Throws();
-                Assert.Fail();
-            } catch (Exception ex)
-            {
-                Assert.AreSame(doNotTranslate, ex);
-            }
+            Assert.Fail();
         }
-
-        [Test]
-        public void TranslationNeededForTheseExceptions()
+        catch (Exception ex)
         {
-            DoTestTranslationNeededForTheseExceptions((new StereotypedRepositoryInterfaceImpl()));
-        }
-
-        [Test]
-        public void TranslationNeededForTheseExceptionsOnSuperclass()
-        {
-            DoTestTranslationNeededForTheseExceptions((new MyStereotypedRepositoryInterfaceImpl()));            
-        }
-
-        [Test]
-        public void TranslationNeededForTheseExceptionsOnInterface()
-        {
-            DoTestTranslationNeededForTheseExceptions((new MyInterfaceStereotypedRepositoryInterfaceImpl()));
-        }
-
-        [Test]
-        public void TranslationNeededForTheseExceptionsOnInheritedInterface()
-        {
-            DoTestTranslationNeededForTheseExceptions((new MyInterfaceInheritedStereotypedRepositoryInterfaceImpl()));
-        }
-
-        private void DoTestTranslationNeededForTheseExceptions(RepositoryInterfaceImpl target)
-        {
-            IRepositoryInterface ri = CreateProxy(target);
-            target.Behavior = persistenceException;
-            try
-            {
-                ri.Throws();
-                Assert.Fail();
-            } catch (DataAccessException ex)
-            {
-                //Expected
-                Assert.AreSame(persistenceException, ex.InnerException);
-            } catch (PersistenceException)
-            {
-                Assert.Fail("Should have been translated");
-            }
-        }
-
-
-        private IRepositoryInterface CreateProxy(RepositoryInterfaceImpl target)
-        {
-            MapPersistenceExceptionTranslator mpet = new MapPersistenceExceptionTranslator();
-            mpet.AddTranslation(persistenceException, new InvalidDataAccessApiUsageException("", persistenceException));
-            ProxyFactory pf = new ProxyFactory(target);
-            pf.AddInterface(typeof(IRepositoryInterface));
-            AddPersistenceExceptionTranslation(pf, mpet);
-            return (IRepositoryInterface) pf.GetProxy();
-        }
-
-        protected virtual void AddPersistenceExceptionTranslation(ProxyFactory pf, IPersistenceExceptionTranslator pet)
-        {
-            pf.AddAdvisor(new PersistenceExceptionTranslationAdvisor(pet, typeof(RepositoryAttribute)));
+            Assert.AreSame(doNotTranslate, ex);
         }
     }
 
-
-
-
-
-    [Repository]
-    public class StereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl
+    [Test]
+    public void TranslationNeededForTheseExceptions()
     {
-        // Extends above class just to add repository annotation
+        DoTestTranslationNeededForTheseExceptions((new StereotypedRepositoryInterfaceImpl()));
     }
 
-    public class MyStereotypedRepositoryInterfaceImpl : StereotypedRepositoryInterfaceImpl {
-	}
-
-    [Repository]
-    public interface IStereotypedInterface
+    [Test]
+    public void TranslationNeededForTheseExceptionsOnSuperclass()
     {
-        
+        DoTestTranslationNeededForTheseExceptions((new MyStereotypedRepositoryInterfaceImpl()));
     }
-    public class MyInterfaceStereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl, IStereotypedInterface
+
+    [Test]
+    public void TranslationNeededForTheseExceptionsOnInterface()
+    {
+        DoTestTranslationNeededForTheseExceptions((new MyInterfaceStereotypedRepositoryInterfaceImpl()));
+    }
+
+    [Test]
+    public void TranslationNeededForTheseExceptionsOnInheritedInterface()
+    {
+        DoTestTranslationNeededForTheseExceptions((new MyInterfaceInheritedStereotypedRepositoryInterfaceImpl()));
+    }
+
+    private void DoTestTranslationNeededForTheseExceptions(RepositoryInterfaceImpl target)
+    {
+        IRepositoryInterface ri = CreateProxy(target);
+        target.Behavior = persistenceException;
+        try
+        {
+            ri.Throws();
+            Assert.Fail();
+        }
+        catch (DataAccessException ex)
+        {
+            //Expected
+            Assert.AreSame(persistenceException, ex.InnerException);
+        }
+        catch (PersistenceException)
+        {
+            Assert.Fail("Should have been translated");
+        }
+    }
+
+    private IRepositoryInterface CreateProxy(RepositoryInterfaceImpl target)
+    {
+        MapPersistenceExceptionTranslator mpet = new MapPersistenceExceptionTranslator();
+        mpet.AddTranslation(persistenceException, new InvalidDataAccessApiUsageException("", persistenceException));
+        ProxyFactory pf = new ProxyFactory(target);
+        pf.AddInterface(typeof(IRepositoryInterface));
+        AddPersistenceExceptionTranslation(pf, mpet);
+        return (IRepositoryInterface) pf.GetProxy();
+    }
+
+    protected virtual void AddPersistenceExceptionTranslation(ProxyFactory pf, IPersistenceExceptionTranslator pet)
+    {
+        pf.AddAdvisor(new PersistenceExceptionTranslationAdvisor(pet, typeof(RepositoryAttribute)));
+    }
+}
+
+[Repository]
+public class StereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl
+{
+    // Extends above class just to add repository annotation
+}
+
+public class MyStereotypedRepositoryInterfaceImpl : StereotypedRepositoryInterfaceImpl
+{
+}
+
+[Repository]
+public interface IStereotypedInterface
+{
+}
+
+public class MyInterfaceStereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl, IStereotypedInterface
+{
+}
+
+public interface IStereotypedInheritingInterface : IStereotypedInterface
+{
+}
+
+public class MyInterfaceInheritedStereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl, IStereotypedInheritingInterface
+{
+}
+
+public class RepositoryInterfaceImpl : IRepositoryInterface
+{
+    private Exception ex;
+
+    public Exception Behavior
+    {
+        set { ex = value; }
+    }
+
+    public void Throws()
+    {
+        if (ex != null)
+        {
+            throw ex;
+        }
+    }
+}
+
+public interface IRepositoryInterface
+{
+    void Throws();
+}
+
+[Serializable]
+public class PersistenceException : ApplicationException
+{
+    #region Constructor (s) / Destructor
+
+    public PersistenceException()
     {
     }
 
-    public interface IStereotypedInheritingInterface : IStereotypedInterface {
-	}
-
-    public class MyInterfaceInheritedStereotypedRepositoryInterfaceImpl : RepositoryInterfaceImpl, IStereotypedInheritingInterface {
-	}
-
-    public class RepositoryInterfaceImpl : IRepositoryInterface
+    public PersistenceException(string message)
+        : base(message)
     {
-        private Exception ex;
-
-
-        public Exception Behavior
-        {
-            set { ex = value; }
-        }
-
-        public void Throws()
-        {
-            if (ex != null)
-            {
-                throw ex;
-            }
-        }
     }
 
-    public interface IRepositoryInterface
+    public PersistenceException(string message, Exception rootCause)
+        : base(message, rootCause)
     {
-        void Throws();
     }
 
-    [Serializable]
-    public class PersistenceException : ApplicationException
+    protected PersistenceException(
+        SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
-        #region Constructor (s) / Destructor
-
-        public PersistenceException()
-        {
-        }
-
-        public PersistenceException(string message)
-            : base(message)
-        {
-        }
-
-        public PersistenceException(string message, Exception rootCause)
-            : base(message, rootCause)
-        {
-        }
-
-        protected PersistenceException(
-            SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-        #endregion
     }
 
+    #endregion
 }

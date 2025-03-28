@@ -20,88 +20,86 @@
 
 using Spring.Util;
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// ITypeFilter that looks for a specific attribute being present on a class
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack  (.NET)</author>
+public class AttributeTypeFilter : ITypeFilter
 {
+    private readonly Type attributeType;
+    private readonly bool checkInherited;
+
     /// <summary>
-    /// ITypeFilter that looks for a specific attribute being present on a class
+    /// The attribute <see cref="Type"/> for this filter.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack  (.NET)</author>
-    public class AttributeTypeFilter : ITypeFilter
+    public Type AttributeType
     {
-        private readonly Type attributeType;
-        private readonly bool checkInherited;
+        get { return attributeType; }
+    }
 
-        /// <summary>
-        /// The attribute <see cref="Type"/> for this filter.
-        /// </summary>
-        public Type AttributeType
+    /// <summary>
+    /// Indicates, whether this filter considers base types for filtering.
+    /// </summary>
+    public bool CheckInherited
+    {
+        get { return checkInherited; }
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AttributeTypeFilter"/> class for the
+    /// given attribute type.
+    /// </summary>
+    /// <param name="attributeType">Type of the attribute to look for.</param>
+    public AttributeTypeFilter(Type attributeType) : this(attributeType, false)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AttributeTypeFilter"/> class for the
+    /// given attribute type.
+    /// </summary>
+    /// <param name="attributeType">Type of the attribute.</param>
+    /// <param name="checkInherited">if set to <c>true</c> [check inherited].</param>
+    public AttributeTypeFilter(Type attributeType, bool checkInherited)
+    {
+        #region parameter validation
+
+        AssertUtils.ArgumentNotNull(attributeType, "attributeType");
+        if (!typeof(Attribute).IsAssignableFrom(attributeType))
         {
-            get { return attributeType; }
+            throw new ArgumentException(
+                string.Format(
+                    "The [{0}] Type must be derived from the [System.Attribute] class.",
+                    attributeType));
         }
 
-        /// <summary>
-        /// Indicates, whether this filter considers base types for filtering.
-        /// </summary>
-        public bool CheckInherited
+        #endregion
+
+        this.attributeType = attributeType;
+        this.checkInherited = checkInherited;
+    }
+
+    /// <summary>
+    /// Should the pointcut apply to the supplied <see cref="System.Type"/>?
+    /// </summary>
+    /// <param name="type">The candidate <see cref="System.Type"/>.</param>
+    /// <returns>
+    /// 	<see langword="true"/> if the advice should apply to the supplied
+    /// <paramref name="type"/>
+    /// </returns>
+    public bool Matches(Type type)
+    {
+        if (checkInherited)
         {
-            get { return checkInherited; }
+            return AttributeUtils.FindAttribute(type, attributeType) != null;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AttributeTypeFilter"/> class for the
-        /// given attribute type.
-        /// </summary>
-        /// <param name="attributeType">Type of the attribute to look for.</param>
-        public AttributeTypeFilter(Type attributeType) : this(attributeType, false)
+        else
         {
-
+            object[] atts = type.GetCustomAttributes(attributeType, false);
+            return ArrayUtils.HasLength(atts);
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AttributeTypeFilter"/> class for the
-        /// given attribute type.
-        /// </summary>
-        /// <param name="attributeType">Type of the attribute.</param>
-        /// <param name="checkInherited">if set to <c>true</c> [check inherited].</param>
-        public AttributeTypeFilter(Type attributeType, bool checkInherited)
-        {
-            #region parameter validation
-            AssertUtils.ArgumentNotNull(attributeType, "attributeType");
-            if (!typeof(Attribute).IsAssignableFrom(attributeType))
-            {
-                throw new ArgumentException(
-                    string.Format(
-                        "The [{0}] Type must be derived from the [System.Attribute] class.",
-                        attributeType));
-            }
-            #endregion
-            this.attributeType = attributeType;
-            this.checkInherited = checkInherited;
-        }
-
-
-        /// <summary>
-        /// Should the pointcut apply to the supplied <see cref="System.Type"/>?
-        /// </summary>
-        /// <param name="type">The candidate <see cref="System.Type"/>.</param>
-        /// <returns>
-        /// 	<see langword="true"/> if the advice should apply to the supplied
-        /// <paramref name="type"/>
-        /// </returns>
-        public bool Matches(Type type)
-        {
-            if (checkInherited)
-            {
-                return AttributeUtils.FindAttribute(type, attributeType) != null;
-            }
-            else
-            {
-                object[] atts = type.GetCustomAttributes(attributeType, false);
-                return ArrayUtils.HasLength(atts);
-            }
-        }
-
-
     }
 }

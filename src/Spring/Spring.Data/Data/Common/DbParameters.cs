@@ -22,280 +22,278 @@ using System.Data;
 using System.Reflection;
 using Spring.Dao;
 
-namespace Spring.Data.Common
+namespace Spring.Data.Common;
+
+/// <summary>
+/// A more portable means to create a collection of ADO.NET
+/// parameters.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public class DbParameters : IDbParameters
 {
+    #region Fields
+
+    private IDbProvider dbProvider;
+
+    //Just used as a container for the underlying parameter collection.
+    private IDbCommand dbCommand;
+    private IDataParameterCollection dataParameterCollection;
+
+    #endregion
+
+    #region Constructor (s)
+
     /// <summary>
-    /// A more portable means to create a collection of ADO.NET
-    /// parameters.
+    /// Initializes a new instance of the <see cref="DbParameters"/> class.
     /// </summary>
-    /// <author>Mark Pollack (.NET)</author>
-    public class DbParameters : IDbParameters
+    public DbParameters(IDbProvider dbProvider)
     {
+        this.dbProvider = dbProvider;
+        dbCommand = dbProvider.CreateCommand();
+        dataParameterCollection = dbCommand.Parameters;
+    }
 
-        #region Fields
+    #endregion
 
-        private IDbProvider dbProvider;
+    #region Properties
 
-        //Just used as a container for the underlying parameter collection.
-        private IDbCommand dbCommand;
-        private IDataParameterCollection dataParameterCollection;
+    #endregion
 
-        #endregion
+    #region Methods
 
-        #region Constructor (s)
+    #endregion
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DbParameters"/> class.
-        /// </summary>
-        public DbParameters(IDbProvider dbProvider)
+    public IDataParameter this[string parameterName]
+    {
+        get { return (IDbDataParameter) dataParameterCollection[parameterName]; }
+        set { dataParameterCollection[parameterName] = value; }
+    }
+
+    public IDataParameter this[int index]
+    {
+        get { return (IDbDataParameter) dataParameterCollection[index]; }
+        set { dataParameterCollection[index] = value; }
+    }
+
+    public IDataParameterCollection DataParameterCollection
+    {
+        get { return dataParameterCollection; }
+    }
+
+    public int Count
+    {
+        get
         {
-            this.dbProvider = dbProvider;
-            dbCommand = dbProvider.CreateCommand();
-            dataParameterCollection = dbCommand.Parameters;
+            return dataParameterCollection.Count;
+        }
+    }
+
+    public bool Contains(string parameterName)
+    {
+        return dataParameterCollection.Contains(parameterName);
+    }
+
+    public void AddParameter(IDataParameter dbParameter)
+    {
+        dataParameterCollection.Add(dbParameter);
+    }
+
+    public IDbDataParameter AddParameter(string name,
+        Enum parameterType,
+        int size,
+        ParameterDirection direction,
+        bool isNullable,
+        byte precision,
+        byte scale,
+        string sourceColumn,
+        DataRowVersion sourceVersion,
+        object parameterValue)
+    {
+        IDbDataParameter parameter = dbCommand.CreateParameter();
+
+        parameter.ParameterName = dbProvider.CreateParameterNameForCollection(name);
+
+        AssignParameterType(parameter, parameterType);
+
+        if (size > 0)
+        {
+            parameter.Size = size;
         }
 
-        #endregion
+        parameter.Direction = direction;
 
-        #region Properties
-
-        #endregion
-
-        #region Methods
-
-        #endregion
-
-        public IDataParameter this[string parameterName]
+        if (isNullable)
         {
-            get { return (IDbDataParameter) dataParameterCollection[parameterName]; }
-            set { dataParameterCollection[parameterName] = value; }
+            AssignIsNullable(isNullable, parameter);
         }
 
-        public IDataParameter this[int index]
+        parameter.Precision = precision;
+
+        if (scale > 0)
         {
-            get { return (IDbDataParameter) dataParameterCollection[index]; }
-            set { dataParameterCollection[index] = value; }
+            parameter.Scale = scale;
         }
 
-        public IDataParameterCollection DataParameterCollection
+        if (sourceColumn != null && sourceColumn != string.Empty)
         {
-            get { return dataParameterCollection; }
+            parameter.SourceColumn = sourceColumn;
         }
 
-        public int Count
+        parameter.SourceVersion = sourceVersion;
+
+        parameter.Value = (parameterValue == null) ? DBNull.Value : parameterValue;
+
+        dataParameterCollection.Add(parameter);
+
+        return parameter;
+    }
+
+    public IDbDataParameter AddParameter(string name,
+        Enum parameterType,
+        ParameterDirection direction,
+        bool isNullable,
+        byte precision,
+        byte scale,
+        string sourceColumn,
+        DataRowVersion sourceVersion,
+        object parameterValue)
+    {
+        return AddParameter(name, parameterType, 0, direction, isNullable, precision, scale, sourceColumn, sourceVersion,
+            parameterValue);
+    }
+
+    public int Add(object parameterValue)
+    {
+        IDbDataParameter parameter = dbCommand.CreateParameter();
+        parameter.Value = (parameterValue == null) ? DBNull.Value : parameterValue;
+        dataParameterCollection.Add(parameter);
+        return dataParameterCollection.Count - 1;
+    }
+
+    public void AddRange(Array values)
+    {
+        foreach (Array value in values)
         {
-            get
-            {
-                return dataParameterCollection.Count;
-            }
+            Add(value);
         }
-        public bool Contains(string parameterName)
+    }
+
+    public IDbDataParameter AddWithValue(string name, object parameterValue)
+    {
+        return AddParameter(name, null, -1, ParameterDirection.Input, false,
+            0, 0, null, DataRowVersion.Default, parameterValue);
+    }
+
+    public IDbDataParameter Add(string name, Enum parameterType)
+    {
+        return AddParameter(name, parameterType, -1, ParameterDirection.Input,
+            false, 0, 0, null, DataRowVersion.Default, null);
+    }
+
+    public IDbDataParameter Add(string name, Enum parameterType, int size)
+    {
+        return AddParameter(name, parameterType, size, ParameterDirection.Input,
+            false, 0, 0, null, DataRowVersion.Default, null);
+    }
+
+    public IDbDataParameter Add(string name, Enum parameterType, int size, string sourceColumn)
+    {
+        return AddParameter(name, parameterType, size, ParameterDirection.Input,
+            false, 0, 0, sourceColumn, DataRowVersion.Default, null);
+    }
+
+    public IDbDataParameter AddOut(string name, Enum parameterType)
+    {
+        return AddParameter(name, parameterType, -1, ParameterDirection.Output,
+            false, 0, 0, null, DataRowVersion.Default, null);
+    }
+
+    public IDbDataParameter AddOut(string name, Enum parameterType, int size)
+    {
+        return AddParameter(name, parameterType, size, ParameterDirection.Output,
+            false, 0, 0, null, DataRowVersion.Default, null);
+    }
+
+    public IDbDataParameter AddInOut(string name, Enum parameterType)
+    {
+        return AddParameter(name, parameterType, -1, ParameterDirection.InputOutput,
+            false, 0, 0, null, DataRowVersion.Default, null);
+    }
+
+    public IDbDataParameter AddInOut(string name, Enum parameterType, int size)
+    {
+        return AddParameter(name, parameterType, size, ParameterDirection.InputOutput,
+            false, 0, 0, null, DataRowVersion.Default, null);
+    }
+
+    public IDbDataParameter AddReturn(string name, Enum parameterType)
+    {
+        return AddParameter(name, parameterType, -1, ParameterDirection.ReturnValue,
+            false, 0, 0, null, DataRowVersion.Default, null);
+    }
+
+    public IDbDataParameter AddReturn(string name, Enum parameterType, int size)
+    {
+        return AddParameter(name, parameterType, size, ParameterDirection.ReturnValue,
+            false, 0, 0, null, DataRowVersion.Default, null);
+    }
+
+    public object GetValue(string name)
+    {
+        IDataParameter parameter = dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)] as IDataParameter;
+        if (parameter != null)
         {
-            return dataParameterCollection.Contains(parameterName);
+            return parameter.Value;
         }
 
-        public void AddParameter(IDataParameter dbParameter)
+        throw new InvalidDataAccessApiUsageException(
+            "object in IDataParameterCollection is not of the type IDataParameter, it is type [" +
+            dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)].GetType() + "].");
+    }
+
+    public void SetValue(string name, object parameterValue)
+    {
+        IDbDataParameter parameter = dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)] as IDbDataParameter;
+        if (parameter != null)
         {
-            dataParameterCollection.Add(dbParameter);
-        }
-
-
-        public IDbDataParameter AddParameter(string name,
-                                 Enum parameterType,
-                                 int size,
-                                 ParameterDirection direction,
-                                 bool isNullable,
-                                 byte precision,
-                                 byte scale,
-                                 string sourceColumn,
-                                 DataRowVersion sourceVersion,
-                                 object parameterValue)
-        {
-            IDbDataParameter parameter = dbCommand.CreateParameter();
-
-            parameter.ParameterName = dbProvider.CreateParameterNameForCollection(name);
-
-            AssignParameterType(parameter, parameterType);
-
-            if (size > 0)
-            {
-                parameter.Size = size;
-            }
-            parameter.Direction = direction;
-
-            if (isNullable)
-            {
-                AssignIsNullable(isNullable, parameter);
-            }
-
-            parameter.Precision = precision;
-
-            if (scale > 0)
-            {
-                parameter.Scale = scale;
-            }
-
-            if (sourceColumn != null && sourceColumn != string.Empty)
-            {
-                parameter.SourceColumn = sourceColumn;
-            }
-
-            parameter.SourceVersion = sourceVersion;
-
             parameter.Value = (parameterValue == null) ? DBNull.Value : parameterValue;
-
-            dataParameterCollection.Add(parameter);
-
-            return parameter;
         }
+    }
 
-        public IDbDataParameter AddParameter(string name,
-                                             Enum parameterType,
-                                             ParameterDirection direction,
-                                             bool isNullable,
-                                             byte precision,
-                                             byte scale,
-                                             string sourceColumn,
-                                             DataRowVersion sourceVersion,
-                                             object parameterValue)
+    protected void AssignParameterType(IDbDataParameter parameter, Enum parameterType)
+    {
+        if (parameterType != null)
         {
-            return AddParameter(name, parameterType, 0, direction, isNullable, precision, scale, sourceColumn, sourceVersion,
-                         parameterValue);
-        }
-
-
-        public int Add(object parameterValue)
-        {
-            IDbDataParameter parameter = dbCommand.CreateParameter();
-            parameter.Value = (parameterValue == null) ? DBNull.Value : parameterValue;
-            dataParameterCollection.Add(parameter);
-            return dataParameterCollection.Count - 1;
-        }
-
-        public void AddRange(Array values)
-        {
-            foreach (Array value in values)
+            if (parameterType is DbType)
             {
-                Add(value);
+                parameter.DbType = (DbType) parameterType;
             }
-        }
-
-        public IDbDataParameter AddWithValue(string name, object parameterValue)
-        {
-            return AddParameter(name, null, -1, ParameterDirection.Input, false,
-                                0, 0, null, DataRowVersion.Default, parameterValue);
-        }
-
-        public IDbDataParameter Add(string name, Enum parameterType)
-        {
-            return AddParameter(name, parameterType, -1, ParameterDirection.Input,
-                false, 0, 0, null, DataRowVersion.Default, null);
-        }
-
-        public IDbDataParameter Add(string name, Enum parameterType, int size)
-        {
-            return AddParameter(name, parameterType, size, ParameterDirection.Input,
-                false, 0, 0, null, DataRowVersion.Default, null);
-        }
-
-        public IDbDataParameter Add(string name, Enum parameterType, int size, string sourceColumn)
-        {
-            return AddParameter(name, parameterType, size, ParameterDirection.Input,
-                false, 0, 0, sourceColumn, DataRowVersion.Default, null);
-        }
-
-        public IDbDataParameter AddOut(string name, Enum parameterType)
-        {
-            return AddParameter(name, parameterType, -1, ParameterDirection.Output,
-                false, 0, 0, null, DataRowVersion.Default, null);
-        }
-
-        public IDbDataParameter AddOut(string name, Enum parameterType, int size)
-        {
-            return AddParameter(name, parameterType, size, ParameterDirection.Output,
-                false, 0, 0, null, DataRowVersion.Default, null);
-        }
-
-        public IDbDataParameter AddInOut(string name, Enum parameterType)
-        {
-            return AddParameter(name, parameterType, -1, ParameterDirection.InputOutput,
-                false, 0, 0, null, DataRowVersion.Default, null);
-        }
-
-        public IDbDataParameter AddInOut(string name, Enum parameterType, int size)
-        {
-            return AddParameter(name, parameterType, size, ParameterDirection.InputOutput,
-                false, 0, 0, null, DataRowVersion.Default, null);
-        }
-
-        public IDbDataParameter AddReturn(string name, Enum parameterType)
-        {
-            return AddParameter(name, parameterType, -1, ParameterDirection.ReturnValue,
-                false, 0, 0, null, DataRowVersion.Default, null);
-        }
-
-        public IDbDataParameter AddReturn(string name, Enum parameterType, int size)
-        {
-            return AddParameter(name, parameterType, size, ParameterDirection.ReturnValue,
-                false, 0, 0, null, DataRowVersion.Default, null);
-        }
-
-
-        public object GetValue(string name)
-        {
-            IDataParameter parameter = dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)] as IDataParameter;
-            if (parameter != null)
+            else
             {
-                return parameter.Value;
-            }
-            throw new InvalidDataAccessApiUsageException(
-                "object in IDataParameterCollection is not of the type IDataParameter, it is type [" +
-                dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)].GetType() + "].");
-        }
-
-        public void SetValue(string name, object parameterValue)
-        {
-            IDbDataParameter parameter = dataParameterCollection[dbProvider.CreateParameterNameForCollection(name)] as IDbDataParameter;
-            if (parameter != null)
-            {
-                parameter.Value = (parameterValue == null) ? DBNull.Value : parameterValue;
-            }
-        }
-
-
-        protected void AssignParameterType(IDbDataParameter parameter, Enum parameterType)
-        {
-            if (parameterType != null)
-            {
-                if (parameterType is DbType)
+                if (parameterType.GetType() != dbProvider.DbMetadata.ParameterDbType)
                 {
-                    parameter.DbType = (DbType) parameterType;
+                    throw new TypeMismatchDataAccessException("Invalid parameter type specified for parameter name ["
+                                                              + parameter.ParameterName + "].  ["
+                                                              + parameterType.GetType().AssemblyQualifiedName + "] is not of expected type ["
+                                                              + dbProvider.DbMetadata.ParameterDbType.AssemblyQualifiedName + "]");
                 }
-                else
-                {
-                    if (parameterType.GetType() != dbProvider.DbMetadata.ParameterDbType)
-                    {
-                        throw new TypeMismatchDataAccessException("Invalid parameter type specified for parameter name ["
-                                                                  + parameter.ParameterName + "].  ["
-                                                                  + parameterType.GetType().AssemblyQualifiedName + "] is not of expected type ["
-                                                                  + dbProvider.DbMetadata.ParameterDbType.AssemblyQualifiedName + "]");
-                    }
-                    dbProvider.DbMetadata.ParameterDbTypeProperty.SetValue(parameter, parameterType, null);
-                }
+
+                dbProvider.DbMetadata.ParameterDbTypeProperty.SetValue(parameter, parameterType, null);
             }
         }
+    }
 
-        protected void AssignIsNullable(bool isNullable, IDbDataParameter parameter)
+    protected void AssignIsNullable(bool isNullable, IDbDataParameter parameter)
+    {
+        PropertyInfo propertyInfo = dbProvider.DbMetadata.ParameterIsNullableProperty;
+        if (propertyInfo != null)
         {
-            PropertyInfo propertyInfo = dbProvider.DbMetadata.ParameterIsNullableProperty;
-            if (propertyInfo != null)
-            {
-                propertyInfo.SetValue(parameter, isNullable, null);
-            }
-            if (parameter.Value == null)
-            {
-                parameter.Value = DBNull.Value;
-            }
+            propertyInfo.SetValue(parameter, isNullable, null);
         }
 
+        if (parameter.Value == null)
+        {
+            parameter.Value = DBNull.Value;
+        }
     }
 }

@@ -20,53 +20,56 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Exception thrown if certain expected data could not be retrieved, e.g.
+/// when looking up specific data via a known identifier.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This exception will be thrown either by O/R mapping tools or by custom DAO
+/// implementations.
+/// </p>
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class DataRetrievalFailureException : NonTransientDataAccessException
 {
-	/// <summary>
-	/// Exception thrown if certain expected data could not be retrieved, e.g.
-	/// when looking up specific data via a known identifier.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This exception will be thrown either by O/R mapping tools or by custom DAO
-	/// implementations.
-	/// </p>
-	/// </remarks>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-    public class DataRetrievalFailureException : NonTransientDataAccessException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.DataRetrievalFailureException"/> class.
-		/// </summary>
-		public DataRetrievalFailureException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.DataRetrievalFailureException"/> class.
+    /// </summary>
+    public DataRetrievalFailureException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.DataRetrievalFailureException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public DataRetrievalFailureException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.DataRetrievalFailureException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public DataRetrievalFailureException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.DataRetrievalFailureException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public DataRetrievalFailureException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.DataRetrievalFailureException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public DataRetrievalFailureException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected DataRetrievalFailureException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected DataRetrievalFailureException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

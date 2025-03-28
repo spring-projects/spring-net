@@ -22,73 +22,72 @@ using System.Collections;
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+[TestFixture]
+public class ManagedListTests
 {
-    [TestFixture]
-    public class ManagedListTests
+    [Test]
+    public void MergeSunnyDay()
     {
-        [Test]
-        public void MergeSunnyDay()
-        {
-            ManagedList parent = new ManagedList();
-            parent.Add("one");
-            parent.Add("two");
-            ManagedList child = new ManagedList();
-            child.Add("three");
-            child.MergeEnabled = true;
-            IList mergedList = (IList) child.Merge(parent);
-            Assert.AreEqual(3, mergedList.Count);
-        }
+        ManagedList parent = new ManagedList();
+        parent.Add("one");
+        parent.Add("two");
+        ManagedList child = new ManagedList();
+        child.Add("three");
+        child.MergeEnabled = true;
+        IList mergedList = (IList) child.Merge(parent);
+        Assert.AreEqual(3, mergedList.Count);
+    }
 
-        [Test]
-        public void MergeWithNullParent()
-        {
-            ManagedList child = new ManagedList();
-            child.Add("one");
-            child.MergeEnabled = true;
-            Assert.AreSame(child, child.Merge(null));
-        }
+    [Test]
+    public void MergeWithNullParent()
+    {
+        ManagedList child = new ManagedList();
+        child.Add("one");
+        child.MergeEnabled = true;
+        Assert.AreSame(child, child.Merge(null));
+    }
 
-        [Test]
-        public void MergeNotAllowedWhenMergeNotEnabled()
-        {
-            ManagedList child = new ManagedList();
-            Assert.Throws<InvalidOperationException>(() => child.Merge(null), "Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
-        }
+    [Test]
+    public void MergeNotAllowedWhenMergeNotEnabled()
+    {
+        ManagedList child = new ManagedList();
+        Assert.Throws<InvalidOperationException>(() => child.Merge(null), "Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
+    }
 
-        [Test]
-        public void MergeWithNonCompatibleParentType()
-        {
-            ManagedList child = new ManagedList();
-            child.Add("one");
-            child.MergeEnabled = true;
-            Assert.Throws<InvalidOperationException>(() => child.Merge("hello"));
-        }
+    [Test]
+    public void MergeWithNonCompatibleParentType()
+    {
+        ManagedList child = new ManagedList();
+        child.Add("one");
+        child.MergeEnabled = true;
+        Assert.Throws<InvalidOperationException>(() => child.Merge("hello"));
+    }
 
-        [Test]
-        public void MergeEmptyChild()
-        {
-            ManagedList parent = new ManagedList();
-            parent.Add("one");
-            parent.Add("two");
-            ManagedList child = new ManagedList();
-            child.MergeEnabled = true;
-            IList mergedList = (IList) child.Merge(parent);
-            Assert.AreEqual(2, mergedList.Count);
-        }
+    [Test]
+    public void MergeEmptyChild()
+    {
+        ManagedList parent = new ManagedList();
+        parent.Add("one");
+        parent.Add("two");
+        ManagedList child = new ManagedList();
+        child.MergeEnabled = true;
+        IList mergedList = (IList) child.Merge(parent);
+        Assert.AreEqual(2, mergedList.Count);
+    }
 
-        [Test]
-        public void MergeChildValueOverrideTheParents()
-        {
-            //doesn't make much sense in the context of a list...
-            ManagedList parent = new ManagedList();
-            parent.Add("one");
-            parent.Add("two");
-            ManagedList child = new ManagedList();
-            child.Add("one");
-            child.MergeEnabled = true;
-            IList mergedList = (IList) child.Merge(parent);
-            Assert.AreEqual(3, mergedList.Count);
-        }
+    [Test]
+    public void MergeChildValueOverrideTheParents()
+    {
+        //doesn't make much sense in the context of a list...
+        ManagedList parent = new ManagedList();
+        parent.Add("one");
+        parent.Add("two");
+        ManagedList child = new ManagedList();
+        child.Add("one");
+        child.MergeEnabled = true;
+        IList mergedList = (IList) child.Merge(parent);
+        Assert.AreEqual(3, mergedList.Count);
     }
 }

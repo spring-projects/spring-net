@@ -16,26 +16,25 @@
 
 using Spring.Objects.Support;
 
-namespace Spring.Scheduling.Quartz
+namespace Spring.Scheduling.Quartz;
+
+/// <summary>
+/// Exception that wraps an exception thrown from a target method.
+/// Propagated to the Quartz scheduler from a Job that reflectively invokes
+/// an arbitrary target method.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <seealso cref="MethodInvokingJobDetailFactoryObject" />
+public class JobMethodInvocationFailedException : Exception // TODO, in Java NestedRuntimeException
 {
     /// <summary>
-    /// Exception that wraps an exception thrown from a target method.
-    /// Propagated to the Quartz scheduler from a Job that reflectively invokes
-    /// an arbitrary target method.
+    /// Constructor for JobMethodInvocationFailedException.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <seealso cref="MethodInvokingJobDetailFactoryObject" />
-    public class JobMethodInvocationFailedException : Exception // TODO, in Java NestedRuntimeException
+    /// <param name="methodInvoker">the MethodInvoker used for reflective invocation</param>
+    /// <param name="cause">the root cause (as thrown from the target method)</param>
+    public JobMethodInvocationFailedException(MethodInvoker methodInvoker, Exception cause) :
+        base("Invocation of method '" + methodInvoker.TargetMethod +
+             "' on target class [" + methodInvoker.TargetType + "] failed", cause)
     {
-        /// <summary>
-        /// Constructor for JobMethodInvocationFailedException.
-        /// </summary>
-        /// <param name="methodInvoker">the MethodInvoker used for reflective invocation</param>
-        /// <param name="cause">the root cause (as thrown from the target method)</param>
-        public JobMethodInvocationFailedException(MethodInvoker methodInvoker, Exception cause) :
-            base("Invocation of method '" + methodInvoker.TargetMethod +
-                 "' on target class [" + methodInvoker.TargetType + "] failed", cause)
-        {
-        }
     }
 }

@@ -27,80 +27,79 @@ using Spring.Objects.Factory.Support;
 
 #endregion
 
-namespace Spring.Aop.Framework.AutoProxy.Target
+namespace Spring.Aop.Framework.AutoProxy.Target;
+
+/// <summary>
+/// Summary description for AbstractPrototypeBasedTargetSourceCreator.
+/// </summary>
+public abstract class AbstractPrototypeTargetSourceCreator : ITargetSourceCreator
 {
     /// <summary>
-    /// Summary description for AbstractPrototypeBasedTargetSourceCreator.
+    /// The logger
     /// </summary>
-    public abstract class AbstractPrototypeTargetSourceCreator : ITargetSourceCreator
+    protected readonly ILogger logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+    #region ITargetSourceCreator Members
+
+    /// <summary>
+    /// Create a special TargetSource for the given object, if any.
+    /// </summary>
+    /// <param name="objectType">the type of the object to create a TargetSource for</param>
+    /// <param name="name">the name of the object</param>
+    /// <param name="factory">the containing factory</param>
+    /// <returns>
+    /// a special TargetSource or null if this TargetSourceCreator isn't
+    /// interested in the particular object
+    /// </returns>
+    public ITargetSource GetTargetSource(Type objectType, string name, IObjectFactory factory)
     {
-        /// <summary>
-        /// The logger
-        /// </summary>
-        protected readonly ILogger logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        #region ITargetSourceCreator Members
-
-        /// <summary>
-        /// Create a special TargetSource for the given object, if any.
-        /// </summary>
-        /// <param name="objectType">the type of the object to create a TargetSource for</param>
-        /// <param name="name">the name of the object</param>
-        /// <param name="factory">the containing factory</param>
-        /// <returns>
-        /// a special TargetSource or null if this TargetSourceCreator isn't
-        /// interested in the particular object
-        /// </returns>
-        public ITargetSource GetTargetSource(Type objectType, string name, IObjectFactory factory)
+        AbstractPrototypeTargetSource prototypeTargetSource = CreatePrototypeTargetSource(objectType, name, factory);
+        if (prototypeTargetSource == null)
         {
-            AbstractPrototypeTargetSource prototypeTargetSource = CreatePrototypeTargetSource(objectType, name, factory);
-            if (prototypeTargetSource == null)
+            return null;
+        }
+        else
+        {
+            if (!(factory is IObjectDefinitionRegistry))
             {
+                if (logger.IsEnabled(LogLevel.Warning))
+                    logger.LogWarning("Cannot do autopooling with a IObjectFactory that doesn't implement IObjectDefinitionRegistry");
                 return null;
             }
-            else
-            {
-                if (!(factory is IObjectDefinitionRegistry))
-                {
-                    if (logger.IsEnabled(LogLevel.Warning))
-                        logger.LogWarning("Cannot do autopooling with a IObjectFactory that doesn't implement IObjectDefinitionRegistry");
-                    return null;
-                }
-                IObjectDefinitionRegistry definitionRegistry = (IObjectDefinitionRegistry) factory;
-                RootObjectDefinition definition = (RootObjectDefinition) definitionRegistry.GetObjectDefinition(name);
 
-                if (logger.IsEnabled(LogLevel.Information))
-                    logger.LogInformation("Configuring AbstractPrototypeBasedTargetSource...");
+            IObjectDefinitionRegistry definitionRegistry = (IObjectDefinitionRegistry) factory;
+            RootObjectDefinition definition = (RootObjectDefinition) definitionRegistry.GetObjectDefinition(name);
 
-                // Infinite cycle will result if we don't use a different factory,
-                // because a GetObject() call with this objectName will go through the autoproxy
-                // infrastructure again.
-                // We to override just this object definition, as it may reference other objects
-                // and we're happy to take the parent's definition for those.
-                DefaultListableObjectFactory objectFactory = new DefaultListableObjectFactory(factory);
+            if (logger.IsEnabled(LogLevel.Information))
+                logger.LogInformation("Configuring AbstractPrototypeBasedTargetSource...");
 
-                // Override the prototype object
-                objectFactory.RegisterObjectDefinition(name, definition);
+            // Infinite cycle will result if we don't use a different factory,
+            // because a GetObject() call with this objectName will go through the autoproxy
+            // infrastructure again.
+            // We to override just this object definition, as it may reference other objects
+            // and we're happy to take the parent's definition for those.
+            DefaultListableObjectFactory objectFactory = new DefaultListableObjectFactory(factory);
 
-                // Complete configuring the PrototypeTargetSource
-                prototypeTargetSource.TargetObjectName = name;
-                prototypeTargetSource.ObjectFactory = objectFactory;
+            // Override the prototype object
+            objectFactory.RegisterObjectDefinition(name, definition);
 
-                return prototypeTargetSource;
-            }
+            // Complete configuring the PrototypeTargetSource
+            prototypeTargetSource.TargetObjectName = name;
+            prototypeTargetSource.ObjectFactory = objectFactory;
+
+            return prototypeTargetSource;
         }
-
-        #endregion
-
-        /// <summary>
-        /// Creates the prototype target source.
-        /// </summary>
-        /// <param name="objectType">The type of the object to create a target source for.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="factory">The factory.</param>
-        /// <returns></returns>
-        protected abstract AbstractPrototypeTargetSource CreatePrototypeTargetSource(Type objectType, string name,
-                                                                                     IObjectFactory factory);
-
     }
+
+    #endregion
+
+    /// <summary>
+    /// Creates the prototype target source.
+    /// </summary>
+    /// <param name="objectType">The type of the object to create a target source for.</param>
+    /// <param name="name">The name.</param>
+    /// <param name="factory">The factory.</param>
+    /// <returns></returns>
+    protected abstract AbstractPrototypeTargetSource CreatePrototypeTargetSource(Type objectType, string name,
+        IObjectFactory factory);
 }

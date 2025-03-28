@@ -21,56 +21,54 @@
 #region Imports
 
 using NUnit.Framework;
-
 using Spring.Context;
 using Spring.Context.Support;
 
 #endregion
 
-namespace Spring.Remoting
+namespace Spring.Remoting;
+
+/// <summary>
+/// Unit tests for the CaoFactoryObject class.
+/// </summary>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public class CaoFactoryObjectTests : BaseRemotingTestFixture
 {
-    /// <summary>
-    /// Unit tests for the CaoFactoryObject class.
-    /// </summary>
-    /// <author>Bruno Baia</author>
-    [TestFixture]
-    public class CaoFactoryObjectTests : BaseRemotingTestFixture
+    [Test]
+    public void BailsWhenNotConfigured()
     {
-        [Test]
-        public void BailsWhenNotConfigured()
-        {
-            CaoFactoryObject cfo = new CaoFactoryObject();
-            Assert.Throws<ArgumentException>(() => cfo.AfterPropertiesSet());
-        }
+        CaoFactoryObject cfo = new CaoFactoryObject();
+        Assert.Throws<ArgumentException>(() => cfo.AfterPropertiesSet());
+    }
 
-        [Test]
-        public void GetSimpleObject()
-        {
-            IApplicationContext ctx = new XmlApplicationContext("assembly://Spring.Services.Tests/Spring.Data.Spring.Remoting/cao.xml");
-            ContextRegistry.RegisterContext(ctx);
+    [Test]
+    public void GetSimpleObject()
+    {
+        IApplicationContext ctx = new XmlApplicationContext("assembly://Spring.Services.Tests/Spring.Data.Spring.Remoting/cao.xml");
+        ContextRegistry.RegisterContext(ctx);
 
-            object obj = ctx.GetObject("remoteCaoCounter1");
+        object obj = ctx.GetObject("remoteCaoCounter1");
 
-            Assert.IsNotNull(obj, "Object is null even though a object has been registered.");
-            Assert.IsTrue((obj is ISimpleCounter), "Object should implement 'ISimpleCounter' interface.");
+        Assert.IsNotNull(obj, "Object is null even though a object has been registered.");
+        Assert.IsTrue((obj is ISimpleCounter), "Object should implement 'ISimpleCounter' interface.");
 
-            ISimpleCounter sc = (ISimpleCounter) obj;
-            Assert.AreEqual(7, sc.Counter, "Remote object hasn't been activated by the client.");
-            sc.Count();
-            Assert.AreEqual(8, sc.Counter);
-        }
+        ISimpleCounter sc = (ISimpleCounter) obj;
+        Assert.AreEqual(7, sc.Counter, "Remote object hasn't been activated by the client.");
+        sc.Count();
+        Assert.AreEqual(8, sc.Counter);
+    }
 
-        [Test]
-        public void DisconnectFromClient()
-        {
-            IApplicationContext ctx = new XmlApplicationContext("assembly://Spring.Services.Tests/Spring.Data.Spring.Remoting/cao.xml");
-            ContextRegistry.RegisterContext(ctx);
+    [Test]
+    public void DisconnectFromClient()
+    {
+        IApplicationContext ctx = new XmlApplicationContext("assembly://Spring.Services.Tests/Spring.Data.Spring.Remoting/cao.xml");
+        ContextRegistry.RegisterContext(ctx);
 
-            object obj = ctx.GetObject("remoteCaoCounter1");
-            Assert.IsNotNull(obj, "CAO is null even though a CAO has been registered.");
+        object obj = ctx.GetObject("remoteCaoCounter1");
+        Assert.IsNotNull(obj, "CAO is null even though a CAO has been registered.");
 
-            IDisposable cao = obj as IDisposable;
-            Assert.IsNotNull(cao, "CAO should implement 'IDisposable' interface.");
-        }
+        IDisposable cao = obj as IDisposable;
+        Assert.IsNotNull(cao, "CAO should implement 'IDisposable' interface.");
     }
 }

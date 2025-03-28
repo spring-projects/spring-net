@@ -20,39 +20,38 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed null literal node.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class NullLiteralNode : BaseNode
 {
     /// <summary>
-    /// Represents parsed null literal node.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class NullLiteralNode : BaseNode
+    public NullLiteralNode()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public NullLiteralNode()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected NullLiteralNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected NullLiteralNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Returns a value for the null literal node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            return null;
-        }
+    /// <summary>
+    /// Returns a value for the null literal node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        return null;
     }
 }

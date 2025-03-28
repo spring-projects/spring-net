@@ -16,19 +16,19 @@ limitations under the License.
 -->
 <objects xmlns="http://www.springframework.net">
 
-  <object id="testObject" type="Spring.Objects.TestObject, Spring.Core.Tests">
-    <property name="Name" value="${SomeName}" />
-  </object>
+    <object id="testObject" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="Name" value="${SomeName}" />
+    </object>
 
-  <object name="propertyplaceholder_100"
-          type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
-    <property name="Order" value="100"/>
-    <property name="EnvironmentVariableMode" value="never"/>
-    <property name="IgnoreUnresolvablePlaceholders" value="false"/>
-    <property name="Properties">
-      <name-values>
-        <add key="SomeName" value="wrong_name" />
-      </name-values>
-    </property>
-  </object>
+    <object name="propertyplaceholder_100"
+            type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
+        <property name="Order" value="100" />
+        <property name="EnvironmentVariableMode" value="never" />
+        <property name="IgnoreUnresolvablePlaceholders" value="false" />
+        <property name="Properties">
+            <name-values>
+                <add key="SomeName" value="wrong_name" />
+            </name-values>
+        </property>
+    </object>
 </objects>

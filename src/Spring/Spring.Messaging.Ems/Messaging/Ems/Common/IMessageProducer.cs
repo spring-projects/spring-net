@@ -18,33 +18,32 @@
 
 #endregion
 
-namespace Spring.Messaging.Ems.Common
+namespace Spring.Messaging.Ems.Common;
+
+public interface IMessageProducer
 {
-    public interface IMessageProducer
-    {
-        MessageProducer NativeMessageProducer { get; }
+    MessageProducer NativeMessageProducer { get; }
 
-        void Close();
-        void Send(Message message);
-        void Send(TIBCO.EMS.Destination dest, Message message);
-        void Send(Message message, int deliveryMode, int priority, long timeToLive);
-        void Send(Message message, MessageDeliveryMode deliveryMode, int priority, long timeToLive);
-        void Send(TIBCO.EMS.Destination dest, Message message, int deliveryMode, int priority, long timeToLive);
-        void Send(TIBCO.EMS.Destination dest, Message message, MessageDeliveryMode deliveryMode, int priority, long timeToLive);
-        string ToString();
-        int DeliveryMode { get; set; }
-        TIBCO.EMS.Destination Destination { get; }
-        bool DisableMessageID { get; set; }
-        bool DisableMessageTimestamp { get; set; }
-        MessageDeliveryMode MsgDeliveryMode { get; set; }
-        int Priority { get; set; }
+    void Close();
+    void Send(Message message);
+    void Send(TIBCO.EMS.Destination dest, Message message);
+    void Send(Message message, int deliveryMode, int priority, long timeToLive);
+    void Send(Message message, MessageDeliveryMode deliveryMode, int priority, long timeToLive);
+    void Send(TIBCO.EMS.Destination dest, Message message, int deliveryMode, int priority, long timeToLive);
+    void Send(TIBCO.EMS.Destination dest, Message message, MessageDeliveryMode deliveryMode, int priority, long timeToLive);
+    string ToString();
+    int DeliveryMode { get; set; }
+    TIBCO.EMS.Destination Destination { get; }
+    bool DisableMessageID { get; set; }
+    bool DisableMessageTimestamp { get; set; }
+    MessageDeliveryMode MsgDeliveryMode { get; set; }
+    int Priority { get; set; }
 
-        /// <summary>
-        /// Gets or sets the the default length of time in milliseconds from its dispatch time
-        /// that a produced message should be retained by the message system.
-        /// </summary>
-        /// <remarks>Time to live is set to zero by default.</remarks>
-        /// <value>The message time to live in milliseconds; zero is unlimited</value>
-        long TimeToLive { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the the default length of time in milliseconds from its dispatch time
+    /// that a produced message should be retained by the message system.
+    /// </summary>
+    /// <remarks>Time to live is set to zero by default.</remarks>
+    /// <value>The message time to live in milliseconds; zero is unlimited</value>
+    long TimeToLive { get; set; }
 }

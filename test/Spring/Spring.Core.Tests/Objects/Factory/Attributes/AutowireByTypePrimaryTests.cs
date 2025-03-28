@@ -22,58 +22,57 @@ using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Attributes.ByType;
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+[TestFixture]
+public class AutowireByTypePrimaryTests
 {
-    [TestFixture]
-    public class AutowireByTypePrimaryTests
+    private XmlApplicationContext _applicationContext;
+
+    [SetUp]
+    public void Setup()
     {
-        private XmlApplicationContext _applicationContext;
+        _applicationContext = new XmlApplicationContext(false,
+            "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByTypePrimaryObjects.xml");
+    }
 
-        [SetUp]
-        public void Setup()
-        {
-            _applicationContext = new XmlApplicationContext(false,
-                                                            "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByTypePrimaryObjects.xml");
-        }
+    [Test]
+    public void InjectOnField()
+    {
+        var testObj = (AutowireTestFieldNormal) _applicationContext.GetObject("AutowireTestFieldNormal");
+        var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestFieldNormal");
 
-        [Test]
-        public void InjectOnField()
-        {
-            var testObj = (AutowireTestFieldNormal) _applicationContext.GetObject("AutowireTestFieldNormal");
-            var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestFieldNormal");
+        Assert.That(testObj.hello, Is.Not.Null);
+        Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(1));
+    }
 
-            Assert.That(testObj.hello, Is.Not.Null);
-            Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(1));
-        }
+    [Test]
+    public void InjectOnProperty()
+    {
+        var testObj = (AutowireTestPropertyNormal) _applicationContext.GetObject("AutowireTestPropertyNormal");
+        var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestPropertyNormal");
 
-        [Test]
-        public void InjectOnProperty()
-        {
-            var testObj = (AutowireTestPropertyNormal) _applicationContext.GetObject("AutowireTestPropertyNormal");
-            var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestPropertyNormal");
+        Assert.That(testObj.Hello, Is.Not.Null);
+        Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(1));
+    }
 
-            Assert.That(testObj.Hello, Is.Not.Null);
-            Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(1));
-        }
+    [Test]
+    public void InjectOnMethod()
+    {
+        var testObj = (AutowireTestMethodNormal) _applicationContext.GetObject("AutowireTestMethodNormal");
+        var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestMethodNormal");
 
-        [Test]
-        public void InjectOnMethod()
-        {
-            var testObj = (AutowireTestMethodNormal) _applicationContext.GetObject("AutowireTestMethodNormal");
-            var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestMethodNormal");
+        Assert.That(testObj.hello, Is.Not.Null);
+        Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(1));
+    }
 
-            Assert.That(testObj.hello, Is.Not.Null);
-            Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(1));
-        }
+    [Test]
+    public void InjectOnConstructor()
+    {
+        var testObj = (AutowireTestConstructorNormal) _applicationContext.GetObject("AutowireTestConstructorNormal");
+        var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestConstructorNormal");
 
-        [Test]
-        public void InjectOnConstructor()
-        {
-            var testObj = (AutowireTestConstructorNormal)_applicationContext.GetObject("AutowireTestConstructorNormal");
-            var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestConstructorNormal");
-
-            Assert.That(testObj.hello, Is.Not.Null);
-            Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(0));
-        }
+        Assert.That(testObj.hello, Is.Not.Null);
+        Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(0));
     }
 }

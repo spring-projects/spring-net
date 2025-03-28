@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,40 +25,41 @@ using System.Xml;
 
 #endregion
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <summary>
+/// Default section handler that can handle any configuration section.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Simply returns the configuration section as an <see cref="System.Xml.XmlElement"/>.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public class DefaultSectionHandler : IConfigurationSectionHandler
 {
+    #region Methods
+
     /// <summary>
-    /// Default section handler that can handle any configuration section.
+    /// Returns the configuration section as an <see cref="System.Xml.XmlElement"/>
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// Simply returns the configuration section as an <see cref="System.Xml.XmlElement"/>.
-    /// </p>
-    /// </remarks>
-	/// <author>Aleksandar Seovic</author>
-    public class DefaultSectionHandler : IConfigurationSectionHandler
+    /// <param name="parent">
+    /// The configuration settings in a corresponding parent
+    /// configuration section.
+    /// </param>
+    /// <param name="configContext">
+    /// The configuration context when called from the ASP.NET
+    /// configuration system. Otherwise, this parameter is reserved and
+    /// is a null reference.
+    /// </param>
+    /// <param name="section">
+    /// The <see cref="System.Xml.XmlNode"/> for the section.
+    /// </param>
+    /// <returns>Config section as XmlElement.</returns>
+    public object Create(object parent, object configContext, XmlNode section)
     {
-        #region Methods
-        /// <summary>
-        /// Returns the configuration section as an <see cref="System.Xml.XmlElement"/>
-        /// </summary>
-        /// <param name="parent">
-        /// The configuration settings in a corresponding parent
-        /// configuration section.
-        /// </param>
-        /// <param name="configContext">
-        /// The configuration context when called from the ASP.NET
-        /// configuration system. Otherwise, this parameter is reserved and
-        /// is a null reference.
-        /// </param>
-        /// <param name="section">
-        /// The <see cref="System.Xml.XmlNode"/> for the section.
-        /// </param>
-        /// <returns>Config section as XmlElement.</returns>
-        public object Create(object parent, object configContext, XmlNode section)
-        {
-            return section as XmlElement;
-        }
-        #endregion
+        return section as XmlElement;
     }
+
+    #endregion
 }

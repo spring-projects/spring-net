@@ -1,4 +1,5 @@
 ﻿#region License
+
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -14,112 +15,112 @@
 //  * See the License for the specific language governing permissions and
 //  * limitations under the License.
 //  */
+
 #endregion
 
 using Apache.NMS;
 using Spring.Messaging.Nms.Support;
 
-namespace Spring.Messaging.Nms.Connections
+namespace Spring.Messaging.Nms.Connections;
+
+public class NmsConsumer : INMSConsumer
 {
-    public class NmsConsumer : INMSConsumer
+    private readonly IMessageConsumer consumer;
+
+    public NmsConsumer(IMessageConsumer consumer)
     {
-        private readonly IMessageConsumer consumer;
+        this.consumer = consumer;
+    }
 
-        public NmsConsumer(IMessageConsumer consumer)
-        {
-            this.consumer = consumer;
-        }
-        
-       public void Dispose()
-        {
-            consumer.Dispose();
-        }
+    public void Dispose()
+    {
+        consumer.Dispose();
+    }
 
-        public IMessage Receive()
-        {
-            return consumer.Receive();
-        }
+    public IMessage Receive()
+    {
+        return consumer.Receive();
+    }
 
-        public Task<IMessage> ReceiveAsync()
-        {
-            return consumer.ReceiveAsync();
-        }
+    public Task<IMessage> ReceiveAsync()
+    {
+        return consumer.ReceiveAsync();
+    }
 
-        public IMessage Receive(TimeSpan timeout)
-        {
-            return consumer.Receive(timeout);
-        }
+    public IMessage Receive(TimeSpan timeout)
+    {
+        return consumer.Receive(timeout);
+    }
 
-        public Task<IMessage> ReceiveAsync(TimeSpan timeout)
-        {
-            return consumer.ReceiveAsync(timeout);
-        }
+    public Task<IMessage> ReceiveAsync(TimeSpan timeout)
+    {
+        return consumer.ReceiveAsync(timeout);
+    }
 
-        public IMessage ReceiveNoWait()
-        {
-            return consumer.ReceiveNoWait();
-        }
+    public IMessage ReceiveNoWait()
+    {
+        return consumer.ReceiveNoWait();
+    }
 
-        public T ReceiveBody<T>()
-        {
-            return ReceiveBodyInternal<T>(() => Task.FromResult(consumer.Receive())).GetAsyncResult();
-        }
+    public T ReceiveBody<T>()
+    {
+        return ReceiveBodyInternal<T>(() => Task.FromResult(consumer.Receive())).GetAsyncResult();
+    }
 
-        public Task<T> ReceiveBodyAsync<T>()
-        {
-            return ReceiveBodyInternal<T>(() => consumer.ReceiveAsync());
-        }
+    public Task<T> ReceiveBodyAsync<T>()
+    {
+        return ReceiveBodyInternal<T>(() => consumer.ReceiveAsync());
+    }
 
-        public T ReceiveBody<T>(TimeSpan timeout)
-        {
-            return ReceiveBodyInternal<T>(() => Task.FromResult(consumer.Receive(timeout))).GetAsyncResult();
-        }
+    public T ReceiveBody<T>(TimeSpan timeout)
+    {
+        return ReceiveBodyInternal<T>(() => Task.FromResult(consumer.Receive(timeout))).GetAsyncResult();
+    }
 
-        public Task<T> ReceiveBodyAsync<T>(TimeSpan timeout)
-        {
-            return ReceiveBodyInternal<T>(() => consumer.ReceiveAsync(timeout));
-        }
+    public Task<T> ReceiveBodyAsync<T>(TimeSpan timeout)
+    {
+        return ReceiveBodyInternal<T>(() => consumer.ReceiveAsync(timeout));
+    }
 
-        public T ReceiveBodyNoWait<T>()
-        {
-            return ReceiveBodyInternal<T>( () => Task.FromResult( consumer.ReceiveNoWait())).GetAsyncResult();
-        }
+    public T ReceiveBodyNoWait<T>()
+    {
+        return ReceiveBodyInternal<T>(() => Task.FromResult(consumer.ReceiveNoWait())).GetAsyncResult();
+    }
 
-        private async Task<T> ReceiveBodyInternal<T>(Func<Task<IMessage>> receiveMessageFunc)
+    private async Task<T> ReceiveBodyInternal<T>(Func<Task<IMessage>> receiveMessageFunc)
+    {
+        var message = await receiveMessageFunc().Awaiter();
+        if (message != null)
         {
-            var message = await receiveMessageFunc().Awaiter();
-            if (message != null)
-            {
-                return message.Body<T>();
-            }
-            else
-            {
-                return default(T);
-            }
+            return message.Body<T>();
         }
-        
-        public void Close()
+        else
         {
-            consumer.Close();
+            return default(T);
         }
+    }
 
-        public Task CloseAsync()
-        {
-            return consumer.CloseAsync();
-        }
+    public void Close()
+    {
+        consumer.Close();
+    }
 
-        public string MessageSelector => consumer.MessageSelector;
+    public Task CloseAsync()
+    {
+        return consumer.CloseAsync();
+    }
 
-        public ConsumerTransformerDelegate ConsumerTransformer
-        {
-            get => consumer.ConsumerTransformer; 
-            set => consumer.ConsumerTransformer = value; 
-        }
+    public string MessageSelector => consumer.MessageSelector;
 
-        public event MessageListener Listener
-        {
-            add => consumer.Listener += value;
-            remove => consumer.Listener -= value;
-        }
+    public ConsumerTransformerDelegate ConsumerTransformer
+    {
+        get => consumer.ConsumerTransformer;
+        set => consumer.ConsumerTransformer = value;
+    }
+
+    public event MessageListener Listener
+    {
+        add => consumer.Listener += value;
+        remove => consumer.Listener -= value;
     }
 }

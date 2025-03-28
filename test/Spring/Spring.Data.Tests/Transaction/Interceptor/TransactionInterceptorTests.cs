@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,28 +25,25 @@ using Spring.Aop.Framework;
 
 #endregion
 
-namespace Spring.Transaction.Interceptor
-{
-    /// <summary>
-    /// This class contains mock objects tests the TransactionInterceptor 
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class TransactionInterceptorTests : AbstractTransactionAspectTests
-    {
-       
+namespace Spring.Transaction.Interceptor;
 
-        protected override object Advised(object target, IPlatformTransactionManager ptm,
-                                          ITransactionAttributeSource tas)
-        {
-            TransactionInterceptor ti = new TransactionInterceptor();
-            ti.TransactionManager = ptm;
-            Assert.AreEqual(ptm, ti.TransactionManager);
-            ti.TransactionAttributeSource = tas;
-            Assert.AreEqual(tas, ti.TransactionAttributeSource);
-            ProxyFactory pf = new ProxyFactory(target);
-            pf.AddAdvice(0, ti);
-            return pf.GetProxy();
-        }
+/// <summary>
+/// This class contains mock objects tests the TransactionInterceptor
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class TransactionInterceptorTests : AbstractTransactionAspectTests
+{
+    protected override object Advised(object target, IPlatformTransactionManager ptm,
+        ITransactionAttributeSource tas)
+    {
+        TransactionInterceptor ti = new TransactionInterceptor();
+        ti.TransactionManager = ptm;
+        Assert.AreEqual(ptm, ti.TransactionManager);
+        ti.TransactionAttributeSource = tas;
+        Assert.AreEqual(tas, ti.TransactionAttributeSource);
+        ProxyFactory pf = new ProxyFactory(target);
+        pf.AddAdvice(0, ti);
+        return pf.GetProxy();
     }
 }

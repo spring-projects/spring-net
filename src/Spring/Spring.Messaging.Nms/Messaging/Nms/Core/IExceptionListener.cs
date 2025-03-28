@@ -18,18 +18,17 @@
 
 #endregion
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Nms.Core;
+
+/// <summary>
+/// Exception handler for exceptions from the messaging infrastrcture.
+/// </summary>
+/// <author>Mark Pollack</author>
+public interface IExceptionListener
 {
     /// <summary>
-    /// Exception handler for exceptions from the messaging infrastrcture.
+    /// Called when there is an exception in message processing.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public interface IExceptionListener
-    {
-        /// <summary>
-        /// Called when there is an exception in message processing.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        void OnException(Exception exception);
-    }
+    /// <param name="exception">The exception.</param>
+    void OnException(Exception exception);
 }

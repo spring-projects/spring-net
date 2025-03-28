@@ -26,70 +26,68 @@ using Spring.Objects.Factory.Config;
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Unit tests for the XmlParserResolver class.
+/// </summary>
+/// <author>Rick Evans</author>
+/// <author>Aleksandar Seovic  2006.11.21</author>
+[TestFixture]
+public sealed class XmlParserResolverTests
 {
-	/// <summary>
-	/// Unit tests for the XmlParserResolver class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	/// <author>Aleksandar Seovic  2006.11.21</author>
-	[TestFixture]
-	public sealed class XmlParserResolverTests
-	{
-		[Test]
-		public void RegisterParserWithNullType()
-		{
-            Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser((Type) null));
-		}
+    [Test]
+    public void RegisterParserWithNullType()
+    {
+        Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser((Type) null));
+    }
 
-		[Test]
-		public void RegisterParserWithBadParserType()
-		{
-            Assert.Throws<ArgumentException>(() => NamespaceParserRegistry.RegisterParser(GetType()));
-		}
+    [Test]
+    public void RegisterParserWithBadParserType()
+    {
+        Assert.Throws<ArgumentException>(() => NamespaceParserRegistry.RegisterParser(GetType()));
+    }
 
-		[Test]
-		public void RegisterParserWithNullNamespaceWithoutDefaultValues()
-		{
-            Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser(typeof(NotImplementedXmlObjectDefinitionParser), null, null));
-		}
+    [Test]
+    public void RegisterParserWithNullNamespaceWithoutDefaultValues()
+    {
+        Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser(typeof(NotImplementedXmlObjectDefinitionParser), null, null));
+    }
 
-		[Test]
-        public void RegisterParserWithEmptyNamespaceWithoutDefaultValues()
-		{
-            Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser(typeof(NotImplementedXmlObjectDefinitionParser), string.Empty, null));
-		}
+    [Test]
+    public void RegisterParserWithEmptyNamespaceWithoutDefaultValues()
+    {
+        Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser(typeof(NotImplementedXmlObjectDefinitionParser), string.Empty, null));
+    }
 
-		#region Inner Class : NotImplementedXmlObjectDefinitionParser
+    #region Inner Class : NotImplementedXmlObjectDefinitionParser
 
-		private sealed class NotImplementedXmlObjectDefinitionParser : INamespaceParser
-		{
-		    #region IXmlObjectDefinitionParser Members
+    private sealed class NotImplementedXmlObjectDefinitionParser : INamespaceParser
+    {
+        #region IXmlObjectDefinitionParser Members
 
-		    /// <summary>
-		    /// Invoked by <see cref="NamespaceParserRegistry"/> after construction but before any
-		    /// elements have been parsed.
-		    /// </summary>
-		    public void Init()
-		    {
-		        throw new NotImplementedException();
-		    }
+        /// <summary>
+        /// Invoked by <see cref="NamespaceParserRegistry"/> after construction but before any
+        /// elements have been parsed.
+        /// </summary>
+        public void Init()
+        {
+            throw new NotImplementedException();
+        }
 
-		    #endregion
+        #endregion
 
-		    public IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
-			{
-				throw new NotImplementedException();
-			}
+        public IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
+        {
+            throw new NotImplementedException();
+        }
 
-		    public ObjectDefinitionHolder Decorate(XmlNode node, ObjectDefinitionHolder definition,
-		                                           ParserContext parserContext)
-		    {
-		        throw new NotImplementedException();
-		    }
-		    
-		}
+        public ObjectDefinitionHolder Decorate(XmlNode node, ObjectDefinitionHolder definition,
+            ParserContext parserContext)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
-		#endregion
-	}
+    #endregion
 }

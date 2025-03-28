@@ -24,52 +24,48 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// This class contains tests for SystemUtils
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class SystemUtilsTests
 {
-    /// <summary>
-    /// This class contains tests for SystemUtils
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class SystemUtilsTests
+    private static string threadName = "TestingThread";
+
+    [Test]
+    public void ThreadIdIsName()
     {
-        private static string threadName = "TestingThread";
+        Thread t = new Thread(new ThreadStart(AssertThreadName));
+        t.Name = threadName;
+        t.Start();
+        t.Join();
+    }
 
+    public void AssertThreadName()
+    {
+        Assert.AreEqual(threadName, SystemUtils.ThreadId);
+    }
 
-        [Test]
-        public void ThreadIdIsName()
+    [Test]
+    public void ThreadIdIsInt()
+    {
+        Thread t = new Thread(new ThreadStart(AssertThreadIsInt));
+        t.Start();
+        t.Join();
+    }
+
+    public void AssertThreadIsInt()
+    {
+        try
         {
-            Thread t = new Thread(new ThreadStart(AssertThreadName));
-            t.Name = threadName;
-            t.Start();
-            t.Join();
+            int.Parse(SystemUtils.ThreadId);
         }
-
-
-        public void AssertThreadName()
+        catch (Exception)
         {
-            Assert.AreEqual(threadName, SystemUtils.ThreadId);               
-        }
-
-        [Test]
-        public void ThreadIdIsInt()
-        {
-            Thread t = new Thread(new ThreadStart(AssertThreadIsInt));
-            t.Start();
-            t.Join();
-            
-        }
-
-        public void AssertThreadIsInt()
-        {
-            try
-            {
-                int.Parse(SystemUtils.ThreadId);
-            }
-            catch (Exception)
-            {
-                Assert.Fail("ThreadId should be an integer");
-            }
+            Assert.Fail("ThreadId should be an integer");
         }
     }
 }

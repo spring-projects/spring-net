@@ -20,72 +20,71 @@
 
 using System.Collections;
 
-namespace Spring.Data.Common
+namespace Spring.Data.Common;
+
+/// <summary>
+/// Assists in creating a collection of parameters by keeping track of all
+/// IDbParameters its creates.  After creating a number of parameters ask for the collection
+/// with the GetParameters methods.
+/// </summary>
+/// <remarks>This builder is stateful, you must create a new one for each collection
+/// of parameters you would like to create.</remarks>
+/// <author>Mark Pollack (.NET)</author>
+public class DbParametersBuilder : IDbParametersBuilder
 {
+    #region Fields
+
+    private IDbProvider dbProvider;
+    private IList parameterList;
+
+    #endregion
+
+    #region Constructor (s)
+
     /// <summary>
-    /// Assists in creating a collection of parameters by keeping track of all
-    /// IDbParameters its creates.  After creating a number of parameters ask for the collection
-    /// with the GetParameters methods.
+    /// Initializes a new instance of the <see cref="DbParametersBuilder"/> class.
     /// </summary>
-    /// <remarks>This builder is stateful, you must create a new one for each collection
-    /// of parameters you would like to create.</remarks>
-    /// <author>Mark Pollack (.NET)</author>
-    public class DbParametersBuilder : IDbParametersBuilder
+    public DbParametersBuilder(IDbProvider dbProvider)
     {
-        #region Fields
-
-        private IDbProvider dbProvider;
-        private IList parameterList;
-
-        #endregion
-
-        #region Constructor (s)
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DbParametersBuilder"/> class.
-        /// </summary>
-        public DbParametersBuilder(IDbProvider dbProvider)
-        {
-            this.dbProvider = dbProvider;
-            parameterList = new ArrayList();
-        }
-
-        #endregion
-
-        #region Methods
-
-        public IDbParameter Create()
-        {
-            IDbParameter p = new DbParameter();
-            parameterList.Add(p);
-            return p;
-        }
-
-        public IDbParameters GetParameters()
-        {
-            IDbParameters dbParameters = CreateDbParameters();
-            foreach (IDbParameter parameter in parameterList)
-            {
-                dbParameters.AddParameter(parameter.GetName(),
-                                          parameter.GetDbType(),
-                                          parameter.GetSize(),
-                                          parameter.GetDirection(),
-                                          parameter.GetIsNullable(),
-                                          parameter.GetPrecision(),
-                                          parameter.GetScale(),
-                                          parameter.GetSourceColumn(),
-                                          parameter.GetSourceVersion(),
-                                          parameter.GetValue());
-            }
-            return dbParameters;
-        }
-
-
-        protected IDbParameters CreateDbParameters()
-        {
-            return new DbParameters(dbProvider);
-        }
-
-        #endregion
+        this.dbProvider = dbProvider;
+        parameterList = new ArrayList();
     }
+
+    #endregion
+
+    #region Methods
+
+    public IDbParameter Create()
+    {
+        IDbParameter p = new DbParameter();
+        parameterList.Add(p);
+        return p;
+    }
+
+    public IDbParameters GetParameters()
+    {
+        IDbParameters dbParameters = CreateDbParameters();
+        foreach (IDbParameter parameter in parameterList)
+        {
+            dbParameters.AddParameter(parameter.GetName(),
+                parameter.GetDbType(),
+                parameter.GetSize(),
+                parameter.GetDirection(),
+                parameter.GetIsNullable(),
+                parameter.GetPrecision(),
+                parameter.GetScale(),
+                parameter.GetSourceColumn(),
+                parameter.GetSourceVersion(),
+                parameter.GetValue());
+        }
+
+        return dbParameters;
+    }
+
+    protected IDbParameters CreateDbParameters()
+    {
+        return new DbParameters(dbProvider);
+    }
+
+    #endregion
 }

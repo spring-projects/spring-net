@@ -22,69 +22,68 @@
 
 #endregion
 
-namespace Spring.Aop
+namespace Spring.Aop;
+
+/// <summary>
+/// Superinterface for advisors that perform one or more AOP
+/// <b>introductions</b>.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This interface cannot be implemented directly; subinterfaces must
+/// provide the advice type implementing the introduction.
+/// </p>
+/// <p>
+/// Introduction is the implementation of additional interfaces (not
+/// implemented by a target) via AOP advice.
+/// </p>
+/// </remarks>
+/// <seealso cref="Spring.Aop.IIntroductionInterceptor"/>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+public interface IIntroductionAdvisor : IAdvisor
 {
-	/// <summary>
-	/// Superinterface for advisors that perform one or more AOP
-	/// <b>introductions</b>.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This interface cannot be implemented directly; subinterfaces must
-	/// provide the advice type implementing the introduction.
-	/// </p>
-	/// <p>
-	/// Introduction is the implementation of additional interfaces (not
-	/// implemented by a target) via AOP advice.
-	/// </p>
-	/// </remarks>
-	/// <seealso cref="Spring.Aop.IIntroductionInterceptor"/>
-	/// <author>Rod Johnson</author>
-	/// <author>Aleksandar Seovic (.NET)</author>
-	public interface IIntroductionAdvisor : IAdvisor
-	{
-		/// <summary>
-		/// Returns the filter determining which target classes this
-		/// introduction should apply to.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// This is the <see cref="System.Type"/> part of a pointcut.
-		/// Be advised that method matching doesn't make sense in the context
-		/// of introductions.
-		/// </p>
-		/// </remarks>
-		/// <value>
-		/// The filter determining which target classes this introduction
-		/// should apply to.
-		/// </value>
-		ITypeFilter TypeFilter { get; }
+    /// <summary>
+    /// Returns the filter determining which target classes this
+    /// introduction should apply to.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// This is the <see cref="System.Type"/> part of a pointcut.
+    /// Be advised that method matching doesn't make sense in the context
+    /// of introductions.
+    /// </p>
+    /// </remarks>
+    /// <value>
+    /// The filter determining which target classes this introduction
+    /// should apply to.
+    /// </value>
+    ITypeFilter TypeFilter { get; }
 
-		/// <summary>
-		/// Gets the interfaces introduced by this
-		/// <see cref="Spring.Aop.IAdvisor"/>.
-		/// </summary>
-		/// <value>
-		/// The interfaces introduced by this
-		/// <see cref="Spring.Aop.IAdvisor"/>.
-		/// </value>
-		Type[] Interfaces { get; }
+    /// <summary>
+    /// Gets the interfaces introduced by this
+    /// <see cref="Spring.Aop.IAdvisor"/>.
+    /// </summary>
+    /// <value>
+    /// The interfaces introduced by this
+    /// <see cref="Spring.Aop.IAdvisor"/>.
+    /// </value>
+    Type[] Interfaces { get; }
 
-		/// <summary>
-		/// Can the advised interfaces be implemented by the introduction
-		/// advice?
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// Invoked <b>before</b> adding an
-		/// <seealso cref="Spring.Aop.IIntroductionAdvisor"/>.
-		/// </p>
-		/// </remarks>
-		/// <exception cref="System.ArgumentException">
-		/// If the advised interfaces cannot be implemented by the introduction
-		/// advice.
-		/// </exception>
-		/// <seealso cref="Spring.Aop.IIntroductionAdvisor.Interfaces"/>
-		void ValidateInterfaces();
-	}
+    /// <summary>
+    /// Can the advised interfaces be implemented by the introduction
+    /// advice?
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Invoked <b>before</b> adding an
+    /// <seealso cref="Spring.Aop.IIntroductionAdvisor"/>.
+    /// </p>
+    /// </remarks>
+    /// <exception cref="System.ArgumentException">
+    /// If the advised interfaces cannot be implemented by the introduction
+    /// advice.
+    /// </exception>
+    /// <seealso cref="Spring.Aop.IIntroductionAdvisor.Interfaces"/>
+    void ValidateInterfaces();
 }

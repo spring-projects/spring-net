@@ -21,42 +21,41 @@
 using System.Runtime.Serialization;
 using Spring.Util;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents logical "less than" operator.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class OpLess : BinaryOperator
 {
     /// <summary>
-    /// Represents logical "less than" operator.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class OpLess : BinaryOperator
+    public OpLess() : base()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpLess():base()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpLess(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpLess(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Returns a value for the logical "less than" operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            object left = GetLeftValue( context, evalContext );
-            object right = GetRightValue( context, evalContext );
+    /// <summary>
+    /// Returns a value for the logical "less than" operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object left = GetLeftValue(context, evalContext);
+        object right = GetRightValue(context, evalContext);
 
-            return CompareUtils.Compare(left, right) < 0;
-        }
+        return CompareUtils.Compare(left, right) < 0;
     }
 }

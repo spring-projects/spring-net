@@ -1,4 +1,5 @@
 #region License
+
 // /*
 //  * Copyright 2018 the original author or authors.
 //  *
@@ -14,22 +15,21 @@
 //  * See the License for the specific language governing permissions and
 //  * limitations under the License.
 //  */
+
 #endregion
 
 using NUnitAspEx;
 using NUnitAspEx.Client;
 
-namespace Spring.Web.Conversation
+namespace Spring.Web.Conversation;
+
+public static class HttpWebclientExtensions
 {
-    public static class HttpWebclientExtensions
+    public static HttpWebClient CreateClientWithDefaultPort(this IAspFixtureHost host)
     {
-        
-        public static HttpWebClient CreateClientWithDefaultPort(this IAspFixtureHost host)
-        {
-            HttpWebClient clnt = host.CreateWebClient();
-            // fix port which otherwise defaults to -1 breaking everything
-            clnt.BaseAddress = clnt.BaseAddress.Replace("aspfixturehost/", "aspfixturehost:80/");
-            return clnt;
-        }
+        HttpWebClient clnt = host.CreateWebClient();
+        // fix port which otherwise defaults to -1 breaking everything
+        clnt.BaseAddress = clnt.BaseAddress.Replace("aspfixturehost/", "aspfixturehost:80/");
+        return clnt;
     }
 }

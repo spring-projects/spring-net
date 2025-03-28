@@ -18,57 +18,56 @@
 
 #endregion
 
-namespace Spring.Objects.Events
+namespace Spring.Objects.Events;
+
+/// <summary>
+/// A registry that manages subscriptions to and the
+/// publishing of events.
+/// </summary>
+/// <author>Griffin Caprio</author>
+public interface IEventRegistry
 {
-	/// <summary>
-	/// A registry that manages subscriptions to and the
-	/// publishing of events.
-	/// </summary>
-	/// <author>Griffin Caprio</author>
-	public interface IEventRegistry
-	{
-		/// <summary>
-		/// Publishes <b>all</b> events of the source object.
-		/// </summary>
-		/// <param name="sourceObject">
-		/// The source object containing events to publish.
-		/// </param>
-		void PublishEvents(object sourceObject);
+    /// <summary>
+    /// Publishes <b>all</b> events of the source object.
+    /// </summary>
+    /// <param name="sourceObject">
+    /// The source object containing events to publish.
+    /// </param>
+    void PublishEvents(object sourceObject);
 
-		/// <summary>
-		/// Subscribes to <b>all</b> events published, if the subscriber
-		/// implements compatible handler methods.
-		/// </summary>
-		/// <param name="subscriber">The subscriber to use.</param>
-		void Subscribe(object subscriber);
+    /// <summary>
+    /// Subscribes to <b>all</b> events published, if the subscriber
+    /// implements compatible handler methods.
+    /// </summary>
+    /// <param name="subscriber">The subscriber to use.</param>
+    void Subscribe(object subscriber);
 
-		/// <summary>
-		/// Subscribes to the published events of all objects of a given
-		/// <see cref="System.Type"/>, if the subscriber implements
-		/// compatible handler methods.
-		/// </summary>
-		/// <param name="subscriber">The subscriber to use.</param>
-		/// <param name="targetSourceType">
-		/// The target <see cref="System.Type"/> to subscribe to.
-		/// </param>
-		void Subscribe(object subscriber, Type targetSourceType);
+    /// <summary>
+    /// Subscribes to the published events of all objects of a given
+    /// <see cref="System.Type"/>, if the subscriber implements
+    /// compatible handler methods.
+    /// </summary>
+    /// <param name="subscriber">The subscriber to use.</param>
+    /// <param name="targetSourceType">
+    /// The target <see cref="System.Type"/> to subscribe to.
+    /// </param>
+    void Subscribe(object subscriber, Type targetSourceType);
 
-        /// <summary>
-        /// Unsubscribes to <b>all</b> events published, if the subscriber
-        /// implmenets compatible handler methods.
-        /// </summary>
-        /// <param name="subscriber">The subscriber to use</param>
-	    void Unsubscribe(object subscriber);
+    /// <summary>
+    /// Unsubscribes to <b>all</b> events published, if the subscriber
+    /// implmenets compatible handler methods.
+    /// </summary>
+    /// <param name="subscriber">The subscriber to use</param>
+    void Unsubscribe(object subscriber);
 
-        /// <summary>
-        /// Unsubscribes to the published events of all objects of a given
-        /// <see cref="System.Type"/>, if the subscriber implements
-        /// compatible handler methods.
-        /// </summary>
-        /// <param name="subscriber">The subscriber to use.</param>
-        /// <param name="targetSourceType">
-        /// The target <see cref="System.Type"/> to unsubscribe from
-        /// </param>
-        void Unsubscribe(object subscriber, Type targetSourceType);
-	}
+    /// <summary>
+    /// Unsubscribes to the published events of all objects of a given
+    /// <see cref="System.Type"/>, if the subscriber implements
+    /// compatible handler methods.
+    /// </summary>
+    /// <param name="subscriber">The subscriber to use.</param>
+    /// <param name="targetSourceType">
+    /// The target <see cref="System.Type"/> to unsubscribe from
+    /// </param>
+    void Unsubscribe(object subscriber, Type targetSourceType);
 }

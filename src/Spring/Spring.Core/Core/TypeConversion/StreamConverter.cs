@@ -22,104 +22,109 @@
 
 using System.ComponentModel;
 using System.Globalization;
-
 using Spring.Core.IO;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// Converter for <see cref="System.IO.Stream"/> to directly set a
+/// <see cref="System.IO.Stream"/> property.
+/// </summary>
+/// <author>Jurgen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+public class StreamConverter : TypeConverter
 {
-	/// <summary>
-	/// Converter for <see cref="System.IO.Stream"/> to directly set a
-	/// <see cref="System.IO.Stream"/> property.
-	/// </summary>
-	/// <author>Jurgen Hoeller</author>
-	/// <author>Mark Pollack (.NET)</author>
-	public class StreamConverter : TypeConverter
-	{
-        private ResourceConverter resourceConverter;
+    private ResourceConverter resourceConverter;
 
-        #region Constructors
-        /// <summary>
-        /// Create a new StreamConverter using the default
-        /// <see cref="Spring.Core.IO.ResourceConverter"/>.
-        /// </summary>
-		public StreamConverter() : this (new ResourceConverter())
-		{
-		}
+    #region Constructors
 
-        /// <summary>
-        /// Create a new StreamConverter using the given
-        /// <see cref="Spring.Core.IO.ResourceConverter"/>.
-        /// </summary>
-        /// <param name="resourceConverter">
-        /// The <see cref="Spring.Core.IO.ResourceConverter"/> to use.</param>
-        public StreamConverter(ResourceConverter resourceConverter)
+    /// <summary>
+    /// Create a new StreamConverter using the default
+    /// <see cref="Spring.Core.IO.ResourceConverter"/>.
+    /// </summary>
+    public StreamConverter() : this(new ResourceConverter())
+    {
+    }
+
+    /// <summary>
+    /// Create a new StreamConverter using the given
+    /// <see cref="Spring.Core.IO.ResourceConverter"/>.
+    /// </summary>
+    /// <param name="resourceConverter">
+    /// The <see cref="Spring.Core.IO.ResourceConverter"/> to use.</param>
+    public StreamConverter(ResourceConverter resourceConverter)
+    {
+        this.resourceConverter = resourceConverter == null
+            ? new ResourceConverter()
+            : resourceConverter;
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Returns whether this converter can convert an object of one
+    /// <see cref="System.Type"/> to a <see cref="System.IO.Stream"/>
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Currently only supports conversion from a
+    /// <see cref="System.String"/> instance.
+    /// </p>
+    /// </remarks>
+    /// <param name="context">
+    /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
+    /// that provides a format context.
+    /// </param>
+    /// <param name="sourceType">
+    /// A <see cref="System.Type"/> that represents the
+    /// <see cref="System.Type"/> you want to convert from.
+    /// </param>
+    /// <returns>True if the conversion is possible.</returns>
+    public override bool CanConvertFrom(
+        ITypeDescriptorContext context,
+        Type sourceType)
+    {
+        if (sourceType == typeof(string))
         {
-            this.resourceConverter = resourceConverter == null
-                ? new ResourceConverter() : resourceConverter;
-        }
-        #endregion
-
-        #region Methods
-        /// <summary>
-        /// Returns whether this converter can convert an object of one
-        /// <see cref="System.Type"/> to a <see cref="System.IO.Stream"/>
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Currently only supports conversion from a
-        /// <see cref="System.String"/> instance.
-        /// </p>
-        /// </remarks>
-        /// <param name="context">
-        /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
-        /// that provides a format context.
-        /// </param>
-        /// <param name="sourceType">
-        /// A <see cref="System.Type"/> that represents the
-        /// <see cref="System.Type"/> you want to convert from.
-        /// </param>
-        /// <returns>True if the conversion is possible.</returns>
-        public override bool CanConvertFrom (
-            ITypeDescriptorContext context,
-            Type sourceType)
-        {
-            if (sourceType == typeof (string))
-            {
-                return true;
-            }
-            return base.CanConvertFrom (context, sourceType);
+            return true;
         }
 
-        /// <summary>
-        /// Convert from a string value to a <see cref="System.IO.Stream"/> instance.
-        /// </summary>
-        /// <param name="context">
-        /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
-        /// that provides a format context.
-        /// </param>
-        /// <param name="culture">
-        /// The <see cref="System.Globalization.CultureInfo"/> to use
-        /// as the current culture.
-        /// </param>
-        /// <param name="val">
-        /// The value that is to be converted.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.IO.Stream"/> if successful.
-        /// </returns>
-        public override object ConvertFrom (
-            ITypeDescriptorContext context,
-            CultureInfo culture, object val)
+        return base.CanConvertFrom(context, sourceType);
+    }
+
+    /// <summary>
+    /// Convert from a string value to a <see cref="System.IO.Stream"/> instance.
+    /// </summary>
+    /// <param name="context">
+    /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
+    /// that provides a format context.
+    /// </param>
+    /// <param name="culture">
+    /// The <see cref="System.Globalization.CultureInfo"/> to use
+    /// as the current culture.
+    /// </param>
+    /// <param name="val">
+    /// The value that is to be converted.
+    /// </param>
+    /// <returns>
+    /// A <see cref="System.IO.Stream"/> if successful.
+    /// </returns>
+    public override object ConvertFrom(
+        ITypeDescriptorContext context,
+        CultureInfo culture, object val)
+    {
+        if (val is string)
         {
-            if (val is string)
-            {
-                IResource resource = (IResource) resourceConverter.ConvertFrom(context, culture, val);
-                return resource.InputStream;
-            }
-            return base.ConvertFrom (context, culture, val);
+            IResource resource = (IResource) resourceConverter.ConvertFrom(context, culture, val);
+            return resource.InputStream;
         }
-        #endregion
-	}
+
+        return base.ConvertFrom(context, culture, val);
+    }
+
+    #endregion
 }

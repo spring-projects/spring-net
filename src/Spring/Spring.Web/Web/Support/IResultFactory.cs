@@ -22,30 +22,29 @@
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// A result factory is responsible for create an <see cref="IResult"/> instance from a given string representation.
+/// </summary>
+/// <remarks>
+/// For a larger example illustrating the customization of result processing, <see cref="ResultFactoryRegistry"/>.
+/// </remarks>
+/// <seealso cref="ResultFactoryRegistry"/>
+/// <seealso cref="IResult"/>
+/// <seealso cref="Result"/>
+/// <seealso cref="DefaultResultWebNavigator"/>
+/// <author>Erich Eichinger</author>
+public interface IResultFactory
 {
     /// <summary>
-    /// A result factory is responsible for create an <see cref="IResult"/> instance from a given string representation.
+    /// Create an <see cref="IResult"/> instance from the given string representation.
     /// </summary>
+    /// <param name="resultMode">the resultMode that caused triggering this factory.</param>
+    /// <param name="resultText">the remainder string to be interpreted and converted into an <see cref="IResult"/>.</param>
+    /// <returns>An <see cref="IResult"/> instance. Must never be null!</returns>
     /// <remarks>
-    /// For a larger example illustrating the customization of result processing, <see cref="ResultFactoryRegistry"/>.
+    /// Note to implementors: This method must never return null. Instead exceptions should be thrown.
     /// </remarks>
-    /// <seealso cref="ResultFactoryRegistry"/>
-    /// <seealso cref="IResult"/>
-    /// <seealso cref="Result"/>
-    /// <seealso cref="DefaultResultWebNavigator"/>
-    /// <author>Erich Eichinger</author>
-    public interface IResultFactory
-    {
-        /// <summary>
-        /// Create an <see cref="IResult"/> instance from the given string representation.
-        /// </summary>
-        /// <param name="resultMode">the resultMode that caused triggering this factory.</param>
-        /// <param name="resultText">the remainder string to be interpreted and converted into an <see cref="IResult"/>.</param>
-        /// <returns>An <see cref="IResult"/> instance. Must never be null!</returns>
-        /// <remarks>
-        /// Note to implementors: This method must never return null. Instead exceptions should be thrown.
-        /// </remarks>
-        IResult CreateResult( string resultMode, string resultText );
-    }
+    IResult CreateResult(string resultMode, string resultText);
 }

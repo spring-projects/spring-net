@@ -19,49 +19,47 @@
 #endregion
 
 using System.Web.UI;
-
 using Spring.Web.UI.Controls;
 
-namespace Spring.Web.UI.Validation
+namespace Spring.Web.UI.Validation;
+
+/// <summary>
+/// Implementation of <see cref="IValidationErrorsRenderer"/> that renders
+/// validation errors within a <c>span</c> element, using breaks between the
+/// errors.
+/// </summary>
+/// <remarks>
+/// This renderer's behavior is consistent with standard ASP.NET behavior of
+/// the control validators, and is used as the default renderer for Spring.NET
+/// <see cref="ValidationError"/> control.
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public class SpanValidationErrorsRenderer : AbstractValidationErrorsRenderer
 {
     /// <summary>
-    /// Implementation of <see cref="IValidationErrorsRenderer"/> that renders
-    /// validation errors within a <c>span</c> element, using breaks between the
-    /// errors.
+    /// Renders validation errors using specified <see cref="HtmlTextWriter"/>.
     /// </summary>
-    /// <remarks>
-    /// This renderer's behavior is consistent with standard ASP.NET behavior of
-    /// the control validators, and is used as the default renderer for Spring.NET
-    /// <see cref="ValidationError"/> control.
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    public class SpanValidationErrorsRenderer : AbstractValidationErrorsRenderer
+    /// <param name="page">Web form instance.</param>
+    /// <param name="writer">An HTML writer to use.</param>
+    /// <param name="errors">The list of validation errors.</param>
+    public override void RenderErrors(Page page, HtmlTextWriter writer, IList<string> errors)
     {
-        /// <summary>
-        /// Renders validation errors using specified <see cref="HtmlTextWriter"/>.
-        /// </summary>
-        /// <param name="page">Web form instance.</param>
-        /// <param name="writer">An HTML writer to use.</param>
-        /// <param name="errors">The list of validation errors.</param>
-        public override void RenderErrors(Page page, HtmlTextWriter writer, IList<string> errors)
+        if (errors != null && errors.Count > 0)
         {
-            if (errors != null && errors.Count > 0)
+            if (CssClass != null)
             {
-                if (CssClass != null)
-                {
-                    writer.AddAttribute(HtmlTextWriterAttribute.Class, CssClass);
-                }
-
-                writer.RenderBeginTag(HtmlTextWriterTag.Span);
-
-                foreach (string error in errors)
-                {
-                    writer.Write(error);
-                    writer.Write(" ");
-                }
-                writer.RenderEndTag();
-
+                writer.AddAttribute(HtmlTextWriterAttribute.Class, CssClass);
             }
+
+            writer.RenderBeginTag(HtmlTextWriterTag.Span);
+
+            foreach (string error in errors)
+            {
+                writer.Write(error);
+                writer.Write(" ");
+            }
+
+            writer.RenderEndTag();
         }
     }
 }

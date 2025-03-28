@@ -20,91 +20,88 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Simple object used to check constructor dependency checking.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Rick Evans (.NET)</author>
+public class ConstructorDependenciesObject
 {
-	/// <summary>
-	/// Simple object used to check constructor dependency checking.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Rick Evans (.NET)</author>
-	public class ConstructorDependenciesObject
-	{
-		#region Constructor (s) / Destructor
+    #region Constructor (s) / Destructor
 
-		public ConstructorDependenciesObject(int age)
-		{
-			this.age = age;
-		}
+    public ConstructorDependenciesObject(int age)
+    {
+        this.age = age;
+    }
 
-		public ConstructorDependenciesObject(string name)
-		{
-			this.name = name;
-		}
+    public ConstructorDependenciesObject(string name)
+    {
+        this.name = name;
+    }
 
-		public ConstructorDependenciesObject(ITestObject spouse1)
-		{
-			this.spouse1 = spouse1;
-		}
+    public ConstructorDependenciesObject(ITestObject spouse1)
+    {
+        this.spouse1 = spouse1;
+    }
 
-		public ConstructorDependenciesObject(ITestObject spouse1, ITestObject spouse2)
-		{
-			this.spouse1 = spouse1;
-			this.spouse2 = spouse2;
-		}
+    public ConstructorDependenciesObject(ITestObject spouse1, ITestObject spouse2)
+    {
+        this.spouse1 = spouse1;
+        this.spouse2 = spouse2;
+    }
 
-		public ConstructorDependenciesObject(ITestObject spouse1, ITestObject spouse2, IndexedTestObject other)
-		{
-			this.spouse1 = spouse1;
-			this.spouse2 = spouse2;
-			this.other = other;
-		}
+    public ConstructorDependenciesObject(ITestObject spouse1, ITestObject spouse2, IndexedTestObject other)
+    {
+        this.spouse1 = spouse1;
+        this.spouse2 = spouse2;
+        this.other = other;
+    }
 
-		#endregion
+    #endregion
 
-		#region Properties
+    #region Properties
 
-		public int Age
-		{
-			get { return age; }
+    public int Age
+    {
+        get { return age; }
 
-			set { this.age = value; }
-		}
+        set { this.age = value; }
+    }
 
-		public string Name
-		{
-			get { return name; }
-			set { this.name = value; }
-		}
+    public string Name
+    {
+        get { return name; }
+        set { this.name = value; }
+    }
 
-		public ITestObject Spouse1
-		{
-			get { return spouse1; }
-		}
+    public ITestObject Spouse1
+    {
+        get { return spouse1; }
+    }
 
-		public ITestObject Spouse2
-		{
-			get { return spouse2; }
-		}
+    public ITestObject Spouse2
+    {
+        get { return spouse2; }
+    }
 
-		public IndexedTestObject Other
-		{
-			get { return other; }
-		}
+    public IndexedTestObject Other
+    {
+        get { return other; }
+    }
 
-		#endregion
+    #endregion
 
-		#region Fields
+    #region Fields
 
-		private int age;
-		private string name;
-		private ITestObject spouse1;
-		private ITestObject spouse2;
-		private IndexedTestObject other;
+    private int age;
+    private string name;
+    private ITestObject spouse1;
+    private ITestObject spouse2;
+    private IndexedTestObject other;
 
-		#endregion
-	}
+    #endregion
 }

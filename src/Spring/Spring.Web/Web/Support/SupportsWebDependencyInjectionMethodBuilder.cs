@@ -1,4 +1,5 @@
 #region License
+
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -14,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #endregion
 
 #region Imports
@@ -24,84 +26,84 @@ using Spring.Proxy;
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// This MethodBuilder emits a Callback-call before calling the base method
+/// </summary>
+/// <author>Erich Eichinger</author>
+internal class SupportsWebDependencyInjectionMethodBuilder : BaseProxyMethodBuilder
 {
+    private FieldInfo _appContextField;
+    private MethodInfo _callbackMethod;
+
     /// <summary>
-    /// This MethodBuilder emits a Callback-call before calling the base method
+    /// Initializes a new instance of a SupportsWebDependencyInjectionMethodBuilder
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    internal class SupportsWebDependencyInjectionMethodBuilder : BaseProxyMethodBuilder
+    public SupportsWebDependencyInjectionMethodBuilder(TypeBuilder typeBuilder, IProxyTypeGenerator proxyGenerator,
+        FieldInfo appContextField, MethodInfo callbackMethod)
+        : base(typeBuilder, proxyGenerator, true)
     {
-        private FieldInfo _appContextField;
-        private MethodInfo _callbackMethod;
+        _appContextField = appContextField;
+        _callbackMethod = callbackMethod;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of a SupportsWebDependencyInjectionMethodBuilder
-        /// </summary>
-        public SupportsWebDependencyInjectionMethodBuilder(TypeBuilder typeBuilder, IProxyTypeGenerator proxyGenerator,
-                                                           FieldInfo appContextField, MethodInfo callbackMethod)
-            : base(typeBuilder, proxyGenerator, true)
+    /// <summary>
+    /// Inserts a call to a callback-method before actually calling the base-method.
+    /// </summary>
+    /// <param name="il">The IL generator to use</param>
+    /// <param name="method">The method to proxy</param>
+    /// <param name="interfaceMethod">The interface definition of this method, if applicable</param>
+    protected override void GenerateMethod(ILGenerator il, MethodInfo method, MethodInfo interfaceMethod)
+    {
+        this.GenerateCallbackMethodCall(il, method, interfaceMethod);
+        base.GenerateMethod(il, method, interfaceMethod);
+    }
+
+    /// <summary>
+    /// Emits the callback invocation.
+    /// </summary>
+    private void GenerateCallbackMethodCall(ILGenerator il, MethodInfo method, MethodInfo interfaceMethod)
+    {
+        // setup parameters for call
+
+        // IApplicationContext is always first parameter!
+        il.Emit(OpCodes.Ldarg_0);
+        il.Emit(OpCodes.Ldfld, _appContextField);
+
+        // lookup parameters needed for callback - they are matched by type in order!
+        ParameterInfo[] callbackParams = _callbackMethod.GetParameters();
+        ParameterInfo[] paramArray = method.GetParameters();
+
+        Type returnType = _callbackMethod.ReturnType;
+        int replaceArgumentIndex = -1;
+
+        for (int j = 1; j < callbackParams.Length; j++)
         {
-            _appContextField = appContextField;
-            _callbackMethod = callbackMethod;
-        }
-
-        /// <summary>
-        /// Inserts a call to a callback-method before actually calling the base-method.
-        /// </summary>
-        /// <param name="il">The IL generator to use</param>
-        /// <param name="method">The method to proxy</param>
-        /// <param name="interfaceMethod">The interface definition of this method, if applicable</param>
-        protected override void GenerateMethod(ILGenerator il, MethodInfo method, MethodInfo interfaceMethod)
-        {
-            this.GenerateCallbackMethodCall(il, method, interfaceMethod);
-            base.GenerateMethod(il, method, interfaceMethod);
-        }
-
-        /// <summary>
-        /// Emits the callback invocation.
-        /// </summary>
-        private void GenerateCallbackMethodCall(ILGenerator il, MethodInfo method, MethodInfo interfaceMethod)
-        {
-            // setup parameters for call
-
-            // IApplicationContext is always first parameter!
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Ldfld, _appContextField);
-
-            // lookup parameters needed for callback - they are matched by type in order!
-            ParameterInfo[] callbackParams = _callbackMethod.GetParameters();
-            ParameterInfo[] paramArray = method.GetParameters();
-
-            Type returnType = _callbackMethod.ReturnType;
-            int replaceArgumentIndex = -1;
-
-            for (int j = 1; j < callbackParams.Length; j++)
+            for (int i = 0; i < paramArray.Length; i++)
             {
-                for (int i = 0; i < paramArray.Length; i++)
+                // remember the parameter to assign the value returned from the callback to
+                if (paramArray[i].ParameterType == returnType)
                 {
-                    // remember the parameter to assign the value returned from the callback to
-                    if (paramArray[i].ParameterType == returnType)
-                    {
-                        replaceArgumentIndex = i;
-                    }
+                    replaceArgumentIndex = i;
+                }
 
-                    if (paramArray[i].ParameterType == callbackParams[j].ParameterType)
-                    {
-                        il.Emit(OpCodes.Ldarg_S, i + 1);
-                        break;
-                    }
+                if (paramArray[i].ParameterType == callbackParams[j].ParameterType)
+                {
+                    il.Emit(OpCodes.Ldarg_S, i + 1);
+                    break;
                 }
             }
-
-            // invoke static(!) callback
-            il.EmitCall(OpCodes.Call, _callbackMethod, null);
-            // if callback has a result, store the result back into the first matching argument
-            if (replaceArgumentIndex > -1)
-            {
-                il.Emit(OpCodes.Starg_S, (byte)replaceArgumentIndex+1);
-            }
-            return;
         }
+
+        // invoke static(!) callback
+        il.EmitCall(OpCodes.Call, _callbackMethod, null);
+        // if callback has a result, store the result back into the first matching argument
+        if (replaceArgumentIndex > -1)
+        {
+            il.Emit(OpCodes.Starg_S, (byte) replaceArgumentIndex + 1);
+        }
+
+        return;
     }
 }

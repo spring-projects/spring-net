@@ -24,57 +24,56 @@ using System.Runtime.Serialization;
 
 #endregion
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+/// <summary>
+/// Thrown in response to the misconfiguration of an AOP proxy.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+[Serializable]
+public class AopConfigException : ApplicationException
 {
-	/// <summary>
-	/// Thrown in response to the misconfiguration of an AOP proxy.
-	/// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Aleksandar Seovic (.NET)</author>
-    [Serializable]
-	public class AopConfigException : ApplicationException
-	{
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Aop.Framework.AopConfigException"/> class.
-        /// </summary>
-        public AopConfigException ()
-        {
-        }
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Framework.AopConfigException"/> class.
+    /// </summary>
+    public AopConfigException()
+    {
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Aop.Framework.AopConfigException"/> class with
-		/// the specified message.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public AopConfigException (string message) : base(message)
-		{
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Framework.AopConfigException"/> class with
+    /// the specified message.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public AopConfigException(string message) : base(message)
+    {
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Aop.Framework.AopConfigException"/> class with
-		/// the specified message and root cause.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception that is being wrapped.
-		/// </param>
-		public AopConfigException (string message, Exception rootCause)
-			: base(message, rootCause)
-		{
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Framework.AopConfigException"/> class with
+    /// the specified message and root cause.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public AopConfigException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected AopConfigException (
-			SerializationInfo info, StreamingContext context)
-			: base (info, context)
-		{
-		}
-	}
+    /// <inheritdoc />
+    protected AopConfigException(
+        SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 }

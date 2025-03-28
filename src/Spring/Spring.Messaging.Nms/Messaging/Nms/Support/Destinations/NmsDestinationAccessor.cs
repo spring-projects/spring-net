@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,90 +21,86 @@
 using Spring.Util;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Support.Destinations
+namespace Spring.Messaging.Nms.Support.Destinations;
+
+/// <summary> Base class for NmsTemplate} and other
+/// NMS-accessing gateway helpers, adding destination-related properties to
+/// MessagingAccessor's common properties.
+/// </summary>
+/// <remarks>
+/// <p>Not intended to be used directly. See NmsTemplate.</p>
+///
+/// </remarks>
+/// <author>Juergen Hoeller </author>
+/// <author>Mark Pollack (.NET)</author>
+public class NmsDestinationAccessor : NmsAccessor
 {
-    /// <summary> Base class for NmsTemplate} and other
-    /// NMS-accessing gateway helpers, adding destination-related properties to
-    /// MessagingAccessor's common properties.
+    #region Fields
+
+    private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
+
+    private bool pubSubDomain = false;
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Gets or sets the destination resolver that is to be used to resolve
+    /// IDestination references for this accessor.
     /// </summary>
-    /// <remarks>
-    /// <p>Not intended to be used directly. See NmsTemplate.</p>
-    /// 
+    /// <remarks>The default resolver is a DynamicDestinationResolver. Specify a
+    /// JndiDestinationResolver for resolving destination names as JNDI locations.
     /// </remarks>
-    /// <author>Juergen Hoeller </author>
-    /// <author>Mark Pollack (.NET)</author>
-    public class NmsDestinationAccessor : NmsAccessor
+    /// <value>The destination resolver.</value>
+    virtual public IDestinationResolver DestinationResolver
     {
-        #region Fields
-        
-        private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
-
-        private bool pubSubDomain = false;
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the destination resolver that is to be used to resolve
-        /// IDestination references for this accessor.
-        /// </summary>
-        /// <remarks>The default resolver is a DynamicDestinationResolver. Specify a
-        /// JndiDestinationResolver for resolving destination names as JNDI locations.
-        /// </remarks>
-        /// <value>The destination resolver.</value>
-        virtual public IDestinationResolver DestinationResolver
+        get
         {
-            get
-            {
-                return destinationResolver;
-            }
-
-            set
-            {
-                AssertUtils.ArgumentNotNull(value, "DestinationResolver must not be null");
-                this.destinationResolver = value;
-            }
-
+            return destinationResolver;
         }
 
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Publish/Subscribe
-        /// domain (Topics) is used. Otherwise, the Point-to-Point domain
-        /// (Queues) is used.
-        /// 
-        /// </summary>
-        /// <remarks>this
-        /// setting tells what type of destination to create if dynamic destinations are enabled.</remarks>
-        /// <value><c>true</c> if Publish/Subscribe domain; otherwise, <c>false</c>
-        /// for the Point-to-Point domain.</value>
-        public virtual bool PubSubDomain
+        set
         {
-            get
-            {
-                return pubSubDomain;
-            }
-
-            set
-            {
-                this.pubSubDomain = value;
-            }
-
+            AssertUtils.ArgumentNotNull(value, "DestinationResolver must not be null");
+            this.destinationResolver = value;
         }
-		
-        #endregion
+    }
 
-        /// <summary>
-        /// Resolves the given destination name to a NMS destination.
-        /// </summary>
-        /// <param name="session">The current session.</param>
-        /// <param name="destinationName">Name of the destination.</param>
-        /// <returns>The located IDestination</returns>
-        /// <exception cref="NMSException">If resolution failed.</exception>
-        public virtual IDestination ResolveDestinationName(ISession session, System.String destinationName)
+    /// <summary>
+    /// Gets or sets a value indicating whether Publish/Subscribe
+    /// domain (Topics) is used. Otherwise, the Point-to-Point domain
+    /// (Queues) is used.
+    ///
+    /// </summary>
+    /// <remarks>this
+    /// setting tells what type of destination to create if dynamic destinations are enabled.</remarks>
+    /// <value><c>true</c> if Publish/Subscribe domain; otherwise, <c>false</c>
+    /// for the Point-to-Point domain.</value>
+    public virtual bool PubSubDomain
+    {
+        get
         {
-            return DestinationResolver.ResolveDestinationName(session, destinationName, PubSubDomain);
+            return pubSubDomain;
         }
+
+        set
+        {
+            this.pubSubDomain = value;
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Resolves the given destination name to a NMS destination.
+    /// </summary>
+    /// <param name="session">The current session.</param>
+    /// <param name="destinationName">Name of the destination.</param>
+    /// <returns>The located IDestination</returns>
+    /// <exception cref="NMSException">If resolution failed.</exception>
+    public virtual IDestination ResolveDestinationName(ISession session, System.String destinationName)
+    {
+        return DestinationResolver.ResolveDestinationName(session, destinationName, PubSubDomain);
     }
 }

@@ -25,119 +25,117 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the TypedStringValue class.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Rick Evans (.NET)</author>
+[TestFixture]
+public sealed class TypedStringValueTests
 {
-	/// <summary>
-	/// Unit tests for the TypedStringValue class.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Rick Evans (.NET)</author>
-	[TestFixture]
-	public sealed class TypedStringValueTests
-	{
-		[Test]
-		public void Instantiation()
-		{
-			string expectedNow = DateTime.Now.ToShortDateString();
-			
-            TypedStringValue tsv = new TypedStringValue(expectedNow, typeof (DateTime));
-			Assert.AreEqual(expectedNow, tsv.Value);
-			Assert.AreEqual(typeof (DateTime), tsv.TargetType);
-            
-            tsv = new TypedStringValue(expectedNow);
-            Assert.AreEqual(expectedNow, tsv.Value);
+    [Test]
+    public void Instantiation()
+    {
+        string expectedNow = DateTime.Now.ToShortDateString();
 
-            tsv = new TypedStringValue(expectedNow, typeof(DateTime).FullName);
-            Assert.AreEqual(expectedNow, tsv.Value);
-            Assert.AreEqual(typeof(DateTime).FullName, tsv.TargetTypeName);
+        TypedStringValue tsv = new TypedStringValue(expectedNow, typeof(DateTime));
+        Assert.AreEqual(expectedNow, tsv.Value);
+        Assert.AreEqual(typeof(DateTime), tsv.TargetType);
 
-		}
+        tsv = new TypedStringValue(expectedNow);
+        Assert.AreEqual(expectedNow, tsv.Value);
 
-	    [Test]
-	    public void InstantiationWithNullType()
-	    {
-	        Assert.Throws<ArgumentNullException>(() => new TypedStringValue(string.Empty, (Type) null));
-	    }
+        tsv = new TypedStringValue(expectedNow, typeof(DateTime).FullName);
+        Assert.AreEqual(expectedNow, tsv.Value);
+        Assert.AreEqual(typeof(DateTime).FullName, tsv.TargetTypeName);
+    }
 
-	    [Test]
-	    public void InstantiationWithNullTypeName()
-	    {
-	        Assert.Throws<ArgumentNullException>(() => new TypedStringValue(string.Empty, (string) null));
-	    }
+    [Test]
+    public void InstantiationWithNullType()
+    {
+        Assert.Throws<ArgumentNullException>(() => new TypedStringValue(string.Empty, (Type) null));
+    }
 
-	    [Test]
-	    public void InstantiationWithEmptyTypeName()
-	    {
-	        Assert.Throws<ArgumentNullException>(() => new TypedStringValue(string.Empty, "  "));
-	    }
+    [Test]
+    public void InstantiationWithNullTypeName()
+    {
+        Assert.Throws<ArgumentNullException>(() => new TypedStringValue(string.Empty, (string) null));
+    }
 
-	    [Test]
-	    public void SetTargetTypePropertyToNullType()
-	    {
-	        TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime));
-	        Assert.Throws<ArgumentNullException>(() => tsv.TargetType = null);
-	    }
+    [Test]
+    public void InstantiationWithEmptyTypeName()
+    {
+        Assert.Throws<ArgumentNullException>(() => new TypedStringValue(string.Empty, "  "));
+    }
 
-        [Test]
-        public void SetTargetTypeNamePropertyToEmptyString()
-        {
-            TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime));
-            Assert.Throws<ArgumentNullException>(() => tsv.TargetTypeName = "  ");
-        }
+    [Test]
+    public void SetTargetTypePropertyToNullType()
+    {
+        TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime));
+        Assert.Throws<ArgumentNullException>(() => tsv.TargetType = null);
+    }
 
-		[Test]
-		public void IsSerializable()
-		{
-			Assert.IsTrue(SerializationTestUtils.IsSerializable(new TypedStringValue()),
-				"Must be marked as [Serializable].");
-		}
+    [Test]
+    public void SetTargetTypeNamePropertyToEmptyString()
+    {
+        TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime));
+        Assert.Throws<ArgumentNullException>(() => tsv.TargetTypeName = "  ");
+    }
 
-		[Test]
-		public void Serialization()
-		{
-			TypedStringValue value = new TypedStringValue();
-			Type expectedType = typeof(string);
-			value.TargetType = expectedType;
-			const string expectedValue = "rilo-kiley";
-			value.Value = expectedValue;
+    [Test]
+    public void IsSerializable()
+    {
+        Assert.IsTrue(SerializationTestUtils.IsSerializable(new TypedStringValue()),
+            "Must be marked as [Serializable].");
+    }
 
-			object foo = SerializationTestUtils.SerializeAndDeserialize(value);
-			Assert.IsNotNull(foo, "Serialization roundtrip must never result in null.");
-			TypedStringValue deser = foo as TypedStringValue;
-			Assert.IsNotNull(deser,
-				"Serialization roundtrip yielded the wrong Type of object.");
-			Assert.AreEqual(expectedType, deser.TargetType,
-				"Serialization roundtrip yielded the wrong TargetType.");
-			Assert.AreEqual(expectedValue, deser.Value,
-				"Serialization roundtrip yielded the wrong Value.");
-		}
+    [Test]
+    public void Serialization()
+    {
+        TypedStringValue value = new TypedStringValue();
+        Type expectedType = typeof(string);
+        value.TargetType = expectedType;
+        const string expectedValue = "rilo-kiley";
+        value.Value = expectedValue;
 
-        [Test]
-        public void HasTargetType()
-        {
-            TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime));
-            Assert.IsTrue(tsv.HasTargetType);
-        }
+        object foo = SerializationTestUtils.SerializeAndDeserialize(value);
+        Assert.IsNotNull(foo, "Serialization roundtrip must never result in null.");
+        TypedStringValue deser = foo as TypedStringValue;
+        Assert.IsNotNull(deser,
+            "Serialization roundtrip yielded the wrong Type of object.");
+        Assert.AreEqual(expectedType, deser.TargetType,
+            "Serialization roundtrip yielded the wrong TargetType.");
+        Assert.AreEqual(expectedValue, deser.Value,
+            "Serialization roundtrip yielded the wrong Value.");
+    }
 
-        [Test]
-        public void HasTargetTypeReturnsFalseWhenTargetTypeNotResolved()
-        {
-            TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime).FullName);
-            Assert.IsFalse(tsv.HasTargetType);
+    [Test]
+    public void HasTargetType()
+    {
+        TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime));
+        Assert.IsTrue(tsv.HasTargetType);
+    }
 
-            tsv = new TypedStringValue(string.Empty, typeof(DateTime));
-            Assert.IsTrue(tsv.HasTargetType);
-            tsv.TargetTypeName = typeof(DateTime).FullName;
-            Assert.IsFalse(tsv.HasTargetType);
-        }
+    [Test]
+    public void HasTargetTypeReturnsFalseWhenTargetTypeNotResolved()
+    {
+        TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime).FullName);
+        Assert.IsFalse(tsv.HasTargetType);
 
-        [Test]
-        public void ResolveTargetType()
-        {
-            TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime).FullName);
-            Assert.IsFalse(tsv.HasTargetType);
-            Assert.AreEqual(typeof(DateTime), tsv.ResolveTargetType());
-            Assert.IsTrue(tsv.HasTargetType);
-        }
-	}
+        tsv = new TypedStringValue(string.Empty, typeof(DateTime));
+        Assert.IsTrue(tsv.HasTargetType);
+        tsv.TargetTypeName = typeof(DateTime).FullName;
+        Assert.IsFalse(tsv.HasTargetType);
+    }
+
+    [Test]
+    public void ResolveTargetType()
+    {
+        TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime).FullName);
+        Assert.IsFalse(tsv.HasTargetType);
+        Assert.AreEqual(typeof(DateTime), tsv.ResolveTargetType());
+        Assert.IsTrue(tsv.HasTargetType);
+    }
 }

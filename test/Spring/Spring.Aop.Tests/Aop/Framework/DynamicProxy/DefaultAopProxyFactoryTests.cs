@@ -25,80 +25,79 @@ using Spring.Objects;
 
 #endregion
 
-namespace Spring.Aop.Framework.DynamicProxy
+namespace Spring.Aop.Framework.DynamicProxy;
+
+/// <summary>
+/// Unit tests for the DefaultAopProxyFactory class.
+/// </summary>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public class DefaultAopProxyFactoryTests
 {
-	/// <summary>
-    /// Unit tests for the DefaultAopProxyFactory class.
-	/// </summary>
-	/// <author>Bruno Baia</author>
-	[TestFixture]
-    public class DefaultAopProxyFactoryTests
-	{
-        protected virtual IAopProxy CreateAopProxy(ProxyFactory advisedSupport)
-        {
+    protected virtual IAopProxy CreateAopProxy(ProxyFactory advisedSupport)
+    {
 //            return (IAopProxy) advisedSupport.GetProxy();
-            IAopProxyFactory apf = new DefaultAopProxyFactory();
-            return apf.CreateAopProxy(advisedSupport);
-        }
-
-        [Test]
-        public void NullConfig()
-        {
-            IAopProxyFactory apf = new DefaultAopProxyFactory();
-            Assert.Throws<AopConfigException>(() => apf.CreateAopProxy(null),"Cannot create IAopProxy with null ProxyConfig" );
-        }
-
-        [Test]
-        public void NoInterceptorsAndNoTarget()
-        {
-            ProxyFactory advisedSupport = new ProxyFactory(new Type[] { typeof(ITestObject) });
-            Assert.Throws<AopConfigException>(() => CreateAopProxy(advisedSupport), "Cannot create IAopProxy with no advisors and no target source");
-        }
-
-        [Test]
-        public void TargetDoesNotImplementAnyInterfaces()
-        {
-            ProxyFactory advisedSupport = new ProxyFactory();
-            advisedSupport.AopProxyFactory = new DefaultAopProxyFactory();
-            advisedSupport.ProxyTargetType = false;
-            advisedSupport.Target = new DoesNotImplementAnyInterfacesTestObject();
-            
-            IAopProxy aopProxy = CreateAopProxy(advisedSupport);
-            Assert.IsNotNull(aopProxy);
-            Assert.IsTrue(AopUtils.IsDecoratorAopProxy(aopProxy));
-        }
-
-        [Test]
-        public void TargetImplementsAnInterface()
-        {
-            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
-            IAopProxy aopProxy = CreateAopProxy(advisedSupport);
-            Assert.IsNotNull(aopProxy);
-
-            Assert.IsTrue(AopUtils.IsCompositionAopProxy(aopProxy));
-        }
-
-        [Test]
-        public void TargetImplementsAnInterfaceWithProxyTargetTypeSetToTrue()
-        {
-            ProxyFactory advisedSupport = new ProxyFactory();
-            advisedSupport.ProxyTargetType = true;
-            advisedSupport.Target = new TestObject();
-
-            IAopProxy aopProxy = CreateAopProxy(advisedSupport);
-            Assert.IsNotNull(aopProxy);
-            Assert.IsTrue(AopUtils.IsDecoratorAopProxy(aopProxy));
-        }
-
-        #region Helper classes definitions
-
-        public class DoesNotImplementAnyInterfacesTestObject
-        {
-            public virtual void SomeMethod()
-            {
-            }
-        }
-
-        #endregion
+        IAopProxyFactory apf = new DefaultAopProxyFactory();
+        return apf.CreateAopProxy(advisedSupport);
     }
+
+    [Test]
+    public void NullConfig()
+    {
+        IAopProxyFactory apf = new DefaultAopProxyFactory();
+        Assert.Throws<AopConfigException>(() => apf.CreateAopProxy(null), "Cannot create IAopProxy with null ProxyConfig");
+    }
+
+    [Test]
+    public void NoInterceptorsAndNoTarget()
+    {
+        ProxyFactory advisedSupport = new ProxyFactory(new Type[] { typeof(ITestObject) });
+        Assert.Throws<AopConfigException>(() => CreateAopProxy(advisedSupport), "Cannot create IAopProxy with no advisors and no target source");
+    }
+
+    [Test]
+    public void TargetDoesNotImplementAnyInterfaces()
+    {
+        ProxyFactory advisedSupport = new ProxyFactory();
+        advisedSupport.AopProxyFactory = new DefaultAopProxyFactory();
+        advisedSupport.ProxyTargetType = false;
+        advisedSupport.Target = new DoesNotImplementAnyInterfacesTestObject();
+
+        IAopProxy aopProxy = CreateAopProxy(advisedSupport);
+        Assert.IsNotNull(aopProxy);
+        Assert.IsTrue(AopUtils.IsDecoratorAopProxy(aopProxy));
+    }
+
+    [Test]
+    public void TargetImplementsAnInterface()
+    {
+        ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
+        IAopProxy aopProxy = CreateAopProxy(advisedSupport);
+        Assert.IsNotNull(aopProxy);
+
+        Assert.IsTrue(AopUtils.IsCompositionAopProxy(aopProxy));
+    }
+
+    [Test]
+    public void TargetImplementsAnInterfaceWithProxyTargetTypeSetToTrue()
+    {
+        ProxyFactory advisedSupport = new ProxyFactory();
+        advisedSupport.ProxyTargetType = true;
+        advisedSupport.Target = new TestObject();
+
+        IAopProxy aopProxy = CreateAopProxy(advisedSupport);
+        Assert.IsNotNull(aopProxy);
+        Assert.IsTrue(AopUtils.IsDecoratorAopProxy(aopProxy));
+    }
+
+    #region Helper classes definitions
+
+    public class DoesNotImplementAnyInterfacesTestObject
+    {
+        public virtual void SomeMethod()
+        {
+        }
+    }
+
+    #endregion
 }

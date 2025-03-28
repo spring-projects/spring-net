@@ -20,84 +20,84 @@ using Spring.Context.Events;
 
 #endregion
 
-namespace Spring.Context
+namespace Spring.Context;
+
+/// <summary>
+/// Test object for receiving application context events.
+/// </summary>
+/// <author>Mark Pollack</author>
+public sealed class ContextListenerObject : IApplicationContextAware, IApplicationEventListener
 {
-	/// <summary>
-	/// Test object for receiving application context events.
-	/// </summary>
-	/// <author>Mark Pollack</author>
-	public sealed class ContextListenerObject : IApplicationContextAware, IApplicationEventListener
-	{
-		private IApplicationContext _ctx;
-		private bool _appListenerContextRefreshed = false;
-		private bool _appListenerContextClosed = false;
-		private bool _ctxRefreshed = false;
-		private bool _ctxClosed = false;
+    private IApplicationContext _ctx;
+    private bool _appListenerContextRefreshed = false;
+    private bool _appListenerContextClosed = false;
+    private bool _ctxRefreshed = false;
+    private bool _ctxClosed = false;
 
-		public ContextListenerObject()
-		{
-		}
+    public ContextListenerObject()
+    {
+    }
 
-		public IApplicationContext ApplicationContext
-		{
-			set
-			{
-				_ctx = value;
-				_ctx.ContextEvent += new ApplicationEventHandler(ContextRefreshedHandler);
-			}
-			get { return _ctx; }
-		}
+    public IApplicationContext ApplicationContext
+    {
+        set
+        {
+            _ctx = value;
+            _ctx.ContextEvent += new ApplicationEventHandler(ContextRefreshedHandler);
+        }
+        get { return _ctx; }
+    }
 
-		public bool AppListenerContextRefreshed
-		{
-			get { return _appListenerContextRefreshed; }
-		}
+    public bool AppListenerContextRefreshed
+    {
+        get { return _appListenerContextRefreshed; }
+    }
 
-		public bool AppListenerContextClosed
-		{
-			get { return _appListenerContextClosed; }
-		}
+    public bool AppListenerContextClosed
+    {
+        get { return _appListenerContextClosed; }
+    }
 
-		public bool CtxRefreshed
-		{
-			get { return _ctxRefreshed; }
-		}
+    public bool CtxRefreshed
+    {
+        get { return _ctxRefreshed; }
+    }
 
-		public bool CtxClosed
-		{
-			get { return _ctxClosed; }
-		}
+    public bool CtxClosed
+    {
+        get { return _ctxClosed; }
+    }
 
-		public void HandleApplicationEvent(object source, ApplicationEventArgs e)
-		{
-			ContextEventArgs ctxArgs = e as ContextEventArgs;
-			if (ctxArgs != null)
-			{
-				if (ctxArgs.Event == ContextEventArgs.ContextEvent.Refreshed)
-				{
-					_appListenerContextRefreshed = true;
-				}
-				if (ctxArgs.Event == ContextEventArgs.ContextEvent.Closed)
-				{
-					_appListenerContextClosed = true;
-				}
-			}
-		}
+    public void HandleApplicationEvent(object source, ApplicationEventArgs e)
+    {
+        ContextEventArgs ctxArgs = e as ContextEventArgs;
+        if (ctxArgs != null)
+        {
+            if (ctxArgs.Event == ContextEventArgs.ContextEvent.Refreshed)
+            {
+                _appListenerContextRefreshed = true;
+            }
 
-		private void ContextRefreshedHandler(object sender, ApplicationEventArgs e)
-		{
-			ContextEventArgs args = e as ContextEventArgs;
-			if (args != null)
-			{
-				if (args.Event == ContextEventArgs.ContextEvent.Refreshed)
-				{
-					_ctxRefreshed = true;
-				}
-				else if (args.Event == ContextEventArgs.ContextEvent.Closed)
-				{
-					_ctxClosed = true;
-				}
-			}
-		}
-	}
+            if (ctxArgs.Event == ContextEventArgs.ContextEvent.Closed)
+            {
+                _appListenerContextClosed = true;
+            }
+        }
+    }
+
+    private void ContextRefreshedHandler(object sender, ApplicationEventArgs e)
+    {
+        ContextEventArgs args = e as ContextEventArgs;
+        if (args != null)
+        {
+            if (args.Event == ContextEventArgs.ContextEvent.Refreshed)
+            {
+                _ctxRefreshed = true;
+            }
+            else if (args.Event == ContextEventArgs.ContextEvent.Closed)
+            {
+                _ctxClosed = true;
+            }
+        }
+    }
 }

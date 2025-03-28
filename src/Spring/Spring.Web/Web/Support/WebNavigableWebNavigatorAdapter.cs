@@ -22,32 +22,31 @@
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// Adapts a concrete <see cref="IWebNavigator"/> instance as a <see cref="IWebNavigable"/>.
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class WebNavigableWebNavigatorAdapter : IWebNavigable
 {
+    private readonly IWebNavigator _resultNavigator;
+
     /// <summary>
-    /// Adapts a concrete <see cref="IWebNavigator"/> instance as a <see cref="IWebNavigable"/>.
+    /// Create a new adapter instance, wrapping the specified <paramref name="resultNavigator"/>
+    /// into a <see cref="IWebNavigable"/> interface.
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class WebNavigableWebNavigatorAdapter : IWebNavigable
+    /// <param name="resultNavigator">the <see cref="IWebNavigator"/> instance to be adapted. May be null.</param>
+    public WebNavigableWebNavigatorAdapter(IWebNavigator resultNavigator)
     {
-        private readonly IWebNavigator _resultNavigator;
+        _resultNavigator = resultNavigator;
+    }
 
-        /// <summary>
-        /// Create a new adapter instance, wrapping the specified <paramref name="resultNavigator"/> 
-        /// into a <see cref="IWebNavigable"/> interface.
-        /// </summary>
-        /// <param name="resultNavigator">the <see cref="IWebNavigator"/> instance to be adapted. May be null.</param>
-        public WebNavigableWebNavigatorAdapter(IWebNavigator resultNavigator)
-        {
-            _resultNavigator = resultNavigator;
-        }
-
-        /// <summary>
-        /// Returns the wrapped <see cref="IWebNavigator"/> that was passed into <see cref="WebNavigableWebNavigatorAdapter(IWebNavigator)"/>.
-        /// </summary>
-        public IWebNavigator WebNavigator
-        {
-            get { return _resultNavigator; }
-        }
+    /// <summary>
+    /// Returns the wrapped <see cref="IWebNavigator"/> that was passed into <see cref="WebNavigableWebNavigatorAdapter(IWebNavigator)"/>.
+    /// </summary>
+    public IWebNavigator WebNavigator
+    {
+        get { return _resultNavigator; }
     }
 }

@@ -22,77 +22,79 @@ using System.Globalization;
 using System.Web;
 using Spring.Util;
 
-namespace Spring.Globalization.Resolvers
+namespace Spring.Globalization.Resolvers;
+
+/// <summary>
+/// Default culture resolver for web applications. Contains some common utility methods for web culture resolvers.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class DefaultWebCultureResolver : DefaultCultureResolver
 {
     /// <summary>
-    /// Default culture resolver for web applications. Contains some common utility methods for web culture resolvers.
+    /// Returns default culture. If <see cref="DefaultCultureResolver.DefaultCulture"/> property is not set,
+    /// it tries to get culture from the request headers
+    /// and falls back to a current thread's culture if no headers are available.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class DefaultWebCultureResolver : DefaultCultureResolver
+    /// <returns>Default culture to use.</returns>
+    protected override CultureInfo GetDefaultLocale()
     {
-        /// <summary>
-        /// Returns default culture. If <see cref="DefaultCultureResolver.DefaultCulture"/> property is not set,
-        /// it tries to get culture from the request headers
-        /// and falls back to a current thread's culture if no headers are available.
-        /// </summary>
-        /// <returns>Default culture to use.</returns>
-        protected override CultureInfo GetDefaultLocale()
+        if (DefaultCulture != null)
         {
-            if (DefaultCulture != null)
-            {
-                return base.DefaultCulture;
-            }
-
-            CultureInfo culture = GetCulture(GetRequestLanguage());
-            if (culture != null)
-            {
-                return culture;
-            }
-
-            return Thread.CurrentThread.CurrentUICulture;
+            return base.DefaultCulture;
         }
 
-        /// <summary>
-        /// Extracts the users favorite language from "accept-language" header of the current request.
-        /// </summary>
-        /// <returns>a language string if any or <c>null</c>, if no languages have been sent with the request</returns>
-        protected virtual string GetRequestLanguage()
+        CultureInfo culture = GetCulture(GetRequestLanguage());
+        if (culture != null)
         {
-            HttpContext context = HttpContext.Current;
-            if (context != null && context.Request != null && ArrayUtils.HasLength(context.Request.UserLanguages))
-            {
-                return context.Request.UserLanguages[0];
-            }
-            return null;
+            return culture;
         }
 
-        /// <summary>
-        /// Resolves a culture by name.
-        /// </summary>
-        /// <param name="cultureName">the name of the culture to get</param>
-        /// <returns>a (possible neutral!) <see cref="CultureInfo"/> or <c>null</c>, if culture could not be resolved</returns>
-        public CultureInfo GetCulture(string cultureName)
+        return Thread.CurrentThread.CurrentUICulture;
+    }
+
+    /// <summary>
+    /// Extracts the users favorite language from "accept-language" header of the current request.
+    /// </summary>
+    /// <returns>a language string if any or <c>null</c>, if no languages have been sent with the request</returns>
+    protected virtual string GetRequestLanguage()
+    {
+        HttpContext context = HttpContext.Current;
+        if (context != null && context.Request != null && ArrayUtils.HasLength(context.Request.UserLanguages))
         {
-            try { return new CultureInfo(cultureName.Split(';')[0]); } catch { }
-            return null;
+            return context.Request.UserLanguages[0];
         }
 
-        /// <summary>
-        /// Resolves the culture from the context.
-        /// </summary>
-        /// <returns>Culture that should be used to render view.</returns>
-        public override CultureInfo ResolveCulture()
-        {
-            return GetDefaultLocale();
-        }
+        return null;
+    }
 
-        /// <summary>
-        /// Not supported for this implementation.
-        /// </summary>
-        /// <param name="culture">The new culture or <code>null</code> to clear the culture.</param>
-        public override void SetCulture(CultureInfo culture)
-        {
-            throw new NotSupportedException("Cannot change a default culture in a web application - use a different culture resolution strategy.");
-        }
+    /// <summary>
+    /// Resolves a culture by name.
+    /// </summary>
+    /// <param name="cultureName">the name of the culture to get</param>
+    /// <returns>a (possible neutral!) <see cref="CultureInfo"/> or <c>null</c>, if culture could not be resolved</returns>
+    public CultureInfo GetCulture(string cultureName)
+    {
+        try { return new CultureInfo(cultureName.Split(';')[0]); }
+        catch { }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Resolves the culture from the context.
+    /// </summary>
+    /// <returns>Culture that should be used to render view.</returns>
+    public override CultureInfo ResolveCulture()
+    {
+        return GetDefaultLocale();
+    }
+
+    /// <summary>
+    /// Not supported for this implementation.
+    /// </summary>
+    /// <param name="culture">The new culture or <code>null</code> to clear the culture.</param>
+    public override void SetCulture(CultureInfo culture)
+    {
+        throw new NotSupportedException("Cannot change a default culture in a web application - use a different culture resolution strategy.");
     }
 }

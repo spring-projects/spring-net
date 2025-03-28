@@ -18,7 +18,6 @@
 
 #endregion
 
-
 using Spring.Transaction.Interceptor;
 
 namespace Spring.Data.NHibernate
@@ -26,7 +25,6 @@ namespace Spring.Data.NHibernate
     public class SimpleService : ISimpleService
     {
         private ITestObjectDao testObjectDao;
-
 
         public ITestObjectDao TestObjectDao
         {

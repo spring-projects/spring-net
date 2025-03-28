@@ -26,25 +26,25 @@ using System.Web.UI.WebControls;
 
 #endregion
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// Provides functions required for implementing validators
+/// but are unfortunately not accessible from <see cref="BaseValidator"/>
+/// </summary>
+/// <author>Erich Eichinger</author>
+public abstract class AbstractBaseValidator : BaseValidator
 {
-	/// <summary>
-	/// Provides functions required for implementing validators
-	/// but are unfortunately not accessible from <see cref="BaseValidator"/>
-	/// </summary>
-	/// <author>Erich Eichinger</author>
-	public abstract class AbstractBaseValidator : BaseValidator
+    /// <summary>
+    /// Registers a javascript-block to be rendered.
+    /// </summary>
+    protected void RegisterClientScriptBlock(Type type, string key, string script)
     {
-		/// <summary>
-		/// Registers a javascript-block to be rendered.
-		/// </summary>
-		protected void RegisterClientScriptBlock(Type type, string key, string script)
-		{
-                this.Page.ClientScript.RegisterClientScriptBlock(
-                    typeof(RequiredCheckBoxValidator)
-                    , "RequiredCheckBoxValidatorEvaluateIsChecked"
-                    ,
-@"
+        this.Page.ClientScript.RegisterClientScriptBlock(
+            typeof(RequiredCheckBoxValidator)
+            , "RequiredCheckBoxValidatorEvaluateIsChecked"
+            ,
+            @"
 <script type=""text/javascript"">
 function RequiredCheckBoxValidatorEvaluateIsChecked(val)
 {
@@ -54,43 +54,42 @@ function RequiredCheckBoxValidatorEvaluateIsChecked(val)
 }
 </script>
 "
-                    );
-		}
+        );
+    }
 
-		/// <summary>
-		/// Checks, if a certain javascript-block is already registered.
-		/// </summary>
-    	protected bool IsClientScriptBlockRegistered(Type type, string key)
-    	{
-			return this.Page.ClientScript.IsClientScriptBlockRegistered(type, key);
-    	}
+    /// <summary>
+    /// Checks, if a certain javascript-block is already registered.
+    /// </summary>
+    protected bool IsClientScriptBlockRegistered(Type type, string key)
+    {
+        return this.Page.ClientScript.IsClientScriptBlockRegistered(type, key);
+    }
 
-		/// <summary>
-		/// Adds an attribute to be rendered for clientside validation.
-		/// </summary>
-        protected void AddExpandoAttribute(HtmlTextWriter writer, string controlId, string attributeName, string attributeValue, bool encode)
+    /// <summary>
+    /// Adds an attribute to be rendered for clientside validation.
+    /// </summary>
+    protected void AddExpandoAttribute(HtmlTextWriter writer, string controlId, string attributeName, string attributeValue, bool encode)
+    {
+        typeof(BaseValidator).InvokeMember("AddExpandoAttribute"
+            ,
+            BindingFlags.InvokeMethod | BindingFlags.NonPublic
+                                      | BindingFlags.Instance
+            , null
+            , this
+            , new object[] { writer, controlId, attributeName, attributeValue, encode }
+        );
+    }
+
+    /// <summary>
+    /// Is "XHTML 1.0 Transitional" rendering allowed?
+    /// </summary>
+    protected bool EnableLegacyRendering
+    {
+        get
         {
-            typeof(BaseValidator).InvokeMember("AddExpandoAttribute"
-                                                ,
-                                                BindingFlags.InvokeMethod | BindingFlags.NonPublic
-                                                | BindingFlags.Instance
-                                                , null
-                                                , this
-                                                , new object[] {writer, controlId, attributeName, attributeValue, encode}
-                );
-        }
-
-		/// <summary>
-		/// Is "XHTML 1.0 Transitional" rendering allowed?
-		/// </summary>
-        protected bool EnableLegacyRendering
-        {
-            get
-            {
-                return (bool) typeof(BaseValidator).GetProperty("EnableLegacyRendering",
-                                                                                       BindingFlags.Instance
-                                                                                       | BindingFlags.NonPublic).GetValue(this, null);
-            }
+            return (bool) typeof(BaseValidator).GetProperty("EnableLegacyRendering",
+                BindingFlags.Instance
+                | BindingFlags.NonPublic).GetValue(this, null);
         }
     }
 }

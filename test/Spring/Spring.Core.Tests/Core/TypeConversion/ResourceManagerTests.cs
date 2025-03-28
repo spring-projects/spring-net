@@ -21,109 +21,105 @@
 #region Imports
 
 using System.Resources;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// Unit tests for the ResourceManagerConverter class.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public sealed class ResourceManagerConverterTests
 {
-	/// <summary>
-	/// Unit tests for the ResourceManagerConverter class.
+    /// <summary>
+    /// Test that we indicate we can convert from strings only.
     /// </summary>
-    /// <author>Mark Pollack</author>
-	[TestFixture]
-    public sealed class ResourceManagerConverterTests
+    [Test]
+    public void CanConvertFrom()
     {
-        /// <summary>
-        /// Test that we indicate we can convert from strings only.
-        /// </summary>
-        [Test]
-        public void CanConvertFrom () 
-        {
-            ResourceManagerConverter cvt = new ResourceManagerConverter ();
-            Assert.IsTrue (cvt.CanConvertFrom (typeof (string)), "Conversion from a string instance must be supported.");
-            Assert.IsFalse (cvt.CanConvertFrom (null));
-        }
+        ResourceManagerConverter cvt = new ResourceManagerConverter();
+        Assert.IsTrue(cvt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
+        Assert.IsFalse(cvt.CanConvertFrom(null));
+    }
 
-        /// <summary>
-        /// Test sunny day scenario to convert from resource name, assembly name string pair
-        /// </summary>
-        [Test]
-        public void ConvertFrom () 
-        {
-            
-            ResourceManagerConverter cvt = new ResourceManagerConverter();
-            object actual = cvt.ConvertFrom ("Spring.TestResource.txt, Spring.Core.Tests");
-            Assert.IsNotNull (actual);
-            Assert.AreEqual (typeof (ResourceManager), actual.GetType());
+    /// <summary>
+    /// Test sunny day scenario to convert from resource name, assembly name string pair
+    /// </summary>
+    [Test]
+    public void ConvertFrom()
+    {
+        ResourceManagerConverter cvt = new ResourceManagerConverter();
+        object actual = cvt.ConvertFrom("Spring.TestResource.txt, Spring.Core.Tests");
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(typeof(ResourceManager), actual.GetType());
+    }
 
-        }
-        
-        /// <summary>
-        /// Test passing a null instance and see if expected exception is raised
-        /// </summary>
-        [Test]
-        public void ConvertFromNullReference ()
-        {
-            ResourceManagerConverter cvt = new ResourceManagerConverter();
-            Assert.Throws<NotSupportedException>(() => cvt.ConvertFrom (null));
-        }
+    /// <summary>
+    /// Test passing a null instance and see if expected exception is raised
+    /// </summary>
+    [Test]
+    public void ConvertFromNullReference()
+    {
+        ResourceManagerConverter cvt = new ResourceManagerConverter();
+        Assert.Throws<NotSupportedException>(() => cvt.ConvertFrom(null));
+    }
 
-        /// <summary>
-        /// Test passing a single string with no ','
-        /// </summary>
-        [Test]
-        public void ConvertFromSingleString ()
-        {
-            ResourceManagerConverter cvt = new ResourceManagerConverter();
-            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom ("Spring.TestResource.txt"));
-        }
+    /// <summary>
+    /// Test passing a single string with no ','
+    /// </summary>
+    [Test]
+    public void ConvertFromSingleString()
+    {
+        ResourceManagerConverter cvt = new ResourceManagerConverter();
+        Assert.Throws<ArgumentException>(() => cvt.ConvertFrom("Spring.TestResource.txt"));
+    }
 
-        /// <summary>
-        /// Test passing a single ','
-        /// </summary>
-        [Test]
-        public void ConvertFromSingleComma ()
-        {
-            ResourceManagerConverter cvt = new ResourceManagerConverter();
-            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom (","));
-        }
+    /// <summary>
+    /// Test passing a single ','
+    /// </summary>
+    [Test]
+    public void ConvertFromSingleComma()
+    {
+        ResourceManagerConverter cvt = new ResourceManagerConverter();
+        Assert.Throws<ArgumentException>(() => cvt.ConvertFrom(","));
+    }
 
-        /// <summary>
-        /// Test passing only assembly name
-        /// </summary>
-        [Test]
-        public void ConvertFromOnlyAssemblyNAme ()
-        {
-            ResourceManagerConverter cvt = new ResourceManagerConverter();
-            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom (",Spring.Core.Tests"));
-        }
+    /// <summary>
+    /// Test passing only assembly name
+    /// </summary>
+    [Test]
+    public void ConvertFromOnlyAssemblyNAme()
+    {
+        ResourceManagerConverter cvt = new ResourceManagerConverter();
+        Assert.Throws<ArgumentException>(() => cvt.ConvertFrom(",Spring.Core.Tests"));
+    }
 
-        /// <summary>
-        /// Test passing only assembly name
-        /// </summary>
-        [Test]
-        public void ConvertFromOnlyResourceName()
-        {
-            ResourceManagerConverter cvt = new ResourceManagerConverter();
-            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom ("Spring.TestResource.txt,"));
-        }
+    /// <summary>
+    /// Test passing only assembly name
+    /// </summary>
+    [Test]
+    public void ConvertFromOnlyResourceName()
+    {
+        ResourceManagerConverter cvt = new ResourceManagerConverter();
+        Assert.Throws<ArgumentException>(() => cvt.ConvertFrom("Spring.TestResource.txt,"));
+    }
 
 #if NETFRAMEWORK
-        [Test]
-        public void ConvertFromBadAssembly()
-        {
-            ResourceManagerConverter cvt = new ResourceManagerConverter();
-            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom ("Spring.TestResource.txt, FooAssembly"));
-        }
+    [Test]
+    public void ConvertFromBadAssembly()
+    {
+        ResourceManagerConverter cvt = new ResourceManagerConverter();
+        Assert.Throws<ArgumentException>(() => cvt.ConvertFrom ("Spring.TestResource.txt, FooAssembly"));
+    }
 #endif
 
-        [Test]
-        public void ConvertFromBad_App_GlobalResources()
-        {
-            ResourceManagerConverter cvt = new ResourceManagerConverter();
-            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom("Spring.TestResource.txt, "+ResourceManagerConverter.APP_GLOBALRESOURCES_ASSEMBLYNAME));
-        }        
-	}
+    [Test]
+    public void ConvertFromBad_App_GlobalResources()
+    {
+        ResourceManagerConverter cvt = new ResourceManagerConverter();
+        Assert.Throws<ArgumentException>(() => cvt.ConvertFrom("Spring.TestResource.txt, " + ResourceManagerConverter.APP_GLOBALRESOURCES_ASSEMBLYNAME));
+    }
 }

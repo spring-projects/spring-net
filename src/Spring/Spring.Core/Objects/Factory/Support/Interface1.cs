@@ -20,41 +20,40 @@
 
 using Spring.Objects.Factory.Config;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Post-processor callback interface for <i>merged</i> bean definitions at runtime.
+/// <see cref="IObjectPostProcessor"/> implementations may implement this sub-interface in order
+/// to post-process the merged bean definition (a processed copy of the original object
+/// definition) that the Spring <see cref="IObjectFactory" /> uses to create a object instance.
+/// </summary>
+/// <remarks>
+/// The <see cref="PostProcessMergedObjectDefinition" /> method may for example introspect
+/// the object definition in order to prepare some cached metadata before post-processing
+/// actual instances of a object. It is also allowed to modify the object definition but
+/// <i>only</i> for definition properties which are actually intended for concurrent
+/// modification. Essentially, this only applies to operations defined on the
+/// <see cref="RootObjectDefinition" /> itself but not to the properties of its base classes.
+/// </remarks>
+public interface IMergedObjectDefinitionPostProcessor : IObjectPostProcessor
 {
     /// <summary>
-    /// Post-processor callback interface for <i>merged</i> bean definitions at runtime.
-    /// <see cref="IObjectPostProcessor"/> implementations may implement this sub-interface in order
-    /// to post-process the merged bean definition (a processed copy of the original object
-    /// definition) that the Spring <see cref="IObjectFactory" /> uses to create a object instance.
+    /// Post-process the given merged object definition for the specified object.
+    /// </summary>
+    /// <param name="objectDefinition">The merged object definition for the object</param>
+    /// <param name="objectType">The actual type of the managed object instance</param>
+    /// <param name="objectName">The name of the object</param>
+    /// <see cref="AbstractAutowireCapableObjectFactory.ApplyMergedObjectDefinitionPostProcessors" />
+    void PostProcessMergedObjectDefinition(RootObjectDefinition objectDefinition, Type objectType, string objectName);
+
+    /// <summary>
+    /// A notification that the object definition for the specified name has been reset,
+    /// and that this post-processor should clear any metadata for the affected object.
     /// </summary>
     /// <remarks>
-    /// The <see cref="PostProcessMergedObjectDefinition" /> method may for example introspect
-    /// the object definition in order to prepare some cached metadata before post-processing
-    /// actual instances of a object. It is also allowed to modify the object definition but
-    /// <i>only</i> for definition properties which are actually intended for concurrent
-    /// modification. Essentially, this only applies to operations defined on the
-    /// <see cref="RootObjectDefinition" /> itself but not to the properties of its base classes.
+    /// The default implementation is empty.
     /// </remarks>
-    public interface IMergedObjectDefinitionPostProcessor : IObjectPostProcessor
-    {
-        /// <summary>
-        /// Post-process the given merged object definition for the specified object.
-        /// </summary>
-        /// <param name="objectDefinition">The merged object definition for the object</param>
-        /// <param name="objectType">The actual type of the managed object instance</param>
-        /// <param name="objectName">The name of the object</param>
-        /// <see cref="AbstractAutowireCapableObjectFactory.ApplyMergedObjectDefinitionPostProcessors" />
-        void PostProcessMergedObjectDefinition(RootObjectDefinition objectDefinition, Type objectType, string objectName);
-
-        /// <summary>
-        /// A notification that the object definition for the specified name has been reset,
-        /// and that this post-processor should clear any metadata for the affected object.
-        /// </summary>
-        /// <remarks>
-        /// The default implementation is empty.
-        /// </remarks>
-        /// <param name="objectName">The name of the object</param>
-        void ResetObjectDefinition(string objectName);
-    }
+    /// <param name="objectName">The name of the object</param>
+    void ResetObjectDefinition(string objectName);
 }

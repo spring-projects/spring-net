@@ -20,53 +20,56 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Exception thrown when an attempt to insert or update data
+/// results in violation of an integrity constraint.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Note that this is not purely a relational concept; unique primary keys are
+/// required by most database types.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class DataIntegrityViolationException : NonTransientDataAccessException
 {
-	/// <summary>
-	/// Exception thrown when an attempt to insert or update data
-	/// results in violation of an integrity constraint.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Note that this is not purely a relational concept; unique primary keys are
-	/// required by most database types.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-    public class DataIntegrityViolationException : NonTransientDataAccessException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.DataIntegrityViolationException"/> class.
-		/// </summary>
-		public DataIntegrityViolationException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.DataIntegrityViolationException"/> class.
+    /// </summary>
+    public DataIntegrityViolationException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.DataIntegrityViolationException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public DataIntegrityViolationException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.DataIntegrityViolationException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public DataIntegrityViolationException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.DataIntegrityViolationException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public DataIntegrityViolationException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.DataIntegrityViolationException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public DataIntegrityViolationException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected DataIntegrityViolationException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected DataIntegrityViolationException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

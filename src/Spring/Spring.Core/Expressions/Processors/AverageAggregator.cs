@@ -21,47 +21,46 @@
 using System.Collections;
 using Spring.Util;
 
-namespace Spring.Expressions.Processors
+namespace Spring.Expressions.Processors;
+
+/// <summary>
+/// Implementation of the average aggregator.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class AverageAggregator : ICollectionProcessor
 {
     /// <summary>
-    /// Implementation of the average aggregator.
+    /// Returns the average of the numeric values in the source collection.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class AverageAggregator : ICollectionProcessor
+    /// <param name="source">
+    /// The source collection to process.
+    /// </param>
+    /// <param name="args">
+    /// Ignored.
+    /// </param>
+    /// <returns>
+    /// The average of the numeric values in the source collection.
+    /// </returns>
+    public object Process(ICollection source, object[] args)
     {
-        /// <summary>
-        /// Returns the average of the numeric values in the source collection.
-        /// </summary>
-        /// <param name="source">
-        /// The source collection to process.
-        /// </param>
-        /// <param name="args">
-        /// Ignored.
-        /// </param>
-        /// <returns>
-        /// The average of the numeric values in the source collection.
-        /// </returns>
-        public object Process(ICollection source, object[] args)
+        int n = 0;
+        object total = 0d;
+        foreach (object item in source)
         {
-            int n = 0;
-            object total = 0d;
-            foreach (object item in source)
+            if (item != null)
             {
-                if (item != null)
+                if (NumberUtils.IsNumber(item))
                 {
-                    if (NumberUtils.IsNumber(item))
-                    {
-                        total = NumberUtils.Add(total, item);
-                        n++;
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Average can only be calculated for a collection of numeric values.");
-                    }
+                    total = NumberUtils.Add(total, item);
+                    n++;
+                }
+                else
+                {
+                    throw new ArgumentException("Average can only be calculated for a collection of numeric values.");
                 }
             }
-
-            return NumberUtils.Divide(total, n);
         }
+
+        return NumberUtils.Divide(total, n);
     }
 }

@@ -20,68 +20,67 @@
 
 using System.Configuration;
 using System.Xml;
-
 using Spring.Core.IO;
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Creates an <see cref="Spring.Objects.Factory.IObjectFactory"/> instance
+/// populated with the object definitions supplied in the configuration
+/// section.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Applications will typically want to use an
+/// <see cref="Spring.Context.IApplicationContext"/>, and instantiate it
+/// via the use of the <see cref="Spring.Context.Support.ContextHandler"/>
+/// class (which is similar in functionality to this class). This class is
+/// provided for those times when only an
+/// <see cref="Spring.Objects.Factory.IObjectFactory"/> is required.
+/// </p>
+/// <para>Creates an instance of the class XmlObjectFactory</para>
+/// </remarks>
+/// <example>
+/// <p>
+///
+/// </p>
+/// </example>
+/// <author>Mark Pollack (.NET)</author>
+public class ObjectFactorySectionHandler : IConfigurationSectionHandler
 {
     /// <summary>
-    /// Creates an <see cref="Spring.Objects.Factory.IObjectFactory"/> instance
+    /// Creates a new instance of the <see cref="ObjectFactorySectionHandler"/>
+    /// class.
+    /// </summary>
+    public ObjectFactorySectionHandler()
+    {
+    }
+
+    /// <summary>
+    /// Creates a <see cref="Spring.Objects.Factory.IObjectFactory"/>
+    /// instance populated with the object definitions supplied in the
+    /// configuration section.
+    /// </summary>
+    /// <param name="parent">
+    /// The configuration settings in a corresponding parent configuration
+    /// section.
+    /// </param>
+    /// <param name="configContext">
+    /// The configuration context when called from the ASP.NET
+    /// configuration system. Otherwise, this parameter is reserved and
+    /// is <see langword="null"/>.
+    /// </param>
+    /// <param name="section">
+    /// The <see cref="System.Xml.XmlNode"/> for the section.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Spring.Objects.Factory.IObjectFactory"/> instance
     /// populated with the object definitions supplied in the configuration
     /// section.
-    /// </summary>
-    /// <remarks>
-    /// <p>
-    /// Applications will typically want to use an
-    /// <see cref="Spring.Context.IApplicationContext"/>, and instantiate it
-    /// via the use of the <see cref="Spring.Context.Support.ContextHandler"/>
-    /// class (which is similar in functionality to this class). This class is
-    /// provided for those times when only an
-    /// <see cref="Spring.Objects.Factory.IObjectFactory"/> is required.
-    /// </p>
-    /// <para>Creates an instance of the class XmlObjectFactory</para>
-    /// </remarks>
-    /// <example>
-    /// <p>
-    ///
-    /// </p>
-    /// </example>
-    /// <author>Mark Pollack (.NET)</author>
-    public class ObjectFactorySectionHandler : IConfigurationSectionHandler
+    /// </returns>
+    public object Create(
+        object parent, object configContext, XmlNode section)
     {
-        /// <summary>
-        /// Creates a new instance of the <see cref="ObjectFactorySectionHandler"/>
-        /// class.
-        /// </summary>
-        public ObjectFactorySectionHandler()
-        {}
-
-        /// <summary>
-        /// Creates a <see cref="Spring.Objects.Factory.IObjectFactory"/>
-        /// instance populated with the object definitions supplied in the
-        /// configuration section.
-        /// </summary>
-        /// <param name="parent">
-        /// The configuration settings in a corresponding parent configuration
-        /// section.
-        /// </param>
-        /// <param name="configContext">
-        /// The configuration context when called from the ASP.NET
-        /// configuration system. Otherwise, this parameter is reserved and
-        /// is <see langword="null"/>.
-        /// </param>
-        /// <param name="section">
-        /// The <see cref="System.Xml.XmlNode"/> for the section.
-        /// </param>
-        /// <returns>
-        /// A <see cref="Spring.Objects.Factory.IObjectFactory"/> instance
-        /// populated with the object definitions supplied in the configuration
-        /// section.
-        /// </returns>
-        public object Create(
-            object parent, object configContext, XmlNode section)
-        {
-            return new XmlObjectFactory(new ConfigSectionResource(section as XmlElement), true);
-        }
+        return new XmlObjectFactory(new ConfigSectionResource(section as XmlElement), true);
     }
 }

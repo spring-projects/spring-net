@@ -1,21 +1,15 @@
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.Tools.DotNet;
-
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 public partial class Build
 {
-    [Parameter]
-    readonly bool TestFull = false;
-    [Parameter]
-    readonly bool TestIntegrationData = false;
-    [Parameter]
-    readonly bool TestIntegrationEms = false;
-    [Parameter]
-    readonly bool TestIntegrationNms = false;
-    [Parameter]
-    readonly bool TestIntegrationMsMq = false;
+    [Parameter] readonly bool TestFull = false;
+    [Parameter] readonly bool TestIntegrationData = false;
+    [Parameter] readonly bool TestIntegrationEms = false;
+    [Parameter] readonly bool TestIntegrationNms = false;
+    [Parameter] readonly bool TestIntegrationMsMq = false;
 
     Target Test => _ => _
         .DependsOn(Restore)
@@ -55,5 +49,4 @@ public partial class Build
                 });
             }
         });
-
 }

@@ -20,47 +20,50 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// Exception thrown when attempting to suspend an existing transaction
+/// but transaction suspension is not supported by the underlying backend.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class TransactionSuspensionNotSupportedException : CannotCreateTransactionException
 {
-	/// <summary>
-	/// Exception thrown when attempting to suspend an existing transaction
-	/// but transaction suspension is not supported by the underlying backend.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class TransactionSuspensionNotSupportedException : CannotCreateTransactionException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.TransactionSuspensionNotSupportedException"/> class.
-		/// </summary>
-		public TransactionSuspensionNotSupportedException( ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.TransactionSuspensionNotSupportedException"/> class.
+    /// </summary>
+    public TransactionSuspensionNotSupportedException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.TransactionSuspensionNotSupportedException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public TransactionSuspensionNotSupportedException( String message ) : base(message) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.TransactionSuspensionNotSupportedException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public TransactionSuspensionNotSupportedException(String message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.TransactionSuspensionNotSupportedException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception that is being wrapped.
-		/// </param>
-		public TransactionSuspensionNotSupportedException(string message, Exception rootCause)
-			: base(message, rootCause) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.TransactionSuspensionNotSupportedException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public TransactionSuspensionNotSupportedException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected TransactionSuspensionNotSupportedException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected TransactionSuspensionNotSupportedException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

@@ -18,12 +18,11 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Parsing
+namespace Spring.Objects.Factory.Parsing;
+
+public interface IProblemReporter
 {
-    public interface IProblemReporter
-    {
-        void Fatal(Problem problem);
-        void Warning(Problem problem);
-        void Error(Problem problem);
-    }
+    void Fatal(Problem problem);
+    void Warning(Problem problem);
+    void Error(Problem problem);
 }

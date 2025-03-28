@@ -22,68 +22,68 @@ using System.Xml;
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Support.Converters
+namespace Spring.Messaging.Support.Converters;
+
+/// <summary>
+/// Converts an <see cref="XmlDocument"/> to a Message and vice-versa by using the message's 
+/// body stream. 
+/// </summary>
+/// <author>Mark Pollack</author>
+public class XmlDocumentConverter : IMessageConverter
 {
+    #region IMessageConverter Members
+
     /// <summary>
-    /// Converts an <see cref="XmlDocument"/> to a Message and vice-versa by using the message's 
-    /// body stream. 
+    /// Convert the given object to a Message.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public class XmlDocumentConverter : IMessageConverter
+    /// <param name="obj">The object to send.</param>
+    /// <returns>Message to send</returns>
+    public Message ToMessage(object obj)
     {
-        #region IMessageConverter Members
-
-        /// <summary>
-        /// Convert the given object to a Message.
-        /// </summary>
-        /// <param name="obj">The object to send.</param>
-        /// <returns>Message to send</returns>
-        public Message ToMessage(object obj)
+        XmlDocument doc = obj as XmlDocument;
+        if (doc != null)
         {
-            XmlDocument doc = obj as XmlDocument;
-            if (doc != null)
-            {
-                Message m = new Message();
-                doc.Save(m.BodyStream);
-                return m;
-            }
-            else
-            {
-                throw new MessagingException("Expected object to be of type System.Xml.XmlDocument");
-            }
+            Message m = new Message();
+            doc.Save(m.BodyStream);
+            return m;
         }
-
-        /// <summary>
-        /// Convert the given message to a object.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <returns>the object</returns>
-        public object FromMessage(Message message)
+        else
         {
-            XmlDocument doc = new XmlDocument(); 
-            doc.Load(message.BodyStream);
-            return doc;
+            throw new MessagingException("Expected object to be of type System.Xml.XmlDocument");
         }
-
-        #endregion
-
-        #region ICloneable Members
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            return new XmlDocumentConverter();
-        }
-
-        #endregion
     }
+
+    /// <summary>
+    /// Convert the given message to a object.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <returns>the object</returns>
+    public object FromMessage(Message message)
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load(message.BodyStream);
+        return doc;
+    }
+
+    #endregion
+
+    #region ICloneable Members
+
+    /// <summary>
+    /// Creates a new object that is a copy of the current instance.
+    /// </summary>
+    /// <returns>
+    /// A new object that is a copy of this instance.
+    /// </returns>
+    public object Clone()
+    {
+        return new XmlDocumentConverter();
+    }
+
+    #endregion
 }

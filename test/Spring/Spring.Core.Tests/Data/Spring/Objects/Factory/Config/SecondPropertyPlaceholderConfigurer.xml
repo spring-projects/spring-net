@@ -15,15 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <objects xmlns="http://www.springframework.net">
-  <object name="propertyplaceholder_90"
-          type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
-    <property name="Order" value="90"/>
-    <property name="EnvironmentVariableMode" value="never"/>
-    <property name="IgnoreUnresolvablePlaceholders" value="false"/>
-    <property name="Properties">
-      <name-values>
-        <add key="SomeName" value="correct_name" />
-      </name-values>
-    </property>
-  </object>
+    <object name="propertyplaceholder_90"
+            type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
+        <property name="Order" value="90" />
+        <property name="EnvironmentVariableMode" value="never" />
+        <property name="IgnoreUnresolvablePlaceholders" value="false" />
+        <property name="Properties">
+            <name-values>
+                <add key="SomeName" value="correct_name" />
+            </name-values>
+        </property>
+    </object>
 </objects>

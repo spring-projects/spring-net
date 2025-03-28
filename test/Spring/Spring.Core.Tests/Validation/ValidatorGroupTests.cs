@@ -21,112 +21,109 @@
 #region Imports
 
 using System.Collections;
-
 using NUnit.Framework;
-
 using Spring.Expressions;
 
 #endregion
 
-namespace Spring.Validation
+namespace Spring.Validation;
+
+/// <summary>
+/// Unit tests for the ValidatorGroup class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public sealed class ValidatorGroupTests : ValidatorGroup
 {
-    /// <summary>
-    /// Unit tests for the ValidatorGroup class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public sealed class ValidatorGroupTests : ValidatorGroup
+    [Test]
+    public void WhenAllValidatorsReturnFalse()
     {
-        [Test]
-        public void WhenAllValidatorsReturnFalse()
-        {
-            ValidatorGroup vg = new ValidatorGroup();
-            vg.Validators.Add(new FalseValidator());
-            vg.Validators.Add(new FalseValidator());
-            vg.Validators.Add(new FalseValidator());
+        ValidatorGroup vg = new ValidatorGroup();
+        vg.Validators.Add(new FalseValidator());
+        vg.Validators.Add(new FalseValidator());
+        vg.Validators.Add(new FalseValidator());
 
-            IValidationErrors errors = new ValidationErrors();
-            errors.AddError("existingErrors", new ErrorMessage("error", null));
+        IValidationErrors errors = new ValidationErrors();
+        errors.AddError("existingErrors", new ErrorMessage("error", null));
 
-            bool valid = vg.Validate(new object(), errors);
+        bool valid = vg.Validate(new object(), errors);
 
-            Assert.IsFalse(valid, "Validation should fail when all inner validators return false.");
-            Assert.AreEqual(3, errors.GetErrors("errors").Count);
-            Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
-        }
+        Assert.IsFalse(valid, "Validation should fail when all inner validators return false.");
+        Assert.AreEqual(3, errors.GetErrors("errors").Count);
+        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+    }
 
-        [Test]
-        public void WhenAllValidatorsReturnFalseFast()
-        {
-            ValidatorGroup vg = new ValidatorGroup();
-            vg.FastValidate = true;
-            vg.Validators.Add(new FalseValidator());
-            vg.Validators.Add(new FalseValidator());
-            vg.Validators.Add(new FalseValidator());
+    [Test]
+    public void WhenAllValidatorsReturnFalseFast()
+    {
+        ValidatorGroup vg = new ValidatorGroup();
+        vg.FastValidate = true;
+        vg.Validators.Add(new FalseValidator());
+        vg.Validators.Add(new FalseValidator());
+        vg.Validators.Add(new FalseValidator());
 
-            IValidationErrors errors = new ValidationErrors();
-            errors.AddError("existingErrors", new ErrorMessage("error", null));
+        IValidationErrors errors = new ValidationErrors();
+        errors.AddError("existingErrors", new ErrorMessage("error", null));
 
-            bool valid = vg.Validate(new object(), errors);
+        bool valid = vg.Validate(new object(), errors);
 
-            Assert.IsFalse(valid, "Validation should fail when all inner validators return false.");
-            Assert.AreEqual(1, errors.GetErrors("errors").Count);
-            Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
-        }
+        Assert.IsFalse(valid, "Validation should fail when all inner validators return false.");
+        Assert.AreEqual(1, errors.GetErrors("errors").Count);
+        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+    }
 
-        [Test]
-        public void WhenAllValidatorsReturnTrue()
-        {
-            ValidatorGroup vg = new ValidatorGroup("true");
-            vg.Validators.Add(new TrueValidator());
-            vg.Validators.Add(new TrueValidator());
-            vg.Validators.Add(new TrueValidator());
+    [Test]
+    public void WhenAllValidatorsReturnTrue()
+    {
+        ValidatorGroup vg = new ValidatorGroup("true");
+        vg.Validators.Add(new TrueValidator());
+        vg.Validators.Add(new TrueValidator());
+        vg.Validators.Add(new TrueValidator());
 
-            IValidationErrors errors = new ValidationErrors();
-            errors.AddError("existingErrors", new ErrorMessage("error", null));
+        IValidationErrors errors = new ValidationErrors();
+        errors.AddError("existingErrors", new ErrorMessage("error", null));
 
-            bool valid = vg.Validate(new object(), errors);
+        bool valid = vg.Validate(new object(), errors);
 
-            Assert.IsTrue(valid, "Validation should succeed when all inner validators return true.");
-            Assert.AreEqual(0, errors.GetErrors("errors").Count);
-            Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
-        }
+        Assert.IsTrue(valid, "Validation should succeed when all inner validators return true.");
+        Assert.AreEqual(0, errors.GetErrors("errors").Count);
+        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+    }
 
-        [Test]
-        public void WhenSingleValidatorReturnsTrue()
-        {
-            ValidatorGroup vg = new ValidatorGroup(Expression.Parse("true"));
-            vg.Validators.Add(new FalseValidator());
-            vg.Validators.Add(new TrueValidator());
-            vg.Validators.Add(new FalseValidator());
+    [Test]
+    public void WhenSingleValidatorReturnsTrue()
+    {
+        ValidatorGroup vg = new ValidatorGroup(Expression.Parse("true"));
+        vg.Validators.Add(new FalseValidator());
+        vg.Validators.Add(new TrueValidator());
+        vg.Validators.Add(new FalseValidator());
 
-            IValidationErrors errors = new ValidationErrors();
-            errors.AddError("existingErrors", new ErrorMessage("error", null));
+        IValidationErrors errors = new ValidationErrors();
+        errors.AddError("existingErrors", new ErrorMessage("error", null));
 
-            bool valid = vg.Validate(new object(), errors);
+        bool valid = vg.Validate(new object(), errors);
 
-            Assert.IsFalse(valid, "Validation should fail when single inner validator returns true.");
-            Assert.AreEqual(2, errors.GetErrors("errors").Count);
-            Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
-        }
+        Assert.IsFalse(valid, "Validation should fail when single inner validator returns true.");
+        Assert.AreEqual(2, errors.GetErrors("errors").Count);
+        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+    }
 
-        [Test]
-        public void WhenGroupIsNotValidatedBecauseWhenExpressionReturnsFalse()
-        {
-            ValidatorGroup vg = new ValidatorGroup("false");
-            IList validators = new ArrayList();
-            validators.Add(new FalseValidator());
-            validators.Add(new FalseValidator());
-            vg.Validators = validators;
+    [Test]
+    public void WhenGroupIsNotValidatedBecauseWhenExpressionReturnsFalse()
+    {
+        ValidatorGroup vg = new ValidatorGroup("false");
+        IList validators = new ArrayList();
+        validators.Add(new FalseValidator());
+        validators.Add(new FalseValidator());
+        vg.Validators = validators;
 
-            IValidationErrors errors = new ValidationErrors();
-            errors.AddError("existingErrors", new ErrorMessage("error", null));
+        IValidationErrors errors = new ValidationErrors();
+        errors.AddError("existingErrors", new ErrorMessage("error", null));
 
-            bool valid = vg.Validate(new object(), errors);
+        bool valid = vg.Validate(new object(), errors);
 
-            Assert.IsTrue(valid, "Validation should succeed when group validator is not evaluated.");
-            Assert.AreEqual(0, errors.GetErrors("errors").Count);
-            Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
-        }
+        Assert.IsTrue(valid, "Validation should succeed when group validator is not evaluated.");
+        Assert.AreEqual(0, errors.GetErrors("errors").Count);
+        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
     }
 }

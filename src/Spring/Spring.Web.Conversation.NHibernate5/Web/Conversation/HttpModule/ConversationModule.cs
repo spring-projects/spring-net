@@ -23,146 +23,144 @@ using System.Web.UI;
 using Microsoft.Extensions.Logging;
 using Spring.Context;
 
-namespace Spring.Web.Conversation.HttpModule
+namespace Spring.Web.Conversation.HttpModule;
+
+/// <summary>
+/// HttpModule for ending Conversations with Timeout exceeded.
+/// </summary>
+/// <author>Hailton de Castro</author>
+public class ConversationModule : IHttpModule, IApplicationContextAware
 {
+    private static readonly ILogger<ConversationModule> LOG = LogManager.GetLogger<ConversationModule>();
+
+    private IList<string> conversationManagerName;
+
     /// <summary>
-    /// HttpModule for ending Conversations with Timeout exceeded.
+    /// The Names of the <see cref="IConversationManager"/>s in the <see cref="IApplicationContext"/>
     /// </summary>
-    /// <author>Hailton de Castro</author>
-    public class ConversationModule : IHttpModule, IApplicationContextAware
+    public IList<string> ConversationManagerNameList
     {
-        private static readonly ILogger<ConversationModule> LOG = LogManager.GetLogger<ConversationModule>();
+        get { return conversationManagerName; }
+        set { conversationManagerName = value; }
+    }
 
-        private IList<string> conversationManagerName;
+    #region IHttpModule Members
 
-        /// <summary>
-        /// The Names of the <see cref="IConversationManager"/>s in the <see cref="IApplicationContext"/>
-        /// </summary>
-        public IList<string> ConversationManagerNameList
+    /// <summary>
+    /// Add PostRequestHandlerExecute event to clear conversations with timeout exceeded.
+    /// </summary>
+    /// <param name="context"></param>
+    public void Init(HttpApplication context)
+    {
+        context.PreRequestHandlerExecute += context_PreRequestHandlerExecute;
+        context.PostRequestHandlerExecute += context_PostRequestHandlerExecute;
+        context.EndRequest += context_EndRequest;
+    }
+
+    /// <summary>
+    /// Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule"/>.
+    /// </summary>
+    public void Dispose()
+    {
+        //noop
+    }
+
+    void context_PreRequestHandlerExecute(object sender, EventArgs e)
+    {
+        if (HttpContext.Current.Handler is Page)
         {
-            get { return conversationManagerName; }
-            set { conversationManagerName = value; }
-        }
+            Page page = (Page) HttpContext.Current.Handler;
+            page.Unload += page_Unload;
 
-        #region IHttpModule Members
-
-        /// <summary>
-        /// Add PostRequestHandlerExecute event to clear conversations with timeout exceeded.
-        /// </summary>
-        /// <param name="context"></param>
-        public void Init(HttpApplication context)
-        {
-            context.PreRequestHandlerExecute += context_PreRequestHandlerExecute;
-            context.PostRequestHandlerExecute += context_PostRequestHandlerExecute;
-            context.EndRequest += context_EndRequest;
-        }
-
-
-        /// <summary>
-        /// Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule"/>.
-        /// </summary>
-        public void Dispose()
-        {
-            //noop
-        }
-
-        void context_PreRequestHandlerExecute(object sender, EventArgs e)
-        {
-            if (HttpContext.Current.Handler is Page)
-            {
-                Page page = (Page)HttpContext.Current.Handler;
-                page.Unload += page_Unload;
-
-                if (HttpContext.Current.Session != null)
-                {
-                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: Processing HttpContext.Current.Session");
-                    foreach (String convMngName in this.ConversationManagerNameList)
-                    {
-                        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("context_PreRequestHandlerExecute: Processing ConversationManager: {0}", convMngName));
-                        IConversationManager convMng = (IConversationManager)this.applicationContext.GetObject(convMngName);
-                        convMng.EndOnTimeOut();
-                        convMng.FreeEnded();
-                    }
-                }
-                else
-                {
-                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: no HttpContext.Current.Session found.");
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Handles the Unload event of the page control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Necessary for Redirect or Abort for any reason.
-        /// </remarks>
-        void page_Unload(object sender, EventArgs e)
-        {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("page_Unload HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
-            foreach (String convMngName in this.ConversationManagerNameList)
-            {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("page_Unload: Processing ConversationManager: {0}", convMngName));
-                IConversationManager convMng = (IConversationManager)this.applicationContext.GetObject(convMngName);
-                convMng.EndOnTimeOut();
-                convMng.FreeEnded();
-                convMng.PauseConversations();
-            }
-        }
-
-        void context_EndRequest(object sender, EventArgs e)
-        {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_EndRequest HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
-        }
-
-        void context_PostRequestHandlerExecute(object sender, EventArgs e)
-        {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PostRequestHandlerExecute HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
             if (HttpContext.Current.Session != null)
             {
+                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: Processing HttpContext.Current.Session");
+                foreach (String convMngName in this.ConversationManagerNameList)
+                {
+                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("context_PreRequestHandlerExecute: Processing ConversationManager: {0}", convMngName));
+                    IConversationManager convMng = (IConversationManager) this.applicationContext.GetObject(convMngName);
+                    convMng.EndOnTimeOut();
+                    convMng.FreeEnded();
+                }
+            }
+            else
+            {
+                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: no HttpContext.Current.Session found.");
             }
         }
-
-        #endregion
-
-        #region IApplicationContextAware Members
-        private IApplicationContext applicationContext;
-
-        /// <summary>
-        /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
-        /// object runs in.
-        /// </summary>
-        /// <value></value>
-        /// <remarks>
-        /// 	<p>
-        /// Used to obtain the instances of <see cref="IConversationManager"/>
-        /// </p>
-        /// 	<p>
-        /// Invoked after population of normal object properties but before an
-        /// init callback such as
-        /// <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
-        /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
-        /// or a custom init-method. Invoked after the setting of any
-        /// <see cref="Spring.Context.IResourceLoaderAware"/>'s
-        /// <see cref="Spring.Context.IResourceLoaderAware.ResourceLoader"/>
-        /// property.
-        /// </p>
-        /// </remarks>
-        /// <exception cref="Spring.Context.ApplicationContextException">
-        /// In the case of application context initialization errors.
-        /// </exception>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// If thrown by any application context methods.
-        /// </exception>
-        /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
-        public IApplicationContext ApplicationContext
-        {
-            set { this.applicationContext = value; }
-        }
-
-        #endregion
     }
+
+    /// <summary>
+    /// Handles the Unload event of the page control.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+    /// <remarks>
+    /// Necessary for Redirect or Abort for any reason.
+    /// </remarks>
+    void page_Unload(object sender, EventArgs e)
+    {
+        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("page_Unload HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
+        foreach (String convMngName in this.ConversationManagerNameList)
+        {
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("page_Unload: Processing ConversationManager: {0}", convMngName));
+            IConversationManager convMng = (IConversationManager) this.applicationContext.GetObject(convMngName);
+            convMng.EndOnTimeOut();
+            convMng.FreeEnded();
+            convMng.PauseConversations();
+        }
+    }
+
+    void context_EndRequest(object sender, EventArgs e)
+    {
+        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_EndRequest HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
+    }
+
+    void context_PostRequestHandlerExecute(object sender, EventArgs e)
+    {
+        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PostRequestHandlerExecute HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
+        if (HttpContext.Current.Session != null)
+        {
+        }
+    }
+
+    #endregion
+
+    #region IApplicationContextAware Members
+
+    private IApplicationContext applicationContext;
+
+    /// <summary>
+    /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
+    /// object runs in.
+    /// </summary>
+    /// <value></value>
+    /// <remarks>
+    /// 	<p>
+    /// Used to obtain the instances of <see cref="IConversationManager"/>
+    /// </p>
+    /// 	<p>
+    /// Invoked after population of normal object properties but before an
+    /// init callback such as
+    /// <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
+    /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
+    /// or a custom init-method. Invoked after the setting of any
+    /// <see cref="Spring.Context.IResourceLoaderAware"/>'s
+    /// <see cref="Spring.Context.IResourceLoaderAware.ResourceLoader"/>
+    /// property.
+    /// </p>
+    /// </remarks>
+    /// <exception cref="Spring.Context.ApplicationContextException">
+    /// In the case of application context initialization errors.
+    /// </exception>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// If thrown by any application context methods.
+    /// </exception>
+    /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
+    public IApplicationContext ApplicationContext
+    {
+        set { this.applicationContext = value; }
+    }
+
+    #endregion
 }

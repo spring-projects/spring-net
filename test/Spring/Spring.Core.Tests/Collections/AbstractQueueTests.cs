@@ -25,193 +25,195 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Collections
+namespace Spring.Collections;
+
+/// <summary>
+/// Unit tests for the AbstractQueue class.
+/// </summary>
+/// <author>Griffin Caprio</author>
+[TestFixture]
+public sealed class AbstractQueueTests
 {
-	/// <summary>
-	/// Unit tests for the AbstractQueue class.
-	/// </summary>
-	/// <author>Griffin Caprio</author>
-	[TestFixture]
-	public sealed class AbstractQueueTests
-	{
-		private sealed class SucceedQueue : AbstractQueue
-		{
-			
-			public override int Count
-			{
-				get { return 0; }
-			}
-			public override int Capacity
-			{
-				get
-				{
-					return 0;
-				}
-			}
-			public override bool Offer(object x)
-			{
-				if (x == null)
-				{
-					throw new NullReferenceException();
-				}
-				return true;
-			}
+    private sealed class SucceedQueue : AbstractQueue
+    {
+        public override int Count
+        {
+            get { return 0; }
+        }
 
-			public override object Peek()
-			{
-				return Int32.Parse("1");
-			}
+        public override int Capacity
+        {
+            get
+            {
+                return 0;
+            }
+        }
 
-			public override object Poll()
-			{
-				return Int32.Parse("1");
-			}
+        public override bool Offer(object x)
+        {
+            if (x == null)
+            {
+                throw new NullReferenceException();
+            }
 
-			public override IEnumerator GetEnumerator()
-			{
-				return null;
-			}
+            return true;
+        }
 
-			public override void CopyTo(Array array, Int32 index)
-			{
-			}
+        public override object Peek()
+        {
+            return Int32.Parse("1");
+        }
 
-			public override object SyncRoot
-			{
-				get { return null; }
+        public override object Poll()
+        {
+            return Int32.Parse("1");
+        }
 
-			}
+        public override IEnumerator GetEnumerator()
+        {
+            return null;
+        }
 
-			public override Boolean IsSynchronized
-			{
-				get { return false; }
+        public override void CopyTo(Array array, Int32 index)
+        {
+        }
 
-			}
+        public override object SyncRoot
+        {
+            get { return null; }
+        }
 
-			public override bool IsEmpty
-			{
-				get { throw new NotImplementedException(); }
-			}
-		}
+        public override Boolean IsSynchronized
+        {
+            get { return false; }
+        }
 
-		private sealed class FailQueue : AbstractQueue
-		{
-			public override int Count
-			{
-				get { return 0; }
-			}
-			public override int Capacity
-			{
-				get
-				{
-					return 0;
-				}
-			}
-			public override bool Offer(object x)
-			{
-				if (x == null)
-				{
-					throw new NullReferenceException();
-				}
-				return false;
-			}
+        public override bool IsEmpty
+        {
+            get { throw new NotImplementedException(); }
+        }
+    }
 
-			public override object Peek()
-			{
-				return null;
-			}
+    private sealed class FailQueue : AbstractQueue
+    {
+        public override int Count
+        {
+            get { return 0; }
+        }
 
-			public override object Poll()
-			{
-				return null;
-			}
+        public override int Capacity
+        {
+            get
+            {
+                return 0;
+            }
+        }
 
-			public override IEnumerator GetEnumerator()
-			{
-				return null;
-			}
+        public override bool Offer(object x)
+        {
+            if (x == null)
+            {
+                throw new NullReferenceException();
+            }
 
-			public override void CopyTo(Array array, Int32 index)
-			{
-			}
+            return false;
+        }
 
-			public override object SyncRoot
-			{
-				get { return null; }
-			}
+        public override object Peek()
+        {
+            return null;
+        }
 
-			public override Boolean IsSynchronized
-			{
-				get { return false; }
-			}
+        public override object Poll()
+        {
+            return null;
+        }
 
-			public override bool IsEmpty
-			{
-				get { throw new NotImplementedException(); }
-			}
-		}
+        public override IEnumerator GetEnumerator()
+        {
+            return null;
+        }
 
-		[Test]
-		public void AddSucceed()
-		{
-			SucceedQueue q = new SucceedQueue();
-			Assert.IsTrue(q.Add(Int32.Parse("2")));
-		}
+        public override void CopyTo(Array array, Int32 index)
+        {
+        }
 
-		[Test]
-		public void AddFail()
-		{
-			FailQueue q = new FailQueue();
-			Assert.Throws<InvalidOperationException>(() => q.Add(Int32.Parse("1")));
-		}
+        public override object SyncRoot
+        {
+            get { return null; }
+        }
 
-		[Test]
-		public void AddNPE()
-		{
-			SucceedQueue q = new SucceedQueue();
-			Assert.Throws<NullReferenceException>(() => q.Add(null));
-		}
+        public override Boolean IsSynchronized
+        {
+            get { return false; }
+        }
 
-		[Test]
-		public void RemoveSucceed()
-		{
-			SucceedQueue q = new SucceedQueue();
-			q.Remove();
-		}
+        public override bool IsEmpty
+        {
+            get { throw new NotImplementedException(); }
+        }
+    }
 
-		[Test]
-		public void RemoveFail()
-		{
-			FailQueue q = new FailQueue();
-			Assert.Throws<NoElementsException>(() => q.Remove());
-		}
+    [Test]
+    public void AddSucceed()
+    {
+        SucceedQueue q = new SucceedQueue();
+        Assert.IsTrue(q.Add(Int32.Parse("2")));
+    }
 
-		[Test]
-		public void ElementSucceed()
-		{
-			SucceedQueue q = new SucceedQueue();
-			q.Element();
-		}
+    [Test]
+    public void AddFail()
+    {
+        FailQueue q = new FailQueue();
+        Assert.Throws<InvalidOperationException>(() => q.Add(Int32.Parse("1")));
+    }
 
-		[Test]
-		public void ElementF()
-		{
-			FailQueue q = new FailQueue();
-			Assert.Throws<NoElementsException>(() => q.Element());
-		}
+    [Test]
+    public void AddNPE()
+    {
+        SucceedQueue q = new SucceedQueue();
+        Assert.Throws<NullReferenceException>(() => q.Add(null));
+    }
 
-		[Test]
-		public void AddAll1()
-		{
-			SucceedQueue q = new SucceedQueue();
-			Assert.Throws<ArgumentNullException>(() => q.AddAll(null));
-		}
+    [Test]
+    public void RemoveSucceed()
+    {
+        SucceedQueue q = new SucceedQueue();
+        q.Remove();
+    }
 
-		[Test]
-		public void AddAllSelf()
-		{
-			SucceedQueue q = new SucceedQueue();
-			Assert.Throws<ArgumentException>(() => q.AddAll(q));
-		}
-	}
+    [Test]
+    public void RemoveFail()
+    {
+        FailQueue q = new FailQueue();
+        Assert.Throws<NoElementsException>(() => q.Remove());
+    }
+
+    [Test]
+    public void ElementSucceed()
+    {
+        SucceedQueue q = new SucceedQueue();
+        q.Element();
+    }
+
+    [Test]
+    public void ElementF()
+    {
+        FailQueue q = new FailQueue();
+        Assert.Throws<NoElementsException>(() => q.Element());
+    }
+
+    [Test]
+    public void AddAll1()
+    {
+        SucceedQueue q = new SucceedQueue();
+        Assert.Throws<ArgumentNullException>(() => q.AddAll(null));
+    }
+
+    [Test]
+    public void AddAllSelf()
+    {
+        SucceedQueue q = new SucceedQueue();
+        Assert.Throws<ArgumentException>(() => q.AddAll(q));
+    }
 }

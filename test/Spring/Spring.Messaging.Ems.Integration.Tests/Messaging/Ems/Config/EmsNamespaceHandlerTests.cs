@@ -29,75 +29,66 @@ using Spring.Objects.Factory.Xml;
 
 #endregion
 
-namespace Spring.Messaging.Ems.Config
+namespace Spring.Messaging.Ems.Config;
+
+/// <summary>
+/// This class contains tests for 
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class EmsNamespaceHandlerTests
 {
-    /// <summary>
-    /// This class contains tests for 
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class EmsNamespaceHandlerTests
+    private static string DEFAULT_CONNECTION_FACTORY = "ConnectionFactory";
+
+    private static string EXPLICIT_CONNECTION_FACTORY = "testConnectionFactory";
+
+    private IApplicationContext ctx;
+
+    [SetUp]
+    public void Setup()
     {
+        NamespaceParserRegistry.RegisterParser(typeof(EmsNamespaceParser));
+        ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("EmsNamespaceHandlerTests.xml", GetType()));
+    }
 
-        private static string DEFAULT_CONNECTION_FACTORY = "ConnectionFactory";
+    [Test]
+    public void Registered()
+    {
+        Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/ems"));
+    }
 
-        private static string EXPLICIT_CONNECTION_FACTORY = "testConnectionFactory";
+    [Test]
+    public void ObjectsCreated()
+    {
+        IDictionary<string, object> containers = ctx.GetObjectsOfType(typeof(SimpleMessageListenerContainer));
+        Assert.AreEqual(3, containers.Count);
+    }
 
+    [Test]
+    public void ContainerConfiguration()
+    {
+        IDictionary<string, object> containers = ctx.GetObjectsOfType(typeof(SimpleMessageListenerContainer));
+        EmsConnectionFactory defaultConnectionFactory = (EmsConnectionFactory) ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
+        defaultConnectionFactory = (EmsConnectionFactory) ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
+        EmsConnectionFactory explicitConnectionFactory = (EmsConnectionFactory) ctx.GetObject(EXPLICIT_CONNECTION_FACTORY);
 
-        private IApplicationContext ctx;
-
-
-        [SetUp]
-        public void Setup()
+        int defaultConnectionFactoryCount = 0;
+        int explicitConnectionFactoryCount = 0;
+        foreach (KeyValuePair<string, object> dictionaryEntry in containers)
         {
-            NamespaceParserRegistry.RegisterParser(typeof(EmsNamespaceParser));
-            ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("EmsNamespaceHandlerTests.xml", GetType()));
-        }
-
-        [Test]
-        public void Registered()
-        {
-            Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/ems"));
-        }
-
-        [Test]
-        public void ObjectsCreated()
-        {
-            IDictionary<string, object> containers = ctx.GetObjectsOfType(typeof(SimpleMessageListenerContainer));
-            Assert.AreEqual(3, containers.Count);
-        }
-
-        [Test]
-        public void ContainerConfiguration()
-        {
-            IDictionary<string, object> containers = ctx.GetObjectsOfType(typeof (SimpleMessageListenerContainer));
-            EmsConnectionFactory defaultConnectionFactory = (EmsConnectionFactory)ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
-            defaultConnectionFactory = (EmsConnectionFactory)ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
-            EmsConnectionFactory explicitConnectionFactory = (EmsConnectionFactory)ctx.GetObject(EXPLICIT_CONNECTION_FACTORY);
-            
-
-            int defaultConnectionFactoryCount = 0;
-		    int explicitConnectionFactoryCount = 0;
-            foreach (KeyValuePair<string, object> dictionaryEntry in containers)
+            SimpleMessageListenerContainer container = (SimpleMessageListenerContainer) dictionaryEntry.Value;
+            if (container.ConnectionFactory.Equals(defaultConnectionFactory))
             {
-                SimpleMessageListenerContainer container = (SimpleMessageListenerContainer) dictionaryEntry.Value;
-                if (container.ConnectionFactory.Equals(defaultConnectionFactory))
-                {
-                    defaultConnectionFactoryCount++;
-                }
-                else if (container.ConnectionFactory.Equals(explicitConnectionFactory))
-                {
-                    explicitConnectionFactoryCount++;
-                    Assert.AreEqual(4, container.ConcurrentConsumers);
-                }
+                defaultConnectionFactoryCount++;
             }
-
-            Assert.AreEqual(1, defaultConnectionFactoryCount, "1 container should have the default connectionFactory");
-            Assert.AreEqual(2, explicitConnectionFactoryCount, "2 containers should have the explicit connectionFactory");
-
+            else if (container.ConnectionFactory.Equals(explicitConnectionFactory))
+            {
+                explicitConnectionFactoryCount++;
+                Assert.AreEqual(4, container.ConcurrentConsumers);
+            }
         }
 
- 
-
+        Assert.AreEqual(1, defaultConnectionFactoryCount, "1 container should have the default connectionFactory");
+        Assert.AreEqual(2, explicitConnectionFactoryCount, "2 containers should have the explicit connectionFactory");
     }
 }

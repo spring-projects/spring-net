@@ -23,91 +23,91 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
 
-namespace Spring.Objects
+namespace Spring.Objects;
+
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class TestTransparentProxyFactory : RealProxy, IRemotingTypeInfo
 {
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class TestTransparentProxyFactory : RealProxy, IRemotingTypeInfo
+    public delegate object InvokeCallback(object proxy, object targetInstance, MethodInfo targetMethod, object[] arguments);
+
+    private object targetInstance;
+    private Type targetType;
+    private InvokeCallback invokeHandler;
+
+    public object TargetInstance
     {
-        public delegate object InvokeCallback(object proxy, object targetInstance, MethodInfo targetMethod, object[] arguments);
+        get { return targetInstance; }
+        set { targetInstance = value; }
+    }
 
-        private object targetInstance;
-        private Type targetType;
-        private InvokeCallback invokeHandler;
+    public Type TargetType
+    {
+        get { return targetType; }
+        set { targetType = value; }
+    }
 
-        public object TargetInstance
+    public InvokeCallback InvokeHandler
+    {
+        get { return invokeHandler; }
+        set { invokeHandler = value; }
+    }
+
+    public TestTransparentProxyFactory(object targetInstance, Type targetType, InvokeCallback invokeHandler)
+        : base(typeof(MarshalByRefObject))
+    {
+        this.targetInstance = targetInstance;
+        this.targetType = targetType;
+        this.invokeHandler = invokeHandler;
+    }
+
+    public override IMessage Invoke(IMessage msg)
+    {
+        if (msg is IMethodCallMessage)
         {
-            get { return targetInstance; }
-            set { targetInstance = value; }
-        }
+            IMethodCallMessage callMsg = (IMethodCallMessage) msg;
 
-        public Type TargetType
-        {
-            get { return targetType; }
-            set { targetType = value; }
-        }
+            // obtain method with same name & signature from target instance
+            MethodInfo targetMethod = targetInstance.GetType().GetMethod(callMsg.MethodName, (Type[]) callMsg.MethodSignature);
 
-        public InvokeCallback InvokeHandler
-        {
-            get { return invokeHandler; }
-            set { invokeHandler = value; }
-        }
-
-        public TestTransparentProxyFactory(object targetInstance, Type targetType, InvokeCallback invokeHandler)
-            : base(typeof(MarshalByRefObject))
-        {
-            this.targetInstance = targetInstance;
-            this.targetType = targetType;
-            this.invokeHandler = invokeHandler;
-        }
-
-        public override IMessage Invoke(IMessage msg)
-        {
-            if (msg is IMethodCallMessage)
+            // invoke
+            object result;
+            if (invokeHandler != null)
             {
-                IMethodCallMessage callMsg = (IMethodCallMessage)msg;
-
-                // obtain method with same name & signature from target instance
-                MethodInfo targetMethod = targetInstance.GetType().GetMethod(callMsg.MethodName, (Type[])callMsg.MethodSignature);
-
-                // invoke
-                object result;
-                if (invokeHandler != null)
-                {
-                    result = invokeHandler(this, targetInstance, targetMethod, callMsg.Args);
-                }
-                else
-                {
-                    result = targetMethod.Invoke(targetInstance, callMsg.Args);
-                }
-
-                // create result msg
-                return new ReturnMessage(result, null, 0, null, callMsg);
+                result = invokeHandler(this, targetInstance, targetMethod, callMsg.Args);
             }
-            throw new NotSupportedException();
+            else
+            {
+                result = targetMethod.Invoke(targetInstance, callMsg.Args);
+            }
+
+            // create result msg
+            return new ReturnMessage(result, null, 0, null, callMsg);
         }
 
-        public virtual bool CanCastTo(Type fromType, object o)
-        {
-            // we accept ALL messages...
-            return fromType.IsAssignableFrom(fromType);
-        }
+        throw new NotSupportedException();
+    }
 
-        public virtual string TypeName
-        {
-            get { return targetInstance.GetType().AssemblyQualifiedName; }
-            set { throw new System.NotSupportedException(); }
-        }
+    public virtual bool CanCastTo(Type fromType, object o)
+    {
+        // we accept ALL messages...
+        return fromType.IsAssignableFrom(fromType);
+    }
 
-        public static TestTransparentProxyFactory GetProxy(object transparentProxy )
-        {
-            return (TestTransparentProxyFactory) RemotingServices.GetRealProxy(transparentProxy);
-        }
+    public virtual string TypeName
+    {
+        get { return targetInstance.GetType().AssemblyQualifiedName; }
+        set { throw new System.NotSupportedException(); }
+    }
 
-        public static object GetTargetInstance( object transparentProxy )
-        {
-            return GetProxy(transparentProxy).targetInstance;
-        }
+    public static TestTransparentProxyFactory GetProxy(object transparentProxy)
+    {
+        return (TestTransparentProxyFactory) RemotingServices.GetRealProxy(transparentProxy);
+    }
+
+    public static object GetTargetInstance(object transparentProxy)
+    {
+        return GetProxy(transparentProxy).targetInstance;
     }
 }

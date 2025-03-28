@@ -22,165 +22,165 @@ using System.Collections;
 using System.Reflection;
 using Spring.Util;
 
-namespace Spring.Reflection.Dynamic
+namespace Spring.Reflection.Dynamic;
+
+#region IDynamicMethod interface
+
+/// <summary>
+/// Defines methods that dynamic method class has to implement.
+/// </summary>
+public interface IDynamicMethod
 {
-    #region IDynamicMethod interface
+    /// <summary>
+    /// Invokes dynamic method on the specified target object.
+    /// </summary>
+    /// <param name="target">
+    /// Target object to invoke method on.
+    /// </param>
+    /// <param name="arguments">
+    /// Method arguments.
+    /// </param>
+    /// <returns>
+    /// A method return value.
+    /// </returns>
+    object Invoke(object target, params object[] arguments);
+}
+
+#endregion
+
+#region Safe wrapper
+
+/// <summary>
+/// Safe wrapper for the dynamic method.
+/// </summary>
+/// <remarks>
+/// <see cref="SafeMethod"/> will attempt to use dynamic
+/// method if possible, but it will fall back to standard
+/// reflection if necessary.
+/// </remarks>
+public class SafeMethod : IDynamicMethod
+{
+    private readonly MethodInfo methodInfo;
 
     /// <summary>
-    /// Defines methods that dynamic method class has to implement.
+    /// Gets the class, that declares this method
     /// </summary>
-    public interface IDynamicMethod
+    public Type DeclaringType
     {
-        /// <summary>
-        /// Invokes dynamic method on the specified target object.
-        /// </summary>
-        /// <param name="target">
-        /// Target object to invoke method on.
-        /// </param>
-        /// <param name="arguments">
-        /// Method arguments.
-        /// </param>
-        /// <returns>
-        /// A method return value.
-        /// </returns>
-        object Invoke(object target, params object[] arguments);
+        get { return methodInfo.DeclaringType; }
     }
+
+    #region Generated Function Cache
+
+    private class SafeMethodState
+    {
+        public readonly FunctionDelegate method;
+        public readonly object[] nullArguments;
+
+        public SafeMethodState(FunctionDelegate method, object[] nullArguments)
+        {
+            this.method = method;
+            this.nullArguments = nullArguments;
+        }
+    }
+
+    private class IdentityTable : Hashtable
+    {
+        public IdentityTable()
+        {
+        }
+
+        protected override int GetHash(object key)
+        {
+            return key.GetHashCode();
+        }
+
+        protected override bool KeyEquals(object item, object key)
+        {
+            return ReferenceEquals(item, key);
+        }
+    }
+
+    private static readonly Hashtable stateCache = new IdentityTable();
 
     #endregion
 
-    #region Safe wrapper
+    private readonly SafeMethodState state;
 
     /// <summary>
-    /// Safe wrapper for the dynamic method.
+    /// Creates a new instance of the safe method wrapper.
     /// </summary>
-    /// <remarks>
-    /// <see cref="SafeMethod"/> will attempt to use dynamic
-    /// method if possible, but it will fall back to standard
-    /// reflection if necessary.
-    /// </remarks>
-    public class SafeMethod : IDynamicMethod
+    /// <param name="methodInfo">Method to wrap.</param>
+    public SafeMethod(MethodInfo methodInfo)
     {
-        private readonly MethodInfo methodInfo;
+        AssertUtils.ArgumentNotNull(methodInfo, "You cannot create a dynamic method for a null value.");
 
-        /// <summary>
-        /// Gets the class, that declares this method
-        /// </summary>
-        public Type DeclaringType
+        state = (SafeMethodState) stateCache[methodInfo];
+        if (state == null)
         {
-            get { return methodInfo.DeclaringType; }
-        }
-
-        #region Generated Function Cache
-
-        private class SafeMethodState
-        {
-            public readonly FunctionDelegate method;
-            public readonly object[] nullArguments;
-
-            public SafeMethodState(FunctionDelegate method, object[] nullArguments)
-            {
-                this.method = method;
-                this.nullArguments = nullArguments;
-            }
-        }
-
-        private class IdentityTable : Hashtable
-        {
-            public IdentityTable()
-            { }
-
-            protected override int GetHash(object key)
-            {
-                return key.GetHashCode();
-            }
-
-            protected override bool KeyEquals(object item, object key)
-            {
-                return ReferenceEquals(item, key);
-            }
-        }
-
-        private static readonly Hashtable stateCache = new IdentityTable();
-
-        #endregion
-
-        private readonly SafeMethodState state;
-
-        /// <summary>
-        /// Creates a new instance of the safe method wrapper.
-        /// </summary>
-        /// <param name="methodInfo">Method to wrap.</param>
-        public SafeMethod(MethodInfo methodInfo)
-        {
-            AssertUtils.ArgumentNotNull(methodInfo, "You cannot create a dynamic method for a null value.");
-
-            state = (SafeMethodState)stateCache[methodInfo];
-            if (state == null)
-            {
-                SafeMethodState newState = new SafeMethodState(DynamicReflectionManager.CreateMethod(methodInfo),
+            SafeMethodState newState = new SafeMethodState(DynamicReflectionManager.CreateMethod(methodInfo),
                 new object[methodInfo.GetParameters().Length]
-                );
+            );
 
-                lock (stateCache.SyncRoot)
+            lock (stateCache.SyncRoot)
+            {
+                state = (SafeMethodState) stateCache[methodInfo];
+                if (state == null)
                 {
-                    state = (SafeMethodState)stateCache[methodInfo];
-                    if (state == null)
-                    {
-                        state = newState;
-                        stateCache[methodInfo] = state;
-                    }
+                    state = newState;
+                    stateCache[methodInfo] = state;
                 }
             }
-
-            this.methodInfo = methodInfo;
         }
 
-        /// <summary>
-        /// Invokes dynamic method.
-        /// </summary>
-        /// <param name="target">
-        /// Target object to invoke method on.
-        /// </param>
-        /// <param name="arguments">
-        /// Method arguments.
-        /// </param>
-        /// <returns>
-        /// A method return value.
-        /// </returns>
-        public object Invoke(object target, params object[] arguments)
-        {
-            // special case - when calling Invoke(null,null) it is undecidible if the second null is an argument or the argument array
-            object[] nullArguments = state.nullArguments;
-            if (arguments == null && nullArguments.Length == 1) arguments = nullArguments;
-            int arglen = (arguments == null ? 0 : arguments.Length);
-            if (nullArguments.Length != arglen)
-            {
-                throw new ArgumentException(string.Format("Invalid number of arguments passed into method {0} - expected {1}, but was {2}", methodInfo.Name, nullArguments.Length, arglen));
-            }
-
-            return this.state.method(target, arguments);
-        }
+        this.methodInfo = methodInfo;
     }
 
-    #endregion
-
     /// <summary>
-    /// Factory class for dynamic methods.
+    /// Invokes dynamic method.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class DynamicMethod : BaseDynamicMember
+    /// <param name="target">
+    /// Target object to invoke method on.
+    /// </param>
+    /// <param name="arguments">
+    /// Method arguments.
+    /// </param>
+    /// <returns>
+    /// A method return value.
+    /// </returns>
+    public object Invoke(object target, params object[] arguments)
     {
-        /// <summary>
-        /// Creates dynamic method instance for the specified <see cref="MethodInfo"/>.
-        /// </summary>
-        /// <param name="method">Method info to create dynamic method for.</param>
-        /// <returns>Dynamic method for the specified <see cref="MethodInfo"/>.</returns>
-        public static IDynamicMethod Create(MethodInfo method)
+        // special case - when calling Invoke(null,null) it is undecidible if the second null is an argument or the argument array
+        object[] nullArguments = state.nullArguments;
+        if (arguments == null && nullArguments.Length == 1) arguments = nullArguments;
+        int arglen = (arguments == null ? 0 : arguments.Length);
+        if (nullArguments.Length != arglen)
         {
-            AssertUtils.ArgumentNotNull(method, "You cannot create a dynamic method for a null value.");
-
-            IDynamicMethod dynamicMethod = new SafeMethod(method);
-            return dynamicMethod;
+            throw new ArgumentException(string.Format("Invalid number of arguments passed into method {0} - expected {1}, but was {2}", methodInfo.Name, nullArguments.Length, arglen));
         }
+
+        return this.state.method(target, arguments);
+    }
+}
+
+#endregion
+
+/// <summary>
+/// Factory class for dynamic methods.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class DynamicMethod : BaseDynamicMember
+{
+    /// <summary>
+    /// Creates dynamic method instance for the specified <see cref="MethodInfo"/>.
+    /// </summary>
+    /// <param name="method">Method info to create dynamic method for.</param>
+    /// <returns>Dynamic method for the specified <see cref="MethodInfo"/>.</returns>
+    public static IDynamicMethod Create(MethodInfo method)
+    {
+        AssertUtils.ArgumentNotNull(method, "You cannot create a dynamic method for a null value.");
+
+        IDynamicMethod dynamicMethod = new SafeMethod(method);
+        return dynamicMethod;
     }
 }

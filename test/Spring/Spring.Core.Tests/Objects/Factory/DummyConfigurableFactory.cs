@@ -24,29 +24,28 @@ using Spring.Objects.Factory.Config;
 
 #endregion
 
-namespace Spring.Objects.Factory
+namespace Spring.Objects.Factory;
+
+/// <summary>
+/// Simple factory based on DummyFactory to allow testing
+/// of IConfigurableFactoryObject support in AbstractObjectFactory.
+/// </summary>
+/// <author>Bruno Baia</author>
+public class DummyConfigurableFactory : DummyFactory, IConfigurableFactoryObject
 {
-	/// <summary>
-	/// Simple factory based on DummyFactory to allow testing 
-    /// of IConfigurableFactoryObject support in AbstractObjectFactory.
-	/// </summary>
-	/// <author>Bruno Baia</author>
-	public class DummyConfigurableFactory : DummyFactory, IConfigurableFactoryObject
+    #region Fields
+
+    private IObjectDefinition productTemplate;
+
+    #endregion
+
+    #region IConfigurableFactoryObject Members
+
+    public IObjectDefinition ProductTemplate
     {
-        #region Fields
-
-        private IObjectDefinition productTemplate;
-
-        #endregion
-
-        #region IConfigurableFactoryObject Members
-
-        public IObjectDefinition ProductTemplate
-        {
-            get { return productTemplate; }
-            set { productTemplate = value; }
-        }
-
-        #endregion
+        get { return productTemplate; }
+        set { productTemplate = value; }
     }
+
+    #endregion
 }

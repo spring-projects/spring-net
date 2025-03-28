@@ -20,30 +20,28 @@
 
 using System.Data;
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// Custom data reader implementations often delegate to an underlying
+/// instance.  This interface captures that relationship for reuse in
+/// the framework.
+/// </summary>
+/// <remarks>Implementations will typically add behavior to standard IDataReader methods,
+/// for example, by providing default values for DbNull values.
+/// See <see cref="Spring.Data.Support.NullMappingDataReader"/> as an example.
+///  </remarks>
+/// <author>Mark Pollack (.NET)</author>
+public interface IDataReaderWrapper : IDataReader
 {
     /// <summary>
-    /// Custom data reader implementations often delegate to an underlying
-    /// instance.  This interface captures that relationship for reuse in
-    /// the framework.
+    /// The underlying reader implementation to delegate to for accessing data
+    /// from a returned result sets.
     /// </summary>
-    /// <remarks>Implementations will typically add behavior to standard IDataReader methods,
-    /// for example, by providing default values for DbNull values.
-    /// See <see cref="Spring.Data.Support.NullMappingDataReader"/> as an example.
-    ///  </remarks>
-    /// <author>Mark Pollack (.NET)</author>
-    public interface IDataReaderWrapper : IDataReader
+    /// <value>The wrapped reader.</value>
+    IDataReader WrappedReader
     {
-        /// <summary>
-        /// The underlying reader implementation to delegate to for accessing data
-        /// from a returned result sets.
-        /// </summary>
-        /// <value>The wrapped reader.</value>
-        IDataReader WrappedReader
-        {
-            get;
-            set;
-        }
-
+        get;
+        set;
     }
 }

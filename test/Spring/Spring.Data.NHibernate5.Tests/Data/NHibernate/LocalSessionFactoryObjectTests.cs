@@ -22,11 +22,9 @@ using NHibernate;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
-
 using Spring.Context.Support;
 using Spring.Data.Common;
 using Spring.Data.NHibernate.Bytecode;
-
 using NUnit.Framework;
 using Environment = NHibernate.Cfg.Environment;
 
@@ -39,7 +37,6 @@ namespace Spring.Data.NHibernate
     [TestFixture]
     public class LocalSessionFactoryObjectTests
     {
-
         [Test]
         public void LocalSessionFactoryObjectWithDbProviderAndProperties()
         {
@@ -66,11 +63,11 @@ namespace Spring.Data.NHibernate
             Assert.AreEqual(sfo.Configuration.Properties[Environment.Dialect], typeof(MsSql2000Dialect).AssemblyQualifiedName);
 
             Assert.Throws<KeyNotFoundException>(() =>
-                                                    {
-                                                        var x =
-                                                          sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass];
-                                                    }, "ProxyFactoryFactory should not be explicitly set!");
-            
+            {
+                var x =
+                    sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass];
+            }, "ProxyFactoryFactory should not be explicitly set!");
+
             Assert.AreNotEqual(typeof(BytecodeProvider), Environment.BytecodeProvider.GetType(), "default IBytecodeProvider should not be Spring's BytecodeProvider!");
         }
 
@@ -80,7 +77,6 @@ namespace Spring.Data.NHibernate
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
             sfo.MappingResources = new string[] { "mapping.hbm.xml" };
             Assert.Throws<FileNotFoundException>(() => sfo.AfterPropertiesSet());
-
         }
 
         [Test]

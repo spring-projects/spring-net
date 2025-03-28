@@ -24,19 +24,18 @@ using System.Reflection;
 
 #endregion
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+/// <summary>
+/// Simple before advice example that we can use for counting checks.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Choy Rim (.NET)</author>
+[Serializable]
+public class CountingBeforeAdvice : MethodCounter, IMethodBeforeAdvice
 {
-	/// <summary>
-	/// Simple before advice example that we can use for counting checks.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Choy Rim (.NET)</author>
-    [Serializable]
-    public class CountingBeforeAdvice : MethodCounter, IMethodBeforeAdvice
-	{
-		public virtual void Before(MethodInfo method, object[] args, object target)
-		{
-			Count(method);
-		}
-	}
+    public virtual void Before(MethodInfo method, object[] args, object target)
+    {
+        Count(method);
+    }
 }

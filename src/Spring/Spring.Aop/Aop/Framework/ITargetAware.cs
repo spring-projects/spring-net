@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,25 @@
 
 #endregion
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+/// <summary>
+/// Provides access to the target object of an AOP proxy.
+/// </summary>
+/// <remarks>
+/// <p>
+/// To be implemented by introduction aspects in order to obtain access to
+/// the target object.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public interface ITargetAware
 {
     /// <summary>
-    /// Provides access to the target object of an AOP proxy.
+    /// Sets the <see cref="Spring.Aop.Framework.IAopProxy"/> target object.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// To be implemented by introduction aspects in order to obtain access to
-    /// the target object.
-    /// </p>
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    public interface ITargetAware
+    IAopProxy TargetProxy
     {
-        /// <summary>
-        /// Sets the <see cref="Spring.Aop.Framework.IAopProxy"/> target object.
-        /// </summary>
-        IAopProxy TargetProxy
-        {
-        	set;
-        }
+        set;
     }
 }

@@ -24,69 +24,72 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Support
+namespace Spring.Objects.Support;
+
+/// <summary>
+/// Unit tests for the MutableSortDefinition class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class MutableSortDefinitionTests
 {
-    /// <summary>
-    /// Unit tests for the MutableSortDefinition class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    public sealed class MutableSortDefinitionTests
+    [Test]
+    public void Instantiation()
     {
-        [Test]
-        public void Instantiation () {
-            MutableSortDefinition def = new MutableSortDefinition ();
-            Assert.IsTrue (def.IgnoreCase);
-            Assert.IsTrue (def.Ascending);
-            Assert.IsNotNull (def.Property);
-        }
+        MutableSortDefinition def = new MutableSortDefinition();
+        Assert.IsTrue(def.IgnoreCase);
+        Assert.IsTrue(def.Ascending);
+        Assert.IsNotNull(def.Property);
+    }
 
-        [Test]
-        public void InstantiationWithCopy () {
-            ISortDefinition copy = new MutableSortDefinition ("Bing!", false, false);
-            MutableSortDefinition def = new MutableSortDefinition (copy);
-            Assert.IsFalse (def.IgnoreCase);
-            Assert.IsFalse (def.Ascending);
-            Assert.IsNotNull (def.Property);
-            Assert.AreEqual (copy.Property, def.Property);
-        }
+    [Test]
+    public void InstantiationWithCopy()
+    {
+        ISortDefinition copy = new MutableSortDefinition("Bing!", false, false);
+        MutableSortDefinition def = new MutableSortDefinition(copy);
+        Assert.IsFalse(def.IgnoreCase);
+        Assert.IsFalse(def.Ascending);
+        Assert.IsNotNull(def.Property);
+        Assert.AreEqual(copy.Property, def.Property);
+    }
 
-        [Test]
-        public void TestEquals () {
-            ISortDefinition copy = new MutableSortDefinition ("Rab", false, false);
-            MutableSortDefinition def = new MutableSortDefinition ("Bing!", false, false);
-            def.Property = "Rab";
-            Assert.AreEqual (copy, def);
-            Assert.AreEqual (copy.GetHashCode (), def.GetHashCode ());
-            Assert.IsFalse (def.Equals (null));
-        }
+    [Test]
+    public void TestEquals()
+    {
+        ISortDefinition copy = new MutableSortDefinition("Rab", false, false);
+        MutableSortDefinition def = new MutableSortDefinition("Bing!", false, false);
+        def.Property = "Rab";
+        Assert.AreEqual(copy, def);
+        Assert.AreEqual(copy.GetHashCode(), def.GetHashCode());
+        Assert.IsFalse(def.Equals(null));
+    }
 
-        [Test]
-        public void PropertySetter () {
-            MutableSortDefinition def = new MutableSortDefinition ();
-            def.Property = null;
-            Assert.IsNotNull (def.Property);
-            Assert.AreEqual (string.Empty, def.Property);
-        }
+    [Test]
+    public void PropertySetter()
+    {
+        MutableSortDefinition def = new MutableSortDefinition();
+        def.Property = null;
+        Assert.IsNotNull(def.Property);
+        Assert.AreEqual(string.Empty, def.Property);
+    }
 
-        [Test]
-        public void TogglesOkWhenPropertyIsSetAgain () 
-        {
-            MutableSortDefinition def = new MutableSortDefinition (true);
-            bool originalAscendingValue = def.Ascending;
-            def.Property = "Name";
-            def.Property = "Name"; // sort order should (must!) be reversed now...
-            Assert.IsFalse (def.Ascending == originalAscendingValue);
-        }
+    [Test]
+    public void TogglesOkWhenPropertyIsSetAgain()
+    {
+        MutableSortDefinition def = new MutableSortDefinition(true);
+        bool originalAscendingValue = def.Ascending;
+        def.Property = "Name";
+        def.Property = "Name"; // sort order should (must!) be reversed now...
+        Assert.IsFalse(def.Ascending == originalAscendingValue);
+    }
 
-        [Test]
-        public void DoesNotTogglesWhenPropertyIsSetAgain () 
-        {
-            MutableSortDefinition def = new MutableSortDefinition (true);
-            bool originalAscendingValue = def.Ascending;
-            def.Property = "Name";
-            def.Property = "Age"; // sort order must not be toggled (different property)
-            Assert.IsTrue (def.Ascending == originalAscendingValue);
-        }
+    [Test]
+    public void DoesNotTogglesWhenPropertyIsSetAgain()
+    {
+        MutableSortDefinition def = new MutableSortDefinition(true);
+        bool originalAscendingValue = def.Ascending;
+        def.Property = "Name";
+        def.Property = "Age"; // sort order must not be toggled (different property)
+        Assert.IsTrue(def.Ascending == originalAscendingValue);
     }
 }

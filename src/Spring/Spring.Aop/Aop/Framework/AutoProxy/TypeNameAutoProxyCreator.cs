@@ -25,52 +25,52 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop.Framework.AutoProxy
+namespace Spring.Aop.Framework.AutoProxy;
+
+/// <summary>
+/// AutoProxyCreator, that identifies objects to proxy by matching their <see cref="Type.FullName"/> against a list of patterns.
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class TypeNameAutoProxyCreator : AbstractFilteringAutoProxyCreator
 {
-    /// <summary>
-    /// AutoProxyCreator, that identifies objects to proxy by matching their <see cref="Type.FullName"/> against a list of patterns.
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class TypeNameAutoProxyCreator : AbstractFilteringAutoProxyCreator
+    private TypeNameTypeFilter _typeNameFilter = null;
+
+    ///<summary>
+    /// The list of patterns to match <see cref="Type.FullName"/> against. For pattern syntax, see <see cref="TypeNameTypeFilter"/>
+    ///</summary>
+    public string[] TypeNames
     {
-        private TypeNameTypeFilter _typeNameFilter = null;
-
-        ///<summary>
-        /// The list of patterns to match <see cref="Type.FullName"/> against. For pattern syntax, see <see cref="TypeNameTypeFilter"/>
-        ///</summary>
-        public string[] TypeNames
+        get
         {
-            get
+            if (_typeNameFilter != null)
             {
-                if (_typeNameFilter != null)
-                {
-                    return _typeNameFilter.TypeNamePatterns;
-                }
-                return null;
+                return _typeNameFilter.TypeNamePatterns;
             }
-            set
-            {
-                AssertUtils.ArgumentNotNull(value, "TypeNames");
-                _typeNameFilter = new TypeNameTypeFilter(value);
-            }
-        }
 
-        /// <summary>
-        /// Decide, whether the given object is eligible for proxying.
-        /// </summary>
-        /// <remarks>
-        /// Override this method to allow or reject proxying for the given object.
-        /// </remarks>
-        /// <param name="targetType">the object's type</param>
-        /// <param name="targetName">the name of the object</param>
-        /// <seealso cref="AbstractAutoProxyCreator.ShouldSkip"/>
-        /// <returns>whether the given object shall be proxied.</returns>
-        protected override bool IsEligibleForProxying(Type targetType, string targetName)
+            return null;
+        }
+        set
         {
-            AssertUtils.ArgumentNotNull(_typeNameFilter, "TypeNames");
-
-            bool shallProxy = _typeNameFilter.Matches(targetType);
-            return shallProxy;
+            AssertUtils.ArgumentNotNull(value, "TypeNames");
+            _typeNameFilter = new TypeNameTypeFilter(value);
         }
+    }
+
+    /// <summary>
+    /// Decide, whether the given object is eligible for proxying.
+    /// </summary>
+    /// <remarks>
+    /// Override this method to allow or reject proxying for the given object.
+    /// </remarks>
+    /// <param name="targetType">the object's type</param>
+    /// <param name="targetName">the name of the object</param>
+    /// <seealso cref="AbstractAutoProxyCreator.ShouldSkip"/>
+    /// <returns>whether the given object shall be proxied.</returns>
+    protected override bool IsEligibleForProxying(Type targetType, string targetName)
+    {
+        AssertUtils.ArgumentNotNull(_typeNameFilter, "TypeNames");
+
+        bool shallProxy = _typeNameFilter.Matches(targetType);
+        return shallProxy;
     }
 }

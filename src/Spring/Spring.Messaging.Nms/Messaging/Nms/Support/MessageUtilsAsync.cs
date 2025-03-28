@@ -1,4 +1,5 @@
 #region License
+
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -14,178 +15,174 @@
 //  * See the License for the specific language governing permissions and
 //  * limitations under the License.
 //  */
+
 #endregion
 
 using Spring.Util;
 using Apache.NMS;
 using Microsoft.Extensions.Logging;
 
-namespace Spring.Messaging.Nms.Support
+namespace Spring.Messaging.Nms.Support;
+
+/// <summary>
+/// Async version of NmsUtils
+/// </summary>
+/// <see cref="NmsUtils"/>
+public abstract class NmsUtilsAsync
 {
-    /// <summary>
-    /// Async version of NmsUtils
+    #region Logging
+
+    private static readonly ILogger<NmsUtils> logger = LogManager.GetLogger<NmsUtils>();
+
+    #endregion
+
+    /// <summary> Close the given NMS Connection and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual NMS code.
     /// </summary>
-    /// <see cref="NmsUtils"/>
-    public abstract class NmsUtilsAsync
+    /// <param name="con">the NMS Connection to close (may be <code>null</code>)
+    /// </param>
+    public static Task CloseConnection(IConnection con)
     {
-        #region Logging
+        return CloseConnection(con, false);
+    }
 
-        private static readonly ILogger<NmsUtils> logger = LogManager.GetLogger<NmsUtils>();
-
-        #endregion
-
-        /// <summary> Close the given NMS Connection and ignore any thrown exception.
-        /// This is useful for typical <code>finally</code> blocks in manual NMS code.
-        /// </summary>
-        /// <param name="con">the NMS Connection to close (may be <code>null</code>)
-        /// </param>
-        public static Task CloseConnection(IConnection con)
+    /// <summary> Close the given NMS Connection and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual NMS code.
+    /// </summary>
+    /// <param name="con">the NMS Connection to close (may be <code>null</code>)
+    /// </param>
+    /// <param name="stop">whether to call <code>stop()</code> before closing
+    /// </param>
+    public static async Task CloseConnection(IConnection con, bool stop)
+    {
+        if (con != null)
         {
-            return CloseConnection(con, false);
-        }
-
-        /// <summary> Close the given NMS Connection and ignore any thrown exception.
-        /// This is useful for typical <code>finally</code> blocks in manual NMS code.
-        /// </summary>
-        /// <param name="con">the NMS Connection to close (may be <code>null</code>)
-        /// </param>
-        /// <param name="stop">whether to call <code>stop()</code> before closing
-        /// </param>
-        public static async Task CloseConnection(IConnection con, bool stop)
-        {
-            if (con != null)
+            try
             {
-                try
+                if (stop)
                 {
-                    if (stop)
+                    try
                     {
-                        try
-                        {
-                            await con.StopAsync().Awaiter();
-                        }
-                        finally
-                        {
-                            await con.CloseAsync().Awaiter();
-                        }
+                        await con.StopAsync().Awaiter();
                     }
-                    else
+                    finally
                     {
                         await con.CloseAsync().Awaiter();
                     }
                 }
-                catch (NMSException ex)
+                else
                 {
-                    logger.LogDebug(ex, "Could not close NMS Connection");
-                }
-                catch (Exception ex)
-                {
-                    // We don't trust the NMS provider: It might throw another exception.
-                    logger.LogDebug(ex, "Unexpected exception on closing NMS Connection");
+                    await con.CloseAsync().Awaiter();
                 }
             }
-        }
-        
-        /// <summary> Close the given NMS Session and ignore any thrown exception.
-		/// This is useful for typical <code>finally</code> blocks in manual NMS code.
-		/// </summary>
-		/// <param name="session">the NMS Session to close (may be <code>null</code>)
-		/// </param>
-		public static async Task CloseSession(ISession session)
-        {
-            if (session != null)
+            catch (NMSException ex)
             {
-                try
-                {
-                    await session.CloseAsync().Awaiter();
-                }
-                catch (NMSException ex)
-                {
-                    logger.LogDebug(ex, "Could not close NMS ISession");
-                }
-                catch (Exception ex)
-                {
-                    // We don't trust the NMS provider: It might throw RuntimeException or Error.
-                    logger.LogDebug(ex, "Unexpected exception on closing NMS ISession");
-                }
+                logger.LogDebug(ex, "Could not close NMS Connection");
             }
-        }
-        
-        /// <summary> Close the given NMS MessageProducer and ignore any thrown exception.
-		/// This is useful for typical <code>finally</code> blocks in manual NMS code.
-		/// </summary>
-		/// <param name="producer">the NMS MessageProducer to close (may be <code>null</code>)
-		/// </param>
-        public static async Task CloseMessageProducer(IMessageProducer producer)
-        {
-            if (producer != null)
+            catch (Exception ex)
             {
-                try
-                {
-                    await producer.CloseAsync().Awaiter();
-                }
-                catch (NMSException ex)
-                {
-                    logger.LogDebug(ex, "Could not close NMS MessageProducer");
-                }
-                catch (Exception ex)
-                {
-                    // We don't trust the NMS provider: It might throw RuntimeException or Error.
-                    logger.LogDebug(ex, "Unexpected exception on closing NMS MessageProducer");
-                }
+                // We don't trust the NMS provider: It might throw another exception.
+                logger.LogDebug(ex, "Unexpected exception on closing NMS Connection");
             }
         }
-        
-        
+    }
 
-        /// <summary> Close the given NMS MessageConsumer and ignore any thrown exception.
-        /// This is useful for typical <code>finally</code> blocks in manual NMS code.
-        /// </summary>
-        /// <param name="consumer">the NMS MessageConsumer to close (may be <code>null</code>)
-        /// </param>
-        public static async Task CloseMessageConsumer(IMessageConsumer consumer)
+    /// <summary> Close the given NMS Session and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual NMS code.
+    /// </summary>
+    /// <param name="session">the NMS Session to close (may be <code>null</code>)
+    /// </param>
+    public static async Task CloseSession(ISession session)
+    {
+        if (session != null)
         {
-            if (consumer != null)
+            try
             {
-                try
-                {
-                    await consumer.CloseAsync().Awaiter();
-                }
-                catch (NMSException ex)
-                {
-                    logger.LogDebug(ex, "Could not close NMS MessageConsumer");
-                }
-                catch (Exception ex)
-                {
-                    // We don't trust the NMS provider: It might throw RuntimeException or Error.
-                    logger.LogDebug(ex, "Unexpected exception on closing NMS MessageConsumer");
-                }
+                await session.CloseAsync().Awaiter();
+            }
+            catch (NMSException ex)
+            {
+                logger.LogDebug(ex, "Could not close NMS ISession");
+            }
+            catch (Exception ex)
+            {
+                // We don't trust the NMS provider: It might throw RuntimeException or Error.
+                logger.LogDebug(ex, "Unexpected exception on closing NMS ISession");
             }
         }
+    }
 
-
-        /// <summary> Commit the Session if not within a distributed transaction.</summary>
-        /// <remarks>Needs investigation - no distributed tx in .NET messaging providers</remarks>
-        /// <param name="session">the NMS Session to commit
-        /// </param>
-        /// <throws>NMSException if committing failed </throws>
-        public static async Task CommitIfNecessary(ISession session)
+    /// <summary> Close the given NMS MessageProducer and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual NMS code.
+    /// </summary>
+    /// <param name="producer">the NMS MessageProducer to close (may be <code>null</code>)
+    /// </param>
+    public static async Task CloseMessageProducer(IMessageProducer producer)
+    {
+        if (producer != null)
         {
-		    AssertUtils.ArgumentNotNull(session, "ISession must not be null");
-			
-			await session.CommitAsync().Awaiter();
-	    }
+            try
+            {
+                await producer.CloseAsync().Awaiter();
+            }
+            catch (NMSException ex)
+            {
+                logger.LogDebug(ex, "Could not close NMS MessageProducer");
+            }
+            catch (Exception ex)
+            {
+                // We don't trust the NMS provider: It might throw RuntimeException or Error.
+                logger.LogDebug(ex, "Unexpected exception on closing NMS MessageProducer");
+            }
+        }
+    }
 
-        /// <summary> Rollback the Session if not within a distributed transaction.</summary>
-        /// <remarks>Needs investigation - no distributed tx in EMS</remarks>
-        /// <param name="session">the NMS Session to rollback
-        /// </param>
-        /// <throws>  NMSException if committing failed </throws>
-	    public static async Task RollbackIfNecessary(ISession session)
+    /// <summary> Close the given NMS MessageConsumer and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual NMS code.
+    /// </summary>
+    /// <param name="consumer">the NMS MessageConsumer to close (may be <code>null</code>)
+    /// </param>
+    public static async Task CloseMessageConsumer(IMessageConsumer consumer)
+    {
+        if (consumer != null)
         {
-		    AssertUtils.ArgumentNotNull(session, "ISession must not be null");
+            try
+            {
+                await consumer.CloseAsync().Awaiter();
+            }
+            catch (NMSException ex)
+            {
+                logger.LogDebug(ex, "Could not close NMS MessageConsumer");
+            }
+            catch (Exception ex)
+            {
+                // We don't trust the NMS provider: It might throw RuntimeException or Error.
+                logger.LogDebug(ex, "Unexpected exception on closing NMS MessageConsumer");
+            }
+        }
+    }
 
-            await session.RollbackAsync().Awaiter();
-	    }
-        
+    /// <summary> Commit the Session if not within a distributed transaction.</summary>
+    /// <remarks>Needs investigation - no distributed tx in .NET messaging providers</remarks>
+    /// <param name="session">the NMS Session to commit
+    /// </param>
+    /// <throws>NMSException if committing failed </throws>
+    public static async Task CommitIfNecessary(ISession session)
+    {
+        AssertUtils.ArgumentNotNull(session, "ISession must not be null");
+
+        await session.CommitAsync().Awaiter();
+    }
+
+    /// <summary> Rollback the Session if not within a distributed transaction.</summary>
+    /// <remarks>Needs investigation - no distributed tx in EMS</remarks>
+    /// <param name="session">the NMS Session to rollback
+    /// </param>
+    /// <throws>  NMSException if committing failed </throws>
+    public static async Task RollbackIfNecessary(ISession session)
+    {
+        AssertUtils.ArgumentNotNull(session, "ISession must not be null");
+
+        await session.RollbackAsync().Awaiter();
     }
 }

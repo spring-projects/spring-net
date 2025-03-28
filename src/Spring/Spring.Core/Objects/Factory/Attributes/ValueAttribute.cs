@@ -18,18 +18,17 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
+public class ValueAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
-    public class ValueAttribute : Attribute
+    private string _expression;
+
+    public ValueAttribute(string expression)
     {
-        private string _expression;
-
-        public ValueAttribute(string expression)
-        {
-            _expression = expression;
-        }
-
-        public string Expression { get { return _expression; } }
+        _expression = expression;
     }
+
+    public string Expression { get { return _expression; } }
 }

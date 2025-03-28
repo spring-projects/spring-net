@@ -26,18 +26,17 @@ using Spring.Scheduling.Quartz;
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>Test that the assembly is built with the correct DebugAttributes in release and debug builds.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public sealed class QuartzCompilerOptionTests : CompilerOptionsTests
 {
-    /// <summary>Test that the assembly is built with the correct DebugAttributes in release and debug builds.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public sealed class QuartzCompilerOptionTests : CompilerOptionsTests
+    [OneTimeSetUp]
+    public void FixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void FixtureSetUp()
-        {
-            AssemblyToCheck = Assembly.GetAssembly(typeof (SchedulingException));
-        }
+        AssemblyToCheck = Assembly.GetAssembly(typeof(SchedulingException));
     }
 }

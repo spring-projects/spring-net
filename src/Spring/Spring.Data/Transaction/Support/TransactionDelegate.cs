@@ -18,25 +18,23 @@
 
 #endregion
 
-namespace Spring.Transaction.Support
-{
+namespace Spring.Transaction.Support;
 
-    /// <summary>
-    /// Callback delegate for performing actions within a transactional context.
-    /// </summary>
-    /// <remarks>
-    /// <p>To be used with <see cref="TransactionTemplate"/>'s Execute
-    /// methods.
-    /// </p>
-    /// <p>
-    /// Typically used to gather various calls to transaction-unaware low-level
-    /// services into a higher-level method implementation with transaction
-    /// demarcation.
-    /// </p>
-    /// </remarks>
-    /// <param name="status">The status of the transaction, can be used to
-    /// trigger a rollback the current transaction by settings its
-    /// RollbackOnly property to true.</param>
-    /// <returns>A result object or <c>null</c>.</returns>
-    public delegate object TransactionDelegate(ITransactionStatus status);
-}
+/// <summary>
+/// Callback delegate for performing actions within a transactional context.
+/// </summary>
+/// <remarks>
+/// <p>To be used with <see cref="TransactionTemplate"/>'s Execute
+/// methods.
+/// </p>
+/// <p>
+/// Typically used to gather various calls to transaction-unaware low-level
+/// services into a higher-level method implementation with transaction
+/// demarcation.
+/// </p>
+/// </remarks>
+/// <param name="status">The status of the transaction, can be used to
+/// trigger a rollback the current transaction by settings its
+/// RollbackOnly property to true.</param>
+/// <returns>A result object or <c>null</c>.</returns>
+public delegate object TransactionDelegate(ITransactionStatus status);

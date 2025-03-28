@@ -24,37 +24,36 @@ using AopAlliance.Intercept;
 
 #endregion
 
-namespace Spring.Aop
+namespace Spring.Aop;
+
+/// <summary>
+/// Subinterface of the AOP Alliance
+/// <see cref="AopAlliance.Intercept.IMethodInterceptor"/> interface that
+/// allows additional interfaces to be implemented by the interceptor, and
+/// available via a proxy using that interceptor.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This is a fundamental AOP concept called <b>introduction</b>.
+/// </p>
+/// <p>
+/// Introductions are often <b>mixins</b>, enabling the building of composite
+/// objects that can achieve many of the goals of multiple inheritance.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+public interface IIntroductionInterceptor : IMethodInterceptor
 {
-	/// <summary>
-	/// Subinterface of the AOP Alliance
-	/// <see cref="AopAlliance.Intercept.IMethodInterceptor"/> interface that
-	/// allows additional interfaces to be implemented by the interceptor, and
-	/// available via a proxy using that interceptor.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This is a fundamental AOP concept called <b>introduction</b>.
-	/// </p>
-	/// <p>
-	/// Introductions are often <b>mixins</b>, enabling the building of composite
-	/// objects that can achieve many of the goals of multiple inheritance.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Aleksandar Seovic (.NET)</author>
-	public interface IIntroductionInterceptor : IMethodInterceptor
-	{
-		/// <summary>
-		/// Does this <see cref="Spring.Aop.IIntroductionInterceptor"/>
-		/// implement the given interface?
-		/// </summary>
-		/// <param name="intf">The interface to check.</param>
-		/// <returns>
-		/// <see langword="true"/> if this
-		/// <see cref="Spring.Aop.IIntroductionInterceptor"/>
-		/// implements the given interface.
-		/// </returns>
-		bool ImplementsInterface(Type intf);
-	}
+    /// <summary>
+    /// Does this <see cref="Spring.Aop.IIntroductionInterceptor"/>
+    /// implement the given interface?
+    /// </summary>
+    /// <param name="intf">The interface to check.</param>
+    /// <returns>
+    /// <see langword="true"/> if this
+    /// <see cref="Spring.Aop.IIntroductionInterceptor"/>
+    /// implements the given interface.
+    /// </returns>
+    bool ImplementsInterface(Type intf);
 }

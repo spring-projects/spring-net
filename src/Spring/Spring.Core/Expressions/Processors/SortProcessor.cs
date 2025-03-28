@@ -21,70 +21,70 @@
 using System.Collections;
 using Spring.Collections;
 
-namespace Spring.Expressions.Processors
+namespace Spring.Expressions.Processors;
+
+/// <summary>
+/// Implementation of the sort processor.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class SortProcessor : ICollectionProcessor
 {
     /// <summary>
-    /// Implementation of the sort processor.
+    /// Sorts the source collection.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class SortProcessor : ICollectionProcessor
+    /// <remarks>
+    /// Please not that this processor requires that collection elements
+    /// are of a uniform type and that they implement <see cref="IComparable"/>
+    /// interface.
+    /// <p/>
+    /// If you want to perform custom sorting based on element properties
+    /// you should consider using <see cref="OrderByProcessor"/> instead.
+    /// </remarks>
+    /// <param name="source">
+    /// The source collection to sort.
+    /// </param>
+    /// <param name="args">
+    /// Ignored.
+    /// </param>
+    /// <returns>
+    /// An array containing sorted collection elements.
+    /// </returns>
+    /// <exception cref="ArgumentException">
+    /// If <paramref name="source"/> collection is not empty and it is
+    /// neither <see cref="IList"/> nor <see cref="ISet"/>.
+    /// </exception>
+    public object Process(ICollection source, object[] args)
     {
-        /// <summary>
-        /// Sorts the source collection.
-        /// </summary>
-        /// <remarks>
-        /// Please not that this processor requires that collection elements
-        /// are of a uniform type and that they implement <see cref="IComparable"/>
-        /// interface.
-        /// <p/>
-        /// If you want to perform custom sorting based on element properties
-        /// you should consider using <see cref="OrderByProcessor"/> instead.
-        /// </remarks>
-        /// <param name="source">
-        /// The source collection to sort.
-        /// </param>
-        /// <param name="args">
-        /// Ignored.
-        /// </param>
-        /// <returns>
-        /// An array containing sorted collection elements.
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// If <paramref name="source"/> collection is not empty and it is
-        /// neither <see cref="IList"/> nor <see cref="ISet"/>.
-        /// </exception>
-        public object Process(ICollection source, object[] args)
+        if (source == null || source.Count == 0)
         {
-            if (source == null || source.Count == 0)
-            {
-                return source;
-            }
-
-            bool sortAscending = true;
-            if (args != null && args.Length == 1 && args[0] is bool)
-            {
-                sortAscending = (bool) args[0];
-            }
-
-            ArrayList list = new ArrayList(source);
-            list.Sort();
-            if (!sortAscending)
-            {
-                list.Reverse();
-            }
-
-            Type elementType = DetermineElementType(list);
-            return list.ToArray(elementType);
+            return source;
         }
 
-        private Type DetermineElementType(IList list)
+        bool sortAscending = true;
+        if (args != null && args.Length == 1 && args[0] is bool)
         {
-            for(int i=0;i<list.Count;i++)
-            {
-                object element = list[i];
-                if (element != null) return element.GetType();
-            }
-            return typeof (object);
+            sortAscending = (bool) args[0];
         }
+
+        ArrayList list = new ArrayList(source);
+        list.Sort();
+        if (!sortAscending)
+        {
+            list.Reverse();
+        }
+
+        Type elementType = DetermineElementType(list);
+        return list.ToArray(elementType);
+    }
+
+    private Type DetermineElementType(IList list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            object element = list[i];
+            if (element != null) return element.GetType();
+        }
+
+        return typeof(object);
     }
 }

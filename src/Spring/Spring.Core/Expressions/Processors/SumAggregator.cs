@@ -21,45 +21,44 @@
 using System.Collections;
 using Spring.Util;
 
-namespace Spring.Expressions.Processors
+namespace Spring.Expressions.Processors;
+
+/// <summary>
+/// Implementation of the sum aggregator.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class SumAggregator : ICollectionProcessor
 {
     /// <summary>
-    /// Implementation of the sum aggregator.
+    /// Returns the sum of the numeric values in the source collection.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class SumAggregator : ICollectionProcessor
+    /// <param name="source">
+    /// The source collection to process.
+    /// </param>
+    /// <param name="args">
+    /// Ignored.
+    /// </param>
+    /// <returns>
+    /// The sum of the numeric values in the source collection.
+    /// </returns>
+    public object Process(ICollection source, object[] args)
     {
-        /// <summary>
-        /// Returns the sum of the numeric values in the source collection.
-        /// </summary>
-        /// <param name="source">
-        /// The source collection to process.
-        /// </param>
-        /// <param name="args">
-        /// Ignored.
-        /// </param>
-        /// <returns>
-        /// The sum of the numeric values in the source collection.
-        /// </returns>
-        public object Process(ICollection source, object[] args)
+        object total = 0d;
+        foreach (object item in source)
         {
-            object total = 0d;
-            foreach (object item in source)
+            if (item != null)
             {
-                if (item != null)
+                if (NumberUtils.IsNumber(item))
                 {
-                    if (NumberUtils.IsNumber(item))
-                    {
-                        total = NumberUtils.Add(total, item);
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Sum can only be calculated for a collection of numeric values.");
-                    }
+                    total = NumberUtils.Add(total, item);
+                }
+                else
+                {
+                    throw new ArgumentException("Sum can only be calculated for a collection of numeric values.");
                 }
             }
-
-            return total;
         }
+
+        return total;
     }
 }

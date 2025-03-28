@@ -25,125 +25,126 @@ using System.Reflection;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Factory class to conceal any default <see cref="Spring.Core.IControlFlow"/> implementation.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Simon White (.NET)</author>
+public abstract class ControlFlowFactory
 {
-	/// <summary>
-	/// Factory class to conceal any default <see cref="Spring.Core.IControlFlow"/> implementation.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Simon White (.NET)</author>
-	public abstract class ControlFlowFactory
-	{
-		/// <summary>
-		/// Creates a new instance of the <see cref="Spring.Core.IControlFlow"/>
-		/// implementation provided by this factory.
-		/// </summary>
-		/// <returns>
-		/// A new instance of the <see cref="Spring.Core.IControlFlow"/>
-		/// implementation provided by this factory.
-		/// </returns>
-		public static IControlFlow CreateControlFlow()
-		{
-			return new DefaultControlFlow();
-		}
+    /// <summary>
+    /// Creates a new instance of the <see cref="Spring.Core.IControlFlow"/>
+    /// implementation provided by this factory.
+    /// </summary>
+    /// <returns>
+    /// A new instance of the <see cref="Spring.Core.IControlFlow"/>
+    /// implementation provided by this factory.
+    /// </returns>
+    public static IControlFlow CreateControlFlow()
+    {
+        return new DefaultControlFlow();
+    }
 
-		private class DefaultControlFlow : IControlFlow
-		{
-			private StackTrace _stackTrace;
+    private class DefaultControlFlow : IControlFlow
+    {
+        private StackTrace _stackTrace;
 
-			#region Constructor (s) / Destructor
+        #region Constructor (s) / Destructor
 
-			/// <summary>
-			/// Creates a new instance of the
-			/// <see cref="Spring.Core.ControlFlowFactory.DefaultControlFlow"/> class.
-			/// </summary>
-			public DefaultControlFlow()
-			{
-				_stackTrace = new StackTrace();
-			}
+        /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Core.ControlFlowFactory.DefaultControlFlow"/> class.
+        /// </summary>
+        public DefaultControlFlow()
+        {
+            _stackTrace = new StackTrace();
+        }
 
-			#endregion
+        #endregion
 
-			#region IControlFlow Members
+        #region IControlFlow Members
 
-			/// <summary>
-			/// Detects whether the caller is under the supplied <see cref="System.Type"/>,
-			/// according to the current stacktrace.
-			/// </summary>
-			/// <seealso cref="Spring.Core.IControlFlow.Under(Type)"/>
-			bool IControlFlow.Under(Type type)
-			{
-				return IsMatch(new MethodsDeclaredTypeCriteria(type));
-			}
+        /// <summary>
+        /// Detects whether the caller is under the supplied <see cref="System.Type"/>,
+        /// according to the current stacktrace.
+        /// </summary>
+        /// <seealso cref="Spring.Core.IControlFlow.Under(Type)"/>
+        bool IControlFlow.Under(Type type)
+        {
+            return IsMatch(new MethodsDeclaredTypeCriteria(type));
+        }
 
-			/// <summary>
-			/// Detects whether the caller is under the supplied <see cref="System.Type"/>
-			/// and <paramref name="methodName"/>, according to the current stacktrace.
-			/// </summary>
-			/// <remarks>
-			/// <p>
-			/// Matches the whole method name.
-			/// </p>
-			/// </remarks>
-			/// <seealso cref="Spring.Core.IControlFlow.Under(Type, string)"/>
-			bool IControlFlow.Under(Type type, string methodName)
-			{
-				ComposedCriteria criteria = new ComposedCriteria();
-				criteria.Add(new MethodsDeclaredTypeCriteria(type));
-				criteria.Add(new RegularExpressionMethodNameCriteria(methodName));
-				return IsMatch(criteria);
-			}
+        /// <summary>
+        /// Detects whether the caller is under the supplied <see cref="System.Type"/>
+        /// and <paramref name="methodName"/>, according to the current stacktrace.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Matches the whole method name.
+        /// </p>
+        /// </remarks>
+        /// <seealso cref="Spring.Core.IControlFlow.Under(Type, string)"/>
+        bool IControlFlow.Under(Type type, string methodName)
+        {
+            ComposedCriteria criteria = new ComposedCriteria();
+            criteria.Add(new MethodsDeclaredTypeCriteria(type));
+            criteria.Add(new RegularExpressionMethodNameCriteria(methodName));
+            return IsMatch(criteria);
+        }
 
-			/// <summary>
-			/// Does the current stack trace contain the supplied <paramref name="token"/>?
-			/// </summary>
-			/// <remarks>
-			/// <p>
-			/// This leaves it up to the caller to decide what matches, but is obviously less of
-			/// an abstraction because the caller must know the exact format of the underlying
-			/// stack trace.
-			/// </p>
-			/// </remarks>
-			/// <seealso cref="Spring.Core.IControlFlow.UnderToken(string)"/>
-			bool IControlFlow.UnderToken(string token)
-			{
-				return _stackTrace.ToString().IndexOf(token) != -1;
-			}
+        /// <summary>
+        /// Does the current stack trace contain the supplied <paramref name="token"/>?
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// This leaves it up to the caller to decide what matches, but is obviously less of
+        /// an abstraction because the caller must know the exact format of the underlying
+        /// stack trace.
+        /// </p>
+        /// </remarks>
+        /// <seealso cref="Spring.Core.IControlFlow.UnderToken(string)"/>
+        bool IControlFlow.UnderToken(string token)
+        {
+            return _stackTrace.ToString().IndexOf(token) != -1;
+        }
 
-			private bool IsMatch(ICriteria criteria)
-			{
-				for (int i = 0; i < _stackTrace.FrameCount; i++)
-				{
-					MethodBase method = _stackTrace.GetFrame(i).GetMethod();
-					if(criteria.IsSatisfied(method))
-					{
-						return true;
-					}
-				}
-				return false;
-			}
+        private bool IsMatch(ICriteria criteria)
+        {
+            for (int i = 0; i < _stackTrace.FrameCount; i++)
+            {
+                MethodBase method = _stackTrace.GetFrame(i).GetMethod();
+                if (criteria.IsSatisfied(method))
+                {
+                    return true;
+                }
+            }
 
-			private sealed class MethodsDeclaredTypeCriteria : ICriteria
-			{
-				public MethodsDeclaredTypeCriteria(Type typeToMatch)
-				{
-					_typeToMatch = typeToMatch;
-				}
+            return false;
+        }
 
-				public bool IsSatisfied(object datum)
-				{
-					MethodBase method = datum as MethodBase;
-					if(method != null && method.DeclaringType != null)
-					{
-						return method.DeclaringType.Equals(_typeToMatch);
-					}
-					return false;
-				}
+        private sealed class MethodsDeclaredTypeCriteria : ICriteria
+        {
+            public MethodsDeclaredTypeCriteria(Type typeToMatch)
+            {
+                _typeToMatch = typeToMatch;
+            }
 
-				private Type _typeToMatch;
-			}
+            public bool IsSatisfied(object datum)
+            {
+                MethodBase method = datum as MethodBase;
+                if (method != null && method.DeclaringType != null)
+                {
+                    return method.DeclaringType.Equals(_typeToMatch);
+                }
 
-			#endregion
-		}
-	}
+                return false;
+            }
+
+            private Type _typeToMatch;
+        }
+
+        #endregion
+    }
 }

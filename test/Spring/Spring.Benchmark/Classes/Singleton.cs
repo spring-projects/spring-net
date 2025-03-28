@@ -1,80 +1,79 @@
-﻿namespace Spring.Benchmark.Classes
+﻿namespace Spring.Benchmark.Classes;
+
+public interface ISingleton1
 {
-    public interface ISingleton1
+    void DoSomething();
+}
+
+public interface ISingleton2
+{
+    void DoSomething();
+}
+
+public interface ISingleton3
+{
+    void DoSomething();
+}
+
+public class Singleton1 : ISingleton1
+{
+    private static int counter;
+
+    public Singleton1()
     {
-        void DoSomething();
+        System.Threading.Interlocked.Increment(ref counter);
     }
 
-    public interface ISingleton2
+    public static int Instances
     {
-        void DoSomething();
+        get { return counter; }
+        set { counter = value; }
     }
 
-    public interface ISingleton3
+    public void DoSomething()
     {
-        void DoSomething();
+        Console.WriteLine("Hello");
+    }
+}
+
+public class Singleton2 : ISingleton2
+{
+    private static int counter;
+
+    public Singleton2()
+    {
+        System.Threading.Interlocked.Increment(ref counter);
     }
 
-    public class Singleton1 : ISingleton1
+    public static int Instances
     {
-        private static int counter;
-
-        public Singleton1()
-        {
-            System.Threading.Interlocked.Increment(ref counter);
-        }
-
-        public static int Instances
-        {
-            get { return counter; }
-            set { counter = value; }
-        }
-
-        public void DoSomething()
-        {
-            Console.WriteLine("Hello");
-        }
+        get { return counter; }
+        set { counter = value; }
     }
 
-    public class Singleton2 : ISingleton2
+    public void DoSomething()
     {
-        private static int counter;
+        Console.WriteLine("Hello");
+    }
+}
 
-        public Singleton2()
-        {
-            System.Threading.Interlocked.Increment(ref counter);
-        }
+public class Singleton3 : ISingleton3
+{
+    private static int counter;
 
-        public static int Instances
-        {
-            get { return counter; }
-            set { counter = value; }
-        }
-
-        public void DoSomething()
-        {
-            Console.WriteLine("Hello");
-        }
+    public Singleton3()
+    {
+        System.Threading.Interlocked.Increment(ref counter);
     }
 
-    public class Singleton3 : ISingleton3
+    public static int Instances
     {
-        private static int counter;
+        get { return counter; }
+        set { counter = value; }
+    }
 
-        public Singleton3()
-        {
-            System.Threading.Interlocked.Increment(ref counter);
-        }
-
-        public static int Instances
-        {
-            get { return counter; }
-            set { counter = value; }
-        }
-
-        public void DoSomething()
-        {
-            Console.WriteLine("Hello");
-        }
+    public void DoSomething()
+    {
+        Console.WriteLine("Hello");
     }
 }

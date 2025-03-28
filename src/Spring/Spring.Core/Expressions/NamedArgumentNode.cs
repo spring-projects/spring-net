@@ -20,39 +20,38 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed named argument node in the expression.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class NamedArgumentNode : BaseNode
 {
     /// <summary>
-    /// Represents parsed named argument node in the expression.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class NamedArgumentNode : BaseNode
+    public NamedArgumentNode()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public NamedArgumentNode()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected NamedArgumentNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected NamedArgumentNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Returns the value of the named argument defined by this node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            return GetValue(((BaseNode) this.getFirstChild()), evalContext.RootContext, evalContext);
-        }
+    /// <summary>
+    /// Returns the value of the named argument defined by this node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        return GetValue(((BaseNode) this.getFirstChild()), evalContext.RootContext, evalContext);
     }
 }

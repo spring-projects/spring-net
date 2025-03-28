@@ -22,60 +22,59 @@
 
 #endregion
 
-namespace Spring.Threading
+namespace Spring.Threading;
+
+/// <summary>
+/// Base class for async test operations
+/// </summary>
+/// <author>Erich Eichinger</author>
+public abstract class AsyncTestTask
 {
-    /// <summary>
-    /// Base class for async test operations
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    public abstract class AsyncTestTask
+    private Exception exception;
+    private Thread t;
+    private readonly int iterations;
+    private int iterationno;
+
+    public AsyncTestTask(int iterations)
     {
-        private Exception exception;
-        private Thread t;
-        private readonly int iterations;
-        private int iterationno;
+        this.iterations = iterations;
+        t = new Thread(new ThreadStart(Run));
+        t.IsBackground = true;
+    }
 
-        public AsyncTestTask(int iterations)
+    public abstract void DoExecute();
+
+    public AsyncTestTask Start()
+    {
+        t.Start();
+        return this;
+    }
+
+    public void Run()
+    {
+        int loop = 0;
+        try
         {
-            this.iterations = iterations;
-            t = new Thread(new ThreadStart(Run));
-            t.IsBackground = true;
-        }
-
-        public abstract void DoExecute();
-
-        public AsyncTestTask Start()
-        {
-            t.Start();
-            return this;
-        }
-
-        public void Run()
-        {
-            int loop = 0;
-            try
+            iterationno = 0;
+            for (loop = 0; loop < iterations; loop++)
             {
-                iterationno = 0;
-                for(loop = 0; loop < iterations; loop++)
-                {
-                    DoExecute();
-                    Thread.Sleep(0);
-                }
-            }
-            catch(Exception ex)
-            {
-                iterationno = loop;
-                exception = ex;
+                DoExecute();
+                Thread.Sleep(0);
             }
         }
-
-        public void AssertNoException()
+        catch (Exception ex)
         {
-            t.Join();
-            if(exception != null)
-            {
-                throw new Exception("Exception occured in testtask on iteration " + iterationno, exception);
-            }
+            iterationno = loop;
+            exception = ex;
+        }
+    }
+
+    public void AssertNoException()
+    {
+        t.Join();
+        if (exception != null)
+        {
+            throw new Exception("Exception occured in testtask on iteration " + iterationno, exception);
         }
     }
 }

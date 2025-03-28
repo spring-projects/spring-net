@@ -25,67 +25,66 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop.Framework.Adapter
+namespace Spring.Aop.Framework.Adapter;
+
+/// <summary>
+/// <see cref="AopAlliance.Intercept.IInterceptor"/> implementation that
+/// wraps <see cref="Spring.Aop.IMethodBeforeAdvice"/> instances.
+/// </summary>
+/// <remarks>
+/// <p>
+/// In the future Spring.NET may also offer a more efficient alternative
+/// solution in cases where there is no interception advice and therefore
+/// no need to create an <see cref="AopAlliance.Intercept.IMethodInvocation"/>
+/// object.
+/// </p>
+/// <p>
+/// Used internally by the Spring.NET AOP framework: application developers
+/// should not need to use this class directly.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+[Serializable]
+internal sealed class MethodBeforeAdviceInterceptor : IMethodInterceptor
 {
+    private IMethodBeforeAdvice advice;
+
     /// <summary>
-    /// <see cref="AopAlliance.Intercept.IInterceptor"/> implementation that
-    /// wraps <see cref="Spring.Aop.IMethodBeforeAdvice"/> instances.
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Framework.Adapter.MethodBeforeAdviceInterceptor"/>
+    /// class.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// In the future Spring.NET may also offer a more efficient alternative
-    /// solution in cases where there is no interception advice and therefore
-    /// no need to create an <see cref="AopAlliance.Intercept.IMethodInvocation"/>
-    /// object.
-    /// </p>
-    /// <p>
-    /// Used internally by the Spring.NET AOP framework: application developers
-    /// should not need to use this class directly.
-    /// </p>
-    /// </remarks>
-    /// <author>Rod Johnson</author>
-    /// <author>Aleksandar Seovic (.NET)</author>
-    [Serializable]
-    internal sealed class MethodBeforeAdviceInterceptor : IMethodInterceptor
+    /// <param name="advice">
+    /// The <see cref="Spring.Aop.IMethodBeforeAdvice"/> that is to be wrapped.
+    /// </param>
+    /// <exception cref="System.ArgumentNullException">
+    /// If the supplied <paramref name="advice"/> is <see langword="null"/>.
+    /// </exception>
+    public MethodBeforeAdviceInterceptor(IMethodBeforeAdvice advice)
     {
-        private IMethodBeforeAdvice advice;
+        AssertUtils.ArgumentNotNull(advice, "advice");
+        this.advice = advice;
+    }
 
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Aop.Framework.Adapter.MethodBeforeAdviceInterceptor"/>
-        /// class.
-        /// </summary>
-        /// <param name="advice">
-        /// The <see cref="Spring.Aop.IMethodBeforeAdvice"/> that is to be wrapped.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// If the supplied <paramref name="advice"/> is <see langword="null"/>.
-        /// </exception>
-        public MethodBeforeAdviceInterceptor(IMethodBeforeAdvice advice)
-        {
-            AssertUtils.ArgumentNotNull(advice, "advice");
-            this.advice = advice;
-        }
-
-        /// <summary>
-        /// Executes interceptor before the target method successfully returns.
-        /// </summary>
-        /// <param name="invocation">
-        /// The method invocation that is being intercepted.
-        /// </param>
-        /// <returns>
-        /// The result of the call to the
-        /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/> method of
-        /// the supplied <paramref name="invocation"/>.
-        /// </returns>
-        /// <exception cref="System.Exception">
-        /// If any of the interceptors in the chain or the target object itself
-        /// throws an exception.
-        /// </exception>
-        public object Invoke(IMethodInvocation invocation)
-        {
-            advice.Before(invocation.Method, invocation.Arguments, invocation.This);
-            return invocation.Proceed();
-        }
+    /// <summary>
+    /// Executes interceptor before the target method successfully returns.
+    /// </summary>
+    /// <param name="invocation">
+    /// The method invocation that is being intercepted.
+    /// </param>
+    /// <returns>
+    /// The result of the call to the
+    /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/> method of
+    /// the supplied <paramref name="invocation"/>.
+    /// </returns>
+    /// <exception cref="System.Exception">
+    /// If any of the interceptors in the chain or the target object itself
+    /// throws an exception.
+    /// </exception>
+    public object Invoke(IMethodInvocation invocation)
+    {
+        advice.Before(invocation.Method, invocation.Arguments, invocation.This);
+        return invocation.Proceed();
     }
 }

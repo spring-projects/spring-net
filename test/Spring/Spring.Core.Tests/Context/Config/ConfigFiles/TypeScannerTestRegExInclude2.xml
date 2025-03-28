@@ -2,10 +2,10 @@
 <objects xmlns="http://www.springframework.net"
          xmlns:context="http://www.springframework.net/context">
 
-	<context:component-scan base-assemblies="Spring.Core.Tests">
-		<context:include-filter type="regex" expression=".*Test.*Include1"/>
-		<context:include-filter type="regex" expression=".*Test.*Include2"/>
-	</context:component-scan>
-  
+    <context:component-scan base-assemblies="Spring.Core.Tests">
+        <context:include-filter type="regex" expression=".*Test.*Include1" />
+        <context:include-filter type="regex" expression=".*Test.*Include2" />
+    </context:component-scan>
+
 </objects>
 

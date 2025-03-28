@@ -24,13 +24,12 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Unit tests for the PatternMatchUtils class.
+/// </summary>
+[TestFixture]
+public sealed class PatternMatchUtilsTests
 {
-	/// <summary>
-    /// Unit tests for the PatternMatchUtils class.
-	/// </summary>
-    [TestFixture]
-    public sealed class PatternMatchUtilsTests
-    {
-    }
 }

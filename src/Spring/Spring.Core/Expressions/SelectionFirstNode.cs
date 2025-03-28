@@ -21,59 +21,59 @@
 using System.Collections;
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed selection node in the navigation expression.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class SelectionFirstNode : BaseNode
 {
     /// <summary>
-    /// Represents parsed selection node in the navigation expression.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class SelectionFirstNode : BaseNode
+    public SelectionFirstNode() : base()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public SelectionFirstNode():base()
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected SelectionFirstNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Returns the first context item that matches selection expression.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        IEnumerable enumerable = context as IEnumerable;
+        if (enumerable == null)
         {
+            throw new ArgumentException(
+                "Selection can only be used on an instance of the type that implements IEnumerable.");
         }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected SelectionFirstNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        BaseNode expression = (BaseNode) this.getFirstChild();
+        using (evalContext.SwitchThisContext())
         {
-        }
-
-        /// <summary>
-        /// Returns the first context item that matches selection expression.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            IEnumerable enumerable = context as IEnumerable;
-            if (enumerable == null)
+            foreach (object o in enumerable)
             {
-                throw new ArgumentException(
-                    "Selection can only be used on an instance of the type that implements IEnumerable.");
-            }
-
-            BaseNode expression = (BaseNode) this.getFirstChild();
-            using (evalContext.SwitchThisContext())
-            {
-                foreach (object o in enumerable)
+                evalContext.ThisContext = o;
+                bool isMatch = (bool) GetValue(expression, o, evalContext);
+                if (isMatch)
                 {
-                    evalContext.ThisContext = o;
-                    bool isMatch = (bool)GetValue(expression, o, evalContext);
-                    if (isMatch)
-                    {
-                        return o;
-                    }
+                    return o;
                 }
             }
-            return null;
         }
+
+        return null;
     }
 }

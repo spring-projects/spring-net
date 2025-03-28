@@ -19,57 +19,56 @@ using NHibernate;
 using NHibernate.Engine;
 using NHibernate.Proxy;
 
-namespace Spring.Data.NHibernate.Bytecode
+namespace Spring.Data.NHibernate.Bytecode;
+
+/// <summary>
+/// A Spring for .NET backed <see cref="IProxyFactory"/> implementation for creating
+/// NHibernate proxies.
+/// </summary>
+/// <seealso cref="ProxyFactoryFactory"/>
+/// <author>Erich Eichinger</author>
+public class ProxyFactory : AbstractProxyFactory
 {
-    /// <summary>
-    /// A Spring for .NET backed <see cref="IProxyFactory"/> implementation for creating
-    /// NHibernate proxies.
-    /// </summary>
-    /// <seealso cref="ProxyFactoryFactory"/>
-    /// <author>Erich Eichinger</author>
-    public class ProxyFactory : AbstractProxyFactory
+    private static readonly ILogger<ProxyFactory> log = LogManager.GetLogger<ProxyFactory>();
+
+    [Serializable]
+    private class SerializableProxyFactory : global::Spring.Aop.Framework.ProxyFactory
     {
-        private static readonly ILogger<ProxyFactory> log = LogManager.GetLogger<ProxyFactory>();
-
-        [Serializable]
-        private class SerializableProxyFactory : global::Spring.Aop.Framework.ProxyFactory
+        // ensure proxy types are generated as Serializable
+        public override bool IsSerializable
         {
-            // ensure proxy types are generated as Serializable
-            public override bool IsSerializable
-            {
-                get { return true; }
-            }
+            get { return true; }
         }
+    }
 
-        /// <summary>
-        /// Creates a new proxy.
-        /// </summary>
-        /// <param name="id">The id value for the proxy to be generated.</param>
-        /// <param name="session">The session to which the generated proxy will be associated.</param>
-        /// <returns>The generated proxy.</returns>
-        /// <exception cref="T:NHibernate.HibernateException">Indicates problems generating requested proxy.</exception>
-        public override INHibernateProxy GetProxy(object id, ISessionImplementor session)
+    /// <summary>
+    /// Creates a new proxy.
+    /// </summary>
+    /// <param name="id">The id value for the proxy to be generated.</param>
+    /// <param name="session">The session to which the generated proxy will be associated.</param>
+    /// <returns>The generated proxy.</returns>
+    /// <exception cref="T:NHibernate.HibernateException">Indicates problems generating requested proxy.</exception>
+    public override INHibernateProxy GetProxy(object id, ISessionImplementor session)
+    {
+        try
         {
-            try
-            {
-                // PersistentClass = PersistentClass.IsInterface ? typeof(object) : PersistentClass
-                LazyInitializer initializer = new LazyInitializer(EntityName, PersistentClass,
-                                                      id, GetIdentifierMethod, SetIdentifierMethod, ComponentIdType, session);
+            // PersistentClass = PersistentClass.IsInterface ? typeof(object) : PersistentClass
+            LazyInitializer initializer = new LazyInitializer(EntityName, PersistentClass,
+                id, GetIdentifierMethod, SetIdentifierMethod, ComponentIdType, session);
 
-                SerializableProxyFactory proxyFactory = new SerializableProxyFactory();
-                proxyFactory.Interfaces = Interfaces;
-                proxyFactory.TargetSource = initializer;
-                proxyFactory.ProxyTargetType = IsClassProxy;
-                proxyFactory.AddAdvice(initializer);
+            SerializableProxyFactory proxyFactory = new SerializableProxyFactory();
+            proxyFactory.Interfaces = Interfaces;
+            proxyFactory.TargetSource = initializer;
+            proxyFactory.ProxyTargetType = IsClassProxy;
+            proxyFactory.AddAdvice(initializer);
 
-                object proxyInstance = proxyFactory.GetProxy();
-                return (INHibernateProxy)proxyInstance;
-            }
-            catch (Exception ex)
-            {
-                log.LogError(ex, "Creating a proxy instance failed");
-                throw new HibernateException("Creating a proxy instance failed", ex);
-            }
+            object proxyInstance = proxyFactory.GetProxy();
+            return (INHibernateProxy) proxyInstance;
+        }
+        catch (Exception ex)
+        {
+            log.LogError(ex, "Creating a proxy instance failed");
+            throw new HibernateException("Creating a proxy instance failed", ex);
         }
     }
 }

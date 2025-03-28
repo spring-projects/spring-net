@@ -21,112 +21,110 @@
 using FakeItEasy;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
-
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
 
-namespace Spring.Aop.Target
+namespace Spring.Aop.Target;
+
+/// <summary>
+/// Unit tests for the PrototypeTargetSource class.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Federico Spinazzi</author>
+[TestFixture]
+public sealed class PrototypeTargetSourceTests
 {
     /// <summary>
-    /// Unit tests for the PrototypeTargetSource class.
+    /// The setup logic executed before the execution of this test fixture.
     /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Federico Spinazzi</author>
-    [TestFixture]
-    public sealed class PrototypeTargetSourceTests
+    [OneTimeSetUp]
+    public void FixtureSetUp()
     {
-        /// <summary>
-        /// The setup logic executed before the execution of this test fixture.
-        /// </summary>
-        [OneTimeSetUp]
-        public void FixtureSetUp()
-        {
-            // enable (null appender) logging, just to ensure that the logging code is correct
-            LogManager.LoggerFactory = NullLoggerFactory.Instance;
-        }
+        // enable (null appender) logging, just to ensure that the logging code is correct
+        LogManager.LoggerFactory = NullLoggerFactory.Instance;
+    }
 
-        /// <summary>
-        ///  Test that multiple invocations of the prototype object will result
-        ///  in no change to visible state, as a new instance is used.
-        ///  With the singleton, there will be change.
-        /// </summary>
-        [Test]
-        public void PrototypeAndSingletonBehaveDifferently()
-        {
-            int initialCount = 10;
-            IObjectFactory of = new XmlObjectFactory(new ReadOnlyXmlTestResource("prototypeTargetSourceTests.xml", GetType()));
-            ISideEffectObject singleton = (ISideEffectObject)of.GetObject("singleton");
-            Assert.AreEqual(initialCount, singleton.Count);
-            singleton.doWork();
-            Assert.AreEqual(initialCount + 1, singleton.Count);
+    /// <summary>
+    ///  Test that multiple invocations of the prototype object will result
+    ///  in no change to visible state, as a new instance is used.
+    ///  With the singleton, there will be change.
+    /// </summary>
+    [Test]
+    public void PrototypeAndSingletonBehaveDifferently()
+    {
+        int initialCount = 10;
+        IObjectFactory of = new XmlObjectFactory(new ReadOnlyXmlTestResource("prototypeTargetSourceTests.xml", GetType()));
+        ISideEffectObject singleton = (ISideEffectObject) of.GetObject("singleton");
+        Assert.AreEqual(initialCount, singleton.Count);
+        singleton.doWork();
+        Assert.AreEqual(initialCount + 1, singleton.Count);
 
-            ISideEffectObject prototype = (ISideEffectObject)of.GetObject("prototype");
-            Assert.AreEqual(initialCount, prototype.Count);
-            singleton.doWork();
-            Assert.AreEqual(initialCount, prototype.Count);
+        ISideEffectObject prototype = (ISideEffectObject) of.GetObject("prototype");
+        Assert.AreEqual(initialCount, prototype.Count);
+        singleton.doWork();
+        Assert.AreEqual(initialCount, prototype.Count);
 
-            ISideEffectObject prototypeByName = (ISideEffectObject)of.GetObject("prototypeByName");
-            Assert.AreEqual(initialCount, prototypeByName.Count);
-            singleton.doWork();
-            Assert.AreEqual(initialCount, prototypeByName.Count);
-        }
+        ISideEffectObject prototypeByName = (ISideEffectObject) of.GetObject("prototypeByName");
+        Assert.AreEqual(initialCount, prototypeByName.Count);
+        singleton.doWork();
+        Assert.AreEqual(initialCount, prototypeByName.Count);
+    }
 
-        [Test]
-        public void TargetType()
-        {
-            SideEffectObject target = new SideEffectObject();
+    [Test]
+    public void TargetType()
+    {
+        SideEffectObject target = new SideEffectObject();
 
-            IObjectFactory factory = A.Fake<IObjectFactory>();
+        IObjectFactory factory = A.Fake<IObjectFactory>();
 
-            A.CallTo(() => factory.IsPrototype(null)).Returns(true);
-            A.CallTo(() => factory.GetType(null)).Returns(typeof(SideEffectObject));
+        A.CallTo(() => factory.IsPrototype(null)).Returns(true);
+        A.CallTo(() => factory.GetType(null)).Returns(typeof(SideEffectObject));
 
-            PrototypeTargetSource source = new PrototypeTargetSource();
-            source.ObjectFactory = factory;
-            Assert.AreEqual(target.GetType(), source.TargetType, "Wrong TargetType being returned.");
-        }
+        PrototypeTargetSource source = new PrototypeTargetSource();
+        source.ObjectFactory = factory;
+        Assert.AreEqual(target.GetType(), source.TargetType, "Wrong TargetType being returned.");
+    }
 
-        [Test]
-        public void IsStatic()
-        {
-            PrototypeTargetSource source = new PrototypeTargetSource();
-            Assert.IsFalse(source.IsStatic, "Must not be static.");
-        }
+    [Test]
+    public void IsStatic()
+    {
+        PrototypeTargetSource source = new PrototypeTargetSource();
+        Assert.IsFalse(source.IsStatic, "Must not be static.");
+    }
 
-        [Test]
-        public void WithNonSingletonTargetObject()
-        {
-            IObjectFactory factory = A.Fake<IObjectFactory>();
-            const string objectName = "Foo";
+    [Test]
+    public void WithNonSingletonTargetObject()
+    {
+        IObjectFactory factory = A.Fake<IObjectFactory>();
+        const string objectName = "Foo";
 
-            A.CallTo(() => factory.IsPrototype(objectName)).Returns(false);
-            PrototypeTargetSource source = new PrototypeTargetSource();
-            source.TargetObjectName = objectName;
+        A.CallTo(() => factory.IsPrototype(objectName)).Returns(false);
+        PrototypeTargetSource source = new PrototypeTargetSource();
+        source.TargetObjectName = objectName;
 
-            Assert.Throws<ObjectDefinitionStoreException>(delegate { source.ObjectFactory = factory; });
-        }
+        Assert.Throws<ObjectDefinitionStoreException>(delegate { source.ObjectFactory = factory; });
+    }
 
-        [Test]
-        public void GetTarget()
-        {
-            IObjectFactory factory = A.Fake<IObjectFactory>();
-            SideEffectObject target = new SideEffectObject();
-            A.CallTo(() => factory.IsPrototype("foo")).Returns(true);
-            A.CallTo(() => factory.GetObject("foo")).Returns(target);
-            A.CallTo(() => factory.GetType("foo")).Returns(typeof(string));
+    [Test]
+    public void GetTarget()
+    {
+        IObjectFactory factory = A.Fake<IObjectFactory>();
+        SideEffectObject target = new SideEffectObject();
+        A.CallTo(() => factory.IsPrototype("foo")).Returns(true);
+        A.CallTo(() => factory.GetObject("foo")).Returns(target);
+        A.CallTo(() => factory.GetType("foo")).Returns(typeof(string));
 
-            PrototypeTargetSource source = new PrototypeTargetSource();
-            source.TargetObjectName = "foo";
-            source.ObjectFactory = factory;
-            Assert.IsTrue(object.ReferenceEquals(source.GetTarget(), target),
-                "Initial target source reference not being returned by GetTarget().");
-        }
+        PrototypeTargetSource source = new PrototypeTargetSource();
+        source.TargetObjectName = "foo";
+        source.ObjectFactory = factory;
+        Assert.IsTrue(object.ReferenceEquals(source.GetTarget(), target),
+            "Initial target source reference not being returned by GetTarget().");
+    }
 
-        [Test]
-        public void AfterPropertiesSetWithoutTargetObjectNameBeingSet()
-        {
-            PrototypeTargetSource source = new PrototypeTargetSource();
-            Assert.Throws<ArgumentNullException>(() => source.AfterPropertiesSet());
-        }
+    [Test]
+    public void AfterPropertiesSetWithoutTargetObjectNameBeingSet()
+    {
+        PrototypeTargetSource source = new PrototypeTargetSource();
+        Assert.Throws<ArgumentNullException>(() => source.AfterPropertiesSet());
     }
 }

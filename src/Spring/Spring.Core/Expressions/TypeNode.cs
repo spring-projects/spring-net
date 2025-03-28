@@ -22,62 +22,62 @@ using System.Runtime.Serialization;
 using Spring.Core.TypeResolution;
 using Spring.Expressions.Parser.antlr.collections;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed type node in the navigation expression.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class TypeNode : BaseNode
 {
+    private Type type;
+
     /// <summary>
-    /// Represents parsed type node in the navigation expression.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class TypeNode : BaseNode
+    public TypeNode()
+        : base()
     {
-        private Type type;
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public TypeNode()
-            : base()
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected TypeNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected TypeNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+    /// <summary>
+    /// Returns node's value for the given context.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        if (type == null)
         {
-        }
-
-        /// <summary>
-        /// Returns node's value for the given context.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            if (type == null)
+            lock (this)
             {
-                lock(this)
-                {
-                    type = TypeResolutionUtils.ResolveType(getText());
-                }
+                type = TypeResolutionUtils.ResolveType(getText());
             }
-
-            return type;
         }
 
-        /// <summary>
-        /// Overrides getText to allow easy way to get fully
-        /// qualified typename.
-        /// </summary>
-        /// <returns>
-        /// Fully qualified typename as a string.
-        /// </returns>
-        public override string getText()
-        {
-            string tmp = base.getText();
+        return type;
+    }
+
+    /// <summary>
+    /// Overrides getText to allow easy way to get fully
+    /// qualified typename.
+    /// </summary>
+    /// <returns>
+    /// Fully qualified typename as a string.
+    /// </returns>
+    public override string getText()
+    {
+        string tmp = base.getText();
 //            if (tmp != null && TypeRegistry.ContainsAlias(tmp))
 //            {
 //                Type type = TypeRegistry.ResolveType(tmp);
@@ -86,13 +86,13 @@ namespace Spring.Expressions
 //                    tmp = type.AssemblyQualifiedName;
 //                }
 //            }
-            AST node = this.getFirstChild();
-            while (node != null)
-            {
-                tmp += node.getText();
-                node = node.getNextSibling();
-            }
-            return tmp;
+        AST node = this.getFirstChild();
+        while (node != null)
+        {
+            tmp += node.getText();
+            node = node.getNextSibling();
         }
+
+        return tmp;
     }
 }

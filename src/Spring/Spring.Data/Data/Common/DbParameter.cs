@@ -20,169 +20,171 @@
 
 using System.Data;
 
-namespace Spring.Data.Common
+namespace Spring.Data.Common;
+
+/// <summary>
+/// A parameter class used by <see cref="DbParametersBuilder"/>
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public class DbParameter : Spring.Data.Common.IDbParameter
 {
-	/// <summary>
-    /// A parameter class used by <see cref="DbParametersBuilder"/>
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	public class DbParameter : Spring.Data.Common.IDbParameter
-	{
-		#region Fields
-        private Enum dbType;
-	    private ParameterDirection direction;
-        private bool isNullable;
-        private string name;
-	    private string sourceColumn;
-	    private DataRowVersion sourceVersion;
-        private object val;
-	    private byte precision;
-	    private byte scale;
-	    private int size;
-		#endregion
+    #region Fields
 
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DbParameter"/> class.
-        /// </summary>
-        /// <remarks>
-        /// Sets the SourceVersion to be Default and the ParameterDirection to be Input.
-        /// </remarks>
-		public DbParameter()
-		{
-            sourceVersion = DataRowVersion.Default;
-            direction = ParameterDirection.Input;
-		}
+    private Enum dbType;
+    private ParameterDirection direction;
+    private bool isNullable;
+    private string name;
+    private string sourceColumn;
+    private DataRowVersion sourceVersion;
+    private object val;
+    private byte precision;
+    private byte scale;
+    private int size;
 
-		#endregion
+    #endregion
 
-        #region IDbParameter Members
+    #region Constructor (s)
 
-        public Enum DbType
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DbParameter"/> class.
+    /// </summary>
+    /// <remarks>
+    /// Sets the SourceVersion to be Default and the ParameterDirection to be Input.
+    /// </remarks>
+    public DbParameter()
+    {
+        sourceVersion = DataRowVersion.Default;
+        direction = ParameterDirection.Input;
+    }
+
+    #endregion
+
+    #region IDbParameter Members
+
+    public Enum DbType
+    {
+        set
         {
-            set
-            {
-                dbType = value;
-            }
+            dbType = value;
         }
+    }
 
-        #endregion
+    #endregion
 
-	    public IDbParameter Type(Enum dbType)
-	    {
-	        this.dbType = dbType;
-	        return this;
-	    }
+    public IDbParameter Type(Enum dbType)
+    {
+        this.dbType = dbType;
+        return this;
+    }
 
-	    public IDbParameter Type(Enum dbType, int size)
-	    {
-	        this.dbType = dbType;
-	        this.size = size;
-	        return this;
-	    }
+    public IDbParameter Type(Enum dbType, int size)
+    {
+        this.dbType = dbType;
+        this.size = size;
+        return this;
+    }
 
-	    public Enum GetDbType()
-	    {
-	        return dbType;
-	    }
+    public Enum GetDbType()
+    {
+        return dbType;
+    }
 
-	    public IDbParameter Direction(ParameterDirection direction)
-	    {
-	        this.direction = direction;
-	        return this;
-	    }
+    public IDbParameter Direction(ParameterDirection direction)
+    {
+        this.direction = direction;
+        return this;
+    }
 
-	    public ParameterDirection GetDirection()
-	    {
-	        return direction;
-	    }
+    public ParameterDirection GetDirection()
+    {
+        return direction;
+    }
 
-	    public IDbParameter IsNullable(bool isNullable)
-	    {
-	        this.isNullable = isNullable;
-	        return this;
-	    }
+    public IDbParameter IsNullable(bool isNullable)
+    {
+        this.isNullable = isNullable;
+        return this;
+    }
 
-	    public bool GetIsNullable()
-	    {
-	        return isNullable;
-	    }
+    public bool GetIsNullable()
+    {
+        return isNullable;
+    }
 
-	    public IDbParameter Name(string name)
-	    {
-	        this.name = name;
-	        return this;
-	    }
+    public IDbParameter Name(string name)
+    {
+        this.name = name;
+        return this;
+    }
 
-	    public string GetName()
-	    {
-	        return name;
-	    }
+    public string GetName()
+    {
+        return name;
+    }
 
-	    public IDbParameter SourceColumn(string sourceColumn)
-	    {
-	        this.sourceColumn = sourceColumn;
-	        return this;
-	    }
+    public IDbParameter SourceColumn(string sourceColumn)
+    {
+        this.sourceColumn = sourceColumn;
+        return this;
+    }
 
-	    public string GetSourceColumn()
-	    {
-	        return sourceColumn;
-	    }
+    public string GetSourceColumn()
+    {
+        return sourceColumn;
+    }
 
-	    public IDbParameter SourceVersion(DataRowVersion sourceVersion)
-	    {
-	        this.sourceVersion = sourceVersion;
-	        return this;
-	    }
+    public IDbParameter SourceVersion(DataRowVersion sourceVersion)
+    {
+        this.sourceVersion = sourceVersion;
+        return this;
+    }
 
-	    public DataRowVersion GetSourceVersion()
-	    {
-	        return sourceVersion;
-	    }
+    public DataRowVersion GetSourceVersion()
+    {
+        return sourceVersion;
+    }
 
-	    public IDbParameter Value(object val)
-	    {
-	        this.val = val;
-	        return this;
-	    }
+    public IDbParameter Value(object val)
+    {
+        this.val = val;
+        return this;
+    }
 
-	    public object GetValue()
-	    {
-	       return val;
-	    }
+    public object GetValue()
+    {
+        return val;
+    }
 
-	    public IDbParameter Precision(byte precision)
-	    {
-	        this.precision = precision;
-	        return this;
-	    }
+    public IDbParameter Precision(byte precision)
+    {
+        this.precision = precision;
+        return this;
+    }
 
-	    public byte GetPrecision()
-	    {
-	        return precision;
-	    }
+    public byte GetPrecision()
+    {
+        return precision;
+    }
 
-	    public IDbParameter Scale(byte scale)
-	    {
-	        this.scale = scale;
-	        return this;
-	    }
+    public IDbParameter Scale(byte scale)
+    {
+        this.scale = scale;
+        return this;
+    }
 
-	    public byte GetScale()
-	    {
-	        return scale;
-	    }
+    public byte GetScale()
+    {
+        return scale;
+    }
 
-	    public IDbParameter Size(int size)
-	    {
-	        this.size = size;
-	        return this;
-	    }
+    public IDbParameter Size(int size)
+    {
+        this.size = size;
+        return this;
+    }
 
-	    public int GetSize()
-	    {
-	        return size;
-	    }
-	}
+    public int GetSize()
+    {
+        return size;
+    }
 }

@@ -22,61 +22,60 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Object instantiation strategy for use in
+/// <see cref="Spring.Objects.Factory.Support.WebObjectFactory"/>.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This strategy checks if objects id ASP.Net page and if it is uses
+/// PageParser to compile and instantiate page instance. Otherwise it
+/// delagates call to its parent.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class WebInstantiationStrategy : MethodInjectingInstantiationStrategy
 {
     /// <summary>
-    /// Object instantiation strategy for use in
-    /// <see cref="Spring.Objects.Factory.Support.WebObjectFactory"/>.
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Factory.Support.WebInstantiationStrategy"/> class.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// This strategy checks if objects id ASP.Net page and if it is uses
-    /// PageParser to compile and instantiate page instance. Otherwise it
-    /// delagates call to its parent.
-    /// </p>
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class WebInstantiationStrategy : MethodInjectingInstantiationStrategy
+    public WebInstantiationStrategy()
     {
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Objects.Factory.Support.WebInstantiationStrategy"/> class.
-        /// </summary>
-        public WebInstantiationStrategy()
-        {}
+    }
 
-        /// <summary>
-        /// Instantiate an instance of the object described by the supplied
-        /// <paramref name="definition"/> from the supplied <paramref name="factory"/>.
-        /// </summary>
-        /// <param name="definition">
-        /// The definition of the object that is to be instantiated.
-        /// </param>
-        /// <param name="name">
-        /// The name associated with the object definition. The name can be the null
-        /// or zero length string if we're autowiring an object that doesn't belong
-        /// to the supplied <paramref name="factory"/>.
-        /// </param>
-        /// <param name="factory">
-        /// The owning <see cref="Spring.Objects.Factory.IObjectFactory"/>
-        /// </param>
-        /// <returns>
-        /// An instance of the object described by the supplied
-        /// <paramref name="definition"/> from the supplied <paramref name="factory"/>.
-        /// </returns>
-        public override object Instantiate(
-            RootObjectDefinition definition, string name, IObjectFactory factory)
+    /// <summary>
+    /// Instantiate an instance of the object described by the supplied
+    /// <paramref name="definition"/> from the supplied <paramref name="factory"/>.
+    /// </summary>
+    /// <param name="definition">
+    /// The definition of the object that is to be instantiated.
+    /// </param>
+    /// <param name="name">
+    /// The name associated with the object definition. The name can be the null
+    /// or zero length string if we're autowiring an object that doesn't belong
+    /// to the supplied <paramref name="factory"/>.
+    /// </param>
+    /// <param name="factory">
+    /// The owning <see cref="Spring.Objects.Factory.IObjectFactory"/>
+    /// </param>
+    /// <returns>
+    /// An instance of the object described by the supplied
+    /// <paramref name="definition"/> from the supplied <paramref name="factory"/>.
+    /// </returns>
+    public override object Instantiate(
+        RootObjectDefinition definition, string name, IObjectFactory factory)
+    {
+        if (definition is IWebObjectDefinition && ((IWebObjectDefinition) definition).IsPage)
         {
-            if (definition is IWebObjectDefinition && ((IWebObjectDefinition) definition).IsPage)
-            {
-                return WebObjectUtils.CreatePageInstance(((IWebObjectDefinition) definition).PageName);
-            }
-            else
-            {
-                return base.Instantiate(definition, name, factory);
-            }
+            return WebObjectUtils.CreatePageInstance(((IWebObjectDefinition) definition).PageName);
         }
-
+        else
+        {
+            return base.Instantiate(definition, name, factory);
+        }
     }
 }

@@ -25,53 +25,52 @@ using Spring.Objects;
 
 #endregion
 
-namespace Spring.Core.TypeResolution
+namespace Spring.Core.TypeResolution;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class TypeAssemblyHolderTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class TypeAssemblyHolderTests
+    [Test]
+    public void CanTakeQualifiedType()
     {
-        [Test]
-        public void CanTakeQualifiedType()
-        {
-            Type testType = typeof(TestObject);
-            TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.AssemblyQualifiedName);
-            Assert.IsTrue(tah.IsAssemblyQualified);
-            Assert.AreEqual(testType.FullName, tah.TypeName);
-            Assert.AreEqual(testType.Assembly.FullName, tah.AssemblyName);
-        }
+        Type testType = typeof(TestObject);
+        TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.AssemblyQualifiedName);
+        Assert.IsTrue(tah.IsAssemblyQualified);
+        Assert.AreEqual(testType.FullName, tah.TypeName);
+        Assert.AreEqual(testType.Assembly.FullName, tah.AssemblyName);
+    }
 
-        [Test]
-        public void CanTakeUnqualifiedType()
-        {
-            Type testType = typeof(TestObject);
-            TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.FullName);
-            Assert.IsFalse(tah.IsAssemblyQualified);
-            Assert.AreEqual(testType.FullName, tah.TypeName);
-            Assert.AreEqual(null, tah.AssemblyName);
-        }
+    [Test]
+    public void CanTakeUnqualifiedType()
+    {
+        Type testType = typeof(TestObject);
+        TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.FullName);
+        Assert.IsFalse(tah.IsAssemblyQualified);
+        Assert.AreEqual(testType.FullName, tah.TypeName);
+        Assert.AreEqual(null, tah.AssemblyName);
+    }
 
-        [Test]
-        public void CanTakeUnqualifiedGenericType()
-        {
-            Type testType = typeof(TestGenericObject<int, string>);
-            TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.FullName);
-            Assert.IsFalse(tah.IsAssemblyQualified);
-            Assert.AreEqual(testType.FullName, tah.TypeName);
-            Assert.AreEqual(null, tah.AssemblyName);
-        }
+    [Test]
+    public void CanTakeUnqualifiedGenericType()
+    {
+        Type testType = typeof(TestGenericObject<int, string>);
+        TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.FullName);
+        Assert.IsFalse(tah.IsAssemblyQualified);
+        Assert.AreEqual(testType.FullName, tah.TypeName);
+        Assert.AreEqual(null, tah.AssemblyName);
+    }
 
-        [Test]
-        public void CanTakeQualifiedGenericType()
-        {
-            Type testType = typeof(TestGenericObject<int, string>);
-            TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.AssemblyQualifiedName);
-            Assert.IsTrue(tah.IsAssemblyQualified);
-            Assert.AreEqual(testType.FullName, tah.TypeName);
-            Assert.AreEqual(testType.Assembly.FullName, tah.AssemblyName);
-        }
+    [Test]
+    public void CanTakeQualifiedGenericType()
+    {
+        Type testType = typeof(TestGenericObject<int, string>);
+        TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.AssemblyQualifiedName);
+        Assert.IsTrue(tah.IsAssemblyQualified);
+        Assert.AreEqual(testType.FullName, tah.TypeName);
+        Assert.AreEqual(testType.Assembly.FullName, tah.AssemblyName);
     }
 }

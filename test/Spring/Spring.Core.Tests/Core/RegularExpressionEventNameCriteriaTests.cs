@@ -21,49 +21,47 @@
 #region Imports
 
 using System.Reflection;
-
 using Spring.Objects;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Unit tests for the RegularExpressionEventNameCriteria class.
+/// </summary>
+[TestFixture]
+public class RegularExpressionEventNameCriteriaTests
 {
-	/// <summary>
-	/// Unit tests for the RegularExpressionEventNameCriteria class.
-    /// </summary>
-	[TestFixture]
-    public class RegularExpressionEventNameCriteriaTests
+    [Test]
+    public void IsSatisfied()
     {
-        [Test]
-        public void IsSatisfied () {
-        	RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria("Click");
-            EventInfo evt = typeof(TestObject).GetEvent("Click");
-            Assert.IsTrue (criteria.IsSatisfied (evt));
-        }
+        RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria("Click");
+        EventInfo evt = typeof(TestObject).GetEvent("Click");
+        Assert.IsTrue(criteria.IsSatisfied(evt));
+    }
 
-        [Test]
-        public void IsNotSatisfiedWithGarbage () 
-        {
-        	RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria ("BingoBango");
-            EventInfo evt = typeof(TestObject).GetEvent("Click");
-            Assert.IsFalse (criteria.IsSatisfied (evt));
-        }
+    [Test]
+    public void IsNotSatisfiedWithGarbage()
+    {
+        RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria("BingoBango");
+        EventInfo evt = typeof(TestObject).GetEvent("Click");
+        Assert.IsFalse(criteria.IsSatisfied(evt));
+    }
 
-        [Test]
-        public void IsNotSatisfiedWithNull () 
-        {
-            RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria("Click");
-            Assert.IsFalse (criteria.IsSatisfied (null));
-        }
+    [Test]
+    public void IsNotSatisfiedWithNull()
+    {
+        RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria("Click");
+        Assert.IsFalse(criteria.IsSatisfied(null));
+    }
 
-        [Test]
-        public void IsSatisfiedWithAnythingByDefault () 
-        {
-        	RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria ();
-            EventInfo evt = typeof (TestObject).GetEvent ("Click");
-            Assert.IsTrue (criteria.IsSatisfied (evt));
-        }
-	}
+    [Test]
+    public void IsSatisfiedWithAnythingByDefault()
+    {
+        RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria();
+        EventInfo evt = typeof(TestObject).GetEvent("Click");
+        Assert.IsTrue(criteria.IsSatisfied(evt));
+    }
 }

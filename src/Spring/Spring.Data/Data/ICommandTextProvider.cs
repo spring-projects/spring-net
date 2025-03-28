@@ -18,22 +18,21 @@
 
 #endregion
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// Interface to be implemented by objects that can provide SQL strings
+/// </summary>
+/// <remarks>Typically implemented by IDbCommandCreator and
+/// ICommandCallbacks that want to expose the CommandText they
+/// use to create their ADO.NET commands, to allow for better
+/// contextual information in case of exceptions</remarks>
+/// <author>Mark Pollack(.NET)</author>
+/// <author>Juergen Hoeller</author>
+public interface ICommandTextProvider
 {
-    /// <summary>
-    /// Interface to be implemented by objects that can provide SQL strings
-    /// </summary>
-    /// <remarks>Typically implemented by IDbCommandCreator and 
-    /// ICommandCallbacks that want to expose the CommandText they
-    /// use to create their ADO.NET commands, to allow for better
-    /// contextual information in case of exceptions</remarks>
-    /// <author>Mark Pollack(.NET)</author>
-    /// <author>Juergen Hoeller</author>
-    public interface ICommandTextProvider
+    string CommandText
     {
-        string CommandText
-        {
-            get;
-        }
+        get;
     }
 }

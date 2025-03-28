@@ -21,125 +21,123 @@
 #region Imports
 
 using System.Text;
-
 using Spring.Core.IO;
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml 
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Centralised resource getter for loading all of those XML object
+/// definition files used in the XML based object factory tests.
+/// </summary>
+/// <author>Rick Evans (.NET)</author>
+/// <author>Erich Eichinger (.NET)</author>
+public class ReadOnlyXmlTestResource : IResource
 {
+    private readonly IResource underlyingResource;
+    private const string TestDataFolder = "Data";
+
     /// <summary>
-    /// Centralised resource getter for loading all of those XML object
-    /// definition files used in the XML based object factory tests.
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Factory.Xml.ReadOnlyXmlTestResource"/> class.
     /// </summary>
-    /// <author>Rick Evans (.NET)</author>
-    /// <author>Erich Eichinger (.NET)</author>
-    public class ReadOnlyXmlTestResource : IResource 
+    /// <param name="fileName">
+    /// The filename/resourcename (e.g. foo.txt) of the XML file containing the object
+    /// definitions.
+    /// </param>
+    public ReadOnlyXmlTestResource(string fileName)
     {
-        private readonly IResource underlyingResource;
-        private const string TestDataFolder = "Data";
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Objects.Factory.Xml.ReadOnlyXmlTestResource"/> class.
-        /// </summary>
-        /// <param name="fileName">
-        /// The filename/resourcename (e.g. foo.txt) of the XML file containing the object
-        /// definitions.
-        /// </param>
-        public ReadOnlyXmlTestResource (string fileName)
+        if (ConfigurableResourceLoader.HasProtocol(fileName))
         {
-            if (ConfigurableResourceLoader.HasProtocol(fileName))
-            {
-                ConfigurableResourceLoader loader = new ConfigurableResourceLoader();
-                underlyingResource = loader.GetResource(fileName);
-            }
-            else
-            {
-                underlyingResource = new FileSystemResource(fileName);
-            }
+            ConfigurableResourceLoader loader = new ConfigurableResourceLoader();
+            underlyingResource = loader.GetResource(fileName);
+        }
+        else
+        {
+            underlyingResource = new FileSystemResource(fileName);
+        }
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Factory.Xml.ReadOnlyXmlTestResource"/> class.
+    /// </summary>
+    /// <param name="fileName">
+    /// The filename/resourcename (e.g. foo.txt) of the XML file containing the object
+    /// definitions.
+    /// </param>
+    /// <param name="associatedTestType">
+    /// The <see cref="System.Type"/> of the test class utilising said file.
+    /// </param>
+    public ReadOnlyXmlTestResource(string fileName, Type associatedTestType)
+        : this(ReadOnlyXmlTestResource.GetFilePath(fileName, associatedTestType))
+    {
+    }
+
+    public IResource CreateRelative(string relativePath)
+    {
+        return this.underlyingResource.CreateRelative(relativePath);
+    }
+
+    public bool IsOpen
+    {
+        get { return this.underlyingResource.IsOpen; }
+    }
+
+    public Uri Uri
+    {
+        get { return this.underlyingResource.Uri; }
+    }
+
+    public FileInfo File
+    {
+        get { return this.underlyingResource.File; }
+    }
+
+    public string Description
+    {
+        get { return this.underlyingResource.Description; }
+    }
+
+    public bool Exists
+    {
+        get { return this.underlyingResource.Exists; }
+    }
+
+    public Stream InputStream
+    {
+        get { return this.underlyingResource.InputStream; }
+    }
+
+    public static string GetFilePath(string fileName, Type associatedTestType)
+    {
+        if (associatedTestType == null)
+        {
+            return fileName;
         }
 
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Objects.Factory.Xml.ReadOnlyXmlTestResource"/> class.
-        /// </summary>
-        /// <param name="fileName">
-        /// The filename/resourcename (e.g. foo.txt) of the XML file containing the object
-        /// definitions.
-        /// </param>
-        /// <param name="associatedTestType">
-        /// The <see cref="System.Type"/> of the test class utilising said file.
-        /// </param>
-        public ReadOnlyXmlTestResource (string fileName, Type associatedTestType)
-            : this (ReadOnlyXmlTestResource.GetFilePath (fileName, associatedTestType))
+        // check filesystem
+        StringBuilder path = new StringBuilder(TestDataFolder).Append(Path.DirectorySeparatorChar.ToString());
+        path.Append(associatedTestType.Namespace.Replace(".", Path.DirectorySeparatorChar.ToString()));
+        path.Append(Path.DirectorySeparatorChar.ToString()).Append(fileName);
+
+        FileInfo file = new FileInfo(path.ToString());
+        if (file.Exists)
         {
+            return path.ToString();
         }
-
-        public IResource CreateRelative(string relativePath)
+        else
         {
-            return this.underlyingResource.CreateRelative(relativePath);
+            // interpret as assembly resource
+            fileName = "assembly://" + associatedTestType.Assembly.FullName + "/" + associatedTestType.Namespace
+                       + "/" + fileName;
+            return fileName;
         }
+    }
 
-        public bool IsOpen
-        {
-            get { return this.underlyingResource.IsOpen; }
-        }
-
-        public Uri Uri
-        {
-            get { return this.underlyingResource.Uri; }
-        }
-
-        public FileInfo File
-        {
-            get { return this.underlyingResource.File; }
-        }
-
-        public string Description
-        {
-            get { return this.underlyingResource.Description; }
-        }
-
-        public bool Exists
-        {
-            get { return this.underlyingResource.Exists; }
-        }
-
-        public Stream InputStream
-        {
-            get { return this.underlyingResource.InputStream; }
-        }
-
-        public static string GetFilePath (string fileName, Type associatedTestType) 
-        {
-            if (associatedTestType == null) 
-            {
-                return fileName;
-            }
-
-            // check filesystem
-            StringBuilder path = new StringBuilder (TestDataFolder).Append (Path.DirectorySeparatorChar.ToString());
-            path.Append (associatedTestType.Namespace.Replace (".", Path.DirectorySeparatorChar.ToString()));
-            path.Append (Path.DirectorySeparatorChar.ToString()).Append (fileName);
-
-            FileInfo file = new FileInfo(path.ToString());
-            if (file.Exists)
-            {
-                return path.ToString ();
-            }
-            else
-            {
-                // interpret as assembly resource
-                fileName = "assembly://" + associatedTestType.Assembly.FullName + "/" + associatedTestType.Namespace
-                           + "/" + fileName;
-                return fileName;
-            }
-        }
-
-        public override string ToString()
-        {
-            return Description;
-        }
+    public override string ToString()
+    {
+        return Description;
     }
 }

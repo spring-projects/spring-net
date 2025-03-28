@@ -1,5 +1,3 @@
-
-
 #region License
 
 /*
@@ -22,10 +20,9 @@
 
 using Spring.Messaging.Ems.Common;
 
-namespace Spring.Messaging.Ems.Core
-{
-    /// <summary>
-    /// Delegate callback for browsing the messages in an EMS queue.
-    /// </summary>
-    public delegate object BrowserDelegate(ISession session, QueueBrowser browser);
-}
+namespace Spring.Messaging.Ems.Core;
+
+/// <summary>
+/// Delegate callback for browsing the messages in an EMS queue.
+/// </summary>
+public delegate object BrowserDelegate(ISession session, QueueBrowser browser);

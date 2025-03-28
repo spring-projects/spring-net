@@ -22,134 +22,135 @@
 
 #endregion
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// Defines miscellaneous <see cref="System.Type"/> filter operations.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.Net)</author>
+public sealed class TypeFilters
 {
-	/// <summary>
-	/// Defines miscellaneous <see cref="System.Type"/> filter operations.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Aleksandar Seovic (.Net)</author>
-	public sealed class TypeFilters
-	{
-		/// <summary>
-		/// Creates a union of two <see cref="System.Type"/> filters.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// The filter arising from the union will match all of the
-		/// <see cref="System.Type"/> that either of the two supplied filters
-		/// would match.
-		/// </p>
-		/// </remarks>
-		/// <param name="first">
-		/// The first <see cref="System.Type"/> filter.
-		/// </param>
-		/// <param name="second">
-		/// The second <see cref="System.Type"/> filter.
-		/// </param>
-		/// <returns>
-		/// The union of the supplied <see cref="System.Type"/> filters.
-		/// </returns>
-		public static ITypeFilter Union(ITypeFilter first, ITypeFilter second)
-		{
-			return new UnionTypeFilter(new ITypeFilter[] {first, second});
-		}
+    /// <summary>
+    /// Creates a union of two <see cref="System.Type"/> filters.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// The filter arising from the union will match all of the
+    /// <see cref="System.Type"/> that either of the two supplied filters
+    /// would match.
+    /// </p>
+    /// </remarks>
+    /// <param name="first">
+    /// The first <see cref="System.Type"/> filter.
+    /// </param>
+    /// <param name="second">
+    /// The second <see cref="System.Type"/> filter.
+    /// </param>
+    /// <returns>
+    /// The union of the supplied <see cref="System.Type"/> filters.
+    /// </returns>
+    public static ITypeFilter Union(ITypeFilter first, ITypeFilter second)
+    {
+        return new UnionTypeFilter(new ITypeFilter[] { first, second });
+    }
 
-		/// <summary>
-		/// Creates the intersection of two <see cref="System.Type"/> filters.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// The filter arising from the intersection will match all of the
-		/// <see cref="System.Type"/> that both of the two supplied filters
-		/// would match.
-		/// </p>
-		/// </remarks>
-		/// <param name="first">
-		/// The first <see cref="System.Type"/> filter.
-		/// </param>
-		/// <param name="second">
-		/// The second <see cref="System.Type"/> filter.
-		/// </param>
-		/// <returns>
-		/// The intersection of the supplied <see cref="System.Type"/> filters.
-		/// </returns>
-		public static ITypeFilter Intersection(ITypeFilter first, ITypeFilter second)
-		{
-			return new IntersectionTypeFilter(new ITypeFilter[] {first, second});
-		}
+    /// <summary>
+    /// Creates the intersection of two <see cref="System.Type"/> filters.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// The filter arising from the intersection will match all of the
+    /// <see cref="System.Type"/> that both of the two supplied filters
+    /// would match.
+    /// </p>
+    /// </remarks>
+    /// <param name="first">
+    /// The first <see cref="System.Type"/> filter.
+    /// </param>
+    /// <param name="second">
+    /// The second <see cref="System.Type"/> filter.
+    /// </param>
+    /// <returns>
+    /// The intersection of the supplied <see cref="System.Type"/> filters.
+    /// </returns>
+    public static ITypeFilter Intersection(ITypeFilter first, ITypeFilter second)
+    {
+        return new IntersectionTypeFilter(new ITypeFilter[] { first, second });
+    }
 
-		/// <summary>
-		/// Union class filter implementation.
-		/// </summary>
-        [Serializable]
-        private sealed class UnionTypeFilter : ITypeFilter
-		{
-			private ITypeFilter[] _filters;
+    /// <summary>
+    /// Union class filter implementation.
+    /// </summary>
+    [Serializable]
+    private sealed class UnionTypeFilter : ITypeFilter
+    {
+        private ITypeFilter[] _filters;
 
-			public UnionTypeFilter(ITypeFilter[] filters)
-			{
-				_filters = filters;
-			}
+        public UnionTypeFilter(ITypeFilter[] filters)
+        {
+            _filters = filters;
+        }
 
-			public bool Matches(Type type)
-			{
-				for (int i = 0; i < _filters.Length; i++)
-				{
-					if (_filters[i].Matches(type))
-					{
-						return true;
-					}
-				}
-				return false;
-			}
-		}
+        public bool Matches(Type type)
+        {
+            for (int i = 0; i < _filters.Length; i++)
+            {
+                if (_filters[i].Matches(type))
+                {
+                    return true;
+                }
+            }
 
-		/// <summary>
-		/// Intersection <see cref="Spring.Aop.ITypeFilter"/> implementation.
-		/// </summary>
-        [Serializable]
-        private sealed class IntersectionTypeFilter : ITypeFilter
-		{
-			private ITypeFilter[] _filters;
+            return false;
+        }
+    }
 
-			public IntersectionTypeFilter(ITypeFilter[] filters)
-			{
-				_filters = filters;
-			}
+    /// <summary>
+    /// Intersection <see cref="Spring.Aop.ITypeFilter"/> implementation.
+    /// </summary>
+    [Serializable]
+    private sealed class IntersectionTypeFilter : ITypeFilter
+    {
+        private ITypeFilter[] _filters;
 
-			public bool Matches(Type type)
-			{
-				for (int i = 0; i < _filters.Length; i++)
-				{
-					if (!_filters[i].Matches(type))
-					{
-						return false;
-					}
-				}
-				return true;
-			}
-		}
+        public IntersectionTypeFilter(ITypeFilter[] filters)
+        {
+            _filters = filters;
+        }
 
-		#region Constructor (s) / Destructor
+        public bool Matches(Type type)
+        {
+            for (int i = 0; i < _filters.Length; i++)
+            {
+                if (!_filters[i].Matches(type))
+                {
+                    return false;
+                }
+            }
 
-		// CLOVER:OFF
+            return true;
+        }
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Aop.Support.TypeFilters"/> class.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// This is a utility class, and as such has no publicly visible constructors.
-		/// </p>
-		/// </remarks>
-		private TypeFilters()
-		{
-		}
+    #region Constructor (s) / Destructor
 
-		// CLOVER:ON
+    // CLOVER:OFF
 
-		#endregion
-	}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Support.TypeFilters"/> class.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// This is a utility class, and as such has no publicly visible constructors.
+    /// </p>
+    /// </remarks>
+    private TypeFilters()
+    {
+    }
+
+    // CLOVER:ON
+
+    #endregion
 }

@@ -18,55 +18,55 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// A generic implementation of an <see cref="IObjectFactoryPostProcessor"/>, that delegates post processing to a passed delegate
+/// </summary>
+/// <remarks>
+/// This comes in handy when you want to perform specific tasks on an object factory, e.g. doing special initialization.
+/// </remarks>
+/// <example>
+/// The example below is taken from a unit test. The snippet causes 'someObject' to be registered each time <see cref="Spring.Context.Support.AbstractApplicationContext.Refresh"/> is called on
+/// the context instance:
+/// <code>
+/// IConfigurableApplicationContext ctx = new XmlApplicationContext(false, &quot;name&quot;, false, null);
+/// ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer( of =&gt;
+///     {
+///         of.RegisterSingleton(&quot;someObject&quot;, someObject);
+///     }));
+/// </code>
+/// </example>
+/// <author>Erich Eichinger</author>
+public class DelegateObjectFactoryConfigurer : IObjectFactoryPostProcessor
 {
+    public delegate void ObjectFactoryConfigurationHandler(IConfigurableListableObjectFactory objectFactory);
+
+    private ObjectFactoryConfigurationHandler _configurationHandler;
+
     /// <summary>
-    /// A generic implementation of an <see cref="IObjectFactoryPostProcessor"/>, that delegates post processing to a passed delegate
+    /// Get or Set the handler to delegate configuration to
     /// </summary>
-    /// <remarks>
-    /// This comes in handy when you want to perform specific tasks on an object factory, e.g. doing special initialization.
-    /// </remarks>
-    /// <example>
-    /// The example below is taken from a unit test. The snippet causes 'someObject' to be registered each time <see cref="Spring.Context.Support.AbstractApplicationContext.Refresh"/> is called on 
-    /// the context instance:
-    /// <code>
-    /// IConfigurableApplicationContext ctx = new XmlApplicationContext(false, &quot;name&quot;, false, null);
-    /// ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer( of =&gt;
-    ///     {
-    ///         of.RegisterSingleton(&quot;someObject&quot;, someObject);
-    ///     }));
-    /// </code>
-    /// </example>
-    /// <author>Erich Eichinger</author>
-    public class DelegateObjectFactoryConfigurer : IObjectFactoryPostProcessor
+    public ObjectFactoryConfigurationHandler ConfigurationHandler
     {
-        public delegate void ObjectFactoryConfigurationHandler(IConfigurableListableObjectFactory objectFactory);
+        get { return _configurationHandler; }
+        set { _configurationHandler = value; }
+    }
 
-        private ObjectFactoryConfigurationHandler _configurationHandler;
+    public DelegateObjectFactoryConfigurer()
+    {
+    }
 
-        /// <summary>
-        /// Get or Set the handler to delegate configuration to
-        /// </summary>
-        public ObjectFactoryConfigurationHandler ConfigurationHandler
+    public DelegateObjectFactoryConfigurer(ObjectFactoryConfigurationHandler configurationHandler)
+    {
+        _configurationHandler = configurationHandler;
+    }
+
+    public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
+    {
+        if (_configurationHandler != null)
         {
-            get { return _configurationHandler; }
-            set { _configurationHandler = value; }
-        }
-
-        public DelegateObjectFactoryConfigurer()
-        { }
-
-        public DelegateObjectFactoryConfigurer(ObjectFactoryConfigurationHandler configurationHandler)
-        {
-            _configurationHandler = configurationHandler;
-        }
-
-        public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
-        {
-            if (_configurationHandler != null)
-            {
-                _configurationHandler(factory);
-            }
+            _configurationHandler(factory);
         }
     }
 }

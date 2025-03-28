@@ -24,69 +24,99 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// Tests the MediaType class according to http://www.iana.org/assignments/media-types/
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class MimeMediaTypeTests
 {
-    /// <summary>
-    /// Tests the MediaType class according to http://www.iana.org/assignments/media-types/
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class MimeMediaTypeTests
+    [Test]
+    public void CreateInstance()
     {
-        [Test]
-        public void CreateInstance()
-        {
-            Assert.AreEqual( MimeMediaType.Application.Octet, new MimeMediaType() );
-            MimeMediaType mt = new MimeMediaType("ApPlicatioN");
-            Assert.AreEqual("application", mt.ContentType);
-            Assert.AreEqual("*", mt.SubType);
+        Assert.AreEqual(MimeMediaType.Application.Octet, new MimeMediaType());
+        MimeMediaType mt = new MimeMediaType("ApPlicatioN");
+        Assert.AreEqual("application", mt.ContentType);
+        Assert.AreEqual("*", mt.SubType);
 
-            Assert.AreEqual("*", new MimeMediaType("ApPlicatioN", null).SubType);
-            Assert.AreEqual("*", new MimeMediaType("ApPlicatioN", "").SubType);
-            Assert.AreEqual("bla", new MimeMediaType("ApPlicatioN", "bla").SubType);
+        Assert.AreEqual("*", new MimeMediaType("ApPlicatioN", null).SubType);
+        Assert.AreEqual("*", new MimeMediaType("ApPlicatioN", "").SubType);
+        Assert.AreEqual("bla", new MimeMediaType("ApPlicatioN", "bla").SubType);
+    }
+
+    [Test]
+    public void ToStringReturnsMimeTypeString()
+    {
+        Assert.AreEqual("application/subtype", new MimeMediaType("ApPlicatioN", "SubType").ToString());
+    }
+
+    [Test]
+    public void Parse()
+    {
+        MimeMediaType mt = MimeMediaType.Parse("text/html");
+        Assert.AreEqual("text", mt.ContentType);
+        Assert.AreEqual("html", mt.SubType);
+
+        try
+        {
+            mt = MimeMediaType.Parse(null);
+            Assert.Fail();
+        }
+        catch (ArgumentNullException)
+        {
+            /* ok */
         }
 
-        [Test]
-        public void ToStringReturnsMimeTypeString()
+        try
         {
-            Assert.AreEqual("application/subtype", new MimeMediaType("ApPlicatioN", "SubType").ToString());
+            mt = MimeMediaType.Parse("");
+            Assert.Fail();
+        }
+        catch (ArgumentException)
+        {
+            /* ok */
         }
 
-        [Test]
-        public void Parse()
+        try
         {
-            MimeMediaType mt = MimeMediaType.Parse("text/html");
-            Assert.AreEqual("text", mt.ContentType);
-            Assert.AreEqual("html", mt.SubType);
-
-            try { mt = MimeMediaType.Parse(null); Assert.Fail(); }
-            catch (ArgumentNullException) { /* ok */ }
-            try { mt = MimeMediaType.Parse(""); Assert.Fail(); }
-            catch (ArgumentException) { /* ok */ }
-            try { mt = MimeMediaType.Parse("aasdfaDF"); Assert.Fail(); }
-            catch (ArgumentException) { /* ok */ }
-            try { mt = MimeMediaType.Parse("*"); Assert.Fail(); }
-            catch (ArgumentException) { /* ok */ }
+            mt = MimeMediaType.Parse("aasdfaDF");
+            Assert.Fail();
+        }
+        catch (ArgumentException)
+        {
+            /* ok */
         }
 
-        [Test]
-        public void Equals()
+        try
         {
-            MimeMediaType mt = MimeMediaType.Parse("text/html");
-            Assert.AreEqual(MimeMediaType.Text.Html, mt);
-            Assert.AreEqual(MimeMediaType.Parse("text/html"), mt);
-
-            Assert.AreNotEqual(MimeMediaType.Parse("text/xml"), mt);
+            mt = MimeMediaType.Parse("*");
+            Assert.Fail();
         }
-
-        [Test]
-        public void GetHashcode()
+        catch (ArgumentException)
         {
-            MimeMediaType mt = MimeMediaType.Parse("text/html");
-            Assert.AreEqual(MimeMediaType.Text.Html.GetHashCode(), mt.GetHashCode());
-            Assert.AreEqual(MimeMediaType.Parse("text/html").GetHashCode(), mt.GetHashCode());
-
-            Assert.AreNotEqual(MimeMediaType.Parse("text/xml").GetHashCode(), mt.GetHashCode());
+            /* ok */
         }
+    }
+
+    [Test]
+    public void Equals()
+    {
+        MimeMediaType mt = MimeMediaType.Parse("text/html");
+        Assert.AreEqual(MimeMediaType.Text.Html, mt);
+        Assert.AreEqual(MimeMediaType.Parse("text/html"), mt);
+
+        Assert.AreNotEqual(MimeMediaType.Parse("text/xml"), mt);
+    }
+
+    [Test]
+    public void GetHashcode()
+    {
+        MimeMediaType mt = MimeMediaType.Parse("text/html");
+        Assert.AreEqual(MimeMediaType.Text.Html.GetHashCode(), mt.GetHashCode());
+        Assert.AreEqual(MimeMediaType.Parse("text/html").GetHashCode(), mt.GetHashCode());
+
+        Assert.AreNotEqual(MimeMediaType.Parse("text/xml").GetHashCode(), mt.GetHashCode());
     }
 }

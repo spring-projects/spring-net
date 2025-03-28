@@ -18,32 +18,31 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Subinterface of
+/// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/> that adds
+/// a before-destruction callback.
+/// </summary>
+/// <remarks>
+/// The typical usage will be to invoke custom destruction callbacks on
+/// specific object types, matching corresponding initialization callbacks.
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Simon White (.NET)</author>
+public interface IDestructionAwareObjectPostProcessor : IObjectPostProcessor
 {
-	/// <summary>
-	/// Subinterface of
-	/// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/> that adds
-	/// a before-destruction callback.
-	/// </summary>
-	/// <remarks>
-	/// The typical usage will be to invoke custom destruction callbacks on
-	/// specific object types, matching corresponding initialization callbacks.
-	/// </remarks>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Simon White (.NET)</author>
-	public interface IDestructionAwareObjectPostProcessor : IObjectPostProcessor
-	{
-		/// <summary>
-		/// Apply this
-		/// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/> to the
-		/// given new object instance before its destruction. Can invoke custom
-		/// destruction callbacks.
-		/// </summary>
-		/// <param name="instance">The new object instance.</param>
-		/// <param name="name">The name of the object.</param>
-		/// <exception cref="Spring.Objects.ObjectsException">
-		/// In case of errors.
-		/// </exception>
-		void PostProcessBeforeDestruction (object instance, string name);
-	}
+    /// <summary>
+    /// Apply this
+    /// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/> to the
+    /// given new object instance before its destruction. Can invoke custom
+    /// destruction callbacks.
+    /// </summary>
+    /// <param name="instance">The new object instance.</param>
+    /// <param name="name">The name of the object.</param>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// In case of errors.
+    /// </exception>
+    void PostProcessBeforeDestruction(object instance, string name);
 }

@@ -25,79 +25,78 @@ using Spring.Objects.Factory.Support;
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Unit tests that test the event wiring features of the
+/// XmlObjectFactory.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Rick Evans (.NET)</author>
+/// <author>Choy Rim (.NET)</author>
+[TestFixture]
+public class EventWiringTests
 {
-    /// <summary>
-    /// Unit tests that test the event wiring features of the
-    /// XmlObjectFactory.
-    /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Rick Evans (.NET)</author>
-    /// <author>Choy Rim (.NET)</author>
-    [TestFixture]
-    public class EventWiringTests
+    [Ignore("SPRNET-21")]
+    [Test]
+    public virtual void EventWiringInstanceSinkToPrototypeSource()
     {
-        [Ignore("SPRNET-21")]
-        [Test]
-        public virtual void EventWiringInstanceSinkToPrototypeSource()
-        {
-            DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
-            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
-            reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("event-wiring-prototypes.xml", GetType()));
-            TestEventHandler instanceHandler = factory["instanceSink"] as TestEventHandler;
-            ITestObject source = factory["source"] as ITestObject;
-            // raise the event... handlers should be notified at this point (obviously)
-            source.OnClick();
-            Assert.IsTrue(instanceHandler.EventWasHandled,
-                          "The instance handler did not get notified when the instance event was raised (and was probably not wired up in the first place).");
-        }
+        DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
+        XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
+        reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("event-wiring-prototypes.xml", GetType()));
+        TestEventHandler instanceHandler = factory["instanceSink"] as TestEventHandler;
+        ITestObject source = factory["source"] as ITestObject;
+        // raise the event... handlers should be notified at this point (obviously)
+        source.OnClick();
+        Assert.IsTrue(instanceHandler.EventWasHandled,
+            "The instance handler did not get notified when the instance event was raised (and was probably not wired up in the first place).");
+    }
 
-        [Test]
-        public virtual void SingletonSourcePrototypeSink()
-        {
-            DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
-            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
-            reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("event-wiring.xml", GetType()));
-            ITestObject source = factory["source"] as ITestObject;
-            TestEventHandler prototypeEventHandler = factory["prototypeEventListener"] as TestEventHandler;
-            // raise the event... handlers should be notified at this point (obviously)
-            source.OnClick();
-            Assert.IsTrue(prototypeEventHandler.EventWasHandled,
-                          "The prototype instance handler did not get notified when the instance event was raised (and was probably not wired up in the first place).");
-        }
+    [Test]
+    public virtual void SingletonSourcePrototypeSink()
+    {
+        DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
+        XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
+        reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("event-wiring.xml", GetType()));
+        ITestObject source = factory["source"] as ITestObject;
+        TestEventHandler prototypeEventHandler = factory["prototypeEventListener"] as TestEventHandler;
+        // raise the event... handlers should be notified at this point (obviously)
+        source.OnClick();
+        Assert.IsTrue(prototypeEventHandler.EventWasHandled,
+            "The prototype instance handler did not get notified when the instance event was raised (and was probably not wired up in the first place).");
+    }
 
-        [Test]
-        public virtual void InstanceEventWiring()
-        {
-            DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
-            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
-            reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("event-wiring.xml", GetType()));
-            ITestObject source = factory["source"] as ITestObject;
-            TestEventHandler instanceHandler = factory["instanceEventListener"] as TestEventHandler;
-            // raise the event... handlers should be notified at this point (obviously)
-            source.OnClick();
-            Assert.IsTrue(instanceHandler.EventWasHandled,
-                          "The instance handler did not get notified when the instance event was raised (and was probably not wired up in the first place).");
-        }
+    [Test]
+    public virtual void InstanceEventWiring()
+    {
+        DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
+        XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
+        reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("event-wiring.xml", GetType()));
+        ITestObject source = factory["source"] as ITestObject;
+        TestEventHandler instanceHandler = factory["instanceEventListener"] as TestEventHandler;
+        // raise the event... handlers should be notified at this point (obviously)
+        source.OnClick();
+        Assert.IsTrue(instanceHandler.EventWasHandled,
+            "The instance handler did not get notified when the instance event was raised (and was probably not wired up in the first place).");
+    }
 
-        [Test]
-        public virtual void StaticEventWiring()
-        {
-            DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
-            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
-            reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("event-wiring.xml", GetType()));
-            TestEventHandler staticHandler = factory["staticEventListener"] as TestEventHandler;
-            // raise the event... handlers should be notified at this point (obviously)
-            TestObject.OnStaticClick();
-            Assert.IsTrue(staticHandler.EventWasHandled,
-                          "The instance handler did not get notified when the static event was raised (and was probably not wired up in the first place).");
-        }
+    [Test]
+    public virtual void StaticEventWiring()
+    {
+        DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
+        XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
+        reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("event-wiring.xml", GetType()));
+        TestEventHandler staticHandler = factory["staticEventListener"] as TestEventHandler;
+        // raise the event... handlers should be notified at this point (obviously)
+        TestObject.OnStaticClick();
+        Assert.IsTrue(staticHandler.EventWasHandled,
+            "The instance handler did not get notified when the static event was raised (and was probably not wired up in the first place).");
+    }
 
-        [OneTimeSetUp]
-        public void FixtureSetUp()
-        {
-            // enable (null appender) logging, to ensure that the logging code is exercised
-            // XmlConfigurator.Configure ();
-        }
+    [OneTimeSetUp]
+    public void FixtureSetUp()
+    {
+        // enable (null appender) logging, to ensure that the logging code is exercised
+        // XmlConfigurator.Configure ();
     }
 }

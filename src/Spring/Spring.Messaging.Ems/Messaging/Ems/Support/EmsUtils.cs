@@ -22,145 +22,145 @@ using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Util;
 
-namespace Spring.Messaging.Ems.Support
+namespace Spring.Messaging.Ems.Support;
+
+/// <summary>
+/// Generic utility methods for working with EMS. Mainly for internal use
+/// within the framework, but also useful for custom EMS access code.
+/// </summary>
+public abstract class EmsUtils
 {
-    /// <summary>
-    /// Generic utility methods for working with EMS. Mainly for internal use
-    /// within the framework, but also useful for custom EMS access code.
+    #region Logging
+
+    private static readonly ILogger<EmsUtils> logger = LogManager.GetLogger<EmsUtils>();
+
+    #endregion
+
+    /// <summary> Close the given EMS Connection and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual EMS code.
     /// </summary>
-    public abstract class EmsUtils
+    /// <param name="con">the EMS Connection to close (may be <code>null</code>)
+    /// </param>
+    public static void CloseConnection(IConnection con)
     {
-        #region Logging
+        CloseConnection(con, false);
+    }
 
-        private static readonly ILogger<EmsUtils> logger = LogManager.GetLogger<EmsUtils>();
-
-        #endregion
-
-        /// <summary> Close the given EMS Connection and ignore any thrown exception.
-        /// This is useful for typical <code>finally</code> blocks in manual EMS code.
-        /// </summary>
-        /// <param name="con">the EMS Connection to close (may be <code>null</code>)
-        /// </param>
-        public static void CloseConnection(IConnection con)
+    /// <summary> Close the given EMS Connection and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual EMS code.
+    /// </summary>
+    /// <param name="con">the EMS Connection to close (may be <code>null</code>)
+    /// </param>
+    /// <param name="stop">whether to call <code>stop()</code> before closing
+    /// </param>
+    public static void CloseConnection(IConnection con, bool stop)
+    {
+        if (con != null)
         {
-            CloseConnection(con, false);
-        }
-
-        /// <summary> Close the given EMS Connection and ignore any thrown exception.
-        /// This is useful for typical <code>finally</code> blocks in manual EMS code.
-        /// </summary>
-        /// <param name="con">the EMS Connection to close (may be <code>null</code>)
-        /// </param>
-        /// <param name="stop">whether to call <code>stop()</code> before closing
-        /// </param>
-        public static void CloseConnection(IConnection con, bool stop)
-        {
-            if (con != null)
+            try
             {
-                try
+                if (stop)
                 {
-                    if (stop)
+                    try
                     {
-                        try
-                        {
-                            con.Stop();
-                        }
-                        finally
-                        {
-                            con.Close();
-                        }
+                        con.Stop();
                     }
-                    else
+                    finally
                     {
                         con.Close();
                     }
                 }
-                catch (EMSException ex)
+                else
                 {
-                    logger.LogDebug((Exception) ex, "Could not close EMS Connection");
-                }
-                catch (Exception ex)
-                {
-                    // We don't trust the EMS provider: It might throw another exception.
-                    logger.LogDebug(ex, "Unexpected exception on closing EMS Connection");
+                    con.Close();
                 }
             }
-        }
-
-        /// <summary> Close the given EMS Session and ignore any thrown exception.
-		/// This is useful for typical <code>finally</code> blocks in manual EMS code.
-		/// </summary>
-		/// <param name="session">the EMS Session to close (may be <code>null</code>)
-		/// </param>
-		public static void CloseSession(ISession session)
-        {
-            if (session != null)
+            catch (EMSException ex)
             {
-                try
-                {
-                    session.Close();
-                }
-                catch (EMSException ex)
-                {
-                    logger.LogDebug((Exception) ex, "Could not close EMS Session");
-                }
-                catch (Exception ex)
-                {
-                    // We don't trust the EMS provider: It might throw RuntimeException or Error.
-                    logger.LogDebug(ex, "Unexpected exception on closing EMS Session");
-                }
+                logger.LogDebug((Exception) ex, "Could not close EMS Connection");
             }
-        }
-
-        /// <summary> Close the given EMS MessageProducer and ignore any thrown exception.
-		/// This is useful for typical <code>finally</code> blocks in manual EMS code.
-		/// </summary>
-		/// <param name="producer">the EMS MessageProducer to close (may be <code>null</code>)
-		/// </param>
-        public static void CloseMessageProducer(IMessageProducer producer)
-        {
-            if (producer != null)
+            catch (Exception ex)
             {
-                try
-                {
-                    producer.Close();
-                }
-                catch (EMSException ex)
-                {
-                    logger.LogDebug((Exception) ex, "Could not close EMS MessageProducer");
-                }
-                catch (Exception ex)
-                {
-                    // We don't trust the provider: It might throw an exception .
-                    logger.LogDebug(ex, "Unexpected exception on closing EMS MessageProducer");
-                }
+                // We don't trust the EMS provider: It might throw another exception.
+                logger.LogDebug(ex, "Unexpected exception on closing EMS Connection");
             }
         }
+    }
 
-        /// <summary> Close the given EMS MessageConsumer and ignore any thrown exception.
-        /// This is useful for typical <code>finally</code> blocks in manual EMS code.
-        /// </summary>
-        /// <param name="consumer">the EMS MessageConsumer to close (may be <code>null</code>)
-        /// </param>
-        public static void CloseMessageConsumer(IMessageConsumer consumer)
+    /// <summary> Close the given EMS Session and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual EMS code.
+    /// </summary>
+    /// <param name="session">the EMS Session to close (may be <code>null</code>)
+    /// </param>
+    public static void CloseSession(ISession session)
+    {
+        if (session != null)
         {
-            if (consumer != null)
+            try
             {
-                try
-                {
-                    consumer.Close();
-                }
-                catch (EMSException ex)
-                {
-                    logger.LogDebug((Exception) ex, "Could not close EMS MessageConsumer");
-                }
-                catch (Exception ex)
-                {
-                    // We don't trust the EMS provider: It might throw RuntimeException or Error.
-                    logger.LogDebug(ex, "Unexpected exception on closing EMS MessageConsumer");
-                }
+                session.Close();
+            }
+            catch (EMSException ex)
+            {
+                logger.LogDebug((Exception) ex, "Could not close EMS Session");
+            }
+            catch (Exception ex)
+            {
+                // We don't trust the EMS provider: It might throw RuntimeException or Error.
+                logger.LogDebug(ex, "Unexpected exception on closing EMS Session");
             }
         }
+    }
+
+    /// <summary> Close the given EMS MessageProducer and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual EMS code.
+    /// </summary>
+    /// <param name="producer">the EMS MessageProducer to close (may be <code>null</code>)
+    /// </param>
+    public static void CloseMessageProducer(IMessageProducer producer)
+    {
+        if (producer != null)
+        {
+            try
+            {
+                producer.Close();
+            }
+            catch (EMSException ex)
+            {
+                logger.LogDebug((Exception) ex, "Could not close EMS MessageProducer");
+            }
+            catch (Exception ex)
+            {
+                // We don't trust the provider: It might throw an exception .
+                logger.LogDebug(ex, "Unexpected exception on closing EMS MessageProducer");
+            }
+        }
+    }
+
+    /// <summary> Close the given EMS MessageConsumer and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual EMS code.
+    /// </summary>
+    /// <param name="consumer">the EMS MessageConsumer to close (may be <code>null</code>)
+    /// </param>
+    public static void CloseMessageConsumer(IMessageConsumer consumer)
+    {
+        if (consumer != null)
+        {
+            try
+            {
+                consumer.Close();
+            }
+            catch (EMSException ex)
+            {
+                logger.LogDebug((Exception) ex, "Could not close EMS MessageConsumer");
+            }
+            catch (Exception ex)
+            {
+                // We don't trust the EMS provider: It might throw RuntimeException or Error.
+                logger.LogDebug(ex, "Unexpected exception on closing EMS MessageConsumer");
+            }
+        }
+    }
 /*
         /// <summary> Close the given EMS QueueRequestor and ignore any thrown exception.
         /// This is useful for typical <code>finally</code> blocks in manual EMS code.
@@ -188,19 +188,18 @@ namespace Spring.Messaging.Ems.Support
 //            }
 //        }
 
+    /// <summary> Commit the Session if not within a distributed transaction.</summary>
+    /// <remarks>Needs investigation - no distributed tx in .NET messaging providers</remarks>
+    /// <param name="session">the EMS Session to commit
+    /// </param>
+    /// <throws>EMSException if committing failed </throws>
+    public static void CommitIfNecessary(ISession session)
+    {
+        AssertUtils.ArgumentNotNull(session, "Session must not be null");
 
-        /// <summary> Commit the Session if not within a distributed transaction.</summary>
-        /// <remarks>Needs investigation - no distributed tx in .NET messaging providers</remarks>
-        /// <param name="session">the EMS Session to commit
-        /// </param>
-        /// <throws>EMSException if committing failed </throws>
-        public static void CommitIfNecessary(ISession session)
-        {
-		    AssertUtils.ArgumentNotNull(session, "Session must not be null");
+        session.Commit();
 
-			session.Commit();
-
-			// TODO Investigate
+        // TODO Investigate
 
 //		    try {
 //			    session.Commit();
@@ -213,19 +212,19 @@ namespace Spring.Messaging.Ems.Support
 //		        // TODO Investigate
 //			    // Ignore -> can only happen in case of a JTA transaction.
 //		    }
-	    }
+    }
 
-        /// <summary> Rollback the Session if not within a distributed transaction.</summary>
-        /// <remarks>Needs investigation - no distributed tx in EMS</remarks>
-        /// <param name="session">the EMS Session to rollback
-        /// </param>
-        /// <throws>  EMSException if committing failed </throws>
-	    public static void RollbackIfNecessary(ISession session)
-        {
-		    AssertUtils.ArgumentNotNull(session, "Session must not be null");
-			session.Rollback();
+    /// <summary> Rollback the Session if not within a distributed transaction.</summary>
+    /// <remarks>Needs investigation - no distributed tx in EMS</remarks>
+    /// <param name="session">the EMS Session to rollback
+    /// </param>
+    /// <throws>  EMSException if committing failed </throws>
+    public static void RollbackIfNecessary(ISession session)
+    {
+        AssertUtils.ArgumentNotNull(session, "Session must not be null");
+        session.Rollback();
 
-			// TODO Investigate
+        // TODO Investigate
 
 //		    try {
 //			    session.Rollback();
@@ -236,58 +235,59 @@ namespace Spring.Messaging.Ems.Support
 //		    catch (IllegalStateException ex) {
 //			    // Ignore -> can only happen in case of a JTA transaction.
 //		    }
-	    }
+    }
 
-        /// <summary>
-        /// Closes the given queue browser and ignore any thrown exception.
-        /// This is useful for typical <code>finally</code> blocks in manual EMS code.
-        /// </summary>
-        /// <param name="browser">The queue browser to close (may be <code>null</code>.</param>
-        public static void CloseQueueBrowser(QueueBrowser browser)
+    /// <summary>
+    /// Closes the given queue browser and ignore any thrown exception.
+    /// This is useful for typical <code>finally</code> blocks in manual EMS code.
+    /// </summary>
+    /// <param name="browser">The queue browser to close (may be <code>null</code>.</param>
+    public static void CloseQueueBrowser(QueueBrowser browser)
+    {
+        if (browser != null)
         {
-            if (browser != null)
+            try
             {
-                try
-                {
-                    browser.Close();
-                } catch (EMSException ex)
-                {
-                    logger.LogDebug((Exception) ex, "Could not close EMS QueueBrowser");
-                } catch (Exception ex)
-                {
-                    logger.LogDebug(ex, "Unexpected exception on closing EMS QueueBrowser");
-                }
+                browser.Close();
+            }
+            catch (EMSException ex)
+            {
+                logger.LogDebug((Exception) ex, "Could not close EMS QueueBrowser");
+            }
+            catch (Exception ex)
+            {
+                logger.LogDebug(ex, "Unexpected exception on closing EMS QueueBrowser");
             }
         }
+    }
 
-        /// <summary>
-        /// Converts the acknowledgement mode from an integer to an enumeration.  If the integer
-        /// does not match a valid enumeration, the returned enumeration is SessionMode.AutoAcknowledge
-        /// </summary>
-        /// <param name="ackMode">The ack mode.</param>
-        /// <returns>The corresponding SessionMode enumeration</returns>
-        public static SessionMode ConvertAcknowledgementMode(int ackMode)
+    /// <summary>
+    /// Converts the acknowledgement mode from an integer to an enumeration.  If the integer
+    /// does not match a valid enumeration, the returned enumeration is SessionMode.AutoAcknowledge
+    /// </summary>
+    /// <param name="ackMode">The ack mode.</param>
+    /// <returns>The corresponding SessionMode enumeration</returns>
+    public static SessionMode ConvertAcknowledgementMode(int ackMode)
+    {
+        switch (ackMode)
         {
-            switch (ackMode)
-            {
-                case Session.AUTO_ACKNOWLEDGE:
-                    return SessionMode.AutoAcknowledge;
-                case Session.CLIENT_ACKNOWLEDGE:
-                    return SessionMode.ClientAcknowledge;
-                case Session.DUPS_OK_ACKNOWLEDGE:
-                    return SessionMode.DupsOkAcknowledge;
-                case Session.EXPLICIT_CLIENT_ACKNOWLEDGE:
-                    return SessionMode.ExplicitClientAcknowledge;
-                case Session.EXPLICIT_CLIENT_DUPS_OK_ACKNOWLEDGE:
-                    return SessionMode.ExplicitClientDupsOkAcknowledge;
-                case Session.NO_ACKNOWLEDGE:
-                    return SessionMode.NoAcknowledge;
-                case Session.SESSION_TRANSACTED:
-                    return SessionMode.SessionTransacted;
-                default:
-                    logger.LogWarning("Integer acknowledgement mode [" + ackMode + "] not valid. Defaulting to SessionMode.AutoAcknowledge");
-                    return SessionMode.AutoAcknowledge;
-            }
+            case Session.AUTO_ACKNOWLEDGE:
+                return SessionMode.AutoAcknowledge;
+            case Session.CLIENT_ACKNOWLEDGE:
+                return SessionMode.ClientAcknowledge;
+            case Session.DUPS_OK_ACKNOWLEDGE:
+                return SessionMode.DupsOkAcknowledge;
+            case Session.EXPLICIT_CLIENT_ACKNOWLEDGE:
+                return SessionMode.ExplicitClientAcknowledge;
+            case Session.EXPLICIT_CLIENT_DUPS_OK_ACKNOWLEDGE:
+                return SessionMode.ExplicitClientDupsOkAcknowledge;
+            case Session.NO_ACKNOWLEDGE:
+                return SessionMode.NoAcknowledge;
+            case Session.SESSION_TRANSACTED:
+                return SessionMode.SessionTransacted;
+            default:
+                logger.LogWarning("Integer acknowledgement mode [" + ackMode + "] not valid. Defaulting to SessionMode.AutoAcknowledge");
+                return SessionMode.AutoAcknowledge;
         }
     }
 }

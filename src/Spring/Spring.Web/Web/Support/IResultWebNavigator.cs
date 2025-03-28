@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,24 +24,23 @@ using System.Collections;
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// Defines the interface, all hierarchical navigators capable of 
+/// dealing with <see cref="IResult"/> instances must implement.
+/// </summary>
+public interface IResultWebNavigator : IHierarchicalWebNavigator
 {
     /// <summary>
-    /// Defines the interface, all hierarchical navigators capable of 
-    /// dealing with <see cref="IResult"/> instances must implement.
+    /// Contains the mappings of navigation destination names to <see cref="IResult"/> 
+    /// instances or their corresponding textual representations.<br/>
+    /// See <see cref="ResultFactoryRegistry"/> for more information on how textual representations are resolved.
     /// </summary>
-    public interface IResultWebNavigator : IHierarchicalWebNavigator
-    {
-        /// <summary>
-        /// Contains the mappings of navigation destination names to <see cref="IResult"/> 
-        /// instances or their corresponding textual representations.<br/>
-        /// See <see cref="ResultFactoryRegistry"/> for more information on how textual representations are resolved.
-        /// </summary>
-        /// <seealso cref="IWebNavigator"/>
-        /// <seealso cref="IHierarchicalWebNavigator"/>
-        /// <seealso cref="DefaultResultWebNavigator"/>
-        /// <seealso cref="ResultFactoryRegistry"/>
-        /// <seealso cref="DefaultResultFactory"/>
-        IDictionary Results { get; set; }
-    }
+    /// <seealso cref="IWebNavigator"/>
+    /// <seealso cref="IHierarchicalWebNavigator"/>
+    /// <seealso cref="DefaultResultWebNavigator"/>
+    /// <seealso cref="ResultFactoryRegistry"/>
+    /// <seealso cref="DefaultResultFactory"/>
+    IDictionary Results { get; set; }
 }

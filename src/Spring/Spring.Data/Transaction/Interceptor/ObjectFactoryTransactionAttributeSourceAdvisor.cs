@@ -21,54 +21,52 @@
 using Spring.Aop;
 using Spring.Aop.Support;
 
-namespace Spring.Transaction.Interceptor
+namespace Spring.Transaction.Interceptor;
+
+public class ObjectFactoryTransactionAttributeSourceAdvisor : AbstractObjectFactoryPointcutAdvisor
 {
-    public class ObjectFactoryTransactionAttributeSourceAdvisor : AbstractObjectFactoryPointcutAdvisor
+    private ITransactionAttributeSource _transactionAttributeSource;
+    private IPointcut _pointcut;
+
+    public ObjectFactoryTransactionAttributeSourceAdvisor()
     {
+        _pointcut = new TransactonAttributeSourcePointcut(this);
+    }
 
-        private ITransactionAttributeSource _transactionAttributeSource;
-        private IPointcut _pointcut;
+    private class TransactonAttributeSourcePointcut : AbstractTransactionAttributeSourcePointcut
+    {
+        private ObjectFactoryTransactionAttributeSourceAdvisor outer;
 
-        public ObjectFactoryTransactionAttributeSourceAdvisor()
+        public TransactonAttributeSourcePointcut(ObjectFactoryTransactionAttributeSourceAdvisor outer)
         {
-            _pointcut = new TransactonAttributeSourcePointcut(this);
+            this.outer = outer;
         }
 
+        #region Overrides of AbstractTransactionAttributeSourcePointcut
 
-        private class TransactonAttributeSourcePointcut : AbstractTransactionAttributeSourcePointcut
+        protected override ITransactionAttributeSource TransactionAttributeSource
         {
-            private ObjectFactoryTransactionAttributeSourceAdvisor outer;
-            public TransactonAttributeSourcePointcut(ObjectFactoryTransactionAttributeSourceAdvisor outer)
-            {
-                this.outer = outer;
-            }
-
-            #region Overrides of AbstractTransactionAttributeSourcePointcut
-
-            protected override ITransactionAttributeSource TransactionAttributeSource
-            {
-                get { return outer._transactionAttributeSource; }
-            }
-
-            #endregion
-        }
-
-        public ITransactionAttributeSource TransactionAttributeSource
-        {
-            set { _transactionAttributeSource = value; }
-        }
-
-        #region Overrides of AbstractPointcutAdvisor
-
-        /// <summary>
-        /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
-        /// </summary>
-        public override IPointcut Pointcut
-        {
-            get { return _pointcut; }
-            set { _pointcut = value; }
+            get { return outer._transactionAttributeSource; }
         }
 
         #endregion
     }
+
+    public ITransactionAttributeSource TransactionAttributeSource
+    {
+        set { _transactionAttributeSource = value; }
+    }
+
+    #region Overrides of AbstractPointcutAdvisor
+
+    /// <summary>
+    /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
+    /// </summary>
+    public override IPointcut Pointcut
+    {
+        get { return _pointcut; }
+        set { _pointcut = value; }
+    }
+
+    #endregion
 }

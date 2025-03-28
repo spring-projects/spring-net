@@ -20,44 +20,43 @@
 
 using System.Reflection;
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Collects information on the constructor to use to create the instance and the argument instances to pass into the
+/// constructor.
+/// </summary>
+public class ConstructorInstantiationInfo
 {
+    private ConstructorInfo constructorInfo;
+    private object[] argInstances;
+
     /// <summary>
-    /// Collects information on the constructor to use to create the instance and the argument instances to pass into the
-    /// constructor.
+    /// Initializes a new instance of the <see cref="ConstructorInstantiationInfo"/> class.
     /// </summary>
-    public class ConstructorInstantiationInfo
+    /// <param name="constructorInfo">The constructor info.</param>
+    /// <param name="argInstances">The arg instances.</param>
+    public ConstructorInstantiationInfo(ConstructorInfo constructorInfo, object[] argInstances)
     {
-        private ConstructorInfo constructorInfo;
-        private object[] argInstances;
+        this.constructorInfo = constructorInfo;
+        this.argInstances = argInstances;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConstructorInstantiationInfo"/> class.
-        /// </summary>
-        /// <param name="constructorInfo">The constructor info.</param>
-        /// <param name="argInstances">The arg instances.</param>
-        public ConstructorInstantiationInfo(ConstructorInfo constructorInfo, object[] argInstances)
-        {
-            this.constructorInfo = constructorInfo;
-            this.argInstances = argInstances;
-        }
+    /// <summary>
+    /// Gets the constructor info.
+    /// </summary>
+    /// <value>The constructor info.</value>
+    public ConstructorInfo ConstructorInfo
+    {
+        get { return constructorInfo; }
+    }
 
-        /// <summary>
-        /// Gets the constructor info.
-        /// </summary>
-        /// <value>The constructor info.</value>
-        public ConstructorInfo ConstructorInfo
-        {
-            get { return constructorInfo; }
-        }
-
-        /// <summary>
-        /// Gets the arg instances.
-        /// </summary>
-        /// <value>The arg instances.</value>
-        public object[] ArgInstances
-        {
-            get { return argInstances; }
-        }
+    /// <summary>
+    /// Gets the arg instances.
+    /// </summary>
+    /// <value>The arg instances.</value>
+    public object[] ArgInstances
+    {
+        get { return argInstances; }
     }
 }

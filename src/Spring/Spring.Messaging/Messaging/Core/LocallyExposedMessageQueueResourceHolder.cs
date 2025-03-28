@@ -20,26 +20,26 @@
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Core
+namespace Spring.Messaging.Core;
+
+/// <summary>
+/// MessageQueueResourceHolder marker subclass that indicates local exposure,
+/// i.e. that does not indicate an externally managed transaction.
+/// </summary>
+/// <author>Mark Pollack</author>
+public class LocallyExposedMessageQueueResourceHolder : MessageQueueResourceHolder
 {
     /// <summary>
-    /// MessageQueueResourceHolder marker subclass that indicates local exposure,
-    /// i.e. that does not indicate an externally managed transaction.
+    /// Initializes a new instance of the <see cref="LocallyExposedMessageQueueResourceHolder"/> class.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public class LocallyExposedMessageQueueResourceHolder : MessageQueueResourceHolder
+    /// <param name="messageQueueTransaction">The message queue transaction.</param>
+    public LocallyExposedMessageQueueResourceHolder(MessageQueueTransaction messageQueueTransaction)
+        : base(messageQueueTransaction)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LocallyExposedMessageQueueResourceHolder"/> class.
-        /// </summary>
-        /// <param name="messageQueueTransaction">The message queue transaction.</param>
-        public LocallyExposedMessageQueueResourceHolder(MessageQueueTransaction messageQueueTransaction)
-            : base(messageQueueTransaction)
-        {
-        }
     }
 }

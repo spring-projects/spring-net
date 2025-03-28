@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <objects xmlns="http://www.springframework.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
     <object id="OverrideConfigurer" type="Spring.Objects.Factory.Config.PropertyOverrideConfigurer">
         <property name="Properties">
             <name-values>
@@ -17,7 +17,8 @@
     </object>
     <object id="ConfigSectionPlaceholderConfigurer" type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer">
         <property name="PlaceholderPrefix" value="%{" />
-        <property name="ConfigSections" value="PropertyPlaceholderConfigurerSectionTest,PropertyPlaceholderConfigurerSectionGroupTest/PropertyPlaceholderConfigurerSectionGroupTestSection" />
+        <property name="ConfigSections"
+                  value="PropertyPlaceholderConfigurerSectionTest,PropertyPlaceholderConfigurerSectionGroupTest/PropertyPlaceholderConfigurerSectionGroupTestSection" />
     </object>
     <object id="Test1" type="Spring.Objects.TestObject, Spring.Core.Tests">
         <property name="Name">
@@ -29,13 +30,13 @@
             <value>Start Name</value>
         </property>
     </object>
-    
-	<object id="Test3" type="Spring.Objects.TestObject, Spring.Core.Tests">
-    <property name="Name">
-      <value>%{test.name.1}</value>
-    </property>
+
+    <object id="Test3" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="Name">
+            <value>%{test.name.1}</value>
+        </property>
     </object>
-  
+
     <object id="Test4" type="Spring.Objects.TestObject, Spring.Core.Tests">
         <property name="Name">
             <value>%{test.name.2}</value>

@@ -19,100 +19,98 @@
 #endregion
 
 using NUnit.Framework;
-
 using Spring.Expressions;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Validation
+namespace Spring.Validation;
+
+/// <summary>
+/// Unit tests for ValidatorReference class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public class ValidatorReferenceTests
 {
-    /// <summary>
-    /// Unit tests for ValidatorReference class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public class ValidatorReferenceTests
+    [Test]
+    public void TrueValidatorReference()
     {
-        [Test]
-        public void TrueValidatorReference()
-        {
-            StaticListableObjectFactory factory = new StaticListableObjectFactory();
-            factory.AddObject("validator", new TrueValidator());
+        StaticListableObjectFactory factory = new StaticListableObjectFactory();
+        factory.AddObject("validator", new TrueValidator());
 
-            ValidatorReference v = new ValidatorReference("true");
-            v.ObjectFactory = factory;
-            v.Name = "validator";
+        ValidatorReference v = new ValidatorReference("true");
+        v.ObjectFactory = factory;
+        v.Name = "validator";
 
-            IValidationErrors errors = new ValidationErrors();
+        IValidationErrors errors = new ValidationErrors();
 
-            Assert.IsTrue(v.Validate(null, null, errors));
-            Assert.IsTrue(v.Validate(null, errors));
-        }
+        Assert.IsTrue(v.Validate(null, null, errors));
+        Assert.IsTrue(v.Validate(null, errors));
+    }
 
-        [Test]
-        public void FalseValidatorReference()
-        {
-            StaticListableObjectFactory factory = new StaticListableObjectFactory();
-            factory.AddObject("validator", new FalseValidator());
+    [Test]
+    public void FalseValidatorReference()
+    {
+        StaticListableObjectFactory factory = new StaticListableObjectFactory();
+        factory.AddObject("validator", new FalseValidator());
 
-            ValidatorReference v = new ValidatorReference();
-            v.ObjectFactory = factory;
-            v.Name = "validator";
+        ValidatorReference v = new ValidatorReference();
+        v.ObjectFactory = factory;
+        v.Name = "validator";
 
-            IValidationErrors errors = new ValidationErrors();
-            Assert.IsFalse(v.Validate(null, null, errors));
-            Assert.IsFalse(v.Validate(null, errors));
-        }
+        IValidationErrors errors = new ValidationErrors();
+        Assert.IsFalse(v.Validate(null, null, errors));
+        Assert.IsFalse(v.Validate(null, errors));
+    }
 
-        [Test]
-        public void FalseValidatorReferenceNotEvaluatedBecauseWhenExpressionReturnsFalse()
-        {
-            StaticListableObjectFactory factory = new StaticListableObjectFactory();
-            factory.AddObject("validator", new FalseValidator());
+    [Test]
+    public void FalseValidatorReferenceNotEvaluatedBecauseWhenExpressionReturnsFalse()
+    {
+        StaticListableObjectFactory factory = new StaticListableObjectFactory();
+        factory.AddObject("validator", new FalseValidator());
 
-            ValidatorReference v = new ValidatorReference("false");
-            v.ObjectFactory = factory;
-            v.Name = "validator";
+        ValidatorReference v = new ValidatorReference("false");
+        v.ObjectFactory = factory;
+        v.Name = "validator";
 
-            IValidationErrors errors = new ValidationErrors();
-            Assert.IsTrue(v.Validate(null, null, errors));
-            Assert.IsTrue(v.Validate(null, errors));
-        }
+        IValidationErrors errors = new ValidationErrors();
+        Assert.IsTrue(v.Validate(null, null, errors));
+        Assert.IsTrue(v.Validate(null, errors));
+    }
 
-        [Test]
-        public void ContextNarrowing()
-        {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            
-            ConditionValidator cv1 = new ConditionValidator("DOB.Year == 1856", null);
-            ConditionValidator cv2 = new ConditionValidator("Year == 1856", null);
-            
-            StaticListableObjectFactory factory = new StaticListableObjectFactory();
-            factory.AddObject("cv1", cv1);
-            factory.AddObject("cv2", cv2);
+    [Test]
+    public void ContextNarrowing()
+    {
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
 
-            ValidatorReference v1 = new ValidatorReference();
-            v1.ObjectFactory = factory;
-            v1.Name = "cv1";
+        ConditionValidator cv1 = new ConditionValidator("DOB.Year == 1856", null);
+        ConditionValidator cv2 = new ConditionValidator("Year == 1856", null);
 
-            IValidationErrors errors = new ValidationErrors();
+        StaticListableObjectFactory factory = new StaticListableObjectFactory();
+        factory.AddObject("cv1", cv1);
+        factory.AddObject("cv2", cv2);
 
-            Assert.IsTrue(v1.Validate(context, null, errors));
-            Assert.IsTrue(v1.Validate(context, errors));
+        ValidatorReference v1 = new ValidatorReference();
+        v1.ObjectFactory = factory;
+        v1.Name = "cv1";
 
-            ValidatorReference v2 = new ValidatorReference();
-            v2.ObjectFactory = factory;
-            v2.Name = "cv2";
-            v2.Context = Expression.Parse("DOB");
+        IValidationErrors errors = new ValidationErrors();
 
-            Assert.IsTrue(v2.Validate(context, null, errors));
-            Assert.IsTrue(v2.Validate(context, errors));
+        Assert.IsTrue(v1.Validate(context, null, errors));
+        Assert.IsTrue(v1.Validate(context, errors));
 
-            ValidatorReference v3 = new ValidatorReference("false");
-            v3.ObjectFactory = factory;
-            v3.Name = "cv2";
-            v3.Context = Expression.Parse("DOB");
+        ValidatorReference v2 = new ValidatorReference();
+        v2.ObjectFactory = factory;
+        v2.Name = "cv2";
+        v2.Context = Expression.Parse("DOB");
 
-            Assert.IsTrue(v3.Validate(null, errors));
-        }
+        Assert.IsTrue(v2.Validate(context, null, errors));
+        Assert.IsTrue(v2.Validate(context, errors));
+
+        ValidatorReference v3 = new ValidatorReference("false");
+        v3.ObjectFactory = factory;
+        v3.Name = "cv2";
+        v3.Context = Expression.Parse("DOB");
+
+        Assert.IsTrue(v3.Validate(null, errors));
     }
 }

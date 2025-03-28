@@ -20,52 +20,55 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Root for exceptions thrown when we use a data access resource incorrectly.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Thrown for example on specifying bad SQL when using a RDBMS.
+/// Resource-specific subclasses will probably be supplied by data access packages.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class InvalidDataAccessResourceUsageException : DataAccessException
 {
-	/// <summary>
-	/// Root for exceptions thrown when we use a data access resource incorrectly.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Thrown for example on specifying bad SQL when using a RDBMS.
-	/// Resource-specific subclasses will probably be supplied by data access packages.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class InvalidDataAccessResourceUsageException : DataAccessException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.InvalidDataAccessResourceUsageException"/> class.
-		/// </summary>
-		public InvalidDataAccessResourceUsageException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.InvalidDataAccessResourceUsageException"/> class.
+    /// </summary>
+    public InvalidDataAccessResourceUsageException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.InvalidDataAccessResourceUsageException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public InvalidDataAccessResourceUsageException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.InvalidDataAccessResourceUsageException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public InvalidDataAccessResourceUsageException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.InvalidDataAccessResourceUsageException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public InvalidDataAccessResourceUsageException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.InvalidDataAccessResourceUsageException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public InvalidDataAccessResourceUsageException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected InvalidDataAccessResourceUsageException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected InvalidDataAccessResourceUsageException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

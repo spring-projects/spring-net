@@ -20,61 +20,59 @@
 
 using System.Globalization;
 
-namespace Spring.Globalization
+namespace Spring.Globalization;
+
+/// <summary>
+/// Abstract base class that all resource cache implementations should extend.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public abstract class AbstractResourceCache : IResourceCache
 {
     /// <summary>
-    /// Abstract base class that all resource cache implementations should extend.
+    /// Gets the list of resources from the cache.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public abstract class AbstractResourceCache : IResourceCache
+    /// <param name="target">Target to get a list of resources for.</param>
+    /// <param name="culture">Resource culture.</param>
+    /// <returns>A list of cached resources for the specified target object and culture.</returns>
+    public IList<Resource> GetResources(object target, CultureInfo culture)
     {
-        /// <summary>
-        /// Gets the list of resources from the cache.
-        /// </summary>
-        /// <param name="target">Target to get a list of resources for.</param>
-        /// <param name="culture">Resource culture.</param>
-        /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        public IList<Resource> GetResources(object target, CultureInfo culture)
-        {
-            return GetResources(CreateCacheKey(target, culture));
-        }
-
-        /// <summary>
-        /// Puts the list of resources in the cache.
-        /// </summary>
-        /// <param name="target">Target to cache a list of resources for.</param>
-        /// <param name="culture">Resource culture.</param>
-        /// <param name="resources">A list of resources to cache.</param>
-        /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        public void PutResources(object target, CultureInfo culture, IList<Resource> resources)
-        {
-            PutResources(CreateCacheKey(target, culture), resources);
-        }
-
-        /// <summary>
-        /// Crates resource cache key for the specified target object and culture.
-        /// </summary>
-        /// <param name="target">Target object to apply resources to.</param>
-        /// <param name="culture">Resource culture to use for resource lookup.</param>
-        protected virtual string CreateCacheKey(object target, CultureInfo culture)
-        {
-            return target.GetType().FullName + "." + culture.Name + ".resources";
-        }
-
-        /// <summary>
-        /// Gets the list of resources from cache.
-        /// </summary>
-        /// <param name="cacheKey">Cache key to use for lookup.</param>
-        /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        protected abstract IList<Resource> GetResources(string cacheKey);
-
-        /// <summary>
-        /// Puts the list of resources in the cache.
-        /// </summary>
-        /// <param name="cacheKey">Cache key to use for the specified resources.</param>
-        /// <param name="resources">A list of resources to cache.</param>
-        /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        protected abstract void PutResources(string cacheKey, IList<Resource> resources);
-
+        return GetResources(CreateCacheKey(target, culture));
     }
+
+    /// <summary>
+    /// Puts the list of resources in the cache.
+    /// </summary>
+    /// <param name="target">Target to cache a list of resources for.</param>
+    /// <param name="culture">Resource culture.</param>
+    /// <param name="resources">A list of resources to cache.</param>
+    /// <returns>A list of cached resources for the specified target object and culture.</returns>
+    public void PutResources(object target, CultureInfo culture, IList<Resource> resources)
+    {
+        PutResources(CreateCacheKey(target, culture), resources);
+    }
+
+    /// <summary>
+    /// Crates resource cache key for the specified target object and culture.
+    /// </summary>
+    /// <param name="target">Target object to apply resources to.</param>
+    /// <param name="culture">Resource culture to use for resource lookup.</param>
+    protected virtual string CreateCacheKey(object target, CultureInfo culture)
+    {
+        return target.GetType().FullName + "." + culture.Name + ".resources";
+    }
+
+    /// <summary>
+    /// Gets the list of resources from cache.
+    /// </summary>
+    /// <param name="cacheKey">Cache key to use for lookup.</param>
+    /// <returns>A list of cached resources for the specified target object and culture.</returns>
+    protected abstract IList<Resource> GetResources(string cacheKey);
+
+    /// <summary>
+    /// Puts the list of resources in the cache.
+    /// </summary>
+    /// <param name="cacheKey">Cache key to use for the specified resources.</param>
+    /// <param name="resources">A list of resources to cache.</param>
+    /// <returns>A list of cached resources for the specified target object and culture.</returns>
+    protected abstract void PutResources(string cacheKey, IList<Resource> resources);
 }

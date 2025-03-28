@@ -1,42 +1,40 @@
-namespace Spring.Expressions.Parser.antlr
+namespace Spring.Expressions.Parser.antlr;
+
+/* ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/license.html
+ */
+
+//
+// ANTLR C# Code Generator by Micheal Jordan
+//                            Kunle Odutola       : kunle UNDERSCORE odutola AT hotmail DOT com
+//                            Anthony Oguntimehin
+//
+using StringBuilder = System.Text.StringBuilder;
+
+public class ParseTreeToken : ParseTree
 {
+    protected IToken token;
 
-	/* ANTLR Translator Generator
-	 * Project led by Terence Parr at http://www.jGuru.com
-	 * Software rights: http://www.antlr.org/license.html
-	 */
+    public ParseTreeToken(IToken token)
+    {
+        this.token = token;
+    }
 
-	//
-	// ANTLR C# Code Generator by Micheal Jordan
-	//                            Kunle Odutola       : kunle UNDERSCORE odutola AT hotmail DOT com
-	//                            Anthony Oguntimehin
-	//
+    protected override internal int getLeftmostDerivation(StringBuilder buf, int step)
+    {
+        buf.Append(' ');
+        buf.Append(ToString());
+        return step; // did on replacements
+    }
 
-    using StringBuilder 	= System.Text.StringBuilder;
+    public override string ToString()
+    {
+        if (token != null)
+        {
+            return token.getText();
+        }
 
-    public class ParseTreeToken : ParseTree
-	{
-		protected IToken token;
-
-		public ParseTreeToken(IToken token) 
-		{
-			this.token = token;
-		}
-
-		protected override internal int getLeftmostDerivation(StringBuilder buf, int step) 
-		{
-			buf.Append(' ');
-			buf.Append(ToString());
-			return step; // did on replacements
-		}
-
-		public override string ToString()
-		{
-			if ( token != null ) 
-			{
-				return token.getText();
-			}
-			return "<missing token>";
-		}
-	}
+        return "<missing token>";
+    }
 }

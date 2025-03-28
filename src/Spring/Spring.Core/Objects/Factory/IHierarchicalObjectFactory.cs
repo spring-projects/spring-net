@@ -18,37 +18,35 @@
 
 #endregion
 
-namespace Spring.Objects.Factory
+namespace Spring.Objects.Factory;
+
+/// <summary>
+/// Sub-interface implemented by object factories that can be part
+/// of a hierarchy.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans (.NET)</author>
+public interface IHierarchicalObjectFactory : IObjectFactory
 {
-	/// <summary>
-	/// Sub-interface implemented by object factories that can be part
-	/// of a hierarchy.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Rick Evans (.NET)</author>
-	public interface IHierarchicalObjectFactory : IObjectFactory
-	{
-		/// <summary>
-		/// Return the parent object factory, or <see langword="null"/>
-		/// if this factory does not have a parent.
-		/// </summary>
-		/// <value>
-		/// The parent object factory, or <see langword="null"/>
-		/// if this factory does not have a parent.
-		/// </value>
-		IObjectFactory ParentObjectFactory { get; }
+    /// <summary>
+    /// Return the parent object factory, or <see langword="null"/>
+    /// if this factory does not have a parent.
+    /// </summary>
+    /// <value>
+    /// The parent object factory, or <see langword="null"/>
+    /// if this factory does not have a parent.
+    /// </value>
+    IObjectFactory ParentObjectFactory { get; }
 
-
-        /// <summary>
-        /// Determines whether the local object factory contains a bean of the given name,
-        /// ignoring object defined in ancestor contexts, also resolving a given alias if necessary.
-        /// This is an alternative to <code>ContainsObject</code>, ignoring an object
-        /// of the given name from an ancestor object factory.
-        /// </summary>
-        /// <param name="name">The name of the object to query.</param>
-        /// <returns>
-        /// 	<c>true</c> if objects with the specified name is defined in the local factory; otherwise, <c>false</c>.
-        /// </returns>
-	    bool ContainsLocalObject(string name);
-	}
+    /// <summary>
+    /// Determines whether the local object factory contains a bean of the given name,
+    /// ignoring object defined in ancestor contexts, also resolving a given alias if necessary.
+    /// This is an alternative to <code>ContainsObject</code>, ignoring an object
+    /// of the given name from an ancestor object factory.
+    /// </summary>
+    /// <param name="name">The name of the object to query.</param>
+    /// <returns>
+    /// 	<c>true</c> if objects with the specified name is defined in the local factory; otherwise, <c>false</c>.
+    /// </returns>
+    bool ContainsLocalObject(string name);
 }

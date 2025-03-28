@@ -30,424 +30,432 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Object definition reader for Spring's default XML object definition format.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Typically applied to a
+/// <see cref="Spring.Objects.Factory.Support.DefaultListableObjectFactory"/> instance.
+/// </p>
+/// <p>
+/// This class registers each object definition with the given object factory superclass,
+/// and relies on the latter's implementation of the
+/// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/> interface.
+/// </p>
+/// <p>
+/// It supports singletons, prototypes, and references to either of these kinds of object.
+/// </p>
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Rick Evans (.NET)</author>
+public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
 {
+    #region Utility Classes
+
     /// <summary>
-    /// Object definition reader for Spring's default XML object definition format.
+    /// For retrying the parse process
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// Typically applied to a
-    /// <see cref="Spring.Objects.Factory.Support.DefaultListableObjectFactory"/> instance.
-    /// </p>
-    /// <p>
-    /// This class registers each object definition with the given object factory superclass,
-    /// and relies on the latter's implementation of the
-    /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/> interface.
-    /// </p>
-    /// <p>
-    /// It supports singletons, prototypes, and references to either of these kinds of object.
-    /// </p>
-    /// </remarks>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Rick Evans (.NET)</author>
-    public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
+    private class RetryParseException : Exception
     {
-        #region Utility Classes
-
-        /// <summary>
-        /// For retrying the parse process
-        /// </summary>
-        private class RetryParseException : Exception
+        public RetryParseException()
         {
-            public RetryParseException()
-            { }
+        }
+    }
+
+    #endregion
+
+    #region Fields
+
+    [NonSerialized] private XmlResolver resolver;
+
+    private Type documentReaderType;
+    private INamespaceParserResolver namespaceParserResolver;
+    private IObjectDefinitionFactory objectDefinitionFactory;
+
+    #endregion
+
+    #region Constructor (s) / Destructor
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/> class.
+    /// </summary>
+    /// <param name="registry">
+    /// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
+    /// instance that this reader works on.
+    /// </param>
+    public XmlObjectDefinitionReader(IObjectDefinitionRegistry registry)
+        : this(registry, new XmlUrlResolver())
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/> class.
+    /// </summary>
+    /// <param name="registry">
+    /// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
+    /// instance that this reader works on.
+    /// </param>
+    /// <param name="resolver">
+    /// The <see cref="System.Xml.XmlResolver"/>to be used for parsing.
+    /// </param>
+    public XmlObjectDefinitionReader(IObjectDefinitionRegistry registry, XmlResolver resolver)
+        : this(registry, resolver, new DefaultObjectDefinitionFactory())
+    {
+        Resolver = resolver;
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/> class.
+    /// </summary>
+    /// <param name="registry">
+    /// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
+    /// instance that this reader works on.
+    /// </param>
+    /// <param name="resolver">
+    /// The <see cref="System.Xml.XmlResolver"/>to be used for parsing.
+    /// </param>
+    /// <param name="objectDefinitionFactory">the <see cref="IObjectDefinitionFactory"/> to use for creating new <see cref="IObjectDefinition"/>s</param>
+    protected XmlObjectDefinitionReader(IObjectDefinitionRegistry registry, XmlResolver resolver, IObjectDefinitionFactory objectDefinitionFactory)
+        : base(registry)
+    {
+        Resolver = resolver;
+        this.objectDefinitionFactory = objectDefinitionFactory;
+    }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// The <see cref="System.Xml.XmlResolver"/>to be used for parsing.
+    /// </summary>
+    public XmlResolver Resolver
+    {
+        get { return resolver; }
+        set { resolver = value; }
+    }
+
+    /// <summary>
+    /// Sets the IObjectDefinitionDocumentReader implementation to use, responsible for
+    /// the actual reading of the XML object definition document.stype of the document reader.
+    /// </summary>
+    /// <value>The type of the document reader.</value>
+    public Type DocumentReaderType
+    {
+        set
+        {
+            if (value == null || !typeof(IObjectDefinitionDocumentReader).IsAssignableFrom(value))
+            {
+                throw new ArgumentException(
+                    "DocumentReaderType must be an implementation of the IObjectDefinitionReader interface.");
+            }
+
+            documentReaderType = value;
+        }
+    }
+
+    /// <summary>
+    /// Specify a <see cref="INamespaceParserResolver"/> to use. If none is specified a default
+    /// instance will be created by <see cref="CreateDefaultNamespaceParserResolver"/>
+    /// </summary>
+    internal INamespaceParserResolver NamespaceParserResolver
+    {
+        get
+        {
+            if (this.namespaceParserResolver == null)
+            {
+                this.namespaceParserResolver = CreateDefaultNamespaceParserResolver();
+            }
+
+            return this.namespaceParserResolver;
+        }
+        set
+        {
+            if (this.namespaceParserResolver != null)
+            {
+                throw new InvalidOperationException("NamespaceParserResolver is already set");
+            }
+
+            this.namespaceParserResolver = value;
+        }
+    }
+
+    /// <summary>
+    /// Specify a <see cref="IObjectDefinitionFactory"/> for creating instances of <see cref="AbstractObjectDefinition"/>.
+    /// </summary>
+    protected IObjectDefinitionFactory ObjectDefinitionFactory
+    {
+        get
+        {
+            return this.objectDefinitionFactory;
+        }
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Load object definitions from the supplied XML <paramref name="resource"/>.
+    /// </summary>
+    /// <param name="resource">
+    /// The XML resource for the object definitions that are to be loaded.
+    /// </param>
+    /// <returns>
+    /// The number of object definitions that were loaded.
+    /// </returns>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// In the case of loading or parsing errors.
+    /// </exception>
+    public override int LoadObjectDefinitions(IResource resource)
+    {
+        if (resource == null)
+        {
+            throw new ObjectDefinitionStoreException
+                ("Resource cannot be null: expected an XML resource.");
+        }
+
+        #region Instrumentation
+
+        if (log.IsEnabled(LogLevel.Debug))
+        {
+            log.LogDebug("Loading XML object definitions from " + resource);
         }
 
         #endregion
 
-        #region Fields
-
-        [NonSerialized]
-        private XmlResolver resolver;
-
-        private Type documentReaderType;
-        private INamespaceParserResolver namespaceParserResolver;
-        private IObjectDefinitionFactory objectDefinitionFactory;
-
-        #endregion
-
-        #region Constructor (s) / Destructor
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/> class.
-        /// </summary>
-        /// <param name="registry">
-        /// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
-        /// instance that this reader works on.
-        /// </param>
-        public XmlObjectDefinitionReader(IObjectDefinitionRegistry registry)
-            : this(registry, new XmlUrlResolver())
-        { }
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/> class.
-        /// </summary>
-        /// <param name="registry">
-        /// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
-        /// instance that this reader works on.
-        /// </param>
-        /// <param name="resolver">
-        /// The <see cref="System.Xml.XmlResolver"/>to be used for parsing.
-        /// </param>
-        public XmlObjectDefinitionReader(IObjectDefinitionRegistry registry, XmlResolver resolver)
-            : this(registry, resolver, new DefaultObjectDefinitionFactory())
+        try
         {
-            Resolver = resolver;
-        }
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/> class.
-        /// </summary>
-        /// <param name="registry">
-        /// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
-        /// instance that this reader works on.
-        /// </param>
-        /// <param name="resolver">
-        /// The <see cref="System.Xml.XmlResolver"/>to be used for parsing.
-        /// </param>
-        /// <param name="objectDefinitionFactory">the <see cref="IObjectDefinitionFactory"/> to use for creating new <see cref="IObjectDefinition"/>s</param>
-        protected XmlObjectDefinitionReader(IObjectDefinitionRegistry registry, XmlResolver resolver, IObjectDefinitionFactory objectDefinitionFactory)
-            : base(registry)
-        {
-            Resolver = resolver;
-            this.objectDefinitionFactory = objectDefinitionFactory;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// The <see cref="System.Xml.XmlResolver"/>to be used for parsing.
-        /// </summary>
-        public XmlResolver Resolver
-        {
-            get { return resolver; }
-            set { resolver = value; }
-        }
-
-
-        /// <summary>
-        /// Sets the IObjectDefinitionDocumentReader implementation to use, responsible for
-        /// the actual reading of the XML object definition document.stype of the document reader.
-        /// </summary>
-        /// <value>The type of the document reader.</value>
-        public Type DocumentReaderType
-        {
-            set
-            {
-                if (value == null || !typeof(IObjectDefinitionDocumentReader).IsAssignableFrom(value))
-                {
-                    throw new ArgumentException(
-                        "DocumentReaderType must be an implementation of the IObjectDefinitionReader interface.");
-                }
-                documentReaderType = value;
-            }
-        }
-
-        /// <summary>
-        /// Specify a <see cref="INamespaceParserResolver"/> to use. If none is specified a default
-        /// instance will be created by <see cref="CreateDefaultNamespaceParserResolver"/>
-        /// </summary>
-        internal INamespaceParserResolver NamespaceParserResolver
-        {
-            get
-            {
-                if (this.namespaceParserResolver == null)
-                {
-                    this.namespaceParserResolver = CreateDefaultNamespaceParserResolver();
-                }
-                return this.namespaceParserResolver;
-            }
-            set
-            {
-                if (this.namespaceParserResolver != null)
-                {
-                    throw new InvalidOperationException("NamespaceParserResolver is already set");
-                }
-                this.namespaceParserResolver = value;
-            }
-        }
-
-        /// <summary>
-        /// Specify a <see cref="IObjectDefinitionFactory"/> for creating instances of <see cref="AbstractObjectDefinition"/>.
-        /// </summary>
-        protected IObjectDefinitionFactory ObjectDefinitionFactory
-        {
-            get
-            {
-                return this.objectDefinitionFactory;
-            }
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Load object definitions from the supplied XML <paramref name="resource"/>.
-        /// </summary>
-        /// <param name="resource">
-        /// The XML resource for the object definitions that are to be loaded.
-        /// </param>
-        /// <returns>
-        /// The number of object definitions that were loaded.
-        /// </returns>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// In the case of loading or parsing errors.
-        /// </exception>
-        public override int LoadObjectDefinitions(IResource resource)
-        {
-            if (resource == null)
-            {
-                throw new ObjectDefinitionStoreException
-                    ("Resource cannot be null: expected an XML resource.");
-            }
-
-            #region Instrumentation
-
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Loading XML object definitions from " + resource);
-            }
-
-            #endregion
-
-            try
-            {
-                Stream stream = resource.InputStream;
-                if (stream == null)
-                {
-                    throw new ObjectDefinitionStoreException(
-                        "InputStream is null from Resource = [" + resource + "]");
-                }
-                try
-                {
-                    return DoLoadObjectDefinitions(stream, resource);
-                }
-                finally
-                {
-                    #region Close stream
-                    try
-                    {
-                        stream.Close();
-                    }
-                    catch (IOException ex)
-                    {
-                        #region Instrumentation
-
-                        if (log.IsEnabled(LogLevel.Warning))
-                        {
-                            log.LogWarning(ex, "Could not close stream.");
-                        }
-
-                        #endregion
-                    }
-                    #endregion
-                }
-            }
-            catch (IOException ex)
+            Stream stream = resource.InputStream;
+            if (stream == null)
             {
                 throw new ObjectDefinitionStoreException(
-                    "IOException parsing XML document from " + resource.Description, ex);
+                    "InputStream is null from Resource = [" + resource + "]");
             }
 
-        }
-
-        /// <summary>
-        /// Actually load object definitions from the specified XML file.
-        /// </summary>
-        /// <param name="stream">The input stream to read from.</param>
-        /// <param name="resource">The resource for the XML data.</param>
-        /// <returns></returns>
-        protected virtual int DoLoadObjectDefinitions(Stream stream, IResource resource)
-        {
             try
             {
-                // create local copy of data
-                byte[] xmlData = IOUtils.ToByteArray(stream);
+                return DoLoadObjectDefinitions(stream, resource);
+            }
+            finally
+            {
+                #region Close stream
 
-                XmlDocument doc;
-                // loop until no unregistered, wellknown namespaces left
-                while (true)
+                try
                 {
-                    XmlReader reader = null;
-                    try
-                    {
-                        MemoryStream xmlDataStream = new MemoryStream(xmlData);
-                        reader = CreateValidatingReader(xmlDataStream);
-                        doc = new ConfigXmlDocument();
-                        doc.Load(reader);
-                        break;
-                    }
-                    catch (RetryParseException)
-                    {
-                        if (reader != null)
-                            reader.Close();
-                    }
+                    stream.Close();
                 }
-                return RegisterObjectDefinitions(doc, resource);
-            }
-            catch (XmlException ex)
-            {
-                throw new ObjectDefinitionStoreException(resource.Description,
-                                                            "Line " + ex.LineNumber + " in XML document from " +
-                                                            resource + " is not well formed.  " + ex.Message, ex);
-            }
-            catch (XmlSchemaException ex)
-            {
-                throw new ObjectDefinitionStoreException(resource.Description,
-                                                            "Line " + ex.LineNumber + " in XML document from " +
-                                                            resource + " violates the schema.  " + ex.Message, ex);
-            }
-            catch (ObjectDefinitionStoreException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new ObjectDefinitionStoreException("Unexpected exception parsing XML document from " + resource.Description + "Inner exception message= " + ex.Message, ex);
-            }
-        }
-
-        private XmlReader CreateValidatingReader(MemoryStream stream)
-        {
-            XmlReader reader;
-            if (SystemUtils.MonoRuntime)
-            {
-                reader = XmlUtils.CreateReader(stream);
-            }
-            else
-            {
-                reader = XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(), HandleValidation);
-            }
-
-            #region Instrumentation
-
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Using the following XmlReader implementation : " + reader.GetType());
-            }
-            return reader;
-
-            #endregion
-        }
-
-        /// <summary>
-        /// Validation callback for a validating XML reader.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="args">Any data pertinent to the event.</param>
-        private void HandleValidation(object sender, ValidationEventArgs args)
-        {
-            if (args.Severity == XmlSeverityType.Error)
-            {
-                XmlSchemaException ex = args.Exception;
-                XmlReader xmlReader = (XmlReader)sender;
-                if (!NamespaceParserRegistry.GetSchemas().Contains(xmlReader.NamespaceURI) && ex is XmlSchemaValidationException)
+                catch (IOException ex)
                 {
-                    // try wellknown parsers
-                    bool registered = NamespaceParserRegistry.RegisterWellknownNamespaceParserType(xmlReader.NamespaceURI);
-                    if (registered)
+                    #region Instrumentation
+
+                    if (log.IsEnabled(LogLevel.Warning))
                     {
-                        throw new RetryParseException();
+                        log.LogWarning(ex, "Could not close stream.");
                     }
-                }
-                throw ex;
-            }
-            else
-            {
-                #region Instrumentation
 
-                if (log.IsEnabled(LogLevel.Warning))
-                {
-                    string message = "Ignored XML validation warning: " + args.Message;
-                    log.LogWarning(args.Exception, message);
+                    #endregion
                 }
 
                 #endregion
             }
         }
-
-        /// <summary>
-        /// Register the object definitions contained in the given DOM document.
-        /// </summary>
-        /// <param name="doc">The DOM document.</param>
-        /// <param name="resource">
-        /// The original resource from where the <see cref="System.Xml.XmlDocument"/>
-        /// was read.
-        /// </param>
-        /// <returns>
-        /// The number of object definitions that were registered.
-        /// </returns>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// In case of parsing errors.
-        /// </exception>
-        public int RegisterObjectDefinitions(
-            XmlDocument doc, IResource resource)
+        catch (IOException ex)
         {
-            IObjectDefinitionDocumentReader documentReader = CreateObjectDefinitionDocumentReader();
-
-            //TODO make void return and get object count from registry.
-            int countBefore = Registry.ObjectDefinitionCount;
-            XmlReaderContext readerContext = CreateReaderContext(resource);
-            readerContext.NamespaceParserResolver = this.NamespaceParserResolver;
-            documentReader.RegisterObjectDefinitions(doc, readerContext);
-            return Registry.ObjectDefinitionCount - countBefore;
+            throw new ObjectDefinitionStoreException(
+                "IOException parsing XML document from " + resource.Description, ex);
         }
+    }
 
-        /// <summary>
-        /// Creates the <see cref="IObjectDefinitionDocumentReader"/> to use for actually
-        /// reading object definitions from an XML document.
-        /// </summary>
-        /// <remarks>Default implementation instantiates the specified <see cref="DocumentReaderType"/>
-        /// or <see cref="DefaultObjectDefinitionDocumentReader"/> if no reader type is specified.</remarks>
-        /// <returns></returns>
-        protected virtual IObjectDefinitionDocumentReader CreateObjectDefinitionDocumentReader()
+    /// <summary>
+    /// Actually load object definitions from the specified XML file.
+    /// </summary>
+    /// <param name="stream">The input stream to read from.</param>
+    /// <param name="resource">The resource for the XML data.</param>
+    /// <returns></returns>
+    protected virtual int DoLoadObjectDefinitions(Stream stream, IResource resource)
+    {
+        try
         {
-            if (documentReaderType == null)
+            // create local copy of data
+            byte[] xmlData = IOUtils.ToByteArray(stream);
+
+            XmlDocument doc;
+            // loop until no unregistered, wellknown namespaces left
+            while (true)
             {
-                return new DefaultObjectDefinitionDocumentReader();
+                XmlReader reader = null;
+                try
+                {
+                    MemoryStream xmlDataStream = new MemoryStream(xmlData);
+                    reader = CreateValidatingReader(xmlDataStream);
+                    doc = new ConfigXmlDocument();
+                    doc.Load(reader);
+                    break;
+                }
+                catch (RetryParseException)
+                {
+                    if (reader != null)
+                        reader.Close();
+                }
             }
-            return (IObjectDefinitionDocumentReader)ObjectUtils.InstantiateType(documentReaderType);
+
+            return RegisterObjectDefinitions(doc, resource);
+        }
+        catch (XmlException ex)
+        {
+            throw new ObjectDefinitionStoreException(resource.Description,
+                "Line " + ex.LineNumber + " in XML document from " +
+                resource + " is not well formed.  " + ex.Message, ex);
+        }
+        catch (XmlSchemaException ex)
+        {
+            throw new ObjectDefinitionStoreException(resource.Description,
+                "Line " + ex.LineNumber + " in XML document from " +
+                resource + " violates the schema.  " + ex.Message, ex);
+        }
+        catch (ObjectDefinitionStoreException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new ObjectDefinitionStoreException("Unexpected exception parsing XML document from " + resource.Description + "Inner exception message= " + ex.Message, ex);
+        }
+    }
+
+    private XmlReader CreateValidatingReader(MemoryStream stream)
+    {
+        XmlReader reader;
+        if (SystemUtils.MonoRuntime)
+        {
+            reader = XmlUtils.CreateReader(stream);
+        }
+        else
+        {
+            reader = XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(), HandleValidation);
         }
 
-        /// <summary>
-        /// Creates the <see cref="XmlReaderContext"/> to be passed along
-        /// during the object definition reading process.
-        /// </summary>
-        /// <param name="resource">The underlying <see cref="IResource"/> that is currently processed.</param>
-        /// <returns>A new <see cref="XmlReaderContext"/></returns>
-        protected virtual XmlReaderContext CreateReaderContext(IResource resource)
+        #region Instrumentation
+
+        if (log.IsEnabled(LogLevel.Debug))
         {
-            return new XmlReaderContext(resource, this, this.objectDefinitionFactory);
+            log.LogDebug("Using the following XmlReader implementation : " + reader.GetType());
         }
 
-        /// <summary>
-        /// Create a <see cref="INamespaceParserResolver"/> instance for handling custom namespaces.
-        /// </summary>
-        /// <remarks>
-        /// TODO (EE): make protected virtual, see remarks on <see cref="INamespaceParserResolver"/>
-        /// </remarks>
-        private INamespaceParserResolver CreateDefaultNamespaceParserResolver()
-        {
-            return new DefaultNamespaceHandlerResolver();
-        }
+        return reader;
 
         #endregion
     }
+
+    /// <summary>
+    /// Validation callback for a validating XML reader.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="args">Any data pertinent to the event.</param>
+    private void HandleValidation(object sender, ValidationEventArgs args)
+    {
+        if (args.Severity == XmlSeverityType.Error)
+        {
+            XmlSchemaException ex = args.Exception;
+            XmlReader xmlReader = (XmlReader) sender;
+            if (!NamespaceParserRegistry.GetSchemas().Contains(xmlReader.NamespaceURI) && ex is XmlSchemaValidationException)
+            {
+                // try wellknown parsers
+                bool registered = NamespaceParserRegistry.RegisterWellknownNamespaceParserType(xmlReader.NamespaceURI);
+                if (registered)
+                {
+                    throw new RetryParseException();
+                }
+            }
+
+            throw ex;
+        }
+        else
+        {
+            #region Instrumentation
+
+            if (log.IsEnabled(LogLevel.Warning))
+            {
+                string message = "Ignored XML validation warning: " + args.Message;
+                log.LogWarning(args.Exception, message);
+            }
+
+            #endregion
+        }
+    }
+
+    /// <summary>
+    /// Register the object definitions contained in the given DOM document.
+    /// </summary>
+    /// <param name="doc">The DOM document.</param>
+    /// <param name="resource">
+    /// The original resource from where the <see cref="System.Xml.XmlDocument"/>
+    /// was read.
+    /// </param>
+    /// <returns>
+    /// The number of object definitions that were registered.
+    /// </returns>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// In case of parsing errors.
+    /// </exception>
+    public int RegisterObjectDefinitions(
+        XmlDocument doc, IResource resource)
+    {
+        IObjectDefinitionDocumentReader documentReader = CreateObjectDefinitionDocumentReader();
+
+        //TODO make void return and get object count from registry.
+        int countBefore = Registry.ObjectDefinitionCount;
+        XmlReaderContext readerContext = CreateReaderContext(resource);
+        readerContext.NamespaceParserResolver = this.NamespaceParserResolver;
+        documentReader.RegisterObjectDefinitions(doc, readerContext);
+        return Registry.ObjectDefinitionCount - countBefore;
+    }
+
+    /// <summary>
+    /// Creates the <see cref="IObjectDefinitionDocumentReader"/> to use for actually
+    /// reading object definitions from an XML document.
+    /// </summary>
+    /// <remarks>Default implementation instantiates the specified <see cref="DocumentReaderType"/>
+    /// or <see cref="DefaultObjectDefinitionDocumentReader"/> if no reader type is specified.</remarks>
+    /// <returns></returns>
+    protected virtual IObjectDefinitionDocumentReader CreateObjectDefinitionDocumentReader()
+    {
+        if (documentReaderType == null)
+        {
+            return new DefaultObjectDefinitionDocumentReader();
+        }
+
+        return (IObjectDefinitionDocumentReader) ObjectUtils.InstantiateType(documentReaderType);
+    }
+
+    /// <summary>
+    /// Creates the <see cref="XmlReaderContext"/> to be passed along
+    /// during the object definition reading process.
+    /// </summary>
+    /// <param name="resource">The underlying <see cref="IResource"/> that is currently processed.</param>
+    /// <returns>A new <see cref="XmlReaderContext"/></returns>
+    protected virtual XmlReaderContext CreateReaderContext(IResource resource)
+    {
+        return new XmlReaderContext(resource, this, this.objectDefinitionFactory);
+    }
+
+    /// <summary>
+    /// Create a <see cref="INamespaceParserResolver"/> instance for handling custom namespaces.
+    /// </summary>
+    /// <remarks>
+    /// TODO (EE): make protected virtual, see remarks on <see cref="INamespaceParserResolver"/>
+    /// </remarks>
+    private INamespaceParserResolver CreateDefaultNamespaceParserResolver()
+    {
+        return new DefaultNamespaceHandlerResolver();
+    }
+
+    #endregion
 }

@@ -20,34 +20,33 @@
 
 using System.Web.UI;
 
-namespace Spring.Web.UI.Validation
+namespace Spring.Web.UI.Validation;
+
+/// <summary>
+/// This class provides common members for all validation errors renderers.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public abstract class AbstractValidationErrorsRenderer : IValidationErrorsRenderer
 {
+    private string cssClass;
+
     /// <summary>
-    /// This class provides common members for all validation errors renderers.
+    /// Gets or sets the name of the CSS class that should be used.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public abstract class AbstractValidationErrorsRenderer : IValidationErrorsRenderer
+    /// <value>
+    /// The name of the CSS class that should be used
+    /// </value>
+    public string CssClass
     {
-        private string cssClass;
-
-        /// <summary>
-        /// Gets or sets the name of the CSS class that should be used.
-        /// </summary>
-        /// <value>
-        /// The name of the CSS class that should be used
-        /// </value>
-        public string CssClass
-        {
-            get { return this.cssClass; }
-            set { this.cssClass = value; }
-        }
-
-        /// <summary>
-        /// Renders validation errors using specified <see cref="HtmlTextWriter"/>.
-        /// </summary>
-        /// <param name="page">Web form instance.</param>
-        /// <param name="writer">An HTML writer to use.</param>
-        /// <param name="errors">The list of validation errors.</param>
-        public abstract void RenderErrors(Page page, HtmlTextWriter writer, IList<string> errors);
+        get { return this.cssClass; }
+        set { this.cssClass = value; }
     }
+
+    /// <summary>
+    /// Renders validation errors using specified <see cref="HtmlTextWriter"/>.
+    /// </summary>
+    /// <param name="page">Web form instance.</param>
+    /// <param name="writer">An HTML writer to use.</param>
+    /// <param name="errors">The list of validation errors.</param>
+    public abstract void RenderErrors(Page page, HtmlTextWriter writer, IList<string> errors);
 }

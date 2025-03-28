@@ -20,35 +20,30 @@
 
 using NUnit.Framework;
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+[TestFixture]
+public class ObjectDefAttributeTests
 {
-    [TestFixture]
-    public class ObjectDefAttributeTests
+    [Test]
+    public void Can_Accept_Single_Name()
     {
-        [Test]
-        public void Can_Accept_Single_Name()
-        {
-            var def = new ObjectDefAttribute();
+        var def = new ObjectDefAttribute();
 
-            def.Names = "Steve";
+        def.Names = "Steve";
 
-            Assert.That(def.NamesToArray[0], Is.EqualTo("Steve"));
-        }
+        Assert.That(def.NamesToArray[0], Is.EqualTo("Steve"));
+    }
 
+    [Test]
+    public void Can_Accept_Multiple_Names()
+    {
+        var def = new ObjectDefAttribute();
+        var names = "Name1,Name2,Name3";
 
-        [Test]
-        public void Can_Accept_Multiple_Names()
-        {
-            var def = new ObjectDefAttribute();
-            var names = "Name1,Name2,Name3";
-
-            def.Names = names;
-            Assert.That(def.NamesToArray[0], Is.EqualTo("Name1"));
-            Assert.That(def.NamesToArray[1], Is.EqualTo("Name2"));
-            Assert.That(def.NamesToArray[2], Is.EqualTo("Name3"));
-
-        }
-
-        
+        def.Names = names;
+        Assert.That(def.NamesToArray[0], Is.EqualTo("Name1"));
+        Assert.That(def.NamesToArray[1], Is.EqualTo("Name2"));
+        Assert.That(def.NamesToArray[2], Is.EqualTo("Name3"));
     }
 }

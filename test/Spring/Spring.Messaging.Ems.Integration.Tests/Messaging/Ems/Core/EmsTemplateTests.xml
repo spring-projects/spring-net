@@ -1,74 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <objects xmlns="http://www.springframework.net"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:ems="http://www.springframework.net/ems">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:ems="http://www.springframework.net/ems">
 
-  <!-- the default ConnectionFactory -->
-  
-  <object id="emsConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
-    <constructor-arg name="serverUrl" value="tcp://localhost:7222"/>
-    <constructor-arg name="clientId" value="SpringEMSClient2"/>
-    <property name="ConnAttemptCount" value="10" />
-    <property name="ConnAttemptDelay" value="100" />
-    <property name="ConnAttemptTimeout" value="1000" />
-  </object>
-  
+    <!-- the default ConnectionFactory -->
 
-  <object id="connectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems">
-    <property name="SessionCacheSize" value="10" />
-    <property name="TargetConnectionFactory">
-      <object type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
-        <constructor-arg name="serverUrl" value="tcp://localhost:7222"/>
-        <constructor-arg name="clientId" value="SpringEMSClient3"/>
+    <object id="emsConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+        <constructor-arg name="serverUrl" value="tcp://localhost:7222" />
+        <constructor-arg name="clientId" value="SpringEMSClient2" />
         <property name="ConnAttemptCount" value="10" />
         <property name="ConnAttemptDelay" value="100" />
         <property name="ConnAttemptTimeout" value="1000" />
-      </object>
-    </property>
-  </object>
-
-  <!--
-    <property name="JndiProperties">
-      <dictionary>
-        <entry key="TIBCO.EMS.provider.url" value="tibjmsnaming://localhost:7222"/>
-      </dictionary> 
-    </property>
-    -->
-  <object id="jndiEmsConnectionFactory" type="Spring.Messaging.Ems.Jndi.JndiLookupFactoryObject, Spring.Messaging.Ems">
-    <property name="JndiName" value="TopicConnectionFactory"/>
-    <property name="JndiProperties[LookupContext.PROVIDER_URL]" value="tibjmsnaming://localhost:7222"/>
-  </object>
-
-  
-  <object id="simpleGateway" type="Spring.Messaging.Ems.Core.SimpleGateway, Spring.Messaging.Ems.Integration.Tests">
-    <property name="ConnectionFactory" ref="connectionFactory" />
-  </object>
-
-  <object id="emsTemplate" type="Spring.Messaging.Ems.Core.EmsTemplate, Spring.Messaging.Ems">
-    <property name="ConnectionFactory" ref="connectionFactory" />
-  </object>
+    </object>
 
 
-  <object id="cachingJndiConnectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems">
-    <property name="SessionCacheSize" value="10" />
-    <property name="TargetConnectionFactory">
-      <object type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
-        <constructor-arg ref="jndiEmsConnectionFactory"/>
-      </object>
-    </property>
-  </object>
+    <object id="connectionFactory"
+            type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems">
+        <property name="SessionCacheSize" value="10" />
+        <property name="TargetConnectionFactory">
+            <object type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+                <constructor-arg name="serverUrl" value="tcp://localhost:7222" />
+                <constructor-arg name="clientId" value="SpringEMSClient3" />
+                <property name="ConnAttemptCount" value="10" />
+                <property name="ConnAttemptDelay" value="100" />
+                <property name="ConnAttemptTimeout" value="1000" />
+            </object>
+        </property>
+    </object>
+
+    <!--
+      <property name="JndiProperties">
+        <dictionary>
+          <entry key="TIBCO.EMS.provider.url" value="tibjmsnaming://localhost:7222"/>
+        </dictionary>
+      </property>
+      -->
+    <object id="jndiEmsConnectionFactory"
+            type="Spring.Messaging.Ems.Jndi.JndiLookupFactoryObject, Spring.Messaging.Ems">
+        <property name="JndiName" value="TopicConnectionFactory" />
+        <property name="JndiProperties[LookupContext.PROVIDER_URL]" value="tibjmsnaming://localhost:7222" />
+    </object>
 
 
-  
-  <object name="simpleMessageListener" 
-          type="Spring.Messaging.Ems.Core.SimpleMessageListener, Spring.Messaging.Ems.Integration.Tests"/>
-	  
- 
-  
-  <ems:listener-container connection-factory="connectionFactory" concurrency="10">
-    <ems:listener ref="simpleMessageListener" destination="APP.STOCK.REQUEST" />
-  </ems:listener-container>
- 
-  
+    <object id="simpleGateway" type="Spring.Messaging.Ems.Core.SimpleGateway, Spring.Messaging.Ems.Integration.Tests">
+        <property name="ConnectionFactory" ref="connectionFactory" />
+    </object>
+
+    <object id="emsTemplate" type="Spring.Messaging.Ems.Core.EmsTemplate, Spring.Messaging.Ems">
+        <property name="ConnectionFactory" ref="connectionFactory" />
+    </object>
+
+
+    <object id="cachingJndiConnectionFactory"
+            type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems">
+        <property name="SessionCacheSize" value="10" />
+        <property name="TargetConnectionFactory">
+            <object type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+                <constructor-arg ref="jndiEmsConnectionFactory" />
+            </object>
+        </property>
+    </object>
+
+
+    <object name="simpleMessageListener"
+            type="Spring.Messaging.Ems.Core.SimpleMessageListener, Spring.Messaging.Ems.Integration.Tests" />
+
+
+    <ems:listener-container connection-factory="connectionFactory" concurrency="10">
+        <ems:listener ref="simpleMessageListener" destination="APP.STOCK.REQUEST" />
+    </ems:listener-container>
+
+
 </objects>
 

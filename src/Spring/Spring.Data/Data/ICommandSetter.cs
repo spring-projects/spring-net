@@ -20,19 +20,15 @@
 
 using System.Data;
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// Called by the AdoTemplate class to allow implementations
+/// to set any necessary parameters on the command object.
+/// The CommandType and CommandText will have already been supplied.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public interface ICommandSetter
 {
-
-	/// <summary>
-	/// Called by the AdoTemplate class to allow implementations
-	/// to set any necessary parameters on the command object.
-	/// The CommandType and CommandText will have already been supplied.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	public interface ICommandSetter
-	{
-
-
-        void SetValues(IDbCommand dbCommand);
-	}
+    void SetValues(IDbCommand dbCommand);
 }

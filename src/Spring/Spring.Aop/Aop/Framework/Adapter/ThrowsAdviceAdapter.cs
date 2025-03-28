@@ -25,54 +25,53 @@ using AopAlliance.Intercept;
 
 #endregion
 
-namespace Spring.Aop.Framework.Adapter
+namespace Spring.Aop.Framework.Adapter;
+
+/// <summary>
+/// <see cref="Spring.Aop.Framework.Adapter.IAdvisorAdapter"/> implementation
+/// to enable <see cref="Spring.Aop.IThrowsAdvice"/> to be used in the
+/// Spring.NET AOP framework.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+[Serializable]
+internal class ThrowsAdviceAdapter : IAdvisorAdapter
 {
     /// <summary>
-    /// <see cref="Spring.Aop.Framework.Adapter.IAdvisorAdapter"/> implementation
-    /// to enable <see cref="Spring.Aop.IThrowsAdvice"/> to be used in the
-    /// Spring.NET AOP framework.
+    /// Returns <see langword="true"/> if the supplied
+    /// <paramref name="advice"/> is an instance of the
+    /// <see cref="Spring.Aop.IThrowsAdvice"/> interface.
     /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Aleksandar Seovic (.NET)</author>
-    [Serializable]
-    internal class ThrowsAdviceAdapter : IAdvisorAdapter
+    /// <param name="advice">The advice to check.</param>
+    /// <returns>
+    /// <see langword="true"/> if the supplied <paramref name="advice"/> is
+    /// an instance of the <see cref="Spring.Aop.IThrowsAdvice"/> interface;
+    /// <see langword="false"/> if not or if the supplied
+    /// <paramref name="advice"/> is <cref lang="null"/>.
+    /// </returns>
+    public virtual bool SupportsAdvice(IAdvice advice)
     {
-        /// <summary>
-        /// Returns <see langword="true"/> if the supplied
-        /// <paramref name="advice"/> is an instance of the
-        /// <see cref="Spring.Aop.IThrowsAdvice"/> interface.
-        /// </summary>
-        /// <param name="advice">The advice to check.</param>
-        /// <returns>
-        /// <see langword="true"/> if the supplied <paramref name="advice"/> is
-        /// an instance of the <see cref="Spring.Aop.IThrowsAdvice"/> interface;
-        /// <see langword="false"/> if not or if the supplied
-        /// <paramref name="advice"/> is <cref lang="null"/>.
-        /// </returns>
-        public virtual bool SupportsAdvice(IAdvice advice)
-        {
-            return advice is IThrowsAdvice;
-        }
+        return advice is IThrowsAdvice;
+    }
 
-        /// <summary>
-        /// Wraps the supplied <paramref name="advisor"/>'s
-        /// <see cref="Spring.Aop.IAdvisor.Advice"/> within a
-        /// <see cref="Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptor"/>
-        /// instance.
-        /// </summary>
-        /// <param name="advisor">
-        /// The advisor exposing the <see cref="AopAlliance.Aop.IAdvice"/> that
-        /// is to be wrapped.
-        /// </param>
-        /// <returns>
-        /// The supplied <paramref name="advisor"/>'s
-        /// <see cref="Spring.Aop.IAdvisor.Advice"/> wrapped within a
-        /// <see cref="Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptor"/>
-        /// instance.
-        /// </returns>
-        public virtual IInterceptor GetInterceptor(IAdvisor advisor)
-        {
-            return new ThrowsAdviceInterceptor(advisor.Advice);
-        }
+    /// <summary>
+    /// Wraps the supplied <paramref name="advisor"/>'s
+    /// <see cref="Spring.Aop.IAdvisor.Advice"/> within a
+    /// <see cref="Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptor"/>
+    /// instance.
+    /// </summary>
+    /// <param name="advisor">
+    /// The advisor exposing the <see cref="AopAlliance.Aop.IAdvice"/> that
+    /// is to be wrapped.
+    /// </param>
+    /// <returns>
+    /// The supplied <paramref name="advisor"/>'s
+    /// <see cref="Spring.Aop.IAdvisor.Advice"/> wrapped within a
+    /// <see cref="Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptor"/>
+    /// instance.
+    /// </returns>
+    public virtual IInterceptor GetInterceptor(IAdvisor advisor)
+    {
+        return new ThrowsAdviceInterceptor(advisor.Advice);
     }
 }

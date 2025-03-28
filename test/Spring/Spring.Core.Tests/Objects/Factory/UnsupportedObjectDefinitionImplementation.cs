@@ -21,126 +21,125 @@
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Objects.Factory
+namespace Spring.Objects.Factory;
+
+internal class UnsupportedObjectDefinitionImplementation : IObjectDefinition
 {
-    internal class UnsupportedObjectDefinitionImplementation : IObjectDefinition
+    public MutablePropertyValues PropertyValues
     {
-        public MutablePropertyValues PropertyValues
-        {
-            get { throw new NotImplementedException(); }
-        }
+        get { throw new NotImplementedException(); }
+    }
 
-        public ConstructorArgumentValues ConstructorArgumentValues
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public ConstructorArgumentValues ConstructorArgumentValues
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public MethodOverrides MethodOverrides
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public MethodOverrides MethodOverrides
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public EventValues EventHandlerValues
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public EventValues EventHandlerValues
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public string ResourceDescription
-        {
-            get { return "UnsupportedObjectDefinitionImplementation_Resource"; }
-        }
+    public string ResourceDescription
+    {
+        get { return "UnsupportedObjectDefinitionImplementation_Resource"; }
+    }
 
-        public bool IsTemplate
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public bool IsTemplate
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public bool IsAbstract
-        {
-            get { return false; }
-        }
+    public bool IsAbstract
+    {
+        get { return false; }
+    }
 
-        public bool IsSingleton
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public bool IsSingleton
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public bool IsLazyInit
-        {
-            get { return false; }
-        }
+    public bool IsLazyInit
+    {
+        get { return false; }
+    }
 
-        public bool IsPrimary
-        {
-            get { return false; }
-        }
+    public bool IsPrimary
+    {
+        get { return false; }
+    }
 
-        public string ParentName
-        {
-            get { return null; }
-            set { throw new NotImplementedException(); }
-        }
+    public string ParentName
+    {
+        get { return null; }
+        set { throw new NotImplementedException(); }
+    }
 
-        public string Scope
-        {
-            get { return "UnsupportedObjectDefinitionImplementation_Resource"; }
-            set { throw new System.NotImplementedException(); }
-        }
+    public string Scope
+    {
+        get { return "UnsupportedObjectDefinitionImplementation_Resource"; }
+        set { throw new System.NotImplementedException(); }
+    }
 
-        public ObjectRole Role
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public ObjectRole Role
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public Type ObjectType
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public Type ObjectType
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public string ObjectTypeName
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
+    public string ObjectTypeName
+    {
+        get { throw new NotImplementedException(); }
+        set { throw new NotImplementedException(); }
+    }
 
-        public AutoWiringMode AutowireMode
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public AutoWiringMode AutowireMode
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public DependencyCheckingMode DependencyCheck
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public DependencyCheckingMode DependencyCheck
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public IReadOnlyList<string> DependsOn
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public IReadOnlyList<string> DependsOn
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public string InitMethodName
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public string InitMethodName
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public string DestroyMethodName
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public string DestroyMethodName
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public string FactoryMethodName
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public string FactoryMethodName
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public string FactoryObjectName
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public string FactoryObjectName
+    {
+        get { throw new NotImplementedException(); }
+    }
 
-        public bool IsAutowireCandidate
-        {
-            get { throw new NotImplementedException(); }
-        }
+    public bool IsAutowireCandidate
+    {
+        get { throw new NotImplementedException(); }
     }
 }

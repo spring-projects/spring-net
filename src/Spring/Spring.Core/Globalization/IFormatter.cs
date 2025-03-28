@@ -18,33 +18,32 @@
 
 #endregion
 
-namespace Spring.Globalization
+namespace Spring.Globalization;
+
+/// <summary>
+/// Interface that should be implemented by all formatters.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Formatters assume that source value is a string, and make no assumptions
+/// about the target value's type, which means that <c>Parse</c> method can return
+/// object of any type.
+/// </para>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public interface IFormatter
 {
     /// <summary>
-    /// Interface that should be implemented by all formatters.
+    /// Formats the specified value.
     /// </summary>
-    /// <remarks>
-    /// <para>
-    /// Formatters assume that source value is a string, and make no assumptions
-    /// about the target value's type, which means that <c>Parse</c> method can return
-    /// object of any type. 
-    /// </para>
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    public interface IFormatter
-    {
-        /// <summary>
-        /// Formats the specified value.
-        /// </summary>
-        /// <param name="value">The value to format.</param>
-        /// <returns>Formatted <paramref name="value"/>.</returns>
-        string Format(object value);
+    /// <param name="value">The value to format.</param>
+    /// <returns>Formatted <paramref name="value"/>.</returns>
+    string Format(object value);
 
-        /// <summary>
-        /// Parses the specified value.
-        /// </summary>
-        /// <param name="value">The value to parse.</param>
-        /// <returns>Parsed <paramref name="value"/>.</returns>
-        object Parse(string value);
-    }
+    /// <summary>
+    /// Parses the specified value.
+    /// </summary>
+    /// <param name="value">The value to parse.</param>
+    /// <returns>Parsed <paramref name="value"/>.</returns>
+    object Parse(string value);
 }

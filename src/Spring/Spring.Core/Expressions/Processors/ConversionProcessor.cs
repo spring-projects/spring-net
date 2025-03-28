@@ -21,63 +21,62 @@
 using System.Collections;
 using Spring.Core.TypeConversion;
 
-namespace Spring.Expressions.Processors
+namespace Spring.Expressions.Processors;
+
+/// <summary>
+/// Converts all elements in the input list to a given target type.
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class ConversionProcessor : ICollectionProcessor
 {
     /// <summary>
-    /// Converts all elements in the input list to a given target type.
+    /// Processes a list of source items and returns a result.
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class ConversionProcessor : ICollectionProcessor
+    /// <param name="source">
+    /// The source list to process.
+    /// </param>
+    /// <param name="args">
+    /// An optional processor arguments array.
+    /// </param>
+    /// <returns>
+    /// The processing result.
+    /// </returns>
+    public object Process(ICollection source, object[] args)
     {
-        /// <summary>
-        /// Processes a list of source items and returns a result.
-        /// </summary>
-        /// <param name="source">
-        /// The source list to process.
-        /// </param>
-        /// <param name="args">
-        /// An optional processor arguments array.
-        /// </param>
-        /// <returns>
-        /// The processing result.
-        /// </returns>
-        public object Process(ICollection source, object[] args)
+        if (source == null
+            || source.Count == 0)
         {
-            if (source == null
-                || source.Count == 0)
-            {
-                return source;
-            }
-
-            Type targetType = typeof(double);
-            if (args == null || args.Length == 0)
-            {
-                throw new ArgumentNullException("args", "convert() processor requires a Type value argument.");
-            }
-            else if (args.Length == 1)
-            {
-                if (args[0] is Type)
-                {
-                    targetType = (Type)args[0];
-                }
-                else
-                {
-                    throw new ArgumentException("convert() processor argument must be a Type value.");
-                }
-            }
-            else if (args.Length > 1)
-            {
-                throw new ArgumentException("Only a single argument can be specified for a convert() processor.");
-            }
-
-            ArrayList result = new ArrayList();
-            foreach(object val in source)
-            {
-                object newVal = TypeConversionUtils.ConvertValueIfNecessary(targetType, val, null);
-                result.Add(newVal);
-            }
-
-            return result.ToArray(targetType);
+            return source;
         }
+
+        Type targetType = typeof(double);
+        if (args == null || args.Length == 0)
+        {
+            throw new ArgumentNullException("args", "convert() processor requires a Type value argument.");
+        }
+        else if (args.Length == 1)
+        {
+            if (args[0] is Type)
+            {
+                targetType = (Type) args[0];
+            }
+            else
+            {
+                throw new ArgumentException("convert() processor argument must be a Type value.");
+            }
+        }
+        else if (args.Length > 1)
+        {
+            throw new ArgumentException("Only a single argument can be specified for a convert() processor.");
+        }
+
+        ArrayList result = new ArrayList();
+        foreach (object val in source)
+        {
+            object newVal = TypeConversionUtils.ConvertValueIfNecessary(targetType, val, null);
+            result.Add(newVal);
+        }
+
+        return result.ToArray(targetType);
     }
 }

@@ -19,67 +19,64 @@
 #endregion
 
 using System.Data;
-
 using FakeItEasy;
-
 using NUnit.Framework;
 
-namespace Spring.Data.Common
+namespace Spring.Data.Common;
+
+/// <summary>
+/// This class contains tests for UserCredentialsDbProvider
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class UserCredentialsDbProviderTests
 {
-    /// <summary>
-    /// This class contains tests for UserCredentialsDbProvider
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class UserCredentialsDbProviderTests
+    [Test]
+    public void StaticCredentials()
     {
-        [Test]
-        public void StaticCredentials()
-        {
-            IDbProvider dbProvider = A.Fake<IDbProvider>();
-            IDbConnection connection = A.Fake<IDbConnection>();
-            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
-            A.CallTo(() => dbProvider.ConnectionString).Returns(@"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False");
+        IDbProvider dbProvider = A.Fake<IDbProvider>();
+        IDbConnection connection = A.Fake<IDbConnection>();
+        A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+        A.CallTo(() => dbProvider.ConnectionString).Returns(@"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False");
 
-            UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
-            provider.TargetDbProvider = dbProvider;
-            provider.Username = "User ID=springqa";
-            provider.Password = "Password=springqa";
-            Assert.AreEqual(connection, provider.CreateConnection());
+        UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
+        provider.TargetDbProvider = dbProvider;
+        provider.Username = "User ID=springqa";
+        provider.Password = "Password=springqa";
+        Assert.AreEqual(connection, provider.CreateConnection());
 
-            A.CallToSet(() => connection.ConnectionString)
-                .WhenArgumentsMatch(x => (string) x[0] == "Data Source=MARKT60\\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa")
-                .MustHaveHappenedOnceExactly();
-        }
+        A.CallToSet(() => connection.ConnectionString)
+            .WhenArgumentsMatch(x => (string) x[0] == "Data Source=MARKT60\\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa")
+            .MustHaveHappenedOnceExactly();
+    }
 
-        [Test]
-        public void NoCredentials()
-        {
-            IDbProvider dbProvider = A.Fake<IDbProvider>();
-            IDbConnection connection = A.Fake<IDbConnection>();
-            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+    [Test]
+    public void NoCredentials()
+    {
+        IDbProvider dbProvider = A.Fake<IDbProvider>();
+        IDbConnection connection = A.Fake<IDbConnection>();
+        A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
 
-            UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
-            provider.TargetDbProvider = dbProvider;
-            Assert.AreEqual(connection, provider.CreateConnection());
-        }
+        UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
+        provider.TargetDbProvider = dbProvider;
+        Assert.AreEqual(connection, provider.CreateConnection());
+    }
 
-        [Test]
-        public void ThreadBoundCredentials()
-        {
-            IDbProvider dbProvider = A.Fake<IDbProvider>();
-            IDbConnection connection = A.Fake<IDbConnection>();
-            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
-            A.CallTo(() => dbProvider.ConnectionString).Returns(@"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False");
+    [Test]
+    public void ThreadBoundCredentials()
+    {
+        IDbProvider dbProvider = A.Fake<IDbProvider>();
+        IDbConnection connection = A.Fake<IDbConnection>();
+        A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+        A.CallTo(() => dbProvider.ConnectionString).Returns(@"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False");
 
-            UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
-            provider.TargetDbProvider = dbProvider;
-            provider.SetCredentialsForCurrentThread("User ID=springqa", "Password=springqa");
-            Assert.AreEqual(connection, provider.CreateConnection());
+        UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
+        provider.TargetDbProvider = dbProvider;
+        provider.SetCredentialsForCurrentThread("User ID=springqa", "Password=springqa");
+        Assert.AreEqual(connection, provider.CreateConnection());
 
-            A.CallToSet(() => connection.ConnectionString)
-                .WhenArgumentsMatch(x => (string) x[0] == "Data Source=MARKT60\\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa")
-                .MustHaveHappenedOnceExactly();
-        }
+        A.CallToSet(() => connection.ConnectionString)
+            .WhenArgumentsMatch(x => (string) x[0] == "Data Source=MARKT60\\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa")
+            .MustHaveHappenedOnceExactly();
     }
 }

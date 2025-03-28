@@ -3,11 +3,13 @@ using Spring.Web.Conversation;
 public partial class TimeOut_NoTimeOut : System.Web.UI.Page
 {
     private IConversationState conversation;
+
     public IConversationState Conversation
     {
         get { return conversation; }
         set { conversation = value; }
     }
+
     protected void Page_Load(object sender, EventArgs e)
     {
         this.Conversation.StartResumeConversation();

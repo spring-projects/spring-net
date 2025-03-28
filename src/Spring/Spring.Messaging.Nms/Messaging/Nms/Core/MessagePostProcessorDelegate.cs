@@ -20,17 +20,15 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Core
-{
+namespace Spring.Messaging.Nms.Core;
 
-    /// <summary>
-    /// Delegate that is used with NmsTemplate's ConvertAndSend method that converts
-    /// an object.
-    /// </summary>
-    /// <remarks>
-    /// It allows for further modification of the message after it has been processed
-    /// by the converter. This is useful for setting of NMS Header and Properties.
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public delegate IMessage MessagePostProcessorDelegate(IMessage message);
-}
+/// <summary>
+/// Delegate that is used with NmsTemplate's ConvertAndSend method that converts
+/// an object.
+/// </summary>
+/// <remarks>
+/// It allows for further modification of the message after it has been processed
+/// by the converter. This is useful for setting of NMS Header and Properties.
+/// </remarks>
+/// <author>Mark Pollack</author>
+public delegate IMessage MessagePostProcessorDelegate(IMessage message);

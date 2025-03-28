@@ -22,75 +22,74 @@ using System.Collections.Specialized;
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Integration tests for ManagedNameValueCollectionTests
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class ManagedNameValueCollectionTests
 {
-    /// <summary>
-    /// Integration tests for ManagedNameValueCollectionTests
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class ManagedNameValueCollectionTests
+    [Test]
+    public void MergeSunnyDay()
     {
-        [Test]
-        public void MergeSunnyDay()
-        {
-            ManagedNameValueCollection parent = new ManagedNameValueCollection();
-            parent.Add("one", "one");
-            parent.Add("two", "two");
-            ManagedNameValueCollection child = new ManagedNameValueCollection();
-            child.Add("three", "three");
-            child.MergeEnabled = true;
-            NameValueCollection mergedList = (NameValueCollection)child.Merge(parent);
-            Assert.AreEqual(3, mergedList.Count);
-        }
+        ManagedNameValueCollection parent = new ManagedNameValueCollection();
+        parent.Add("one", "one");
+        parent.Add("two", "two");
+        ManagedNameValueCollection child = new ManagedNameValueCollection();
+        child.Add("three", "three");
+        child.MergeEnabled = true;
+        NameValueCollection mergedList = (NameValueCollection) child.Merge(parent);
+        Assert.AreEqual(3, mergedList.Count);
+    }
 
-        [Test]
-        public void MergeWithNullParent()
-        {
-            ManagedNameValueCollection child = new ManagedNameValueCollection();
-            child.MergeEnabled = true;
-            Assert.AreSame(child, child.Merge(null));
-        }
+    [Test]
+    public void MergeWithNullParent()
+    {
+        ManagedNameValueCollection child = new ManagedNameValueCollection();
+        child.MergeEnabled = true;
+        Assert.AreSame(child, child.Merge(null));
+    }
 
-        [Test]
-        public void MergeNotAllowedWhenMergeNotEnabled()
-        {
-            ManagedNameValueCollection child = new ManagedNameValueCollection();
-            Assert.Throws<InvalidOperationException>(() => child.Merge(null), "Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
-        }
+    [Test]
+    public void MergeNotAllowedWhenMergeNotEnabled()
+    {
+        ManagedNameValueCollection child = new ManagedNameValueCollection();
+        Assert.Throws<InvalidOperationException>(() => child.Merge(null), "Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
+    }
 
-        [Test]
-        public void MergeWithNonCompatibleParentType()
-        {
-            ManagedNameValueCollection child = new ManagedNameValueCollection();
-            child.MergeEnabled = true;
-            Assert.Throws<InvalidOperationException>(() => child.Merge("hello"));
-        }
+    [Test]
+    public void MergeWithNonCompatibleParentType()
+    {
+        ManagedNameValueCollection child = new ManagedNameValueCollection();
+        child.MergeEnabled = true;
+        Assert.Throws<InvalidOperationException>(() => child.Merge("hello"));
+    }
 
-        [Test]
-        public void MergeEmptyChild()
-        {
-            ManagedNameValueCollection parent = new ManagedNameValueCollection();
-            parent.Add("one", "one");
-            parent.Add("two", "two");
-            ManagedNameValueCollection child = new ManagedNameValueCollection();
-            child.MergeEnabled = true;
-            NameValueCollection mergedMap = (NameValueCollection)child.Merge(parent);
-            Assert.AreEqual(2, mergedMap.Count);
-        }
+    [Test]
+    public void MergeEmptyChild()
+    {
+        ManagedNameValueCollection parent = new ManagedNameValueCollection();
+        parent.Add("one", "one");
+        parent.Add("two", "two");
+        ManagedNameValueCollection child = new ManagedNameValueCollection();
+        child.MergeEnabled = true;
+        NameValueCollection mergedMap = (NameValueCollection) child.Merge(parent);
+        Assert.AreEqual(2, mergedMap.Count);
+    }
 
-        [Test]
-        public void MergeChildValueOverrideTheParents()
-        {
-            ManagedNameValueCollection parent = new ManagedNameValueCollection();
-            parent.Add("one", "one");
-            parent.Add("two", "two");
-            ManagedNameValueCollection child = new ManagedNameValueCollection();
-            child.Add("one", "fork");
-            child.MergeEnabled = true;
-            NameValueCollection mergedMap = (NameValueCollection)child.Merge(parent);
-            Assert.AreEqual(2, mergedMap.Count);
-            Assert.AreEqual("fork", mergedMap["one"]);
-        }
+    [Test]
+    public void MergeChildValueOverrideTheParents()
+    {
+        ManagedNameValueCollection parent = new ManagedNameValueCollection();
+        parent.Add("one", "one");
+        parent.Add("two", "two");
+        ManagedNameValueCollection child = new ManagedNameValueCollection();
+        child.Add("one", "fork");
+        child.MergeEnabled = true;
+        NameValueCollection mergedMap = (NameValueCollection) child.Merge(parent);
+        Assert.AreEqual(2, mergedMap.Count);
+        Assert.AreEqual("fork", mergedMap["one"]);
     }
 }

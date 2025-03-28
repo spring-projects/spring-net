@@ -1,4 +1,5 @@
 #region License
+
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -14,34 +15,34 @@
 //  * See the License for the specific language governing permissions and
 //  * limitations under the License.
 //  */
+
 #endregion
 
 using System.Runtime.CompilerServices;
 
-namespace Spring.Messaging.Nms.Support
-{
-    public static class TaskExtensions
-    {
-        public static T GetAsyncResult<T>(this Task<T> task)
-        {
-            return task.ConfigureAwait(ContinueOnCapturedContext).GetAwaiter().GetResult();
-        }
-        
-        public static void GetAsyncResult(this Task task)
-        {
-            task.ConfigureAwait(ContinueOnCapturedContext).GetAwaiter().GetResult();
-        }
-        
-        public static ConfiguredTaskAwaitable<T> Awaiter<T>(this Task<T> task)
-        {
-            return task.ConfigureAwait(ContinueOnCapturedContext);
-        }
-        
-        public static ConfiguredTaskAwaitable Awaiter(this Task task)
-        {
-            return task.ConfigureAwait(ContinueOnCapturedContext);
-        }
+namespace Spring.Messaging.Nms.Support;
 
-        public static bool ContinueOnCapturedContext { get; set; } = false;
+public static class TaskExtensions
+{
+    public static T GetAsyncResult<T>(this Task<T> task)
+    {
+        return task.ConfigureAwait(ContinueOnCapturedContext).GetAwaiter().GetResult();
     }
+
+    public static void GetAsyncResult(this Task task)
+    {
+        task.ConfigureAwait(ContinueOnCapturedContext).GetAwaiter().GetResult();
+    }
+
+    public static ConfiguredTaskAwaitable<T> Awaiter<T>(this Task<T> task)
+    {
+        return task.ConfigureAwait(ContinueOnCapturedContext);
+    }
+
+    public static ConfiguredTaskAwaitable Awaiter(this Task task)
+    {
+        return task.ConfigureAwait(ContinueOnCapturedContext);
+    }
+
+    public static bool ContinueOnCapturedContext { get; set; } = false;
 }

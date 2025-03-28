@@ -26,124 +26,123 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// Unit tests for the StringArrayConverter class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class StringArrayConverterTests
 {
-	/// <summary>
-	/// Unit tests for the StringArrayConverter class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-    [TestFixture]
-    public sealed class StringArrayConverterTests
+    [Test]
+    public void CanConvertFrom()
     {
-        [Test]
-        public void CanConvertFrom()
-        {
-            StringArrayConverter vrt = new StringArrayConverter();
-            Assert.IsTrue(vrt.CanConvertFrom(typeof (string)), "Conversion from a string instance must be supported.");
-            Assert.IsFalse(vrt.CanConvertFrom(null));
-        }
+        StringArrayConverter vrt = new StringArrayConverter();
+        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
+        Assert.IsFalse(vrt.CanConvertFrom(null));
+    }
 
-        [Test]
-        public void ConvertFrom()
+    [Test]
+    public void ConvertFrom()
+    {
+        object[] expected = new object[] { "1", "Foo", "3" };
+        StringArrayConverter vrt = new StringArrayConverter();
+        object actual = vrt.ConvertFrom("1,Foo,3");
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(typeof(string[]), actual.GetType());
+        Assert.AreEqual(3, ((string[]) actual).Length, "Wrong number of elements in the resulting array.");
+        Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
+            "Individual array elements not correctly converted.");
+    }
+
+    [Test]
+    public void ConvertFromPreservesExtraneousWhitespace()
+    {
+        object[] expected = new object[] { "1 ", " Foo ", " 3" };
+        StringArrayConverter vrt = new StringArrayConverter();
+        object actual = vrt.ConvertFrom("1 , Foo , 3");
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(typeof(string[]), actual.GetType());
+        Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
+            "Individual array elements not correctly converted (check the whitespace?).");
+    }
+
+    [Test]
+    public void ConvertFromNullReference()
+    {
+        StringArrayConverter vrt = new StringArrayConverter();
+        Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
+    }
+
+    [Test]
+    public void ConvertFromNonSupportedOptionBails()
+    {
+        StringArrayConverter vrt = new StringArrayConverter();
+        Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(12));
+    }
+
+    [Test]
+    public void EnsureCultureListSeparatorIsIgnored()
+    {
+        CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
+        try
         {
-            object[] expected = new object[] {"1", "Foo", "3"};
+            CultureInfo frenchCulture = new CultureInfo("fr-FR");
+            Thread.CurrentThread.CurrentCulture = frenchCulture;
+            object[] expected = new object[] { "1", "Foo", "3" };
             StringArrayConverter vrt = new StringArrayConverter();
+            // France uses the ';' (semi-colon) to separate list items...
             object actual = vrt.ConvertFrom("1,Foo,3");
             Assert.IsNotNull(actual);
-            Assert.AreEqual(typeof (string[]), actual.GetType());
-            Assert.AreEqual(3, ((string[]) actual).Length, "Wrong number of elements in the resulting array.");
+            Assert.AreEqual(typeof(string[]), actual.GetType());
             Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
                 "Individual array elements not correctly converted.");
         }
-
-        [Test]
-        public void ConvertFromPreservesExtraneousWhitespace()
+        finally
         {
-            object[] expected = new object[] {"1 ", " Foo ", " 3"};
-            StringArrayConverter vrt = new StringArrayConverter();
-            object actual = vrt.ConvertFrom("1 , Foo , 3");
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(typeof (string[]), actual.GetType());
-            Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
-                "Individual array elements not correctly converted (check the whitespace?).");
+            Thread.CurrentThread.CurrentCulture = originalCulture;
         }
+    }
 
-        [Test]
-        public void ConvertFromNullReference()
-        {
-            StringArrayConverter vrt = new StringArrayConverter();
-            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
-        }
+    [Test]
+    public void EmptyListSeparator()
+    {
+        StringArrayConverter vrt = new StringArrayConverter();
+        Assert.Throws<ArgumentException>(() => vrt.ListSeparator = string.Empty);
+    }
 
-        [Test]
-        public void ConvertFromNonSupportedOptionBails()
-        {
-            StringArrayConverter vrt = new StringArrayConverter();
-            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(12));
-        }
+    [Test]
+    public void TooLongListSeparator()
+    {
+        StringArrayConverter vrt = new StringArrayConverter();
+        Assert.Throws<ArgumentException>(() => vrt.ListSeparator = "  ");
+    }
 
-        [Test]
-        public void EnsureCultureListSeparatorIsIgnored()
-        {
-            CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
-            try
-            {
-                CultureInfo frenchCulture = new CultureInfo("fr-FR");
-                Thread.CurrentThread.CurrentCulture = frenchCulture;
-                object[] expected = new object[] {"1", "Foo", "3"};
-                StringArrayConverter vrt = new StringArrayConverter();
-                // France uses the ';' (semi-colon) to separate list items...
-                object actual = vrt.ConvertFrom("1,Foo,3");
-                Assert.IsNotNull(actual);
-                Assert.AreEqual(typeof (string[]), actual.GetType());
-                Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
-                              "Individual array elements not correctly converted.");
-            }
-            finally
-            {
-                Thread.CurrentThread.CurrentCulture = originalCulture;
-            }
-        }
+    [Test]
+    public void CustomListSeparator()
+    {
+        object[] expected = new object[] { "1", "Foo", "3" };
+        StringArrayConverter vrt = new StringArrayConverter();
+        const string customSeparator = "#";
+        vrt.ListSeparator = customSeparator;
+        object actual = vrt.ConvertFrom(string.Format("1{0}Foo{0}3", customSeparator));
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(typeof(string[]), actual.GetType());
+        Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
+            "Individual array elements not correctly converted.");
+    }
 
-	    [Test]
-        public void EmptyListSeparator()
-	    {
-	        StringArrayConverter vrt = new StringArrayConverter();
-            Assert.Throws<ArgumentException>(() => vrt.ListSeparator = string.Empty);
-        }
-
-        [Test]
-        public void TooLongListSeparator()
-        {
-            StringArrayConverter vrt = new StringArrayConverter();
-            Assert.Throws<ArgumentException>(() => vrt.ListSeparator = "  ");
-        }
-
-        [Test]
-        public void CustomListSeparator()
-        {
-            object[] expected = new object[] {"1", "Foo", "3"};
-            StringArrayConverter vrt = new StringArrayConverter();
-            const string customSeparator = "#";
-            vrt.ListSeparator = customSeparator;
-            object actual = vrt.ConvertFrom(string.Format("1{0}Foo{0}3", customSeparator));
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(typeof (string[]), actual.GetType());
-            Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
-                "Individual array elements not correctly converted.");
-        }
-
-	    [Test]
-	    public void NullingTheListSeparatorMakesItRevertToTheDefault()
-	    {
-            object[] expected = new object[] {"1", "Foo", "3"};
-	        StringArrayConverter vrt = new StringArrayConverter();
-            vrt.ListSeparator = null;
-            object actual = vrt.ConvertFrom("1,Foo,3");
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(typeof (string[]), actual.GetType());
-            Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
-                "Individual array elements not correctly converted.");
-	    }
+    [Test]
+    public void NullingTheListSeparatorMakesItRevertToTheDefault()
+    {
+        object[] expected = new object[] { "1", "Foo", "3" };
+        StringArrayConverter vrt = new StringArrayConverter();
+        vrt.ListSeparator = null;
+        object actual = vrt.ConvertFrom("1,Foo,3");
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(typeof(string[]), actual.GetType());
+        Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
+            "Individual array elements not correctly converted.");
     }
 }

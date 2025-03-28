@@ -20,55 +20,58 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Exception thrown on a pessimistic locking violation.
+/// </summary>
+/// <remarks>
+/// <para>Serves as a superclass for more specific exceptions, like
+/// CannotAcquireLockException and DeadlockLoserDataAccessException
+/// </para>
+/// <para>
+/// This exception will be thrown either by O/R mapping tools or by custom DAO
+/// implementations.
+/// </para>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Mark Pollack (.NET)</author>
+[Serializable]
+public class PessimisticLockingFailureException : ConcurrencyFailureException
 {
-	/// <summary>
-	/// Exception thrown on a pessimistic locking violation.
-	/// </summary>
-	/// <remarks>
-	/// <para>Serves as a superclass for more specific exceptions, like
-	/// CannotAcquireLockException and DeadlockLoserDataAccessException
-	/// </para>
-	/// <para>
-	/// This exception will be thrown either by O/R mapping tools or by custom DAO
-	/// implementations.
-	/// </para>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Mark Pollack (.NET)</author>
-	[Serializable]
-	public class PessimisticLockingFailureException : ConcurrencyFailureException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.PessimisticLockingFailureException"/> class.
-		/// </summary>
-		public PessimisticLockingFailureException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.PessimisticLockingFailureException"/> class.
+    /// </summary>
+    public PessimisticLockingFailureException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.PessimisticLockingFailureException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public PessimisticLockingFailureException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.PessimisticLockingFailureException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public PessimisticLockingFailureException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.PessimisticLockingFailureException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public PessimisticLockingFailureException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.PessimisticLockingFailureException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public PessimisticLockingFailureException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-        protected PessimisticLockingFailureException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected PessimisticLockingFailureException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

@@ -18,23 +18,23 @@
 
 #endregion
 
-namespace Spring.DataBinding
+namespace Spring.DataBinding;
+
+/// <summary>
+/// BaseBindingManager keeps track of all registered bindings and
+/// represents an entry point for the binding and unbinding process.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class BaseBindingManager : BaseBindingContainer
 {
+    #region Constructor(s)
+
     /// <summary>
-    /// BaseBindingManager keeps track of all registered bindings and 
-    /// represents an entry point for the binding and unbinding process.
+    /// Initializes a new instance of the <see cref="BaseBindingManager"/> class.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class BaseBindingManager : BaseBindingContainer
+    public BaseBindingManager()
     {
-        #region Constructor(s)
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseBindingManager"/> class.
-        /// </summary>
-        public BaseBindingManager()
-        {}
-
-        #endregion
     }
+
+    #endregion
 }

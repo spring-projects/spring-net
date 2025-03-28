@@ -20,106 +20,109 @@
 
 using System.Collections;
 using System.Globalization;
-
 using Spring.Util;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Simple factory for shared <see cref="System.Collections.IList"/> instances.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Simon White (.NET)</author>
+[Serializable]
+public class ListFactoryObject : AbstractFactoryObject
 {
-	/// <summary>
-	/// Simple factory for shared <see cref="System.Collections.IList"/> instances.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Simon White (.NET)</author>
-    [Serializable]
-    public class ListFactoryObject : AbstractFactoryObject
-	{
-		private IList _sourceList;
-		private Type _targetListType = typeof (ArrayList);
+    private IList _sourceList;
+    private Type _targetListType = typeof(ArrayList);
 
-		#region Properties
+    #region Properties
 
-		/// <summary>
-		/// Set the source <see cref="System.Collections.IList"/>.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// This value will be used to populate the <see cref="System.Collections.IList"/>
-		/// returned by this factory.
-		/// </p>
-		/// </remarks>
-		public IList SourceList
-		{
-			set { this._sourceList = value; }
-		}
+    /// <summary>
+    /// Set the source <see cref="System.Collections.IList"/>.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// This value will be used to populate the <see cref="System.Collections.IList"/>
+    /// returned by this factory.
+    /// </p>
+    /// </remarks>
+    public IList SourceList
+    {
+        set { this._sourceList = value; }
+    }
 
-		/// <summary>
-		/// Set the <see cref="System.Type"/> of the <see cref="System.Collections.IList"/>
-		/// implementation to use.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// The default is the <see cref="System.Collections.ArrayList"/> <see cref="System.Type"/>.
-		/// </p>
-		/// </remarks>
-		public Type TargetListType
-		{
-			set
-			{
-				AssertUtils.ArgumentNotNull(value, "value");
-				if (!typeof (IList).IsAssignableFrom(value))
-				{
-					throw new ArgumentException(
-						string.Format(CultureInfo.InvariantCulture,
-						              "The Type passed to the TargetListType property must implement the '{0}' interface.",
-						              ObjectType.FullName));
-				}
-				if (value.IsInterface)
-				{
-					throw new ArgumentException(
-						string.Format(CultureInfo.InvariantCulture,
-						              "The Type passed to the TargetListType property cannot be an interface; it must be a concrete class that implements the '{0}' interface.",
-						              ObjectType.FullName));
-				}
-				if (value.IsAbstract)
-				{
-					throw new ArgumentException(
-						string.Format(CultureInfo.InvariantCulture,
-						              "The Type passed to the TargetListType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the '{0}' interface.",
-						              ObjectType.FullName));
-				}
-				this._targetListType = value;
-			}
-		}
+    /// <summary>
+    /// Set the <see cref="System.Type"/> of the <see cref="System.Collections.IList"/>
+    /// implementation to use.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// The default is the <see cref="System.Collections.ArrayList"/> <see cref="System.Type"/>.
+    /// </p>
+    /// </remarks>
+    public Type TargetListType
+    {
+        set
+        {
+            AssertUtils.ArgumentNotNull(value, "value");
+            if (!typeof(IList).IsAssignableFrom(value))
+            {
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture,
+                        "The Type passed to the TargetListType property must implement the '{0}' interface.",
+                        ObjectType.FullName));
+            }
 
-		/// <summary>
-		/// The <see cref="System.Type"/> of objects created by this factory.
-		/// </summary>
-		/// <value>
-		/// Always returns the <see cref="System.Collections.IList"/> <see cref="System.Type"/>.
-		/// </value>
-		public override Type ObjectType
-		{
-			get { return typeof (IList); }
-		}
+            if (value.IsInterface)
+            {
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture,
+                        "The Type passed to the TargetListType property cannot be an interface; it must be a concrete class that implements the '{0}' interface.",
+                        ObjectType.FullName));
+            }
 
-		#endregion
+            if (value.IsAbstract)
+            {
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture,
+                        "The Type passed to the TargetListType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the '{0}' interface.",
+                        ObjectType.FullName));
+            }
 
-		/// <summary>
-		/// Constructs a new instance of the target dictionary.
-		/// </summary>
-		/// <returns>The new <see cref="System.Collections.IList"/> instance.</returns>
-		protected override object CreateInstance()
-		{
-			if (this._sourceList == null)
-			{
-				throw new ArgumentException("The 'SourceList' property cannot be null (Nothing in Visual Basic.NET).");
-			}
-			IList result = (IList) ObjectUtils.InstantiateType(this._targetListType);
-			foreach (object obj in this._sourceList)
-			{
-				result.Add(obj);
-			}
-			return result;
-		}
-	}
+            this._targetListType = value;
+        }
+    }
+
+    /// <summary>
+    /// The <see cref="System.Type"/> of objects created by this factory.
+    /// </summary>
+    /// <value>
+    /// Always returns the <see cref="System.Collections.IList"/> <see cref="System.Type"/>.
+    /// </value>
+    public override Type ObjectType
+    {
+        get { return typeof(IList); }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Constructs a new instance of the target dictionary.
+    /// </summary>
+    /// <returns>The new <see cref="System.Collections.IList"/> instance.</returns>
+    protected override object CreateInstance()
+    {
+        if (this._sourceList == null)
+        {
+            throw new ArgumentException("The 'SourceList' property cannot be null (Nothing in Visual Basic.NET).");
+        }
+
+        IList result = (IList) ObjectUtils.InstantiateType(this._targetListType);
+        foreach (object obj in this._sourceList)
+        {
+            result.Add(obj);
+        }
+
+        return result;
+    }
 }

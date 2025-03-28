@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,28 +24,26 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Messaging.Listener.Adapter
+namespace Spring.Messaging.Listener.Adapter;
+
+/// <summary>
+/// To properly test the MessageListnerAdapter one needs to use TypeMock as MessageQueue and Message are not
+/// interface based.
+/// </summary>
+[TestFixture]
+public class MessageListenerAdapterTests
 {
-    /// <summary>
-    /// To properly test the MessageListnerAdapter one needs to use TypeMock as MessageQueue and Message are not 
-    /// interface based. 
-    /// </summary>
-    [TestFixture]
-    public class MessageListenerAdapterTests
+    [Test]
+    public void DefaultMessageHandlerMethodNameIsTheConstantDefault()
     {
-        [Test]
-        public void DefaultMessageHandlerMethodNameIsTheConstantDefault()
-        {
-            MessageListenerAdapter adapter = new MessageListenerAdapter();
-            Assert.AreSame(MessageListenerAdapter.ORIGINAL_DEFAULT_LISTENER_METHOD, adapter.DefaultHandlerMethod);
-        }
-        
-        [Test]
-        public void WhenNoHandlerMethodIsSuppliedTheHandlerIsAssumedToBeTheMessageListenerAdapterItself()
-        {
-            MessageListenerAdapter adapter = new MessageListenerAdapter();
-            Assert.AreSame(adapter, adapter.HandlerObject);
-                 
-        }
+        MessageListenerAdapter adapter = new MessageListenerAdapter();
+        Assert.AreSame(MessageListenerAdapter.ORIGINAL_DEFAULT_LISTENER_METHOD, adapter.DefaultHandlerMethod);
+    }
+
+    [Test]
+    public void WhenNoHandlerMethodIsSuppliedTheHandlerIsAssumedToBeTheMessageListenerAdapterItself()
+    {
+        MessageListenerAdapter adapter = new MessageListenerAdapter();
+        Assert.AreSame(adapter, adapter.HandlerObject);
     }
 }

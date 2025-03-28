@@ -19,80 +19,68 @@
 #endregion
 
 using NUnit.Framework;
-
 using Spring.Aop.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory.Xml;
 
-namespace Spring.Aop.Config
+namespace Spring.Aop.Config;
+
+/// <summary>
+/// This class contains tests for the custom aop namespace.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class AopNamespaceParserTests
 {
-    /// <summary>
-    /// This class contains tests for the custom aop namespace.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class AopNamespaceParserTests
+    private IApplicationContext ctx;
+
+    [SetUp]
+    public void Setup()
     {
+        // IS WELLKNOWN NOW
+        //NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
+        //ctx = new XmlApplicationContext( "assembly://Spring.Aop.Tests/Spring.Aop.Config/AopNamespaceParserTests.xml");
+        ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("AopNamespaceParserTests.xml", this.GetType()));
+    }
 
-       private IApplicationContext ctx;
+    [Test]
+    public void Registered()
+    {
+        Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/aop"));
 
-        [SetUp]
-        public void Setup()
-        {
-            // IS WELLKNOWN NOW
-            //NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
-            //ctx = new XmlApplicationContext( "assembly://Spring.Aop.Tests/Spring.Aop.Config/AopNamespaceParserTests.xml");
-            ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("AopNamespaceParserTests.xml", this.GetType()));
-        }
+        IPointcut pointcut = ctx["getDescriptionCalls"] as IPointcut;
+        Assert.IsNotNull(pointcut);
+        Assert.IsFalse(AopUtils.IsAopProxy(pointcut));
 
+        ITestObject testObject = ctx["testObject"] as ITestObject;
+        Assert.IsNotNull(testObject);
+        Assert.IsTrue(AopUtils.IsAopProxy(testObject), "Object should be an AOP proxy");
 
+        IAdvised advised = testObject as IAdvised;
+        Assert.IsNotNull(advised);
+        IList<IAdvisor> advisors = advised.Advisors;
+        Assert.IsTrue(advisors.Count > 0, "Advisors should not be empty");
+    }
 
-        [Test]
-        public void Registered()
-        {
-            Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/aop"));
+    [Test]
+    public void AdviceInvokedCorrectly()
+    {
+        CountingBeforeAdvice getDescriptionCounter = ctx.GetObject("getDescriptionCounter") as CountingBeforeAdvice;
+        Assert.IsNotNull(getDescriptionCounter);
 
+        ITestObject testObject = GetTestObject();
 
-            IPointcut pointcut = ctx["getDescriptionCalls"] as IPointcut;
-            Assert.IsNotNull(pointcut);
-            Assert.IsFalse(AopUtils.IsAopProxy(pointcut));
+        Assert.AreEqual(0, getDescriptionCounter.GetCalls("GetDescription"), "Incorrect initial getDescription count");
 
+        testObject.GetDescription();
 
-            ITestObject testObject = ctx["testObject"] as ITestObject;
-            Assert.IsNotNull(testObject);
-            Assert.IsTrue(AopUtils.IsAopProxy(testObject), "Object should be an AOP proxy");
+        Assert.AreEqual(1, getDescriptionCounter.GetCalls("GetDescription"), "Incorrect getDescription count");
+    }
 
-            IAdvised advised = testObject as IAdvised;
-            Assert.IsNotNull(advised);
-            IList<IAdvisor> advisors = advised.Advisors;
-            Assert.IsTrue(advisors.Count > 0, "Advisors should not be empty");
-
-
-        }
-
-        [Test]
-        public void AdviceInvokedCorrectly()
-        {
-            CountingBeforeAdvice getDescriptionCounter = ctx.GetObject("getDescriptionCounter") as CountingBeforeAdvice;
-            Assert.IsNotNull(getDescriptionCounter);
-
-            ITestObject testObject = GetTestObject();
-
-            Assert.AreEqual(0,getDescriptionCounter.GetCalls("GetDescription"),"Incorrect initial getDescription count");
-
-            testObject.GetDescription();
-
-            Assert.AreEqual(1, getDescriptionCounter.GetCalls("GetDescription"), "Incorrect getDescription count");
-
-        }
-
-        private ITestObject GetTestObject()
-        {
-            return ctx.GetObject("testObject", typeof (ITestObject)) as ITestObject;
-        }
-
-
+    private ITestObject GetTestObject()
+    {
+        return ctx.GetObject("testObject", typeof(ITestObject)) as ITestObject;
     }
 }

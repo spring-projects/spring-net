@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,24 +22,24 @@
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// Configures <see cref="MappingHandlerFactory"/>.
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class MappingHandlerFactoryConfigurer
+//        : Spring.Objects.Factory.Config.IObjectPostProcessor // just a trick to have
 {
     /// <summary>
-    /// Configures <see cref="MappingHandlerFactory"/>.
+    /// Contains mappings of url patterns to handler objects.
     /// </summary>
-    /// <author>Erich Eichinger</author>
-	public class MappingHandlerFactoryConfigurer 
-//        : Spring.Objects.Factory.Config.IObjectPostProcessor // just a trick to have
-	{
-        /// <summary>
-        /// Contains mappings of url patterns to handler objects.
-        /// </summary>
-		public HandlerMap HandlerMap
-		{
-			get
-			{
-				return MappingHandlerFactory.HandlerMap;
-			}
+    public HandlerMap HandlerMap
+    {
+        get
+        {
+            return MappingHandlerFactory.HandlerMap;
+        }
 //			set
 //			{
 //				AssertUtils.ArgumentNotNull(value, "HandlerMap");
@@ -48,9 +48,9 @@ namespace Spring.Web.Support
 //					GenericHandlerFactory.HandlerMap[mapEntry.UrlPattern] = mapEntry;
 //				}
 //			}
-        }
+    }
 
-        #region IObjectPostProcessor implementation
+    #region IObjectPostProcessor implementation
 
 //        object IObjectPostProcessor.PostProcessBeforeInitialization(object instance, string name)
 //	    {
@@ -62,6 +62,5 @@ namespace Spring.Web.Support
 //	        return instance;
 //        }
 
-        #endregion
-    }
+    #endregion
 }

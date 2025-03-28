@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,103 +26,100 @@ using Spring.Context.Support;
 
 #endregion
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+/// <summary>
+/// This class contains tests for RequiredAttributeObjectPostProcessor.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class RequiredAttributeObjectPostProcessorTests
 {
-    /// <summary>
-    /// This class contains tests for RequiredAttributeObjectPostProcessor.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class RequiredAttributeObjectPostProcessorTests
+    [SetUp]
+    public void Setup()
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
+    }
 
-        [Test]
-        public void WithRequiredPropertyOmitted()
-        {
-            try
-            {
-                XmlApplicationContext ctx =
-                    new XmlApplicationContext(false,
-                                              "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/RequiredWithOneRequiredPropertyOmitted.xml");
-                Assert.Fail("Should have thrown ObjectCreationException");
-            }
-            catch (ObjectCreationException ex)
-            {
-                string message = ex.InnerException.Message;
-                Assert.IsTrue(message.IndexOf("Property") > -1);
-                Assert.IsTrue(message.IndexOf("Age") > -1);
-                Assert.IsTrue(message.IndexOf("testObject") > -1);
-            }
-        }
-
-        [Test]
-        public void WithThreeRequiredPropertiesOmitted()
-        {
-            try
-            {
-                XmlApplicationContext ctx =
-                       new XmlApplicationContext(false,
-                                                 "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/RequiredWithThreeRequiredPropertiesOmitted.xml");
-                Assert.Fail("Should have thrown ObjectCreationException");
-            }
-            catch (ObjectCreationException ex)
-            {
-                string message = ex.InnerException.Message;
-                Assert.IsTrue(message.IndexOf("Properties") > -1);
-                Assert.IsTrue(message.IndexOf("Age") > -1);
-                Assert.IsTrue(message.IndexOf("FavoriteColor") > -1);
-                Assert.IsTrue(message.IndexOf("JobTitle") > -1);
-                Assert.IsTrue(message.IndexOf("testObject") > -1);
-            }
-        }
-
-        [Test]
-        public void WithOnlyRequiredPropertiesSpecified()
+    [Test]
+    public void WithRequiredPropertyOmitted()
+    {
+        try
         {
             XmlApplicationContext ctx =
-                      new XmlApplicationContext(false,
-                                                "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/RequiredWithAllRequiredPropertiesProvided.xml");
-            RequiredTestObject to = (RequiredTestObject) ctx.GetObject("testObject");
-            Assert.AreEqual(24, to.Age);
-            Assert.AreEqual("Blue", to.GetFavoriteColor());               
+                new XmlApplicationContext(false,
+                    "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/RequiredWithOneRequiredPropertyOmitted.xml");
+            Assert.Fail("Should have thrown ObjectCreationException");
         }
-
-        [Test]
-        public void Reflection()
+        catch (ObjectCreationException ex)
         {
-            foreach (PropertyInfo pi in typeof(RequiredTestObject).GetProperties(BindingFlags.Instance | BindingFlags.Public))
-            {
-                if (pi.Name.Equals("Age"))
-                {
-                    object[] attribs = pi.GetCustomAttributes(typeof (RequiredAttribute), true);
-                    Assert.Greater(attribs.Length, 0);
-                }
-            }
-
+            string message = ex.InnerException.Message;
+            Assert.IsTrue(message.IndexOf("Property") > -1);
+            Assert.IsTrue(message.IndexOf("Age") > -1);
+            Assert.IsTrue(message.IndexOf("testObject") > -1);
         }
+    }
 
-        [Test]
-        public void WithCustomAttribute()
+    [Test]
+    public void WithThreeRequiredPropertiesOmitted()
+    {
+        try
         {
-            try
-            {
-                XmlApplicationContext ctx =
-                       new XmlApplicationContext(false,
-                                                 "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/RequiredWithCustomAttribute.xml");
-                Assert.Fail("Should have thrown ObjectCreationException");
-            }
-            catch (ObjectCreationException ex)
-            {
-                string message = ex.InnerException.Message;
-                Assert.IsTrue(message.IndexOf("Property") > -1);
-                Assert.IsTrue(message.IndexOf("Name") > -1);
-                Assert.IsTrue(message.IndexOf("testObject") > -1);
-            }   
+            XmlApplicationContext ctx =
+                new XmlApplicationContext(false,
+                    "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/RequiredWithThreeRequiredPropertiesOmitted.xml");
+            Assert.Fail("Should have thrown ObjectCreationException");
         }
+        catch (ObjectCreationException ex)
+        {
+            string message = ex.InnerException.Message;
+            Assert.IsTrue(message.IndexOf("Properties") > -1);
+            Assert.IsTrue(message.IndexOf("Age") > -1);
+            Assert.IsTrue(message.IndexOf("FavoriteColor") > -1);
+            Assert.IsTrue(message.IndexOf("JobTitle") > -1);
+            Assert.IsTrue(message.IndexOf("testObject") > -1);
+        }
+    }
 
+    [Test]
+    public void WithOnlyRequiredPropertiesSpecified()
+    {
+        XmlApplicationContext ctx =
+            new XmlApplicationContext(false,
+                "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/RequiredWithAllRequiredPropertiesProvided.xml");
+        RequiredTestObject to = (RequiredTestObject) ctx.GetObject("testObject");
+        Assert.AreEqual(24, to.Age);
+        Assert.AreEqual("Blue", to.GetFavoriteColor());
+    }
+
+    [Test]
+    public void Reflection()
+    {
+        foreach (PropertyInfo pi in typeof(RequiredTestObject).GetProperties(BindingFlags.Instance | BindingFlags.Public))
+        {
+            if (pi.Name.Equals("Age"))
+            {
+                object[] attribs = pi.GetCustomAttributes(typeof(RequiredAttribute), true);
+                Assert.Greater(attribs.Length, 0);
+            }
+        }
+    }
+
+    [Test]
+    public void WithCustomAttribute()
+    {
+        try
+        {
+            XmlApplicationContext ctx =
+                new XmlApplicationContext(false,
+                    "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/RequiredWithCustomAttribute.xml");
+            Assert.Fail("Should have thrown ObjectCreationException");
+        }
+        catch (ObjectCreationException ex)
+        {
+            string message = ex.InnerException.Message;
+            Assert.IsTrue(message.IndexOf("Property") > -1);
+            Assert.IsTrue(message.IndexOf("Name") > -1);
+            Assert.IsTrue(message.IndexOf("testObject") > -1);
+        }
     }
 }

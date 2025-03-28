@@ -21,66 +21,66 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using NUnit.Framework;
 
-namespace Spring.Objects.Factory
+namespace Spring.Objects.Factory;
+
+/// <summary>
+/// Unit tests for the NoSuchObjectDefinitionException class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class NoSuchObjectDefinitionExceptionTests
 {
-	/// <summary>
-	/// Unit tests for the NoSuchObjectDefinitionException class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class NoSuchObjectDefinitionExceptionTests
-	{
-		public const string NotFoundObjectDefinitionName = "myObject";
+    public const string NotFoundObjectDefinitionName = "myObject";
 
-		public static readonly Type NotFoundObjectDefinitionType = typeof (TestObject);
+    public static readonly Type NotFoundObjectDefinitionType = typeof(TestObject);
 
-		[Test]
-		public void SerializesObjectNameFieldCorrectly()
-		{
-			NoSuchObjectDefinitionException ex
-				= new NoSuchObjectDefinitionException(NotFoundObjectDefinitionName, "Cannot dynamically build object key...");
-			NoSuchObjectDefinitionException deserializedException = Serialize(ex);
-			Assert.IsNotNull(deserializedException);
-			Assert.AreEqual(NotFoundObjectDefinitionName, deserializedException.ObjectName, "'ObjectName' property was not serialized correctly.");
-		}
+    [Test]
+    public void SerializesObjectNameFieldCorrectly()
+    {
+        NoSuchObjectDefinitionException ex
+            = new NoSuchObjectDefinitionException(NotFoundObjectDefinitionName, "Cannot dynamically build object key...");
+        NoSuchObjectDefinitionException deserializedException = Serialize(ex);
+        Assert.IsNotNull(deserializedException);
+        Assert.AreEqual(NotFoundObjectDefinitionName, deserializedException.ObjectName, "'ObjectName' property was not serialized correctly.");
+    }
 
-		[Test]
-		public void SerializesObjectTypeFieldCorrectly()
-		{
-			NoSuchObjectDefinitionException ex
-				= new NoSuchObjectDefinitionException(NotFoundObjectDefinitionType, null);
-			NoSuchObjectDefinitionException deserializedException = Serialize(ex);
-			Assert.IsNotNull(deserializedException);
-			Assert.AreEqual(NotFoundObjectDefinitionType, deserializedException.ObjectType, "'ObjectType' property was not serialized correctly.");
-		}
+    [Test]
+    public void SerializesObjectTypeFieldCorrectly()
+    {
+        NoSuchObjectDefinitionException ex
+            = new NoSuchObjectDefinitionException(NotFoundObjectDefinitionType, null);
+        NoSuchObjectDefinitionException deserializedException = Serialize(ex);
+        Assert.IsNotNull(deserializedException);
+        Assert.AreEqual(NotFoundObjectDefinitionType, deserializedException.ObjectType, "'ObjectType' property was not serialized correctly.");
+    }
 
-		private NoSuchObjectDefinitionException Serialize(NoSuchObjectDefinitionException inputException)
-		{
-			NoSuchObjectDefinitionException deserializedException = null;
-			string tempDir = Environment.GetEnvironmentVariable("TEMP");
-			string tempFilename = tempDir + @"\foo.dat";
-			FileInfo file = new FileInfo(tempFilename);
-			try
-			{
-				Stream outstream = file.OpenWrite();
-				new BinaryFormatter().Serialize(outstream, inputException);
-				outstream.Flush();
-				outstream.Close();
-				Stream instream = file.OpenRead();
-				deserializedException = new BinaryFormatter().Deserialize(instream) as NoSuchObjectDefinitionException;
-				instream.Close();
-			}
-			finally
-			{
-				try
-				{
-					file.Delete();
-				}
-				catch
-				{
-				}
-			}
-			return deserializedException;
-		}
-	}
+    private NoSuchObjectDefinitionException Serialize(NoSuchObjectDefinitionException inputException)
+    {
+        NoSuchObjectDefinitionException deserializedException = null;
+        string tempDir = Environment.GetEnvironmentVariable("TEMP");
+        string tempFilename = tempDir + @"\foo.dat";
+        FileInfo file = new FileInfo(tempFilename);
+        try
+        {
+            Stream outstream = file.OpenWrite();
+            new BinaryFormatter().Serialize(outstream, inputException);
+            outstream.Flush();
+            outstream.Close();
+            Stream instream = file.OpenRead();
+            deserializedException = new BinaryFormatter().Deserialize(instream) as NoSuchObjectDefinitionException;
+            instream.Close();
+        }
+        finally
+        {
+            try
+            {
+                file.Delete();
+            }
+            catch
+            {
+            }
+        }
+
+        return deserializedException;
+    }
 }

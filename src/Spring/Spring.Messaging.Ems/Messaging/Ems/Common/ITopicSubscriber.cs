@@ -18,11 +18,10 @@
 
 #endregion
 
-namespace Spring.Messaging.Ems.Common
+namespace Spring.Messaging.Ems.Common;
+
+public interface ITopicSubscriber : IMessageConsumer
 {
-    public interface ITopicSubscriber : IMessageConsumer
-    {
-        bool NoLocal { get; }
-        Topic Topic { get; }
-    }
+    bool NoLocal { get; }
+    Topic Topic { get; }
 }

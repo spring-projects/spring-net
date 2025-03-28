@@ -22,161 +22,163 @@ using System.Collections;
 using Microsoft.Extensions.Logging;
 using Spring.Expressions;
 
-namespace Spring.Aspects
+namespace Spring.Aspects;
+
+/// <summary>
+/// An abstract base class providing all necessary functionality for typical IExceptionHandler implementations.
+/// </summary>
+/// <author>Mark Pollack</author>
+public abstract class AbstractExceptionHandler : IExceptionHandler
 {
+    #region Fields
+
     /// <summary>
-    /// An abstract base class providing all necessary functionality for typical IExceptionHandler implementations.
+    /// The logging instance
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public abstract class AbstractExceptionHandler  : IExceptionHandler
+    protected readonly ILogger log;
+
+    private IList sourceExceptionNames = new ArrayList();
+    private IList sourceExceptionTypes = new ArrayList();
+    private string actionExpressionText;
+    private bool continueProcessing = false;
+    private string constraintExpressionText;
+
+    #endregion
+
+    #region Constructor(s)
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AbstractExceptionHandler"/> class.
+    /// </summary>
+    public AbstractExceptionHandler()
     {
-        #region Fields
-
-        /// <summary>
-        /// The logging instance
-        /// </summary>
-        protected readonly ILogger log;
-
-        private IList sourceExceptionNames = new ArrayList();
-        private IList sourceExceptionTypes = new ArrayList();
-        private string actionExpressionText;
-        private bool continueProcessing = false;
-        private string constraintExpressionText;
-
-        #endregion
-
-        #region Constructor(s)
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AbstractExceptionHandler"/> class.
-        /// </summary>
-        public AbstractExceptionHandler()
-        {
-            log = LogManager.GetLogger(GetType());
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AbstractExceptionHandler"/> class.
-        /// </summary>
-        /// <param name="exceptionNames">The exception names.</param>
-        public AbstractExceptionHandler(string[] exceptionNames)
-        {
-            log = LogManager.GetLogger(GetType());
-            foreach (string exceptionName in exceptionNames)
-            {
-                SourceExceptionNames.Add(exceptionName);
-            }
-        }
-
-        #endregion
-
-        #region Implementation of IExceptionHandler
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the source exception names.
-        /// </summary>
-        /// <value>The source exception names.</value>
-        public virtual IList SourceExceptionNames
-        {
-            get { return sourceExceptionNames; }
-            set { sourceExceptionNames = value; }
-        }
-
-        /// <summary>
-        /// Gets the source exception types.
-        /// </summary>
-        /// <value>The source exception types.</value>
-        public virtual IList SourceExceptionTypes
-        {
-            get { return sourceExceptionTypes; }
-            set { sourceExceptionTypes = value; }
-        }
-
-        /// <summary>
-        /// Gets the action translation expression text
-        /// </summary>
-        /// <value>The action translation expression.</value>
-        public virtual string ActionExpressionText
-        {
-            get { return actionExpressionText; }
-            set { actionExpressionText = value; }
-        }
-
-
-        /// <summary>
-        /// Gets or sets the constraint expression text.
-        /// </summary>
-        /// <value>The constraint expression text.</value>
-        public string ConstraintExpressionText
-        {
-            get { return constraintExpressionText; }
-            set { constraintExpressionText = value; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether to continue processing.
-        /// </summary>
-        /// <value><c>true</c> if continue processing; otherwise, <c>false</c>.</value>
-        public bool ContinueProcessing
-        {
-            get { return continueProcessing; }
-            set { continueProcessing = value; }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Determines whether this instance can handle the exception the specified exception.
-        /// </summary>
-        /// <param name="ex">The exception.</param>
-        /// <param name="callContextDictionary">The call context dictionary.</param>
-        /// <returns>
-        /// 	<c>true</c> if this instance can handle the specified exception; otherwise, <c>false</c>.
-        /// </returns>
-        public bool CanHandleException(Exception ex, IDictionary<string, object> callContextDictionary)
-        {
-            if (SourceExceptionNames != null)
-            {
-                foreach (string exceptionName in SourceExceptionNames)
-                {
-                    if (ex.GetType().Name.IndexOf(exceptionName) >= 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-            if (ConstraintExpressionText != null)
-            {
-                bool canProcess;
-                try
-                {
-                    IExpression expression = Expression.Parse(ConstraintExpressionText);
-                    canProcess = (bool) expression.GetValue(null, callContextDictionary);
-                } catch (InvalidCastException e)
-                {
-                    string message = "Was not able to unbox constraint expression to boolean [" + ConstraintExpressionText + "]";
-                    log.LogWarning(e, message);
-                    return false;
-                } catch (Exception e)
-                {
-                    string message = "Was not able to evaluate constraint expression [" + ConstraintExpressionText + "]";
-                    log.LogWarning(e, message);
-                    return false;
-                }
-                return canProcess;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Handles the exception.
-        /// </summary>
-        /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
-        public abstract object HandleException(IDictionary<string, object> callContextDictionary);
-
-        #endregion
+        log = LogManager.GetLogger(GetType());
     }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AbstractExceptionHandler"/> class.
+    /// </summary>
+    /// <param name="exceptionNames">The exception names.</param>
+    public AbstractExceptionHandler(string[] exceptionNames)
+    {
+        log = LogManager.GetLogger(GetType());
+        foreach (string exceptionName in exceptionNames)
+        {
+            SourceExceptionNames.Add(exceptionName);
+        }
+    }
+
+    #endregion
+
+    #region Implementation of IExceptionHandler
+
+    #region Properties
+
+    /// <summary>
+    /// Gets the source exception names.
+    /// </summary>
+    /// <value>The source exception names.</value>
+    public virtual IList SourceExceptionNames
+    {
+        get { return sourceExceptionNames; }
+        set { sourceExceptionNames = value; }
+    }
+
+    /// <summary>
+    /// Gets the source exception types.
+    /// </summary>
+    /// <value>The source exception types.</value>
+    public virtual IList SourceExceptionTypes
+    {
+        get { return sourceExceptionTypes; }
+        set { sourceExceptionTypes = value; }
+    }
+
+    /// <summary>
+    /// Gets the action translation expression text
+    /// </summary>
+    /// <value>The action translation expression.</value>
+    public virtual string ActionExpressionText
+    {
+        get { return actionExpressionText; }
+        set { actionExpressionText = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the constraint expression text.
+    /// </summary>
+    /// <value>The constraint expression text.</value>
+    public string ConstraintExpressionText
+    {
+        get { return constraintExpressionText; }
+        set { constraintExpressionText = value; }
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether to continue processing.
+    /// </summary>
+    /// <value><c>true</c> if continue processing; otherwise, <c>false</c>.</value>
+    public bool ContinueProcessing
+    {
+        get { return continueProcessing; }
+        set { continueProcessing = value; }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Determines whether this instance can handle the exception the specified exception.
+    /// </summary>
+    /// <param name="ex">The exception.</param>
+    /// <param name="callContextDictionary">The call context dictionary.</param>
+    /// <returns>
+    /// 	<c>true</c> if this instance can handle the specified exception; otherwise, <c>false</c>.
+    /// </returns>
+    public bool CanHandleException(Exception ex, IDictionary<string, object> callContextDictionary)
+    {
+        if (SourceExceptionNames != null)
+        {
+            foreach (string exceptionName in SourceExceptionNames)
+            {
+                if (ex.GetType().Name.IndexOf(exceptionName) >= 0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        if (ConstraintExpressionText != null)
+        {
+            bool canProcess;
+            try
+            {
+                IExpression expression = Expression.Parse(ConstraintExpressionText);
+                canProcess = (bool) expression.GetValue(null, callContextDictionary);
+            }
+            catch (InvalidCastException e)
+            {
+                string message = "Was not able to unbox constraint expression to boolean [" + ConstraintExpressionText + "]";
+                log.LogWarning(e, message);
+                return false;
+            }
+            catch (Exception e)
+            {
+                string message = "Was not able to evaluate constraint expression [" + ConstraintExpressionText + "]";
+                log.LogWarning(e, message);
+                return false;
+            }
+
+            return canProcess;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Handles the exception.
+    /// </summary>
+    /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
+    public abstract object HandleException(IDictionary<string, object> callContextDictionary);
+
+    #endregion
 }

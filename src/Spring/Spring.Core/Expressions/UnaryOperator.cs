@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,45 +20,44 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Base class for unary operators.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+//[Serializable]
+public abstract class UnaryOperator : BaseNode
 {
     /// <summary>
-    /// Base class for unary operators.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    //[Serializable]
-    public abstract class UnaryOperator : BaseNode
+    public UnaryOperator() : base()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public UnaryOperator():base()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public UnaryOperator(BaseNode operand)
-        {
-            this.addChild(operand);
-        }
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    public UnaryOperator(BaseNode operand)
+    {
+        this.addChild(operand);
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected UnaryOperator(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-        
-        /// <summary>
-        /// Gets the operand.
-        /// </summary>
-        /// <value>The operand.</value>
-        public BaseNode Operand
-        {
-            get { return (BaseNode) this.getFirstChild(); }
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected UnaryOperator(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Gets the operand.
+    /// </summary>
+    /// <value>The operand.</value>
+    public BaseNode Operand
+    {
+        get { return (BaseNode) this.getFirstChild(); }
     }
 }

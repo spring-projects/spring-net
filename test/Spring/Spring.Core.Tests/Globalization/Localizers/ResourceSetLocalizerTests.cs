@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,42 +22,39 @@
 
 using System.Globalization;
 using System.Resources;
-
 using NUnit.Framework;
-
 using Spring.Context;
 using Spring.Context.Support;
 
 #endregion
 
-namespace Spring.Globalization.Localizers
+namespace Spring.Globalization.Localizers;
+
+/// <summary>
+/// Unit tests for the ResourceSetLocalizer class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public sealed class ResourceSetLocalizerTests : AbstractLocalizerTests
 {
-    /// <summary>
-    /// Unit tests for the ResourceSetLocalizer class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public sealed class ResourceSetLocalizerTests : AbstractLocalizerTests
+    protected override ILocalizer CreateLocalizer()
     {
-        protected override ILocalizer CreateLocalizer()
-        {
-            return new ResourceSetLocalizer();
-        }
+        return new ResourceSetLocalizer();
+    }
 
-        protected override IMessageSource CreateMessageSource()
-        {
-            ResourceSetMessageSource messageSource = new ResourceSetMessageSource();
-            messageSource.ResourceManagers.Add(new ResourceManager("Spring.Resources.Tesla", GetType().Assembly));
-            return messageSource;
-        }
+    protected override IMessageSource CreateMessageSource()
+    {
+        ResourceSetMessageSource messageSource = new ResourceSetMessageSource();
+        messageSource.ResourceManagers.Add(new ResourceManager("Spring.Resources.Tesla", GetType().Assembly));
+        return messageSource;
+    }
 
-        [Test]
-        public void DoesNotThrowOnMissingResource()
-        {
-            ResourceSetMessageSource messageSource = new ResourceSetMessageSource();
-            messageSource.ResourceManagers.Add(new ResourceManager("do not exist", GetType().Assembly));
-            ResourceSetLocalizer localizer = new ResourceSetLocalizer();
-            localizer.ApplyResources(new Inventor(), messageSource, CultureInfo.InvariantCulture);
-        }
+    [Test]
+    public void DoesNotThrowOnMissingResource()
+    {
+        ResourceSetMessageSource messageSource = new ResourceSetMessageSource();
+        messageSource.ResourceManagers.Add(new ResourceManager("do not exist", GetType().Assembly));
+        ResourceSetLocalizer localizer = new ResourceSetLocalizer();
+        localizer.ApplyResources(new Inventor(), messageSource, CultureInfo.InvariantCulture);
     }
 }

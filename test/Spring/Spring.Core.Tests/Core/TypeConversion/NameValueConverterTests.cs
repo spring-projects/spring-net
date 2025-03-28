@@ -21,66 +21,64 @@
 #region Imports
 
 using System.Collections.Specialized;
-
 using NUnit.Framework;
 using Spring.Objects;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// Unit tests for the NameValueConverter class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class NameValueConverterTests
 {
-	/// <summary>
-	/// Unit tests for the NameValueConverter class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class NameValueConverterTests
+    [Test]
+    public void CanConvertFromString()
     {
-        [Test]
-        public void CanConvertFromString () 
-        {
-            NameValueConverter vrt = new NameValueConverter ();
-            Assert.IsTrue (vrt.CanConvertFrom (typeof (string)), "Conversion from a string instance must be supported.");
-        }
+        NameValueConverter vrt = new NameValueConverter();
+        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
+    }
 
-		[Test]
-		public void CanConvertOnlyFromString()
-		{
-			NameValueConverter vrt = new NameValueConverter ();
-			Assert.IsFalse(vrt.CanConvertFrom(typeof(TestObject)),
-				"Seem to be able to convert from non-supported Type.");
-		}
+    [Test]
+    public void CanConvertOnlyFromString()
+    {
+        NameValueConverter vrt = new NameValueConverter();
+        Assert.IsFalse(vrt.CanConvertFrom(typeof(TestObject)),
+            "Seem to be able to convert from non-supported Type.");
+    }
 
-		[Test]
-        public void ConvertFrom () 
-        {
-            string xml =
-                "<foo>" + 
-                "	<add key=\"one\" value=\"1\"/>" +
-                "	<add key=\"two\" value=\"2\"/>" +
-                "</foo>"; 
-            NameValueConverter vrt = new NameValueConverter ();
-            NameValueCollection actual = vrt.ConvertFrom (xml) as NameValueCollection;
-            Assert.IsNotNull (actual);
-            Assert.AreEqual (2, actual.Count);
-            Assert.AreEqual ("one", actual.GetKey (0));
-            Assert.AreEqual ("two", actual.GetKey (1));
-            Assert.AreEqual ("1", actual ["one"]);
-            Assert.AreEqual ("2", actual ["two"]);
-        }
+    [Test]
+    public void ConvertFrom()
+    {
+        string xml =
+            "<foo>" +
+            "	<add key=\"one\" value=\"1\"/>" +
+            "	<add key=\"two\" value=\"2\"/>" +
+            "</foo>";
+        NameValueConverter vrt = new NameValueConverter();
+        NameValueCollection actual = vrt.ConvertFrom(xml) as NameValueCollection;
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(2, actual.Count);
+        Assert.AreEqual("one", actual.GetKey(0));
+        Assert.AreEqual("two", actual.GetKey(1));
+        Assert.AreEqual("1", actual["one"]);
+        Assert.AreEqual("2", actual["two"]);
+    }
 
-        [Test]
-        public void ConvertFromNullReference()
-        {
-            NameValueConverter vrt = new NameValueConverter();
-            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
-        }
+    [Test]
+    public void ConvertFromNullReference()
+    {
+        NameValueConverter vrt = new NameValueConverter();
+        Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
+    }
 
-        [Test]
-        public void ConvertFromNonSupportedOptionBails()
-        {
-            NameValueConverter vrt = new NameValueConverter();
-            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(true));
-        } 
-	}
+    [Test]
+    public void ConvertFromNonSupportedOptionBails()
+    {
+        NameValueConverter vrt = new NameValueConverter();
+        Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(true));
+    }
 }

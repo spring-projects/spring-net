@@ -2,13 +2,13 @@
 <objects xmlns="http://www.springframework.net">
 
 
-  <object id="someMessageSource" name="myMessageSource" 
-          type="Spring.Context.Support.StaticMessageSource, Spring.Core">
+    <object id="someMessageSource" name="myMessageSource"
+            type="Spring.Context.Support.StaticMessageSource, Spring.Core">
 
-  </object>
+    </object>
 
-  <object type="Spring.Context.Support.XmlApplicationContext, Spring.Core" lazy-init="true">
-    <constructor-arg value="file://SomeNonExistentFile.xml"/>
-  </object>
+    <object type="Spring.Context.Support.XmlApplicationContext, Spring.Core" lazy-init="true">
+        <constructor-arg value="file://SomeNonExistentFile.xml" />
+    </object>
 
 </objects>

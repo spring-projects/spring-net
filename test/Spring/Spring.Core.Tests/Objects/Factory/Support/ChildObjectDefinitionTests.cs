@@ -24,44 +24,43 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Unit tests for the ChildObjectDefinition class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ChildObjectDefinitionTests
 {
-	/// <summary>
-	/// Unit tests for the ChildObjectDefinition class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class ChildObjectDefinitionTests
+    [Test]
+    public void ChokesIfParentNamePropertyIsNullAtValidationTime()
     {
-        [Test]
-        public void ChokesIfParentNamePropertyIsNullAtValidationTime()
-        {
-            Assert.Throws<ObjectDefinitionValidationException>(() => new ChildObjectDefinition(null, null).Validate());
-        }
+        Assert.Throws<ObjectDefinitionValidationException>(() => new ChildObjectDefinition(null, null).Validate());
+    }
 
-        [Test]
-        public void ChokesIfParentNamePropertyIsEmptyAtValidationTime()
-        {
-            Assert.Throws<ObjectDefinitionValidationException>(() => new ChildObjectDefinition(String.Empty, null).Validate());
-        }
+    [Test]
+    public void ChokesIfParentNamePropertyIsEmptyAtValidationTime()
+    {
+        Assert.Throws<ObjectDefinitionValidationException>(() => new ChildObjectDefinition(String.Empty, null).Validate());
+    }
 
-        [Test]
-        public void ChokesIfParentNamePropertyIsJustWhitespaceAtValidationTime()
-        {
-            Assert.Throws<ObjectDefinitionValidationException>(() => new ChildObjectDefinition("    ", null).Validate());
-        }
+    [Test]
+    public void ChokesIfParentNamePropertyIsJustWhitespaceAtValidationTime()
+    {
+        Assert.Throws<ObjectDefinitionValidationException>(() => new ChildObjectDefinition("    ", null).Validate());
+    }
 
-	    [Test]
-	    public void Ctor_ParentNameOnly()
-	    {
-	        const string expectedParentName = "foo";
-	        ChildObjectDefinition def = new ChildObjectDefinition(expectedParentName);
-            Assert.AreEqual(expectedParentName, def.ParentName,
-                "ParentName property not initialized correctly by ctor.");
-            Assert.IsNotNull(def.PropertyValues,
-                "PropertyValues must be init'd to a non-null collection if not explicitly supplied.");
-            Assert.AreEqual(0, def.PropertyValues.PropertyValues.Count, 
-                "PropertyValues must be init'd to an empty collection if not explicitly supplied.");
-	    }
-	}
+    [Test]
+    public void Ctor_ParentNameOnly()
+    {
+        const string expectedParentName = "foo";
+        ChildObjectDefinition def = new ChildObjectDefinition(expectedParentName);
+        Assert.AreEqual(expectedParentName, def.ParentName,
+            "ParentName property not initialized correctly by ctor.");
+        Assert.IsNotNull(def.PropertyValues,
+            "PropertyValues must be init'd to a non-null collection if not explicitly supplied.");
+        Assert.AreEqual(0, def.PropertyValues.PropertyValues.Count,
+            "PropertyValues must be init'd to an empty collection if not explicitly supplied.");
+    }
 }

@@ -22,46 +22,40 @@ using NUnit.Framework;
 using Spring.Messaging.Nms.Core;
 using Spring.Testing.NUnit;
 
-namespace Spring.Messaging.Nms.Listener
+namespace Spring.Messaging.Nms.Listener;
+
+[TestFixture]
+public class SimpleMessageListenerContainerTests : AbstractDependencyInjectionSpringContextTests
 {
-    [TestFixture]
-    public class SimpleMessageListenerContainerTests : AbstractDependencyInjectionSpringContextTests
+    protected SimpleGateway simpleGateway;
+
+    protected SimpleMessageListener simpleMessageListener;
+
+    /// <summary>
+    /// Enable DI based on protected field names
+    /// </summary>
+    public SimpleMessageListenerContainerTests()
     {
-        protected SimpleGateway simpleGateway;
-
-        protected SimpleMessageListener simpleMessageListener;
-
-
-        /// <summary>
-        /// Enable DI based on protected field names
-        /// </summary>
-        public SimpleMessageListenerContainerTests()
-        {
-            this.PopulateProtectedVariables = true;
-        }
-
-        [Test]
-        public void SendAndRecieveAsync()
-        {
-            Assert.NotNull(simpleGateway);
-            Assert.NotNull(simpleMessageListener);
-            Assert.AreEqual(0, simpleMessageListener.MessageCount);
-            simpleGateway.Publish("CSCO", 123.45);
-            Thread.Sleep(1000);
-            Assert.AreEqual(1, simpleMessageListener.MessageCount);
-
-        }
-
-        #region Overrides of AbstractDependencyInjectionSpringContextTests
-
-        protected override string[] ConfigLocations
-        {
-            get { return new string[] { "assembly://Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Listener/SimpleMessageListenerContainerTests.xml" }; }
-
-        }
-
-        #endregion
+        this.PopulateProtectedVariables = true;
     }
 
+    [Test]
+    public void SendAndRecieveAsync()
+    {
+        Assert.NotNull(simpleGateway);
+        Assert.NotNull(simpleMessageListener);
+        Assert.AreEqual(0, simpleMessageListener.MessageCount);
+        simpleGateway.Publish("CSCO", 123.45);
+        Thread.Sleep(1000);
+        Assert.AreEqual(1, simpleMessageListener.MessageCount);
+    }
 
+    #region Overrides of AbstractDependencyInjectionSpringContextTests
+
+    protected override string[] ConfigLocations
+    {
+        get { return new string[] { "assembly://Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Listener/SimpleMessageListenerContainerTests.xml" }; }
+    }
+
+    #endregion
 }

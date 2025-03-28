@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2010-2011 the original author or authors.
+ * Copyright ï¿½ 2010-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,24 +18,22 @@
 
 #endregion
 
-
 using NUnit.Framework;
 using Spring.Objects.Factory.Xml;
 
-namespace Spring.Context.Config
+namespace Spring.Context.Config;
+
+[TestFixture]
+public class ContextNamespaceParserTests
 {
-    [TestFixture]
-    public class ContextNamespaceParserTests
+    [SetUp]
+    public void Setup()
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-        
-        [Test]
-        public void RegisteredAsWellKnownParser()
-        {
-            Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/context"));
-        }
+    }
+
+    [Test]
+    public void RegisteredAsWellKnownParser()
+    {
+        Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/context"));
     }
 }

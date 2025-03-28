@@ -22,40 +22,39 @@
 
 using System.Collections;
 
-namespace Spring.Collections
-{
-	/// <summary>
-	/// Implements an <see cref="Spring.Collections.ISet"/> based on a
-	/// hash table.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This will give the best lookup, add, and remove performance for very
-	/// large data-sets, but iteration will occur in no particular order.
-	/// </p>
-	/// </remarks>
-	/// <seealso cref="Spring.Collections.ISet"/>
-	[Serializable]
-    public class HashedSet : DictionarySet
-	{
-		/// <summary>
-		/// Creates a new instance of the <see cref="HashedSet"/> class.
-		/// </summary>
-		public HashedSet()
-		{
-			InternalDictionary = new Hashtable();
-		}
+namespace Spring.Collections;
 
-		/// <summary>
-		/// Creates a new instance of the <see cref="HashedSet"/> class, and
-		/// initializes it based on a collection of elements.
-		/// </summary>
-		/// <param name="initialValues">
-		/// A collection of elements that defines the initial set contents.
-		/// </param>
-		public HashedSet(ICollection initialValues) : this()
-		{
-			this.AddAll(initialValues);
-		}
-	}
+/// <summary>
+/// Implements an <see cref="Spring.Collections.ISet"/> based on a
+/// hash table.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This will give the best lookup, add, and remove performance for very
+/// large data-sets, but iteration will occur in no particular order.
+/// </p>
+/// </remarks>
+/// <seealso cref="Spring.Collections.ISet"/>
+[Serializable]
+public class HashedSet : DictionarySet
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref="HashedSet"/> class.
+    /// </summary>
+    public HashedSet()
+    {
+        InternalDictionary = new Hashtable();
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="HashedSet"/> class, and
+    /// initializes it based on a collection of elements.
+    /// </summary>
+    /// <param name="initialValues">
+    /// A collection of elements that defines the initial set contents.
+    /// </param>
+    public HashedSet(ICollection initialValues) : this()
+    {
+        this.AddAll(initialValues);
+    }
 }

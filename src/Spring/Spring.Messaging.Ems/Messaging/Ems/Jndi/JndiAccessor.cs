@@ -21,82 +21,80 @@
 using System.Collections;
 using Spring.Objects.Factory;
 
-namespace Spring.Messaging.Ems.Jndi
+namespace Spring.Messaging.Ems.Jndi;
+
+/// <summary>
+/// Convenient superclass to access JndiProperties, JndiContextType or alternatively set the ILookupContext directly.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack</author>
+public class JndiAccessor : IInitializingObject
 {
+    private ILookupContext _jndiLookupContext;
+
+    private Hashtable jndiProperties = new Hashtable();
+
+    private JndiContextType contextType = JndiContextType.JMS;
+
+    protected ILog logger;
+
+    LookupContextFactory contextFactoryObject = new LookupContextFactory();
+
     /// <summary>
-    /// Convenient superclass to access JndiProperties, JndiContextType or alternatively set the ILookupContext directly.
+    /// Gets or sets the lookup context.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack</author>
-    public class JndiAccessor : IInitializingObject
+    /// <value>The lookup context.</value>
+    public ILookupContext JndiLookupContext
     {
-        private ILookupContext _jndiLookupContext;
+        get { return _jndiLookupContext; }
+        set { _jndiLookupContext = value; }
+    }
 
-        private Hashtable jndiProperties = new Hashtable();
-
-        private JndiContextType contextType = JndiContextType.JMS;
-
-        protected ILog logger;
-
-        LookupContextFactory contextFactoryObject = new LookupContextFactory();
-
-        /// <summary>
-        /// Gets or sets the lookup context.
-        /// </summary>
-        /// <value>The lookup context.</value>
-        public ILookupContext JndiLookupContext
+    /// <summary>
+    /// Gets or sets the JNDI environment properties.
+    /// </summary>
+    /// <value>The jndi properties.</value>
+    public IDictionary JndiProperties
+    {
+        get
         {
-            get { return _jndiLookupContext; }
-            set { _jndiLookupContext = value; }
+            return jndiProperties;
         }
-
-        /// <summary>
-        /// Gets or sets the JNDI environment properties.
-        /// </summary>
-        /// <value>The jndi properties.</value>
-        public IDictionary JndiProperties
+        set
         {
-            get
-            {
-                return jndiProperties;
-            }
-            set
-            {
-                jndiProperties = new Hashtable(value);
-            }
+            jndiProperties = new Hashtable(value);
         }
+    }
 
-        /// <summary>
-        /// Gets or sets the type of the jndi context.  The default is JndiContextType.JMS
-        /// </summary>
-        /// <value>The type of the jndi context.</value>
-        public JndiContextType JndiContextType
+    /// <summary>
+    /// Gets or sets the type of the jndi context.  The default is JndiContextType.JMS
+    /// </summary>
+    /// <value>The type of the jndi context.</value>
+    public JndiContextType JndiContextType
+    {
+        get { return this.contextType; }
+        set
         {
-            get { return this.contextType;  }
-            set
-            {
-                this.contextType = value;
-            }
+            this.contextType = value;
         }
+    }
 
-
-        /// <summary>
-        /// Create the JndiLookupContext if it has not been explicitly set.
-        /// </summary>
-        public virtual void AfterPropertiesSet()
+    /// <summary>
+    /// Create the JndiLookupContext if it has not been explicitly set.
+    /// </summary>
+    public virtual void AfterPropertiesSet()
+    {
+        if (_jndiLookupContext == null)
         {
-            if (_jndiLookupContext == null)
+            if (JndiContextType == JndiContextType.JMS)
             {
-                if (JndiContextType == JndiContextType.JMS)
-                {
-                    this._jndiLookupContext = contextFactoryObject.CreateContext(LookupContextFactory.TIBJMS_NAMING_CONTEXT,
-                                                                            jndiProperties);
-                }
-                else
-                {
-                    this._jndiLookupContext = contextFactoryObject.CreateContext(LookupContextFactory.LDAP_CONTEXT,
-                                                                            jndiProperties);
-                }
+                this._jndiLookupContext = contextFactoryObject.CreateContext(LookupContextFactory.TIBJMS_NAMING_CONTEXT,
+                    jndiProperties);
+            }
+            else
+            {
+                this._jndiLookupContext = contextFactoryObject.CreateContext(LookupContextFactory.LDAP_CONTEXT,
+                    jndiProperties);
             }
         }
     }

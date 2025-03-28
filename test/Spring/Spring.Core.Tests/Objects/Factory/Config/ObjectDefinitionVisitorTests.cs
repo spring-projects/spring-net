@@ -23,139 +23,138 @@ using System.Collections.Specialized;
 using NUnit.Framework;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the ObjectDefinitionVisitor class
+/// </summary>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public class ObjectDefinitionVisitorTests
 {
-    /// <summary>
-    /// Unit tests for the ObjectDefinitionVisitor class
-    /// </summary>
-    /// <author>Bruno Baia</author>
-    [TestFixture]
-    public class ObjectDefinitionVisitorTests
+    private Hashtable properties;
+
+    [SetUp]
+    public void SetUp()
     {
-        private Hashtable properties;
+        properties = CollectionsUtil.CreateCaseInsensitiveHashtable();
+        properties.Add("Property", "Value");
+    }
 
-        [SetUp]
-        public void SetUp()
+    private string ParseAndResolveVariables(string rawText)
+    {
+        if (rawText.StartsWith("$"))
         {
-            properties = CollectionsUtil.CreateCaseInsensitiveHashtable();
-            properties.Add("Property", "Value");
+            return (string) properties[rawText.Substring(1)];
         }
 
-        private string ParseAndResolveVariables(string rawText)
-        {
-            if (rawText.StartsWith("$"))
-            {
-                return (string) properties[rawText.Substring(1)];
-            }
-            return rawText;
-        }
+        return rawText;
+    }
 
-        [Test]
-        public void BadConstructorCall()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ObjectDefinitionVisitor(null));
-        }
+    [Test]
+    public void BadConstructorCall()
+    {
+        Assert.Throws<ArgumentNullException>(() => new ObjectDefinitionVisitor(null));
+    }
 
-        [Test]
-        public void VisitObjectTypeName()
-        {
-            IObjectDefinition od = new RootObjectDefinition();
-            od.ObjectTypeName = "$Property";
+    [Test]
+    public void VisitObjectTypeName()
+    {
+        IObjectDefinition od = new RootObjectDefinition();
+        od.ObjectTypeName = "$Property";
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
-            odv.VisitObjectDefinition(od);
+        ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
+        odv.VisitObjectDefinition(od);
 
-            Assert.AreEqual("Value", od.ObjectTypeName);
-        }
+        Assert.AreEqual("Value", od.ObjectTypeName);
+    }
 
-        [Test]
-        public void VisitPropertyValues()
-        {
-            IObjectDefinition od = new RootObjectDefinition();
-            od.PropertyValues.Add("PropertyName", "$Property");
+    [Test]
+    public void VisitPropertyValues()
+    {
+        IObjectDefinition od = new RootObjectDefinition();
+        od.PropertyValues.Add("PropertyName", "$Property");
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
-            odv.VisitObjectDefinition(od);
+        ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
+        odv.VisitObjectDefinition(od);
 
-            Assert.AreEqual("Value", od.PropertyValues.GetPropertyValue("PropertyName").Value);
-        }
+        Assert.AreEqual("Value", od.PropertyValues.GetPropertyValue("PropertyName").Value);
+    }
 
+    [Test]
+    public void VisitManagedList()
+    {
+        IObjectDefinition od = new RootObjectDefinition();
+        ManagedList ml = new ManagedList();
+        ml.ElementTypeName = "$Property";
+        ml.Add("$Property");
+        od.PropertyValues.Add("PropertyName", ml);
 
-        [Test]
-        public void VisitManagedList()
-        {
-            IObjectDefinition od = new RootObjectDefinition();
-            ManagedList ml = new ManagedList();
-            ml.ElementTypeName = "$Property";
-            ml.Add("$Property");
-            od.PropertyValues.Add("PropertyName", ml);
+        ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
+        odv.VisitObjectDefinition(od);
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
-            odv.VisitObjectDefinition(od);
+        ManagedList list = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedList;
 
-            ManagedList list = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedList;
+        Assert.IsNotNull(list, "Property value is not of type ManagedList.  Type = [" +
+                               od.PropertyValues.GetPropertyValue("PropertyName").Value.GetType() + "]");
+        Assert.AreEqual("Value", list.ElementTypeName);
+        Assert.AreEqual("Value", list[0]);
+    }
 
-            Assert.IsNotNull(list, "Property value is not of type ManagedList.  Type = [" +
-                od.PropertyValues.GetPropertyValue("PropertyName").Value.GetType() + "]");
-            Assert.AreEqual("Value", list.ElementTypeName);
-            Assert.AreEqual("Value", list[0]);
-        }
+    [Test]
+    public void VisitManagedSet()
+    {
+        IObjectDefinition od = new RootObjectDefinition();
+        ManagedSet ms = new ManagedSet();
+        ms.ElementTypeName = "$Property";
+        ms.Add("$Property");
+        od.PropertyValues.Add("PropertyName", ms);
 
-        [Test]
-        public void VisitManagedSet()
-        {
-            IObjectDefinition od = new RootObjectDefinition();
-            ManagedSet ms = new ManagedSet();
-            ms.ElementTypeName = "$Property";
-            ms.Add("$Property");
-            od.PropertyValues.Add("PropertyName", ms);
+        ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
+        odv.VisitObjectDefinition(od);
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
-            odv.VisitObjectDefinition(od);
+        ManagedSet set = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedSet;
 
-            ManagedSet set = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedSet;
+        Assert.AreEqual("Value", set.ElementTypeName);
+        IEnumerator enumerator = set.GetEnumerator();
+        enumerator.MoveNext();
+        Assert.AreEqual("Value", enumerator.Current);
+    }
 
-            Assert.AreEqual("Value", set.ElementTypeName);
-            IEnumerator enumerator = set.GetEnumerator();
-            enumerator.MoveNext();
-            Assert.AreEqual("Value", enumerator.Current);
-        }
+    [Test]
+    public void VisitManagedDictionary()
+    {
+        IObjectDefinition od = new RootObjectDefinition();
+        ManagedDictionary md = new ManagedDictionary();
+        md.KeyTypeName = "$Property";
+        md.ValueTypeName = "$Property";
+        md.Add("Key", "$Property");
+        od.PropertyValues.Add("PropertyName", md);
 
-        [Test]
-        public void VisitManagedDictionary()
-        {
-            IObjectDefinition od = new RootObjectDefinition();
-            ManagedDictionary md = new ManagedDictionary();
-            md.KeyTypeName = "$Property";
-            md.ValueTypeName = "$Property";
-            md.Add("Key", "$Property");
-            od.PropertyValues.Add("PropertyName", md);
+        ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
+        odv.VisitObjectDefinition(od);
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
-            odv.VisitObjectDefinition(od);
+        ManagedDictionary dictionary = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedDictionary;
 
-            ManagedDictionary dictionary = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedDictionary;
+        Assert.AreEqual("Value", dictionary.KeyTypeName);
+        Assert.AreEqual("Value", dictionary.ValueTypeName);
+        Assert.AreEqual("Value", dictionary["Key"]);
+    }
 
-            Assert.AreEqual("Value", dictionary.KeyTypeName);
-            Assert.AreEqual("Value", dictionary.ValueTypeName);
-            Assert.AreEqual("Value", dictionary["Key"]);
-        }
+    [Test]
+    public void VisitNameValueCollection()
+    {
+        IObjectDefinition od = new RootObjectDefinition();
+        NameValueCollection nvc = new NameValueCollection();
+        nvc["Key"] = "$Property";
+        od.PropertyValues.Add("PropertyName", nvc);
 
-        [Test]
-        public void VisitNameValueCollection()
-        {
-            IObjectDefinition od = new RootObjectDefinition();
-            NameValueCollection nvc = new NameValueCollection();
-            nvc["Key"] = "$Property";
-            od.PropertyValues.Add("PropertyName", nvc);
+        ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
+        odv.VisitObjectDefinition(od);
 
-            ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
-            odv.VisitObjectDefinition(od);
+        NameValueCollection visitedNvc =
+            od.PropertyValues.GetPropertyValue("PropertyName").Value as NameValueCollection;
 
-            NameValueCollection visitedNvc =
-                od.PropertyValues.GetPropertyValue("PropertyName").Value as NameValueCollection;
-
-            Assert.AreEqual("Value", visitedNvc["Key"]);
-        }
+        Assert.AreEqual("Value", visitedNvc["Key"]);
     }
 }

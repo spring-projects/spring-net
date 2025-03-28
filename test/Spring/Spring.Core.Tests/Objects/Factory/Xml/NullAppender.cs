@@ -20,23 +20,20 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// A log4Net appender that does nothing (by intention).
+/// </summary>
+/// <author>Rick Evans</author>
+public sealed class NullAppender //: AppenderSkeleton
 {
-	/// <summary>
-	/// A log4Net appender that does nothing (by intention).
-    /// </summary>
-    /// <author>Rick Evans</author>
-    public sealed class NullAppender //: AppenderSkeleton
+    /*
+    protected override void Append(log4net.Core.LoggingEvent loggingEvent)
     {
-	    /*
-        protected override void Append(log4net.Core.LoggingEvent loggingEvent)
-        {
-            // an explicit no-op
-        }
-         */
-	}
+        // an explicit no-op
+    }
+     */
 }

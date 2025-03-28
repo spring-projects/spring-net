@@ -18,49 +18,48 @@
 
 #endregion
 
-namespace Spring.Caching
+namespace Spring.Caching;
+
+/// <summary>
+/// This attribute should be used to mark methods whose result
+/// needs to be cached.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This attribute allows application developers to mark that a result
+/// of the method invocation should be cached, but it will not do any
+/// caching by itself.
+/// </p>
+/// <p>
+/// In order to actually cache the result, an application developer
+/// must apply a <c>Spring.Aspects.Cache.CacheResultAdvice</c> to
+/// all of the members that have this attribute defined.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+[Serializable]
+public sealed class CacheResultAttribute : BaseCacheAttribute
 {
     /// <summary>
-    /// This attribute should be used to mark methods whose result
-    /// needs to be cached.
+    /// Creates an attribute instance.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// This attribute allows application developers to mark that a result
-    /// of the method invocation should be cached, but it will not do any
-    /// caching by itself.
-    /// </p>
-    /// <p>
-    /// In order to actually cache the result, an application developer
-    /// must apply a <c>Spring.Aspects.Cache.CacheResultAdvice</c> to
-    /// all of the members that have this attribute defined.
-    /// </p>
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    [Serializable]
-    public sealed class CacheResultAttribute : BaseCacheAttribute
+    public CacheResultAttribute()
     {
-        /// <summary>
-        /// Creates an attribute instance.
-        /// </summary>
-        public CacheResultAttribute()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Creates an attribute instance.
-        /// </summary>
-        /// <param name="cacheName">
-        /// The name of the cache to use.
-        /// </param>
-        /// <param name="key">
-        /// An expression string that should be evaluated in order to determine
-        /// the cache key for the item.
-        /// </param>
-        public CacheResultAttribute(string cacheName, string key)
-            : base(cacheName, key)
-        {
-        }
+    /// <summary>
+    /// Creates an attribute instance.
+    /// </summary>
+    /// <param name="cacheName">
+    /// The name of the cache to use.
+    /// </param>
+    /// <param name="key">
+    /// An expression string that should be evaluated in order to determine
+    /// the cache key for the item.
+    /// </param>
+    public CacheResultAttribute(string cacheName, string key)
+        : base(cacheName, key)
+    {
     }
 }

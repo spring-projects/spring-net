@@ -20,50 +20,49 @@
 
 using AopAlliance.Intercept;
 
-namespace Spring.Aspects.Logging
+namespace Spring.Aspects.Logging;
+
+/// <summary>
+/// This is simple wrapper to expose the protected methood InvokeUnderLog in the class
+/// SimpleLoggingAdvice for testing purposes.
+/// </summary>
+/// <author>Mark Pollack</author>
+public class TestableSimpleLoggingAdvice : SimpleLoggingAdvice
 {
     /// <summary>
-    /// This is simple wrapper to expose the protected methood InvokeUnderLog in the class
-    /// SimpleLoggingAdvice for testing purposes.
+    /// Initializes a new instance of the <see cref="TestableSimpleLoggingAdvice"/> class.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public class TestableSimpleLoggingAdvice : SimpleLoggingAdvice
+    /// <param name="useDynamicLogger">if set to <c>true</c> [use dynamic logger].</param>
+    public TestableSimpleLoggingAdvice(bool useDynamicLogger) : base(useDynamicLogger)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestableSimpleLoggingAdvice"/> class.
-        /// </summary>
-        /// <param name="useDynamicLogger">if set to <c>true</c> [use dynamic logger].</param>
-        public TestableSimpleLoggingAdvice(bool useDynamicLogger) : base(useDynamicLogger)
-        {
-        }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestableSimpleLoggingAdvice"/> class.
-        /// </summary>
-        public TestableSimpleLoggingAdvice()
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TestableSimpleLoggingAdvice"/> class.
+    /// </summary>
+    public TestableSimpleLoggingAdvice()
+    {
+    }
 
-        /// <summary>
-        /// Calls the protected InvokeUnderLog method
-        /// </summary>
-        /// <param name="invocation">The invocation.</param>
-        /// <param name="log">The log.</param>
-        /// <returns>The result of the call to IMethodInvocation.Proceed()</returns>
-        public object CallInvokeUnderLog(IMethodInvocation invocation, ILog log)
-        {
-            return InvokeUnderLog(invocation, log);
-        }
+    /// <summary>
+    /// Calls the protected InvokeUnderLog method
+    /// </summary>
+    /// <param name="invocation">The invocation.</param>
+    /// <param name="log">The log.</param>
+    /// <returns>The result of the call to IMethodInvocation.Proceed()</returns>
+    public object CallInvokeUnderLog(IMethodInvocation invocation, ILog log)
+    {
+        return InvokeUnderLog(invocation, log);
+    }
 
-        /// <summary>
-        /// Calls the IsInterceptorEnabled method.
-        /// </summary>
-        /// <param name="invocation">The invocation.</param>
-        /// <param name="log">The log.</param>
-        /// <returns>The result of the protected method IsInterceptorEnabled</returns>
-        public bool CallIsInterceptorEnabled(IMethodInvocation invocation, ILog log)
-        {
-            return IsInterceptorEnabled(invocation, log);
-        }
+    /// <summary>
+    /// Calls the IsInterceptorEnabled method.
+    /// </summary>
+    /// <param name="invocation">The invocation.</param>
+    /// <param name="log">The log.</param>
+    /// <returns>The result of the protected method IsInterceptorEnabled</returns>
+    public bool CallIsInterceptorEnabled(IMethodInvocation invocation, ILog log)
+    {
+        return IsInterceptorEnabled(invocation, log);
     }
 }

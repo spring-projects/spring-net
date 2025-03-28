@@ -58,7 +58,7 @@ namespace Spring.Data.NHibernate.Bytecode
             return DeepCopy(value);
         }
 
-        public SqlType[] SqlTypes => new[] {new SqlType(DbType.String)};
+        public SqlType[] SqlTypes => new[] { new SqlType(DbType.String) };
 
         public System.Type ReturnedType => typeof(string);
 

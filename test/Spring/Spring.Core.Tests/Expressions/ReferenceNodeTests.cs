@@ -25,160 +25,159 @@ using Spring.Core.IO;
 using Spring.Objects.Factory.Xml;
 using System.Text;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class ReferenceNodeTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class ReferenceNodeTests
+    private class MyTestObject
     {
-        private class MyTestObject
-        {
-            public object MyField { get; set; }
-        }
+        public object MyField { get; set; }
+    }
 
-        [TearDown]
-        public void TearDown() => ContextRegistry.Clear();
+    [TearDown]
+    public void TearDown() => ContextRegistry.Clear();
 
-        [Test]
-        public void DoesNotCallContextRegistryForLocalObjectFactoryReferences()
-        {
-            var xml = $@"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void DoesNotCallContextRegistryForLocalObjectFactoryReferences()
+    {
+        var xml = $@"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
 	<object id='foo' type='{typeof(MyTestObject).AssemblyQualifiedName}'>
         <property name='MyField' expression='@(theObject)' />
     </object>
 </objects>";
 
-            var objectFactory = new XmlObjectFactory(new StringResource(xml, Encoding.UTF8));
-            var theObject = new object();
-            objectFactory.RegisterSingleton("theObject", theObject);
+        var objectFactory = new XmlObjectFactory(new StringResource(xml, Encoding.UTF8));
+        var theObject = new object();
+        objectFactory.RegisterSingleton("theObject", theObject);
 
-            var to = (MyTestObject) objectFactory.GetObject("foo");
-            Assert.That(theObject, Is.SameAs(to.MyField));
-        }
+        var to = (MyTestObject) objectFactory.GetObject("foo");
+        Assert.That(theObject, Is.SameAs(to.MyField));
+    }
 
-        [Test]
-        public void UseDefaultContextRegistryWhenNoContextProvided()
-        {
-            var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void UseDefaultContextRegistryWhenNoContextProvided()
+    {
+        var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
 	<object id='theObject' type='{typeof(MyTestObject).AssemblyQualifiedName}'/>
 </objects>";
 
-            var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
-            ContextRegistry.RegisterContext(defaultContext);
+        var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
+        ContextRegistry.RegisterContext(defaultContext);
 
-            var expectedObject = defaultContext.GetObject("theObject");
+        var expectedObject = defaultContext.GetObject("theObject");
 
-            var expression = Expression.Parse("@(theObject)");
-            var value = expression.GetValue(null, new Dictionary<string, object>());
+        var expression = Expression.Parse("@(theObject)");
+        var value = expression.GetValue(null, new Dictionary<string, object>());
 
-            Assert.That(value, Is.SameAs(expectedObject));
-        }
+        Assert.That(value, Is.SameAs(expectedObject));
+    }
 
-        [Test]
-        public void ThrowsApplicationContextException_WhenContextNotRegistered()
-        {
-            var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void ThrowsApplicationContextException_WhenContextNotRegistered()
+    {
+        var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
 	<object id='theObject' type='{typeof(MyTestObject).AssemblyQualifiedName}'/>
 </objects>";
 
-            var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
-            ContextRegistry.RegisterContext(defaultContext);
+        var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
+        ContextRegistry.RegisterContext(defaultContext);
 
-            var expression = Expression.Parse("@(anotherContext:theObject).Value");
-            void Get() => expression.GetValue(null, new Dictionary<string, object>());
+        var expression = Expression.Parse("@(anotherContext:theObject).Value");
+        void Get() => expression.GetValue(null, new Dictionary<string, object>());
 
-            Assert.That(Get, Throws.InstanceOf<ApplicationContextException>());
-        }
+        Assert.That(Get, Throws.InstanceOf<ApplicationContextException>());
+    }
 
-        [Test]
-        public void WhenContextNameSpecifiedInExpression_UseThatContext()
-        {
-            const string anotherContextName = "AnotherContext";
+    [Test]
+    public void WhenContextNameSpecifiedInExpression_UseThatContext()
+    {
+        const string anotherContextName = "AnotherContext";
 
-            var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
+        var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
 	<object id='theObject' type='{typeof(MyTestObject).AssemblyQualifiedName}'/>
 </objects>";
 
-            var anotherXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
+        var anotherXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
 	<object id='theObject' type='{typeof(MyTestObject).AssemblyQualifiedName}'/>
 </objects>";
 
-            var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
-            ContextRegistry.RegisterContext(defaultContext);
+        var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
+        ContextRegistry.RegisterContext(defaultContext);
 
-            var anotherContext = GetContextFromXmlString(anotherXml, anotherContextName);
-            ContextRegistry.RegisterContext(anotherContext);
+        var anotherContext = GetContextFromXmlString(anotherXml, anotherContextName);
+        ContextRegistry.RegisterContext(anotherContext);
 
-            var expectedObject = anotherContext.GetObject("theObject");
+        var expectedObject = anotherContext.GetObject("theObject");
 
-            var expression = Expression.Parse($"@({anotherContextName}:theObject)");
-            var resolvedObject = expression.GetValue(null, new Dictionary<string, object>());
+        var expression = Expression.Parse($"@({anotherContextName}:theObject)");
+        var resolvedObject = expression.GetValue(null, new Dictionary<string, object>());
 
-            Assert.That(resolvedObject, Is.SameAs(expectedObject));
-        }
+        Assert.That(resolvedObject, Is.SameAs(expectedObject));
+    }
 
-        [Test]
-        public void UseObjectFactoryFromVariables()
-        {
-            const string anotherContextName = "AnotherContext";
+    [Test]
+    public void UseObjectFactoryFromVariables()
+    {
+        const string anotherContextName = "AnotherContext";
 
-            var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
+        var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
 	<object id='theObject' type='{typeof(MyTestObject).AssemblyQualifiedName}'/>
 </objects>";
 
-            var anotherXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
+        var anotherXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
 	<object id='theObject' type='{typeof(MyTestObject).AssemblyQualifiedName}'/>
 </objects>";
 
-            var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
-            ContextRegistry.RegisterContext(defaultContext);
+        var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
+        ContextRegistry.RegisterContext(defaultContext);
 
-            var anotherContext = GetContextFromXmlString(anotherXml, anotherContextName);
-            var variables = new Dictionary<string, object> { [Expression.ReservedVariableNames.RESERVEDPREFIX + "CurrentObjectFactory"] = anotherContext.ObjectFactory };
-            var expectedObject = anotherContext.GetObject("theObject");
+        var anotherContext = GetContextFromXmlString(anotherXml, anotherContextName);
+        var variables = new Dictionary<string, object> { [Expression.ReservedVariableNames.RESERVEDPREFIX + "CurrentObjectFactory"] = anotherContext.ObjectFactory };
+        var expectedObject = anotherContext.GetObject("theObject");
 
-            var expression = Expression.Parse("@(theObject)");
-            var resolvedObject = expression.GetValue(null, variables);
+        var expression = Expression.Parse("@(theObject)");
+        var resolvedObject = expression.GetValue(null, variables);
 
-            Assert.That(resolvedObject, Is.SameAs(expectedObject));
-        }
+        Assert.That(resolvedObject, Is.SameAs(expectedObject));
+    }
 
-        [Test]
-        public void ShouldThrowException_WhenFactoryProvidedInVariables_IsNotOfTypeIObjectFactory()
-        {
-            var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void ShouldThrowException_WhenFactoryProvidedInVariables_IsNotOfTypeIObjectFactory()
+    {
+        var defaultXml = $@"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
 	<object id='theObject' type='{typeof(MyTestObject).AssemblyQualifiedName}'/>
 </objects>";
 
-            var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
-            ContextRegistry.RegisterContext(defaultContext);
+        var defaultContext = GetContextFromXmlString(defaultXml, AbstractApplicationContext.DefaultRootContextName);
+        ContextRegistry.RegisterContext(defaultContext);
 
-            var variables = new Dictionary<string, object> { [Expression.ReservedVariableNames.RESERVEDPREFIX + "CurrentObjectFactory"] = new object() };
+        var variables = new Dictionary<string, object> { [Expression.ReservedVariableNames.RESERVEDPREFIX + "CurrentObjectFactory"] = new object() };
 
-            var expression = Expression.Parse("@(theObject)");
+        var expression = Expression.Parse("@(theObject)");
 
-            void Get() => expression.GetValue(null, variables);
+        void Get() => expression.GetValue(null, variables);
 
-            Assert.That(Get, Throws.InstanceOf<InvalidCastException>());
-        }
+        Assert.That(Get, Throws.InstanceOf<InvalidCastException>());
+    }
 
-        private static GenericApplicationContext GetContextFromXmlString(string xmlString, string contextName)
-        {
-            var stringResource = new StringResource(xmlString, Encoding.UTF8);
-            var objectFactory = new XmlObjectFactory(stringResource);
+    private static GenericApplicationContext GetContextFromXmlString(string xmlString, string contextName)
+    {
+        var stringResource = new StringResource(xmlString, Encoding.UTF8);
+        var objectFactory = new XmlObjectFactory(stringResource);
 
-            return new GenericApplicationContext(objectFactory) { Name = contextName };
-        }
+        return new GenericApplicationContext(objectFactory) { Name = contextName };
     }
 }

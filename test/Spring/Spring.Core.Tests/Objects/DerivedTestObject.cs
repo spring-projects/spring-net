@@ -22,35 +22,34 @@
 
 #endregion
 
-namespace Spring.Objects
+namespace Spring.Objects;
+
+/// <summary>
+/// Adds some extra interfaces and properties to the base clas
+/// so that we can test extra odd corner cases and suchlike.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Rick Evans (.NET)</author>
+public class DerivedTestObject : TestObject, IDisposable
 {
-    /// <summary>
-    /// Adds some extra interfaces and properties to the base clas
-    /// so that we can test extra odd corner cases and suchlike.
-    /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Rick Evans (.NET)</author>
-    public class DerivedTestObject : TestObject, IDisposable
+    public const string NicknamePrefix = "#";
+
+    private bool destroyed;
+    private string nickers;
+
+    public virtual void Dispose()
     {
-        public const string NicknamePrefix = "#";
+        destroyed = true;
+    }
 
-        private bool destroyed;
-        private string nickers;
+    public virtual bool WasDestroyed()
+    {
+        return destroyed;
+    }
 
-        public virtual void Dispose()
-        {
-            destroyed = true;
-        }
-
-        public virtual bool WasDestroyed()
-        {
-            return destroyed;
-        }
-
-        public new string Nickname
-        {
-            get { return this.nickers; }
-            set { this.nickers = NicknamePrefix + value; }
-        }
+    public new string Nickname
+    {
+        get { return this.nickers; }
+        set { this.nickers = NicknamePrefix + value; }
     }
 }

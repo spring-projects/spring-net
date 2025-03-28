@@ -18,31 +18,30 @@
 
 #endregion
 
-namespace Spring.Transaction.Support
+namespace Spring.Transaction.Support;
+
+/// <summary>
+/// Interface to be implemented by transaction objects that are able to
+/// return an internal rollback-only marker, typically from a another
+/// transaction that has participated and marked it as rollback-only.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Autodetected by <see cref="Spring.Transaction.Support.DefaultTransactionStatus"/>,
+/// to always return a current rollbackOnly flag even if not resulting from the current
+/// <see cref="Spring.Transaction.ITransactionStatus"/>.
+/// </p>
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Griffin Caprio (.NET)</author>
+public interface ISmartTransactionObject
 {
-	/// <summary>
-	/// Interface to be implemented by transaction objects that are able to
-	/// return an internal rollback-only marker, typically from a another
-	/// transaction that has participated and marked it as rollback-only.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Autodetected by <see cref="Spring.Transaction.Support.DefaultTransactionStatus"/>,
-	/// to always return a current rollbackOnly flag even if not resulting from the current
-	/// <see cref="Spring.Transaction.ITransactionStatus"/>.
-	/// </p>
-	/// </remarks>
-	/// <author>Juergen Hoeller</author>
-    /// <author>Griffin Caprio (.NET)</author>
-	public interface ISmartTransactionObject
-	{
-	    /// <summary>
-	    /// Return whether the transaction is internally marked as rollback-only.
-	    /// </summary>
-	    /// <returns>True of the transaction is marked as rollback-only.</returns>
-        bool RollbackOnly
-        { 
-            get;
-        }
-	}
+    /// <summary>
+    /// Return whether the transaction is internally marked as rollback-only.
+    /// </summary>
+    /// <returns>True of the transaction is marked as rollback-only.</returns>
+    bool RollbackOnly
+    {
+        get;
+    }
 }

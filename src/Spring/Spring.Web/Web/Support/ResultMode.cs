@@ -22,51 +22,51 @@
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// The various result modes.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+/// <seealso cref="Spring.Web.Support.Result"/>
+[Serializable]
+public enum ResultMode
 {
     /// <summary>
-    /// The various result modes.
+    /// A server-side transfer.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    /// <seealso cref="Spring.Web.Support.Result"/>
-    [Serializable]
-    public enum ResultMode
-    {
-        /// <summary>
-        /// A server-side transfer.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Issues a server-side transfer using the
-        /// <see cref="System.Web.HttpServerUtility.Transfer(string)"/> method.
-        /// </p>
-        /// </remarks>
-        /// <seealso cref="System.Web.HttpServerUtility.Transfer(string)"/>
-        Transfer = 0,
+    /// <remarks>
+    /// <p>
+    /// Issues a server-side transfer using the
+    /// <see cref="System.Web.HttpServerUtility.Transfer(string)"/> method.
+    /// </p>
+    /// </remarks>
+    /// <seealso cref="System.Web.HttpServerUtility.Transfer(string)"/>
+    Transfer = 0,
 
-        /// <summary>
-        /// A redirect.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Issues a redirect (to the user-agent - typically a browser) using
-        /// the <see cref="System.Web.HttpResponse.Redirect(string)"/> method.
-        /// </p>
-        /// </remarks>
-        /// <seealso cref="System.Web.HttpResponse.Redirect(string)"/>
-        Redirect = 1,
+    /// <summary>
+    /// A redirect.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Issues a redirect (to the user-agent - typically a browser) using
+    /// the <see cref="System.Web.HttpResponse.Redirect(string)"/> method.
+    /// </p>
+    /// </remarks>
+    /// <seealso cref="System.Web.HttpResponse.Redirect(string)"/>
+    Redirect = 1,
 
-        /// <summary>
-        /// A server-side transfer.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Issues a server-side transfer using the
-        /// <see cref="System.Web.HttpServerUtility.Transfer(string,bool)"/> method with parameter 'preserveForm=false'.
-        /// </p>
-        /// </remarks>
-        /// <seealso cref="System.Web.HttpServerUtility.Transfer(string,bool)"/>
-        TransferNoPreserve = 2,
+    /// <summary>
+    /// A server-side transfer.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Issues a server-side transfer using the
+    /// <see cref="System.Web.HttpServerUtility.Transfer(string,bool)"/> method with parameter 'preserveForm=false'.
+    /// </p>
+    /// </remarks>
+    /// <seealso cref="System.Web.HttpServerUtility.Transfer(string,bool)"/>
+    TransferNoPreserve = 2,
 
     /// <summary>
     /// A redirect.
@@ -78,6 +78,5 @@ namespace Spring.Web.Support
     /// </p>
     /// </remarks>
     /// <seealso cref="System.Web.HttpResponse.Redirect(string, bool)"/>
-        RedirectNoAbort = 3
-    }
+    RedirectNoAbort = 3
 }

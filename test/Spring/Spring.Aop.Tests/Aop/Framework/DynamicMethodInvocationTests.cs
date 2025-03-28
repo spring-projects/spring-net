@@ -22,23 +22,21 @@
 
 using System.Reflection;
 using System.Collections;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+/// <summary>
+/// Unit tests for the DynamicMethodInvocation class.
+/// </summary>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public class DynamicMethodInvocationTests : AbstractMethodInvocationTests
 {
-	/// <summary>
-	/// Unit tests for the DynamicMethodInvocation class.
-	/// </summary>
-    /// <author>Bruno Baia</author>
-	[TestFixture]
-    public class DynamicMethodInvocationTests : AbstractMethodInvocationTests
-	{
-        protected override AbstractMethodInvocation CreateMethodInvocation(object proxy, object target, MethodInfo method, MethodInfo onProxyMethod, object[] arguments, Type targetType, IList interceptors)
-        {
-            return new DynamicMethodInvocation(proxy, target, method, onProxyMethod, arguments, targetType, interceptors);
-        }
-	}
+    protected override AbstractMethodInvocation CreateMethodInvocation(object proxy, object target, MethodInfo method, MethodInfo onProxyMethod, object[] arguments, Type targetType, IList interceptors)
+    {
+        return new DynamicMethodInvocation(proxy, target, method, onProxyMethod, arguments, targetType, interceptors);
+    }
 }

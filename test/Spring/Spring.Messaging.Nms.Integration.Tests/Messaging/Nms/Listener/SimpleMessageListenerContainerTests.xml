@@ -1,35 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <objects xmlns="http://www.springframework.net"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:nms="http://www.springframework.net/nms">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:nms="http://www.springframework.net/nms">
 
-  <!-- the default ConnectionFactory -->
-  <object id="nmsConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
-    <constructor-arg index="0" value="tcp://localhost:61616"/>
-  </object>
+    <!-- the default ConnectionFactory -->
+    <object id="nmsConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
+        <constructor-arg index="0" value="tcp://localhost:61616" />
+    </object>
 
 
-  <object id="connectionFactory" type="Spring.Messaging.Nms.Connections.CachingConnectionFactory, Spring.Messaging.Nms">
-    <property name="SessionCacheSize" value="10" />
-    <property name="TargetConnectionFactory">
-      <object type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
-        <constructor-arg index="0" value="tcp://localhost:61616"/>
-      </object>
-    </property>
-  </object>
+    <object id="connectionFactory"
+            type="Spring.Messaging.Nms.Connections.CachingConnectionFactory, Spring.Messaging.Nms">
+        <property name="SessionCacheSize" value="10" />
+        <property name="TargetConnectionFactory">
+            <object type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
+                <constructor-arg index="0" value="tcp://localhost:61616" />
+            </object>
+        </property>
+    </object>
 
-  <!-- Send messages -->
-  <object id="simpleGateway" type="Spring.Messaging.Nms.Core.SimpleGateway, Spring.Messaging.Nms.Integration.Tests">
-    <property name="ConnectionFactory" ref="connectionFactory" />
-  </object>
+    <!-- Send messages -->
+    <object id="simpleGateway" type="Spring.Messaging.Nms.Core.SimpleGateway, Spring.Messaging.Nms.Integration.Tests">
+        <property name="ConnectionFactory" ref="connectionFactory" />
+    </object>
 
-  <!-- Listener Infrastructure -->
-  <nms:listener-container connection-factory="connectionFactory" concurrency="10">
-    <nms:listener ref="simpleMessageListener" destination="APP.STOCK.MARKETDATA" />
-  </nms:listener-container>
+    <!-- Listener Infrastructure -->
+    <nms:listener-container connection-factory="connectionFactory" concurrency="10">
+        <nms:listener ref="simpleMessageListener" destination="APP.STOCK.MARKETDATA" />
+    </nms:listener-container>
 
-  <!-- POCO based message processing -->
-  <object name="simpleMessageListener"
-          type="Spring.Messaging.Nms.Core.SimpleMessageListener, Spring.Messaging.Nms.Integration.Tests"/>
+    <!-- POCO based message processing -->
+    <object name="simpleMessageListener"
+            type="Spring.Messaging.Nms.Core.SimpleMessageListener, Spring.Messaging.Nms.Integration.Tests" />
 
 </objects>

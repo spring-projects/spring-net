@@ -20,50 +20,49 @@
 
 using System.Transactions;
 
-namespace Spring.Data.Support
+namespace Spring.Data.Support;
+
+/// <summary>
+/// Provides the necessary transactional state and operations for TxScopeTransactionManager to
+/// work with TransactionScope and Transaction.Current.
+/// </summary>
+/// <remarks>Introduced for purposes of unit testing.</remarks>
+/// <author>Mark Pollack (.NET)</author>
+public interface ITransactionScopeAdapter
 {
     /// <summary>
-    /// Provides the necessary transactional state and operations for TxScopeTransactionManager to
-    /// work with TransactionScope and Transaction.Current.
+    /// Creates the transaction scope.
     /// </summary>
-    /// <remarks>Introduced for purposes of unit testing.</remarks>
-    /// <author>Mark Pollack (.NET)</author>
-    public interface ITransactionScopeAdapter
-    {
-        /// <summary>
-        /// Creates the transaction scope.
-        /// </summary>
-        /// <param name="txScopeOption">The tx scope option.</param>
-        /// <param name="txOptions">The tx options.</param>
-        /// <param name="asyncFlowOption">The async flow option.</param>
-        void CreateTransactionScope(
-            TransactionScopeOption txScopeOption,
-            TransactionOptions txOptions,
-            TransactionScopeAsyncFlowOption asyncFlowOption);
+    /// <param name="txScopeOption">The tx scope option.</param>
+    /// <param name="txOptions">The tx options.</param>
+    /// <param name="asyncFlowOption">The async flow option.</param>
+    void CreateTransactionScope(
+        TransactionScopeOption txScopeOption,
+        TransactionOptions txOptions,
+        TransactionScopeAsyncFlowOption asyncFlowOption);
 
-        /// <summary>
-        /// Call Complete() on the TransactionScope object created by this instance.
-        /// </summary>
-        void Complete();
+    /// <summary>
+    /// Call Complete() on the TransactionScope object created by this instance.
+    /// </summary>
+    void Complete();
 
-        /// <summary>
-        /// Call Dispose() on the TransactionScope object created by this instance.
-        /// </summary>
-        void Dispose();
+    /// <summary>
+    /// Call Dispose() on the TransactionScope object created by this instance.
+    /// </summary>
+    void Dispose();
 
-        /// <summary>
-        /// Gets a value indicating whether there is a new transaction or an existing transaction.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is existing transaction; otherwise, <c>false</c>.
-        /// </value>
-        bool IsExistingTransaction { get; }
+    /// <summary>
+    /// Gets a value indicating whether there is a new transaction or an existing transaction.
+    /// </summary>
+    /// <value>
+    /// 	<c>true</c> if this instance is existing transaction; otherwise, <c>false</c>.
+    /// </value>
+    bool IsExistingTransaction { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether rollback only has been called (i.e. Rollback() on the
-        /// Transaction object) and therefore voting that the transaction will be aborted.
-        /// </summary>
-        /// <value><c>true</c> if rollback only; otherwise, <c>false</c>.</value>
-        bool RollbackOnly { get; }
-    }
+    /// <summary>
+    /// Gets a value indicating whether rollback only has been called (i.e. Rollback() on the
+    /// Transaction object) and therefore voting that the transaction will be aborted.
+    /// </summary>
+    /// <value><c>true</c> if rollback only; otherwise, <c>false</c>.</value>
+    bool RollbackOnly { get; }
 }

@@ -24,53 +24,52 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// This class contains tests for TypeConversionUtils
+/// </summary>
+/// <author>Mark Pollack</author>
+/// <author>Andreas Kluth</author>
+[TestFixture]
+public class TypeConversionUtilsTests
 {
-    /// <summary>
-    /// This class contains tests for TypeConversionUtils
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    /// <author>Andreas Kluth</author>
-    [TestFixture]
-    public class TypeConversionUtilsTests
+    [Test]
+    public void NullAbleTest()
     {
-        [Test]
-        public void NullAbleTest()
-        {
-            object o = TypeConversionUtils.ConvertValueIfNecessary(typeof(DateTime?), "", "bla");
-            Assert.IsNull(o);
-        }
+        object o = TypeConversionUtils.ConvertValueIfNecessary(typeof(DateTime?), "", "bla");
+        Assert.IsNull(o);
+    }
 
-        [Test]
-        [SetCulture( "en-US" )]
-        public void ConvertValueForDecimalMarkWithPointReturnsValue()
-        {
-          object o = TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1.2", "foo" );
-          Assert.That( o, Is.EqualTo( 1.2 ) );
-        }
+    [Test]
+    [SetCulture("en-US")]
+    public void ConvertValueForDecimalMarkWithPointReturnsValue()
+    {
+        object o = TypeConversionUtils.ConvertValueIfNecessary(typeof(Double), "1.2", "foo");
+        Assert.That(o, Is.EqualTo(1.2));
+    }
 
-        [Test]
-        [SetCulture( "en-US" )]
-        public void ConvertValueForDecimalMarkWithCommaFails()
-        {
-          TestDelegate testDelegate = () => TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1,2", "foo" );
-          Assert.Throws<TypeMismatchException>( testDelegate );
-        }
+    [Test]
+    [SetCulture("en-US")]
+    public void ConvertValueForDecimalMarkWithCommaFails()
+    {
+        TestDelegate testDelegate = () => TypeConversionUtils.ConvertValueIfNecessary(typeof(Double), "1,2", "foo");
+        Assert.Throws<TypeMismatchException>(testDelegate);
+    }
 
-        [Test]
-        [SetCulture( "nl-NL" )]
-        public void ConvertValueWithDutchCultureForDecimalMarkWithPointReturnsValue()
-        {
-          object o = TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1.2", "foo" );
-          Assert.That( o, Is.EqualTo( 1.2 ) );
-        }
+    [Test]
+    [SetCulture("nl-NL")]
+    public void ConvertValueWithDutchCultureForDecimalMarkWithPointReturnsValue()
+    {
+        object o = TypeConversionUtils.ConvertValueIfNecessary(typeof(Double), "1.2", "foo");
+        Assert.That(o, Is.EqualTo(1.2));
+    }
 
-        [Test]
-        [SetCulture( "nl-NL" )]
-        public void ConvertValueWithDutchCultureForDecimalMarkWithCommaReturnsValue()
-        {
-          object o = TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1,2", "foo" );
-          Assert.That( o, Is.EqualTo( 1.2 ) );
-        }
+    [Test]
+    [SetCulture("nl-NL")]
+    public void ConvertValueWithDutchCultureForDecimalMarkWithCommaReturnsValue()
+    {
+        object o = TypeConversionUtils.ConvertValueIfNecessary(typeof(Double), "1,2", "foo");
+        Assert.That(o, Is.EqualTo(1.2));
     }
 }

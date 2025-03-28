@@ -22,44 +22,40 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Central interface for factories that can create
+/// <see cref="IConfigurableObjectDefinition"/>
+/// instances.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Allows for replaceable object definition factories using the Strategy
+/// pattern.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public interface IObjectDefinitionFactory
 {
     /// <summary>
-    /// Central interface for factories that can create
+    /// Factory style method for getting concrete
     /// <see cref="IConfigurableObjectDefinition"/>
     /// instances.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// Allows for replaceable object definition factories using the Strategy
-    /// pattern.
-    /// </p>
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    public interface IObjectDefinitionFactory
-    {
-
-        /// <summary>
-        /// Factory style method for getting concrete
-        /// <see cref="IConfigurableObjectDefinition"/>
-        /// instances.
-        /// </summary>
-        /// <param name="typeName">
-        /// The FullName of the <see cref="System.Type"/> of the defined object.
-        /// </param>
-        /// <param name="parent">The name of the parent object definition (if any).</param>
-        /// <param name="domain">
-        /// The <see cref="System.AppDomain"/> against which any class names
-        /// will be resolved into <see cref="System.Type"/> instances.  It can be null to register the
-        /// object class just by name.
-        /// </param>
-        /// <returns>
-        /// An
-        /// <see cref="Spring.Objects.Factory.Support.AbstractObjectDefinition"/>
-        /// instance.
-        /// </returns>
-        AbstractObjectDefinition CreateObjectDefinition(string typeName, string parent, AppDomain domain);
-
-
-    }
+    /// <param name="typeName">
+    /// The FullName of the <see cref="System.Type"/> of the defined object.
+    /// </param>
+    /// <param name="parent">The name of the parent object definition (if any).</param>
+    /// <param name="domain">
+    /// The <see cref="System.AppDomain"/> against which any class names
+    /// will be resolved into <see cref="System.Type"/> instances.  It can be null to register the
+    /// object class just by name.
+    /// </param>
+    /// <returns>
+    /// An
+    /// <see cref="Spring.Objects.Factory.Support.AbstractObjectDefinition"/>
+    /// instance.
+    /// </returns>
+    AbstractObjectDefinition CreateObjectDefinition(string typeName, string parent, AppDomain domain);
 }

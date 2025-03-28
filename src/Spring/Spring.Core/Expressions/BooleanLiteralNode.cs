@@ -20,61 +20,60 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed boolean literal node.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class BooleanLiteralNode : BaseNode
 {
+    private object nodeValue;
+
     /// <summary>
-    /// Represents parsed boolean literal node.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class BooleanLiteralNode : BaseNode
+    public BooleanLiteralNode()
     {
-        private object nodeValue;
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public BooleanLiteralNode()
-        {
-        }
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    public BooleanLiteralNode(string text)
+    {
+        this.Text = text;
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public BooleanLiteralNode(string text)
-        {
-            this.Text = text;
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected BooleanLiteralNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected BooleanLiteralNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+    /// <summary>
+    /// Returns a value for the boolean literal node.
+    /// </summary>
+    /// <summary>
+    /// This is the entrypoint into evaluating this expression.
+    /// </summary>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        if (nodeValue == null)
         {
-        }
-
-        /// <summary>
-        /// Returns a value for the boolean literal node.
-        /// </summary>
-        /// <summary>
-        /// This is the entrypoint into evaluating this expression.
-        /// </summary>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            if (nodeValue == null)
+            lock (this)
             {
-                lock(this)
+                if (nodeValue == null)
                 {
-                    if (nodeValue == null)
-                    {
-                        nodeValue = Boolean.Parse(this.getText());
-                    }
+                    nodeValue = Boolean.Parse(this.getText());
                 }
             }
-
-            return nodeValue;
         }
+
+        return nodeValue;
     }
 }

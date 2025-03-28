@@ -20,42 +20,40 @@
 
 using System.Security.Cryptography.X509Certificates;
 
-namespace Spring.Messaging.Ems.Common
+namespace Spring.Messaging.Ems.Common;
+
+public class EmsSSLFileStoreInfo : IEmsSSLStoreType
 {
-    public class EmsSSLFileStoreInfo : IEmsSSLStoreType
+    private EMSSSLFileStoreInfo nativeEmsSSLFileStoreInfo;
+
+    public virtual EMSSSLFileStoreInfo NativeEmsSslFileStoreInfo
     {
-        private EMSSSLFileStoreInfo nativeEmsSSLFileStoreInfo;
+        get { return nativeEmsSSLFileStoreInfo; }
+        set { nativeEmsSSLFileStoreInfo = value; }
+    }
 
-        public virtual EMSSSLFileStoreInfo NativeEmsSslFileStoreInfo
-        {
-            get { return nativeEmsSSLFileStoreInfo; }
-            set { nativeEmsSSLFileStoreInfo = value; }
-        }
+    public X509Certificate SslClientIdentity
+    {
+        set { NativeEmsSslFileStoreInfo.SetSSLClientIdentity(value); }
+    }
 
-        public X509Certificate SslClientIdentity
-        {
-            set { NativeEmsSslFileStoreInfo.SetSSLClientIdentity(value); }
-        }
+    public string SslClientIdentityAsString
+    {
+        set { NativeEmsSslFileStoreInfo.SetSSLClientIdentity(value); }
+    }
 
-        public string SslClientIdentityAsString
-        {
-            set { NativeEmsSslFileStoreInfo.SetSSLClientIdentity(value); }
-        }
+    public string SslPassword
+    {
+        set { NativeEmsSslFileStoreInfo.SetSSLPassword(value.ToCharArray()); }
+    }
 
-        public string SslPassword
-        {
-            set { NativeEmsSslFileStoreInfo.SetSSLPassword(value.ToCharArray()); }
-        }
+    public X509Certificate SslTrustedCertificate
+    {
+        set { NativeEmsSslFileStoreInfo.SetSSLTrustedCertificate(value); }
+    }
 
-        public X509Certificate SslTrustedCertificate
-        {
-            set { NativeEmsSslFileStoreInfo.SetSSLTrustedCertificate(value); }
-        }
-
-        public string SslTrustedCertificateAsString
-        {
-            set { NativeEmsSslFileStoreInfo.SetSSLTrustedCertificate(value); }
-        }
-
+    public string SslTrustedCertificateAsString
+    {
+        set { NativeEmsSslFileStoreInfo.SetSSLTrustedCertificate(value); }
     }
 }

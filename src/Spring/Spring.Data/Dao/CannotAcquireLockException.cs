@@ -20,53 +20,56 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Exception thrown on failure to aquire a lock during an update i.e a select for
+/// update statement.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This exception will be thrown either by O/R mapping tools or by custom DAO
+/// implementations.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class CannotAcquireLockException : PessimisticLockingFailureException
 {
-	/// <summary>
-	/// Exception thrown on failure to aquire a lock during an update i.e a select for
-	/// update statement.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This exception will be thrown either by O/R mapping tools or by custom DAO
-	/// implementations.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class CannotAcquireLockException : PessimisticLockingFailureException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CannotAcquireLockException"/> class.
-		/// </summary>
-		public CannotAcquireLockException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.CannotAcquireLockException"/> class.
+    /// </summary>
+    public CannotAcquireLockException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CannotAcquireLockException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public CannotAcquireLockException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.CannotAcquireLockException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public CannotAcquireLockException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CannotAcquireLockException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public CannotAcquireLockException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.CannotAcquireLockException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public CannotAcquireLockException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected CannotAcquireLockException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected CannotAcquireLockException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

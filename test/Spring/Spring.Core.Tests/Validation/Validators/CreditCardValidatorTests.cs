@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,25 +24,24 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Validation.Validators
+namespace Spring.Validation.Validators;
+
+/// <summary>
+/// Unit tests for the UrlValidator class.
+/// </summary>
+/// <author>Goran Milosavljevic</author>
+[TestFixture]
+public sealed class CreditCardValidatorTests
 {
-    /// <summary>
-    /// Unit tests for the UrlValidator class.
-    /// </summary>
-    /// <author>Goran Milosavljevic</author>
-    [TestFixture]
-    public sealed class CreditCardValidatorTests
-    {              
-        [Test]
-        public void Validate()
-        {
-            CreditCardValidator validator = new CreditCardValidator();
-            validator.CardType = new Amex();
-            Assert.IsTrue(validator.Validate("378282246310005", new ValidationErrors()));
-            Assert.IsFalse(validator.Validate("444444444", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate(" ", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
-        }
+    [Test]
+    public void Validate()
+    {
+        CreditCardValidator validator = new CreditCardValidator();
+        validator.CardType = new Amex();
+        Assert.IsTrue(validator.Validate("378282246310005", new ValidationErrors()));
+        Assert.IsFalse(validator.Validate("444444444", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate(" ", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
     }
 }

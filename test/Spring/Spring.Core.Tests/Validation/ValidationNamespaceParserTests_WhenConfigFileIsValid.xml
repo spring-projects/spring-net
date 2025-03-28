@@ -2,68 +2,69 @@
 <objects xmlns='http://www.springframework.net' xmlns:v='http://www.springframework.net/validation'>
 
     <v:group id='destinationAirportValidator' fast-validate='true'>
-        <v:ref name='airportCodeValidator' context='ReturningFrom.AirportCode'/>
-        <v:ref name='airportCodeValidator'/>
+        <v:ref name='airportCodeValidator' context='ReturningFrom.AirportCode' />
+        <v:ref name='airportCodeValidator' />
         <v:condition test='ReturningFrom.AirportCode != StartingFrom.AirportCode'>
             <v:message id='error.destinationAirport.sameAsDeparture' providers='summary' />
         </v:condition>
-        <v:validator type='Spring.Validation.RegularExpressionValidator, Spring.Core' test='ReturningFrom.AirportCode' when='true'>
-            <v:property name='Expression' value='[A-Z]*'/>
-            <v:message id='error.destinationAirport.invalidFormat' providers='summary'/>
+        <v:validator type='Spring.Validation.RegularExpressionValidator, Spring.Core' test='ReturningFrom.AirportCode'
+                     when='true'>
+            <v:property name='Expression' value='[A-Z]*' />
+            <v:message id='error.destinationAirport.invalidFormat' providers='summary' />
         </v:validator>
     </v:group>
 
     <v:required id='airportCodeValidator' test='#this'>
-        <v:message id='error.airportCode.dummy' providers='summary' when='false'/>
+        <v:message id='error.airportCode.dummy' providers='summary' when='false' />
         <v:message id='error.airportCode.required' providers='summary'>
-            <v:param value='#this.Abc'/>
-            <v:param value='#this.Xyz'/>
-        </v:message>      
+            <v:param value='#this.Abc' />
+            <v:param value='#this.Xyz' />
+        </v:message>
         <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' when='true'>
-            <v:property name='Valid' value='#now = DateTime.Now'/>
+            <v:property name='Valid' value='#now = DateTime.Now' />
         </v:action>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core'/>
+        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' />
     </v:required>
 
     <v:required id='simpleAirportValidator' test='false'>
-      <v:exception throw='new System.InvalidOperationException("invalid")'/>
+        <v:exception throw='new System.InvalidOperationException("invalid")' />
     </v:required>
-                
+
 
     <object id='myObject' type='DateTime'>
         <property name='' value='' />
     </object>
 
     <v:any id='any' fast-validate='true'>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core'/>
-        <v:message id='myMessage' providers=''/>
+        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' />
+        <v:message id='myMessage' providers='' />
         <v:property name='When' value='' />
-        <v:ref  name='' />
+        <v:ref name='' />
     </v:any>
     <v:collection id='collection' fast-validate='true'>
         <v:property name='When' value='' />
-        <v:message id='myMessage' providers=''/>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core'/>
-        <v:ref  name='' />
+        <v:message id='myMessage' providers='' />
+        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' />
+        <v:ref name='' />
     </v:collection>
     <v:exclusive id='exclusive' fast-validate='true'>
         <v:property name='When' value='' />
-        <v:message id='myMessage' providers=''/>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core'/>
-        <v:ref  name='' />
+        <v:message id='myMessage' providers='' />
+        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' />
+        <v:ref name='' />
     </v:exclusive>
     <v:group id='group' fast-validate='true'>
         <v:property name='When' value='' />
-        <v:message id='myMessage' providers=''/>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core'/>
-        <v:ref  name='' />
+        <v:message id='myMessage' providers='' />
+        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' />
+        <v:ref name='' />
     </v:group>
     <v:regex id='regex' test='TestExpression' expression='RegExp'>
         <v:property name='When' value='' />
-        <v:message id='myMessage' providers=''/>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core'/>
+        <v:message id='myMessage' providers='' />
+        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' />
     </v:regex>
     <v:condition id='condition' test='TestExpression'>
-        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core'/>
+        <v:action type='Spring.Validation.Actions.ExpressionAction, Spring.Core' />
     </v:condition>
 </objects>

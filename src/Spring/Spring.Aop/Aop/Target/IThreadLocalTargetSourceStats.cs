@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,39 +24,38 @@ using AopAlliance.Intercept;
 
 #endregion
 
-namespace Spring.Aop.Target
+namespace Spring.Aop.Target;
+
+/// <summary>
+/// Statistics for a thread local <see cref="Spring.Aop.ITargetSource"/>.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Federico Spinazzi (.NET)</author>
+public interface IThreadLocalTargetSourceStats
 {
-	/// <summary>
-	/// Statistics for a thread local <see cref="Spring.Aop.ITargetSource"/>.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Federico Spinazzi (.NET)</author>
-	public interface IThreadLocalTargetSourceStats
-	{
-		/// <summary>
-		/// Gets the number of invocations of the
-		/// <see cref="ThreadLocalTargetSource.GetTarget()"/> and
-		/// <see cref="ThreadLocalTargetSource.Invoke(IMethodInvocation)"/> methods.
-		/// </summary>
-		/// <value>
-		/// The number of invocations of the
-		/// <see cref="ThreadLocalTargetSource.GetTarget()"/> and
-		/// <see cref="ThreadLocalTargetSource.Invoke(IMethodInvocation)"/> methods.
-		/// </value>
-		int Invocations { get; }
+    /// <summary>
+    /// Gets the number of invocations of the
+    /// <see cref="ThreadLocalTargetSource.GetTarget()"/> and
+    /// <see cref="ThreadLocalTargetSource.Invoke(IMethodInvocation)"/> methods.
+    /// </summary>
+    /// <value>
+    /// The number of invocations of the
+    /// <see cref="ThreadLocalTargetSource.GetTarget()"/> and
+    /// <see cref="ThreadLocalTargetSource.Invoke(IMethodInvocation)"/> methods.
+    /// </value>
+    int Invocations { get; }
 
-		/// <summary>
-		/// Gets the number of hits that were satisfied by a thread bound object.
-		/// </summary>
-		/// <value>
-		/// The number of hits that were satisfied by a thread bound object.
-		/// </value>
-		int Hits { get; }
+    /// <summary>
+    /// Gets the number of hits that were satisfied by a thread bound object.
+    /// </summary>
+    /// <value>
+    /// The number of hits that were satisfied by a thread bound object.
+    /// </value>
+    int Hits { get; }
 
-		/// <summary>
-		/// Gets the number of thread bound objects created.
-		/// </summary>
-		/// <value>The number of thread bound objects created.</value>
-		int Objects { get; }
-	}
+    /// <summary>
+    /// Gets the number of thread bound objects created.
+    /// </summary>
+    /// <value>The number of thread bound objects created.</value>
+    int Objects { get; }
 }

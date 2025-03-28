@@ -20,123 +20,124 @@
 
 using Spring.Util;
 
-namespace Spring.Globalization.Formatters
+namespace Spring.Globalization.Formatters;
+
+/// <summary>
+/// Implementation of <see cref="IFormatter"/> that can be used to
+/// format and parse boolean values.
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class BooleanFormatter : IFormatter
 {
+    private string trueString;
+    private string falseString;
+    private bool ignoreCase;
+
+    #region Constructors
+
     /// <summary>
-    /// Implementation of <see cref="IFormatter"/> that can be used to
-    /// format and parse boolean values.
+    /// Initializes a new instance of the <see cref="BooleanFormatter"/> class
+    /// using default values
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class BooleanFormatter:IFormatter
+    public BooleanFormatter()
+        : this(true, bool.TrueString, bool.FalseString)
     {
-        private string trueString;
-        private string falseString;
-        private bool ignoreCase;
+    }
 
-        #region Constructors
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BooleanFormatter"/> class
+    /// </summary>
+    public BooleanFormatter(bool ignoreCase, string trueString, string falseString)
+    {
+        this.trueString = trueString;
+        this.falseString = falseString;
+        this.ignoreCase = ignoreCase;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BooleanFormatter"/> class
-        /// using default values
-        /// </summary>
-        public BooleanFormatter()
-            : this(true,bool.TrueString,bool.FalseString)
-        { }
+    #endregion
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BooleanFormatter"/> class
-        /// </summary>
-        public BooleanFormatter(bool ignoreCase,string trueString,string falseString)
+    #region Properties
+
+    /// <summary>
+    /// Set/Get value to control casesensitivity of <see cref="Parse"/>
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <value>true</value>
+    /// </remarks>
+    public bool IgnoreCase
+    {
+        get { return this.ignoreCase; }
+        set { this.ignoreCase = value; }
+    }
+
+    /// <summary>
+    /// Set/Get value to recognize as boolean "true" value
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <see cref="bool.TrueString" />
+    /// </remarks>
+    public string TrueString
+    {
+        get { return this.trueString; }
+        set { this.trueString = value; }
+    }
+
+    /// <summary>
+    /// Set/Get value to recognize as boolean "false" value
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <see cref="bool.FalseString" />
+    /// </remarks>
+    public string FalseString
+    {
+        get { return this.falseString; }
+        set { this.falseString = value; }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Formats the specified boolean value.
+    /// </summary>
+    /// <param name="value">The value to format.</param>
+    /// <returns>Formatted boolean value.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="value"/> is not of type <see cref="System.Boolean"/>.</exception>
+    public string Format(object value)
+    {
+        AssertUtils.ArgumentNotNull(value, "value");
+        if (!(value is bool))
         {
-            this.trueString = trueString;
-            this.falseString = falseString;
-            this.ignoreCase = ignoreCase;
+            throw new ArgumentException("BooleanFormatter can only be used to format instances of [System.Boolean]");
         }
 
-        #endregion
+        return ((bool) value) ? this.trueString : this.falseString;
+    }
 
-        #region Properties
-
-        /// <summary>
-        /// Set/Get value to control casesensitivity of <see cref="Parse"/>
-        /// </summary>
-        /// <remarks>
-        /// Defaults to <value>true</value>
-        /// </remarks>
-        public bool IgnoreCase
+    /// <summary>
+    /// Parses the specified boolean value according to settings of <see cref="TrueString"/> and <see cref="FalseString"/>
+    /// </summary>
+    /// <param name="value">The boolean value to parse.</param>
+    /// <returns>Parsed boolean value as a <see cref="System.Boolean"/>.</returns>
+    /// <exception cref="ArgumentException">If <paramref name="value"/> does not match <see cref="TrueString"/> or <see cref="FalseString"/>.</exception>
+    public object Parse(string value)
+    {
+        if (!StringUtils.HasText(value))
         {
-            get { return this.ignoreCase; }
-            set { this.ignoreCase = value; }
+            return false;
         }
 
-        /// <summary>
-        /// Set/Get value to recognize as boolean "true" value
-        /// </summary>
-        /// <remarks>
-        /// Defaults to <see cref="bool.TrueString" />
-        /// </remarks>
-        public string TrueString
+        if (0 == string.Compare(value, this.trueString, this.ignoreCase))
         {
-            get { return this.trueString; }
-            set { this.trueString = value; }
+            return true;
         }
-
-        /// <summary>
-        /// Set/Get value to recognize as boolean "false" value
-        /// </summary>
-        /// <remarks>
-        /// Defaults to <see cref="bool.FalseString" />
-        /// </remarks>
-        public string FalseString
+        else if (0 == string.Compare(value, this.falseString, this.ignoreCase))
         {
-            get { return this.falseString; }
-            set { this.falseString = value; }
+            return false;
         }
-
-        #endregion
-
-        /// <summary>
-        /// Formats the specified boolean value.
-        /// </summary>
-        /// <param name="value">The value to format.</param>
-        /// <returns>Formatted boolean value.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="value"/> is not of type <see cref="System.Boolean"/>.</exception>
-        public string Format(object value)
+        else
         {
-            AssertUtils.ArgumentNotNull( value,"value" );
-            if(!(value is bool))
-            {
-                throw new ArgumentException( "BooleanFormatter can only be used to format instances of [System.Boolean]" );
-            }
-            return ((bool) value) ? this.trueString : this.falseString;
-        }
-
-        /// <summary>
-        /// Parses the specified boolean value according to settings of <see cref="TrueString"/> and <see cref="FalseString"/>
-        /// </summary>
-        /// <param name="value">The boolean value to parse.</param>
-        /// <returns>Parsed boolean value as a <see cref="System.Boolean"/>.</returns>
-        /// <exception cref="ArgumentException">If <paramref name="value"/> does not match <see cref="TrueString"/> or <see cref="FalseString"/>.</exception>
-        public object Parse(string value)
-        {
-            if(!StringUtils.HasText( value ))
-            {
-                return false;
-            }
-
-            if ( 0 == string.Compare( value, this.trueString, this.ignoreCase ))
-            {
-                return true;
-            }
-            else if(0 == string.Compare( value,this.falseString,this.ignoreCase ))
-            {
-                return false;
-            }
-            else
-            {
-                throw new ArgumentException( string.Format("input value '{0}' is not recognized as a boolean", value) );
-            }
+            throw new ArgumentException(string.Format("input value '{0}' is not recognized as a boolean", value));
         }
     }
 }

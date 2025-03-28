@@ -24,74 +24,73 @@ using NUnit.Framework;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Aop.Framework.AutoProxy
+namespace Spring.Aop.Framework.AutoProxy;
+
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class AbstractAdvisorAutoProxyCreatorTests
 {
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class AbstractAdvisorAutoProxyCreatorTests
+    public class TestAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator
     {
-        public class TestAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator
+        public ArrayList CheckedAdvisors = new ArrayList();
+
+        public IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName)
         {
-            public ArrayList CheckedAdvisors = new ArrayList();
-
-            public IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName)
-            {
-                return base.GetAdvicesAndAdvisorsForObject(targetType, targetName, null);
-            }
-
-            protected override bool IsEligibleAdvisorObject(string advisorName, Type targetType, string targetName)
-            {
-                CheckedAdvisors.Add(advisorName);
-                return base.IsEligibleAdvisorObject(advisorName, targetType, targetName);
-            }
+            return base.GetAdvicesAndAdvisorsForObject(targetType, targetName, null);
         }
 
-        public class TestAdvisor : IAdvisor
+        protected override bool IsEligibleAdvisorObject(string advisorName, Type targetType, string targetName)
         {
-            public string Name;
+            CheckedAdvisors.Add(advisorName);
+            return base.IsEligibleAdvisorObject(advisorName, targetType, targetName);
+        }
+    }
 
-            #region Implementation of IAdvisor
+    public class TestAdvisor : IAdvisor
+    {
+        public string Name;
 
-            public bool IsPerInstance
-            {
-                get { throw new NotImplementedException(); }
-            }
+        #region Implementation of IAdvisor
 
-            public IAdvice Advice
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            #endregion
+        public bool IsPerInstance
+        {
+            get { throw new NotImplementedException(); }
         }
 
-        [Test]
-        public void DoesNotAcceptInfrastructureAdvisorsDuringScanning()
+        public IAdvice Advice
         {
-            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
-            
-            GenericObjectDefinition infrastructureAdvisorDefinition = new GenericObjectDefinition();
-            infrastructureAdvisorDefinition.ObjectType = typeof (TestAdvisor);
-            infrastructureAdvisorDefinition.PropertyValues.Add("Name", "InfrastructureAdvisor");
-            infrastructureAdvisorDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
-            of.RegisterObjectDefinition("infrastructure", infrastructureAdvisorDefinition);
+            get { throw new NotImplementedException(); }
+        }
 
-            GenericObjectDefinition regularAdvisorDefinition = new GenericObjectDefinition();
-            regularAdvisorDefinition.ObjectType = typeof (TestAdvisor);
-            regularAdvisorDefinition.PropertyValues.Add("Name", "RegularAdvisor");
+        #endregion
+    }
+
+    [Test]
+    public void DoesNotAcceptInfrastructureAdvisorsDuringScanning()
+    {
+        DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+
+        GenericObjectDefinition infrastructureAdvisorDefinition = new GenericObjectDefinition();
+        infrastructureAdvisorDefinition.ObjectType = typeof(TestAdvisor);
+        infrastructureAdvisorDefinition.PropertyValues.Add("Name", "InfrastructureAdvisor");
+        infrastructureAdvisorDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
+        of.RegisterObjectDefinition("infrastructure", infrastructureAdvisorDefinition);
+
+        GenericObjectDefinition regularAdvisorDefinition = new GenericObjectDefinition();
+        regularAdvisorDefinition.ObjectType = typeof(TestAdvisor);
+        regularAdvisorDefinition.PropertyValues.Add("Name", "RegularAdvisor");
 //            regularAdvisorDefinition.Role = ObjectRole.ROLE_APPLICATION;
-            of.RegisterObjectDefinition("regular", regularAdvisorDefinition);
+        of.RegisterObjectDefinition("regular", regularAdvisorDefinition);
 
-            TestAdvisorAutoProxyCreator apc = new TestAdvisorAutoProxyCreator();
-            apc.ObjectFactory = of;
-            IList<object> advisors = apc.GetAdvicesAndAdvisorsForObject(typeof (object), "dummyTarget");
-            Assert.AreEqual(1, advisors.Count);
-            Assert.AreEqual( "RegularAdvisor", ((TestAdvisor)advisors[0]).Name );
+        TestAdvisorAutoProxyCreator apc = new TestAdvisorAutoProxyCreator();
+        apc.ObjectFactory = of;
+        IList<object> advisors = apc.GetAdvicesAndAdvisorsForObject(typeof(object), "dummyTarget");
+        Assert.AreEqual(1, advisors.Count);
+        Assert.AreEqual("RegularAdvisor", ((TestAdvisor) advisors[0]).Name);
 
-            Assert.AreEqual(1, apc.CheckedAdvisors.Count);
-            Assert.AreEqual("regular", apc.CheckedAdvisors[0]);
-        }
+        Assert.AreEqual(1, apc.CheckedAdvisors.Count);
+        Assert.AreEqual("regular", apc.CheckedAdvisors[0]);
     }
 }

@@ -21,42 +21,41 @@
 using System.Runtime.Serialization;
 using Spring.Util;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents logical "greater than or equal" operator.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class OpGreaterOrEqual : BinaryOperator
 {
     /// <summary>
-    /// Represents logical "greater than or equal" operator.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class OpGreaterOrEqual : BinaryOperator
+    public OpGreaterOrEqual() : base()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpGreaterOrEqual():base()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpGreaterOrEqual(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpGreaterOrEqual(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Returns a value for the logical "greater than or equal" operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            object left = GetLeftValue( context, evalContext );
-            object right = GetRightValue( context, evalContext );
+    /// <summary>
+    /// Returns a value for the logical "greater than or equal" operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object left = GetLeftValue(context, evalContext);
+        object right = GetRightValue(context, evalContext);
 
-            return CompareUtils.Compare(left, right) >= 0;
-        }
+        return CompareUtils.Compare(left, right) >= 0;
     }
 }

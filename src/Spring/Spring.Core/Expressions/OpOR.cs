@@ -21,72 +21,71 @@
 using System.Runtime.Serialization;
 using Spring.Util;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents OR operator (both, bitwise and logical).
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class OpOR : BinaryOperator
 {
     /// <summary>
-    /// Represents OR operator (both, bitwise and logical).
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class OpOR : BinaryOperator
+    public OpOR() : base()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpOR():base()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpOR(BaseNode left, BaseNode right)
-            :base(left, right)
-        {
-        }
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    public OpOR(BaseNode left, BaseNode right)
+        : base(left, right)
+    {
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpOR(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpOR(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Returns a value for the logical OR operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            object l = GetLeftValue(context, evalContext);
+    /// <summary>
+    /// Returns a value for the logical OR operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object l = GetLeftValue(context, evalContext);
 
-            if (NumberUtils.IsInteger(l))
+        if (NumberUtils.IsInteger(l))
+        {
+            object r = GetRightValue(context, evalContext);
+            if (NumberUtils.IsInteger(r))
             {
-                object r = GetRightValue(context, evalContext);
-                if (NumberUtils.IsInteger(r))
-                {
-                    return NumberUtils.BitwiseOr(l, r);
-                }
+                return NumberUtils.BitwiseOr(l, r);
             }
-            else if (l is Enum)
-            {
-                object r = GetRightValue(context, evalContext);
-                if (l.GetType() == r.GetType())
-                {
-                    Type enumType = l.GetType();
-                    Type integralType = Enum.GetUnderlyingType(enumType);
-                    l = Convert.ChangeType(l, integralType);
-                    r = Convert.ChangeType(r, integralType);
-                    object result = NumberUtils.BitwiseOr(l, r);
-                    return Enum.ToObject(enumType, result);
-                }
-            }
-
-            return Convert.ToBoolean(l) ||
-                Convert.ToBoolean(GetRightValue(context, evalContext));
         }
+        else if (l is Enum)
+        {
+            object r = GetRightValue(context, evalContext);
+            if (l.GetType() == r.GetType())
+            {
+                Type enumType = l.GetType();
+                Type integralType = Enum.GetUnderlyingType(enumType);
+                l = Convert.ChangeType(l, integralType);
+                r = Convert.ChangeType(r, integralType);
+                object result = NumberUtils.BitwiseOr(l, r);
+                return Enum.ToObject(enumType, result);
+            }
+        }
+
+        return Convert.ToBoolean(l) ||
+               Convert.ToBoolean(GetRightValue(context, evalContext));
     }
 }

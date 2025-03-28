@@ -21,61 +21,60 @@
 using System.Runtime.Serialization;
 using Spring.Util;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents NOT operator (both, bitwise and logical).
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class OpNOT : UnaryOperator
 {
     /// <summary>
-    /// Represents NOT operator (both, bitwise and logical).
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class OpNOT : UnaryOperator
+    public OpNOT() : base()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpNOT():base()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpNOT(BaseNode operand)
-            :base(operand)
-        {
-        }
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    public OpNOT(BaseNode operand)
+        : base(operand)
+    {
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpNOT(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpNOT(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Returns a value for the logical NOT operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
+    /// <summary>
+    /// Returns a value for the logical NOT operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object operand = GetValue(Operand, context, evalContext);
+        if (NumberUtils.IsInteger(operand))
         {
-            object operand = GetValue(Operand, context, evalContext);
-            if (NumberUtils.IsInteger(operand))
-            {
-                return NumberUtils.BitwiseNot(operand);
-            }
-            else if (operand is Enum)
-            {
-                Type enumType = operand.GetType();
-                Type integralType = Enum.GetUnderlyingType(enumType);
-                operand = Convert.ChangeType(operand, integralType);
-                object result = NumberUtils.BitwiseNot(operand);
-                return Enum.ToObject(enumType, result);
-            }
-            else
-                return !Convert.ToBoolean(operand);
+            return NumberUtils.BitwiseNot(operand);
         }
+        else if (operand is Enum)
+        {
+            Type enumType = operand.GetType();
+            Type integralType = Enum.GetUnderlyingType(enumType);
+            operand = Convert.ChangeType(operand, integralType);
+            object result = NumberUtils.BitwiseNot(operand);
+            return Enum.ToObject(enumType, result);
+        }
+        else
+            return !Convert.ToBoolean(operand);
     }
 }

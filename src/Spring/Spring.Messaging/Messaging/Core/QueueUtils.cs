@@ -25,134 +25,131 @@ using Spring.Transaction.Support;
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Core
+namespace Spring.Messaging.Core;
+
+/// <summary>
+/// Utility methods to support Spring's MSMQ functionality
+/// </summary>
+public class QueueUtils
 {
     /// <summary>
-    /// Utility methods to support Spring's MSMQ functionality
+    /// Registers the default message converter with the application context.
     /// </summary>
-    public class QueueUtils
+    /// <param name="applicationContext">The application context.</param>
+    /// <returns>The name of the message converter to use for lookups with
+    /// <see cref="DefaultMessageQueueFactory"/>.
+    /// </returns>
+    public static string RegisterDefaultMessageConverter(IApplicationContext applicationContext)
     {
-
-        /// <summary>
-        /// Registers the default message converter with the application context.
-        /// </summary>
-        /// <param name="applicationContext">The application context.</param>
-        /// <returns>The name of the message converter to use for lookups with
-        /// <see cref="DefaultMessageQueueFactory"/>.
-        /// </returns>
-        public static string RegisterDefaultMessageConverter(IApplicationContext applicationContext)
+        //Create a default message converter to use.
+        RootObjectDefinition rod = new RootObjectDefinition(typeof(XmlMessageConverter));
+        rod.PropertyValues.Add("TargetTypes", new Type[] { typeof(String) });
+        rod.IsSingleton = false;
+        IConfigurableApplicationContext ctx = (IConfigurableApplicationContext) applicationContext;
+        DefaultListableObjectFactory of = (DefaultListableObjectFactory) ctx.ObjectFactory;
+        string messageConverterObjectName = "__XmlMessageConverter__";
+        if (!applicationContext.ContainsObjectDefinition(messageConverterObjectName))
         {
-            //Create a default message converter to use.
-            RootObjectDefinition rod = new RootObjectDefinition(typeof(XmlMessageConverter));
-            rod.PropertyValues.Add("TargetTypes", new Type[] { typeof(String) });
-            rod.IsSingleton = false;
-            IConfigurableApplicationContext ctx = (IConfigurableApplicationContext)applicationContext;
-            DefaultListableObjectFactory of = (DefaultListableObjectFactory)ctx.ObjectFactory;
-            string messageConverterObjectName = "__XmlMessageConverter__";
-            if (!applicationContext.ContainsObjectDefinition(messageConverterObjectName))
-            {
-                of.RegisterObjectDefinition(messageConverterObjectName, rod);
-            }
-            return messageConverterObjectName;
-
+            of.RegisterObjectDefinition(messageConverterObjectName, rod);
         }
 
-        /// <summary>
-        /// Gets the message queue transaction from thread local storage
-        /// </summary>
-        /// <param name="resourceFactory">The resource factory.</param>
-        /// <returns>null if not found in thread local storage</returns>
-        public static MessageQueueTransaction GetMessageQueueTransaction(IResourceFactory resourceFactory)
-        {
-            MessageQueueResourceHolder resourceHolder =
-                (MessageQueueResourceHolder)
-                TransactionSynchronizationManager.GetResource(
-                    MessageQueueTransactionManager.CURRENT_TRANSACTION_SLOTNAME);
-            if (resourceHolder != null)
-            {
-                return resourceHolder.MessageQueueTransaction;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
+        return messageConverterObjectName;
     }
 
-    internal class MessageQueueResourceSynchronization : ITransactionSynchronization
+    /// <summary>
+    /// Gets the message queue transaction from thread local storage
+    /// </summary>
+    /// <param name="resourceFactory">The resource factory.</param>
+    /// <returns>null if not found in thread local storage</returns>
+    public static MessageQueueTransaction GetMessageQueueTransaction(IResourceFactory resourceFactory)
     {
-        private object resourceKey;
-
-        private MessageQueueResourceHolder resourceHolder;
-
-        private bool holderActive = true;
-
-        public MessageQueueResourceSynchronization(MessageQueueResourceHolder resourceHolder, object resourceKey)
+        MessageQueueResourceHolder resourceHolder =
+            (MessageQueueResourceHolder)
+            TransactionSynchronizationManager.GetResource(
+                MessageQueueTransactionManager.CURRENT_TRANSACTION_SLOTNAME);
+        if (resourceHolder != null)
         {
-            this.resourceHolder = resourceHolder;
-            this.resourceKey = resourceKey;
+            return resourceHolder.MessageQueueTransaction;
         }
-
-        #region ITransactionSynchronization Members
-
-        public void Suspend()
+        else
         {
-            if (holderActive)
-            {
-                TransactionSynchronizationManager.UnbindResource(resourceKey);
-            }
+            return null;
         }
+    }
+}
 
-        public void Resume()
-        {
-            if (holderActive)
-            {
-                TransactionSynchronizationManager.BindResource(resourceKey, resourceHolder);
-            }
-        }
+internal class MessageQueueResourceSynchronization : ITransactionSynchronization
+{
+    private object resourceKey;
 
-        public void BeforeCompletion()
+    private MessageQueueResourceHolder resourceHolder;
+
+    private bool holderActive = true;
+
+    public MessageQueueResourceSynchronization(MessageQueueResourceHolder resourceHolder, object resourceKey)
+    {
+        this.resourceHolder = resourceHolder;
+        this.resourceKey = resourceKey;
+    }
+
+    #region ITransactionSynchronization Members
+
+    public void Suspend()
+    {
+        if (holderActive)
         {
             TransactionSynchronizationManager.UnbindResource(resourceKey);
-            holderActive = false;
-            //this.resourceHolder.closeAll();
-            //TODO SPRNET-1244
         }
-
-        public void BeforeCommit(bool readOnly)
-        {
-
-        }
-
-        public void AfterCommit()
-        {
-        }
-
-        public void AfterCompletion(TransactionSynchronizationStatus status)
-        {
-            //TODO SPRNET-1244
-        }
-
-        #endregion
     }
 
-    /// <summary> Callback interface for resource creation.
-    /// Serving as argument for the <code>GetMessageQueueTransaction</code> method.
-    /// </summary>
-    public interface IResourceFactory
+    public void Resume()
     {
-        /// <summary>
-        /// Return whether to allow for a local transaction that is synchronized with
-        /// a Spring-managed transaction (where the main transaction might be a ADO.NET-based
-        /// one for a specific IDbProvider, for example), with the MSMQ transaction
-        /// committing right after the main transaction.
-        /// Returns whether to allow for synchronizing a local MSMQ transaction
-        /// </summary>
-        bool SynchedLocalTransactionAllowed { get; }
+        if (holderActive)
+        {
+            TransactionSynchronizationManager.BindResource(resourceKey, resourceHolder);
+        }
     }
+
+    public void BeforeCompletion()
+    {
+        TransactionSynchronizationManager.UnbindResource(resourceKey);
+        holderActive = false;
+        //this.resourceHolder.closeAll();
+        //TODO SPRNET-1244
+    }
+
+    public void BeforeCommit(bool readOnly)
+    {
+    }
+
+    public void AfterCommit()
+    {
+    }
+
+    public void AfterCompletion(TransactionSynchronizationStatus status)
+    {
+        //TODO SPRNET-1244
+    }
+
+    #endregion
+}
+
+/// <summary> Callback interface for resource creation.
+/// Serving as argument for the <code>GetMessageQueueTransaction</code> method.
+/// </summary>
+public interface IResourceFactory
+{
+    /// <summary>
+    /// Return whether to allow for a local transaction that is synchronized with
+    /// a Spring-managed transaction (where the main transaction might be a ADO.NET-based
+    /// one for a specific IDbProvider, for example), with the MSMQ transaction
+    /// committing right after the main transaction.
+    /// Returns whether to allow for synchronizing a local MSMQ transaction
+    /// </summary>
+    bool SynchedLocalTransactionAllowed { get; }
 }

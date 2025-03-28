@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,30 +24,29 @@ using AopAlliance.Aop;
 
 #endregion
 
-namespace Spring.Aop
+namespace Spring.Aop;
+
+/// <summary>
+/// Superinterface for all before advice.
+/// </summary>
+/// <remarks>
+/// <p>
+/// <i>Before</i> advice is advice that executes before a joinpoint, but
+/// which does not have the ability to prevent execution flow proceeding to
+/// the joinpoint (unless it throws an <see cref="System.Exception"/>).
+/// </p>
+/// <p>
+/// Spring.NET only supports <i>method</i> before advice. Although this
+/// is unlikely to change, this API is designed to allow <i>field</i>
+/// before advice in future if desired.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+/// <seealso cref="Spring.Aop.IMethodBeforeAdvice"/>
+/// <seealso cref="Spring.Aop.IAfterReturningAdvice"/>
+/// <seealso cref="Spring.Aop.IThrowsAdvice"/>
+/// <seealso cref="AopAlliance.Intercept.IMethodInterceptor"/>
+public interface IBeforeAdvice : IAdvice
 {
-	/// <summary>
-	/// Superinterface for all before advice.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// <i>Before</i> advice is advice that executes before a joinpoint, but
-	/// which does not have the ability to prevent execution flow proceeding to
-	/// the joinpoint (unless it throws an <see cref="System.Exception"/>).
-	/// </p>
-	/// <p>
-	/// Spring.NET only supports <i>method</i> before advice. Although this
-	/// is unlikely to change, this API is designed to allow <i>field</i>
-	/// before advice in future if desired.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <seealso cref="Spring.Aop.IMethodBeforeAdvice"/>
-	/// <seealso cref="Spring.Aop.IAfterReturningAdvice"/>
-	/// <seealso cref="Spring.Aop.IThrowsAdvice"/>
-	/// <seealso cref="AopAlliance.Intercept.IMethodInterceptor"/>
-	public interface IBeforeAdvice : IAdvice
-	{
-	}
 }

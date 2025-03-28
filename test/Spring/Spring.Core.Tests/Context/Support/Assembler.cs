@@ -18,39 +18,35 @@
 
 #endregion
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+#region Test Utility Classes
+
+#endregion
+
+/// <author>Mark Pollack</author>
+public class Assembler
 {
-    #region Test Utility Classes
+    private Service service;
+    private Logic logic;
+    private string name;
 
-    #endregion
-
-
-    /// <author>Mark Pollack</author>
-    public class Assembler
+    public Logic Logic
     {
-        private Service service;
-        private Logic logic;
-        private string name;
+        set { logic = value; }
+    }
 
-        public Logic Logic
-        {
-            set { logic = value; }
-        }
+    public Service Service
+    {
+        set { service = value; }
+    }
 
-        public Service Service
-        {
-            set { service = value; }
-        }
+    public string ObjectName
+    {
+        set { name = value; }
+    }
 
-
-        public string ObjectName
-        {
-            set { name = value; }
-        }
-
-        public void Test()
-        {
-            
-        }
+    public void Test()
+    {
     }
 }

@@ -21,113 +21,108 @@
 using NUnit.Framework;
 using Spring.Context.Attributes;
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+[TestFixture]
+public class CodeConfigApplicationContextTests
 {
-    [TestFixture]
-    public class CodeConfigApplicationContextTests
+    private CodeConfigApplicationContext context;
+    private AssemblyObjectDefinitionScanner scanner;
+
+    [SetUp]
+    public void _TestSetup()
     {
-        private CodeConfigApplicationContext context;
-        private AssemblyObjectDefinitionScanner scanner;
+        context = new CodeConfigApplicationContext();
+        scanner = new AssemblyObjectDefinitionScanner();
+    }
 
-        [SetUp]
-        public void _TestSetup()
+    [Test]
+    public void Can_Filter_For_Assembly_Based_On_Assembly_Metadata()
+    {
+        context.ScanWithAssemblyFilter(a => a.GetName().Name.StartsWith("Spring.Core."));
+        context.Refresh();
+
+        AssertExpectedObjectsAreRegisteredWith(context, 45);
+    }
+
+    [Test]
+    public void Can_Filter_For_Assembly_Containing_Specific_Type_But_Having_NO_Definitions()
+    {
+        //specifically filter assemblies for one that we *know* will result in NO [Configuration] types in it
+        context.ScanWithAssemblyFilter(assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(Spring.Core.IOrdered).Name)));
+        context.Refresh();
+
+        Assert.That(context.DefaultListableObjectFactory.ObjectDefinitionCount, Is.EqualTo(4));
+    }
+
+    [Test]
+    public void Can_Filter_For_Assembly_Containing_Specific_Type()
+    {
+        context.ScanWithAssemblyFilter(assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(MarkerTypeForScannerToFind).Name)));
+        context.Refresh();
+
+        AssertExpectedObjectsAreRegisteredWith(context, 45);
+    }
+
+    [Test]
+    public void Can_Filter_For_Specific_Type()
+    {
+        context.ScanWithTypeFilter(type => type.FullName.Contains(typeof(TheImportedConfigurationClass).Name));
+        context.Refresh();
+
+        Assert.That(context.DefaultListableObjectFactory.ObjectDefinitionCount, Is.EqualTo(8));
+    }
+
+    [Test]
+    public void Can_Filter_For_Specific_Types_With_Compound_Predicate()
+    {
+        context.ScanWithTypeFilter(type => type.FullName.Contains(typeof(TheImportedConfigurationClass).Name) || type.FullName.Contains(typeof(TheConfigurationClass).Name));
+        context.Refresh();
+
+        AssertExpectedObjectsAreRegisteredWith(context, 19);
+    }
+
+    [Test]
+    public void Can_Filter_For_Specific_Types_With_Multiple_Include_Filters()
+    {
+        scanner.WithIncludeFilter(type => type.FullName.Contains(typeof(TheImportedConfigurationClass).Name));
+        scanner.WithIncludeFilter(type => type.FullName.Contains(typeof(TheConfigurationClass).Name));
+
+        context.Scan(scanner);
+        context.Refresh();
+
+        AssertExpectedObjectsAreRegisteredWith(context, 19);
+    }
+
+    [Test]
+    public void Can_Perform_Scan_With_No_Filtering()
+    {
+        context.ScanAllAssemblies();
+        context.Refresh();
+
+        AssertExpectedObjectsAreRegisteredWith(context, 45);
+    }
+
+    private void AssertExpectedObjectsAreRegisteredWith(GenericApplicationContext context, int expectedDefinitionCount)
+    {
+        // only check names that are not part of configuration namespace test
+        List<string> names = new List<string>(context.DefaultListableObjectFactory.GetObjectDefinitionNames());
+        names.RemoveAll(x => x.StartsWith("ConfigurationNameSpace"));
+
+        if (names.Count != expectedDefinitionCount)
         {
-            context = new CodeConfigApplicationContext();
-            scanner = new AssemblyObjectDefinitionScanner();
-        }
-
-        [Test]
-        public void Can_Filter_For_Assembly_Based_On_Assembly_Metadata()
-        {
-            context.ScanWithAssemblyFilter(a => a.GetName().Name.StartsWith("Spring.Core."));
-            context.Refresh();
-
-            AssertExpectedObjectsAreRegisteredWith(context, 45);
-        }
-
-        [Test]
-        public void Can_Filter_For_Assembly_Containing_Specific_Type_But_Having_NO_Definitions()
-        {
-            //specifically filter assemblies for one that we *know* will result in NO [Configuration] types in it
-            context.ScanWithAssemblyFilter(assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(Spring.Core.IOrdered).Name)));
-           context.Refresh();
-
-            Assert.That(context.DefaultListableObjectFactory.ObjectDefinitionCount, Is.EqualTo(4));
-        }
-
-        [Test]
-        public void Can_Filter_For_Assembly_Containing_Specific_Type()
-        {
-            context.ScanWithAssemblyFilter(assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(MarkerTypeForScannerToFind).Name)));
-            context.Refresh();
-
-            AssertExpectedObjectsAreRegisteredWith(context, 45);
-        }
-
-        [Test]
-        public void Can_Filter_For_Specific_Type()
-        {
-            context.ScanWithTypeFilter(type => type.FullName.Contains(typeof(TheImportedConfigurationClass).Name));
-            context.Refresh();
-
-            Assert.That(context.DefaultListableObjectFactory.ObjectDefinitionCount, Is.EqualTo(8));
-        }
-
-        [Test]
-        public void Can_Filter_For_Specific_Types_With_Compound_Predicate()
-        {
-            context.ScanWithTypeFilter(type => type.FullName.Contains(typeof(TheImportedConfigurationClass).Name) || type.FullName.Contains(typeof(TheConfigurationClass).Name));
-            context.Refresh();
-
-            AssertExpectedObjectsAreRegisteredWith(context, 19);
-        }
-
-        [Test]
-        public void Can_Filter_For_Specific_Types_With_Multiple_Include_Filters()
-        {
-            scanner.WithIncludeFilter(type => type.FullName.Contains(typeof(TheImportedConfigurationClass).Name));
-            scanner.WithIncludeFilter(type => type.FullName.Contains(typeof(TheConfigurationClass).Name));
-
-            context.Scan(scanner);
-            context.Refresh();
-
-            AssertExpectedObjectsAreRegisteredWith(context, 19);
-        }
-
-        [Test]
-        public void Can_Perform_Scan_With_No_Filtering()
-        {
-            context.ScanAllAssemblies();
-            context.Refresh();
-
-            AssertExpectedObjectsAreRegisteredWith(context, 45);
-        }
-
-        private void AssertExpectedObjectsAreRegisteredWith(GenericApplicationContext context, int expectedDefinitionCount)
-        {
-            // only check names that are not part of configuration namespace test
-            List<string> names = new List<string>(context.DefaultListableObjectFactory.GetObjectDefinitionNames());
-            names.RemoveAll(x => x.StartsWith("ConfigurationNameSpace"));
-
-
-            if (names.Count != expectedDefinitionCount)
+            Console.WriteLine("Actual types registered with the container:");
+            foreach (var name in names)
             {
-                Console.WriteLine("Actual types registered with the container:");
-                foreach (var name in names)
-                {
-                    Console.WriteLine(name);
-                }
+                Console.WriteLine(name);
             }
-
-
-            Assert.That(names.Count, Is.EqualTo(expectedDefinitionCount));
         }
 
+        Assert.That(names.Count, Is.EqualTo(expectedDefinitionCount));
     }
+}
 
-    //DO NOT DELETE: this empty class req'd by the scanning tests!
-    public class MarkerTypeForScannerToFind
-    {
-
-    }
+//DO NOT DELETE: this empty class req'd by the scanning tests!
+public class MarkerTypeForScannerToFind
+{
 }

@@ -2,38 +2,38 @@
 <objects xmlns="http://www.springframework.net">
 
 
-  <object id='testqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='.\Private$\testqueue'/>
-    <property name='DenySharedReceive' value='true'/>
-    <property name='AccessMode' value='Receive'/>
-    <property name='EnableCache' value='true'/>
-    <property name='ProductTemplate'>
-      <object>
-        <property name='Label' value='MyLabel'/>
-      </object>
-    </property>
-  </object>
+    <object id='testqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+        <property name='Path' value='.\Private$\testqueue' />
+        <property name='DenySharedReceive' value='true' />
+        <property name='AccessMode' value='Receive' />
+        <property name='EnableCache' value='true' />
+        <property name='ProductTemplate'>
+            <object>
+                <property name='Label' value='MyLabel' />
+            </object>
+        </property>
+    </object>
 
-  <object id='testtxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='.\Private$\testtxqueue'/>
-    <property name='ProductTemplate'>
-      <object>
-        <property name='Label' value='MyTxLabel'/>
-      </object>
-    </property>
-  </object>
+    <object id='testtxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+        <property name='Path' value='.\Private$\testtxqueue' />
+        <property name='ProductTemplate'>
+            <object>
+                <property name='Label' value='MyTxLabel' />
+            </object>
+        </property>
+    </object>
 
 
-  <object id='testremotetxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='FormatName:Direct=TCP:192.168.1.105\Private$\testtxqueue'/>
-    <property name='RemoteQueue' value="true"/>
-    <property name="RemoteQueueIsTransactional" value="true"/>
-  </object>
+    <object id='testremotetxqueue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+        <property name='Path' value='FormatName:Direct=TCP:192.168.1.105\Private$\testtxqueue' />
+        <property name='RemoteQueue' value="true" />
+        <property name="RemoteQueueIsTransactional" value="true" />
+    </object>
 
-  <object id='testremotequeue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
-    <property name='Path' value='FormatName:Direct=TCP:192.168.1.105\Private$\testqueue'/>
-    <property name='RemoteQueue' value="true"/>
-  </object>
+    <object id='testremotequeue' type='Spring.Messaging.Support.MessageQueueFactoryObject, Spring.Messaging'>
+        <property name='Path' value='FormatName:Direct=TCP:192.168.1.105\Private$\testqueue' />
+        <property name='RemoteQueue' value="true" />
+    </object>
 
 
 </objects>

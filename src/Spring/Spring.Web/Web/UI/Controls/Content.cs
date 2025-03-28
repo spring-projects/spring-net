@@ -20,22 +20,20 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// Represents Content control that can be used to populate or override placeholders
+/// within the master page.
+/// </summary>
+/// <remarks>
+/// Any content defined within this control will override default content
+/// in the matching <see cref="Spring.Web.UI.Controls.ContentPlaceHolder"/> control
+/// within the master page
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public class Content : System.Web.UI.WebControls.Content
 {
-    /// <summary>
-    /// Represents Content control that can be used to populate or override placeholders
-    /// within the master page.
-    /// </summary>
-    /// <remarks>
-    /// Any content defined within this control will override default content
-    /// in the matching <see cref="Spring.Web.UI.Controls.ContentPlaceHolder"/> control
-    /// within the master page
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-	public class Content : System.Web.UI.WebControls.Content
-	{}
 }

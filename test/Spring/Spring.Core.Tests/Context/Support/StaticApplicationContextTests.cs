@@ -21,29 +21,28 @@
 using System.Globalization;
 using NUnit.Framework;
 
-namespace Spring.Context.Support
-{
-    [TestFixture]
-    public class StaticApplicationContextTests
-    {
-        [Test]
-        public void AddMessageTest()
-        {
-            StaticApplicationContext ctx = new StaticApplicationContext();
-            ctx.Refresh();
-            ctx.AddMessage("code1", CultureInfo.CurrentUICulture, "this is {0}");
-            Assert.AreEqual("this is Spring.NET", ctx.GetMessage("code1", "Spring.NET"));
-        }
+namespace Spring.Context.Support;
 
-        [Test]
-        public void RegisterObjectPrototype()
-        {
-            StaticApplicationContext ctx = new StaticApplicationContext();
-            ctx.RegisterPrototype("my object", typeof(MockContextAwareObject), null);
-            MockContextAwareObject ctx1 = (MockContextAwareObject) ctx.GetObject("my object");
-            MockContextAwareObject ctx2 = (MockContextAwareObject) ctx.GetObject("my object");
-            Assert.IsTrue(ctx1 != ctx2);
-            Assert.IsTrue(!ctx.IsSingleton("my object"));
-        }
+[TestFixture]
+public class StaticApplicationContextTests
+{
+    [Test]
+    public void AddMessageTest()
+    {
+        StaticApplicationContext ctx = new StaticApplicationContext();
+        ctx.Refresh();
+        ctx.AddMessage("code1", CultureInfo.CurrentUICulture, "this is {0}");
+        Assert.AreEqual("this is Spring.NET", ctx.GetMessage("code1", "Spring.NET"));
+    }
+
+    [Test]
+    public void RegisterObjectPrototype()
+    {
+        StaticApplicationContext ctx = new StaticApplicationContext();
+        ctx.RegisterPrototype("my object", typeof(MockContextAwareObject), null);
+        MockContextAwareObject ctx1 = (MockContextAwareObject) ctx.GetObject("my object");
+        MockContextAwareObject ctx2 = (MockContextAwareObject) ctx.GetObject("my object");
+        Assert.IsTrue(ctx1 != ctx2);
+        Assert.IsTrue(!ctx.IsSingleton("my object"));
     }
 }

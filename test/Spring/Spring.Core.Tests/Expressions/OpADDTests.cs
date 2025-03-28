@@ -20,31 +20,31 @@
 
 using NUnit.Framework;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class OpADDTests
 {
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class OpADDTests
+    [Test]
+    public void CanAddStrings()
     {
-        [Test]
-        public void CanAddStrings()
-        {
-            OpADD add = new OpADD();
-            add.addChild( new StringLiteralNode("20"));
-            add.addChild( new StringLiteralNode("30"));
-            object result = add.GetValue(null, null);
-            Assert.AreEqual("2030", result);
-        }
-        [Test]
-        public void CanAddNumbers()
-        {
-            OpADD add = new OpADD();
-            add.addChild( new IntLiteralNode("20"));
-            add.addChild( new IntLiteralNode("30"));
-            object result = add.GetValue(null, null);
-            Assert.AreEqual(50, result);
-        }
+        OpADD add = new OpADD();
+        add.addChild(new StringLiteralNode("20"));
+        add.addChild(new StringLiteralNode("30"));
+        object result = add.GetValue(null, null);
+        Assert.AreEqual("2030", result);
+    }
+
+    [Test]
+    public void CanAddNumbers()
+    {
+        OpADD add = new OpADD();
+        add.addChild(new IntLiteralNode("20"));
+        add.addChild(new IntLiteralNode("30"));
+        object result = add.GetValue(null, null);
+        Assert.AreEqual(50, result);
     }
 }

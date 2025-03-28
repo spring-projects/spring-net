@@ -22,24 +22,22 @@
 
 using System.Reflection;
 using System.Collections;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+/// <summary>
+/// Unit tests for the ReflectiveMethodInvocation class.
+/// </summary>
+/// <author>Rick Evans</author>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public class ReflectiveMethodInvocationTests : AbstractMethodInvocationTests
 {
-    /// <summary>
-    /// Unit tests for the ReflectiveMethodInvocation class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-    /// <author>Bruno Baia</author>
-    [TestFixture]
-    public class ReflectiveMethodInvocationTests : AbstractMethodInvocationTests
+    protected override AbstractMethodInvocation CreateMethodInvocation(object proxy, object target, MethodInfo method, MethodInfo onProxyMethod, object[] arguments, Type targetType, IList interceptors)
     {
-        protected override AbstractMethodInvocation CreateMethodInvocation(object proxy, object target, MethodInfo method, MethodInfo onProxyMethod, object[] arguments, Type targetType, IList interceptors)
-        {
-            return new ReflectiveMethodInvocation(proxy, target, method, onProxyMethod, arguments, targetType, interceptors);
-        }
+        return new ReflectiveMethodInvocation(proxy, target, method, onProxyMethod, arguments, targetType, interceptors);
     }
 }

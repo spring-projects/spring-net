@@ -20,26 +20,24 @@
 
 using AopAlliance.Intercept;
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+/// <summary> Internal framework class.
+/// This class is required because if we put an interceptor that implements IInterceptionAdvice
+/// in the interceptor list passed to MethodInvocation, it may be mistaken for an
+/// advice that requires dynamic method matching.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.Net)</author>
+[Serializable]
+internal class InterceptorAndDynamicMethodMatcher
 {
-	
-	/// <summary> Internal framework class.
-	/// This class is required because if we put an interceptor that implements IInterceptionAdvice
-	/// in the interceptor list passed to MethodInvocation, it may be mistaken for an
-	/// advice that requires dynamic method matching.
-	/// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Aleksandar Seovic (.Net)</author>
-    [Serializable]
-    internal class InterceptorAndDynamicMethodMatcher
-	{
-		internal IMethodMatcher MethodMatcher;
-		internal IMethodInterceptor Interceptor;
-		
-		public InterceptorAndDynamicMethodMatcher(IMethodInterceptor interceptor, IMethodMatcher methodMatcher)
-		{
-			this.Interceptor = interceptor;
-			this.MethodMatcher = methodMatcher;
-		}
-	}
+    internal IMethodMatcher MethodMatcher;
+    internal IMethodInterceptor Interceptor;
+
+    public InterceptorAndDynamicMethodMatcher(IMethodInterceptor interceptor, IMethodMatcher methodMatcher)
+    {
+        this.Interceptor = interceptor;
+        this.MethodMatcher = methodMatcher;
+    }
 }

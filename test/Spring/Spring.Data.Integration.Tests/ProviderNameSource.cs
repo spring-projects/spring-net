@@ -24,26 +24,25 @@ using Spring.Objects.Factory.Config;
 
 #endregion
 
-namespace Spring
-{
-    public class ProviderNameSource : IVariableSource
-    {
-        public bool CanResolveVariable(string name)
-        {
-            return name.ToLower() == "providername";
-        }
+namespace Spring;
 
-        public string ResolveVariable(string name)
+public class ProviderNameSource : IVariableSource
+{
+    public bool CanResolveVariable(string name)
+    {
+        return name.ToLower() == "providername";
+    }
+
+    public string ResolveVariable(string name)
+    {
+        if (name.ToLower() != "providername")
         {
-            if (name.ToLower() != "providername")
-            {
-                return null;
-            }
+            return null;
+        }
 #if NETCOREAPP
             return "SqlServer";
 #else
-            return "SqlServer-2.0";
+        return "SqlServer-2.0";
 #endif
-        }
     }
 }

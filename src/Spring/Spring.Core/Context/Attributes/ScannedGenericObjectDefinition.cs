@@ -26,137 +26,135 @@ using Spring.Objects.Factory.Xml;
 using Spring.Stereotype;
 using Spring.Objects.Factory.Attributes;
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+/// <summary>
+/// A GenericObjectDefinition that provides attribute driven propulation
+/// of properties like LazyInit, Scope or Qualifier
+/// </summary>
+public class ScannedGenericObjectDefinition : GenericObjectDefinition
 {
+    private static readonly ILogger<ScannedGenericObjectDefinition> Log = LogManager.GetLogger<ScannedGenericObjectDefinition>();
+
     /// <summary>
-    /// A GenericObjectDefinition that provides attribute driven propulation
-    /// of properties like LazyInit, Scope or Qualifier
+    /// Name provided by the Component Attribute
     /// </summary>
-    public class ScannedGenericObjectDefinition : GenericObjectDefinition
+    private string _componentName;
+
+    /// <summary>
+    /// Creates a GenericObjectDefinition that applies the default values provided
+    /// in the XML Spring config document. Additionally parses the specific class
+    /// attributesthat allows the definition of LazyInit, Scope or Qualifier
+    /// </summary>
+    /// <param name="typeOfObject">Type of scanned component</param>
+    /// <param name="defaults">Defualts provided in Spring Config document</param>
+    public ScannedGenericObjectDefinition(Type typeOfObject, DocumentDefaultsDefinition defaults)
     {
-        private static readonly ILogger<ScannedGenericObjectDefinition> Log = LogManager.GetLogger<ScannedGenericObjectDefinition>();
+        ObjectType = typeOfObject;
 
-        /// <summary>
-        /// Name provided by the Component Attribute
-        /// </summary>
-        private string _componentName;
+        ParseName();
+        ApplyDefaults(defaults);
+        ParseLazyAttribute();
+        ParseScopeAttribute();
+        ParseQualifierAttribute();
 
-        /// <summary>
-        /// Creates a GenericObjectDefinition that applies the default values provided
-        /// in the XML Spring config document. Additionally parses the specific class
-        /// attributesthat allows the definition of LazyInit, Scope or Qualifier
-        /// </summary>
-        /// <param name="typeOfObject">Type of scanned component</param>
-        /// <param name="defaults">Defualts provided in Spring Config document</param>
-        public ScannedGenericObjectDefinition(Type typeOfObject, DocumentDefaultsDefinition defaults)
+        if (Log.IsEnabled(LogLevel.Debug))
         {
-            ObjectType = typeOfObject;
+            Log.LogDebug("ComponentName: {ComponentNAme}; {Name}", _componentName, ToString());
+        }
+    }
 
-            ParseName();
-            ApplyDefaults(defaults);
-            ParseLazyAttribute();
-            ParseScopeAttribute();
-            ParseQualifierAttribute();
+    private void ParseName()
+    {
+        var attr = Attribute.GetCustomAttribute(ObjectType, typeof(ComponentAttribute), true) as ComponentAttribute;
+        if (attr != null && !string.IsNullOrEmpty(attr.Name))
+            _componentName = attr.Name;
+    }
 
-            if (Log.IsEnabled(LogLevel.Debug))
+    private void ApplyDefaults(DocumentDefaultsDefinition defaults)
+    {
+        if (defaults == null)
+            return;
+
+        bool lazyInit = false;
+        bool.TryParse(defaults.LazyInit, out lazyInit);
+        IsLazyInit = lazyInit;
+
+        if (!String.IsNullOrEmpty(defaults.Autowire))
+        {
+            AutowireMode = GetAutowireMode(defaults.Autowire);
+        }
+    }
+
+    private AutoWiringMode GetAutowireMode(string value)
+    {
+        AutoWiringMode autoWiringMode;
+        autoWiringMode = (AutoWiringMode) Enum.Parse(typeof(AutoWiringMode), value, true);
+        return autoWiringMode;
+    }
+
+    private void ParseScopeAttribute()
+    {
+        var attr = Attribute.GetCustomAttribute(ObjectType, typeof(ScopeAttribute), true) as ScopeAttribute;
+        if (attr != null)
+        {
+            Scope = attr.ObjectScope.ToString().ToLower();
+
+            if (attr.ObjectScope == ObjectScope.Request || attr.ObjectScope == ObjectScope.Session)
             {
-                Log.LogDebug("ComponentName: {ComponentNAme}; {Name}", _componentName, ToString());
+                IsLazyInit = true;
             }
         }
+    }
 
-        private void ParseName()
+    private void ParseLazyAttribute()
+    {
+        var attr = Attribute.GetCustomAttribute(ObjectType, typeof(LazyAttribute), true) as LazyAttribute;
+        if (attr != null)
+            IsLazyInit = attr.LazyInitialize;
+    }
+
+    private void ParseQualifierAttribute()
+    {
+        var attr = Attribute.GetCustomAttribute(ObjectType, typeof(QualifierAttribute), true) as QualifierAttribute;
+        if (attr != null)
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof (ComponentAttribute), true) as ComponentAttribute;
-            if (attr != null && !string.IsNullOrEmpty(attr.Name))
-                _componentName = attr.Name;
+            var qualifier = new AutowireCandidateQualifier(attr.GetType());
+
+            if (!string.IsNullOrEmpty(attr.Value))
+                qualifier.SetAttribute(AutowireCandidateQualifier.VALUE_KEY, attr.Value);
+
+            ParseQualifierProperties(attr, qualifier);
+
+            AddQualifier(qualifier);
         }
+    }
 
-        private void ApplyDefaults(DocumentDefaultsDefinition defaults)
+    private void ParseQualifierProperties(QualifierAttribute attr, AutowireCandidateQualifier qualifier)
+    {
+        foreach (var property in attr.GetType().GetProperties())
         {
-            if (defaults == null)
-                return;
-
-            bool lazyInit = false;
-            bool.TryParse(defaults.LazyInit, out lazyInit);
-            IsLazyInit = lazyInit;
-            
-            if (!String.IsNullOrEmpty(defaults.Autowire))
+            if (!property.Name.Equals("TypeId") && !property.Name.Equals("Value"))
             {
-               AutowireMode = GetAutowireMode(defaults.Autowire);
-            }            
-        }
-
-        private AutoWiringMode GetAutowireMode(string value)
-        {
-           AutoWiringMode autoWiringMode;
-           autoWiringMode = (AutoWiringMode)Enum.Parse(typeof(AutoWiringMode), value, true);
-           return autoWiringMode;
-        }
-
-
-        private void ParseScopeAttribute()
-        {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof(ScopeAttribute), true) as ScopeAttribute;
-            if (attr != null)
-            {
-                Scope = attr.ObjectScope.ToString().ToLower();
-
-                if (attr.ObjectScope == ObjectScope.Request || attr.ObjectScope == ObjectScope.Session)
+                object value = property.GetValue(attr, null);
+                if (value != null)
                 {
-                    IsLazyInit = true;
+                    var attribute = new ObjectMetadataAttribute(property.Name, value);
+                    qualifier.AddMetadataAttribute(attribute);
                 }
             }
         }
+    }
 
-        private void ParseLazyAttribute()
+    /// <summary>
+    /// Provides the name of the object scanned
+    /// </summary>
+    /// <returns>return the provided attribute name of the full object type name</returns>
+    public string ComponentName
+    {
+        get
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof(LazyAttribute), true) as LazyAttribute;
-            if (attr != null)
-                IsLazyInit = attr.LazyInitialize;
-        }
-
-        private void ParseQualifierAttribute()
-        {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof(QualifierAttribute), true) as QualifierAttribute;
-            if (attr != null)
-            {
-                var qualifier = new AutowireCandidateQualifier(attr.GetType());
-
-                if (!string.IsNullOrEmpty(attr.Value))
-                    qualifier.SetAttribute(AutowireCandidateQualifier.VALUE_KEY, attr.Value);
-
-                ParseQualifierProperties(attr, qualifier);
-
-                AddQualifier(qualifier);
-            }
-        }
-
-        private void ParseQualifierProperties(QualifierAttribute attr, AutowireCandidateQualifier qualifier)
-        {
-            foreach (var property in attr.GetType().GetProperties())
-            {
-                if (!property.Name.Equals("TypeId") && !property.Name.Equals("Value"))
-                {
-                    object value = property.GetValue(attr, null);
-                    if (value != null)
-                    {
-                        var attribute = new ObjectMetadataAttribute(property.Name, value);
-                        qualifier.AddMetadataAttribute(attribute);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Provides the name of the object scanned
-        /// </summary>
-        /// <returns>return the provided attribute name of the full object type name</returns>
-        public string ComponentName
-        {
-            get
-            {
-                return _componentName;
-            }
+            return _componentName;
         }
     }
 }

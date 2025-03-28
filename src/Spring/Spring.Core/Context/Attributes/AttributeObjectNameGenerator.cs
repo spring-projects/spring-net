@@ -21,39 +21,39 @@
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+/// <summary>
+/// Default Name Generator for attribute driven component scan.
+///
+/// First choice is the provided name of the Component attribute.
+/// Fallback is the short type name.
+/// </summary>
+public class AttributeObjectNameGenerator : IObjectNameGenerator
 {
     /// <summary>
-    /// Default Name Generator for attribute driven component scan.
-    /// 
-    /// First choice is the provided name of the Component attribute.
-    /// Fallback is the short type name.
+    /// Generates an object name for the given object definition.
     /// </summary>
-    public class AttributeObjectNameGenerator : IObjectNameGenerator
+    /// <param name="definition">The object definition to generate a name for.</param>
+    /// <param name="registry">The object definitions registry that the given definition is
+    ///             supposed to be registerd with</param>
+    /// <returns>
+    /// the generated object name
+    /// </returns>
+    public string GenerateObjectName(IObjectDefinition definition, IObjectDefinitionRegistry registry)
     {
-        /// <summary>
-        /// Generates an object name for the given object definition.
-        /// </summary>
-        /// <param name="definition">The object definition to generate a name for.</param>
-        /// <param name="registry">The object definitions registry that the given definition is
-        ///             supposed to be registerd with</param>
-        /// <returns>
-        /// the generated object name
-        /// </returns>
-        public string GenerateObjectName(IObjectDefinition definition, IObjectDefinitionRegistry registry)
+        if (definition is ScannedGenericObjectDefinition)
         {
-            if (definition is ScannedGenericObjectDefinition)
-            {
-                string objectName = ((ScannedGenericObjectDefinition) definition).ComponentName;
-                if (!string.IsNullOrEmpty(objectName))
-                    return objectName;
-            }
-            return BuildDefaultObjectName(definition);
+            string objectName = ((ScannedGenericObjectDefinition) definition).ComponentName;
+            if (!string.IsNullOrEmpty(objectName))
+                return objectName;
         }
 
-        private string BuildDefaultObjectName(IObjectDefinition definition)
-        {
-            return definition.ObjectType.FullName;
-        }
+        return BuildDefaultObjectName(definition);
+    }
+
+    private string BuildDefaultObjectName(IObjectDefinition definition)
+    {
+        return definition.ObjectType.FullName;
     }
 }

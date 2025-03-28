@@ -20,46 +20,44 @@
 
 using System.Messaging;
 
-namespace Spring.Messaging.Core
-{
-    /// <summary>
-    /// Utility class to recreate message queues if they do not exist. 
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    public class MessageQueueUtils
-    {
-        public static void RecreateMessageQueue(string path, bool transactional)
-        {
-            bool defaultCacheEnabled = MessageQueue.EnableConnectionCache;
-            MessageQueue.ClearConnectionCache();
-            MessageQueue.EnableConnectionCache = false;
-            if (MessageQueue.Exists(path))
-            {
-                // TODO (EE): delete/create doesn't work for some reason
-                //                MessageQueue.Delete(path);
-                //                queue = MessageQueue.Create(path, transactional);
-                using (MessageQueue queue = new MessageQueue(path))
-                {
-                    queue.Purge();
-                }
-            }
-            else
-            {
-                /*
-                 * MSDN docs indicate that calls to the static .Create() method should include
-                 *   an explicit call to .Dispose() b/c unmanaged resources are involved
-                 * Here this req'ment is handled implicitly with the using() statement
-                 *  even though the empty using() block seems odd at first glance b/c it
-                 *  encloses a static method call
-                 */
-                using (MessageQueue.Create(path, transactional))
-                {
-                	
-                }
-            }
-            MessageQueue.ClearConnectionCache();
-            MessageQueue.EnableConnectionCache = defaultCacheEnabled; // set to default
-        }
-    }
+namespace Spring.Messaging.Core;
 
+/// <summary>
+/// Utility class to recreate message queues if they do not exist. 
+/// </summary>
+/// <author>Mark Pollack</author>
+public class MessageQueueUtils
+{
+    public static void RecreateMessageQueue(string path, bool transactional)
+    {
+        bool defaultCacheEnabled = MessageQueue.EnableConnectionCache;
+        MessageQueue.ClearConnectionCache();
+        MessageQueue.EnableConnectionCache = false;
+        if (MessageQueue.Exists(path))
+        {
+            // TODO (EE): delete/create doesn't work for some reason
+            //                MessageQueue.Delete(path);
+            //                queue = MessageQueue.Create(path, transactional);
+            using (MessageQueue queue = new MessageQueue(path))
+            {
+                queue.Purge();
+            }
+        }
+        else
+        {
+            /*
+             * MSDN docs indicate that calls to the static .Create() method should include
+             *   an explicit call to .Dispose() b/c unmanaged resources are involved
+             * Here this req'ment is handled implicitly with the using() statement
+             *  even though the empty using() block seems odd at first glance b/c it
+             *  encloses a static method call
+             */
+            using (MessageQueue.Create(path, transactional))
+            {
+            }
+        }
+
+        MessageQueue.ClearConnectionCache();
+        MessageQueue.EnableConnectionCache = defaultCacheEnabled; // set to default
+    }
 }

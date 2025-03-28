@@ -26,44 +26,41 @@ using Spring.Core.IO;
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// This class contains tests for setting properties that do not parse easily in other locales, such
+/// as comma delimited strings.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class LocaleTests
 {
-    /// <summary>
-    /// This class contains tests for setting properties that do not parse easily in other locales, such
-    /// as comma delimited strings.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class LocaleTests
+    [SetUp]
+    public void Setup()
     {
-        [SetUp]
-        public void Setup()
+    }
+
+    [Test]
+    public void LocaleTest()
+    {
+        CultureInfo oldCulture = Thread.CurrentThread.CurrentCulture;
+        try
         {
-        }
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
 
-        [Test]
-        public void LocaleTest()
+            IResource resource = new ReadOnlyXmlTestResource("locale.xml", GetType());
+            XmlObjectFactory xof = new XmlObjectFactory(resource);
+            TestObject to = xof.GetObject("jenny") as TestObject;
+            Assert.IsNotNull(to);
+            DateTime d = new DateTime(2007, 10, 30);
+            Assert.AreEqual(d, to.Date);
+            Assert.AreEqual(30, to.Size.Height);
+            Assert.AreEqual(30, to.Size.Width);
+        }
+        finally
         {
-            CultureInfo oldCulture = Thread.CurrentThread.CurrentCulture;
-            try
-            {
-                Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
-
-                IResource resource = new ReadOnlyXmlTestResource("locale.xml", GetType());
-                XmlObjectFactory xof = new XmlObjectFactory(resource);
-                TestObject to = xof.GetObject("jenny") as TestObject;
-                Assert.IsNotNull(to);
-                DateTime d = new DateTime(2007, 10, 30);
-                Assert.AreEqual(d, to.Date);
-                Assert.AreEqual(30, to.Size.Height);
-                Assert.AreEqual(30, to.Size.Width);
-            }
-            finally
-            {
-                Thread.CurrentThread.CurrentCulture = oldCulture;
-            }
+            Thread.CurrentThread.CurrentCulture = oldCulture;
         }
-
-        
     }
 }

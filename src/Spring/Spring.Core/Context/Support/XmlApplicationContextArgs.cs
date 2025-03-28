@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,54 +20,52 @@
 
 using Spring.Core.IO;
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <summary>
+/// Encapsulates arguments to the <see cref="Spring.Context.Support.XmlApplicationContext"/> class.
+/// </summary>
+public class XmlApplicationContextArgs : AbstractXmlApplicationContextArgs
 {
+    private const bool DEFAULT_REFRESH = true;
+    private const bool DEFAULT_CASESENSITIVE = true;
+
     /// <summary>
-    /// Encapsulates arguments to the <see cref="Spring.Context.Support.XmlApplicationContext"/> class.
+    /// Initializes a new instance of the <see cref="XmlApplicationContextArgs"/> class.
     /// </summary>
-    public class XmlApplicationContextArgs : AbstractXmlApplicationContextArgs
+    public XmlApplicationContextArgs()
+        : this(string.Empty, null, null, null, DEFAULT_CASESENSITIVE, DEFAULT_REFRESH)
     {
+    }
 
-        private const bool DEFAULT_REFRESH = true;
-        private const bool DEFAULT_CASESENSITIVE = true;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="XmlApplicationContextArgs"/> class.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="parentContext">The parent context.</param>
+    /// <param name="configurationLocations">The configuration locations.</param>
+    /// <param name="configurationResources">The configuration resources.</param>
+    public XmlApplicationContextArgs(string name, IApplicationContext parentContext, string[] configurationLocations, IResource[] configurationResources)
+        : this(name, parentContext, configurationLocations, configurationResources, DEFAULT_CASESENSITIVE, DEFAULT_REFRESH)
+    {
+    }
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlApplicationContextArgs"/> class.
-        /// </summary>
-        public XmlApplicationContextArgs()
-            : this(string.Empty, null, null, null, DEFAULT_CASESENSITIVE, DEFAULT_REFRESH)
-        { }
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlApplicationContextArgs"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="parentContext">The parent context.</param>
-        /// <param name="configurationLocations">The configuration locations.</param>
-        /// <param name="configurationResources">The configuration resources.</param>
-        public XmlApplicationContextArgs(string name, IApplicationContext parentContext, string[] configurationLocations, IResource[] configurationResources)
-            : this(name, parentContext, configurationLocations, configurationResources, DEFAULT_CASESENSITIVE, DEFAULT_REFRESH)
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the XmlApplicationContextArgs class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="parentContext">The parent context.</param>
-        /// <param name="configurationLocations">The configuration locations.</param>
-        /// <param name="configurationResources">The configuration resources.</param>
-        /// <param name="caseSensitive">if set to <c>true</c> [case sensitive].</param>
-        /// <param name="refresh">if set to <c>true</c> [refresh].</param>
-        public XmlApplicationContextArgs(string name, IApplicationContext parentContext, string[] configurationLocations, IResource[] configurationResources, bool caseSensitive, bool refresh)
-        {
-            Name = name;
-            ParentContext = parentContext;
-            ConfigurationLocations = configurationLocations;
-            ConfigurationResources = configurationResources;
-            CaseSensitive = caseSensitive;
-            Refresh = refresh;
-        }
+    /// <summary>
+    /// Initializes a new instance of the XmlApplicationContextArgs class.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="parentContext">The parent context.</param>
+    /// <param name="configurationLocations">The configuration locations.</param>
+    /// <param name="configurationResources">The configuration resources.</param>
+    /// <param name="caseSensitive">if set to <c>true</c> [case sensitive].</param>
+    /// <param name="refresh">if set to <c>true</c> [refresh].</param>
+    public XmlApplicationContextArgs(string name, IApplicationContext parentContext, string[] configurationLocations, IResource[] configurationResources, bool caseSensitive, bool refresh)
+    {
+        Name = name;
+        ParentContext = parentContext;
+        ConfigurationLocations = configurationLocations;
+        ConfigurationResources = configurationResources;
+        CaseSensitive = caseSensitive;
+        Refresh = refresh;
     }
 }

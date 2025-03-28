@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,29 @@
 
 #endregion
 
-namespace Spring.Context
-{
-	/// <summary>
-	/// The callback for application events.
-	/// </summary>
-	public delegate void ApplicationEventHandler(object sender, ApplicationEventArgs e);
+namespace Spring.Context;
 
-	/// <summary>
-	/// A listener for application events.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[EventListener]
-	public interface IApplicationEventListener
-	{
-		/// <summary>
-		/// Handle an application event.
-		/// </summary>
-		/// <param name="sender">
-		/// The source of the event.
-		/// </param>
-		/// <param name="e">
-		/// The event that is to be handled.
-		/// </param>
-		void HandleApplicationEvent(object sender, ApplicationEventArgs e);
-	}
+/// <summary>
+/// The callback for application events.
+/// </summary>
+public delegate void ApplicationEventHandler(object sender, ApplicationEventArgs e);
+
+/// <summary>
+/// A listener for application events.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[EventListener]
+public interface IApplicationEventListener
+{
+    /// <summary>
+    /// Handle an application event.
+    /// </summary>
+    /// <param name="sender">
+    /// The source of the event.
+    /// </param>
+    /// <param name="e">
+    /// The event that is to be handled.
+    /// </param>
+    void HandleApplicationEvent(object sender, ApplicationEventArgs e);
 }

@@ -18,42 +18,40 @@
 
 #endregion
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// Concrete ObjectFactory-based IPointcutAdvisor thta allows for any Advice to be
+/// configured as reference to an Advice object in the ObjectFatory, as well as
+/// the Pointcut to be configured through an object property.
+/// </summary>
+/// <remarks>
+/// Specifying the name of an advice object instead of the advice object itself
+/// (if running within a ObjectFactory/ApplicationContext) increases loose coupling
+/// at initialization time, in order to not intialize the advice object until the pointcut
+/// actually matches.
+/// </remarks>
+/// <author>Juerge Hoeller</author>
+/// <author>Mark Pollack</author>
+public class DefaultObjectFactoryPointcutAdvisor : AbstractObjectFactoryPointcutAdvisor
 {
+    private IPointcut pointcut = TruePointcut.True;
+
     /// <summary>
-    /// Concrete ObjectFactory-based IPointcutAdvisor thta allows for any Advice to be
-    /// configured as reference to an Advice object in the ObjectFatory, as well as 
-    /// the Pointcut to be configured through an object property.
+    /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
     /// </summary>
-    /// <remarks>
-    /// Specifying the name of an advice object instead of the advice object itself
-    /// (if running within a ObjectFactory/ApplicationContext) increases loose coupling
-    /// at initialization time, in order to not intialize the advice object until the pointcut
-    /// actually matches.
-    /// </remarks>
-    /// <author>Juerge Hoeller</author>
-    /// <author>Mark Pollack</author>
-    public class DefaultObjectFactoryPointcutAdvisor : AbstractObjectFactoryPointcutAdvisor
+    public override IPointcut Pointcut
     {
-        private IPointcut pointcut = TruePointcut.True;
+        get { return pointcut; }
+        set { pointcut = (pointcut != null ? value : TruePointcut.True); }
+    }
 
-
-        /// <summary>
-        /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
-        /// </summary>
-        public override IPointcut Pointcut
-        {
-            get { return pointcut; }
-            set { pointcut = (pointcut != null ? value : TruePointcut.True); }
-        }
-
-        /// <summary>
-        /// Describe this Advisor, showing pointcut and name of advice object.
-        /// </summary>
-        /// <returns>Type name , pointcut, and advice object name.</returns>
-        public override string ToString()
-        {
-            return GetType().Name + ": pointcut [" + Pointcut + "]; advice object = '" + AdviceObjectName + "'";
-        }
+    /// <summary>
+    /// Describe this Advisor, showing pointcut and name of advice object.
+    /// </summary>
+    /// <returns>Type name , pointcut, and advice object name.</returns>
+    public override string ToString()
+    {
+        return GetType().Name + ": pointcut [" + Pointcut + "]; advice object = '" + AdviceObjectName + "'";
     }
 }

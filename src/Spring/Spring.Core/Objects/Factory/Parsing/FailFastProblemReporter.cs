@@ -20,34 +20,31 @@
 
 using Microsoft.Extensions.Logging;
 
-namespace Spring.Objects.Factory.Parsing
+namespace Spring.Objects.Factory.Parsing;
+
+public class FailFastProblemReporter : IProblemReporter
 {
-    public class FailFastProblemReporter : IProblemReporter
+    private static readonly ILogger<FailFastProblemReporter> _logger = LogManager.GetLogger<FailFastProblemReporter>();
+
+    public ILogger Logger
     {
-        private static readonly ILogger<FailFastProblemReporter> _logger = LogManager.GetLogger<FailFastProblemReporter>();
+        get { return _logger; }
+    }
 
-        public ILogger Logger
-        {
-            get { return _logger; }
-        }
+    public void Error(Problem problem)
+    {
+        _logger.LogError(problem.Message);
+        throw new ObjectDefinitionParsingException(problem);
+    }
 
-        public void Error(Problem problem)
-        {
-            _logger.LogError(problem.Message);
-            throw new ObjectDefinitionParsingException(problem);
-        }
+    public void Fatal(Problem problem)
+    {
+        _logger.LogCritical(problem.Message);
+        throw new ObjectDefinitionParsingException(problem);
+    }
 
-        public void Fatal(Problem problem)
-        {
-            _logger.LogCritical(problem.Message);
-            throw new ObjectDefinitionParsingException(problem);
-        }
-
-        public void Warning(Problem problem)
-        {
-            _logger.LogWarning(problem.Message);
-
-        }
-
+    public void Warning(Problem problem)
+    {
+        _logger.LogWarning(problem.Message);
     }
 }

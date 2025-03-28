@@ -20,31 +20,30 @@
 
 using Spring.Validation.Actions;
 
-namespace Spring.Validation
+namespace Spring.Validation;
+
+/// <summary>
+/// An action that should be executed after validator is evaluated.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This interface allows us to define the actions that should be executed
+/// after validation in a generic fashion.
+/// </p>
+/// <p>
+/// For example, addition of error messages to validation errors collection
+/// is performed by one specific implementation of this interface, <see cref="ErrorMessageAction"/>.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public interface IValidationAction
 {
     /// <summary>
-    /// An action that should be executed after validator is evaluated.
+    /// Executes the action.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// This interface allows us to define the actions that should be executed
-    /// after validation in a generic fashion.
-    /// </p>
-    /// <p>
-    /// For example, addition of error messages to validation errors collection
-    /// is performed by one specific implementation of this interface, <see cref="ErrorMessageAction"/>.
-    /// </p>
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    public interface IValidationAction
-    {
-        /// <summary>
-        /// Executes the action.
-        /// </summary>
-        /// <param name="isValid">Whether associated validator is valid or not.</param>
-        /// <param name="validationContext">Validation context.</param>
-        /// <param name="contextParams">Additional context parameters.</param>
-        /// <param name="errors">Validation errors container.</param>
-        void Execute(bool isValid, object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors);
-    }
+    /// <param name="isValid">Whether associated validator is valid or not.</param>
+    /// <param name="validationContext">Validation context.</param>
+    /// <param name="contextParams">Additional context parameters.</param>
+    /// <param name="errors">Validation errors container.</param>
+    void Execute(bool isValid, object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors);
 }

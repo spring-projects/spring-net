@@ -22,22 +22,21 @@
 
 #endregion
 
-namespace Spring.Proxy
+namespace Spring.Proxy;
+
+/// <summary>
+/// This attribute can be used to mark interfaces that should not be proxied
+/// </summary>
+/// <author>Bruno Baia</author>
+[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = false)]
+[Serializable]
+public sealed class ProxyIgnoreAttribute : Attribute
 {
     /// <summary>
-    /// This attribute can be used to mark interfaces that should not be proxied
+    /// Creates a new instance of the
+    /// <see cref="Spring.Proxy.ProxyIgnoreAttribute"/> class.
     /// </summary>
-    /// <author>Bruno Baia</author>
-    [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = false)]
-    [Serializable]
-    public sealed class ProxyIgnoreAttribute : Attribute
+    public ProxyIgnoreAttribute()
     {
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Proxy.ProxyIgnoreAttribute"/> class.
-        /// </summary>
-        public ProxyIgnoreAttribute()
-        {
-        }
     }
 }

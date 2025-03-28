@@ -24,71 +24,89 @@ using System.Reflection;
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>
+/// Base class for tests that check standards compliance.
+/// </summary>
+public abstract class StandardsComplianceTest
 {
-	/// <summary>
-	/// Base class for tests that check standards compliance.
-	/// </summary>
-    public abstract class StandardsComplianceTest
+    #region Constructor (s) / Destructor
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.StandardsComplianceTest"/> class.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This is an <see langword="abstract"/> class, and as such has no publicly visible
+    /// constructors.
+    /// </para>
+    /// </remarks>
+    protected StandardsComplianceTest() { }
+
+    #endregion
+
+    #region Properties
+
+    protected Type CheckedType
     {
-        #region Constructor (s) / Destructor
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.StandardsComplianceTest"/> class.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// This is an <see langword="abstract"/> class, and as such has no publicly visible
-        /// constructors.
-        /// </para>
-        /// </remarks>
-        protected StandardsComplianceTest () {}
-        #endregion
-
-        #region Properties
-        protected Type CheckedType {
-            get {
-                return checkedType;
-            }
-            set {
-                checkedType = value;
-            }
+        get
+        {
+            return checkedType;
         }
-        #endregion
+        set
+        {
+            checkedType = value;
+        }
+    }
 
-        private bool IsCheckedType (Type type) {
-            if (CheckedType.IsInterface) {
-                Type iface = type.GetInterface (CheckedType.Name, false);
-                return iface != null;
-            } else {
-                Type baseType = null;
-                while ((baseType = type.BaseType) != null) {
-                    if (baseType == CheckedType) {
-                        return true;
-                    }
-                    type = baseType;
+    #endregion
+
+    private bool IsCheckedType(Type type)
+    {
+        if (CheckedType.IsInterface)
+        {
+            Type iface = type.GetInterface(CheckedType.Name, false);
+            return iface != null;
+        }
+        else
+        {
+            Type baseType = null;
+            while ((baseType = type.BaseType) != null)
+            {
+                if (baseType == CheckedType)
+                {
+                    return true;
                 }
-            }
-            return false;
-        }
 
-        protected void ProcessAssembly (Assembly a) {
-            foreach (Type t in a.GetTypes ()) {
-                
-                // TODO: make antlr compliant
-                if (t.FullName.IndexOf(".antlr.")>-1) continue;
-
-                if ( (t.IsPublic||t.IsNestedPublic)
-                    && IsCheckedType (t)) {
-                    CheckStandardsCompliance (a, t);
-                }
+                type = baseType;
             }
         }
 
-        protected abstract void CheckStandardsCompliance (Assembly assembly, Type t);
+        return false;
+    }
 
-        #region Fields
-        private Type checkedType;
-        #endregion
-	}
+    protected void ProcessAssembly(Assembly a)
+    {
+        foreach (Type t in a.GetTypes())
+        {
+            // TODO: make antlr compliant
+            if (t.FullName.IndexOf(".antlr.") > -1) continue;
+
+            if ((t.IsPublic || t.IsNestedPublic)
+                && IsCheckedType(t))
+            {
+                CheckStandardsCompliance(a, t);
+            }
+        }
+    }
+
+    protected abstract void CheckStandardsCompliance(Assembly assembly, Type t);
+
+    #region Fields
+
+    private Type checkedType;
+
+    #endregion
 }

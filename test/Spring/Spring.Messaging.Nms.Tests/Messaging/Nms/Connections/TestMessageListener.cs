@@ -21,33 +21,31 @@
 using Apache.NMS;
 using Spring.Messaging.Nms.Core;
 
-namespace Spring.Messaging.Nms.Connections
+namespace Spring.Messaging.Nms.Connections;
+
+/// <summary>
+///
+/// </summary>
+/// <remarks>
+///
+/// </remarks>
+/// <author>Mark Pollack</author>
+public class TestMessageListener : IMessageListener
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <remarks>
-    ///
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public class TestMessageListener : IMessageListener
+    private IMessage message;
+
+    public IMessage Message
     {
-        private IMessage message;
-
-
-        public IMessage Message
-        {
-            get { return message; }
-            set { message = value; }
-        }
-
-        #region IMessageListener Members
-
-        public void OnMessage(IMessage message)
-        {
-            this.message = message;
-        }
-
-        #endregion
+        get { return message; }
+        set { message = value; }
     }
+
+    #region IMessageListener Members
+
+    public void OnMessage(IMessage message)
+    {
+        this.message = message;
+    }
+
+    #endregion
 }

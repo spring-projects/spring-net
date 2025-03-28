@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,72 +25,67 @@ using Spring.Core.IO;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the PropertyFileVariableSource class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public sealed class PropertyFileVariableSourceTests
 {
-    /// <summary>
-    /// Unit tests for the PropertyFileVariableSource class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public sealed class PropertyFileVariableSourceTests
+    [Test]
+    public void TestVariablesResolutionWithSingleLocation()
     {
-        [Test]
-        public void TestVariablesResolutionWithSingleLocation()
+        PropertyFileVariableSource vs = new PropertyFileVariableSource();
+        vs.Location =
+            new AssemblyResource(
+                "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties");
+
+        // existing vars
+        Assert.AreEqual("Aleks Seovic", vs.ResolveVariable("name"));
+        Assert.AreEqual("32", vs.ResolveVariable("age"));
+
+        // non-existant variable
+        Assert.IsNull(vs.ResolveVariable("dummy"));
+    }
+
+    [Test]
+    public void TestMissingResourceLocation()
+    {
+        PropertyFileVariableSource vs = new PropertyFileVariableSource();
+        vs.IgnoreMissingResources = true;
+        vs.Locations = new IResource[]
         {
-            PropertyFileVariableSource vs = new PropertyFileVariableSource();
-            vs.Location =
-                new AssemblyResource(
-                    "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties");
+            new AssemblyResource(
+                "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/non-existent.properties"),
+            new AssemblyResource(
+                "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties"),
+        };
 
-            // existing vars
-            Assert.AreEqual("Aleks Seovic", vs.ResolveVariable("name"));
-            Assert.AreEqual("32", vs.ResolveVariable("age"));
+        // existing vars
+        Assert.AreEqual("Aleks Seovic", vs.ResolveVariable("name"));
+        Assert.AreEqual("32", vs.ResolveVariable("age"));
+    }
 
-            // non-existant variable
-            Assert.IsNull(vs.ResolveVariable("dummy"));
-        }
-
-        [Test]
-        public void TestMissingResourceLocation()
+    [Test]
+    public void TestVariablesResolutionWithTwoLocations()
+    {
+        PropertyFileVariableSource vs = new PropertyFileVariableSource();
+        vs.Locations = new IResource[]
         {
-            PropertyFileVariableSource vs = new PropertyFileVariableSource();
-            vs.IgnoreMissingResources = true;
-            vs.Locations = new IResource[]
-                               {
-                                   new AssemblyResource(
-                                       "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/non-existent.properties")
-                                   ,
-                                   new AssemblyResource(
-                                       "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties")
-                                   ,
-                               };
+            new AssemblyResource(
+                "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties"),
+            new AssemblyResource(
+                "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/two.properties")
+        };
 
-            // existing vars
-            Assert.AreEqual("Aleks Seovic", vs.ResolveVariable("name"));
-            Assert.AreEqual("32", vs.ResolveVariable("age"));
-        }
+        // existing vars
+        Assert.AreEqual("Aleksandar Seovic", vs.ResolveVariable("name")); // should be overriden by the second file
+        Assert.AreEqual("32", vs.ResolveVariable("age"));
+        Assert.AreEqual("Marija,Ana,Nadja", vs.ResolveVariable("family"));
 
-
-        [Test]
-        public void TestVariablesResolutionWithTwoLocations()
-        {
-            PropertyFileVariableSource vs = new PropertyFileVariableSource();
-            vs.Locations = new IResource[]
-                               {
-                                   new AssemblyResource(
-                                       "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties")
-                                   ,
-                                   new AssemblyResource(
-                                       "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/two.properties")
-                               };
-
-            // existing vars
-            Assert.AreEqual("Aleksandar Seovic", vs.ResolveVariable("name")); // should be overriden by the second file
-            Assert.AreEqual("32", vs.ResolveVariable("age"));
-            Assert.AreEqual("Marija,Ana,Nadja", vs.ResolveVariable("family"));
-
-            // non-existant variable
-            Assert.IsNull(vs.ResolveVariable("dummy"));
-        }
+        // non-existant variable
+        Assert.IsNull(vs.ResolveVariable("dummy"));
     }
 }

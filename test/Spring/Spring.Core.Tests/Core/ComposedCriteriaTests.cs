@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,54 +25,53 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+[TestFixture]
+public class ComposedCriteriaTests : ComposedCriteria
 {
-	[TestFixture]
-	public class ComposedCriteriaTests : ComposedCriteria
-	{
-		public ComposedCriteriaTests() : base() {}
-		public ComposedCriteriaTests( ICriteria criteria ) : base( criteria ) {}
-		[Test]
-		public void IsSatisfiedWithNoCriteria()
-		{
-			ComposedCriteriaTests composedCriteria = new ComposedCriteriaTests();
-			Assert.IsTrue(composedCriteria.IsSatisfied("foo"));
-		}
+    public ComposedCriteriaTests() : base() { }
+    public ComposedCriteriaTests(ICriteria criteria) : base(criteria) { }
 
-		[Test]
-		public void SatifiesMyUpperCaseCriteria()
-		{
-			ComposedCriteriaTests composedCriteria = new ComposedCriteriaTests(new MyUpperCaseCriteria());
-			Assert.IsTrue(composedCriteria.IsSatisfied("HELLO"));
-			Assert.IsFalse(composedCriteria.IsSatisfied("hello"));
-		}
+    [Test]
+    public void IsSatisfiedWithNoCriteria()
+    {
+        ComposedCriteriaTests composedCriteria = new ComposedCriteriaTests();
+        Assert.IsTrue(composedCriteria.IsSatisfied("foo"));
+    }
 
-		[Test]
-		public void SatifiesTwoCriteria()
-		{
-			ComposedCriteriaTests composedCriteria = new ComposedCriteriaTests();
-			composedCriteria.Add(new MyUpperCaseCriteria());
-			composedCriteria.Add(new MyStringCriteria());
-			Assert.IsTrue(composedCriteria.IsSatisfied("HELLO"));
-			Assert.IsFalse(composedCriteria.IsSatisfied("GOODBYE"));
-			Assert.IsTrue( composedCriteria.Criteria.Count == 2 );
-		}
+    [Test]
+    public void SatifiesMyUpperCaseCriteria()
+    {
+        ComposedCriteriaTests composedCriteria = new ComposedCriteriaTests(new MyUpperCaseCriteria());
+        Assert.IsTrue(composedCriteria.IsSatisfied("HELLO"));
+        Assert.IsFalse(composedCriteria.IsSatisfied("hello"));
+    }
 
-		internal class MyUpperCaseCriteria : ICriteria
-		{
-			public bool IsSatisfied(object datum)
-			{
-				return Regex.Match((string) datum, "[A-Z]").Success;
-			}
-		}
+    [Test]
+    public void SatifiesTwoCriteria()
+    {
+        ComposedCriteriaTests composedCriteria = new ComposedCriteriaTests();
+        composedCriteria.Add(new MyUpperCaseCriteria());
+        composedCriteria.Add(new MyStringCriteria());
+        Assert.IsTrue(composedCriteria.IsSatisfied("HELLO"));
+        Assert.IsFalse(composedCriteria.IsSatisfied("GOODBYE"));
+        Assert.IsTrue(composedCriteria.Criteria.Count == 2);
+    }
 
-		internal class MyStringCriteria : ICriteria
-		{
-			public bool IsSatisfied(object datum)
-			{
-				return datum.ToString().ToLower() == "hello";
-			}
-		}
+    internal class MyUpperCaseCriteria : ICriteria
+    {
+        public bool IsSatisfied(object datum)
+        {
+            return Regex.Match((string) datum, "[A-Z]").Success;
+        }
+    }
 
-	}
+    internal class MyStringCriteria : ICriteria
+    {
+        public bool IsSatisfied(object datum)
+        {
+            return datum.ToString().ToLower() == "hello";
+        }
+    }
 }

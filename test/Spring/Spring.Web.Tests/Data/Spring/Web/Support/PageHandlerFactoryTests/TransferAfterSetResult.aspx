@@ -1,9 +1,9 @@
 <%@ Page language="c#" AutoEventWireup="false" Inherits="Spring.Web.UI.Page" ClassName="TransferAfterSetResult" %>
 <script language="c#" runat="server">
-private void Save_Clicked(object sender, EventArgs e)
-{
-    SetResult("save");
-}
+    private void Save_Clicked(object sender, EventArgs e)
+    {
+        SetResult("save");
+    }
 </script>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>

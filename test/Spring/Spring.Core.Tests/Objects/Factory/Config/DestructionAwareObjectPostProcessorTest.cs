@@ -22,64 +22,62 @@ using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+[TestFixture]
+public class DestructionAwareObjectPostProcessorTest
 {
-    [TestFixture]
-    public class DestructionAwareObjectPostProcessorTest
+    private GenericApplicationContext _context;
+
+    [SetUp]
+    public void Setup()
     {
-        private GenericApplicationContext _context;
+        _context = new GenericApplicationContext();
 
-        [SetUp]
-        public void Setup()
-        {
-            _context = new GenericApplicationContext();
+        var objectDefinition = new RootObjectDefinition(typeof(DestructionPostProcessor));
+        objectDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
+        _context.ObjectFactory.RegisterObjectDefinition("DestructionPostProcessor", objectDefinition);
 
-            var objectDefinition = new RootObjectDefinition(typeof(DestructionPostProcessor));
-            objectDefinition.Role = ObjectRole.ROLE_INFRASTRUCTURE;
-            _context.ObjectFactory.RegisterObjectDefinition("DestructionPostProcessor", objectDefinition);
+        var objectDef = new RootObjectDefinition(typeof(DestroyTester));
+        _context.ObjectFactory.RegisterObjectDefinition("DestroyTester", objectDef);
 
-            var objectDef = new RootObjectDefinition(typeof(DestroyTester));
-            _context.ObjectFactory.RegisterObjectDefinition("DestroyTester", objectDef);
-
-            _context.Refresh();
-        }
-
-        [Test]
-        public void PostProcessBeforeDestructionIsCalled()
-        {
-            var testObj = _context.GetObject("DestroyTester");
-            _context.Dispose();
-
-            Assert.That(DestructionTester.MethodCalled, Is.EqualTo(1));
-        }
+        _context.Refresh();
     }
 
-    public class DestructionPostProcessor : IDestructionAwareObjectPostProcessor
+    [Test]
+    public void PostProcessBeforeDestructionIsCalled()
     {
-        public void PostProcessBeforeDestruction(object instance, string name)
-        {
-            if (instance.GetType() == typeof(DestroyTester))
-                DestructionTester.MethodCalled++;
-        }
+        var testObj = _context.GetObject("DestroyTester");
+        _context.Dispose();
 
-        public object PostProcessBeforeInitialization(object instance, string name)
-        {
-            return instance;
-        }
+        Assert.That(DestructionTester.MethodCalled, Is.EqualTo(1));
+    }
+}
 
-        public object PostProcessAfterInitialization(object instance, string objectName)
-        {
-            return instance;
-        }
+public class DestructionPostProcessor : IDestructionAwareObjectPostProcessor
+{
+    public void PostProcessBeforeDestruction(object instance, string name)
+    {
+        if (instance.GetType() == typeof(DestroyTester))
+            DestructionTester.MethodCalled++;
     }
 
-    public class DestroyTester
+    public object PostProcessBeforeInitialization(object instance, string name)
     {
-    
+        return instance;
     }
 
-    public static class DestructionTester
+    public object PostProcessAfterInitialization(object instance, string objectName)
     {
-        public static int MethodCalled { get; set; }
+        return instance;
     }
+}
+
+public class DestroyTester
+{
+}
+
+public static class DestructionTester
+{
+    public static int MethodCalled { get; set; }
 }

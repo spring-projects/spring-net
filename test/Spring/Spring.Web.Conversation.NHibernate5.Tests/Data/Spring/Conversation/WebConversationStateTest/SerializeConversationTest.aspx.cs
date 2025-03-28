@@ -1,9 +1,7 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using Spring.Web.Conversation;
-
 using NHibernate;
 using Spring.Entities;
-
 
 /// <summary>
 /// Page for <see cref="Spring.Web.Conversation.WebConversationStateTest.SerializeConversationTest()"/>.
@@ -11,6 +9,7 @@ using Spring.Entities;
 public partial class SerializeConversationTest : System.Web.UI.Page
 {
     private IConversationState conversation;
+
     /// <summary>
     /// <see cref="IConversationState"/>
     /// </summary>
@@ -40,7 +39,6 @@ public partial class SerializeConversationTest : System.Web.UI.Page
             }
 
             bf.Serialize(ms, sessionContent);
-
 
             if (this.Session["SPCDetailEnt#1"] == null)
             {

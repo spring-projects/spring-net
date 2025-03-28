@@ -6,8 +6,8 @@ namespace Spring.Data.NHibernate
     [Transaction]
     public class SimpleTestDao : ITestObjectDao
     {
-
         private int _secondsToSleepBeforeException;
+
         public int SecondsToSleepBeforeException
         {
             get { return _secondsToSleepBeforeException; }
@@ -16,7 +16,6 @@ namespace Spring.Data.NHibernate
                 _secondsToSleepBeforeException = value * 1000;
             }
         }
-        
 
         public ISessionFactory SessionFactory
         {

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,20 +25,19 @@ using Spring.Web.UI.Validation;
 
 #endregion
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// 
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class ValidationSummaryTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class ValidationSummaryTests
+    [Test]
+    public void DefaultsToDivValidationErrorsRenderer()
     {
-        [Test]
-        public void DefaultsToDivValidationErrorsRenderer()
-        {
-            ValidationSummary vs = new ValidationSummary();
-            Assert.AreEqual(typeof (DivValidationErrorsRenderer), vs.Renderer.GetType());
-        }
+        ValidationSummary vs = new ValidationSummary();
+        Assert.AreEqual(typeof(DivValidationErrorsRenderer), vs.Renderer.GetType());
     }
 }

@@ -25,49 +25,49 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop
+namespace Spring.Aop;
+
+/// <summary>
+/// Unit tests for the TrueTypeFilter class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class TrueTypeFilterTests
 {
-	/// <summary>
-	/// Unit tests for the TrueTypeFilter class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class TrueTypeFilterTests
-	{
-		[Test]
-		public void Deserialization()
-		{
-			ITypeFilter deserializedVersion
-				= (ITypeFilter) SerializationTestUtils.SerializeAndDeserialize(
-					TrueTypeFilter.True);
-			Assert.IsTrue(Object.ReferenceEquals(TrueTypeFilter.True, deserializedVersion),
-			              "Singleton instance not being deserialized correctly");
-		}
+    [Test]
+    public void Deserialization()
+    {
+        ITypeFilter deserializedVersion
+            = (ITypeFilter) SerializationTestUtils.SerializeAndDeserialize(
+                TrueTypeFilter.True);
+        Assert.IsTrue(Object.ReferenceEquals(TrueTypeFilter.True, deserializedVersion),
+            "Singleton instance not being deserialized correctly");
+    }
 
-		[Test]
-		public void IsSerializable()
-		{
-			Assert.IsTrue(SerializationTestUtils.IsSerializable(TrueTypeFilter.True),
-			              "TrueClassFilter must be serializable.");
-		}
+    [Test]
+    public void IsSerializable()
+    {
+        Assert.IsTrue(SerializationTestUtils.IsSerializable(TrueTypeFilter.True),
+            "TrueClassFilter must be serializable.");
+    }
 
-		[Test]
-		public void AlwaysMatchesEvenOnNullArgument()
-		{
-			Assert.IsTrue(TrueTypeFilter.True.Matches(null),
-			              "Must always match (return true).");
-		}
+    [Test]
+    public void AlwaysMatchesEvenOnNullArgument()
+    {
+        Assert.IsTrue(TrueTypeFilter.True.Matches(null),
+            "Must always match (return true).");
+    }
 
-		[Test]
-		public void AlwaysMatches()
-		{
-			Assert.IsTrue(TrueTypeFilter.True.Matches(GetType()),
-			              "Must always match (return true).");
-		}
-		[Test]
-			public void ToStringAlwaysTrue()
-		{
-			Assert.AreEqual("TrueTypeFilter.True", TrueTypeFilter.True.ToString() );
-		}
-	}
+    [Test]
+    public void AlwaysMatches()
+    {
+        Assert.IsTrue(TrueTypeFilter.True.Matches(GetType()),
+            "Must always match (return true).");
+    }
+
+    [Test]
+    public void ToStringAlwaysTrue()
+    {
+        Assert.AreEqual("TrueTypeFilter.True", TrueTypeFilter.True.ToString());
+    }
 }

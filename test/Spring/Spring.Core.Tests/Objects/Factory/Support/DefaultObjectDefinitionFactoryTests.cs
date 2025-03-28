@@ -24,58 +24,57 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Unit tests for the DefaultObjectDefinitionFactory class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class DefaultObjectDefinitionFactoryTests
 {
-	/// <summary>
-	/// Unit tests for the DefaultObjectDefinitionFactory class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class DefaultObjectDefinitionFactoryTests
-	{
-		[Test]
-		public void CreateRootDefinition()
-		{
-			DefaultObjectDefinitionFactory factory = new DefaultObjectDefinitionFactory();
-			IConfigurableObjectDefinition definition
-				= factory.CreateObjectDefinition(
-					typeof (TestObject).FullName, null, AppDomain.CurrentDomain);
-			Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
-			Assert.AreEqual(typeof (TestObject), definition.ObjectType);
-			Assert.AreEqual(0, definition.PropertyValues.PropertyValues.Count,
-			                "Must not have any property values as none were passed in.");
-			Assert.AreEqual(0, definition.ConstructorArgumentValues.ArgumentCount,
-			                "Must not have any ctor args as none were passed in.");
-		}
+    [Test]
+    public void CreateRootDefinition()
+    {
+        DefaultObjectDefinitionFactory factory = new DefaultObjectDefinitionFactory();
+        IConfigurableObjectDefinition definition
+            = factory.CreateObjectDefinition(
+                typeof(TestObject).FullName, null, AppDomain.CurrentDomain);
+        Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
+        Assert.AreEqual(typeof(TestObject), definition.ObjectType);
+        Assert.AreEqual(0, definition.PropertyValues.PropertyValues.Count,
+            "Must not have any property values as none were passed in.");
+        Assert.AreEqual(0, definition.ConstructorArgumentValues.ArgumentCount,
+            "Must not have any ctor args as none were passed in.");
+    }
 
-		[Test]
-		public void CreateChildDefinition()
-		{
-			DefaultObjectDefinitionFactory factory = new DefaultObjectDefinitionFactory();
-			IConfigurableObjectDefinition definition
-				= factory.CreateObjectDefinition(
-					typeof (TestObject).FullName, "Aimee Mann", AppDomain.CurrentDomain);
-			Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
-			Assert.AreEqual(typeof (TestObject), definition.ObjectType);
-			Assert.AreEqual(0, definition.PropertyValues.PropertyValues.Count,
-			                "Must not have any property values as none were passed in.");
-			Assert.AreEqual(0, definition.ConstructorArgumentValues.ArgumentCount,
-			                "Must not have any ctor args as none were passed in.");
-		}
+    [Test]
+    public void CreateChildDefinition()
+    {
+        DefaultObjectDefinitionFactory factory = new DefaultObjectDefinitionFactory();
+        IConfigurableObjectDefinition definition
+            = factory.CreateObjectDefinition(
+                typeof(TestObject).FullName, "Aimee Mann", AppDomain.CurrentDomain);
+        Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
+        Assert.AreEqual(typeof(TestObject), definition.ObjectType);
+        Assert.AreEqual(0, definition.PropertyValues.PropertyValues.Count,
+            "Must not have any property values as none were passed in.");
+        Assert.AreEqual(0, definition.ConstructorArgumentValues.ArgumentCount,
+            "Must not have any ctor args as none were passed in.");
+    }
 
-		[Test]
-		public void DoesNotResolveTypeNameToFullTypeInstanceIfAppDomainIsNull()
-		{
-			DefaultObjectDefinitionFactory factory = new DefaultObjectDefinitionFactory();
-			IConfigurableObjectDefinition definition
-				= factory.CreateObjectDefinition(
-					typeof (TestObject).FullName, null, null);
-			Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
-			Assert.AreEqual(typeof (TestObject).FullName, definition.ObjectTypeName);
-			Assert.AreEqual(0, definition.PropertyValues.PropertyValues.Count,
-			                "Must not have any property values as none were passed in.");
-			Assert.AreEqual(0, definition.ConstructorArgumentValues.ArgumentCount,
-			                "Must not have any ctor args as none were passed in.");
-		}
-	}
+    [Test]
+    public void DoesNotResolveTypeNameToFullTypeInstanceIfAppDomainIsNull()
+    {
+        DefaultObjectDefinitionFactory factory = new DefaultObjectDefinitionFactory();
+        IConfigurableObjectDefinition definition
+            = factory.CreateObjectDefinition(
+                typeof(TestObject).FullName, null, null);
+        Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
+        Assert.AreEqual(typeof(TestObject).FullName, definition.ObjectTypeName);
+        Assert.AreEqual(0, definition.PropertyValues.PropertyValues.Count,
+            "Must not have any property values as none were passed in.");
+        Assert.AreEqual(0, definition.ConstructorArgumentValues.ArgumentCount,
+            "Must not have any ctor args as none were passed in.");
+    }
 }

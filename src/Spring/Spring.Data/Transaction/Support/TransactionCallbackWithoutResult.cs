@@ -18,51 +18,48 @@
 
 #endregion
 
-namespace Spring.Transaction.Support
+namespace Spring.Transaction.Support;
+
+/// <summary>
+/// Simple convenience class for TransactionCallback implementation.
+/// Allows for implementing a DoInTransaction version without result,
+/// i.e. without the need for a return statement.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public abstract class TransactionCallbackWithoutResult : ITransactionCallback
 {
-	/// <summary>
-	/// Simple convenience class for TransactionCallback implementation.
-	/// Allows for implementing a DoInTransaction version without result,
-	/// i.e. without the need for a return statement.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	public abstract class TransactionCallbackWithoutResult : ITransactionCallback
-	{
-		#region Methods
+    #region Methods
 
-        /// <summary>
-        /// Gets called by TransactionTemplate.execute within a transactional context
-        /// when no return value is required.
-        /// </summary>
-        /// <param name="status">The status.</param>
-        /// <remarks>
-        /// Does not need to care about transactions itself, although it can retrieve
-        /// and influence the status of the current transaction via the given status
-        /// object, e.g. setting rollback-only.
-        /// A RuntimeException thrown by the callback is treated as application
-        /// exception that enforces a rollback. An exception gets propagated to the
-        /// caller of the template.
-        /// </remarks>
-        public abstract void DoInTransactionWithoutResult(ITransactionStatus status);
+    /// <summary>
+    /// Gets called by TransactionTemplate.execute within a transactional context
+    /// when no return value is required.
+    /// </summary>
+    /// <param name="status">The status.</param>
+    /// <remarks>
+    /// Does not need to care about transactions itself, although it can retrieve
+    /// and influence the status of the current transaction via the given status
+    /// object, e.g. setting rollback-only.
+    /// A RuntimeException thrown by the callback is treated as application
+    /// exception that enforces a rollback. An exception gets propagated to the
+    /// caller of the template.
+    /// </remarks>
+    public abstract void DoInTransactionWithoutResult(ITransactionStatus status);
 
-	    #endregion
+    #endregion
 
-        #region ITransactionCallback Members
+    #region ITransactionCallback Members
 
-        /// <summary>
-        /// Gets called by TransactionTemplate.Execute within a
-        /// transaction context.
-        /// </summary>
-        /// <param name="status">The associated transaction status.</param>
-        /// <returns>a result object or <c>null</c></returns>
-        public object DoInTransaction(ITransactionStatus status)
-        {
-            DoInTransactionWithoutResult(status);
-            return null;
-        }
-
-
-
-	    #endregion
+    /// <summary>
+    /// Gets called by TransactionTemplate.Execute within a
+    /// transaction context.
+    /// </summary>
+    /// <param name="status">The associated transaction status.</param>
+    /// <returns>a result object or <c>null</c></returns>
+    public object DoInTransaction(ITransactionStatus status)
+    {
+        DoInTransactionWithoutResult(status);
+        return null;
     }
+
+    #endregion
 }

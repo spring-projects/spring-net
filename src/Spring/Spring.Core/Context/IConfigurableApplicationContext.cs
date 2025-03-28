@@ -20,108 +20,107 @@
 
 using Spring.Objects.Factory.Config;
 
-namespace Spring.Context
+namespace Spring.Context;
+
+/// <summary>
+/// Provides the means to configure an application context in addition to
+/// the methods exposed on the
+/// <see cref="Spring.Context.IApplicationContext"/> interface.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This interface is to be implemented by most (if not all)
+/// <see cref="Spring.Context.IApplicationContext"/> implementations.
+/// </p>
+/// <p>
+/// Configuration and lifecycle methods are encapsulated here to avoid
+/// making them obvious to <see cref="Spring.Context.IApplicationContext"/>
+/// client code.
+/// </p>
+/// <p>
+/// Calling <see cref="System.IDisposable.Dispose()"/> will close this
+/// application context, releasing all resources and locks that the
+/// implementation might hold. This includes disposing all cached
+/// <b>singleton</b> objects.
+/// </p>
+/// <note type="caution">
+/// <see cref="System.IDisposable.Dispose()"/> does <i>not</i> invoke the
+/// attendant <see cref="System.IDisposable.Dispose()"/> on any parent
+/// context.
+/// </note>
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+/// <seealso cref="System.IDisposable"/>
+/// <seealso cref="Spring.Context.IApplicationContext"/>
+public interface IConfigurableApplicationContext : IApplicationContext, ILifecycle
 {
     /// <summary>
-    /// Provides the means to configure an application context in addition to
-    /// the methods exposed on the
-    /// <see cref="Spring.Context.IApplicationContext"/> interface.
+    /// Return the internal object factory of this application context.
     /// </summary>
     /// <remarks>
     /// <p>
-    /// This interface is to be implemented by most (if not all)
-    /// <see cref="Spring.Context.IApplicationContext"/> implementations.
-    /// </p>
-    /// <p>
-    /// Configuration and lifecycle methods are encapsulated here to avoid
-    /// making them obvious to <see cref="Spring.Context.IApplicationContext"/>
-    /// client code.
-    /// </p>
-    /// <p>
-    /// Calling <see cref="System.IDisposable.Dispose()"/> will close this
-    /// application context, releasing all resources and locks that the
-    /// implementation might hold. This includes disposing all cached
-    /// <b>singleton</b> objects.
+    /// Can be used to access specific functionality of the factory.
     /// </p>
     /// <note type="caution">
-    /// <see cref="System.IDisposable.Dispose()"/> does <i>not</i> invoke the
-    /// attendant <see cref="System.IDisposable.Dispose()"/> on any parent
-    /// context.
+    /// This is just guaranteed to return an instance that is not
+    /// <see langword="null"/> <i>after</i> the context has been refreshed
+    /// at least once.
+    /// </note>
+    /// <note type="caution">
+    /// Do not use this to post-process the object factory; singletons
+    /// will already have been instantiated. Use an
+    /// <see cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
+    /// to intercept the object factory setup process before objects even
+    /// get touched.
     /// </note>
     /// </remarks>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    /// <seealso cref="System.IDisposable"/>
-    /// <seealso cref="Spring.Context.IApplicationContext"/>
-    public interface IConfigurableApplicationContext : IApplicationContext, ILifecycle
-    {
-        /// <summary>
-        /// Return the internal object factory of this application context.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Can be used to access specific functionality of the factory.
-        /// </p>
-        /// <note type="caution">
-        /// This is just guaranteed to return an instance that is not
-        /// <see langword="null"/> <i>after</i> the context has been refreshed
-        /// at least once.
-        /// </note>
-        /// <note type="caution">
-        /// Do not use this to post-process the object factory; singletons
-        /// will already have been instantiated. Use an
-        /// <see cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
-        /// to intercept the object factory setup process before objects even
-        /// get touched.
-        /// </note>
-        /// </remarks>
-        /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
-        IConfigurableListableObjectFactory ObjectFactory { get; }
+    /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
+    IConfigurableListableObjectFactory ObjectFactory { get; }
 
-        /// <summary>
-        /// Add an
-        /// <see cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
-        /// that will get applied to the internal object factory of this
-        /// application context on refresh, before any of the object
-        /// definitions are evaluated.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// To be invoked during context configuration.
-        /// </p>
-        /// </remarks>
-        /// <param name="objectFactoryPostProcessor">
-        /// The factory processor to register.
-        /// </param>
-        /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
-        void AddObjectFactoryPostProcessor(
-            IObjectFactoryPostProcessor objectFactoryPostProcessor);
+    /// <summary>
+    /// Add an
+    /// <see cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
+    /// that will get applied to the internal object factory of this
+    /// application context on refresh, before any of the object
+    /// definitions are evaluated.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// To be invoked during context configuration.
+    /// </p>
+    /// </remarks>
+    /// <param name="objectFactoryPostProcessor">
+    /// The factory processor to register.
+    /// </param>
+    /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
+    void AddObjectFactoryPostProcessor(
+        IObjectFactoryPostProcessor objectFactoryPostProcessor);
 
-        /// <summary>
-        /// Load or refresh the persistent representation of the configuration,
-        /// which might an XML file, properties file, or relational database schema.
-        /// </summary>
-        /// <exception cref="Spring.Context.ApplicationContextException">
-        /// If the configuration cannot be loaded.
-        /// </exception>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// If the object factory could not be initialized.
-        /// </exception>
-        void Refresh();
+    /// <summary>
+    /// Load or refresh the persistent representation of the configuration,
+    /// which might an XML file, properties file, or relational database schema.
+    /// </summary>
+    /// <exception cref="Spring.Context.ApplicationContextException">
+    /// If the configuration cannot be loaded.
+    /// </exception>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// If the object factory could not be initialized.
+    /// </exception>
+    void Refresh();
 
-        /// <summary>
-        /// Sets the parent of this application context.
-        /// </summary>
-        /// <remarks>
-        /// <note>
-        /// The parent should <b>not</b> be changed: it should only be set
-        /// outside a constructor if it isn't available when an instance of
-        /// this class is created.
-        /// </note>
-        /// </remarks>
-        /// <value>
-        /// The parent context.
-        /// </value>
-        new IApplicationContext ParentContext { get; set; }
-    }
+    /// <summary>
+    /// Sets the parent of this application context.
+    /// </summary>
+    /// <remarks>
+    /// <note>
+    /// The parent should <b>not</b> be changed: it should only be set
+    /// outside a constructor if it isn't available when an instance of
+    /// this class is created.
+    /// </note>
+    /// </remarks>
+    /// <value>
+    /// The parent context.
+    /// </value>
+    new IApplicationContext ParentContext { get; set; }
 }

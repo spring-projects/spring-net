@@ -14,7 +14,7 @@ namespace Spring.Data.NHibernate
 
         public void DoWork()
         {
-            accountManager.DoTransfer(30,30);
+            accountManager.DoTransfer(30, 30);
         }
 
         #endregion

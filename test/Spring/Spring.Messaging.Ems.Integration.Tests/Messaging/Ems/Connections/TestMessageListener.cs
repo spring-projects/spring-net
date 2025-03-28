@@ -18,33 +18,31 @@
 
 #endregion
 
-namespace Spring.Messaging.Ems.Connections
+namespace Spring.Messaging.Ems.Connections;
+
+/// <summary>
+///
+/// </summary>
+/// <remarks>
+///
+/// </remarks>
+/// <author>Mark Pollack</author>
+public class TestMessageListener : IMessageListener
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <remarks>
-    ///
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public class TestMessageListener : IMessageListener
+    private string message;
+
+    public string Message
     {
-        private string message;
-
-
-        public string Message
-        {
-            get { return message; }
-            set { message = value; }
-        }
-
-        #region IMessageListener Members
-
-        public void OnMessage(Message message)
-        {
-            this.message = "Test1";
-        }
-
-        #endregion
+        get { return message; }
+        set { message = value; }
     }
+
+    #region IMessageListener Members
+
+    public void OnMessage(Message message)
+    {
+        this.message = "Test1";
+    }
+
+    #endregion
 }

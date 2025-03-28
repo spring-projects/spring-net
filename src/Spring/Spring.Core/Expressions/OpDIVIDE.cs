@@ -21,53 +21,52 @@
 using System.Runtime.Serialization;
 using Spring.Util;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents arithmetic division operator.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class OpDIVIDE : BinaryOperator
 {
     /// <summary>
-    /// Represents arithmetic division operator.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class OpDIVIDE : BinaryOperator
+    public OpDIVIDE()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpDIVIDE()
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpDIVIDE(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Returns a value for the arithmetic division operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object left = GetLeftValue(context, evalContext);
+        object right = GetRightValue(context, evalContext);
+
+        if (NumberUtils.IsNumber(left) && NumberUtils.IsNumber(right))
         {
+            return NumberUtils.Divide(left, right);
         }
-
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpDIVIDE(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        else
         {
-        }
-
-        /// <summary>
-        /// Returns a value for the arithmetic division operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            object left = GetLeftValue(context, evalContext);
-            object right = GetRightValue(context, evalContext);
-
-            if (NumberUtils.IsNumber(left) && NumberUtils.IsNumber(right))
-            {
-                return NumberUtils.Divide(left, right);
-            }
-            else
-            {
-                throw new ArgumentException("Cannot divide instances of '"
-                                            + left.GetType().FullName
-                                            + "' and '"
-                                            + right.GetType().FullName
-                                            + "'.");
-            }
+            throw new ArgumentException("Cannot divide instances of '"
+                                        + left.GetType().FullName
+                                        + "' and '"
+                                        + right.GetType().FullName
+                                        + "'.");
         }
     }
 }

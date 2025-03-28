@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,67 +19,64 @@
 #endregion
 
 using FakeItEasy;
-
 using NUnit.Framework;
 
-namespace Spring.Globalization.Formatters
+namespace Spring.Globalization.Formatters;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class FilteringFormatterTests
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class FilteringFormatterTests
+    public class TestFilteringFormatter : FilteringFormatter
     {
-        public class TestFilteringFormatter : FilteringFormatter
+        public TestFilteringFormatter(IFormatter underlyingFormatter) : base(underlyingFormatter)
         {
-            public TestFilteringFormatter(IFormatter underlyingFormatter) : base(underlyingFormatter)
-            {
-            }
-
-            protected override string FilterValueToParse(string value)
-            {
-                return this.DoFilterValueToParse(value);
-            }
-
-            public virtual string DoFilterValueToParse(string value)
-            {
-                return base.FilterValueToParse(value);
-            }
-
-            protected override object FilterValueToFormat(object value)
-            {
-                return this.DoFilterValueToFormat(value);
-            }
-
-            public virtual object DoFilterValueToFormat(object value)
-            {
-                return base.FilterValueToFormat(value);
-            }
-
         }
 
-        [Test]
-        public void FiltersOnParseAndFormat()
+        protected override string FilterValueToParse(string value)
         {
-            IFormatter underlyingFormatter = A.Fake<IFormatter>();
-            TestFilteringFormatter formatter = A.Fake<TestFilteringFormatter>(x => x
-                .CallsBaseMethods()
-                .WithArgumentsForConstructor(new[] {underlyingFormatter}));
-
-            string inputText = "inputText";
-            string filteredInputText = "filteredInputText";
-            object outputValue = new object();
-            object filteredOutputValue = new object();
-
-            A.CallTo(() => formatter.DoFilterValueToParse(inputText)).Returns(filteredInputText);
-            A.CallTo(() => underlyingFormatter.Parse(filteredInputText)).Returns(outputValue);
-
-            A.CallTo(() => formatter.DoFilterValueToFormat(outputValue)).Returns(filteredOutputValue);
-            A.CallTo(() => underlyingFormatter.Format(filteredOutputValue)).Returns(inputText);
-
-            Assert.AreSame(outputValue, formatter.Parse(inputText));
-            Assert.AreEqual(inputText, formatter.Format(outputValue));
+            return this.DoFilterValueToParse(value);
         }
+
+        public virtual string DoFilterValueToParse(string value)
+        {
+            return base.FilterValueToParse(value);
+        }
+
+        protected override object FilterValueToFormat(object value)
+        {
+            return this.DoFilterValueToFormat(value);
+        }
+
+        public virtual object DoFilterValueToFormat(object value)
+        {
+            return base.FilterValueToFormat(value);
+        }
+    }
+
+    [Test]
+    public void FiltersOnParseAndFormat()
+    {
+        IFormatter underlyingFormatter = A.Fake<IFormatter>();
+        TestFilteringFormatter formatter = A.Fake<TestFilteringFormatter>(x => x
+            .CallsBaseMethods()
+            .WithArgumentsForConstructor(new[] { underlyingFormatter }));
+
+        string inputText = "inputText";
+        string filteredInputText = "filteredInputText";
+        object outputValue = new object();
+        object filteredOutputValue = new object();
+
+        A.CallTo(() => formatter.DoFilterValueToParse(inputText)).Returns(filteredInputText);
+        A.CallTo(() => underlyingFormatter.Parse(filteredInputText)).Returns(outputValue);
+
+        A.CallTo(() => formatter.DoFilterValueToFormat(outputValue)).Returns(filteredOutputValue);
+        A.CallTo(() => underlyingFormatter.Format(filteredOutputValue)).Returns(inputText);
+
+        Assert.AreSame(outputValue, formatter.Parse(inputText));
+        Assert.AreEqual(inputText, formatter.Format(outputValue));
     }
 }

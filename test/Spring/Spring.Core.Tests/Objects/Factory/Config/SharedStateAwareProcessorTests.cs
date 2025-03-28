@@ -21,146 +21,149 @@
 #region Imports
 
 using System.Collections;
-
 using FakeItEasy;
 using NUnit.Framework;
-
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Support;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class SharedStateAwareProcessorTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class SharedStateAwareProcessorTests
+    [Test]
+    public void DoesNotAllowNullOrEmptyFactoryList()
     {
-        [Test]
-        public void DoesNotAllowNullOrEmptyFactoryList()
+        // check default ctor init
+        SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
+        Assert.IsNotNull(ssap.SharedStateFactories);
+        Assert.AreEqual(0, ssap.SharedStateFactories.Length);
+
+        // check we accept a list at all
+        ssap = new SharedStateAwareProcessor(new ISharedStateFactory[] { new ByTypeSharedStateFactory() }, Int32.MaxValue);
+
+        // now ensure that SharedStateFactories will never be null or empty
+        ssap = new SharedStateAwareProcessor();
+        try
         {
-            // check default ctor init
-            SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
-            Assert.IsNotNull( ssap.SharedStateFactories );
-            Assert.AreEqual( 0, ssap.SharedStateFactories.Length );
-
-            // check we accept a list at all
-            ssap = new SharedStateAwareProcessor( new ISharedStateFactory[] { new ByTypeSharedStateFactory() }, Int32.MaxValue );
-
-            // now ensure that SharedStateFactories will never be null or empty
-            ssap = new SharedStateAwareProcessor();
-            try
-            {
-                ssap.SharedStateFactories = null;
-                Assert.Fail( "should throw ArgumentException" );
-            }
-            catch (ArgumentException)
-            { }
-
-            try
-            {
-                ssap.SharedStateFactories = new ISharedStateFactory[0];
-                Assert.Fail( "should throw ArgumentException" );
-            }
-            catch (ArgumentException)
-            { }
-
-            try
-            {
-                ssap.SharedStateFactories = new ISharedStateFactory[] { null };
-                Assert.Fail( "should throw ArgumentException" );
-            }
-            catch (ArgumentException)
-            { }
-
-            try
-            {
-                ssap = new SharedStateAwareProcessor( null, Int32.MaxValue );
-                Assert.Fail( "should throw ArgumentException" );
-            }
-            catch (ArgumentException)
-            { }
-
-            try
-            {
-                ssap = new SharedStateAwareProcessor( new ISharedStateFactory[0], Int32.MaxValue );
-                Assert.Fail( "should throw ArgumentException" );
-            }
-            catch (ArgumentException)
-            { }
-
-            try
-            {
-                ssap = new SharedStateAwareProcessor( new ISharedStateFactory[] { null }, Int32.MaxValue );
-                Assert.Fail( "should throw ArgumentException" );
-            }
-            catch (ArgumentException)
-            { }
+            ssap.SharedStateFactories = null;
+            Assert.Fail("should throw ArgumentException");
+        }
+        catch (ArgumentException)
+        {
         }
 
-        [Test]
-        public void BeforeInitializationIsNoOp()
+        try
         {
-            SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
-            object res = ssap.PostProcessBeforeInitialization( this, null );
-            Assert.AreSame( this, res );
+            ssap.SharedStateFactories = new ISharedStateFactory[0];
+            Assert.Fail("should throw ArgumentException");
+        }
+        catch (ArgumentException)
+        {
         }
 
-        [Test]
-        public void IgnoresAlreadyPopulatedState()
+        try
         {
-            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
-
-            ISharedStateFactory ssf1 = A.Fake<ISharedStateFactory>();
-            ISharedStateAware ssa = A.Fake<ISharedStateAware>();
-
-            SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
-            ssap.SharedStateFactories = new ISharedStateFactory[] {ssf1};
-            of.RegisterSingleton("ssap", ssap);
-
-            // preset SharedState - ssap must ignore it
-            A.CallTo(() => ssa.SharedState).Returns(new Hashtable());
-
-            ssap.PostProcessBeforeInitialization(ssa, "myPage");
-
-            A.CallTo(ssa).Where(x => x.Method.Name == "set_SharedState").MustNotHaveHappened();
+            ssap.SharedStateFactories = new ISharedStateFactory[] { null };
+            Assert.Fail("should throw ArgumentException");
+        }
+        catch (ArgumentException)
+        {
         }
 
-        [Test]
-        public void ProbesSharedStateFactories()
+        try
         {
-            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
-
-            ISharedStateFactory ssf1 = A.Fake<ISharedStateFactory>();
-            ISharedStateFactory ssf2 = A.Fake<ISharedStateFactory>();
-            ISharedStateFactory ssf3 = A.Fake<ISharedStateFactory>();
-            ISharedStateFactory ssf4 = A.Fake<ISharedStateFactory>();
-            IDictionary ssf3ProvidedState = new Hashtable();
-
-            SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
-            ssap.SharedStateFactories = new ISharedStateFactory[] {ssf1, ssf2, ssf3, ssf4};
-            of.RegisterSingleton("ssap", ssap);
-
-            ISharedStateAware ssa = A.Fake<ISharedStateAware>();
-
-            // Ensure we iterate over configured SharedStateFactories until 
-            // the first provider is found that
-            // a) true == provider.CanProvideState( instance, name )
-            // b) null != provider.GetSharedState( instance, name )
-
-            A.CallTo(() => ssa.SharedState).Returns(null).Once();
-            A.CallTo(() => ssf1.CanProvideState(ssa, "pageName")).Returns(false).Once();
-            A.CallTo(() => ssf2.CanProvideState(ssa, "pageName")).Returns(true).Once();
-            A.CallTo(() => ssf2.GetSharedStateFor(ssa, "pageName")).Returns(null);
-            A.CallTo(() => ssf3.CanProvideState(ssa, "pageName")).Returns(true).Once();
-            A.CallTo(() => ssf3.GetSharedStateFor(ssa, "pageName")).Returns(ssf3ProvidedState).Once();
-
-            ssap.PostProcessBeforeInitialization(ssa, "pageName");
-
-            Assert.That(Equals(ssa.SharedState, ssf3ProvidedState));
+            ssap = new SharedStateAwareProcessor(null, Int32.MaxValue);
+            Assert.Fail("should throw ArgumentException");
         }
+        catch (ArgumentException)
+        {
+        }
+
+        try
+        {
+            ssap = new SharedStateAwareProcessor(new ISharedStateFactory[0], Int32.MaxValue);
+            Assert.Fail("should throw ArgumentException");
+        }
+        catch (ArgumentException)
+        {
+        }
+
+        try
+        {
+            ssap = new SharedStateAwareProcessor(new ISharedStateFactory[] { null }, Int32.MaxValue);
+            Assert.Fail("should throw ArgumentException");
+        }
+        catch (ArgumentException)
+        {
+        }
+    }
+
+    [Test]
+    public void BeforeInitializationIsNoOp()
+    {
+        SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
+        object res = ssap.PostProcessBeforeInitialization(this, null);
+        Assert.AreSame(this, res);
+    }
+
+    [Test]
+    public void IgnoresAlreadyPopulatedState()
+    {
+        DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+
+        ISharedStateFactory ssf1 = A.Fake<ISharedStateFactory>();
+        ISharedStateAware ssa = A.Fake<ISharedStateAware>();
+
+        SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
+        ssap.SharedStateFactories = new ISharedStateFactory[] { ssf1 };
+        of.RegisterSingleton("ssap", ssap);
+
+        // preset SharedState - ssap must ignore it
+        A.CallTo(() => ssa.SharedState).Returns(new Hashtable());
+
+        ssap.PostProcessBeforeInitialization(ssa, "myPage");
+
+        A.CallTo(ssa).Where(x => x.Method.Name == "set_SharedState").MustNotHaveHappened();
+    }
+
+    [Test]
+    public void ProbesSharedStateFactories()
+    {
+        DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+
+        ISharedStateFactory ssf1 = A.Fake<ISharedStateFactory>();
+        ISharedStateFactory ssf2 = A.Fake<ISharedStateFactory>();
+        ISharedStateFactory ssf3 = A.Fake<ISharedStateFactory>();
+        ISharedStateFactory ssf4 = A.Fake<ISharedStateFactory>();
+        IDictionary ssf3ProvidedState = new Hashtable();
+
+        SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
+        ssap.SharedStateFactories = new ISharedStateFactory[] { ssf1, ssf2, ssf3, ssf4 };
+        of.RegisterSingleton("ssap", ssap);
+
+        ISharedStateAware ssa = A.Fake<ISharedStateAware>();
+
+        // Ensure we iterate over configured SharedStateFactories until
+        // the first provider is found that
+        // a) true == provider.CanProvideState( instance, name )
+        // b) null != provider.GetSharedState( instance, name )
+
+        A.CallTo(() => ssa.SharedState).Returns(null).Once();
+        A.CallTo(() => ssf1.CanProvideState(ssa, "pageName")).Returns(false).Once();
+        A.CallTo(() => ssf2.CanProvideState(ssa, "pageName")).Returns(true).Once();
+        A.CallTo(() => ssf2.GetSharedStateFor(ssa, "pageName")).Returns(null);
+        A.CallTo(() => ssf3.CanProvideState(ssa, "pageName")).Returns(true).Once();
+        A.CallTo(() => ssf3.GetSharedStateFor(ssa, "pageName")).Returns(ssf3ProvidedState).Once();
+
+        ssap.PostProcessBeforeInitialization(ssa, "pageName");
+
+        Assert.That(Equals(ssa.SharedState, ssf3ProvidedState));
     }
 }

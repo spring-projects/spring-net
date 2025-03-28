@@ -27,77 +27,76 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Proxy
+namespace Spring.Proxy;
+
+/// <summary>
+/// Allows easy access to existing and creation of new dynamic proxies.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+/// <author>Bruno Baia</author>
+public sealed class DynamicProxyManager
 {
+    #region Fields
+
     /// <summary>
-    /// Allows easy access to existing and creation of new dynamic proxies.
+    /// The name of the assembly that defines proxy types created.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    /// <author>Bruno Baia</author>
-    public sealed class DynamicProxyManager
+    public const string ASSEMBLY_NAME = "Spring.Proxy";
+
+    /// <summary>
+    /// The attributes of the proxy type to generate.
+    /// </summary>
+    private const TypeAttributes TYPE_ATTRIBUTES = TypeAttributes.BeforeFieldInit | TypeAttributes.Public;
+
+    #endregion
+
+    #region Public Methods
+
+    /// <summary>
+    /// Creates an appropriate type builder.
+    /// </summary>
+    /// <param name="typeName">The proxy type name.</param>
+    /// <param name="baseType">The type to extends if provided.</param>
+    /// <returns>The type builder to use.</returns>
+    public static TypeBuilder CreateTypeBuilder(string typeName, Type baseType)
     {
-        #region Fields
+        ModuleBuilder module = DynamicCodeManager.GetModuleBuilder(ASSEMBLY_NAME);
 
-        /// <summary>
-        /// The name of the assembly that defines proxy types created.
-        /// </summary>
-        public const string ASSEMBLY_NAME = "Spring.Proxy";
-
-        /// <summary>
-        /// The attributes of the proxy type to generate.
-        /// </summary>
-        private const TypeAttributes TYPE_ATTRIBUTES = TypeAttributes.BeforeFieldInit | TypeAttributes.Public;
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Creates an appropriate type builder.
-        /// </summary>
-        /// <param name="typeName">The proxy type name.</param>
-        /// <param name="baseType">The type to extends if provided.</param>
-        /// <returns>The type builder to use.</returns>
-        public static TypeBuilder CreateTypeBuilder(string typeName, Type baseType)
+        try
         {
-            ModuleBuilder module = DynamicCodeManager.GetModuleBuilder(ASSEMBLY_NAME);
-
-            try
+            if (baseType == null)
             {
-                if (baseType == null)
-                {
-                    return module.DefineType(typeName, TYPE_ATTRIBUTES);
-                }
-                else
-                {
-                    return module.DefineType(typeName, TYPE_ATTRIBUTES, baseType);
-                }
+                return module.DefineType(typeName, TYPE_ATTRIBUTES);
             }
-            catch (ArgumentException ex)
+            else
             {
-                Type alreadyRegisteredType = module.GetType(typeName, true);
-
-                string msg;
-
-                if (alreadyRegisteredType != null)
-                    msg = "Proxy already registered for \"{0}\" as Type \"{1}\".";
-                else
-                    msg = "Proxy already registered for \"{0}\".";
-
-                throw new ArgumentException(string.Format(msg, typeName, alreadyRegisteredType.FullName), ex);
+                return module.DefineType(typeName, TYPE_ATTRIBUTES, baseType);
             }
         }
-
-        /// <summary>
-        /// Saves dynamically generated assembly to disk.
-        /// Can only be called in DEBUG_DYNAMIC mode, per ConditionalAttribute rules.
-        /// </summary>
-        [Conditional("DEBUG_DYNAMIC")]
-        public static void SaveAssembly()
+        catch (ArgumentException ex)
         {
-            DynamicCodeManager.SaveAssembly(ASSEMBLY_NAME);
-        }
+            Type alreadyRegisteredType = module.GetType(typeName, true);
 
-        #endregion
+            string msg;
+
+            if (alreadyRegisteredType != null)
+                msg = "Proxy already registered for \"{0}\" as Type \"{1}\".";
+            else
+                msg = "Proxy already registered for \"{0}\".";
+
+            throw new ArgumentException(string.Format(msg, typeName, alreadyRegisteredType.FullName), ex);
+        }
     }
+
+    /// <summary>
+    /// Saves dynamically generated assembly to disk.
+    /// Can only be called in DEBUG_DYNAMIC mode, per ConditionalAttribute rules.
+    /// </summary>
+    [Conditional("DEBUG_DYNAMIC")]
+    public static void SaveAssembly()
+    {
+        DynamicCodeManager.SaveAssembly(ASSEMBLY_NAME);
+    }
+
+    #endregion
 }

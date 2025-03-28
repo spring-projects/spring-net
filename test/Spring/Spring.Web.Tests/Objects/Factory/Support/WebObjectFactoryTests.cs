@@ -26,59 +26,58 @@ using Spring.TestSupport;
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Unit tests for the WebObjectFactory class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class WebObjectFactoryTests
 {
-    /// <summary>
-    /// Unit tests for the WebObjectFactory class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    public sealed class WebObjectFactoryTests
+    [Test]
+    public void CanBeUsedOnNonWebThread()
     {
-        [Test]
-        public void CanBeUsedOnNonWebThread()
+        WebObjectFactory wof;
+        RootWebObjectDefinition rwod;
+
+        // we need to create WOF within a valid HttpContext environment 'cause we will
+        // make use of 'request' and 'session' scope.
+        using (new VirtualEnvironmentMock("/somedir/some.file", null, null, "/", true))
         {
-            WebObjectFactory wof;
-            RootWebObjectDefinition rwod;
-
-            // we need to create WOF within a valid HttpContext environment 'cause we will 
-            // make use of 'request' and 'session' scope.
-            using (new VirtualEnvironmentMock("/somedir/some.file", null, null, "/", true))
-            {
-                wof = new WebObjectFactory("/somedir/", false);
-            }
-
-            rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
-            rwod.Scope = ObjectScope.Application.ToString();
-            wof.RegisterObjectDefinition("applicationScopedObject", rwod);
-
-            rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
-            rwod.Scope = ObjectScope.Request.ToString();
-            wof.RegisterObjectDefinition("requestScopedObject", rwod);
-
-            rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
-            rwod.Scope = ObjectScope.Session.ToString();
-            wof.RegisterObjectDefinition("sessionScopedObject", rwod);
-
-            object o;
-            o = wof.GetObject("applicationScopedObject");
-            Assert.IsNotNull(o);
-
-            AssertGetObjectThrows(typeof(ObjectCreationException), wof, "requestScopedObject");
-            AssertGetObjectThrows(typeof(ObjectCreationException), wof, "sessionScopedObject");
+            wof = new WebObjectFactory("/somedir/", false);
         }
 
-        private void AssertGetObjectThrows(Type exceptionType, WebObjectFactory wof, string objectName)
+        rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
+        rwod.Scope = ObjectScope.Application.ToString();
+        wof.RegisterObjectDefinition("applicationScopedObject", rwod);
+
+        rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
+        rwod.Scope = ObjectScope.Request.ToString();
+        wof.RegisterObjectDefinition("requestScopedObject", rwod);
+
+        rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
+        rwod.Scope = ObjectScope.Session.ToString();
+        wof.RegisterObjectDefinition("sessionScopedObject", rwod);
+
+        object o;
+        o = wof.GetObject("applicationScopedObject");
+        Assert.IsNotNull(o);
+
+        AssertGetObjectThrows(typeof(ObjectCreationException), wof, "requestScopedObject");
+        AssertGetObjectThrows(typeof(ObjectCreationException), wof, "sessionScopedObject");
+    }
+
+    private void AssertGetObjectThrows(Type exceptionType, WebObjectFactory wof, string objectName)
+    {
+        try
         {
-            try
-            {
-                wof.GetObject(objectName);
-                Assert.Fail("must not reach this line");
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual(exceptionType, ex.GetType());
-            }
+            wof.GetObject(objectName);
+            Assert.Fail("must not reach this line");
+        }
+        catch (Exception ex)
+        {
+            Assert.AreEqual(exceptionType, ex.GetType());
         }
     }
 }

@@ -21,68 +21,66 @@
 using AopAlliance.Intercept;
 using FakeItEasy;
 using NUnit.Framework;
-
 using Spring.Util;
 
-namespace Spring.Aop.Framework.Adapter
+namespace Spring.Aop.Framework.Adapter;
+
+/// <summary>
+/// Unit tests for the AfterReturningAdviceInterceptor class.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Simon White (.NET)</author>
+[TestFixture]
+public sealed class AfterReturningAdviceInterceptorTests
 {
-    /// <summary>
-    /// Unit tests for the AfterReturningAdviceInterceptor class.
-    /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Simon White (.NET)</author>
-    [TestFixture]
-    public sealed class AfterReturningAdviceInterceptorTests
+    [Test]
+    public void PassNullAdviceToCtor()
     {
-        [Test]
-        public void PassNullAdviceToCtor()
+        Assert.Throws<ArgumentNullException>(() => new AfterReturningAdviceInterceptor(null));
+    }
+
+    [Test]
+    public void IsNotInvokedIfServiceObjectThrowsException()
+    {
+        IMethodInvocation mockInvocation = A.Fake<IMethodInvocation>();
+        IAfterReturningAdvice mockAdvice = A.Fake<IAfterReturningAdvice>();
+
+        A.CallTo(() => mockAdvice.AfterReturning(null, null, null, null)).WithAnyArguments().Throws<FormatException>();
+        A.CallTo(() => mockInvocation.Method).Returns(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
+        A.CallTo(() => mockInvocation.Arguments).Returns(null);
+        A.CallTo(() => mockInvocation.This).Returns(new object());
+        A.CallTo(() => mockInvocation.Proceed()).Returns(null);
+
+        try
         {
-            Assert.Throws<ArgumentNullException>(() => new AfterReturningAdviceInterceptor(null));
+            AfterReturningAdviceInterceptor interceptor = new AfterReturningAdviceInterceptor(mockAdvice);
+            interceptor.Invoke(mockInvocation);
+            Assert.Fail("Must have thrown a FormatException by this point.");
         }
-
-        [Test]
-        public void IsNotInvokedIfServiceObjectThrowsException()
+        catch (FormatException)
         {
-            IMethodInvocation mockInvocation = A.Fake<IMethodInvocation>();
-            IAfterReturningAdvice mockAdvice = A.Fake<IAfterReturningAdvice>();
-
-            A.CallTo(() => mockAdvice.AfterReturning(null, null, null, null)).WithAnyArguments().Throws<FormatException>();
-            A.CallTo(() => mockInvocation.Method).Returns(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
-            A.CallTo(() => mockInvocation.Arguments).Returns(null);
-            A.CallTo(() => mockInvocation.This).Returns(new object());
-            A.CallTo(() => mockInvocation.Proceed()).Returns(null);
-
-            try
-            {
-                AfterReturningAdviceInterceptor interceptor = new AfterReturningAdviceInterceptor(mockAdvice);
-                interceptor.Invoke(mockInvocation);
-                Assert.Fail("Must have thrown a FormatException by this point.");
-            }
-            catch (FormatException)
-            {
-            }
         }
+    }
 
-        [Test]
-        public void JustPassesAfterReturningAdviceExceptionUpWithoutAnyWrapping()
+    [Test]
+    public void JustPassesAfterReturningAdviceExceptionUpWithoutAnyWrapping()
+    {
+        IMethodInvocation mockInvocation = A.Fake<IMethodInvocation>();
+        IAfterReturningAdvice mockAdvice = A.Fake<IAfterReturningAdvice>();
+        A.CallTo(() => mockAdvice.AfterReturning(null, null, null, null)).WithAnyArguments().Throws<FormatException>();
+
+        A.CallTo(() => mockInvocation.Method).Returns(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
+        A.CallTo(() => mockInvocation.Arguments).Returns(null);
+        A.CallTo(() => mockInvocation.This).Returns(new object());
+        A.CallTo(() => mockInvocation.Proceed()).Returns(null);
+        try
         {
-            IMethodInvocation mockInvocation = A.Fake<IMethodInvocation>();
-            IAfterReturningAdvice mockAdvice = A.Fake<IAfterReturningAdvice>();
-            A.CallTo(() => mockAdvice.AfterReturning(null, null, null, null)).WithAnyArguments().Throws<FormatException>();
-
-            A.CallTo(() => mockInvocation.Method).Returns(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
-            A.CallTo(() => mockInvocation.Arguments).Returns(null);
-            A.CallTo(() => mockInvocation.This).Returns(new object());
-            A.CallTo(() => mockInvocation.Proceed()).Returns(null);
-            try
-            {
-                AfterReturningAdviceInterceptor interceptor = new AfterReturningAdviceInterceptor(mockAdvice);
-                interceptor.Invoke(mockInvocation);
-                Assert.Fail("Must have thrown a FormatException by this point.");
-            }
-            catch (FormatException)
-            {
-            }
+            AfterReturningAdviceInterceptor interceptor = new AfterReturningAdviceInterceptor(mockAdvice);
+            interceptor.Invoke(mockInvocation);
+            Assert.Fail("Must have thrown a FormatException by this point.");
+        }
+        catch (FormatException)
+        {
         }
     }
 }

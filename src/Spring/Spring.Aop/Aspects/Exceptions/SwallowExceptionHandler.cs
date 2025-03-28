@@ -18,38 +18,35 @@
 
 #endregion
 
-namespace Spring.Aspects.Exceptions
+namespace Spring.Aspects.Exceptions;
+
+/// <summary>
+/// Returns a token to indicate that this exception should be swallowed.
+/// </summary>
+/// <author>Mark Pollack</author>
+public class SwallowExceptionHandler : AbstractExceptionHandler
 {
     /// <summary>
-    /// Returns a token to indicate that this exception should be swallowed.
+    /// Initializes a new instance of the <see cref="SwallowExceptionHandler"/> class.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public class SwallowExceptionHandler : AbstractExceptionHandler
+    public SwallowExceptionHandler()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SwallowExceptionHandler"/> class.
-        /// </summary>
-        public SwallowExceptionHandler()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SwallowExceptionHandler"/> class.
-        /// </summary>
-        /// <param name="exceptionNames">The exception names.</param>
-        public SwallowExceptionHandler(string[] exceptionNames) : base(exceptionNames)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SwallowExceptionHandler"/> class.
+    /// </summary>
+    /// <param name="exceptionNames">The exception names.</param>
+    public SwallowExceptionHandler(string[] exceptionNames) : base(exceptionNames)
+    {
+    }
 
-
-
-        /// <summary>
-        /// Handles the exception.
-        /// </summary>
-        /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
-        public override object HandleException(IDictionary<string, object> callContextDictionary)
-        {
-            return "swallow";
-        }
+    /// <summary>
+    /// Handles the exception.
+    /// </summary>
+    /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
+    public override object HandleException(IDictionary<string, object> callContextDictionary)
+    {
+        return "swallow";
     }
 }

@@ -19,77 +19,77 @@
 #endregion
 
 using System.Globalization;
-
 using Spring.Util;
 
-namespace Spring.Globalization.Formatters
+namespace Spring.Globalization.Formatters;
+
+/// <summary>
+/// Implementation of <see cref="IFormatter"/> that can be used to
+/// format and parse integer numbers.
+/// </summary>
+/// <remarks>
+/// <para>
+/// This formatter allows you to format and parse numbers that conform
+/// to <see cref="NumberStyles.Integer"/> number style (leading and trailing
+/// white space, leading sign).
+/// </para>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public class IntegerFormatter : IFormatter
 {
-	/// <summary>
-	/// Implementation of <see cref="IFormatter"/> that can be used to
-	/// format and parse integer numbers.
-	/// </summary>
-	/// <remarks>
-	/// <para>
-	/// This formatter allows you to format and parse numbers that conform
-	/// to <see cref="NumberStyles.Integer"/> number style (leading and trailing
-	/// white space, leading sign).
-	/// </para>
-	/// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    public class IntegerFormatter : IFormatter
-	{
-        private string format = "{0:D}";
+    private string format = "{0:D}";
 
-        #region Constructors
+    #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IntegerFormatter"/> class,
-        /// using default format string of '{0:D}'.
-        /// </summary>
-        public IntegerFormatter()
-        {}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IntegerFormatter"/> class,
+    /// using default format string of '{0:D}'.
+    /// </summary>
+    public IntegerFormatter()
+    {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IntegerFormatter"/> class,
-        /// using specified format string.
-        /// </summary>
-        public IntegerFormatter(string format)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IntegerFormatter"/> class,
+    /// using specified format string.
+    /// </summary>
+    public IntegerFormatter(string format)
+    {
+        this.format = format;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Formats the specified integer value.
+    /// </summary>
+    /// <param name="value">The value to format.</param>
+    /// <returns>Formatted integer number.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="value"/> is not an integer number.</exception>
+    public string Format(object value)
+    {
+        AssertUtils.ArgumentNotNull(value, "value");
+        if (!NumberUtils.IsInteger(value))
         {
-            this.format = format;
+            throw new ArgumentException("IntegerFormatter can only be used to format integer numbers.");
         }
 
-        #endregion
+        return String.Format(format, value);
+    }
 
-        /// <summary>
-        /// Formats the specified integer value.
-        /// </summary>
-        /// <param name="value">The value to format.</param>
-        /// <returns>Formatted integer number.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">If <paramref name="value"/> is not an integer number.</exception>
-        public string Format(object value)
-	    {
-            AssertUtils.ArgumentNotNull(value, "value");
-            if (!NumberUtils.IsInteger(value))
-            {
-                throw new ArgumentException("IntegerFormatter can only be used to format integer numbers.");
-            }
+    /// <summary>
+    /// Parses the specified integer value.
+    /// </summary>
+    /// <param name="value">The integer value to parse.</param>
+    /// <returns>Parsed number value as a <see cref="Int32"/>.</returns>
+    public object Parse(string value)
+    {
+        if (!StringUtils.HasText(value))
+        {
+            return 0;
+        }
 
-	        return String.Format(format, value);
-	    }
-
-        /// <summary>
-        /// Parses the specified integer value.
-        /// </summary>
-        /// <param name="value">The integer value to parse.</param>
-        /// <returns>Parsed number value as a <see cref="Int32"/>.</returns>
-        public object Parse(string value)
-	    {
-            if (!StringUtils.HasText(value))
-            {
-                return 0;
-            }
-	        return Int32.Parse(value, NumberStyles.Integer);
-	    }
-	}
+        return Int32.Parse(value, NumberStyles.Integer);
+    }
 }

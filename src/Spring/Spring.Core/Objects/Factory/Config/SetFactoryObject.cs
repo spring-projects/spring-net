@@ -22,96 +22,99 @@ using System.Globalization;
 using Spring.Collections;
 using Spring.Util;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Simple factory object for shared <see cref="Spring.Collections.ISet"/> instances.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Simon White (.NET)</author>
+[Serializable]
+public class SetFactoryObject : AbstractFactoryObject
 {
-	/// <summary>
-	/// Simple factory object for shared <see cref="Spring.Collections.ISet"/> instances.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Simon White (.NET)</author>
-    [Serializable]
-    public class SetFactoryObject : AbstractFactoryObject
-	{
-		private ISet _sourceSet;
-		private Type _targetSetType = typeof (HybridSet);
+    private ISet _sourceSet;
+    private Type _targetSetType = typeof(HybridSet);
 
-		/// <summary>
-		/// Set the source <see cref="Spring.Collections.ISet"/>.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// This value will be used to populate the <see cref="Spring.Collections.ISet"/>
-		/// returned by this factory.
-		/// </p>
-		/// </remarks>
-		public ISet SourceSet
-		{
-			set { this._sourceSet = value; }
-		}
+    /// <summary>
+    /// Set the source <see cref="Spring.Collections.ISet"/>.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// This value will be used to populate the <see cref="Spring.Collections.ISet"/>
+    /// returned by this factory.
+    /// </p>
+    /// </remarks>
+    public ISet SourceSet
+    {
+        set { this._sourceSet = value; }
+    }
 
-		/// <summary>
-		/// Set the <see cref="System.Type"/> of the <see cref="Spring.Collections.ISet"/>
-		/// implementation to use.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// The default is the <see cref="Spring.Collections.HybridSet"/> <see cref="System.Type"/>.
-		/// </p>
-		/// </remarks>
-		public Type TargetSetType
-		{
-			set
-			{
-				AssertUtils.ArgumentNotNull(value, "value");
-				if (!typeof (ISet).IsAssignableFrom(value))
-				{
-					throw new ArgumentException(
-						string.Format(CultureInfo.InvariantCulture,
-						              "The Type passed to the TargetSetType property must implement the '{0}' interface.",
-						              typeof (ISet).FullName));
-				}
-				if (value.IsInterface)
-				{
-					throw new ArgumentException(
-						string.Format(CultureInfo.InvariantCulture,
-						"The Type passed to the TargetSetType property cannot be an interface; it must be a concrete class that implements the '{0}' interface.",
-						ObjectType.FullName));
-				}
-				if (value.IsAbstract)
-				{
-					throw new ArgumentException(
-						string.Format(CultureInfo.InvariantCulture,
-						"The Type passed to the TargetSetType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the '{0}' interface.",
-						ObjectType.FullName));
-				}
-				this._targetSetType = value;
-			}
-		}
+    /// <summary>
+    /// Set the <see cref="System.Type"/> of the <see cref="Spring.Collections.ISet"/>
+    /// implementation to use.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// The default is the <see cref="Spring.Collections.HybridSet"/> <see cref="System.Type"/>.
+    /// </p>
+    /// </remarks>
+    public Type TargetSetType
+    {
+        set
+        {
+            AssertUtils.ArgumentNotNull(value, "value");
+            if (!typeof(ISet).IsAssignableFrom(value))
+            {
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture,
+                        "The Type passed to the TargetSetType property must implement the '{0}' interface.",
+                        typeof(ISet).FullName));
+            }
 
-		/// <summary>
-		/// The <see cref="System.Type"/> of objects created by this factory.
-		/// </summary>
-		/// <value>
-		/// Always returns the <see cref="Spring.Collections.ISet"/> <see cref="System.Type"/>.
-		/// </value>
-		public override Type ObjectType
-		{
-			get { return typeof (ISet); }
-		}
+            if (value.IsInterface)
+            {
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture,
+                        "The Type passed to the TargetSetType property cannot be an interface; it must be a concrete class that implements the '{0}' interface.",
+                        ObjectType.FullName));
+            }
 
-		/// <summary>
-		/// Constructs a new instance of the target set.
-		/// </summary>
-		/// <returns>The new <see cref="Spring.Collections.ISet"/> instance.</returns>
-		protected override object CreateInstance()
-		{
-			if (this._sourceSet == null)
-			{
-				throw new ArgumentException("The 'SourceSet' property cannot be null (Nothing in Visual Basic.NET).");
-			}
-			Set result = (Set) ObjectUtils.InstantiateType(this._targetSetType);
-			result.AddAll(this._sourceSet);
-			return result;
-		}
-	}
+            if (value.IsAbstract)
+            {
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture,
+                        "The Type passed to the TargetSetType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the '{0}' interface.",
+                        ObjectType.FullName));
+            }
+
+            this._targetSetType = value;
+        }
+    }
+
+    /// <summary>
+    /// The <see cref="System.Type"/> of objects created by this factory.
+    /// </summary>
+    /// <value>
+    /// Always returns the <see cref="Spring.Collections.ISet"/> <see cref="System.Type"/>.
+    /// </value>
+    public override Type ObjectType
+    {
+        get { return typeof(ISet); }
+    }
+
+    /// <summary>
+    /// Constructs a new instance of the target set.
+    /// </summary>
+    /// <returns>The new <see cref="Spring.Collections.ISet"/> instance.</returns>
+    protected override object CreateInstance()
+    {
+        if (this._sourceSet == null)
+        {
+            throw new ArgumentException("The 'SourceSet' property cannot be null (Nothing in Visual Basic.NET).");
+        }
+
+        Set result = (Set) ObjectUtils.InstantiateType(this._targetSetType);
+        result.AddAll(this._sourceSet);
+        return result;
+    }
 }

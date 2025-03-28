@@ -18,24 +18,23 @@
 
 #endregion
 
-namespace Spring.Web.UI
+namespace Spring.Web.UI;
+
+/// <summary>
+/// Specifies that page should be treated as a dialog, meaning that after processing
+/// is over user should return to the referring page.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Pages marked with this attribute will have "close" result predefined.
+/// </p>
+/// <p>
+/// Developers should call SetResult("close") from the event handler
+/// in order to return control back to the calling page.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+public class DialogAttribute : Attribute
 {
-	/// <summary>
-	/// Specifies that page should be treated as a dialog, meaning that after processing
-	/// is over user should return to the referring page.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Pages marked with this attribute will have "close" result predefined.
-	/// </p>
-	/// <p>
-	/// Developers should call SetResult("close") from the event handler
-	/// in order to return control back to the calling page.
-	/// </p>
-	/// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    public class DialogAttribute : Attribute
-	{
-	}
 }

@@ -24,32 +24,31 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the SpecialFolderVariableSource class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public sealed class SpecialFolderVariableSourceTests
 {
-	/// <summary>
-    /// Unit tests for the SpecialFolderVariableSource class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public sealed class SpecialFolderVariableSourceTests
+    [Test]
+    public void TestVariablesResolution()
     {
-        [Test]
-        public void TestVariablesResolution()
-        {
-            SpecialFolderVariableSource vs = new SpecialFolderVariableSource();
+        SpecialFolderVariableSource vs = new SpecialFolderVariableSource();
 
-            // existing vars
-            Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                            vs.ResolveVariable("ApplicationData"));
-            Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-                            vs.ResolveVariable("desktopDirectory"));
-            Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                            vs.ResolveVariable("programFiles"));
-            Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-                            vs.ResolveVariable("personal"));
+        // existing vars
+        Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            vs.ResolveVariable("ApplicationData"));
+        Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+            vs.ResolveVariable("desktopDirectory"));
+        Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+            vs.ResolveVariable("programFiles"));
+        Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.Personal),
+            vs.ResolveVariable("personal"));
 
-            // non-existant variable
-            Assert.IsNull(vs.ResolveVariable("dummy"));
-        }
+        // non-existant variable
+        Assert.IsNull(vs.ResolveVariable("dummy"));
     }
 }

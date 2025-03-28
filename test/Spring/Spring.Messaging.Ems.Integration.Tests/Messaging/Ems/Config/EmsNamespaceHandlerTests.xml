@@ -1,54 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <objects xmlns="http://www.springframework.net"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:ems="http://www.springframework.net/ems">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:ems="http://www.springframework.net/ems">
 
-  <ems:listener-container connection-factory="testConnectionFactory" 
-			destination-resolver="testDestinationResolver" message-converter="testMessageConverter"
-      auto-startup="false" concurrency="${concurrency}">
-    <ems:listener id="listener1" destination="testDestination" ref="testObject1" method="SetName"/>
-    <ems:listener id="listener2" destination="testDestination" ref="testObject2" method="SetName" 
-                  response-destination="responseDestination"/>
-  </ems:listener-container>
+    <ems:listener-container connection-factory="testConnectionFactory"
+                            destination-resolver="testDestinationResolver" message-converter="testMessageConverter"
+                            auto-startup="false" concurrency="${concurrency}">
+        <ems:listener id="listener1" destination="testDestination" ref="testObject1" method="SetName" />
+        <ems:listener id="listener2" destination="testDestination" ref="testObject2" method="SetName"
+                      response-destination="responseDestination" />
+    </ems:listener-container>
 
-  <ems:listener-container auto-startup="false">
-    <ems:listener destination="testDestination" ref="testObject3"/>
-  </ems:listener-container>
-
-
-  <!-- the default ConnectionFactory -->
-  <object id="ConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
-    <constructor-arg index="0" value="tcp://localhost:7222"/>
-  </object>
-  
-  <object id="testConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
-    <constructor-arg index="0" value="tcp://localhost:7222"/>
-  </object>
-
-  <!--
-  <bean id="testActivationSpecFactory" class="org.springframework.jms.listener.endpoint.StubJmsActivationSpecFactory"/>
-  -->
-
-  <object id="testDestinationResolver" type="Spring.Messaging.Ems.Support.Destinations.DynamicDestinationResolver, Spring.Messaging.Ems"/>
-
-  <object id="testMessageConverter" type="Spring.Messaging.Ems.Support.Converter.SimpleMessageConverter, Spring.Messaging.Ems"/>
+    <ems:listener-container auto-startup="false">
+        <ems:listener destination="testDestination" ref="testObject3" />
+    </ems:listener-container>
 
 
-  <object id="testObject1" type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+    <!-- the default ConnectionFactory -->
+    <object id="ConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+        <constructor-arg index="0" value="tcp://localhost:7222" />
+    </object>
 
-  <object id="testObject2"  type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+    <object id="testConnectionFactory" type="Spring.Messaging.Ems.Common.EmsConnectionFactory, Spring.Messaging.Ems">
+        <constructor-arg index="0" value="tcp://localhost:7222" />
+    </object>
 
-  <object id="testObject3"  type="Spring.Messaging.Ems.Connections.TestMessageListener, Spring.Messaging.Ems.Integration.Tests"/>
+    <!--
+    <bean id="testActivationSpecFactory" class="org.springframework.jms.listener.endpoint.StubJmsActivationSpecFactory"/>
+    -->
 
-  <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
-    <property name="VariableSources">
-      <list>
-        <object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core">
-          <property name="SectionNames" value="EmsConfiguration" />
-        </object>
-      </list>
-    </property>
-  </object>
+    <object id="testDestinationResolver"
+            type="Spring.Messaging.Ems.Support.Destinations.DynamicDestinationResolver, Spring.Messaging.Ems" />
+
+    <object id="testMessageConverter"
+            type="Spring.Messaging.Ems.Support.Converter.SimpleMessageConverter, Spring.Messaging.Ems" />
+
+
+    <object id="testObject1" type="Spring.Objects.TestObject, Spring.Core.Tests" />
+
+    <object id="testObject2" type="Spring.Objects.TestObject, Spring.Core.Tests" />
+
+    <object id="testObject3"
+            type="Spring.Messaging.Ems.Connections.TestMessageListener, Spring.Messaging.Ems.Integration.Tests" />
+
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core">
+                    <property name="SectionNames" value="EmsConfiguration" />
+                </object>
+            </list>
+        </property>
+    </object>
 
 </objects>
 

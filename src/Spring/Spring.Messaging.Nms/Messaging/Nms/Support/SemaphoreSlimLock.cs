@@ -1,4 +1,5 @@
 #region License
+
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -14,59 +15,57 @@
 //  * See the License for the specific language governing permissions and
 //  * limitations under the License.
 //  */
+
 #endregion
 
-namespace Spring.Messaging.Nms.Support
+namespace Spring.Messaging.Nms.Support;
+
+/// <summary>
+/// Lock that can be used in sync and async code
+/// its non reentrant but there is a parameter acquireLock that can be passed from outer context to tell that lock is already taken for current execution flow
+/// </summary>
+public class SemaphoreSlimLock
 {
-    /// <summary>
-    /// Lock that can be used in sync and async code
-    /// its non reentrant but there is a parameter acquireLock that can be passed from outer context to tell that lock is already taken for current execution flow
-    /// </summary>
-    public class SemaphoreSlimLock
+    private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+
+    public IDisposable Lock(bool acquireLock = true)
     {
-        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
-
-        public IDisposable Lock(bool acquireLock = true)
+        if (acquireLock)
         {
-            if (acquireLock)
-            {
-                _semaphoreSlim.Wait();
-                return new DisposableLock(_semaphoreSlim);
-            }
-            else
-            {
-                return new DisposableLock(null);
-            }
+            _semaphoreSlim.Wait();
+            return new DisposableLock(_semaphoreSlim);
         }
-        
-        public async Task<IDisposable> LockAsync(bool acquireLock = true)
+        else
         {
-            if (acquireLock)
-            {
-                await _semaphoreSlim.WaitAsync().Awaiter();
-                return new DisposableLock(_semaphoreSlim);
-            }
-            else
-            {
-                return new DisposableLock(null);
-            }
+            return new DisposableLock(null);
         }
+    }
 
-
-        private class DisposableLock : IDisposable
+    public async Task<IDisposable> LockAsync(bool acquireLock = true)
+    {
+        if (acquireLock)
         {
-            private readonly SemaphoreSlim _semaphoreToUnlock;
-
-            public DisposableLock(SemaphoreSlim semaphoreSlim)
-            {
-                this._semaphoreToUnlock = semaphoreSlim;
-            }
-            
-            public void Dispose()
-            {
-                _semaphoreToUnlock?.Release();
-            }
+            await _semaphoreSlim.WaitAsync().Awaiter();
+            return new DisposableLock(_semaphoreSlim);
         }
-        
+        else
+        {
+            return new DisposableLock(null);
+        }
+    }
+
+    private class DisposableLock : IDisposable
+    {
+        private readonly SemaphoreSlim _semaphoreToUnlock;
+
+        public DisposableLock(SemaphoreSlim semaphoreSlim)
+        {
+            this._semaphoreToUnlock = semaphoreSlim;
+        }
+
+        public void Dispose()
+        {
+            _semaphoreToUnlock?.Release();
+        }
     }
 }

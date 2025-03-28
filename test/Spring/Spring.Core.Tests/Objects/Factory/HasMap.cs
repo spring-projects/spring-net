@@ -22,99 +22,101 @@
 
 using System.Collections;
 using System.Collections.Specialized;
-
 using Spring.Collections;
 
 #endregion
 
-namespace Spring.Objects.Factory {
+namespace Spring.Objects.Factory;
 
-	/// <summary>
-	/// Object exposing a map. Used for object factory tests.
-	/// </summary>
-    public class HasMap {
+/// <summary>
+/// Object exposing a map. Used for object factory tests.
+/// </summary>
+public class HasMap
+{
+    #region Properties
 
-        #region Properties        
-        public IDictionary Map
+    public IDictionary Map
+    {
+        get
         {
-            get
-            {
-                return _map;
-            }
-            set
-            {
-                _map = value;
-            }
+            return _map;
         }
-
-        public Set Set
+        set
         {
-            get
-            {
-                return _set;
-            }
-            set
-            {
-                _set = value;
-            }
+            _map = value;
         }
+    }
 
-        public NameValueCollection Props
+    public Set Set
+    {
+        get
         {
-            get
-            {
-                return _props;
-            }
-            set
-            {
-                _props = value;
-            }
+            return _set;
         }
-
-        public object [] ObjectArray
+        set
         {
-            get
-            {
-                return _objectArray;
-            }
-            set
-            {
-                _objectArray = value;
-            }
+            _set = value;
         }
+    }
 
-        virtual public Type [] ClassArray
+    public NameValueCollection Props
+    {
+        get
         {
-            get
-            {
-                return _classArray;
-            }
-            set
-            {
-                _classArray = value;
-            }
+            return _props;
         }
-
-        virtual public int [] IntegerArray
+        set
         {
-            get
-            {
-                return _intArray;
-            }
-            set
-            {
-                _intArray = value;
-            }
+            _props = value;
         }
-        #endregion
+    }
 
-        #region Fields
-        private IDictionary _map;
-        private Set _set;
-        private NameValueCollection _props;
-        private object [] _objectArray;
-        private Type [] _classArray;
-        private int [] _intArray;
-        #endregion
-	}
+    public object[] ObjectArray
+    {
+        get
+        {
+            return _objectArray;
+        }
+        set
+        {
+            _objectArray = value;
+        }
+    }
+
+    virtual public Type[] ClassArray
+    {
+        get
+        {
+            return _classArray;
+        }
+        set
+        {
+            _classArray = value;
+        }
+    }
+
+    virtual public int[] IntegerArray
+    {
+        get
+        {
+            return _intArray;
+        }
+        set
+        {
+            _intArray = value;
+        }
+    }
+
+    #endregion
+
+    #region Fields
+
+    private IDictionary _map;
+    private Set _set;
+    private NameValueCollection _props;
+    private object[] _objectArray;
+    private Type[] _classArray;
+    private int[] _intArray;
+
+    #endregion
 }

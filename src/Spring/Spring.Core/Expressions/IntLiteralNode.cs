@@ -20,68 +20,67 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed integer literal node.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class IntLiteralNode : BaseNode
 {
+    private object nodeValue;
+
     /// <summary>
-    /// Represents parsed integer literal node.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class IntLiteralNode : BaseNode
+    public IntLiteralNode()
     {
-        private object nodeValue;
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public IntLiteralNode()
-        {
-        }
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    public IntLiteralNode(string text)
+    {
+        this.Text = text;
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public IntLiteralNode(string text)
-        {
-            this.Text = text;
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected IntLiteralNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected IntLiteralNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+    /// <summary>
+    /// Returns a value for the integer literal node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        if (nodeValue == null)
         {
-        }
-        
-        /// <summary>
-        /// Returns a value for the integer literal node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            if (nodeValue == null)
+            lock (this)
             {
-                lock (this)
+                if (nodeValue == null)
                 {
-                    if (nodeValue == null)
+                    string n = this.getText();
+                    try
                     {
-                        string n = this.getText();
-                        try
-                        {
-                            nodeValue = Int32.Parse(n);
-                        }
-                        catch (OverflowException)
-                        {
-                            nodeValue = Int64.Parse(n);
-                        }
+                        nodeValue = Int32.Parse(n);
+                    }
+                    catch (OverflowException)
+                    {
+                        nodeValue = Int64.Parse(n);
                     }
                 }
             }
-
-            return nodeValue;
         }
+
+        return nodeValue;
     }
 }

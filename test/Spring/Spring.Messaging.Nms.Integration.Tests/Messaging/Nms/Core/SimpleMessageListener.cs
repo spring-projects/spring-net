@@ -21,37 +21,35 @@
 using Apache.NMS;
 using Microsoft.Extensions.Logging;
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Nms.Core;
+
+public class SimpleMessageListener : IMessageListener
 {
+    private static readonly ILogger<SimpleMessageListener> LOG = LogManager.GetLogger<SimpleMessageListener>();
 
-    public class SimpleMessageListener : IMessageListener
+    private int messageCount;
+
+    public int MessageCount
     {
-        private static readonly ILogger<SimpleMessageListener> LOG = LogManager.GetLogger<SimpleMessageListener>();
-
-        private int messageCount;
-
-        public int MessageCount
-        {
-            get { return messageCount; }
-        }
-        #region Implementation of IMessageListener
-
-        public void OnMessage(IMessage message)
-        {
-            messageCount++;
-            LOG.LogDebug("Message listener count = " + messageCount);
-            ITextMessage textMessage = message as ITextMessage;
-            if (textMessage != null)
-            {
-                LOG.LogInformation("Message Text = " + textMessage.Text);
-            }
-            else
-            {
-                LOG.LogWarning("Can not process message of type " + message.GetType());
-            }
-        }
-
-        #endregion
+        get { return messageCount; }
     }
 
+    #region Implementation of IMessageListener
+
+    public void OnMessage(IMessage message)
+    {
+        messageCount++;
+        LOG.LogDebug("Message listener count = " + messageCount);
+        ITextMessage textMessage = message as ITextMessage;
+        if (textMessage != null)
+        {
+            LOG.LogInformation("Message Text = " + textMessage.Text);
+        }
+        else
+        {
+            LOG.LogWarning("Can not process message of type " + message.GetType());
+        }
+    }
+
+    #endregion
 }

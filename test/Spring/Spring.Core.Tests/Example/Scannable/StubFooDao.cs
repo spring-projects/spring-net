@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2010-2011 the original author or authors.
+ * Copyright ï¿½ 2010-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +20,17 @@
 
 using Spring.Stereotype;
 
-namespace Spring.Example.Scannable
-{
-    /// <summary>
-    ///  
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [Repository]
-    public class StubFooDao : IFooDao
-    {
-        public string FindFoo(string id)
-        {
-            return "bar";
-        }
-    }
+namespace Spring.Example.Scannable;
 
+/// <summary>
+///
+/// </summary>
+/// <author>Mark Pollack</author>
+[Repository]
+public class StubFooDao : IFooDao
+{
+    public string FindFoo(string id)
+    {
+        return "bar";
+    }
 }

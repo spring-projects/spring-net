@@ -18,45 +18,42 @@
 
 #endregion
 
-namespace Spring.Objects.Factory
-{
+namespace Spring.Objects.Factory;
 
+/// <summary>
+/// Interface to be implemented by objects that wish to be aware of their object
+/// name in an <see cref="Spring.Objects.Factory.IObjectFactory"/>.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Note that most objects will choose to receive references to collaborating
+/// objects via respective properties.
+/// </p>
+/// <p>
+/// For a list of all object lifecycle methods, see the
+/// <see cref="Spring.Objects.Factory.IObjectFactory"/> API documentation.
+/// </p>
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Rick Evans (.NET)</author>
+public interface IObjectNameAware
+{
     /// <summary>
-    /// Interface to be implemented by objects that wish to be aware of their object
-    /// name in an <see cref="Spring.Objects.Factory.IObjectFactory"/>.
+    /// Set the name of the object in the object factory that created this object.
     /// </summary>
+    /// <value>
+    /// The name of the object in the factory.
+    /// </value>
     /// <remarks>
     /// <p>
-    /// Note that most objects will choose to receive references to collaborating
-    /// objects via respective properties.
-    /// </p>
-    /// <p>
-    /// For a list of all object lifecycle methods, see the
-    /// <see cref="Spring.Objects.Factory.IObjectFactory"/> API documentation.
+    /// Invoked after population of normal object properties but before an init
+    /// callback like <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
+    /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
+    /// method or a custom init-method.
     /// </p>
     /// </remarks>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Rick Evans (.NET)</author>
-	public interface IObjectNameAware
+    string ObjectName
     {
-
-        /// <summary>
-        /// Set the name of the object in the object factory that created this object.
-        /// </summary>
-        /// <value>
-        /// The name of the object in the factory.
-        /// </value>
-        /// <remarks>
-        /// <p>
-        /// Invoked after population of normal object properties but before an init
-        /// callback like <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
-        /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
-        /// method or a custom init-method.
-        /// </p>
-        /// </remarks>
-        string ObjectName
-        {
-            set;
-        }
-	}
+        set;
+    }
 }

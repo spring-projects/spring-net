@@ -20,65 +20,63 @@
 
 using Spring.Core;
 
-namespace Spring.Objects
+namespace Spring.Objects;
+
+/// <summary>
+/// Extension of <see cref="AttributeAccessorSupport"/>,
+/// holding attributes as <see cref="IObjectMetadataElement"/> objects in order
+/// to keep track of the definition source.
+/// </summary>
+[Serializable]
+public class ObjectMetadataAttributeAccessor : AttributeAccessorSupport, IObjectMetadataElement
 {
+    private object _source;
+
     /// <summary>
-    /// Extension of <see cref="AttributeAccessorSupport"/>,
-    /// holding attributes as <see cref="IObjectMetadataElement"/> objects in order
-    /// to keep track of the definition source.
+    /// Set the configuration source <code>object</code> for this metadata element.
+    /// <p>The exact type of the object will depend on the configuration mechanism used.</p>
     /// </summary>
-    [Serializable]
-    public class ObjectMetadataAttributeAccessor : AttributeAccessorSupport, IObjectMetadataElement
+    public object Source
     {
-	    private object _source;
+        get { return _source; }
+        set { _source = value; }
+    }
 
-	    /// <summary>
-	    /// Set the configuration source <code>object</code> for this metadata element.
-	    /// <p>The exact type of the object will depend on the configuration mechanism used.</p>
-	    /// </summary>
-	    public object Source
-        {
-            get { return _source; }
-            set { _source = value; }
-        }
+    /// <summary>
+    /// Add the given BeanMetadataAttribute to this accessor's set of attributes.
+    /// </summary>
+    /// <param name="attribute">The BeanMetadataAttribute object to register</param>
+    public void AddMetadataAttribute(ObjectMetadataAttribute attribute)
+    {
+        base.SetAttribute(attribute.Name, attribute);
+    }
 
-	    /// <summary>
-	    /// Add the given BeanMetadataAttribute to this accessor's set of attributes.
-	    /// </summary>
-	    /// <param name="attribute">The BeanMetadataAttribute object to register</param>
-	    public void AddMetadataAttribute(ObjectMetadataAttribute attribute)
-        {
-		    base.SetAttribute(attribute.Name, attribute);
-	    }
+    /// <summary>
+    /// Look up the given BeanMetadataAttribute in this accessor's set of attributes.
+    /// </summary>
+    /// <param name="name">the name of the attribute</param>
+    /// <returns>the corresponding BeanMetadataAttribute object,
+    /// or <code>null</code> if no such attribute defined
+    /// </returns>
+    public ObjectMetadataAttribute GetMetadataAttribute(string name)
+    {
+        return (ObjectMetadataAttribute) base.GetAttribute(name);
+    }
 
-	    /// <summary>
-	    /// Look up the given BeanMetadataAttribute in this accessor's set of attributes.
-        /// </summary>
-        /// <param name="name">the name of the attribute</param>
-	    /// <returns>the corresponding BeanMetadataAttribute object,
-	    /// or <code>null</code> if no such attribute defined
-        /// </returns>
-	    public ObjectMetadataAttribute GetMetadataAttribute(string name)
-	    {
-	        return (ObjectMetadataAttribute) base.GetAttribute(name);
-	    }
+    public override void SetAttribute(string name, object value)
+    {
+        base.SetAttribute(name, new ObjectMetadataAttribute(name, value));
+    }
 
-        public override void SetAttribute(string name, object value)
-        {
-            base.SetAttribute(name, new ObjectMetadataAttribute(name, value));
-        }
+    public override object GetAttribute(string name)
+    {
+        var attribute = (ObjectMetadataAttribute) base.GetAttribute(name);
+        return (attribute != null ? attribute.Value : null);
+    }
 
-	    public override object GetAttribute(string name)
-	    {
-	        var attribute = (ObjectMetadataAttribute) base.GetAttribute(name);
-		    return (attribute != null ? attribute.Value : null);
-	    }
-
-	    public override object RemoveAttribute(string name)
-	    {
-	        var attribute = (ObjectMetadataAttribute) base.RemoveAttribute(name);
-		    return (attribute != null ? attribute.Value : null);
-	    }
-
+    public override object RemoveAttribute(string name)
+    {
+        var attribute = (ObjectMetadataAttribute) base.RemoveAttribute(name);
+        return (attribute != null ? attribute.Value : null);
     }
 }

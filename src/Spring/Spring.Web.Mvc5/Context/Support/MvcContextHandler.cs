@@ -18,13 +18,11 @@
 
 #endregion
 
-namespace Spring.Context.Support
-{
-    /// <summary>
-    /// Context Handler for ASP.NET MVC Applications
-    /// </summary>
-    public class MvcContextHandler : WebContextHandler
-    {
+namespace Spring.Context.Support;
 
-    }
+/// <summary>
+/// Context Handler for ASP.NET MVC Applications
+/// </summary>
+public class MvcContextHandler : WebContextHandler
+{
 }

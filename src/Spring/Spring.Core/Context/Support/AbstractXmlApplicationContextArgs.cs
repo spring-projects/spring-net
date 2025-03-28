@@ -20,99 +20,97 @@
 
 using Spring.Core.IO;
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+public abstract class AbstractXmlApplicationContextArgs
 {
-    public abstract class AbstractXmlApplicationContextArgs
+    private bool _caseSensitive;
+
+    private string[] _configurationLocations;
+
+    private IResource[] _configurationResources;
+
+    private string _name;
+
+    private IApplicationContext _parentContext;
+
+    private bool _refresh;
+
+    public virtual bool CaseSensitive
     {
-        private bool _caseSensitive;
-
-        private string[] _configurationLocations;
-
-        private IResource[] _configurationResources;
-
-        private string _name;
-
-        private IApplicationContext _parentContext;
-
-        private bool _refresh;
-
-        public virtual bool CaseSensitive
+        get
         {
-            get
-            {
-                return _caseSensitive;
-            }
-            set
-            {
-                _caseSensitive = value;
-            }
+            return _caseSensitive;
         }
-
-        public virtual string[] ConfigurationLocations
+        set
         {
-            get
-            {
-                if (_configurationLocations == null)
-                    _configurationLocations = new string[0];
-
-                return _configurationLocations;
-            }
-            set
-            {
-                _configurationLocations = value;
-            }
+            _caseSensitive = value;
         }
+    }
 
-        public virtual IResource[] ConfigurationResources
+    public virtual string[] ConfigurationLocations
+    {
+        get
         {
-            get
-            {
-                if (_configurationResources == null)
-                    _configurationResources = new IResource[0];
+            if (_configurationLocations == null)
+                _configurationLocations = new string[0];
 
-                return _configurationResources;
-            }
-            set
-            {
-                _configurationResources = value;
-            }
+            return _configurationLocations;
         }
-
-        public virtual string Name
+        set
         {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
+            _configurationLocations = value;
         }
+    }
 
-        public virtual IApplicationContext ParentContext
+    public virtual IResource[] ConfigurationResources
+    {
+        get
         {
-            get
-            {
-                return _parentContext;
-            }
-            set
-            {
-                _parentContext = value;
-            }
-        }
+            if (_configurationResources == null)
+                _configurationResources = new IResource[0];
 
-        public virtual bool Refresh
+            return _configurationResources;
+        }
+        set
         {
-            get
-            {
-                return _refresh;
-            }
-            set
-            {
-                _refresh = value;
-            }
+            _configurationResources = value;
         }
+    }
 
+    public virtual string Name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            _name = value;
+        }
+    }
+
+    public virtual IApplicationContext ParentContext
+    {
+        get
+        {
+            return _parentContext;
+        }
+        set
+        {
+            _parentContext = value;
+        }
+    }
+
+    public virtual bool Refresh
+    {
+        get
+        {
+            return _refresh;
+        }
+        set
+        {
+            _refresh = value;
+        }
     }
 }

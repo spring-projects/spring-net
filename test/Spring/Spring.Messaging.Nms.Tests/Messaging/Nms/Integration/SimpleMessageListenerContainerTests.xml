@@ -2,29 +2,31 @@
 <objects xmlns="http://www.springframework.net">
 
 
-  <object name="ConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
-    <property name="BrokerUri" value="tcp://localhost:61616"/>
-  </object>
-  <!--
-  <object name="SingleConnectionFactory" type="Spring.Messaging.Nms.Connection.SingleConnectionFactory, Spring.Messaging.Nms">
-    <property name="TargetConnectionFactory" ref="ConnectionFactory"/>
-  </object>
-  -->
-          
-  <object name="SimpleMessageListenerContainer" type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms">
-    <property name="ConnectionFactory" ref="ConnectionFactory"/>
-    <property name="DestinationName" value="test.queue"/>
-    <property name="MessageListener" ref="SimpleMessageListener"/>
-    <property name="ExceptionListener">
-      <object type="Spring.Messaging.Nms.Integration.LoggingExceptionHandler, Spring.Messaging.Nms.Tests"/>
-    </property>
-  </object>
+    <object name="ConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
+        <property name="BrokerUri" value="tcp://localhost:61616" />
+    </object>
+    <!--
+    <object name="SingleConnectionFactory" type="Spring.Messaging.Nms.Connection.SingleConnectionFactory, Spring.Messaging.Nms">
+      <property name="TargetConnectionFactory" ref="ConnectionFactory"/>
+    </object>
+    -->
 
-  <object id="SimpleMessageListener" type="Spring.Messaging.Nms.Integration.SimpleMessageListener, Spring.Messaging.Nms.Tests"/>
+    <object name="SimpleMessageListenerContainer"
+            type="Spring.Messaging.Nms.Listener.SimpleMessageListenerContainer, Spring.Messaging.Nms">
+        <property name="ConnectionFactory" ref="ConnectionFactory" />
+        <property name="DestinationName" value="test.queue" />
+        <property name="MessageListener" ref="SimpleMessageListener" />
+        <property name="ExceptionListener">
+            <object type="Spring.Messaging.Nms.Integration.LoggingExceptionHandler, Spring.Messaging.Nms.Tests" />
+        </property>
+    </object>
+
+    <object id="SimpleMessageListener"
+            type="Spring.Messaging.Nms.Integration.SimpleMessageListener, Spring.Messaging.Nms.Tests" />
 
 
-  <object name="NmsTemplate" type="Spring.Messaging.Nms.Core.NmsTemplate, Spring.Messaging.Nms">
-    <property name="ConnectionFactory" ref="ConnectionFactory"/>
-    <property name="DefaultDestinationName" value="test.queue"/>
-  </object>
+    <object name="NmsTemplate" type="Spring.Messaging.Nms.Core.NmsTemplate, Spring.Messaging.Nms">
+        <property name="ConnectionFactory" ref="ConnectionFactory" />
+        <property name="DefaultDestinationName" value="test.queue" />
+    </object>
 </objects>

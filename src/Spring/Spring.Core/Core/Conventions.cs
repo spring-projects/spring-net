@@ -20,50 +20,51 @@
 
 using Spring.Util;
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Provides methods to support various naming and other conventions used throughout the framework.
+/// Mainly for internal use within the framework.
+/// </summary>
+/// <author>Rob Harrop</author>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+public sealed class Conventions
 {
-    /// <summary>
-    /// Provides methods to support various naming and other conventions used throughout the framework.
-    /// Mainly for internal use within the framework.
+    /// <summary> Convert <code>String</code>s in attribute name format (lowercase, hyphens separating words)
+    /// into property name format (camel-cased). For example, <code>transaction-manager</code> is
+    /// converted into <code>transactionManager</code>.
     /// </summary>
-    /// <author>Rob Harrop</author>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    public sealed class Conventions
+    public static string AttributeNameToPropertyName(string attributeName)
     {
-        /// <summary> Convert <code>String</code>s in attribute name format (lowercase, hyphens separating words)
-        /// into property name format (camel-cased). For example, <code>transaction-manager</code> is
-        /// converted into <code>transactionManager</code>.
-        /// </summary>
-        public static string AttributeNameToPropertyName(string attributeName)
+        AssertUtils.ArgumentNotNull(attributeName, "attributeName");
+        if (attributeName.IndexOf("-") == -1)
         {
-            AssertUtils.ArgumentNotNull(attributeName, "attributeName");
-            if (attributeName.IndexOf("-") == -1)
-            {
-                return attributeName;
-            }
-            char[] chars = attributeName.ToCharArray();
-            char[] result = new char[chars.Length - 1]; // not completely accurate but good guess
-            int currPos = 0;
-            bool upperCaseNext = false;
-            for (int i = 0; i < chars.Length; i++)
-            {
-                char c = chars[i];
-                if (c == '-')
-                {
-                    upperCaseNext = true;
-                }
-                else if (upperCaseNext)
-                {
-                    result[currPos++] = Char.ToUpper(c);
-                    upperCaseNext = false;
-                }
-                else
-                {
-                    result[currPos++] = c;
-                }
-            }
-            return new String(result, 0, currPos);
+            return attributeName;
         }
+
+        char[] chars = attributeName.ToCharArray();
+        char[] result = new char[chars.Length - 1]; // not completely accurate but good guess
+        int currPos = 0;
+        bool upperCaseNext = false;
+        for (int i = 0; i < chars.Length; i++)
+        {
+            char c = chars[i];
+            if (c == '-')
+            {
+                upperCaseNext = true;
+            }
+            else if (upperCaseNext)
+            {
+                result[currPos++] = Char.ToUpper(c);
+                upperCaseNext = false;
+            }
+            else
+            {
+                result[currPos++] = c;
+            }
+        }
+
+        return new String(result, 0, currPos);
     }
 }

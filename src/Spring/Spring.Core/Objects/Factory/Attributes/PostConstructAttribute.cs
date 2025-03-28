@@ -18,42 +18,39 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+/// <summary>
+/// Defines a method that will be called during the intantiation of an instance
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class PostConstructAttribute : Attribute
 {
+    private int _order;
+
     /// <summary>
-    /// Defines a method that will be called during the intantiation of an instance
+    /// Initializes a new instance of the PostConstruct class with order = 1
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class PostConstructAttribute : Attribute
+    public PostConstructAttribute()
     {
-        private int _order;
+        _order = int.MaxValue;
+    }
 
+    /// <summary>
+    /// Initializes a new instance of the PostConstruct class with defined order
+    /// </summary>
+    /// <param name="order">Order in which the PostContruct method is called</param>
+    public PostConstructAttribute(int order)
+    {
+        _order = order;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the PostConstruct class with order = 1
-        /// </summary>
-        public PostConstructAttribute()
-        {
-            _order = int.MaxValue;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PostConstruct class with defined order
-        /// </summary>
-        /// <param name="order">Order in which the PostContruct method is called</param>
-        public PostConstructAttribute(int order)
-        {
-            _order = order;
-        }
-
-
-        /// <summary>
-        /// Defined the order in which the PostContruct methods are called
-        /// </summary>
-        public int Order
-        {
-            get { return _order; }
-            set { _order = value; }
-        }
+    /// <summary>
+    /// Defined the order in which the PostContruct methods are called
+    /// </summary>
+    public int Order
+    {
+        get { return _order; }
+        set { _order = value; }
     }
 }

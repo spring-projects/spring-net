@@ -22,24 +22,23 @@
 
 #endregion
 
-namespace Spring.Aop.Framework
-{
-    /// <summary>
-    /// Simple throw advice example that we can use for counting checks.
-    /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Bruno Baia (.NET)</author>
-    [Serializable]
-    public class CountingThrowsAdvice : MethodCounter, IThrowsAdvice
-    {
-        public void AfterThrowing(Exception ex)
-        {
-            Count(ex.GetType().Name);
-        }
+namespace Spring.Aop.Framework;
 
-        public void AfterThrowing(ApplicationException aex)
-        {
-            Count(aex.GetType().Name);
-        }
+/// <summary>
+/// Simple throw advice example that we can use for counting checks.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Bruno Baia (.NET)</author>
+[Serializable]
+public class CountingThrowsAdvice : MethodCounter, IThrowsAdvice
+{
+    public void AfterThrowing(Exception ex)
+    {
+        Count(ex.GetType().Name);
+    }
+
+    public void AfterThrowing(ApplicationException aex)
+    {
+        Count(aex.GetType().Name);
     }
 }

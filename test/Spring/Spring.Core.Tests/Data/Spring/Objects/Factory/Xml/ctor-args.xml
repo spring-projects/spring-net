@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <objects xmlns="http://www.springframework.net">
-	<description>
-		Tests for list and map handling in an XML object definition file.
-	</description>
-  <object id="foo" type="Spring.Objects.TestObject, Spring.Core.Tests" abstract="true">
-    <constructor-arg index="0" value="foo"/>
-    <constructor-arg index="1" value="2"/>
-  </object>
-  
-	<object id="rod" type="Spring.Objects.TestObject, Spring.Core.Tests">
-    <constructor-arg index="0" value="rod"/>
-    <constructor-arg index="1" value="1"/>
-	</object>
-	
+    <description>
+        Tests for list and map handling in an XML object definition file.
+    </description>
+    <object id="foo" type="Spring.Objects.TestObject, Spring.Core.Tests" abstract="true">
+        <constructor-arg index="0" value="foo" />
+        <constructor-arg index="1" value="2" />
+    </object>
+
+    <object id="rod" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <constructor-arg index="0" value="rod" />
+        <constructor-arg index="1" value="1" />
+    </object>
+
 </objects>

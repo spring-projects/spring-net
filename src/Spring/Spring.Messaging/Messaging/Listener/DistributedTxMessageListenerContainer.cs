@@ -24,137 +24,111 @@ using Spring.Transaction;
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Listener
+namespace Spring.Messaging.Listener;
+
+/// <summary>
+/// A MessageListenerContainer that uses distributed (DTC) based transactions.  Exceptions are
+/// handled by instances of <see cref="IDistributedTransactionExceptionHandler"/>.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Starts a DTC based transaction before receiving the message.  The transaction is
+/// automaticaly promoted to 2PC to avoid the default behaivor of transactional promotion.
+/// Database and messaging operations will commit or rollback together.
+/// </para>
+/// <para>
+/// If you only want local message based transactions use the
+/// <see cref="TransactionalMessageListenerContainer"/>.  With some simple programming
+/// you may also achieve 'exactly once' processing using the
+/// <see cref="TransactionalMessageListenerContainer"/>.
+/// </para>
+/// <para>
+/// Poison messages can be detected and sent to another queue using Spring's
+/// <see cref="SendToQueueDistributedTransactionExceptionHandler"/>.
+/// </para>
+/// </remarks>
+public class DistributedTxMessageListenerContainer : AbstractTransactionalMessageListenerContainer
 {
+    #region Logging Definition
+
+    private static readonly ILogger LOG = LogManager.GetLogger(typeof(DistributedTxMessageListenerContainer));
+
+    #endregion
+
+    private IDistributedTransactionExceptionHandler distributedTransactionExceptionHandler;
+
     /// <summary>
-    /// A MessageListenerContainer that uses distributed (DTC) based transactions.  Exceptions are
-    /// handled by instances of <see cref="IDistributedTransactionExceptionHandler"/>.
+    /// Gets or sets the distributed transaction exception handler.
     /// </summary>
-    /// <remarks>
-    /// <para>
-    /// Starts a DTC based transaction before receiving the message.  The transaction is
-    /// automaticaly promoted to 2PC to avoid the default behaivor of transactional promotion.
-    /// Database and messaging operations will commit or rollback together.
-    /// </para>
-    /// <para>
-    /// If you only want local message based transactions use the
-    /// <see cref="TransactionalMessageListenerContainer"/>.  With some simple programming
-    /// you may also achieve 'exactly once' processing using the
-    /// <see cref="TransactionalMessageListenerContainer"/>.
-    /// </para>
-    /// <para>
-    /// Poison messages can be detected and sent to another queue using Spring's
-    /// <see cref="SendToQueueDistributedTransactionExceptionHandler"/>.
-    /// </para>
-    /// </remarks>
-    public class DistributedTxMessageListenerContainer : AbstractTransactionalMessageListenerContainer
+    /// <value>The distributed transaction exception handler.</value>
+    public IDistributedTransactionExceptionHandler DistributedTransactionExceptionHandler
     {
-        #region Logging Definition
+        get { return distributedTransactionExceptionHandler; }
+        set { distributedTransactionExceptionHandler = value; }
+    }
 
-        private static readonly ILogger LOG = LogManager.GetLogger(typeof (DistributedTxMessageListenerContainer));
-
-        #endregion
-
-        private IDistributedTransactionExceptionHandler distributedTransactionExceptionHandler;
-
-
-        /// <summary>
-        /// Gets or sets the distributed transaction exception handler.
-        /// </summary>
-        /// <value>The distributed transaction exception handler.</value>
-        public IDistributedTransactionExceptionHandler DistributedTransactionExceptionHandler
+    /// <summary>
+    /// Set the transaction name to be the spring object name.
+    /// Call base class Initialize() functionality.
+    /// </summary>
+    public override void Initialize()
+    {
+        // Use object name as default transaction name.
+        if (TransactionDefinition.Name == null)
         {
-            get { return distributedTransactionExceptionHandler; }
-            set { distributedTransactionExceptionHandler = value; }
+            TransactionDefinition.Name = ObjectName;
         }
 
-        /// <summary>
-        /// Set the transaction name to be the spring object name.
-        /// Call base class Initialize() functionality.
-        /// </summary>
-        public override void Initialize()
-        {
-            // Use object name as default transaction name.
-            if (TransactionDefinition.Name == null)
-            {
-                TransactionDefinition.Name = ObjectName;
-            }
+        // Proceed with superclass initialization.
+        base.Initialize();
+    }
 
-            // Proceed with superclass initialization.
-            base.Initialize();
+    /// <summary>
+    /// Does the receive and execute using TxPlatformTransactionManager.  Starts a distributed
+    /// transaction before calling Receive.
+    /// </summary>
+    /// <param name="mq">The message queue.</param>
+    /// <param name="status">The transactional status.</param>
+    /// <returns>
+    /// true if should continue peeking, false otherwise.
+    /// </returns>
+    protected override bool DoReceiveAndExecuteUsingPlatformTransactionManager(MessageQueue mq,
+        ITransactionStatus status)
+    {
+        #region Logging
+
+        if (LOG.IsEnabled(LogLevel.Debug))
+        {
+            LOG.LogDebug("Executing DoReceiveAndExecuteUsingTxScopeTransactionManager");
         }
 
-        /// <summary>
-        /// Does the receive and execute using TxPlatformTransactionManager.  Starts a distributed
-        /// transaction before calling Receive.
-        /// </summary>
-        /// <param name="mq">The message queue.</param>
-        /// <param name="status">The transactional status.</param>
-        /// <returns>
-        /// true if should continue peeking, false otherwise.
-        /// </returns>
-        protected override bool DoReceiveAndExecuteUsingPlatformTransactionManager(MessageQueue mq,
-                                                                                   ITransactionStatus status)
+        #endregion Logging
+
+        //We are sure to be talking to a second resource manager, so avoid going through
+        //the promotable transaction and force a distributed transaction right from the start.
+        TransactionInterop.GetTransmitterPropagationToken(System.Transactions.Transaction.Current);
+
+        Message message;
+        try
         {
-            #region Logging
-
-            if (LOG.IsEnabled(LogLevel.Debug))
+            message = mq.Receive(TimeSpan.Zero, MessageQueueTransactionType.Automatic);
+        }
+        catch (MessageQueueException ex)
+        {
+            if (ex.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
             {
-                LOG.LogDebug("Executing DoReceiveAndExecuteUsingTxScopeTransactionManager");
-            }
+                //expected to occur occasionally
 
-            #endregion Logging
-
-            //We are sure to be talking to a second resource manager, so avoid going through
-            //the promotable transaction and force a distributed transaction right from the start.
-            TransactionInterop.GetTransmitterPropagationToken(System.Transactions.Transaction.Current);
-
-            Message message;
-            try
-            {
-                message = mq.Receive(TimeSpan.Zero, MessageQueueTransactionType.Automatic);
-            }
-            catch (MessageQueueException ex)
-            {
-                if (ex.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
-                {
-                    //expected to occur occasionally
-
-                    #region Logging
-
-                    if (LOG.IsEnabled(LogLevel.Trace))
-                    {
-                        LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
-                    }
-
-                    #endregion
-
-                    status.SetRollbackOnly();
-                    return false; // no more peeking unless this is the last listener thread
-                }
-                else
-                {
-                    // A real issue in receiving the message
-                    lock (messageQueueMonitor)
-                    {
-                        mq.Close();
-                        MessageQueue.ClearConnectionCache();
-                    }
-                    throw; // will cause rollback in surrounding platform transaction manager and log exception
-                }
-            }
-
-            if (message == null)
-            {
                 #region Logging
 
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
-                    LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
+                    LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
                 }
 
                 #endregion
@@ -162,55 +136,82 @@ namespace Spring.Messaging.Listener
                 status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
             }
-
-
-            try
+            else
             {
-                #region Logging
-
-                if (LOG.IsEnabled(LogLevel.Debug))
+                // A real issue in receiving the message
+                lock (messageQueueMonitor)
                 {
-                    LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
+                    mq.Close();
+                    MessageQueue.ClearConnectionCache();
                 }
 
-                #endregion
-
-                MessageReceived(message);
-                if (DistributedTransactionExceptionHandler != null)
-                {
-                    if (DistributedTransactionExceptionHandler.IsPoisonMessage(message))
-                    {
-                        DistributedTransactionExceptionHandler.HandlePoisonMessage(message);
-                        return true; // will remove from queue and continue receive loop.
-                    }
-                }
-                DoExecuteListener(message);
+                throw; // will cause rollback in surrounding platform transaction manager and log exception
             }
-            catch (Exception ex)
-            {
-                HandleDistributedTransactionListenerException(ex, message);
-                throw; // will rollback and keep message on the queue.
-            }
-            finally
-            {
-                message.Dispose();
-            }
-            return true;
         }
 
-        /// <summary>
-        /// Handles the distributed transaction listener exception by calling the
-        /// <see cref="IDistributedTransactionExceptionHandler"/> if not null.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <param name="message">The message.</param>
-        protected virtual void HandleDistributedTransactionListenerException(Exception exception, Message message)
+        if (message == null)
         {
-            IDistributedTransactionExceptionHandler exceptionHandler = DistributedTransactionExceptionHandler;
-            if (exceptionHandler != null)
+            #region Logging
+
+            if (LOG.IsEnabled(LogLevel.Trace))
             {
-                exceptionHandler.OnException(exception, message);
+                LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
             }
+
+            #endregion
+
+            status.SetRollbackOnly();
+            return false; // no more peeking unless this is the last listener thread
+        }
+
+        try
+        {
+            #region Logging
+
+            if (LOG.IsEnabled(LogLevel.Debug))
+            {
+                LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
+            }
+
+            #endregion
+
+            MessageReceived(message);
+            if (DistributedTransactionExceptionHandler != null)
+            {
+                if (DistributedTransactionExceptionHandler.IsPoisonMessage(message))
+                {
+                    DistributedTransactionExceptionHandler.HandlePoisonMessage(message);
+                    return true; // will remove from queue and continue receive loop.
+                }
+            }
+
+            DoExecuteListener(message);
+        }
+        catch (Exception ex)
+        {
+            HandleDistributedTransactionListenerException(ex, message);
+            throw; // will rollback and keep message on the queue.
+        }
+        finally
+        {
+            message.Dispose();
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Handles the distributed transaction listener exception by calling the
+    /// <see cref="IDistributedTransactionExceptionHandler"/> if not null.
+    /// </summary>
+    /// <param name="exception">The exception.</param>
+    /// <param name="message">The message.</param>
+    protected virtual void HandleDistributedTransactionListenerException(Exception exception, Message message)
+    {
+        IDistributedTransactionExceptionHandler exceptionHandler = DistributedTransactionExceptionHandler;
+        if (exceptionHandler != null)
+        {
+            exceptionHandler.OnException(exception, message);
         }
     }
 }

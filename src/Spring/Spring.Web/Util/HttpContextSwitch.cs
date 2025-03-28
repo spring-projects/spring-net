@@ -25,46 +25,45 @@ using Microsoft.Extensions.Logging;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Performs a <see cref="HttpContext.RewritePath(string)"/>. Original path will be restored on <see cref="Dispose"/>
+/// </summary>
+/// <remarks>
+/// Rewrites the current HttpContext's filepath to &lt;directory&gt;/currentcontext.dummy.<br/>
+/// This affects resolving resources by calls to <see cref="Spring.Util.ConfigurationUtils.GetSection"/> and <see cref="HttpRequest.MapPath(string)"/><br/>
+/// Original path is restored during <see cref="HttpContextSwitch.Dispose"/>.
+/// </remarks>
+/// <example>
+/// <code>
+/// using( new HttpContextSwitch( "/path" ) )
+/// {
+///     Response.Write( Request.FilePath ); // writes "/path/currentcontext.dummy" to response.
+/// }
+/// // Request.FilePath has been reset to original url here
+/// </code>
+/// </example>
+/// <author>Erich Eichinger</author>
+public class HttpContextSwitch : IDisposable
 {
+    private readonly IDisposable rewriteContext;
+    private static readonly ILogger<HttpContextSwitch> log = LogManager.GetLogger<HttpContextSwitch>();
+
     /// <summary>
-    /// Performs a <see cref="HttpContext.RewritePath(string)"/>. Original path will be restored on <see cref="Dispose"/>
+    /// Performs an immediate call to <see cref="HttpContext.RewritePath(string)"/>
     /// </summary>
-    /// <remarks>
-    /// Rewrites the current HttpContext's filepath to &lt;directory&gt;/currentcontext.dummy.<br/>
-    /// This affects resolving resources by calls to <see cref="Spring.Util.ConfigurationUtils.GetSection"/> and <see cref="HttpRequest.MapPath(string)"/><br/>
-    /// Original path is restored during <see cref="HttpContextSwitch.Dispose"/>.
-    /// </remarks>
-    /// <example>
-    /// <code>
-    /// using( new HttpContextSwitch( "/path" ) )
-    /// {
-    ///     Response.Write( Request.FilePath ); // writes "/path/currentcontext.dummy" to response.
-    /// }
-    /// // Request.FilePath has been reset to original url here
-    /// </code>
-    /// </example>
-    /// <author>Erich Eichinger</author>
-    public class HttpContextSwitch : IDisposable
+    /// <param name="virtualDirectory">a directory path (without trailing filename!)</param>
+    public HttpContextSwitch(string virtualDirectory)
     {
-        private readonly IDisposable rewriteContext;
-        private static readonly ILogger<HttpContextSwitch> log = LogManager.GetLogger<HttpContextSwitch>();
+        rewriteContext = VirtualEnvironment.RewritePath(virtualDirectory, false);
+    }
 
-        /// <summary>
-        /// Performs an immediate call to <see cref="HttpContext.RewritePath(string)"/>
-        /// </summary>
-        /// <param name="virtualDirectory">a directory path (without trailing filename!)</param>
-        public HttpContextSwitch(string virtualDirectory)
-        {
-            rewriteContext = VirtualEnvironment.RewritePath(virtualDirectory, false);
-        }
-
-        /// <summary>
-        /// Restores original path if necessary
-        /// </summary>
-        public void Dispose()
-        {
-            rewriteContext.Dispose();
-        }
+    /// <summary>
+    /// Restores original path if necessary
+    /// </summary>
+    public void Dispose()
+    {
+        rewriteContext.Dispose();
     }
 }

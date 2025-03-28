@@ -1,122 +1,124 @@
 using AST = Spring.Expressions.Parser.antlr.collections.AST;
 
-namespace Spring.Expressions.Parser.antlr
+namespace Spring.Expressions.Parser.antlr;
+/*ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/license.html
+ *
+ * $Id:$
+ */
+
+//
+// ANTLR C# Code Generator by Micheal Jordan
+//                            Kunle Odutola       : kunle UNDERSCORE odutola AT hotmail DOT com
+//                            Anthony Oguntimehin
+//
+// With many thanks to Eric V. Smith from the ANTLR list.
+//
+
+/*Common AST node implementation */
+public class CommonAST : BaseAST
 {
-	/*ANTLR Translator Generator
-	* Project led by Terence Parr at http://www.jGuru.com
-	* Software rights: http://www.antlr.org/license.html
-	*
-	* $Id:$
-	*/
+    public static readonly CommonAST.CommonASTCreator Creator = new CommonASTCreator();
 
-	//
-	// ANTLR C# Code Generator by Micheal Jordan
-	//                            Kunle Odutola       : kunle UNDERSCORE odutola AT hotmail DOT com
-	//                            Anthony Oguntimehin
-	//
-	// With many thanks to Eric V. Smith from the ANTLR list.
-	//
+    internal int ttype = Token.INVALID_TYPE;
+    internal string text;
 
-	/*Common AST node implementation */
-	public class CommonAST : BaseAST
-	{
-		public static readonly CommonAST.CommonASTCreator Creator = new CommonASTCreator();
+    [Obsolete("Deprecated since version 2.7.2. Use ASTFactory.dup() instead.", false)]
+    protected CommonAST(CommonAST another)
+    {
+        // don't include child/sibling pointers in Clone()/dup()
+        //down	= another.down;
+        //right	= another.right;
+        ttype = another.ttype;
+        text = (another.text == null) ? null : String.Copy(another.text);
+    }
 
-		internal int ttype = Token.INVALID_TYPE;
-		internal string text;
+    /*Get the token text for this node */
+    override public string getText()
+    {
+        return text;
+    }
 
+    /*Get the token type for this node */
+    override public int Type
+    {
+        get { return ttype; }
+        set { ttype = value; }
+    }
 
-		[Obsolete("Deprecated since version 2.7.2. Use ASTFactory.dup() instead.", false)]
-		protected CommonAST(CommonAST another)
-		{
-			// don't include child/sibling pointers in Clone()/dup()
-			//down	= another.down;
-			//right	= another.right;
-			ttype	= another.ttype;
-			text	= (another.text==null) ? null : String.Copy(another.text);
-		}
+    override public void initialize(int t, string txt)
+    {
+        Type = t;
+        setText(txt);
+    }
 
-		/*Get the token text for this node */
-		override public string getText()
-		{
-			return text;
-		}
+    override public void initialize(collections.AST t)
+    {
+        setText(t.getText());
+        Type = t.Type;
+    }
 
-		/*Get the token type for this node */
-		override public int Type
-		{
-			get { return ttype;   }
-			set { ttype = value; }
-		}
+    public CommonAST()
+    {
+    }
 
-		override public void  initialize(int t, string txt)
-		{
-			Type = t;
-			setText(txt);
-		}
+    public CommonAST(IToken tok)
+    {
+        initialize(tok);
+    }
 
-		override public void  initialize(collections.AST t)
-		{
-			setText(t.getText());
-			Type = t.Type;
-		}
+    override public void initialize(IToken tok)
+    {
+        setText(tok.getText());
+        Type = tok.Type;
+    }
 
-		public CommonAST()
-		{
-		}
+    /*Set the token text for this node */
+    override public void setText(string text_)
+    {
+        text = text_;
+    }
 
-		public CommonAST(IToken tok)
-		{
-			initialize(tok);
-		}
+    /*Set the token type for this node */
+    override public void setType(int ttype_)
+    {
+        this.Type = ttype_;
+    }
 
-		override public void  initialize(IToken tok)
-		{
-			setText(tok.getText());
-			Type = tok.Type;
-		}
-		/*Set the token text for this node */
-		override public void  setText(string text_)
-		{
-			text = text_;
-		}
-		/*Set the token type for this node */
-		override public void  setType(int ttype_)
-		{
-			this.Type = ttype_;
-		}
+    #region Implementation of ICloneable
 
-		#region Implementation of ICloneable
-		[Obsolete("Deprecated since version 2.7.2. Use ASTFactory.dup() instead.", false)]
-		override public object Clone()
-		{
-			return new CommonAST(this);
-		}
-		#endregion
+    [Obsolete("Deprecated since version 2.7.2. Use ASTFactory.dup() instead.", false)]
+    override public object Clone()
+    {
+        return new CommonAST(this);
+    }
 
-		public class CommonASTCreator : ASTNodeCreator
-		{
-			public CommonASTCreator() {}
+    #endregion
 
-			/// <summary>
-			/// Returns the fully qualified name of the AST type that this
-			/// class creates.
-			/// </summary>
-			public override string ASTNodeTypeName
-			{
-				get
-				{
-					return typeof(antlr.CommonAST).FullName;;
-				}
-			}
+    public class CommonASTCreator : ASTNodeCreator
+    {
+        public CommonASTCreator() { }
 
-			/// <summary>
-			/// Constructs a <see cref="AST"/> instance.
-			/// </summary>
-			public override AST Create()
-			{
-				return new CommonAST();
-			}
-		}
-	}
+        /// <summary>
+        /// Returns the fully qualified name of the AST type that this
+        /// class creates.
+        /// </summary>
+        public override string ASTNodeTypeName
+        {
+            get
+            {
+                return typeof(antlr.CommonAST).FullName;
+                ;
+            }
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="AST"/> instance.
+        /// </summary>
+        public override AST Create()
+        {
+            return new CommonAST();
+        }
+    }
 }

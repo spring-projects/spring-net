@@ -20,22 +20,21 @@
 
 using System.ComponentModel;
 
-namespace Spring.Transaction.Interceptor
+namespace Spring.Transaction.Interceptor;
+
+/// <summary>
+/// This interface adds a
+/// <see cref="Spring.Transaction.Interceptor.ITransactionAttribute.RollbackOn(Exception)"/>
+/// specification to <see cref="Spring.Transaction.ITransactionDefinition"/>.
+/// </summary>
+/// <author>Griffin Caprio (.NET)</author>
+[TypeConverter(typeof(TransactionAttributeConverter))]
+public interface ITransactionAttribute : ITransactionDefinition
 {
-	/// <summary>
-	/// This interface adds a
-	/// <see cref="Spring.Transaction.Interceptor.ITransactionAttribute.RollbackOn(Exception)"/>
-	/// specification to <see cref="Spring.Transaction.ITransactionDefinition"/>.
-	/// </summary>
-	/// <author>Griffin Caprio (.NET)</author>
-	[TypeConverter(typeof(TransactionAttributeConverter))]
-	public interface ITransactionAttribute : ITransactionDefinition
-	{
-		/// <summary>
-		/// Decides if rollback is required for the supplied <paramref name="exception"/>.
-		/// </summary>
-		/// <param name="exception">The <see cref="System.Exception"/> to evaluate.</param>
-		/// <returns>True if the exception causes a rollback, false otherwise.</returns>
-		bool RollbackOn( Exception exception );
-	}
+    /// <summary>
+    /// Decides if rollback is required for the supplied <paramref name="exception"/>.
+    /// </summary>
+    /// <param name="exception">The <see cref="System.Exception"/> to evaluate.</param>
+    /// <returns>True if the exception causes a rollback, false otherwise.</returns>
+    bool RollbackOn(Exception exception);
 }

@@ -20,156 +20,152 @@
 
 using System.Globalization;
 using System.Web;
-
 using FakeItEasy;
-
 using NUnit.Framework;
-
 using Spring.Globalization.Resolvers;
 using Spring.Objects;
 using Spring.TestSupport;
 using Spring.Validation;
 using Spring.Web.Support;
 
-namespace Spring.Web.UI
+namespace Spring.Web.UI;
+
+/// <summary>
+/// Unit tests for the Page class.
+/// </summary>
+/// <author>Goran Milosavljevic</author>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class PageTests : TestWebContextTests
 {
-    /// <summary>
-    /// Unit tests for the Page class.
-    /// </summary>
-    /// <author>Goran Milosavljevic</author>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class PageTests : TestWebContextTests
+    class MockValidator : System.Web.UI.WebControls.BaseValidator
     {
-        class MockValidator : System.Web.UI.WebControls.BaseValidator
+        public bool WasCalled = false;
+
+        protected override bool ControlPropertiesValid()
         {
-            public bool WasCalled = false;
-
-            protected override bool ControlPropertiesValid()
-            {
-                return true;
-            }
-
-            protected override bool EvaluateIsValid()
-            {
-                WasCalled = true;
-                return true;
-            }
+            return true;
         }
 
-        [Test]
-        public void NoSharedStateAtConstruction()
+        protected override bool EvaluateIsValid()
         {
-            Page page = new Page();            
-            Assert.IsNull(page.SharedState);
+            WasCalled = true;
+            return true;
         }
+    }
 
-        [Test]
-        public void CallsBaseValidateMethod()
+    [Test]
+    public void NoSharedStateAtConstruction()
+    {
+        Page page = new Page();
+        Assert.IsNull(page.SharedState);
+    }
+
+    [Test]
+    public void CallsBaseValidateMethod()
+    {
+        Page child;
+        MockValidator mockValidator;
+
+        child = new Page();
+        mockValidator = new MockValidator();
+        mockValidator.ValidationGroup = "theValidationGroup";
+        child.Validators.Add(mockValidator);
+
+        child.Validate(mockValidator.ValidationGroup);
+        Assert.IsTrue(mockValidator.WasCalled);
+
+        child = new Page();
+        mockValidator = new MockValidator();
+        child.Validators.Add(mockValidator);
+
+        child.Validate();
+        Assert.IsTrue(mockValidator.WasCalled);
+    }
+
+    [Test]
+    public void Validate()
+    {
+        Page page = new TestPage(HttpContext.Current);
+        IValidator[] validators = new IValidator[] { new RequiredValidator("Name", null), new ConditionValidator("Loan == 0", "Age > 21") };
+        Contact contact = new Contact("Goran", 24, 0);
+        bool result = page.Validate(contact, validators);
+        Assert.IsTrue(result);
+
+        contact = new Contact(null, 24, 0);
+        result = page.Validate(contact, validators);
+        Assert.IsFalse(result);
+
+        contact = new Contact("Goran", 24, 1);
+        result = page.Validate(contact, validators);
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void DefaultsToDefaultWebCultureResolver()
+    {
+        TestPage page = new TestPage();
+        Assert.AreEqual(typeof(DefaultWebCultureResolver), page.CultureResolver.GetType());
+    }
+
+    [Test]
+    public void AllowsNeutralUserCulture()
+    {
+        TestPage page = new TestPage();
+        // DefaultWebCultureResolver does not allow culture to be set
+        page.CultureResolver = new DefaultCultureResolver();
+        page.UserCulture = new CultureInfo("de");
+
+        page.InitializeCulture();
+        Assert.AreEqual(page.UserCulture, Thread.CurrentThread.CurrentUICulture);
+        Assert.AreEqual(CultureInfo.CreateSpecificCulture(page.UserCulture.Name), Thread.CurrentThread.CurrentCulture);
+    }
+
+    [Test]
+    public void SetResultThrowsVerboseExceptionOnUnknownResultName()
+    {
+        string RESULTNAME = "nonexistant result";
+
+        TestPage page = new TestPage();
+        try
         {
-            Page child;
-            MockValidator mockValidator;
-
-            child = new Page();
-            mockValidator = new MockValidator();
-            mockValidator.ValidationGroup = "theValidationGroup";
-            child.Validators.Add( mockValidator );
-
-            child.Validate(mockValidator.ValidationGroup);
-            Assert.IsTrue(mockValidator.WasCalled);
-
-            child = new Page();
-            mockValidator = new MockValidator();
-            child.Validators.Add( mockValidator );
-
-            child.Validate();
-            Assert.IsTrue(mockValidator.WasCalled);
+            page.SetResult(RESULTNAME);
+            Assert.Fail();
         }
-
-        [Test]
-        public void Validate()
-        {           
-            Page page = new TestPage(HttpContext.Current);
-            IValidator[] validators = new IValidator[] {new RequiredValidator("Name", null), new ConditionValidator("Loan == 0", "Age > 21")};
-            Contact contact = new Contact("Goran", 24, 0);
-            bool result = page.Validate(contact, validators);
-            Assert.IsTrue(result);
-
-            contact = new Contact(null, 24, 0);
-            result = page.Validate(contact, validators);
-            Assert.IsFalse(result);
-
-            contact = new Contact("Goran", 24, 1);
-            result = page.Validate(contact, validators);
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void DefaultsToDefaultWebCultureResolver()
+        catch (ArgumentException ae)
         {
-            TestPage page = new TestPage();
-            Assert.AreEqual( typeof(DefaultWebCultureResolver), page.CultureResolver.GetType() );            
+            string expected = string.Format("No mapping found for the specified destination '{0}'.", RESULTNAME);
+            string msg = ae.Message.Substring(0, expected.Length);
+            Assert.AreEqual(expected, msg);
         }
+    }
 
-        [Test]
-        public void AllowsNeutralUserCulture()
-        {
-            TestPage page = new TestPage();
-            // DefaultWebCultureResolver does not allow culture to be set
-            page.CultureResolver = new DefaultCultureResolver();
-            page.UserCulture = new CultureInfo("de");
-            
-            page.InitializeCulture();
-            Assert.AreEqual( page.UserCulture, Thread.CurrentThread.CurrentUICulture );
-            Assert.AreEqual( CultureInfo.CreateSpecificCulture(page.UserCulture.Name), Thread.CurrentThread.CurrentCulture);
-        }
+    [Test]
+    public void SetResultSelectsCorrectResult()
+    {
+        TestPage page = new TestPage();
 
-        [Test]
-        public void SetResultThrowsVerboseExceptionOnUnknownResultName()
-        {
-            string RESULTNAME = "nonexistant result";
+        Result theResult = A.Fake<Result>();
 
-            TestPage page = new TestPage();
-            try
-            {
-                page.SetResult(RESULTNAME);
-                Assert.Fail();
-            }
-            catch(ArgumentException ae)
-            {
-                string expected = string.Format("No mapping found for the specified destination '{0}'.", RESULTNAME);
-                string msg = ae.Message.Substring(0, expected.Length);
-                Assert.AreEqual(expected, msg);
-            }
-        }
+        page.Results.Add("theResult", theResult);
+        page.SetResult("theResult");
 
-        [Test]
-        public void SetResultSelectsCorrectResult()
-        {
-            TestPage page = new TestPage();
+        A.CallTo(() => theResult.Navigate(page)).MustHaveHappened();
+    }
 
-            Result theResult = A.Fake<Result>();
+    [Test]
+    public void NoNullModelPersistenceMediumAllowed()
+    {
+        TestPage tuc = new TestPage();
+        Assert.Throws<ArgumentNullException>(() => tuc.ModelPersistenceMedium = null);
+    }
 
-            page.Results.Add( "theResult", theResult );
-            page.SetResult("theResult");
-
-            A.CallTo(() => theResult.Navigate(page)).MustHaveHappened();
-        }
-
-        [Test]
-        public void NoNullModelPersistenceMediumAllowed()
-        {
-            TestPage tuc = new TestPage();
-            Assert.Throws<ArgumentNullException>(() => tuc.ModelPersistenceMedium = null);
-        }
-
-        [Test]
-        public void StoresAndLoadsModelUsingModelPersistenceMedium()
-        {
-            TestPage tuc = new TestPage();
-            tuc.ModelPersistenceMedium = new DictionaryModelPersistenceMedium();
-            tuc.SaveModelToPersistenceMedium( this );
-            Assert.AreEqual(this, tuc.LoadModelFromPersistenceMedium());
-        }
+    [Test]
+    public void StoresAndLoadsModelUsingModelPersistenceMedium()
+    {
+        TestPage tuc = new TestPage();
+        tuc.ModelPersistenceMedium = new DictionaryModelPersistenceMedium();
+        tuc.SaveModelToPersistenceMedium(this);
+        Assert.AreEqual(this, tuc.LoadModelFromPersistenceMedium());
     }
 }

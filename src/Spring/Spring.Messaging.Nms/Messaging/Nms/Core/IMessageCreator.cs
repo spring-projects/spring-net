@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,23 +20,22 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Nms.Core;
+
+/// <summary> Creates a NMS message given a Session</summary>
+/// <remarks>
+/// <p>The Session typically is provided by an instance
+/// of the MessageTemplate class.</p>
+/// </remarks>
+/// <author>Mark Pollack</author>
+public interface IMessageCreator
 {
-    /// <summary> Creates a NMS message given a Session</summary>
-    /// <remarks>
-    /// <p>The Session typically is provided by an instance
-    /// of the MessageTemplate class.</p>
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public interface IMessageCreator
-    {
-        /// <summary> Create a Message to be sent.</summary>
-        /// <param name="session">the NMS Session to be used to create the
-        /// <code>IMessage</code> (never <code>null</code>)
-        /// </param>
-        /// <returns> the <code>Message</code> to be sent
-        /// </returns>
-        /// <throws>NMSException if thrown by NMS API methods </throws>
-        IMessage CreateMessage(ISession session);
-    }
+    /// <summary> Create a Message to be sent.</summary>
+    /// <param name="session">the NMS Session to be used to create the
+    /// <code>IMessage</code> (never <code>null</code>)
+    /// </param>
+    /// <returns> the <code>Message</code> to be sent
+    /// </returns>
+    /// <throws>NMSException if thrown by NMS API methods </throws>
+    IMessage CreateMessage(ISession session);
 }

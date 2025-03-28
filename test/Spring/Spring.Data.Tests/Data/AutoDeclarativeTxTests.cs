@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,62 +29,56 @@ using Spring.Transaction;
 
 #endregion
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// Test case that uses the approach of automatically creating
+/// declarative transaction interceptors for objects identified via means
+/// of transaction attributes.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+[TestFixture]
+public class AutoDeclarativeTxTests
 {
-	/// <summary>
-	/// Test case that uses the approach of automatically creating 
-	/// declarative transaction interceptors for objects identified via means
-	/// of transaction attributes.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	[TestFixture]
-	public class AutoDeclarativeTxTests 
-	{
-        private IApplicationContext ctx;
+    private IApplicationContext ctx;
 
-        [SetUp]
-        public void SetUp()
-        {
-            //LogManager.Adapter = new ConsoleOutLoggerFactoryAdapter();
-            ctx =
-                new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Data/AutoDeclarativeTxTests.xml");
-            
-        }
+    [SetUp]
+    public void SetUp()
+    {
+        //LogManager.Adapter = new ConsoleOutLoggerFactoryAdapter();
+        ctx =
+            new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Data/AutoDeclarativeTxTests.xml");
+    }
 
+    [Test]
+    public void CoordinatorDeclarativeWithAttributes()
+    {
+        ITestCoord coord = ctx["testCoordinator"] as ITestCoord;
+        Assert.IsNotNull(coord);
+        CallCountingTransactionManager ccm = ctx["transactionManager"] as CallCountingTransactionManager;
+        Assert.IsNotNull(ccm);
+        LoggingAroundAdvice advice = (LoggingAroundAdvice) ctx["consoleLoggingAroundAdvice"];
+        Assert.IsNotNull(advice);
 
+        ITestObjectMgr testObjectMgr = ctx["testObjectManager"] as ITestObjectMgr;
+        Assert.IsNotNull(testObjectMgr);
+        //Proxied due to NameMatchMethodPointcutAdvisor
+        Assert.IsTrue(AopUtils.IsAopProxy(coord));
 
-        [Test]
-        public void CoordinatorDeclarativeWithAttributes()
-        {
-            ITestCoord coord = ctx["testCoordinator"] as ITestCoord;
-            Assert.IsNotNull(coord);
-            CallCountingTransactionManager ccm = ctx["transactionManager"] as CallCountingTransactionManager;
-            Assert.IsNotNull(ccm);
-            LoggingAroundAdvice advice = (LoggingAroundAdvice)ctx["consoleLoggingAroundAdvice"];
-            Assert.IsNotNull(advice);
+        //Proxied due to DefaultAdvisorAutoProxyCreator
+        Assert.IsTrue(AopUtils.IsAopProxy(testObjectMgr));
 
-            ITestObjectMgr testObjectMgr = ctx["testObjectManager"] as ITestObjectMgr;
-            Assert.IsNotNull(testObjectMgr);
-            //Proxied due to NameMatchMethodPointcutAdvisor
-            Assert.IsTrue(AopUtils.IsAopProxy(coord));
+        TestObject to1 = new TestObject("Jack", 7);
+        TestObject to2 = new TestObject("Jill", 6);
 
-            //Proxied due to DefaultAdvisorAutoProxyCreator
-            Assert.IsTrue(AopUtils.IsAopProxy(testObjectMgr));
+        Assert.AreEqual(0, ccm.begun);
+        Assert.AreEqual(0, ccm.commits);
+        Assert.AreEqual(0, advice.numInvoked);
 
+        coord.WorkOn(to1, to2);
 
-            TestObject to1 = new TestObject("Jack", 7);
-            TestObject to2 = new TestObject("Jill", 6);
-
-            Assert.AreEqual(0, ccm.begun);
-            Assert.AreEqual(0, ccm.commits);
-            Assert.AreEqual(0, advice.numInvoked);
-            
-            coord.WorkOn(to1,to2);
-            
-            Assert.AreEqual(1, ccm.begun);
-            Assert.AreEqual(1, ccm.commits);
-            Assert.AreEqual(1, advice.numInvoked);
-        }
-
-	}
+        Assert.AreEqual(1, ccm.begun);
+        Assert.AreEqual(1, ccm.commits);
+        Assert.AreEqual(1, advice.numInvoked);
+    }
 }

@@ -21,9 +21,7 @@
 #region Imports
 
 using System.Reflection;
-
 using NUnit.Framework;
-
 using Spring.Aop.Config;
 using Spring.Context;
 using Spring.Context.Support;
@@ -35,131 +33,131 @@ using Spring.Transaction.Interceptor;
 
 #endregion
 
-namespace Spring.Transaction.Config
+namespace Spring.Transaction.Config;
+
+[TestFixture]
+public class TxNamespaceParserTests
 {
-    [TestFixture]
-    public class TxNamespaceParserTests
+    private class ResourceXmlApplicationContext : AbstractXmlApplicationContext
     {
-        private class ResourceXmlApplicationContext : AbstractXmlApplicationContext
+        private readonly IResource[] configurationResources;
+
+        public ResourceXmlApplicationContext(params IResource[] configurationResources)
+            : base()
         {
-            private readonly IResource[] configurationResources;
-            public ResourceXmlApplicationContext(params IResource[] configurationResources) 
-                : base()
-            {
-                this.configurationResources = configurationResources;
-            }
-
-            protected override void  LoadObjectDefinitions(XmlObjectDefinitionReader objectDefinitionReader)
-            {
-                 base.LoadObjectDefinitions(objectDefinitionReader);
-                objectDefinitionReader.LoadObjectDefinitions(configurationResources);
-            }
-
-            protected override string[] ConfigurationLocations
-            {
-                get { return null; }
-            }
-
-            protected override IResource[] ConfigurationResources
-            {
-                get { return null; }
-            }
+            this.configurationResources = configurationResources;
         }
 
-        private const string APPCTXCFG_PROLOG = @"<?xml version='1.0' encoding='utf-8' ?>";
-        private const string APPCTXCFG_START = APPCTXCFG_PROLOG + @"<objects xmlns='http://www.springframework.net' xmlns:tx='http://www.springframework.net/tx'>";
-        private const string APPCTXCFG_END = @"</objects>";
-
-        private IApplicationContext ctx;
-
-        [SetUp]
-        public void SetUp()
+        protected override void LoadObjectDefinitions(XmlObjectDefinitionReader objectDefinitionReader)
         {
-            //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
-            //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
-            ctx = new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Transaction.Config/TxNamespaceParserTests.xml");
+            base.LoadObjectDefinitions(objectDefinitionReader);
+            objectDefinitionReader.LoadObjectDefinitions(configurationResources);
         }
 
-        // TODO (EE)
-        [Test]
-        public void AppliesTxAttributeDrivenAttributes()
+        protected override string[] ConfigurationLocations
         {
-            StringResource appCtxCfg = new StringResource(
-                APPCTXCFG_START 
-                + "<tx:attribute-driven transaction-manager='otherTxManager' proxy-target-type='true' order='2' />" 
-                + APPCTXCFG_END);
+            get { return null; }
+        }
 
-            IApplicationContext appCtx = new ResourceXmlApplicationContext(appCtxCfg);
+        protected override IResource[] ConfigurationResources
+        {
+            get { return null; }
+        }
+    }
+
+    private const string APPCTXCFG_PROLOG = @"<?xml version='1.0' encoding='utf-8' ?>";
+    private const string APPCTXCFG_START = APPCTXCFG_PROLOG + @"<objects xmlns='http://www.springframework.net' xmlns:tx='http://www.springframework.net/tx'>";
+    private const string APPCTXCFG_END = @"</objects>";
+
+    private IApplicationContext ctx;
+
+    [SetUp]
+    public void SetUp()
+    {
+        //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
+        //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
+        ctx = new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Transaction.Config/TxNamespaceParserTests.xml");
+    }
+
+    // TODO (EE)
+    [Test]
+    public void AppliesTxAttributeDrivenAttributes()
+    {
+        StringResource appCtxCfg = new StringResource(
+            APPCTXCFG_START
+            + "<tx:attribute-driven transaction-manager='otherTxManager' proxy-target-type='true' order='2' />"
+            + APPCTXCFG_END);
+
+        IApplicationContext appCtx = new ResourceXmlApplicationContext(appCtxCfg);
 //            DefaultAdvisorAutoProxyCreator daapc = (DefaultAdvisorAutoProxyCreator) appCtx.GetObject(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME);
 //            Assert.AreEqual(2, daapc.Order);
-        }
+    }
 
-        [Test]
-        public void Registered()
+    [Test]
+    public void Registered()
+    {
+        Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/tx"));
+        Assert.IsTrue(ctx.ContainsObjectDefinition(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME));
+
+        string className = typeof(ObjectFactoryTransactionAttributeSourceAdvisor).FullName;
+        string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
+
+        Assert.IsTrue(ctx.ContainsObjectDefinition(targetName));
+    }
+
+    [Test]
+    public void InvokeTransactional()
+    {
+        ITestObject testObject = TestObject;
+        CallCountingTransactionManager ptm = ctx["transactionManager"] as CallCountingTransactionManager;
+        Assert.IsNotNull(ptm);
+
+        // try with transactional
+        Assert.AreEqual(0, ptm.begun, "Should not have started any transactions");
+        testObject.GetDescription();
+        Assert.AreEqual(1, ptm.begun, "Should have 1 started transaction");
+        Assert.AreEqual(1, ptm.commits, "Should have 1 committed transaction");
+
+        // try with non-transaction
+        int i = testObject.Age;
+        Assert.IsNotNull(i);
+        Assert.AreEqual(1, ptm.begun, "Should not have started another transaction");
+
+        // try with exceptional
+        try
         {
-            Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/tx"));
-            Assert.IsTrue(ctx.ContainsObjectDefinition(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME));
-
-            string className = typeof(ObjectFactoryTransactionAttributeSourceAdvisor).FullName;
-            string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
-
-            Assert.IsTrue(ctx.ContainsObjectDefinition(targetName));
+            testObject.Exceptional(new ArgumentNullException());
+            Assert.Fail("Should not get here");
         }
-
-
-        [Test]
-        public void InvokeTransactional()
+        catch (Exception)
         {
-            ITestObject testObject = TestObject;
-            CallCountingTransactionManager ptm = ctx["transactionManager"] as CallCountingTransactionManager;
-            Assert.IsNotNull(ptm);
-
-            // try with transactional
-            Assert.AreEqual(0, ptm.begun,"Should not have started any transactions");
-            testObject.GetDescription();
-            Assert.AreEqual(1, ptm.begun, "Should have 1 started transaction");
-            Assert.AreEqual(1, ptm.commits, "Should have 1 committed transaction");
-
-            // try with non-transaction
-            int i = testObject.Age;
-            Assert.IsNotNull(i);
-            Assert.AreEqual(1, ptm.begun, "Should not have started another transaction");
-
-            // try with exceptional
-            try
-            {
-                testObject.Exceptional(new ArgumentNullException());
-                Assert.Fail("Should not get here");
-            } catch (Exception)
-            {
-                Assert.AreEqual(2, ptm.begun, "Should have another started transaction");
-                Assert.AreEqual(1, ptm.rollbacks, "Should have 1 rolled back transaction");
-            }
+            Assert.AreEqual(2, ptm.begun, "Should have another started transaction");
+            Assert.AreEqual(1, ptm.rollbacks, "Should have 1 rolled back transaction");
         }
+    }
 
-        private ITestObject TestObject
+    private ITestObject TestObject
+    {
+        get
         {
-            get
-            {
-                return ctx["testObject"] as
-                       ITestObject;
-            }
+            return ctx["testObject"] as
+                ITestObject;
         }
+    }
 
-        [Test]
-        public void RollbackRules()
-        {
-            TransactionInterceptor txInterceptor = ctx.GetObject("txRollbackAdvice") as TransactionInterceptor;
-            Assert.IsNotNull(txInterceptor);
+    [Test]
+    public void RollbackRules()
+    {
+        TransactionInterceptor txInterceptor = ctx.GetObject("txRollbackAdvice") as TransactionInterceptor;
+        Assert.IsNotNull(txInterceptor);
 
-            MethodInfo getDescriptionMethod = typeof(ITestObject).GetMethod("GetDescription");
-            MethodInfo exceptionalMethod = typeof (ITestObject).GetMethod("Exceptional");
-            ITransactionAttributeSource txAttrSource = txInterceptor.TransactionAttributeSource;
-            ITransactionAttribute txAttr = txAttrSource.ReturnTransactionAttribute(getDescriptionMethod, typeof (ITestObject));
-            Assert.IsTrue(txAttr.RollbackOn(new System.ApplicationException()));
+        MethodInfo getDescriptionMethod = typeof(ITestObject).GetMethod("GetDescription");
+        MethodInfo exceptionalMethod = typeof(ITestObject).GetMethod("Exceptional");
+        ITransactionAttributeSource txAttrSource = txInterceptor.TransactionAttributeSource;
+        ITransactionAttribute txAttr = txAttrSource.ReturnTransactionAttribute(getDescriptionMethod, typeof(ITestObject));
+        Assert.IsTrue(txAttr.RollbackOn(new System.ApplicationException()));
 
-            txAttr = txAttrSource.ReturnTransactionAttribute(exceptionalMethod, typeof (ITestObject));
-            Assert.IsFalse(txAttr.RollbackOn(new System.ArithmeticException()));
-        }
+        txAttr = txAttrSource.ReturnTransactionAttribute(exceptionalMethod, typeof(ITestObject));
+        Assert.IsFalse(txAttr.RollbackOn(new System.ArithmeticException()));
     }
 }

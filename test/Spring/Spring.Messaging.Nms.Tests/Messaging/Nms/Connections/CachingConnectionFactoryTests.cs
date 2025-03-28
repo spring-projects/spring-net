@@ -22,203 +22,197 @@ using Apache.NMS;
 using FakeItEasy;
 using NUnit.Framework;
 
-namespace Spring.Messaging.Nms.Connections
+namespace Spring.Messaging.Nms.Connections;
+
+/// <summary>
+/// This class contains tests for CachingConnectionFactory
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class CachingConnectionFactoryTests
 {
-    /// <summary>
-    /// This class contains tests for CachingConnectionFactory
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class CachingConnectionFactoryTests
+    [Test]
+    public void CachedSession()
     {
-        [Test]
-        public void CachedSession()
-        {
-            IConnectionFactory connectionFactory = CreateConnectionFactory();
+        IConnectionFactory connectionFactory = CreateConnectionFactory();
 
-            CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-            cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
+        cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
 
-            IConnection con1 = cachingConnectionFactory.CreateConnection();
+        IConnection con1 = cachingConnectionFactory.CreateConnection();
 
-            ISession session1 = con1.CreateSession(AcknowledgementMode.Transactional);        
-            TestSession testSession = GetTestSession(session1);
-            Assert.AreEqual(1, testSession.CreatedCount);
-            Assert.AreEqual(0, testSession.CloseCount);
+        ISession session1 = con1.CreateSession(AcknowledgementMode.Transactional);
+        TestSession testSession = GetTestSession(session1);
+        Assert.AreEqual(1, testSession.CreatedCount);
+        Assert.AreEqual(0, testSession.CloseCount);
 
+        session1.Close(); // won't close, will put in session cache.
+        Assert.AreEqual(0, testSession.CloseCount);
 
-            session1.Close();  // won't close, will put in session cache.
-            Assert.AreEqual(0, testSession.CloseCount);
-            
-            ISession session2 = con1.CreateSession(AcknowledgementMode.Transactional);
+        ISession session2 = con1.CreateSession(AcknowledgementMode.Transactional);
 
+        TestSession testSession2 = GetTestSession(session2);
 
-            TestSession testSession2 = GetTestSession(session2);
-            
+        Assert.AreSame(testSession, testSession2);
 
-            Assert.AreSame(testSession, testSession2);
+        Assert.AreEqual(1, testSession.CreatedCount);
+        Assert.AreEqual(0, testSession.CloseCount);
 
-            Assert.AreEqual(1, testSession.CreatedCount);
-            Assert.AreEqual(0, testSession.CloseCount);
+        //don't explicitly call close on
+    }
 
-            //don't explicitly call close on 
-        }
+    private static TestSession GetTestSession(ISession session1)
+    {
+        CachedSession cachedSession = session1 as CachedSession;
+        Assert.IsNotNull(cachedSession);
+        TestSession testSession = cachedSession.TargetSession as TestSession;
+        Assert.IsNotNull(testSession);
+        return testSession;
+    }
 
-        private static TestSession GetTestSession(ISession session1)
-        {
-            CachedSession cachedSession = session1 as CachedSession;
-            Assert.IsNotNull(cachedSession);
-            TestSession testSession = cachedSession.TargetSession as TestSession;
-            Assert.IsNotNull(testSession);
-            return testSession;
-        }
+    [Test]
+    public void CachedSessionTwoRequests()
+    {
+        IConnectionFactory connectionFactory = CreateConnectionFactory();
 
-        [Test]
-        public void CachedSessionTwoRequests()
-        {
-            IConnectionFactory connectionFactory = CreateConnectionFactory();
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
+        cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
+        IConnection con1 = cachingConnectionFactory.CreateConnection();
 
-            CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-            cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
-            IConnection con1 = cachingConnectionFactory.CreateConnection();
+        ISession session1 = con1.CreateSession(AcknowledgementMode.Transactional);
+        TestSession testSession1 = GetTestSession(session1);
+        Assert.AreEqual(1, testSession1.CreatedCount);
+        Assert.AreEqual(0, testSession1.CloseCount);
 
-            ISession session1 = con1.CreateSession(AcknowledgementMode.Transactional);
-            TestSession testSession1 = GetTestSession(session1);
-            Assert.AreEqual(1, testSession1.CreatedCount);
-            Assert.AreEqual(0, testSession1.CloseCount);
+        //will create a new one, not in the cache.
+        ISession session2 = con1.CreateSession(AcknowledgementMode.Transactional);
+        TestSession testSession2 = GetTestSession(session2);
+        Assert.AreEqual(1, testSession2.CreatedCount);
+        Assert.AreEqual(0, testSession2.CloseCount);
 
+        Assert.AreNotSame(testSession1, testSession2);
 
-            //will create a new one, not in the cache.
-            ISession session2 = con1.CreateSession(AcknowledgementMode.Transactional);
-            TestSession testSession2 = GetTestSession(session2);
-            Assert.AreEqual(1, testSession2.CreatedCount);
-            Assert.AreEqual(0, testSession2.CloseCount);
+        Assert.AreNotSame(session1, session2);
 
-            Assert.AreNotSame(testSession1, testSession2);
+        session1.Close(); // will be put in the cache
 
-            Assert.AreNotSame(session1, session2);
+        ISession session3 = con1.CreateSession(AcknowledgementMode.Transactional);
+        TestSession testSession3 = GetTestSession(session3);
+        Assert.AreSame(testSession1, testSession3);
+        Assert.AreSame(session1, session3);
+        Assert.AreEqual(1, testSession1.CreatedCount);
+        Assert.AreEqual(0, testSession1.CloseCount);
+    }
 
-            session1.Close();  // will be put in the cache
+    /// <summary>
+    /// Tests that the same underlying instance of the message producer is returned after
+    /// creating a session, creating the producer (A), closing the session, and creating another
+    /// producer (B).  Assert that (A)=(B).
+    /// </summary>
+    [Test]
+    public void CachedMessageProducer()
+    {
+        IConnectionFactory connectionFactory = CreateConnectionFactory();
 
-            ISession session3 = con1.CreateSession(AcknowledgementMode.Transactional);
-            TestSession testSession3 = GetTestSession(session3);
-            Assert.AreSame(testSession1, testSession3);
-            Assert.AreSame(session1, session3);
-            Assert.AreEqual(1, testSession1.CreatedCount);
-            Assert.AreEqual(0, testSession1.CloseCount);
-        }
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
+        cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
+        IConnection con1 = cachingConnectionFactory.CreateConnection();
 
-        /// <summary>
-        /// Tests that the same underlying instance of the message producer is returned after
-        /// creating a session, creating the producer (A), closing the session, and creating another
-        /// producer (B).  Assert that (A)=(B).
-        /// </summary>
-        [Test]
-        public void CachedMessageProducer()
-        {
-            IConnectionFactory connectionFactory = CreateConnectionFactory();
-            
-            CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-            cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
-            IConnection con1 = cachingConnectionFactory.CreateConnection();
+        ISession sessionA = con1.CreateSession(AcknowledgementMode.Transactional);
+        IMessageProducer producerA = sessionA.CreateProducer();
+        TestMessageProducer tmpA = GetTestMessageProducer(producerA);
 
-            ISession sessionA = con1.CreateSession(AcknowledgementMode.Transactional);
-            IMessageProducer producerA = sessionA.CreateProducer();
-            TestMessageProducer tmpA = GetTestMessageProducer(producerA);
+        sessionA.Close();
 
-            sessionA.Close();
+        ISession sessionB = con1.CreateSession(AcknowledgementMode.Transactional);
+        IMessageProducer producerB = sessionB.CreateProducer();
+        TestMessageProducer tmpB = GetTestMessageProducer(producerB);
 
-            ISession sessionB = con1.CreateSession(AcknowledgementMode.Transactional);
-            IMessageProducer producerB = sessionB.CreateProducer();
-            TestMessageProducer tmpB = GetTestMessageProducer(producerB);
-            
-            Assert.AreSame(tmpA, tmpB);
-        }
+        Assert.AreSame(tmpA, tmpB);
+    }
 
-        [Test]
-        public void CachedMessageProducerTwoRequests()
-        {
-            IConnectionFactory connectionFactory = CreateConnectionFactory();
+    [Test]
+    public void CachedMessageProducerTwoRequests()
+    {
+        IConnectionFactory connectionFactory = CreateConnectionFactory();
 
-            CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-            cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
-            IConnection con1 = cachingConnectionFactory.CreateConnection();
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
+        cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
+        IConnection con1 = cachingConnectionFactory.CreateConnection();
 
-            ISession sessionA = con1.CreateSession(AcknowledgementMode.Transactional);
-            IMessageProducer producerA = sessionA.CreateProducer();
-            TestMessageProducer tmpA = GetTestMessageProducer(producerA);
+        ISession sessionA = con1.CreateSession(AcknowledgementMode.Transactional);
+        IMessageProducer producerA = sessionA.CreateProducer();
+        TestMessageProducer tmpA = GetTestMessageProducer(producerA);
 
-           
-            ISession sessionB = con1.CreateSession(AcknowledgementMode.Transactional);
-            IMessageProducer producerB = sessionB.CreateProducer();
-            TestMessageProducer tmpB = GetTestMessageProducer(producerB);
-            
-            Assert.AreNotSame(tmpA, tmpB);
+        ISession sessionB = con1.CreateSession(AcknowledgementMode.Transactional);
+        IMessageProducer producerB = sessionB.CreateProducer();
+        TestMessageProducer tmpB = GetTestMessageProducer(producerB);
 
-            sessionA.Close();
+        Assert.AreNotSame(tmpA, tmpB);
 
-            ISession sessionC = con1.CreateSession(AcknowledgementMode.Transactional);
-            IMessageProducer producerC = sessionC.CreateProducer();
-            TestMessageProducer tmpC = GetTestMessageProducer(producerC);
+        sessionA.Close();
 
-            Assert.AreSame(tmpA, tmpC);
-        }
+        ISession sessionC = con1.CreateSession(AcknowledgementMode.Transactional);
+        IMessageProducer producerC = sessionC.CreateProducer();
+        TestMessageProducer tmpC = GetTestMessageProducer(producerC);
+
+        Assert.AreSame(tmpA, tmpC);
+    }
 
 #if NETFRAMEWORK
-        /// <summary>
-        /// Tests that the same underlying instance of the message consumer is returned after
-        /// creating a session, creating the consumer (A), closing the session, and creating another
-        /// consumer (B).  Assert that (A)=(B).
-        /// </summary>
-        [Test]
-        public void CachedMessageConsumer()
-        {
-            IConnectionFactory connectionFactory = CreateConnectionFactory();
+    /// <summary>
+    /// Tests that the same underlying instance of the message consumer is returned after
+    /// creating a session, creating the consumer (A), closing the session, and creating another
+    /// consumer (B).  Assert that (A)=(B).
+    /// </summary>
+    [Test]
+    public void CachedMessageConsumer()
+    {
+        IConnectionFactory connectionFactory = CreateConnectionFactory();
 
-            CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-            cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
-            IConnection con1 = cachingConnectionFactory.CreateConnection();
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
+        cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
+        IConnection con1 = cachingConnectionFactory.CreateConnection();
 
-            ISession sessionA = con1.CreateSession(AcknowledgementMode.Transactional);
-            IDestination destination = new Apache.NMS.ActiveMQ.Commands.ActiveMQQueue("test.dest");
-            IMessageConsumer consumerA = sessionA.CreateConsumer(destination);
-            TestMessageConsumer tmpA = GetTestMessageConsumer(consumerA);
+        ISession sessionA = con1.CreateSession(AcknowledgementMode.Transactional);
+        IDestination destination = new Apache.NMS.ActiveMQ.Commands.ActiveMQQueue("test.dest");
+        IMessageConsumer consumerA = sessionA.CreateConsumer(destination);
+        TestMessageConsumer tmpA = GetTestMessageConsumer(consumerA);
 
-            sessionA.Close();
+        sessionA.Close();
 
-            ISession sessionB = con1.CreateSession(AcknowledgementMode.Transactional);
-            IMessageConsumer consumerB = sessionB.CreateConsumer(destination);
-            TestMessageConsumer tmpB = GetTestMessageConsumer(consumerB);
+        ISession sessionB = con1.CreateSession(AcknowledgementMode.Transactional);
+        IMessageConsumer consumerB = sessionB.CreateConsumer(destination);
+        TestMessageConsumer tmpB = GetTestMessageConsumer(consumerB);
 
-            Assert.AreSame(tmpA, tmpB);            
-        }
+        Assert.AreSame(tmpA, tmpB);
+    }
 #endif
 
-        private IConnectionFactory CreateConnectionFactory()
-        {
-            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
-            IConnection connection = new TestConnection();
+    private IConnectionFactory CreateConnectionFactory()
+    {
+        IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+        IConnection connection = new TestConnection();
 
-            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
-            return connectionFactory;
-        }
+        A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
+        return connectionFactory;
+    }
 
-        private static TestMessageConsumer GetTestMessageConsumer(IMessageConsumer consumer)
-        {
-            CachedMessageConsumer cmp1 = consumer as CachedMessageConsumer;
-            Assert.IsNotNull(cmp1);
-            TestMessageConsumer tmp1 = cmp1.Target as TestMessageConsumer;
-            Assert.IsNotNull(tmp1);
-            return tmp1;
-        }
+    private static TestMessageConsumer GetTestMessageConsumer(IMessageConsumer consumer)
+    {
+        CachedMessageConsumer cmp1 = consumer as CachedMessageConsumer;
+        Assert.IsNotNull(cmp1);
+        TestMessageConsumer tmp1 = cmp1.Target as TestMessageConsumer;
+        Assert.IsNotNull(tmp1);
+        return tmp1;
+    }
 
-        private static TestMessageProducer GetTestMessageProducer(IMessageProducer producer1)
-        {
-            CachedMessageProducer cmp1 = producer1 as CachedMessageProducer;
-            Assert.IsNotNull(cmp1);
-            TestMessageProducer tmp1 = cmp1.Target as TestMessageProducer;
-            Assert.IsNotNull(tmp1);
-            return tmp1;
-        }
+    private static TestMessageProducer GetTestMessageProducer(IMessageProducer producer1)
+    {
+        CachedMessageProducer cmp1 = producer1 as CachedMessageProducer;
+        Assert.IsNotNull(cmp1);
+        TestMessageProducer tmp1 = cmp1.Target as TestMessageProducer;
+        Assert.IsNotNull(tmp1);
+        return tmp1;
     }
 }

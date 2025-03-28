@@ -25,28 +25,27 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Threading
+namespace Spring.Threading;
+
+/// <summary>
+/// Apply common thread-storage tests for <see cref="HttpContextStorage"/>
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class HttpContextStorageTests : CommonThreadStorageTests
 {
-    /// <summary>
-    /// Apply common thread-storage tests for <see cref="HttpContextStorage"/>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class HttpContextStorageTests : CommonThreadStorageTests
+    protected override IThreadStorage CreateStorage()
     {
-        protected override IThreadStorage CreateStorage()
-        {
-            return new HttpContextStorage();
-        }
+        return new HttpContextStorage();
+    }
 
-        protected override void ThreadSetup()
-        {
-            HttpContext.Current = new HttpContext(new HttpRequest("/page.aspx", "http://localhost/page.aspx", null), new HttpResponse(new StringWriter()));
-        }
+    protected override void ThreadSetup()
+    {
+        HttpContext.Current = new HttpContext(new HttpRequest("/page.aspx", "http://localhost/page.aspx", null), new HttpResponse(new StringWriter()));
+    }
 
-        protected override void ThreadCleanup()
-        {
-            HttpContext.Current = null;
-        }
+    protected override void ThreadCleanup()
+    {
+        HttpContext.Current = null;
     }
 }

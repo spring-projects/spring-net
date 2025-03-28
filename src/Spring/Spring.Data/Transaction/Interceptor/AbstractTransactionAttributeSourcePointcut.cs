@@ -21,38 +21,37 @@
 using System.Reflection;
 using Spring.Aop.Support;
 
-namespace Spring.Transaction.Interceptor
+namespace Spring.Transaction.Interceptor;
+
+public abstract class AbstractTransactionAttributeSourcePointcut : StaticMethodMatcherPointcut
 {
-    public abstract class AbstractTransactionAttributeSourcePointcut : StaticMethodMatcherPointcut
+    #region Overrides of StaticMethodMatcher
+
+    /// <summary>
+    /// Does the supplied <paramref name="method"/> satisfy this matcher?
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Must be implemented by a derived class in order to specify matching
+    /// rules.
+    /// </p>
+    /// </remarks>
+    /// <param name="method">The candidate method.</param>
+    /// <param name="targetType">
+    /// The target <see cref="System.Type"/> (may be <see langword="null"/>,
+    /// in which case the candidate <see cref="System.Type"/> must be taken
+    /// to be the <paramref name="method"/>'s declaring class).
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> if this this method matches statically.
+    /// </returns>
+    public override bool Matches(MethodInfo method, Type targetType)
     {
-        #region Overrides of StaticMethodMatcher
-
-        /// <summary>
-        /// Does the supplied <paramref name="method"/> satisfy this matcher?
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Must be implemented by a derived class in order to specify matching
-        /// rules.
-        /// </p>
-        /// </remarks>
-        /// <param name="method">The candidate method.</param>
-        /// <param name="targetType">
-        /// The target <see cref="System.Type"/> (may be <see langword="null"/>,
-        /// in which case the candidate <see cref="System.Type"/> must be taken
-        /// to be the <paramref name="method"/>'s declaring class).
-        /// </param>
-        /// <returns>
-        /// <see langword="true"/> if this this method matches statically.
-        /// </returns>
-        public override bool Matches(MethodInfo method, Type targetType)
-        {
-            ITransactionAttributeSource tas = TransactionAttributeSource;
-            return (tas == null || TransactionAttributeSource.ReturnTransactionAttribute(method, targetType) != null);
-        }
-
-        #endregion
-
-        protected abstract ITransactionAttributeSource TransactionAttributeSource { get; }
+        ITransactionAttributeSource tas = TransactionAttributeSource;
+        return (tas == null || TransactionAttributeSource.ReturnTransactionAttribute(method, targetType) != null);
     }
+
+    #endregion
+
+    protected abstract ITransactionAttributeSource TransactionAttributeSource { get; }
 }

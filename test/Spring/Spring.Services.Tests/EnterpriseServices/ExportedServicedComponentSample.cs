@@ -25,45 +25,44 @@ using System.Reflection;
 /*
 The code below is only for reverse engineering generated code in reflector
  */
-namespace Spring.EnterpriseServices
+namespace Spring.EnterpriseServices;
+
+internal interface ITestInterface
 {
-    internal interface ITestInterface
+    void Method();
+}
+
+internal delegate object GetObjectHandler(ServicedComponent component, string targetName);
+
+internal class ExportedServicedComponentSample : ServicedComponent, ITestInterface
+{
+    protected static GetObjectHandler getObject;
+
+    static ExportedServicedComponentSample()
     {
-        void Method();
+        try
+        {
+            // in case we're dealing w/ unsigned assemblies, that is the way to go...
+            string path = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, "Spring.Services.dll");
+            Assembly a = Assembly.LoadFrom(path);
+            if (a == null)
+            {
+                a = Assembly.Load("Spring.Services, Version=1.2.0.20001, Culture=neutral, PublicKeyToken=null");
+            }
+
+            Type t = a.GetType("Spring.EnterpriseServices.ServicedComponentHelper", true);
+            getObject = (GetObjectHandler) Delegate.CreateDelegate(typeof(GetObjectHandler), t.GetMethod("GetObject"));
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine(ex);
+            throw;
+        }
     }
 
-    internal delegate object GetObjectHandler(ServicedComponent component, string targetName);
-
-
-    internal class ExportedServicedComponentSample : ServicedComponent, ITestInterface
+    public void Method()
     {
-        protected static GetObjectHandler getObject;
-
-        static ExportedServicedComponentSample()
-        {
-            try
-            {
-                // in case we're dealing w/ unsigned assemblies, that is the way to go...
-                string path = Path.Combine( new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, "Spring.Services.dll");
-                Assembly a = Assembly.LoadFrom(path);
-                if (a == null)
-                {
-                    a = Assembly.Load("Spring.Services, Version=1.2.0.20001, Culture=neutral, PublicKeyToken=null");
-                }
-                Type t = a.GetType("Spring.EnterpriseServices.ServicedComponentHelper", true);
-                getObject = (GetObjectHandler) Delegate.CreateDelegate(typeof(GetObjectHandler), t.GetMethod("GetObject"));
-            }
-            catch(Exception ex)
-            {
-                Trace.WriteLine(ex);
-                throw;
-            }
-        }
-
-        public void Method()
-        {
-            ITestInterface targetInstance = (ITestInterface) getObject(null, "name");
-            targetInstance.Method();
-        }
+        ITestInterface targetInstance = (ITestInterface) getObject(null, "name");
+        targetInstance.Method();
     }
 }

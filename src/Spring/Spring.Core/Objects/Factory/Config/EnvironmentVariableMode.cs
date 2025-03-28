@@ -18,32 +18,31 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Specifies how instances of the
+/// <see cref="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer"/>
+/// class must apply environment variables when replacing values.
+/// </summary>
+/// <author>Mark Pollack</author>
+[Serializable]
+public enum EnvironmentVariableMode
 {
-	/// <summary>
-	/// Specifies how instances of the
-	/// <see cref="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer"/>
-	/// class must apply environment variables when replacing values.
-	/// </summary>
-	/// <author>Mark Pollack</author>
-    [Serializable]
-    public enum EnvironmentVariableMode
-	{
-		/// <summary>
-		/// Never replace environment variables.
-		/// </summary>
-		Never = 1,
+    /// <summary>
+    /// Never replace environment variables.
+    /// </summary>
+    Never = 1,
 
-		/// <summary>
-		/// If properties are not specified via a resource, 
-		/// then resolve using environment variables.
-		/// </summary>
-		Fallback = 2,
+    /// <summary>
+    /// If properties are not specified via a resource,
+    /// then resolve using environment variables.
+    /// </summary>
+    Fallback = 2,
 
-		/// <summary>
-		/// Apply environment variables first before applying properties from a
-		/// resource.
-		/// </summary>
-		Override = 3
-	}
+    /// <summary>
+    /// Apply environment variables first before applying properties from a
+    /// resource.
+    /// </summary>
+    Override = 3
 }

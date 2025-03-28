@@ -30,571 +30,574 @@ using Microsoft.Extensions.Logging;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Provides platform independent access to HttpRuntime methods
+/// </summary>
+/// <remarks>
+/// For e.g. testing purposes, the default environment implementation may be replaced using <see cref="SetInstance(IVirtualEnvironment)" />.
+/// </remarks>
+/// <author>Erich Eichinger</author>
+public sealed class VirtualEnvironment
 {
+    // default to standard HttpRuntime
+    private static IVirtualEnvironment instance = new HttpRuntimeEnvironment();
+
     /// <summary>
-    /// Provides platform independent access to HttpRuntime methods
+    /// Represents a method that handles Request related events
     /// </summary>
-    /// <remarks>
-    /// For e.g. testing purposes, the default environment implementation may be replaced using <see cref="SetInstance(IVirtualEnvironment)" />.
-    /// </remarks>
-    /// <author>Erich Eichinger</author>
-    public sealed class VirtualEnvironment
+    public delegate void RequestEventHandler(HttpContext context);
+
+    /// <summary>
+    /// Represents a method that handles Session related events
+    /// </summary>
+    public delegate void SessionEventHandler(HttpSessionState session, CacheItemRemovedReason reason);
+
+    private static readonly object syncEndRequestEvent = new object();
+    private static RequestEventHandler s_requestEvent;
+    private static readonly object syncEndSessionEvent = new object();
+    private static SessionEventHandler s_sessionEvent;
+
+    private static volatile bool s_isInitialized = false;
+
+    /// <summary>
+    /// Replaces the current enviroment implementation.
+    /// </summary>
+    /// <param name="newEnvironment">the new environment implementation to be used</param>
+    /// <returns>the previously set environment instance</returns>
+    public static IVirtualEnvironment SetInstance(IVirtualEnvironment newEnvironment)
     {
-        // default to standard HttpRuntime
-        private static IVirtualEnvironment instance = new HttpRuntimeEnvironment();
+        IVirtualEnvironment prevEnvironment = instance;
+        instance = newEnvironment;
+        return prevEnvironment;
+    }
 
-        /// <summary>
-        /// Represents a method that handles Request related events
-        /// </summary>
-        public delegate void RequestEventHandler(HttpContext context);
+    #region default IVirtualEnvironment Adapter for HttpRuntime
 
-        /// <summary>
-        /// Represents a method that handles Session related events
-        /// </summary>
-        public delegate void SessionEventHandler(HttpSessionState session, CacheItemRemovedReason reason);
+    /// <summary>
+    /// Implementation for running within HttpRuntime
+    /// </summary>
+    private class HttpRuntimeEnvironment : IVirtualEnvironment
+    {
+        #region HttpSessionState Adapter
 
-        private static readonly object syncEndRequestEvent = new object();
-        private static RequestEventHandler s_requestEvent;
-        private static readonly object syncEndSessionEvent = new object();
-        private static SessionEventHandler s_sessionEvent;
-
-        private static volatile bool s_isInitialized = false;
-
-        /// <summary>
-        /// Replaces the current enviroment implementation.
-        /// </summary>
-        /// <param name="newEnvironment">the new environment implementation to be used</param>
-        /// <returns>the previously set environment instance</returns>
-        public static IVirtualEnvironment SetInstance(IVirtualEnvironment newEnvironment)
+        private class SessionDictionaryAdapter : ISessionState
         {
-            IVirtualEnvironment prevEnvironment = instance;
-            instance = newEnvironment;
-            return prevEnvironment;
-        }
+            private readonly HttpSessionState _sessionState;
 
-        #region default IVirtualEnvironment Adapter for HttpRuntime
-
-        /// <summary>
-        /// Implementation for running within HttpRuntime
-        /// </summary>
-        private class HttpRuntimeEnvironment : IVirtualEnvironment
-        {
-            #region HttpSessionState Adapter
-
-            private class SessionDictionaryAdapter : ISessionState
+            public SessionDictionaryAdapter(HttpSessionState sessionState)
             {
-                private readonly HttpSessionState _sessionState;
-
-                public SessionDictionaryAdapter(HttpSessionState sessionState)
-                {
-                    _sessionState = sessionState;
-                }
-
-
-                public bool Contains(object key)
-                {
-                    ICollection keys = _sessionState.Keys;
-                    foreach (string sessionKey in keys)
-                    {
-                        if (object.Equals(sessionKey, (string)key)) return true;
-                    }
-                    return false;
-                }
-
-                public void Add(object key, object value)
-                {
-                    _sessionState.Add((string)key, value);
-                }
-
-                public void Clear()
-                {
-                    _sessionState.Clear();
-                }
-
-                public IDictionaryEnumerator GetEnumerator()
-                {
-                    Hashtable tableCopy = new Hashtable();
-                    ICollection keys = _sessionState.Keys;
-                    foreach (string sessionKey in keys)
-                    {
-                        tableCopy.Add(sessionKey, _sessionState[sessionKey]);
-                    }
-                    return tableCopy.GetEnumerator();
-                }
-
-                public void Remove(object key)
-                {
-                    _sessionState.Remove((string) key);
-                }
-
-                public object this[object key]
-                {
-                    get { return _sessionState[(string)key]; }
-                    set { _sessionState[(string)key] = value; }
-                }
-
-                public ICollection Keys
-                {
-                    get { return _sessionState.Keys; }
-                }
-
-                public ICollection Values
-                {
-                    get
-                    {
-                        object[] values = new object[_sessionState.Count];
-                        _sessionState.CopyTo(values, 0);
-                        return values;
-                    }
-                }
-
-                public bool IsReadOnly
-                {
-                    get { return _sessionState.IsReadOnly; }
-                }
-
-                public bool IsFixedSize
-                {
-                    get { return false; }
-                }
-
-                IEnumerator IEnumerable.GetEnumerator()
-                {
-                    return GetEnumerator();
-                }
-
-                public void CopyTo(Array array, int index)
-                {
-                    _sessionState.CopyTo(array, index);
-                }
-
-                public int Count
-                {
-                    get { return _sessionState.Count; }
-                }
-
-                public object SyncRoot
-                {
-                    get { return _sessionState.SyncRoot; }
-                }
-
-                public bool IsSynchronized
-                {
-                    get { return _sessionState.IsSynchronized; }
-                }
-
-                public void Abandon()
-                {
-                    _sessionState.Abandon();
-                }
-
-                public bool IsCookieless
-                {
-                    get { return _sessionState.IsCookieless; }
-                }
-
-                public bool IsNewSession
-                {
-                    get { return _sessionState.IsNewSession; }
-                }
-
-                public int LCID
-                {
-                    get { return _sessionState.LCID; }
-                    set { _sessionState.LCID = value; }
-                }
-
-                public SessionStateMode Mode
-                {
-                    get { return _sessionState.Mode; }
-                }
-
-                public string SessionID
-                {
-                    get { return _sessionState.SessionID; }
-                }
-
-                public int CodePage
-                {
-                    get { return _sessionState.CodePage; }
-                    set { _sessionState.CodePage = value; }
-                }
-#if !MONO
-                public HttpCookieMode CookieMode
-                {
-                    get { return _sessionState.CookieMode; }
-                }
-#endif
+                _sessionState = sessionState;
             }
 
-            #endregion //HttpSessionState Adapter
-
-            private static readonly ILogger log = LogManager.GetLogger(typeof (HttpRuntimeEnvironment));
-
-            private class RewriteContext : IDisposable
+            public bool Contains(object key)
             {
-                private string originalPath;
-                private bool rebaseClientPath;
-                private HttpContext ctx;
-
-                public RewriteContext(string virtualDirectory, bool rebaseClientPath)
+                ICollection keys = _sessionState.Keys;
+                foreach (string sessionKey in keys)
                 {
-                    ctx = HttpContext.Current;
-                    if (ctx == null)
-                    {
-                        return;
-                    }
-
-                    this.rebaseClientPath = rebaseClientPath;
-
-                    string newVirtualPath = WebUtils.GetVirtualDirectory(virtualDirectory);
-                    string currentFileDirectory = WebUtils.GetVirtualDirectory(ctx.Request.FilePath);
-                    // only switch path if necessary
-                    if (string.Compare(newVirtualPath, currentFileDirectory, true) != 0)
-                    {
-                        originalPath = ctx.Request.Url.PathAndQuery;
-                        string newPath = newVirtualPath + "currentcontext.dummy";
-
-                        ctx.RewritePath(newPath, rebaseClientPath);
-
-                        #region Instrumentation
-
-                        if (log.IsEnabled(LogLevel.Debug))
-                        {
-                            log.LogDebug("rewriting path from " + currentFileDirectory + " to " + newPath + " results in " + ctx.Request.FilePath);
-                        }
-
-                        #endregion
-                    }
+                    if (object.Equals(sessionKey, (string) key)) return true;
                 }
 
-                public void Dispose()
-                {
-                    if (originalPath != null)
-                    {
-                        if (log.IsEnabled(LogLevel.Debug))
-                        {
-                            log.LogDebug("restoring path from " + ctx.Request.FilePath + " back to " + originalPath);
-                        }
-
-                        ctx.RewritePath(originalPath, rebaseClientPath);
-                    }
-                }
+                return false;
             }
 
-            public string ApplicationVirtualPath
+            public void Add(object key, object value)
+            {
+                _sessionState.Add((string) key, value);
+            }
+
+            public void Clear()
+            {
+                _sessionState.Clear();
+            }
+
+            public IDictionaryEnumerator GetEnumerator()
+            {
+                Hashtable tableCopy = new Hashtable();
+                ICollection keys = _sessionState.Keys;
+                foreach (string sessionKey in keys)
+                {
+                    tableCopy.Add(sessionKey, _sessionState[sessionKey]);
+                }
+
+                return tableCopy.GetEnumerator();
+            }
+
+            public void Remove(object key)
+            {
+                _sessionState.Remove((string) key);
+            }
+
+            public object this[object key]
+            {
+                get { return _sessionState[(string) key]; }
+                set { _sessionState[(string) key] = value; }
+            }
+
+            public ICollection Keys
+            {
+                get { return _sessionState.Keys; }
+            }
+
+            public ICollection Values
             {
                 get
                 {
-                    string appPath = HttpRuntime.AppDomainAppVirtualPath;
-                    if (!appPath.EndsWith("/")) appPath = appPath + "/";
-                    return appPath;
+                    object[] values = new object[_sessionState.Count];
+                    _sessionState.CopyTo(values, 0);
+                    return values;
                 }
             }
 
-            public string CurrentVirtualPath
+            public bool IsReadOnly
             {
-                get { return HttpContext.Current.Request.Path; }
+                get { return _sessionState.IsReadOnly; }
             }
 
-            public string CurrentVirtualFilePath
+            public bool IsFixedSize
             {
-                get { return HttpContext.Current.Request.FilePath; }
+                get { return false; }
             }
 
-            public string CurrentExecutionFilePath
+            IEnumerator IEnumerable.GetEnumerator()
             {
-                get { return HttpContext.Current.Request.CurrentExecutionFilePath; }
+                return GetEnumerator();
             }
 
-            public NameValueCollection QueryString
+            public void CopyTo(Array array, int index)
             {
-                get { return HttpContext.Current.Request.QueryString; }
+                _sessionState.CopyTo(array, index);
             }
 
-            public string MapPath(string virtualPath)
+            public int Count
             {
-                HttpContext ctx = HttpContext.Current;
-                if (ctx != null)
-                {
-                    return ctx.Request.MapPath(virtualPath);
-                }
-
-                if (VirtualPathUtility.IsAbsolute(virtualPath) && virtualPath.StartsWith(HttpRuntime.AppDomainAppVirtualPath))
-                {
-                    virtualPath = VirtualPathUtility.ToAppRelative(virtualPath);
-                }
-                if (VirtualPathUtility.IsAppRelative(virtualPath))
-                {
-                    virtualPath = virtualPath.Substring(2); // strip "~/"
-                    string physicalPath = Path.Combine(HttpRuntime.AppDomainAppPath, virtualPath);
-                    return physicalPath;
-                }
-                return virtualPath;
+                get { return _sessionState.Count; }
             }
 
-            public IDisposable RewritePath(string virtualDirectory, bool rebaseClientPath)
+            public object SyncRoot
             {
-                return new RewriteContext(virtualDirectory, rebaseClientPath);
+                get { return _sessionState.SyncRoot; }
             }
 
-            public ISessionState Session
+            public bool IsSynchronized
             {
-                get { return new SessionDictionaryAdapter(HttpContext.Current.Session); }
+                get { return _sessionState.IsSynchronized; }
             }
 
-            public IDictionary RequestVariables
+            public void Abandon()
             {
-                get { return HttpContext.Current.Items; }
+                _sessionState.Abandon();
             }
 
-            public NameValueCollection RequestParams
+            public bool IsCookieless
             {
-                get { return HttpContext.Current.Request.Params; }
+                get { return _sessionState.IsCookieless; }
             }
 
-            public Type GetCompiledType(string virtualPath)
+            public bool IsNewSession
             {
-                string rootedVPath = WebUtils.CombineVirtualPaths(CurrentExecutionFilePath, virtualPath);
-
-                Type type = BuildManager.GetCompiledType(rootedVPath);
-
-                return type;
+                get { return _sessionState.IsNewSession; }
             }
 
-            public object CreateInstanceFromVirtualPath(string virtualPath, Type requiredBaseType)
+            public int LCID
             {
-                string rootedVPath = WebUtils.CombineVirtualPaths(CurrentExecutionFilePath, virtualPath);
-                object result = BuildManager.CreateInstanceFromVirtualPath(rootedVPath, requiredBaseType);
-                if (!requiredBaseType.IsAssignableFrom(result.GetType()))
-                {
-                    throw new HttpException(string.Format("Type '{0}' from virtual path '{1}' does not inherit from '{2}'", result.GetType(), rootedVPath, requiredBaseType));
-                }
-                return result;
+                get { return _sessionState.LCID; }
+                set { _sessionState.LCID = value; }
             }
+
+            public SessionStateMode Mode
+            {
+                get { return _sessionState.Mode; }
+            }
+
+            public string SessionID
+            {
+                get { return _sessionState.SessionID; }
+            }
+
+            public int CodePage
+            {
+                get { return _sessionState.CodePage; }
+                set { _sessionState.CodePage = value; }
+            }
+#if !MONO
+            public HttpCookieMode CookieMode
+            {
+                get { return _sessionState.CookieMode; }
+            }
+#endif
         }
 
-        #endregion
+        #endregion //HttpSessionState Adapter
 
-        /// <summary>
-        /// The virtual (rooted) path of the current Application containing a leading '/' as well as a trailing '/'
-        /// </summary>
-        public static string ApplicationVirtualPath
+        private static readonly ILogger log = LogManager.GetLogger(typeof(HttpRuntimeEnvironment));
+
+        private class RewriteContext : IDisposable
         {
-            get { return instance.ApplicationVirtualPath; }
+            private string originalPath;
+            private bool rebaseClientPath;
+            private HttpContext ctx;
+
+            public RewriteContext(string virtualDirectory, bool rebaseClientPath)
+            {
+                ctx = HttpContext.Current;
+                if (ctx == null)
+                {
+                    return;
+                }
+
+                this.rebaseClientPath = rebaseClientPath;
+
+                string newVirtualPath = WebUtils.GetVirtualDirectory(virtualDirectory);
+                string currentFileDirectory = WebUtils.GetVirtualDirectory(ctx.Request.FilePath);
+                // only switch path if necessary
+                if (string.Compare(newVirtualPath, currentFileDirectory, true) != 0)
+                {
+                    originalPath = ctx.Request.Url.PathAndQuery;
+                    string newPath = newVirtualPath + "currentcontext.dummy";
+
+                    ctx.RewritePath(newPath, rebaseClientPath);
+
+                    #region Instrumentation
+
+                    if (log.IsEnabled(LogLevel.Debug))
+                    {
+                        log.LogDebug("rewriting path from " + currentFileDirectory + " to " + newPath + " results in " + ctx.Request.FilePath);
+                    }
+
+                    #endregion
+                }
+            }
+
+            public void Dispose()
+            {
+                if (originalPath != null)
+                {
+                    if (log.IsEnabled(LogLevel.Debug))
+                    {
+                        log.LogDebug("restoring path from " + ctx.Request.FilePath + " back to " + originalPath);
+                    }
+
+                    ctx.RewritePath(originalPath, rebaseClientPath);
+                }
+            }
         }
 
-        /// <summary>
-        /// The virtual (rooted) path of the current Request including <see cref="HttpRequest.PathInfo"/>
-        /// </summary>
-        public static string CurrentVirtualPath
-        {
-            get { return instance.CurrentVirtualPath; }
-        }
-
-        /// <summary>
-        /// The virtual (rooted) path of the current Request including <see cref="HttpRequest.PathInfo"/>
-        /// </summary>
-        public static string CurrentVirtualPathAndQuery
+        public string ApplicationVirtualPath
         {
             get
             {
-                string result = CurrentVirtualPath;
-                if (QueryString.Count > 0)
-                {
-                    result = result + "?" + QueryString.ToString();
-                }
-                return result;
+                string appPath = HttpRuntime.AppDomainAppVirtualPath;
+                if (!appPath.EndsWith("/")) appPath = appPath + "/";
+                return appPath;
             }
         }
 
-        /// <summary>
-        /// The virtual (rooted) path of the current Request without trailing <see cref="HttpRequest.PathInfo"/>
-        /// </summary>
-        public static string CurrentVirtualFilePath
+        public string CurrentVirtualPath
         {
-            get { return instance.CurrentVirtualFilePath; }
+            get { return HttpContext.Current.Request.Path; }
         }
 
-        /// <summary>
-        /// The virtual (rooted) path of the currently executing script
-        /// </summary>
-        public static string CurrentExecutionFilePath
+        public string CurrentVirtualFilePath
         {
-            get { return instance.CurrentExecutionFilePath; }
+            get { return HttpContext.Current.Request.FilePath; }
         }
 
-        /// <summary>
-        /// The query parameters
-        /// </summary>
-        public static NameValueCollection QueryString
+        public string CurrentExecutionFilePath
         {
-            get { return instance.QueryString; }
+            get { return HttpContext.Current.Request.CurrentExecutionFilePath; }
         }
 
-        /// <summary>
-        /// Returns the current Request's variable dictionary (<see cref="HttpContext.Items"/>)
-        /// </summary>
-        public static IDictionary RequestVariables
+        public NameValueCollection QueryString
         {
-            get { return instance.RequestVariables; }
+            get { return HttpContext.Current.Request.QueryString; }
         }
 
-        /// <summary>
-        /// Returns the current Request's parameter dictionary (<see cref="HttpRequest.Params"/>)
-        /// </summary>
-        public static NameValueCollection RequestParams
+        public string MapPath(string virtualPath)
         {
-            get { return instance.RequestParams; }
-        }
-
-        /// <summary>
-        /// Maps a virtual path to it's physical location
-        /// </summary>
-        public static string MapPath(string virtualPath)
-        {
-            return instance.MapPath(virtualPath);
-        }
-
-        /// <summary>
-        /// Rewrites the <see cref="CurrentVirtualPath"/>, thus also affecting <see cref="MapPath"/>
-        /// </summary>
-        public static IDisposable RewritePath(string newVirtualPath, bool rebaseClientPath)
-        {
-            return instance.RewritePath(newVirtualPath, rebaseClientPath);
-        }
-
-        /// <summary>
-        /// Returns an instance of the specified file.
-        /// </summary>
-        public static object CreateInstanceFromVirtualPath(string virtualPath, Type requiredBaseType)
-        {
-            string rootedVPath = WebUtils.CombineVirtualPaths(instance.CurrentExecutionFilePath, virtualPath);
-            return instance.CreateInstanceFromVirtualPath(rootedVPath, requiredBaseType);
-        }
-
-        /// <summary>
-        /// Returns an the compiled type of the specified file.
-        /// </summary>
-        public static Type GetCompiledType(string virtualPath)
-        {
-            string rootedVPath = WebUtils.CombineVirtualPaths(instance.CurrentExecutionFilePath, virtualPath);
-            return instance.GetCompiledType(rootedVPath);
-        }
-
-        /// <summary>
-        /// Receives EndRequest-event from an <see cref="HttpApplication"/> instance
-        /// and dispatches it to all handlers registered with this module.
-        /// </summary>
-        /// <param name="sender">the HttpApplication instance sending this event</param>
-        /// <param name="e">always <see cref="EventArgs.Empty"/></param>
-        public static void RaiseEndRequest(object sender, EventArgs e)
-        {
-            // NOTE: don't sync here for performance reasons.
-            // It is assumed, that all handlers are registered during application startup
-            if (s_requestEvent != null)
+            HttpContext ctx = HttpContext.Current;
+            if (ctx != null)
             {
-                s_requestEvent(((HttpApplication)sender).Context);
+                return ctx.Request.MapPath(virtualPath);
             }
-        }
 
-        /// <summary>
-        /// Receives the EndSession-event and dispatches it to all handlers
-        /// registered with this module.
-        /// </summary>
-        public static void RaiseEndSession(HttpSessionState sessionState, CacheItemRemovedReason reason)
-        {
-            // NOTE: don't sync here for performance reasons.
-            // It is assumed, that all handlers are registered during application startup
-            if (s_sessionEvent != null)
+            if (VirtualPathUtility.IsAbsolute(virtualPath) && virtualPath.StartsWith(HttpRuntime.AppDomainAppVirtualPath))
             {
-                s_sessionEvent(sessionState, reason);
+                virtualPath = VirtualPathUtility.ToAppRelative(virtualPath);
             }
-        }
 
-        /// <summary>
-        /// Register with this event to receive any EndRequest event occuring in the current AppDomain.
-        /// </summary>
-        public static event RequestEventHandler EndRequest
-        {
-            add
+            if (VirtualPathUtility.IsAppRelative(virtualPath))
             {
-                AssertInitialized();
-                lock (syncEndRequestEvent)
-                {
-                    s_requestEvent += value;
-                }
+                virtualPath = virtualPath.Substring(2); // strip "~/"
+                string physicalPath = Path.Combine(HttpRuntime.AppDomainAppPath, virtualPath);
+                return physicalPath;
             }
-            remove
-            {
-                AssertInitialized();
-                lock (syncEndRequestEvent)
-                {
-                    s_requestEvent -= value;
-                }
-            }
+
+            return virtualPath;
         }
 
-        /// <summary>
-        /// Register with this event to receive any EndSession event occuring in the current AppDomain
-        /// </summary>
-        /// <remarks>
-        /// This event may be raised asynchronously on it's own thread.
-        /// Don't rely on e.g. <see cref="HttpContext.Current"/> being available.
-        /// </remarks>
-        public static event SessionEventHandler EndSession
+        public IDisposable RewritePath(string virtualDirectory, bool rebaseClientPath)
         {
-            add
-            {
-                AssertInitialized();
-                lock (syncEndSessionEvent)
-                {
-                    s_sessionEvent += value;
-                }
-            }
-            remove
-            {
-                AssertInitialized();
-                lock (syncEndSessionEvent)
-                {
-                    s_sessionEvent -= value;
-                }
-            }
+            return new RewriteContext(virtualDirectory, rebaseClientPath);
         }
 
-        /// <summary>
-        /// Signals, that VirtualEnvironment is ready to accept
-        /// handler registrations for EndRequest and EndSession events
-        /// </summary>
-        public static void SetInitialized()
+        public ISessionState Session
         {
-            s_isInitialized = true;
+            get { return new SessionDictionaryAdapter(HttpContext.Current.Session); }
         }
 
-        /// <summary>
-        /// Is this VirtualEnviroment ready to accept handler registrations
-        /// for EndRequest and EndSession events ?
-        /// </summary>
-        public static bool IsInitialized
+        public IDictionary RequestVariables
         {
-            get { return s_isInitialized; }
+            get { return HttpContext.Current.Items; }
         }
 
-        /// <summary>
-        /// Ensures, that WebSupportModule has been initialized. Otherwise an exception is thrown.
-        /// </summary>
-        private static void AssertInitialized()
+        public NameValueCollection RequestParams
         {
-            if (!s_isInitialized)
+            get { return HttpContext.Current.Request.Params; }
+        }
+
+        public Type GetCompiledType(string virtualPath)
+        {
+            string rootedVPath = WebUtils.CombineVirtualPaths(CurrentExecutionFilePath, virtualPath);
+
+            Type type = BuildManager.GetCompiledType(rootedVPath);
+
+            return type;
+        }
+
+        public object CreateInstanceFromVirtualPath(string virtualPath, Type requiredBaseType)
+        {
+            string rootedVPath = WebUtils.CombineVirtualPaths(CurrentExecutionFilePath, virtualPath);
+            object result = BuildManager.CreateInstanceFromVirtualPath(rootedVPath, requiredBaseType);
+            if (!requiredBaseType.IsAssignableFrom(result.GetType()))
             {
-                string msg =
-                    @"WebSupportModule not initialized. Did you forget to add " +
-                    @"<add name=""Spring"" type=""Spring.Context.Support.WebSupportModule, Spring.Web""/> " +
-                    @"to your web.config's <httpModules>-section?";
-                throw ConfigurationUtils.CreateConfigurationException(msg);
+                throw new HttpException(string.Format("Type '{0}' from virtual path '{1}' does not inherit from '{2}'", result.GetType(), rootedVPath, requiredBaseType));
+            }
+
+            return result;
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// The virtual (rooted) path of the current Application containing a leading '/' as well as a trailing '/'
+    /// </summary>
+    public static string ApplicationVirtualPath
+    {
+        get { return instance.ApplicationVirtualPath; }
+    }
+
+    /// <summary>
+    /// The virtual (rooted) path of the current Request including <see cref="HttpRequest.PathInfo"/>
+    /// </summary>
+    public static string CurrentVirtualPath
+    {
+        get { return instance.CurrentVirtualPath; }
+    }
+
+    /// <summary>
+    /// The virtual (rooted) path of the current Request including <see cref="HttpRequest.PathInfo"/>
+    /// </summary>
+    public static string CurrentVirtualPathAndQuery
+    {
+        get
+        {
+            string result = CurrentVirtualPath;
+            if (QueryString.Count > 0)
+            {
+                result = result + "?" + QueryString.ToString();
+            }
+
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// The virtual (rooted) path of the current Request without trailing <see cref="HttpRequest.PathInfo"/>
+    /// </summary>
+    public static string CurrentVirtualFilePath
+    {
+        get { return instance.CurrentVirtualFilePath; }
+    }
+
+    /// <summary>
+    /// The virtual (rooted) path of the currently executing script
+    /// </summary>
+    public static string CurrentExecutionFilePath
+    {
+        get { return instance.CurrentExecutionFilePath; }
+    }
+
+    /// <summary>
+    /// The query parameters
+    /// </summary>
+    public static NameValueCollection QueryString
+    {
+        get { return instance.QueryString; }
+    }
+
+    /// <summary>
+    /// Returns the current Request's variable dictionary (<see cref="HttpContext.Items"/>)
+    /// </summary>
+    public static IDictionary RequestVariables
+    {
+        get { return instance.RequestVariables; }
+    }
+
+    /// <summary>
+    /// Returns the current Request's parameter dictionary (<see cref="HttpRequest.Params"/>)
+    /// </summary>
+    public static NameValueCollection RequestParams
+    {
+        get { return instance.RequestParams; }
+    }
+
+    /// <summary>
+    /// Maps a virtual path to it's physical location
+    /// </summary>
+    public static string MapPath(string virtualPath)
+    {
+        return instance.MapPath(virtualPath);
+    }
+
+    /// <summary>
+    /// Rewrites the <see cref="CurrentVirtualPath"/>, thus also affecting <see cref="MapPath"/>
+    /// </summary>
+    public static IDisposable RewritePath(string newVirtualPath, bool rebaseClientPath)
+    {
+        return instance.RewritePath(newVirtualPath, rebaseClientPath);
+    }
+
+    /// <summary>
+    /// Returns an instance of the specified file.
+    /// </summary>
+    public static object CreateInstanceFromVirtualPath(string virtualPath, Type requiredBaseType)
+    {
+        string rootedVPath = WebUtils.CombineVirtualPaths(instance.CurrentExecutionFilePath, virtualPath);
+        return instance.CreateInstanceFromVirtualPath(rootedVPath, requiredBaseType);
+    }
+
+    /// <summary>
+    /// Returns an the compiled type of the specified file.
+    /// </summary>
+    public static Type GetCompiledType(string virtualPath)
+    {
+        string rootedVPath = WebUtils.CombineVirtualPaths(instance.CurrentExecutionFilePath, virtualPath);
+        return instance.GetCompiledType(rootedVPath);
+    }
+
+    /// <summary>
+    /// Receives EndRequest-event from an <see cref="HttpApplication"/> instance
+    /// and dispatches it to all handlers registered with this module.
+    /// </summary>
+    /// <param name="sender">the HttpApplication instance sending this event</param>
+    /// <param name="e">always <see cref="EventArgs.Empty"/></param>
+    public static void RaiseEndRequest(object sender, EventArgs e)
+    {
+        // NOTE: don't sync here for performance reasons.
+        // It is assumed, that all handlers are registered during application startup
+        if (s_requestEvent != null)
+        {
+            s_requestEvent(((HttpApplication) sender).Context);
+        }
+    }
+
+    /// <summary>
+    /// Receives the EndSession-event and dispatches it to all handlers
+    /// registered with this module.
+    /// </summary>
+    public static void RaiseEndSession(HttpSessionState sessionState, CacheItemRemovedReason reason)
+    {
+        // NOTE: don't sync here for performance reasons.
+        // It is assumed, that all handlers are registered during application startup
+        if (s_sessionEvent != null)
+        {
+            s_sessionEvent(sessionState, reason);
+        }
+    }
+
+    /// <summary>
+    /// Register with this event to receive any EndRequest event occuring in the current AppDomain.
+    /// </summary>
+    public static event RequestEventHandler EndRequest
+    {
+        add
+        {
+            AssertInitialized();
+            lock (syncEndRequestEvent)
+            {
+                s_requestEvent += value;
             }
         }
+        remove
+        {
+            AssertInitialized();
+            lock (syncEndRequestEvent)
+            {
+                s_requestEvent -= value;
+            }
+        }
+    }
 
+    /// <summary>
+    /// Register with this event to receive any EndSession event occuring in the current AppDomain
+    /// </summary>
+    /// <remarks>
+    /// This event may be raised asynchronously on it's own thread.
+    /// Don't rely on e.g. <see cref="HttpContext.Current"/> being available.
+    /// </remarks>
+    public static event SessionEventHandler EndSession
+    {
+        add
+        {
+            AssertInitialized();
+            lock (syncEndSessionEvent)
+            {
+                s_sessionEvent += value;
+            }
+        }
+        remove
+        {
+            AssertInitialized();
+            lock (syncEndSessionEvent)
+            {
+                s_sessionEvent -= value;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Signals, that VirtualEnvironment is ready to accept
+    /// handler registrations for EndRequest and EndSession events
+    /// </summary>
+    public static void SetInitialized()
+    {
+        s_isInitialized = true;
+    }
+
+    /// <summary>
+    /// Is this VirtualEnviroment ready to accept handler registrations
+    /// for EndRequest and EndSession events ?
+    /// </summary>
+    public static bool IsInitialized
+    {
+        get { return s_isInitialized; }
+    }
+
+    /// <summary>
+    /// Ensures, that WebSupportModule has been initialized. Otherwise an exception is thrown.
+    /// </summary>
+    private static void AssertInitialized()
+    {
+        if (!s_isInitialized)
+        {
+            string msg =
+                @"WebSupportModule not initialized. Did you forget to add " +
+                @"<add name=""Spring"" type=""Spring.Context.Support.WebSupportModule, Spring.Web""/> " +
+                @"to your web.config's <httpModules>-section?";
+            throw ConfigurationUtils.CreateConfigurationException(msg);
+        }
     }
 }

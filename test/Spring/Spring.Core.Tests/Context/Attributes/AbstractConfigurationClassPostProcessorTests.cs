@@ -24,330 +24,336 @@ using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Xml;
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+public abstract class AbstractConfigurationClassPostProcessorTests
 {
+    protected AbstractApplicationContext _ctx;
 
-    public abstract class AbstractConfigurationClassPostProcessorTests
+    [SetUp]
+    public void _SetUp()
     {
-        protected AbstractApplicationContext _ctx;
-
-        [SetUp]
-        public void _SetUp()
-        {
-            SingletonParent.InstanceCount = 0;
-            SingletonChild.InstanceCount = 0;
-            PrototypeParent.InstanceCount = 0;
-            PrototypeChild.InstanceCount = 0;
-            CreateApplicationContext();
-        }
-
-
-        protected abstract void CreateApplicationContext();
-
-
-        [Test]
-        public void Can_Assign_Init_And_Destroy_Methods()
-        {
-            IObjectDefinition def = _ctx.GetObjectDefinition(typeof(ObjectWithInitAndDestroyMethods).Name);
-
-            Assert.That(def, Is.Not.Null);
-            Assert.That(def.InitMethodName, Is.EqualTo("CallToInit"));
-            Assert.That(def.DestroyMethodName, Is.EqualTo("CallToDestroy"));
-        }
-
-        [Test]
-        public void Can_Import_Configurations_From_Additional_Classes()
-        {
-            Assert.That(_ctx.GetObject(typeof(AnImportedType).Name), Is.Not.Null);
-        }
-
-        [Test]
-        public void Can_Respect_Assigned_Aliases()
-        {
-            var firstObject = _ctx["TheFirstAlias"];
-            var secondObject = _ctx["TheSecondAlias"];
-            Assert.That(firstObject, Is.InstanceOf<ObjectWithAnAlias>());
-            Assert.That(secondObject, Is.InstanceOf<ObjectWithAnAlias>());
-        }
-
-        [Test]
-        public void Can_Respect_Assigned_Name()
-        {
-            var result = _ctx["TheName"];
-            Assert.That(result, Is.InstanceOf<SingleNamedObject>());
-        }
-
-        [Test]
-        public void Can_Respect_Default_Singleton_Scope()
-        {
-            var firstObject = (SingletonChild)_ctx[typeof(SingletonChild).Name];
-            var secondObject = (SingletonChild)_ctx[typeof(SingletonChild).Name];
-
-            Assert.That(SingletonChild.InstanceCount, Is.EqualTo(1));
-            Assert.That(firstObject, Is.SameAs(secondObject));
-        }
-
-        [Test]
-        public void Can_Respect_Default_Singleton_Scope_With_Explicit_Prototype_Dependency()
-        {
-            var firstObject = (SingletonParent)_ctx[typeof(SingletonParent).Name];
-            var secondObject = (SingletonParent)_ctx[typeof(SingletonParent).Name];
-
-            Assert.That(SingletonParent.InstanceCount, Is.EqualTo(1));
-            //Assert.That(PrototypeChild.InstanceCount, Is.EqualTo(2));  // Requires scoped proxies
-            Assert.That(firstObject, Is.SameAs(secondObject));
-        }
-
-        [Test]
-        public void Can_Respect_Explicit_Prototype_Scope()
-        {
-            var firstObject = (PrototypeChild)_ctx[typeof(PrototypeChild).Name];
-            var secondObject = (PrototypeChild)_ctx[typeof(PrototypeChild).Name];
-
-            Assert.That(PrototypeChild.InstanceCount, Is.EqualTo(3)); // One instance used by SingletonParent
-            Assert.That(firstObject, Is.Not.SameAs(secondObject));
-        }
-
-        [Test]
-        public void Can_Respect_Explicit_Prototype_Scope_With_Default_Singleton_Dependency()
-        {
-            var firstObject = (PrototypeParent)_ctx[typeof(PrototypeParent).Name];
-            var secondObject = (PrototypeParent)_ctx[typeof(PrototypeParent).Name];
-
-            Assert.That(PrototypeParent.InstanceCount, Is.EqualTo(2));
-            Assert.That(SingletonChild.InstanceCount, Is.EqualTo(1));
-            Assert.That(firstObject, Is.Not.SameAs(secondObject));
-        }
-
-        [Test]
-        public void Can_Respect_Lazy_Attribute()
-        {
-            Assert.That(_ctx.GetObjectDefinition(typeof(ImplicitLazyInitObject).Name).IsLazyInit, Is.True);
-            Assert.That(_ctx.GetObjectDefinition(typeof(ExplicitLazyInitObject).Name).IsLazyInit, Is.True);
-            Assert.That(_ctx.GetObjectDefinition(typeof(ExplicitNonLazyInitObject).Name).IsLazyInit, Is.False);
-        }
-
-        [Test]
-        public void Can_Retreive_Actual_Objects_From_Context()
-        {
-            Assert.That(_ctx[typeof(SingletonParent).Name], Is.TypeOf<SingletonParent>());
-            Assert.That(_ctx[typeof(PrototypeChild).Name], Is.TypeOf<PrototypeChild>());
-        }
-
-        [Test]
-        public void Can_Satisfy_Dependencies_Of_Objects()
-        {
-            Assert.That(((SingletonParent)_ctx[typeof(SingletonParent).Name]).Child, Is.Not.Null);
-        }
-
-
-        [Test]
-        public void Can_Respect_Imported_Resources()
-        {
-            Assert.That(_ctx["xmlRegisteredObject"], Is.Not.Null);
-        }
+        SingletonParent.InstanceCount = 0;
+        SingletonChild.InstanceCount = 0;
+        PrototypeParent.InstanceCount = 0;
+        PrototypeChild.InstanceCount = 0;
+        CreateApplicationContext();
     }
 
-    public class ObjectWithInitAndDestroyMethods
+    protected abstract void CreateApplicationContext();
+
+    [Test]
+    public void Can_Assign_Init_And_Destroy_Methods()
     {
-        public void CallToDestroy() { }
-        public void CallToInit() { }
+        IObjectDefinition def = _ctx.GetObjectDefinition(typeof(ObjectWithInitAndDestroyMethods).Name);
+
+        Assert.That(def, Is.Not.Null);
+        Assert.That(def.InitMethodName, Is.EqualTo("CallToInit"));
+        Assert.That(def.DestroyMethodName, Is.EqualTo("CallToDestroy"));
     }
 
-
-
-
-    [Configuration]
-    [ImportResource("assembly://Spring.Core.Tests/Spring.Context.Attributes/ObjectDefinitions.xml", DefinitionReader = typeof(XmlObjectDefinitionReader))]
-    [ImportResource("assembly://Spring.Core.Tests/Spring.Context.Attributes/ObjectDefinitionsTwo.xml")]
-    public class TheImportedConfigurationClass
+    [Test]
+    public void Can_Import_Configurations_From_Additional_Classes()
     {
-        [ObjectDef]
-        public virtual AnImportedType AnImportedType()
-        {
-            return new AnImportedType();
-        }
+        Assert.That(_ctx.GetObject(typeof(AnImportedType).Name), Is.Not.Null);
     }
 
-    [Configuration]
-    [Import(typeof(TheImportedConfigurationClass))]
-    public class TheConfigurationClass
+    [Test]
+    public void Can_Respect_Assigned_Aliases()
     {
-        [ObjectDef(Names = "TheName")]
-        public virtual SingleNamedObject NamedObject()
-        {
-            return new SingleNamedObject();
-        }
-
-        [ObjectDef(DestroyMethod = "CallToDestroy", InitMethod = "CallToInit")]
-        public virtual ObjectWithInitAndDestroyMethods ObjectWithInitAndDestroyMethods()
-        {
-            return new ObjectWithInitAndDestroyMethods();
-        }
-
-        [ObjectDef(Names = "TheFirstAlias,TheSecondAlias")]
-        public virtual ObjectWithAnAlias ObjectWithAnAlias()
-        {
-            return new ObjectWithAnAlias();
-        }
-
-        [ObjectDef]
-        [Scope(ObjectScope.Prototype)]
-        public virtual PrototypeParent PrototypeParent()
-        {
-            return new PrototypeParent(SingletonChild());
-        }
-
-        [ObjectDef]
-        [Scope(ObjectScope.Prototype)]
-        public virtual PrototypeChild PrototypeChild()
-        {
-            return new PrototypeChild();
-        }
-
-        [ObjectDef]
-        public virtual SingletonParent SingletonParent()
-        {
-            return new SingletonParent(PrototypeChild());
-        }
-
-        [ObjectDef]
-        public virtual SingletonChild SingletonChild()
-        {
-            return new SingletonChild();
-        }
-
-        [ObjectDef]
-        [Lazy]
-        public virtual ImplicitLazyInitObject ImplicitLazyInitObject()
-        {
-            return new ImplicitLazyInitObject();
-        }
-
-        [ObjectDef]
-        [Lazy(true)]
-        public virtual ExplicitLazyInitObject ExplicitLazyInitObject()
-        {
-            return new ExplicitLazyInitObject();
-        }
-
-        [ObjectDef]
-        [Lazy(false)]
-        public virtual ExplicitNonLazyInitObject ExplicitNonLazyInitObject()
-        {
-            return new ExplicitNonLazyInitObject();
-        }
-
+        var firstObject = _ctx["TheFirstAlias"];
+        var secondObject = _ctx["TheSecondAlias"];
+        Assert.That(firstObject, Is.InstanceOf<ObjectWithAnAlias>());
+        Assert.That(secondObject, Is.InstanceOf<ObjectWithAnAlias>());
     }
 
-
-    [Configuration]
-    public class DerivedConfiguration : BaseConfigurationClass
+    [Test]
+    public void Can_Respect_Assigned_Name()
     {
-        [ObjectDef]
-        public virtual TestObject DerivedDefinition()
-        {
-            return new TestObject(BaseDefinition());
-        }
+        var result = _ctx["TheName"];
+        Assert.That(result, Is.InstanceOf<SingleNamedObject>());
     }
 
-    public class BaseConfigurationClass
+    [Test]
+    public void Can_Respect_Default_Singleton_Scope()
     {
-        [ObjectDef]
-        public virtual string BaseDefinition()
-        {
-            return Guid.NewGuid().ToString();
-        }
+        var firstObject = (SingletonChild) _ctx[typeof(SingletonChild).Name];
+        var secondObject = (SingletonChild) _ctx[typeof(SingletonChild).Name];
+
+        Assert.That(SingletonChild.InstanceCount, Is.EqualTo(1));
+        Assert.That(firstObject, Is.SameAs(secondObject));
     }
 
-    public class TypeRegisteredInXml { }
-    
-    public class TypeRegisteredInXmlTwo { }
-    
-    public class AnImportedType { }
-
-    public class ImplicitLazyInitObject { }
-
-    public class ExplicitLazyInitObject { }
-
-    public class ExplicitNonLazyInitObject { }
-
-    public class ObjectWithAnAlias { }
-
-    public class SingleNamedObject { }
-
-    public class SingletonParent
+    [Test]
+    public void Can_Respect_Default_Singleton_Scope_With_Explicit_Prototype_Dependency()
     {
-        public static int InstanceCount = 0;
-        private PrototypeChild _child;
+        var firstObject = (SingletonParent) _ctx[typeof(SingletonParent).Name];
+        var secondObject = (SingletonParent) _ctx[typeof(SingletonParent).Name];
 
-        public SingletonParent(PrototypeChild child)
-        {
-            InstanceCount++;
-            _child = child;
-        }
-
-        public PrototypeChild Child
-        {
-            get
-            {
-                return _child;
-            }
-        }
+        Assert.That(SingletonParent.InstanceCount, Is.EqualTo(1));
+        //Assert.That(PrototypeChild.InstanceCount, Is.EqualTo(2));  // Requires scoped proxies
+        Assert.That(firstObject, Is.SameAs(secondObject));
     }
 
-    public class SingletonChild
+    [Test]
+    public void Can_Respect_Explicit_Prototype_Scope()
     {
-        public static int InstanceCount = 0;
+        var firstObject = (PrototypeChild) _ctx[typeof(PrototypeChild).Name];
+        var secondObject = (PrototypeChild) _ctx[typeof(PrototypeChild).Name];
 
-        public SingletonChild()
-        {
-            InstanceCount++;
-        }
+        Assert.That(PrototypeChild.InstanceCount, Is.EqualTo(3)); // One instance used by SingletonParent
+        Assert.That(firstObject, Is.Not.SameAs(secondObject));
     }
 
-    public class PrototypeParent
+    [Test]
+    public void Can_Respect_Explicit_Prototype_Scope_With_Default_Singleton_Dependency()
     {
-        public static int InstanceCount = 0;
-        private SingletonChild _child;
+        var firstObject = (PrototypeParent) _ctx[typeof(PrototypeParent).Name];
+        var secondObject = (PrototypeParent) _ctx[typeof(PrototypeParent).Name];
 
-        public PrototypeParent(SingletonChild child)
-        {
-            InstanceCount++;
-            _child = child;
-        }
-
-        public SingletonChild Child
-        {
-            get
-            {
-                return _child;
-            }
-        }
+        Assert.That(PrototypeParent.InstanceCount, Is.EqualTo(2));
+        Assert.That(SingletonChild.InstanceCount, Is.EqualTo(1));
+        Assert.That(firstObject, Is.Not.SameAs(secondObject));
     }
 
-    public class PrototypeChild
+    [Test]
+    public void Can_Respect_Lazy_Attribute()
     {
-        public static int InstanceCount = 0;
-
-        public PrototypeChild()
-        {
-            InstanceCount++;
-        }
+        Assert.That(_ctx.GetObjectDefinition(typeof(ImplicitLazyInitObject).Name).IsLazyInit, Is.True);
+        Assert.That(_ctx.GetObjectDefinition(typeof(ExplicitLazyInitObject).Name).IsLazyInit, Is.True);
+        Assert.That(_ctx.GetObjectDefinition(typeof(ExplicitNonLazyInitObject).Name).IsLazyInit, Is.False);
     }
 
-    public class TestObject
+    [Test]
+    public void Can_Retreive_Actual_Objects_From_Context()
     {
-        private readonly string _value;
+        Assert.That(_ctx[typeof(SingletonParent).Name], Is.TypeOf<SingletonParent>());
+        Assert.That(_ctx[typeof(PrototypeChild).Name], Is.TypeOf<PrototypeChild>());
+    }
 
-        public TestObject(string value)
-        {
-            _value = value;
-        }
+    [Test]
+    public void Can_Satisfy_Dependencies_Of_Objects()
+    {
+        Assert.That(((SingletonParent) _ctx[typeof(SingletonParent).Name]).Child, Is.Not.Null);
+    }
 
-        public string Value
+    [Test]
+    public void Can_Respect_Imported_Resources()
+    {
+        Assert.That(_ctx["xmlRegisteredObject"], Is.Not.Null);
+    }
+}
+
+public class ObjectWithInitAndDestroyMethods
+{
+    public void CallToDestroy() { }
+    public void CallToInit() { }
+}
+
+[Configuration]
+[ImportResource("assembly://Spring.Core.Tests/Spring.Context.Attributes/ObjectDefinitions.xml", DefinitionReader = typeof(XmlObjectDefinitionReader))]
+[ImportResource("assembly://Spring.Core.Tests/Spring.Context.Attributes/ObjectDefinitionsTwo.xml")]
+public class TheImportedConfigurationClass
+{
+    [ObjectDef]
+    public virtual AnImportedType AnImportedType()
+    {
+        return new AnImportedType();
+    }
+}
+
+[Configuration]
+[Import(typeof(TheImportedConfigurationClass))]
+public class TheConfigurationClass
+{
+    [ObjectDef(Names = "TheName")]
+    public virtual SingleNamedObject NamedObject()
+    {
+        return new SingleNamedObject();
+    }
+
+    [ObjectDef(DestroyMethod = "CallToDestroy", InitMethod = "CallToInit")]
+    public virtual ObjectWithInitAndDestroyMethods ObjectWithInitAndDestroyMethods()
+    {
+        return new ObjectWithInitAndDestroyMethods();
+    }
+
+    [ObjectDef(Names = "TheFirstAlias,TheSecondAlias")]
+    public virtual ObjectWithAnAlias ObjectWithAnAlias()
+    {
+        return new ObjectWithAnAlias();
+    }
+
+    [ObjectDef]
+    [Scope(ObjectScope.Prototype)]
+    public virtual PrototypeParent PrototypeParent()
+    {
+        return new PrototypeParent(SingletonChild());
+    }
+
+    [ObjectDef]
+    [Scope(ObjectScope.Prototype)]
+    public virtual PrototypeChild PrototypeChild()
+    {
+        return new PrototypeChild();
+    }
+
+    [ObjectDef]
+    public virtual SingletonParent SingletonParent()
+    {
+        return new SingletonParent(PrototypeChild());
+    }
+
+    [ObjectDef]
+    public virtual SingletonChild SingletonChild()
+    {
+        return new SingletonChild();
+    }
+
+    [ObjectDef]
+    [Lazy]
+    public virtual ImplicitLazyInitObject ImplicitLazyInitObject()
+    {
+        return new ImplicitLazyInitObject();
+    }
+
+    [ObjectDef]
+    [Lazy(true)]
+    public virtual ExplicitLazyInitObject ExplicitLazyInitObject()
+    {
+        return new ExplicitLazyInitObject();
+    }
+
+    [ObjectDef]
+    [Lazy(false)]
+    public virtual ExplicitNonLazyInitObject ExplicitNonLazyInitObject()
+    {
+        return new ExplicitNonLazyInitObject();
+    }
+}
+
+[Configuration]
+public class DerivedConfiguration : BaseConfigurationClass
+{
+    [ObjectDef]
+    public virtual TestObject DerivedDefinition()
+    {
+        return new TestObject(BaseDefinition());
+    }
+}
+
+public class BaseConfigurationClass
+{
+    [ObjectDef]
+    public virtual string BaseDefinition()
+    {
+        return Guid.NewGuid().ToString();
+    }
+}
+
+public class TypeRegisteredInXml
+{
+}
+
+public class TypeRegisteredInXmlTwo
+{
+}
+
+public class AnImportedType
+{
+}
+
+public class ImplicitLazyInitObject
+{
+}
+
+public class ExplicitLazyInitObject
+{
+}
+
+public class ExplicitNonLazyInitObject
+{
+}
+
+public class ObjectWithAnAlias
+{
+}
+
+public class SingleNamedObject
+{
+}
+
+public class SingletonParent
+{
+    public static int InstanceCount = 0;
+    private PrototypeChild _child;
+
+    public SingletonParent(PrototypeChild child)
+    {
+        InstanceCount++;
+        _child = child;
+    }
+
+    public PrototypeChild Child
+    {
+        get
         {
-            get { return _value; }
+            return _child;
         }
+    }
+}
+
+public class SingletonChild
+{
+    public static int InstanceCount = 0;
+
+    public SingletonChild()
+    {
+        InstanceCount++;
+    }
+}
+
+public class PrototypeParent
+{
+    public static int InstanceCount = 0;
+    private SingletonChild _child;
+
+    public PrototypeParent(SingletonChild child)
+    {
+        InstanceCount++;
+        _child = child;
+    }
+
+    public SingletonChild Child
+    {
+        get
+        {
+            return _child;
+        }
+    }
+}
+
+public class PrototypeChild
+{
+    public static int InstanceCount = 0;
+
+    public PrototypeChild()
+    {
+        InstanceCount++;
+    }
+}
+
+public class TestObject
+{
+    private readonly string _value;
+
+    public TestObject(string value)
+    {
+        _value = value;
+    }
+
+    public string Value
+    {
+        get { return _value; }
     }
 }

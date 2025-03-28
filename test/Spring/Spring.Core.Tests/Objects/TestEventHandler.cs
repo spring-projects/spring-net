@@ -22,23 +22,22 @@
 
 #endregion
 
-namespace Spring.Objects {
+namespace Spring.Objects;
 
-    internal class TestEventHandler 
+internal class TestEventHandler
+{
+    public virtual void HandleEvent(object sender, EventArgs e)
     {
-        public virtual void HandleEvent (object sender, EventArgs e) 
-        {
-            _eventWasHandled = true;
-        }
-
-        public virtual bool EventWasHandled 
-        {
-            get 
-            {
-                return _eventWasHandled;
-            }
-        }
-
-        protected bool _eventWasHandled;
+        _eventWasHandled = true;
     }
+
+    public virtual bool EventWasHandled
+    {
+        get
+        {
+            return _eventWasHandled;
+        }
+    }
+
+    protected bool _eventWasHandled;
 }

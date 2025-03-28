@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,11 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Web.Providers
-{
+namespace Spring.Web.Providers;
 /* TBD
- 
+
     /// <summary>
     /// A spring configurable version of <see cref="ActiveDirectoryMembershipProvider"/>
     /// </summary>
@@ -55,7 +52,7 @@ namespace Spring.Web.Providers
         /// <summary>
         /// A collection of the name/value pairs representing the provider-specific
         /// attributes specified in the configuration for this provider.
-        /// </summary> 
+        /// </summary>
         public NameValueCollection Parameters
         {
             get { return this.parameters; }
@@ -68,7 +65,7 @@ namespace Spring.Web.Providers
         ///
         ///<param name="config">
         /// <para>
-        /// A collection of the name/value pairs representing the provider-specific 
+        /// A collection of the name/value pairs representing the provider-specific
         /// attributes specified in the configuration for this provider.
         /// </para>
         /// Values may be overridden by specifying them in <see cref="Parameters"/> list.
@@ -94,6 +91,5 @@ namespace Spring.Web.Providers
         }
     }
 */
-}
 
 #endif

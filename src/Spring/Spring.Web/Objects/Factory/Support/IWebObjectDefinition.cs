@@ -18,27 +18,26 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Defines additional members web object definitions need to implement.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public interface IWebObjectDefinition
 {
     /// <summary>
-    /// Defines additional members web object definitions need to implement.
+    /// Gets or sets scope for the web object (application, session or request)
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public interface IWebObjectDefinition
-    {
-        /// <summary>
-        /// Gets or sets scope for the web object (application, session or request)
-        /// </summary>
-        ObjectScope Scope { get; set; }
+    ObjectScope Scope { get; set; }
 
-        /// <summary>
-        /// Returns true if web object is .aspx page.
-        /// </summary>
-        bool IsPage { get; }
+    /// <summary>
+    /// Returns true if web object is .aspx page.
+    /// </summary>
+    bool IsPage { get; }
 
-		/// <summary>
-		/// Gets the rooted url of the .aspx page, if object definition represents page.
-		/// </summary>
-		string PageName { get; }
-    }
+    /// <summary>
+    /// Gets the rooted url of the .aspx page, if object definition represents page.
+    /// </summary>
+    string PageName { get; }
 }

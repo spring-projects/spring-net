@@ -21,132 +21,127 @@
 using Microsoft.Extensions.Logging;
 using Spring.Expressions;
 
-namespace Spring.Aspects.Exceptions
+namespace Spring.Aspects.Exceptions;
+
+/// <summary>
+/// Log the exceptions.  Default log nameis "LogExceptionHandler" and log level is Debug
+/// </summary>
+/// <author>Mark Pollack</author>
+public class LogExceptionHandler : AbstractExceptionHandler
 {
+    #region Fields
+
+    private string logName = "LogExceptionHandler";
+
+    private LogLevel logLevel = LogLevel.Trace;
+
+    private bool logMessageOnly = false;
+
+    private bool first = true;
+
+    private string actionExpressionText;
+
+    #endregion
+
     /// <summary>
-    /// Log the exceptions.  Default log nameis "LogExceptionHandler" and log level is Debug
+    /// Initializes a new instance of the <see cref="LogExceptionHandler"/> class.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public class LogExceptionHandler : AbstractExceptionHandler
+    public LogExceptionHandler()
     {
-        #region Fields
-        private string logName = "LogExceptionHandler";
+        ContinueProcessing = true;
+    }
 
-        private LogLevel logLevel = LogLevel.Trace;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LogExceptionHandler"/> class.
+    /// </summary>
+    /// <param name="exceptionNames">The exception names.</param>
+    public LogExceptionHandler(string[] exceptionNames) : base(exceptionNames)
+    {
+        ContinueProcessing = true;
+    }
 
-        private bool logMessageOnly = false;
+    /// <summary>
+    /// Gets or sets the name of the log.
+    /// </summary>
+    /// <value>The name of the log.</value>
+    public string LogName
+    {
+        get { return logName; }
+        set { logName = value; }
+    }
 
-        private bool first = true;
+    /// <summary>
+    /// Gets or sets the log level.
+    /// </summary>
+    /// <value>The log level.</value>
+    public LogLevel LogLevel
+    {
+        get { return logLevel; }
+        set { logLevel = value; }
+    }
 
-        private string actionExpressionText;
+    /// <summary>
+    /// Gets or sets a value indicating whether to log message only, and not pass in the
+    /// exception to the logging API
+    /// </summary>
+    /// <value><c>true</c> if log message only; otherwise, <c>false</c>.</value>
+    public bool LogMessageOnly
+    {
+        get { return logMessageOnly; }
+        set { logMessageOnly = value; }
+    }
 
-        #endregion
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogExceptionHandler"/> class.
-        /// </summary>
-        public LogExceptionHandler()
+    /// <summary>
+    /// Gets the action translation expression text.  Overridden to add approprate settings to
+    /// the SpEL expression that does the logging so that it depends on the values of LogLevel and
+    /// LogMessageOnly.  Those properties must be set to the desired values before calling this method.
+    ///
+    /// </summary>
+    /// <value>The action translation expression.</value>
+    public override string ActionExpressionText
+    {
+        get { return actionExpressionText; }
+        set
         {
-            ContinueProcessing = true;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogExceptionHandler"/> class.
-        /// </summary>
-        /// <param name="exceptionNames">The exception names.</param>
-        public LogExceptionHandler(string[] exceptionNames) : base(exceptionNames)
-        {
-            ContinueProcessing = true;
-        }
-
-
-
-        /// <summary>
-        /// Gets or sets the name of the log.
-        /// </summary>
-        /// <value>The name of the log.</value>
-        public string LogName
-        {
-            get { return logName; }
-            set { logName = value; }
-        }
-
-
-        /// <summary>
-        /// Gets or sets the log level.
-        /// </summary>
-        /// <value>The log level.</value>
-        public LogLevel LogLevel
-        {
-            get { return logLevel; }
-            set { logLevel = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to log message only, and not pass in the
-        /// exception to the logging API
-        /// </summary>
-        /// <value><c>true</c> if log message only; otherwise, <c>false</c>.</value>
-        public bool LogMessageOnly
-        {
-            get { return logMessageOnly; }
-            set { logMessageOnly = value; }
-        }
-
-
-        /// <summary>
-        /// Gets the action translation expression text.  Overridden to add approprate settings to
-        /// the SpEL expression that does the logging so that it depends on the values of LogLevel and
-        /// LogMessageOnly.  Those properties must be set to the desired values before calling this method.
-        ///
-        /// </summary>
-        /// <value>The action translation expression.</value>
-        public override string ActionExpressionText
-        {
-            get { return actionExpressionText; }
-            set
+            if (first)
             {
-                if (first)
+                first = false;
+                string textPart1 = "#log." + LogLevel.ToString() + "(" + value;
+                if (logMessageOnly)
                 {
-                    first = false;
-                    string textPart1 = "#log." + LogLevel.ToString() + "(" + value;
-                    if (logMessageOnly)
-                    {
-                        actionExpressionText = textPart1 + ")";
-                    }
-                    else
-                    {
-                        actionExpressionText = textPart1 + ", #e)";
-                    }
+                    actionExpressionText = textPart1 + ")";
+                }
+                else
+                {
+                    actionExpressionText = textPart1 + ", #e)";
                 }
             }
         }
+    }
 
-        /// <summary>
-        /// Handles the exception.
-        /// </summary>
-        /// <param name="callContextDictionary">the calling context dictionary</param>
-        /// <returns>
-        /// The return value from handling the exception, if not rethrown or a new exception is thrown.
-        /// </returns>
-        public override object HandleException(IDictionary<string, object> callContextDictionary)
+    /// <summary>
+    /// Handles the exception.
+    /// </summary>
+    /// <param name="callContextDictionary">the calling context dictionary</param>
+    /// <returns>
+    /// The return value from handling the exception, if not rethrown or a new exception is thrown.
+    /// </returns>
+    public override object HandleException(IDictionary<string, object> callContextDictionary)
+    {
+        //TODO log name is targettype.
+        ILogger adviceLogger = LogManager.GetLogger(logName);
+        callContextDictionary.Add("log", adviceLogger);
+        try
         {
-            //TODO log name is targettype.
-            ILogger adviceLogger = LogManager.GetLogger(logName);
-            callContextDictionary.Add("log", adviceLogger);
-            try
-            {
-                IExpression expression = Expression.Parse(ActionExpressionText);
-                expression.GetValue(null, callContextDictionary);
-            }
-            catch (Exception e)
-            {
-                string message = "Was not able to evaluate action expression [" + ActionExpressionText + "]";
-                log.LogWarning(e, message);
-            }
-            return "logged";
+            IExpression expression = Expression.Parse(ActionExpressionText);
+            expression.GetValue(null, callContextDictionary);
+        }
+        catch (Exception e)
+        {
+            string message = "Was not able to evaluate action expression [" + ActionExpressionText + "]";
+            log.LogWarning(e, message);
         }
 
+        return "logged";
     }
 }

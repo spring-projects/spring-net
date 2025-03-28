@@ -1,8 +1,6 @@
+namespace Spring.Data;
 
-namespace Spring.Data
+public interface IAccountManager
 {
-    public interface IAccountManager
-    {
-        void DoTransfer(float creditAmount, float debitAmount);
-    }
+    void DoTransfer(float creditAmount, float debitAmount);
 }

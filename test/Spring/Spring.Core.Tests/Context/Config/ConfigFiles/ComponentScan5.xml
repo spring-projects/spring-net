@@ -3,9 +3,9 @@
          xmlns:context="http://www.springframework.net/context"
          default-lazy-init="true" default-autowire="byName">
 
-	<context:component-scan base-assemblies="Spring.Core.Tests">
-		<context:include-filter type="regex" expression="ComponentScan.ComponentsUseDefaults.*"/>
-	</context:component-scan>
-  
+    <context:component-scan base-assemblies="Spring.Core.Tests">
+        <context:include-filter type="regex" expression="ComponentScan.ComponentsUseDefaults.*" />
+    </context:component-scan>
+
 </objects>
 

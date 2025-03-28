@@ -21,37 +21,36 @@
 using NUnit.Framework;
 using Spring.Core;
 
-namespace Spring.Objects
+namespace Spring.Objects;
+
+/// <summary>
+/// Unit tests for the NotWritablePropertyException class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class NotWritablePropertyExceptionTests
 {
-	/// <summary>
-	/// Unit tests for the NotWritablePropertyException class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class NotWritablePropertyExceptionTests
-	{
-		[Test]
-		public void InstantiationSupplyingPropertyTypeAndRootException()
-		{
-			NotWritablePropertyException ex = new NotWritablePropertyException("Doctor", typeof (TestObject), null);
-			Assert.AreEqual("Doctor", ex.OffendingPropertyName);
-			Assert.AreEqual(typeof(TestObject), ex.ObjectType);
-		}
+    [Test]
+    public void InstantiationSupplyingPropertyTypeAndRootException()
+    {
+        NotWritablePropertyException ex = new NotWritablePropertyException("Doctor", typeof(TestObject), null);
+        Assert.AreEqual("Doctor", ex.OffendingPropertyName);
+        Assert.AreEqual(typeof(TestObject), ex.ObjectType);
+    }
 
-		[Test]
-		public void InstantiationSupplyingNullPropertyTypeAndRootException()
-		{
-			NotWritablePropertyException ex = new NotWritablePropertyException(null, typeof (TestObject), null);
-			Assert.AreEqual(null, ex.OffendingPropertyName);
-			Assert.AreEqual(typeof(TestObject), ex.ObjectType);
-		}
+    [Test]
+    public void InstantiationSupplyingNullPropertyTypeAndRootException()
+    {
+        NotWritablePropertyException ex = new NotWritablePropertyException(null, typeof(TestObject), null);
+        Assert.AreEqual(null, ex.OffendingPropertyName);
+        Assert.AreEqual(typeof(TestObject), ex.ObjectType);
+    }
 
-		[Test]
-		public void InstantiationSupplyingNullPropertyNullTypeAndRootException()
-		{
-			NotWritablePropertyException ex = new NotWritablePropertyException(null, null, null);
-			Assert.AreEqual(null, ex.OffendingPropertyName);
-			Assert.AreEqual(null, ex.ObjectType);
-		}
-	}
+    [Test]
+    public void InstantiationSupplyingNullPropertyNullTypeAndRootException()
+    {
+        NotWritablePropertyException ex = new NotWritablePropertyException(null, null, null);
+        Assert.AreEqual(null, ex.OffendingPropertyName);
+        Assert.AreEqual(null, ex.ObjectType);
+    }
 }
