@@ -36,7 +36,7 @@ namespace Spring.Context.Support
     /// <author>Erich Eichinger</author>
     public class HttpApplicationConfigurer
     {
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(HttpApplicationConfigurer));
+        private static readonly ILogger<HttpApplicationConfigurer> Log = LogManager.GetLogger<HttpApplicationConfigurer>();
 
         #region ModuleDefinitionsTable class
 

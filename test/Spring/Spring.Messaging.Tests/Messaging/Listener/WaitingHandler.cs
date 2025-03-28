@@ -1,7 +1,3 @@
-
-
-using System;
-using System.Threading;
 using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Listener
@@ -10,7 +6,7 @@ namespace Spring.Messaging.Listener
     {
         #region Logging
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(WaitingHandler));
+        private static readonly ILogger<WaitingHandler> LOG = LogManager.GetLogger<WaitingHandler>();
 
         #endregion
 

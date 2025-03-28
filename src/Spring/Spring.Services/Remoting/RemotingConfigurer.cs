@@ -34,7 +34,7 @@ namespace Spring.Remoting
     {
 		#region Fields
 
-        private static readonly ILogger log = LogManager.GetLogger(typeof(RemotingConfigurer));
+        private static readonly ILogger<RemotingConfigurer> log = LogManager.GetLogger<RemotingConfigurer>();
 
         private int _order = Int32.MinValue;
 

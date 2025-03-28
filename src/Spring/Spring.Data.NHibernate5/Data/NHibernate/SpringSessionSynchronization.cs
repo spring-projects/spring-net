@@ -32,7 +32,7 @@ namespace Spring.Data.NHibernate
         /// <summary>
         /// The <see cref="ILogger"/> instance for this class. 
         /// </summary>
-        private readonly ILogger log = LogManager.GetLogger(typeof(SpringSessionSynchronization));
+        private readonly ILogger<SpringSessionSynchronization> log = LogManager.GetLogger<SpringSessionSynchronization>();
 
         private readonly SessionHolder sessionHolder;
 

@@ -55,7 +55,7 @@ namespace Spring.Messaging.Ems.Connections
 
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(EmsTransactionManager));
+        private static readonly ILogger<EmsTransactionManager> LOG = LogManager.GetLogger<EmsTransactionManager>();
 
         #endregion
 

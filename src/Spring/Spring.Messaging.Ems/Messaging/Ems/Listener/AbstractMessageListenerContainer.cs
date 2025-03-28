@@ -35,7 +35,7 @@ namespace Spring.Messaging.Ems.Listener
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(AbstractMessageListenerContainer));
+        private readonly ILogger<AbstractMessageListenerContainer> logger = LogManager.GetLogger<AbstractMessageListenerContainer>();
 
         #endregion
 

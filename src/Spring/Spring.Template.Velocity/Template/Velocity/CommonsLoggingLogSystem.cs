@@ -34,7 +34,7 @@ namespace Spring.Template.Velocity
         /// <summary>
         /// Shared logger instance.
         /// </summary>
-        protected static readonly ILogger log = LogManager.GetLogger(typeof(CommonsLoggingLogSystem));
+        protected static readonly ILogger<CommonsLoggingLogSystem> log = LogManager.GetLogger<CommonsLoggingLogSystem>();
 
         /// <summary>
         /// Initializes the specified runtime services.  No-op in current implementatin

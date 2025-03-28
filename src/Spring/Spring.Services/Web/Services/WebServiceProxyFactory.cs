@@ -56,7 +56,7 @@ namespace Spring.Web.Services
     {
         #region Logging
 
-        private static readonly ILogger LOG = LogManager.GetLogger(typeof(WebServiceProxyFactory));
+        private static readonly ILogger<WebServiceProxyFactory> LOG = LogManager.GetLogger<WebServiceProxyFactory>();
 
         #endregion
 
@@ -429,7 +429,7 @@ namespace Spring.Web.Services
         {
             #region Logging
 
-            private static readonly ILogger LOG = LogManager.GetLogger(typeof(SoapHttpClientProxyTypeBuilder));
+            private static readonly ILogger<SoapHttpClientProxyTypeBuilder> LOG = LogManager.GetLogger<SoapHttpClientProxyTypeBuilder>();
 
             #endregion
 

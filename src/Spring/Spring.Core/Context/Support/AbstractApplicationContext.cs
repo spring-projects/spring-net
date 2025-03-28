@@ -2352,7 +2352,7 @@ namespace Spring.Context.Support
 
         private sealed class ObjectPostProcessorChecker : IObjectPostProcessor, IOrdered
         {
-            private static readonly ILogger log = LogManager.GetLogger<ObjectPostProcessorChecker>();
+            private static readonly ILogger<ObjectPostProcessorChecker> log = LogManager.GetLogger<ObjectPostProcessorChecker>();
             private int _objectPostProcessorTargetCount;
             private IConfigurableListableObjectFactory _objectFactory;
 

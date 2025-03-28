@@ -45,12 +45,6 @@ namespace Spring.Data.NHibernate
     [Ignore("Bug Fix in Progress...unignore once resolved and tests are cleaned up")]
     public class HibernateTxScopeTransactionManagerTests
     {
-        /// <summary>
-        /// The shared <see cref="log4net.ILog"/> instance for this class (and derived classes). 
-        /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof(HibernateTxScopeTransactionManagerTests));
-
         private IApplicationContext ctx;
 
         private IDbProvider dbProvider;

@@ -74,7 +74,7 @@ namespace Spring.Aspects.Exceptions
         /// <summary>
         /// Log instance available to subclasses
         /// </summary>
-        protected static ILogger log  = LogManager.GetLogger(typeof(ExceptionHandlerAdvice));
+        protected static ILogger<ExceptionHandlerAdvice> log = LogManager.GetLogger<ExceptionHandlerAdvice>();
 
         private IList exceptionHandlers = new ArrayList();
 

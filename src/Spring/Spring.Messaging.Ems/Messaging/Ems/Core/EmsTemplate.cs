@@ -51,7 +51,7 @@ namespace Spring.Messaging.Ems.Core
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(EmsTemplate));
+        private readonly ILogger<EmsTemplate> logger = LogManager.GetLogger<EmsTemplate>();
 
 
         #endregion

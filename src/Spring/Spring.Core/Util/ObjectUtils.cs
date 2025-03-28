@@ -43,7 +43,7 @@ namespace Spring.Util
         /// <summary>
         /// The <see cref="ILogger"/> instance for this class.
         /// </summary>
-        private static readonly ILogger log = LogManager.GetLogger(typeof(ObjectUtils));
+        private static readonly ILogger<ObjectUtils> log = LogManager.GetLogger<ObjectUtils>();
 
         /// <summary>
         /// An empty object array.

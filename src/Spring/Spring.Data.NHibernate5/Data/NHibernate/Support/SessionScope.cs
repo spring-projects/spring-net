@@ -415,7 +415,7 @@ namespace Spring.Data.NHibernate.Support
         /// </remarks>
         private class LazySessionHolder : SessionHolder
         {
-            private readonly ILogger log = LogManager.GetLogger(typeof(LazySessionHolder));
+            private readonly ILogger<LazySessionHolder> log = LogManager.GetLogger<LazySessionHolder>();
             private SessionScope owner;
             private ISession session;
 

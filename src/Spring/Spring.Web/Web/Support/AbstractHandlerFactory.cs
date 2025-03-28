@@ -294,7 +294,7 @@ namespace Spring.Web.Support
         /// </remarks>
         protected internal static NamedObjectDefinition FindWebObjectDefinition(string appRelativeVirtualPath, IConfigurableListableObjectFactory objectFactory)
         {
-            ILogger Log = LogManager.GetLogger(typeof(AbstractHandlerFactory));
+            ILogger<AbstractHandlerFactory> Log = LogManager.GetLogger<AbstractHandlerFactory>();
             bool isDebug = Log.IsEnabled(LogLevel.Debug);
 
             // lookup definition using app-relative url

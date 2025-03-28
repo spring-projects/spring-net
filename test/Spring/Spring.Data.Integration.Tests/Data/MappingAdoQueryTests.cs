@@ -44,12 +44,6 @@ namespace Spring.Data
 
         #region Constants
 
-        /// <summary>
-        /// The shared ILog instance for this class (and derived classes). 
-        /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof(MappingAdoQueryTests));
-
         private IApplicationContext ctx;
 
         #endregion

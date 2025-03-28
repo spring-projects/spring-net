@@ -38,7 +38,7 @@ namespace Spring.Objects.Factory.Attributes
     /// </summary>
     public class InitDestroyAttributeObjectPostProcessor : IDestructionAwareObjectPostProcessor, IObjectFactoryAware, IOrdered
     {
-        private static readonly ILogger logger = LogManager.GetLogger<InitDestroyAttributeObjectPostProcessor>();
+        private static readonly ILogger<InitDestroyAttributeObjectPostProcessor> logger = LogManager.GetLogger<InitDestroyAttributeObjectPostProcessor>();
 
         private IConfigurableListableObjectFactory objectFactory;
         private readonly IDictionary<string, LifecycleLifecycleMetadata> lifecycleMetadataCache;

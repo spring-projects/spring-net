@@ -43,7 +43,7 @@ namespace Spring.Data.NHibernate
 	    /// <summary>
         /// The <see cref="ILogger"/> instance for this class. 
         /// </summary>
-        private static readonly ILogger log = LogManager.GetLogger(typeof(SessionFactoryUtils));
+        private static readonly ILogger<SessionFactoryUtils> log = LogManager.GetLogger<SessionFactoryUtils>();
 
 	    /// <summary>
         /// The ordering value for synchronizaiton this session resources.

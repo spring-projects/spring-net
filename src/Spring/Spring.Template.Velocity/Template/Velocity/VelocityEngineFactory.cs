@@ -67,7 +67,7 @@ namespace Spring.Template.Velocity {
         /// <summary>
         /// Shared logger instance.
         /// </summary>
-        protected static readonly ILogger log = LogManager.GetLogger(typeof(VelocityEngineFactory));
+        protected static readonly ILogger<VelocityEngineFactory> log = LogManager.GetLogger<VelocityEngineFactory>();
 
         private IResource configLocation;
 

@@ -33,7 +33,7 @@ namespace Spring.Messaging.Nms.Connections
     /// <author>Mark Pollack (.NET)</author>
     public class NmsResourceHolder : ResourceHolderSupport
     {
-        private static readonly ILogger logger = LogManager.GetLogger(typeof(NmsResourceHolder));
+        private static readonly ILogger<NmsResourceHolder> logger = LogManager.GetLogger<NmsResourceHolder>();
 
         private readonly IConnectionFactory connectionFactory;
         private readonly bool frozen = false;

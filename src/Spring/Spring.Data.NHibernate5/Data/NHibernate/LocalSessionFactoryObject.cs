@@ -111,7 +111,7 @@ namespace Spring.Data.NHibernate
 		/// <summary>
 		/// The shared <see cref="ILogger"/> instance for this class (and derived classes).
 		/// </summary>
-		protected static readonly ILogger log = LogManager.GetLogger(typeof (LocalSessionFactoryObject));
+		protected static readonly ILogger<LocalSessionFactoryObject> log = LogManager.GetLogger<LocalSessionFactoryObject>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalSessionFactoryObject"/> class.

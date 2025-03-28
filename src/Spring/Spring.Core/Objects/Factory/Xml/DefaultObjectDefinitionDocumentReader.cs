@@ -40,7 +40,7 @@ namespace Spring.Objects.Factory.Xml
         /// <summary>
         /// The shared <see cref="ILogger"/> instance for this class (and derived classes).
         /// </summary>
-        protected static readonly ILogger log = LogManager.GetLogger(typeof(DefaultObjectDefinitionDocumentReader));
+        protected static readonly ILogger<DefaultObjectDefinitionDocumentReader> log = LogManager.GetLogger<DefaultObjectDefinitionDocumentReader>();
 
         private XmlReaderContext readerContext;
 

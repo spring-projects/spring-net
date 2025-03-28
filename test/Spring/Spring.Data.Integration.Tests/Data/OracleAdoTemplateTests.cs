@@ -65,8 +65,7 @@ namespace Spring.Data
         /// <summary>
         /// The shared ILog instance for this class (and derived classes).
         /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof (OracleAdoTemplateTests));
+        protected static readonly ILog log = LogManager.GetLogger<OracleAdoTemplateTests>();
 
         private class TestObjectExtractor : IResultSetExtractor
         {

@@ -53,7 +53,7 @@ namespace Spring.Proxy
         /// <summary>
         /// The shared <see cref="ILogger"/> instance for this class (and derived classes).
         /// </summary>
-        protected static readonly ILogger log = LogManager.GetLogger(typeof(AbstractProxyTypeBuilder));
+        protected static readonly ILogger<AbstractProxyTypeBuilder> log = LogManager.GetLogger<AbstractProxyTypeBuilder>();
 
         private const string DEFAULT_PROXY_TYPE_NAME = "Proxy";
 

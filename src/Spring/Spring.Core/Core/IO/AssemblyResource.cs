@@ -53,7 +53,7 @@ namespace Spring.Core.IO
         private string _fullResourceName;
         private string _resourceNamespace;
         private string _resourceAssemblyName;
-        private static readonly ILogger log = LogManager.GetLogger(typeof(AssemblyResource));
+        private static readonly ILogger<AssemblyResource> log = LogManager.GetLogger<AssemblyResource>();
 
         #endregion
 

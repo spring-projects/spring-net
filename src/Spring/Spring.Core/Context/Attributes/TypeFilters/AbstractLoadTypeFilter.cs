@@ -28,7 +28,7 @@ namespace Spring.Context.Attributes.TypeFilters
     /// </summary>
     public abstract class AbstractLoadTypeFilter : ITypeFilter
     {
-        private static readonly ILogger Logger = LogManager.GetLogger<AbstractLoadTypeFilter>();
+        private static readonly ILogger<AbstractLoadTypeFilter> Logger = LogManager.GetLogger<AbstractLoadTypeFilter>();
 
 
         /// <summary>

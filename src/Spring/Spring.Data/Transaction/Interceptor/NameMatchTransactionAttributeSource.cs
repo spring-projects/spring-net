@@ -39,7 +39,7 @@ namespace Spring.Transaction.Interceptor
         /// Logger available to subclasses, static for optimal serialization
         /// </summary>
         [NonSerialized()]
-        protected static readonly ILogger log = LogManager.GetLogger(typeof(NameMatchTransactionAttributeSource));
+        protected static readonly ILogger<NameMatchTransactionAttributeSource> log = LogManager.GetLogger<NameMatchTransactionAttributeSource>();
 
         /// <summary>
         /// Keys are method names; values are ITransactionAttributes

@@ -38,7 +38,7 @@ namespace Spring.Data
 	{
 		#region Fields
         ITestObjectDao testObjectDao;
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(TestObjectManager));
+        private static readonly ILogger<TestObjectManager> LOG = LogManager.GetLogger<TestObjectManager>();
 		#endregion
 
 		#region Constructor (s)

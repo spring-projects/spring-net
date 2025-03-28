@@ -45,7 +45,7 @@ namespace Spring.Messaging.Core
         /// <summary>
         /// The <see cref="ILogger"/> instance for this class.
         /// </summary>
-        private readonly ILogger log = LogManager.GetLogger(typeof(DefaultMessageQueueFactory));
+        private readonly ILogger<DefaultMessageQueueFactory> log = LogManager.GetLogger<DefaultMessageQueueFactory>();
 
 
         private static readonly string QUEUE_DICTIONARY_SLOTNAME =

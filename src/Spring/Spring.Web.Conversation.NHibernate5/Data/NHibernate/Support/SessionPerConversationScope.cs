@@ -373,7 +373,7 @@ namespace Spring.Data.NHibernate.Support
         /// </remarks>
         private class LazySessionPerConversationHolder : SessionHolder
         {
-            private readonly ILogger log = LogManager.GetLogger(typeof(LazySessionPerConversationHolder));
+            private readonly ILogger<LazySessionPerConversationHolder> log = LogManager.GetLogger<LazySessionPerConversationHolder>();
             private SessionPerConversationScope owner;
 
             IConversationState activeConversation;

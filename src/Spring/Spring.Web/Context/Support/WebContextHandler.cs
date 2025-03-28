@@ -42,7 +42,7 @@ namespace Spring.Context.Support
     /// <author>Erich Eichinger</author>
     public class WebContextHandler : ContextHandler
     {
-        private static readonly ILogger Log = LogManager.GetLogger(typeof(WebContextHandler));
+        private static readonly ILogger<WebContextHandler> Log = LogManager.GetLogger<WebContextHandler>();
 
         /// <summary>
         /// Sets default context type to <see cref="WebApplicationContext"/>

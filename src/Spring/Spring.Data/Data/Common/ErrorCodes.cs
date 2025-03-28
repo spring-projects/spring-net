@@ -18,8 +18,6 @@
 
 #endregion
 
-using Microsoft.Extensions.Logging;
-
 namespace Spring.Data.Common
 {
     /// <summary>

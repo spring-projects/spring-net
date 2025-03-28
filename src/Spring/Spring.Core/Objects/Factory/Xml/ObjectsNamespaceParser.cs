@@ -70,7 +70,7 @@ namespace Spring.Objects.Factory.Xml
         /// <summary>
         /// The shared <see cref="ILogger"/> instance for this class (and derived classes).
         /// </summary>
-        protected static readonly ILogger log = LogManager.GetLogger(typeof(ObjectsNamespaceParser));
+        protected static readonly ILogger<ObjectsNamespaceParser> log = LogManager.GetLogger<ObjectsNamespaceParser>();
 
         #region IXmlObjectDefinitionParser Members
 

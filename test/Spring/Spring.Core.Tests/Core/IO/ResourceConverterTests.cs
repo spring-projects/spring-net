@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 

@@ -45,8 +45,7 @@ namespace Spring.Data.Support
         /// <summary>
         /// The shared ILog instance for this class (and derived classes). 
         /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof(SimpleExceptionTranslationTests));
+        protected static readonly ILog log = LogManager.GetLogger<SimpleExceptionTranslationTests>();
 
         #endregion
 

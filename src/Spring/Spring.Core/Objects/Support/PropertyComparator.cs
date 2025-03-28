@@ -35,8 +35,7 @@ namespace Spring.Objects.Support
     /// <author>Simon White (.NET)</author>
     public class PropertyComparator : IComparer
     {
-        private static readonly ILogger logger
-            = LogManager.GetLogger(typeof (PropertyComparator));
+        private static readonly ILogger<PropertyComparator> logger = LogManager.GetLogger<PropertyComparator>();
 
         private ISortDefinition sortDefinition;
         private readonly IDictionary cachedObjectWrappers = new Hashtable();

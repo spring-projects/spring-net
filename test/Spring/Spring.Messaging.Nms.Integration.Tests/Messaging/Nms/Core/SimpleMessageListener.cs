@@ -26,7 +26,7 @@ namespace Spring.Messaging.Nms.Core
 
     public class SimpleMessageListener : IMessageListener
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(SimpleMessageListener));
+        private static readonly ILogger<SimpleMessageListener> LOG = LogManager.GetLogger<SimpleMessageListener>();
 
         private int messageCount;
 

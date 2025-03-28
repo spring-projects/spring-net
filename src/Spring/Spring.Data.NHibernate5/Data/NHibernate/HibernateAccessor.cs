@@ -47,7 +47,7 @@ namespace Spring.Data.NHibernate
 	    /// <summary>
 		/// The <see cref="ILogger"/> instance for this class. 
 		/// </summary>
-		private readonly ILogger log = LogManager.GetLogger(typeof (HibernateAccessor));
+		private readonly ILogger<HibernateAccessor> log = LogManager.GetLogger<HibernateAccessor>();
 
 	    /// <summary>
 		/// Initializes a new instance of the <see cref="HibernateAccessor"/> class.

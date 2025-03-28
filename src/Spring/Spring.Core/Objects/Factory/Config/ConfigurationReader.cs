@@ -51,7 +51,7 @@ namespace Spring.Objects.Factory.Config
         private const string ConfigSectionElement = "section";
         private const string ConfigSectionNameAttribute = "name";
 
-        private static readonly ILogger _log = LogManager.GetLogger(typeof(ConfigurationReader));
+        private static readonly ILogger<ConfigurationReader> _log = LogManager.GetLogger<ConfigurationReader>();
 
         /// <summary>
         /// Initializes the type members

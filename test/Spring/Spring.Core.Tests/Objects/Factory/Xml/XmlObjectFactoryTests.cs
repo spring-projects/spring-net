@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
 using System.Data;
 using System.Globalization;
-using System.IO;
 using System.Text;
-using System.Threading;
 #if !NETCOREAPP
 using System.Web.Services;
 #endif

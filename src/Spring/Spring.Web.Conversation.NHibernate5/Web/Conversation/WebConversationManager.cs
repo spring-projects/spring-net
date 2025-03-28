@@ -33,7 +33,7 @@ namespace Spring.Web.Conversation
     [Serializable]
     public class WebConversationManager : SessionPerConversationScope, IConversationManager, IApplicationContextAware
     {
-        private static readonly ILogger LOG = LogManager.GetLogger(typeof(WebConversationManager));
+        private static readonly ILogger<WebConversationManager> LOG = LogManager.GetLogger<WebConversationManager>();
 
         /// <summary>
         /// Semaphore to synchronize writes to the dictionary.

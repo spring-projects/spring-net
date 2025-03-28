@@ -89,7 +89,7 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// The <see cref="ILogger"/> instance for this class.
         /// </summary>
-        private static readonly ILogger logger = LogManager.GetLogger<ProxyFactoryObject>();
+        private static readonly ILogger<ProxyFactoryObject> logger = LogManager.GetLogger<ProxyFactoryObject>();
 
         /// <summary>
         /// Is the object managed by this factory a singleton or a prototype?

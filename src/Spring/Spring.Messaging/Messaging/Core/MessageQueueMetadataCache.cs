@@ -13,7 +13,7 @@ namespace Spring.Messaging.Core
     {
         #region Logging Definition
 
-        private static readonly ILogger LOG = LogManager.GetLogger(typeof(MessageQueueMetadataCache));
+        private static readonly ILogger<MessageQueueMetadataCache> LOG = LogManager.GetLogger<MessageQueueMetadataCache>();
 
         #endregion
 

@@ -31,7 +31,7 @@ namespace Spring.Web.Conversation
     [Serializable]
     public class InnerConversationList: IList<IConversationState>, IList
     {
-        private static readonly ILogger LOG = LogManager.GetLogger(typeof(InnerConversationList));
+        private static readonly ILogger<InnerConversationList> LOG = LogManager.GetLogger<InnerConversationList>();
 
         private IConversationState conversationOwner;
 
