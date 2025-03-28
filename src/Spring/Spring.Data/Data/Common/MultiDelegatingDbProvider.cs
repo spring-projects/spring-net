@@ -20,6 +20,7 @@
 
 using System.Collections;
 using System.Data;
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Dao;
 using Spring.Objects.Factory;
@@ -275,7 +276,7 @@ namespace Spring.Data.Common
             //Fall back to default if available
             if (defaultDbProvider != null)
             {
-                if (LOG.IsDebugEnabled())
+                if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.Debug("No DbProvider defined in thread local storage, falling back to use DefaultDbProvider.");
                 }

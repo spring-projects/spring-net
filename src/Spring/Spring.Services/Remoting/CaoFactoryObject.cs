@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Remoting.Support;
 
@@ -134,7 +135,7 @@ namespace Spring.Remoting
 		public object GetObject()
 		{
 		    string url = serviceUrl.TrimEnd('/') + '/' + remoteTargetName;
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Accessing CAO object of type ICaoRemoteFactory object at url = [" + url + "]");
             }

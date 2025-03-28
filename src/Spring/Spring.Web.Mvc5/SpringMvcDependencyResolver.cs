@@ -118,7 +118,7 @@ namespace Spring.Web.Mvc
                 {
                     _nonResolvableTypes.Add(serviceType);
 
-                    if (logger.IsDebugEnabled())
+                    if (logger.IsEnabled(LogLevel.Debug))
                     {
                         logger.LogDebug("Could not find service from Spring container with type: {ServiceType}", serviceType);
                     }

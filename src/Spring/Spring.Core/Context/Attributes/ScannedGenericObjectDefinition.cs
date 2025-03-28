@@ -58,7 +58,7 @@ namespace Spring.Context.Attributes
             ParseScopeAttribute();
             ParseQualifierAttribute();
 
-            if (Log.IsDebugEnabled())
+            if (Log.IsEnabled(LogLevel.Debug))
             {
                 Log.LogDebug("ComponentName: {ComponentNAme}; {Name}", _componentName, ToString());
             }

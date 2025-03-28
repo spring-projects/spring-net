@@ -28,6 +28,7 @@ using AopAlliance.Intercept;
 using Spring.Caching;
 using Spring.Util;
 using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 
 #endregion
 
@@ -174,7 +175,7 @@ namespace Spring.Aspects.Cache
             if (resultInfo != null)
             {
                 #region Instrumentation
-                bool isLogDebugEnabled = logger.IsDebugEnabled();
+                bool isLogDebugEnabled = logger.IsEnabled(LogLevel.Debug);
                 #endregion
 
                 AssertUtils.ArgumentNotNull(resultInfo.KeyExpression, "Key",
@@ -266,7 +267,7 @@ namespace Spring.Aspects.Cache
                 ICache cache = GetCache(itemInfo.CacheName);
 
                 #region Instrumentation
-                bool isDebugEnabled = logger.IsDebugEnabled();
+                bool isDebugEnabled = logger.IsEnabled(LogLevel.Debug);
                 #endregion
                 foreach (object item in items)
                 {

@@ -178,7 +178,7 @@ namespace Spring.Context.Attributes
                 {
                     if (IsCompoundPredicateSatisfiedBy(type))
                     {
-                        if (Logger.IsDebugEnabled())
+                        if (Logger.IsEnabled(LogLevel.Debug))
                         {
                             Logger.LogDebug("Satisfied Type: {FullName}", type.FullName);
                         }
@@ -257,7 +257,7 @@ namespace Spring.Context.Attributes
             assemblies.AddRange(DiscoverAssemblies(folderPath, "*.dll"));
             assemblies.AddRange(DiscoverAssemblies(folderPath, "*.exe"));
 
-            if (Logger.IsDebugEnabled())
+            if (Logger.IsEnabled(LogLevel.Debug))
             {
                 Logger.LogDebug("Assemblies to be scanned: {AssemblyNames}", StringUtils.ArrayToCommaDelimitedString(assemblies.ToArray()));
             }
@@ -368,7 +368,7 @@ namespace Spring.Context.Attributes
             {
                 if (include(assembly))
                 {
-                    if (Logger.IsDebugEnabled())
+                    if (Logger.IsEnabled(LogLevel.Debug))
                     {
                         Logger.LogDebug("Include Assembly: {FullName}", assembly.FullName);
                     }

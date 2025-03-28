@@ -18,7 +18,7 @@
 
 #endregion
 
-
+using Microsoft.Extensions.Logging;
 using Spring.Data.Core;
 using Spring.Transaction;
 using Spring.Transaction.Support;
@@ -183,7 +183,7 @@ namespace Spring.Messaging.Core
             MessageQueueTransaction transaction = txObject.ResourceHolder.MessageQueueTransaction;
             try
             {
-                if (LOG.IsDebugEnabled())
+                if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.Debug("Committing MessageQueueTransaction");
                 }
@@ -208,7 +208,7 @@ namespace Spring.Messaging.Core
             MessageQueueTransaction transaction = txObject.ResourceHolder.MessageQueueTransaction;
             try
             {
-                if (LOG.IsDebugEnabled())
+                if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.Debug("Committing MessageQueueTransaction");
                 }

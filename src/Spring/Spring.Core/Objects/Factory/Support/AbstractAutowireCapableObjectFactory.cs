@@ -289,7 +289,7 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         protected object ApplyObjectPostProcessorsBeforeInstantiation(Type objectType, string objectName)
         {
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Invoking IInstantiationAwareObjectPostProcessors before " +
                           $"the instantiation of '{objectName}'.");
@@ -656,7 +656,7 @@ namespace Spring.Objects.Factory.Support
                     object o = GetObject(propertyName);
                     properties.Add(propertyName, o);
 
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(
                                 string.Format(CultureInfo.InvariantCulture,
@@ -666,7 +666,7 @@ namespace Spring.Objects.Factory.Support
                 }
                 else
                 {
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(
                                 string.Format(CultureInfo.InvariantCulture,
@@ -712,7 +712,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     properties.Add(propertyName, ObjectUtils.EnumerateFirstElement(matchingObjects.Values));
 
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(
                                 string.Format(CultureInfo.InvariantCulture,
@@ -731,7 +731,7 @@ namespace Spring.Objects.Factory.Support
                 }
                 else
                 {
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(
                                 string.Format(CultureInfo.InvariantCulture, "Not autowiring property '{0}' of object '{1}': no matching object found.",
@@ -844,7 +844,7 @@ namespace Spring.Objects.Factory.Support
                 }
             }
 
-            var isDebugEnabled = log.IsDebugEnabled();
+            var isDebugEnabled = log.IsEnabled(LogLevel.Debug);
             if (isDebugEnabled)
             {
                 log.Debug($"Creating instance of Object '{name}' with merged definition [{definition}].");
@@ -1257,7 +1257,7 @@ namespace Spring.Objects.Factory.Support
         {
             if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IInitializingObject), target))
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(string.Format(CultureInfo.InvariantCulture, "Calling AfterPropertiesSet() on object with name '{0}'.", name));
                 }
@@ -1266,7 +1266,7 @@ namespace Spring.Objects.Factory.Support
             }
             if (StringUtils.HasText(definition.InitMethodName))
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(
                             string.Format(CultureInfo.InvariantCulture, "Calling custom init method '{0} on object with name '{1}'.",
@@ -1629,7 +1629,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>A reference to another object in the factory.</returns>
         protected object ResolveReference(IConfigurableObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
         {
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                         string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
@@ -1757,7 +1757,7 @@ namespace Spring.Objects.Factory.Support
         {
             object instance = wrapper.WrappedInstance;
 
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug($"Configuring object using definition '{name}'");
             }
@@ -1767,7 +1767,7 @@ namespace Spring.Objects.Factory.Support
 
             if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IObjectNameAware), instance))
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug($"Setting the name property on the IObjectNameAware object '{name}'.");
                 }
@@ -1777,7 +1777,7 @@ namespace Spring.Objects.Factory.Support
 
             if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IObjectFactoryAware), instance))
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(
                         $"Setting the ObjectFactory property on the IObjectFactoryAware object '{name}'.");
@@ -1894,7 +1894,7 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor.PostProcessBeforeInitialization"/>
         public virtual object ApplyObjectPostProcessorsBeforeInitialization(object instance, string name)
         {
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug($"Invoking IObjectPostProcessors before initialization of object '{name}'");
             }
@@ -1936,7 +1936,7 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor.PostProcessAfterInitialization"/>
         public virtual object ApplyObjectPostProcessorsAfterInitialization(object instance, string name)
         {
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug($"Invoking IObjectPostProcessors after initialization of object '{name}'");
             }

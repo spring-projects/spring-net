@@ -15,7 +15,7 @@
  */
 
 using System.Reflection;
-
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using Spring.Threading;
 using Spring.Transaction.Support;
@@ -312,7 +312,7 @@ namespace Spring.Data.NHibernate.Support
                 throw new InvalidOperationException("This scope is already open");
             }
 
-            bool isDebugEnabled = log.IsDebugEnabled();
+            bool isDebugEnabled = log.IsEnabled(LogLevel.Debug);
 
             if (SingleSession)
             {
@@ -354,7 +354,7 @@ namespace Spring.Data.NHibernate.Support
         /// </summary>
         public void Close()
         {
-            bool isDebugEnabled = log.IsDebugEnabled();
+            bool isDebugEnabled = log.IsEnabled(LogLevel.Debug);
             if (isDebugEnabled) log.Debug("Trying to close SessionScope");
 
             if (IsOpen)
@@ -424,7 +424,7 @@ namespace Spring.Data.NHibernate.Support
             /// </summary>
             public LazySessionHolder(SessionScope owner)
             {
-                if (log.IsDebugEnabled()) log.Debug("Created LazySessionHolder");
+                if (log.IsEnabled(LogLevel.Debug)) log.Debug("Created LazySessionHolder");
                 this.owner = owner;
             }
 
@@ -435,7 +435,7 @@ namespace Spring.Data.NHibernate.Support
             {
                 if (session == null)
                 {
-                    if (log.IsDebugEnabled()) log.Debug("session instance requested - opening new session");
+                    if (log.IsEnabled(LogLevel.Debug)) log.Debug("session instance requested - opening new session");
                     session = owner.DoOpenSession();
                     AddSession(session);
                 }
@@ -453,7 +453,7 @@ namespace Spring.Data.NHibernate.Support
                     session = null;
                     SessionFactoryUtils.CloseSession(tmpSession);
                 }
-                if (log.IsDebugEnabled()) log.Debug("Closed LazySessionHolder");
+                if (log.IsEnabled(LogLevel.Debug)) log.Debug("Closed LazySessionHolder");
             }
         }
     }

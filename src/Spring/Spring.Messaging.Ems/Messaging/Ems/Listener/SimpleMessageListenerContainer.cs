@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;
@@ -194,7 +195,7 @@ namespace Spring.Messaging.Ems.Listener
             // First invoke the user-specific ExceptionListener, if any.
             InvokeExceptionListener(exception);
             // now try to recover the shared Connection and all consumers...
-            if (logger.IsInfoEnabled())
+            if (logger.IsEnabled(LogLevel.Information))
             {
                 logger.Info("Trying to recover from EMS Connection exception: " + exception);
             }
@@ -242,7 +243,7 @@ namespace Spring.Messaging.Ems.Listener
                 }
                 catch (Exception ex)
                 {
-                    if (logger.IsInfoEnabled())
+                    if (logger.IsEnabled(LogLevel.Information))
                     {
                         logger.Info("Could not refresh Connection - retrying in " + recoveryInterval, ex);
                     }

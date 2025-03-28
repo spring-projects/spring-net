@@ -26,6 +26,7 @@ using Spring.Messaging.Nms.Support.Converter;
 using Spring.Messaging.Nms.Support.Destinations;
 using Spring.Util;
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Nms.Listener.Adapter
 {
@@ -403,7 +404,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         {
             if (session != null)
             {
-                if (logger.IsDebugEnabled())
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Listener method returned result [" + result +
                                  "] - generating response message for it");
@@ -415,7 +416,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             }
             else
             {
-                if (logger.IsDebugEnabled())
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Listener method returned result [" + result +
                                  "]: not generating response message for it because of no NMS ISession given");

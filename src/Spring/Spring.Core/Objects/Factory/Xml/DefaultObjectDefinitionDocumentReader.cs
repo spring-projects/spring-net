@@ -16,6 +16,7 @@
 
 using System.Globalization;
 using System.Xml;
+using Microsoft.Extensions.Logging;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -80,7 +81,7 @@ namespace Spring.Objects.Factory.Xml
 
             this.readerContext = readerContext;
 
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Loading object definitions.");
             }
@@ -96,7 +97,7 @@ namespace Spring.Objects.Factory.Xml
 
             PostProcessXml(root);
 
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     $"Found {readerContext.Registry.ObjectDefinitionCount} <{ObjectDefinitionConstants.ObjectElement}> elements defining objects.");
@@ -187,7 +188,7 @@ namespace Spring.Objects.Factory.Xml
                 }
                 bdHolder = helper.DecorateObjectDefinitionIfRequired(element, bdHolder);
 
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(string.Format(CultureInfo.InvariantCulture, "Registering object definition with id '{0}'.", bdHolder.ObjectName));
                 }
@@ -220,7 +221,7 @@ namespace Spring.Objects.Factory.Xml
             string location = resource.GetAttribute(ObjectDefinitionConstants.ImportResourceAttribute);
             try
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(string.Format(
                                   CultureInfo.InvariantCulture,

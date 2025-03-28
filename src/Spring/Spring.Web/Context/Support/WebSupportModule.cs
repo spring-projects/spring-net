@@ -26,7 +26,7 @@ using System.Web.Caching;
 using System.Web.Routing;
 using System.Web.SessionState;
 using System.Web.UI;
-
+using Microsoft.Extensions.Logging;
 using Spring.Core.IO;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
@@ -314,7 +314,7 @@ namespace Spring.Context.Support
                 else
                 {
                     // this is an async session timeout - log as fatal since this is the thread's exit point!
-                    s_log.Fatal(msg, ex);
+                    s_log.LogCritical(ex, msg);
                 }
             }
             finally

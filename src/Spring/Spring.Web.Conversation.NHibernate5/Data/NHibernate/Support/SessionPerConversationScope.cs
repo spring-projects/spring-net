@@ -22,6 +22,7 @@ using Spring.Transaction.Support;
 using Spring.Util;
 using System.Data;
 using System.Data.Common;
+using Microsoft.Extensions.Logging;
 using Spring.Web.Conversation;
 
 namespace Spring.Data.NHibernate.Support
@@ -173,7 +174,7 @@ namespace Spring.Data.NHibernate.Support
         /// </exception>
         public void Open(IConversationState activeConversation, ICollection<IConversationState> allManagedConversation)
         {
-            bool isDebugEnabled = log.IsDebugEnabled();
+            bool isDebugEnabled = log.IsEnabled(LogLevel.Debug);
 
             if (IsOpen)
             {
@@ -248,7 +249,7 @@ namespace Spring.Data.NHibernate.Support
         /// </exception>
         public void Close(ISessionFactory sessionFactory, ICollection<IConversationState> allManagedConversation)
         {
-            bool isDebugEnabled = log.IsDebugEnabled();
+            bool isDebugEnabled = log.IsEnabled(LogLevel.Debug);
             if (isDebugEnabled) log.Debug("Trying to close SessionPerConversationScope");
 
             if (IsOpen)
@@ -323,13 +324,13 @@ namespace Spring.Data.NHibernate.Support
                     //reconnect existing one.
                     if (conversation.DbProvider != null)
                     {
-                        if (log.IsDebugEnabled()) 
+                        if (log.IsEnabled(LogLevel.Debug))
                         {
                             log.Debug($"DoOpenSession: Conversation has a DbProvider: Id='{conversation.Id}'");
                         }
                         if (!conversation.RootSessionPerConversation.IsConnected)
                         {
-                            if (log.IsDebugEnabled())
+                            if (log.IsEnabled(LogLevel.Debug))
                             {
                                 log.Debug($"DoOpenSession: Conversation is not Connected: Id='{conversation.Id}'");
                             }
@@ -341,7 +342,7 @@ namespace Spring.Data.NHibernate.Support
                         }
                         else
                         {
-                            if (log.IsDebugEnabled())
+                            if (log.IsEnabled(LogLevel.Debug))
                             {
                                 log.Debug($"DoOpenSession: Conversation is already Connected: Id='{conversation.Id}'");
                             }
@@ -349,7 +350,7 @@ namespace Spring.Data.NHibernate.Support
                     }
                     else
                     {
-                        if (log.IsDebugEnabled())
+                        if (log.IsEnabled(LogLevel.Debug))
                         {
                             log.Debug($"DoOpenSession: Conversation has NO DbProvider: Id='{conversation.Id}'");
                         }
@@ -383,7 +384,7 @@ namespace Spring.Data.NHibernate.Support
             /// </summary>
             public LazySessionPerConversationHolder(SessionPerConversationScope owner, IConversationState activeConversation, ICollection<IConversationState> allManagedConversation)
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("Created LazyReconnectableSessionHolder");
                 }
@@ -403,7 +404,7 @@ namespace Spring.Data.NHibernate.Support
                 if (activeConversation.RootSessionPerConversation == null
                     || !activeConversation.RootSessionPerConversation.IsConnected)
                 {
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug("EnsureInitialized: 'session-per-conversation' instance requested - opening new session");
                     }
@@ -423,7 +424,7 @@ namespace Spring.Data.NHibernate.Support
                 activeConversation = null;
                 allManagedConversation = null;
 
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("CloseAll LazySessionPerConversationHolder");
                 }
@@ -431,7 +432,7 @@ namespace Spring.Data.NHibernate.Support
 
             private void CloseConversation(IConversationState conversation)
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug($"CloseConversation: Id='{conversation.Id}'");
                 }
@@ -455,7 +456,7 @@ namespace Spring.Data.NHibernate.Support
                     }
                     RemoveSession(tmpSession);
                 }
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("Closed LazySessionPerConversationHolder");
                 }

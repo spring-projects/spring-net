@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
@@ -276,7 +277,7 @@ namespace Spring.Testing.NUnit
             ++this.transactionsStarted;
             this.complete = !this.defaultRollback;
 
-            if (logger.IsInfoEnabled())
+            if (logger.IsEnabled(LogLevel.Information))
             {
                 logger.Info("Began transaction (" + this.transactionsStarted + "): transaction manager [" +
                             this.transactionManager + "]; default rollback = " + this.defaultRollback);

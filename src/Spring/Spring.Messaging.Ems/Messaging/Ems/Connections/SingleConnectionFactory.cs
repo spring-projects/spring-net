@@ -19,6 +19,7 @@
 #endregion
 
 using System.Runtime.Serialization;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Support;
 using Spring.Messaging.Ems.Core;
 using Spring.Messaging.Ems.Common;
@@ -459,7 +460,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
                 this.target = DoCreateConnection();
                 PrepareConnection(this.target);
-                if (LOG.IsDebugEnabled())
+                if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.Info("Established shared EMS Connection: " + this.target);
                 }
@@ -529,7 +530,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <param name="con">The connection.</param>
         protected virtual void CloseConnection(IConnection con)
         {
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Closing shared EMS Connection: " + this.target);
             }

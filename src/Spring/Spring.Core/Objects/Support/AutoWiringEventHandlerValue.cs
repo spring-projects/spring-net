@@ -20,6 +20,7 @@
 
 using System.Globalization;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Util;
 
@@ -204,7 +205,7 @@ namespace Spring.Objects.Support
 				{
 					#region Instrumentation
 
-					if (log.IsDebugEnabled())
+					if (log.IsEnabled(LogLevel.Debug))
 					{
 						log.Debug(string.Format(
 							CultureInfo.InvariantCulture,

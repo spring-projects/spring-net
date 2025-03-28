@@ -19,7 +19,7 @@
 #endregion
 
 using System.ServiceModel;
-
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 
 namespace Spring.ServiceModel.Activation
@@ -183,7 +183,7 @@ namespace Spring.ServiceModel.Activation
 
             #region Instrumentation
 
-            if (LOG.IsInfoEnabled())
+            if (LOG.IsEnabled(LogLevel.Information))
             {
                 LOG.Info(String.Format("The service '{0}' is ready and can now be accessed.", TargetName));
             }

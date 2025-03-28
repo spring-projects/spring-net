@@ -134,7 +134,7 @@ namespace Spring.Objects.Factory.Support
 
             if (this.invokeDisposableObject)
             {
-                if (logger.IsDebugEnabled())
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Invoking Dispose() on object with name '" + this.objectName + "'");
                 }
@@ -147,7 +147,7 @@ namespace Spring.Objects.Factory.Support
                 catch (Exception ex)
                 {
                     string msg = "Invocation of Dispose method failed on object with name '" + this.objectName + "'";
-                    if (logger.IsDebugEnabled())
+                    if (logger.IsEnabled(LogLevel.Debug))
                     {
                         logger.Warn(msg, ex);
                     }
@@ -215,7 +215,7 @@ namespace Spring.Objects.Factory.Support
             {
                 args[0] = true;
             }
-            if (logger.IsDebugEnabled())
+            if (logger.IsEnabled(LogLevel.Debug))
             {
                 logger.Debug("Invoking destroy method '" + this.destroyMethodName +
                              "' on object with name '" + this.objectName + "'");
@@ -229,7 +229,7 @@ namespace Spring.Objects.Factory.Support
             {
                 string msg = "Invocation of destroy method '" + this.destroyMethodName +
                              "' failed on object with name '" + this.objectName + "'";
-                if (logger.IsDebugEnabled())
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Warn(msg, ex.InnerException);
                 }

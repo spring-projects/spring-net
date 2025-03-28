@@ -19,7 +19,7 @@
 #endregion
 
 using System.Runtime.Remoting;
-
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
@@ -183,7 +183,7 @@ namespace Spring.Remoting
 
 			#region Instrumentation
 
-			if (LOG.IsDebugEnabled())
+			if (LOG.IsEnabled(LogLevel.Debug))
 			{
 				LOG.Debug(String.Format("Target '{0}' registered.", targetName));
 			}

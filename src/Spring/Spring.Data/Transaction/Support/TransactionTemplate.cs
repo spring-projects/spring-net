@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 
 namespace Spring.Transaction.Support
@@ -197,7 +198,7 @@ namespace Spring.Transaction.Support
         /// <param name="exception">The thrown application exception or error.</param>
         private void rollbackOnException( ITransactionStatus status, Exception exception )
         {
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Initiating transaction rollback on application exception", exception);
             }

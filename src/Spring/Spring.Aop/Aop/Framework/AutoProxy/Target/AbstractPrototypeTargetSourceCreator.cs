@@ -20,6 +20,7 @@
 
 #region Imports
 
+using Microsoft.Extensions.Logging;
 using Spring.Aop.Target;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
@@ -61,14 +62,14 @@ namespace Spring.Aop.Framework.AutoProxy.Target
             {
                 if (!(factory is IObjectDefinitionRegistry))
                 {
-                    if (logger.IsWarnEnabled())
+                    if (logger.IsEnabled(LogLevel.Warning))
                         logger.Warn("Cannot do autopooling with a IObjectFactory that doesn't implement IObjectDefinitionRegistry");
                     return null;
                 }
                 IObjectDefinitionRegistry definitionRegistry = (IObjectDefinitionRegistry) factory;
                 RootObjectDefinition definition = (RootObjectDefinition) definitionRegistry.GetObjectDefinition(name);
 
-                if (logger.IsInfoEnabled())
+                if (logger.IsEnabled(LogLevel.Information))
                     logger.Info("Configuring AbstractPrototypeBasedTargetSource...");
 
                 // Infinite cycle will result if we don't use a different factory,

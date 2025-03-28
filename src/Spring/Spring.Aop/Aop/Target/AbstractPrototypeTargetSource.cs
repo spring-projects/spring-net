@@ -20,7 +20,7 @@
 
 #region Imports
 
-
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Util;
 
@@ -136,7 +136,7 @@ namespace Spring.Aop.Target
 
 				#region Instrumentation
 
-				if (logger.IsDebugEnabled())
+				if (logger.IsEnabled(LogLevel.Debug))
 				{
 					logger.Debug(string.Format(
 						"Getting object with name '{0}' to determine class.",
@@ -160,7 +160,7 @@ namespace Spring.Aop.Target
 		{
 			#region Instrumentation
 
-			if (logger.IsDebugEnabled())
+			if (logger.IsEnabled(LogLevel.Debug))
 			{
 				logger.Debug(string.Format(
 					"Creating new target from object '{0}'.",

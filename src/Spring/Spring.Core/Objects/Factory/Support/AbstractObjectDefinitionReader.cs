@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Core.IO;
 using Spring.Util;
 
@@ -225,7 +226,7 @@ namespace Spring.Objects.Factory.Support
             }
             int loadCount = LoadObjectDefinitions(resource);
 
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Loaded " + loadCount + " object definitions from location [" + location + "]");
             }

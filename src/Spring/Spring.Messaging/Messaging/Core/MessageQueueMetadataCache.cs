@@ -1,4 +1,5 @@
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Messaging.Support;
 using Spring.Objects.Factory;
@@ -68,7 +69,7 @@ namespace Spring.Messaging.Core
                         } else
                         {
                             #region Logging
-                            if (LOG.IsWarnEnabled())
+                            if (LOG.IsEnabled(LogLevel.Warning))
                             {
                                 LOG.Warn(
                                     "Path for MessageQueueFactoryObject named [" +

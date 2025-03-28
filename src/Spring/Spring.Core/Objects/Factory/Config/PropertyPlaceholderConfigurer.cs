@@ -302,7 +302,7 @@ namespace Spring.Objects.Factory.Config
 
 						#region Instrumentation
 
-						if (logger.IsDebugEnabled())
+						if (logger.IsEnabled(LogLevel.Debug))
 						{
 							logger.Debug(string.Format(
 								CultureInfo.InvariantCulture,

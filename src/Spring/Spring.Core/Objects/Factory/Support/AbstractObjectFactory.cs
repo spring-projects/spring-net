@@ -28,6 +28,7 @@ using Spring.Threading;
 using Spring.Util;
 using System.Threading;
 using System.Runtime.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Objects.Factory.Support
 {
@@ -874,7 +875,7 @@ namespace Spring.Objects.Factory.Support
             // it's a normal object ?
             if (!ObjectUtils.IsAssignable(typeof(IFactoryObject), instance))
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(string.Format("Calling code asked for normal instance for name '{0}'.", canonicalName));
                 }
@@ -885,7 +886,7 @@ namespace Spring.Objects.Factory.Support
             // the user wants the factory itself ?
             if (!ObjectUtils.IsAssignable(typeof(IFactoryObject), instance) || IsFactoryDereference(name))
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(
                         string.Format("Calling code asked for IFactoryObject instance for name '{0}'.",
@@ -895,7 +896,7 @@ namespace Spring.Objects.Factory.Support
                 return instance;
             }
 
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(string.Format("Object with name '{0}' is a factory object.", canonicalName));
             }
@@ -909,7 +910,7 @@ namespace Spring.Objects.Factory.Support
 
             if (resultInstance == null)
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(string.Format("Dereferencing Object with name '{0}'", canonicalName));
                 }
@@ -951,7 +952,7 @@ namespace Spring.Objects.Factory.Support
             }
             else
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(string.Format("Returning factory product from cache for Object with name '{0}'", canonicalName));
                 }
@@ -998,7 +999,7 @@ namespace Spring.Objects.Factory.Support
             {
                 IConfigurableFactoryObject configurableFactory = (IConfigurableFactoryObject)factory;
 
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(string.Format("Factory object with name '{0}' is configurable.", TransformedObjectName(objectName)));
                 }
@@ -2097,7 +2098,7 @@ namespace Spring.Objects.Factory.Support
             object monitor = new object();
             const int indent = 3;
             bool hasErrors = false;
-            var isDebugEnabled = log.IsDebugEnabled();
+            var isDebugEnabled = log.IsEnabled(LogLevel.Debug);
 
             try
             {
@@ -2224,7 +2225,7 @@ namespace Spring.Objects.Factory.Support
                 CleanupAfterObjectCreationFailure(name);
 
                 hasErrors = true;
-                if (log.IsErrorEnabled())
+                if (log.IsEnabled(LogLevel.Error))
                 {
                     log.Error(string.Format("{1}GetObjectInternal: error obtaining object {0}", name, new string(' ', nestingCount * indent)));
                 }
@@ -2325,7 +2326,7 @@ namespace Spring.Objects.Factory.Support
                 object sharedInstance = singletonCache[objectName];
                 if (sharedInstance == null)
                 {
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(string.Format("Creating shared instance of singleton object '{0}'", objectName));
                     }
@@ -2341,7 +2342,7 @@ namespace Spring.Objects.Factory.Support
                     }
                     AddSingleton(objectName, sharedInstance);
 
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(string.Format("Cached shared instance of singleton object '{0}'", objectName));
                     }
@@ -2369,7 +2370,7 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         public virtual void Dispose()
         {
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(string.Format("Destroying singletons in factory [{0}].", this));
             }
@@ -2521,7 +2522,7 @@ namespace Spring.Objects.Factory.Support
 
             if (name == alias)
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(
                         $"Ignoring attempt to Register alias '{alias}' for object with name '{name}' because name and alias would be the same value.");
@@ -2530,7 +2531,7 @@ namespace Spring.Objects.Factory.Support
                 return;
             }
 
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug($"Registering alias '{alias}' for object with name '{name}'.");
             }

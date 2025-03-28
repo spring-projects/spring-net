@@ -19,6 +19,7 @@
 #endregion
 
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Nms.Core;
 using Spring.Messaging.Nms.Support;
 using Spring.Objects.Factory;
@@ -373,7 +374,7 @@ namespace Spring.Messaging.Nms.Connections
 
                 this.target = DoCreateConnection();
                 PrepareConnection(this.target);
-                if (LOG.IsDebugEnabled())
+                if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.Info("Established shared NMS Connection: " + this.target);
                 }
@@ -449,7 +450,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="con">The connection.</param>
         protected virtual void CloseConnection(IConnection con)
         {
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Closing shared NMS Connection: " + this.target);
             }

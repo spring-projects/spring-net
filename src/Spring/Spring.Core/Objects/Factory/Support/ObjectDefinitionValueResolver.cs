@@ -17,6 +17,7 @@
 using System.Collections;
 using System.Globalization;
 using System.Runtime.Remoting;
+using Microsoft.Extensions.Logging;
 using Spring.Core.TypeConversion;
 using Spring.Expressions;
 using Spring.Objects.Factory.Config;
@@ -342,7 +343,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>A reference to another object in the factory.</returns>
         protected virtual object ResolveReference(IObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
         {
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                         string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",

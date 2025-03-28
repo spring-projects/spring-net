@@ -22,7 +22,7 @@ using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
-
+using Microsoft.Extensions.Logging;
 using Spring.Util;
 
 namespace Spring.Objects.Factory.Support
@@ -187,7 +187,7 @@ namespace Spring.Objects.Factory.Support
 				{
 					#region Instrumentation
 
-					if (log.IsDebugEnabled())
+					if (log.IsEnabled(LogLevel.Debug))
 					{
 						log.Debug(string.Format(CultureInfo.InvariantCulture,
 						                        "Generating a subclass of the [{0}] class for the '{1}' " +

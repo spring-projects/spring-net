@@ -20,8 +20,7 @@
 
 using System.Text.RegularExpressions;
 using AopAlliance.Intercept;
-
-
+using Microsoft.Extensions.Logging;
 using Spring.Core.TypeConversion;
 using Spring.Expressions;
 
@@ -174,7 +173,7 @@ namespace Spring.Aspects
                         }
                         else
                         {
-                            if (log.IsTraceEnabled())
+                            if (log.IsEnabled(LogLevel.Trace))
                             {
                                 log.Trace("Retrying " + invocation.Method.Name);
                             }

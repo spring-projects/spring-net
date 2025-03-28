@@ -16,6 +16,7 @@
 
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 using Spring.Util;
 
 namespace Spring.Aop.Support
@@ -157,7 +158,7 @@ namespace Spring.Aop.Support
 	        Match match = _compiledPatterns[patternIndex].Match(pattern);
 	        bool matched = match.Success;
 
-	        if (_logger.IsDebugEnabled())
+	        if (_logger.IsEnabled(LogLevel.Debug))
 	        {
 	            _logger.Debug("Candidate is: '" + pattern + "'; pattern is '" +
 	                          _compiledPatterns[patternIndex].ToString() + "'; matched=" + matched);

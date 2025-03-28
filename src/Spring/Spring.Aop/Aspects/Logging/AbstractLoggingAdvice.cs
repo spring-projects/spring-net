@@ -21,6 +21,7 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 using AopAlliance.Intercept;
+using Microsoft.Extensions.Logging;
 using Spring.Aop.Framework;
 
 namespace Spring.Aspects.Logging
@@ -204,7 +205,7 @@ namespace Spring.Aspects.Logging
         /// </returns>
         protected virtual bool IsLogEnabled(ILog log)
         {
-            return log.IsTraceEnabled();
+            return log.IsEnabled(LogLevel.Trace);
         }
 
         /// <summary>

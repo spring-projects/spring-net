@@ -19,7 +19,7 @@
 #endregion
 
 using System.Runtime.Remoting;
-
+using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
@@ -120,7 +120,7 @@ namespace Spring.Remoting
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 if (filename == null)
                 {

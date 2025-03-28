@@ -22,6 +22,7 @@ using System.Web;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Web.Conversation
 {
@@ -151,7 +152,7 @@ namespace Spring.Web.Conversation
 
         public override Type BindToType(string assemblyName, string typeName)
         {
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
                 LOG.Debug(String.Format("MyBinder.BindToType: {0}, {1}", typeName, assemblyName));
             return Type.GetType(typeName + ", " + assemblyName);
         }
@@ -209,7 +210,7 @@ namespace Spring.Web.Conversation
 
         public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
         {
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
                 LOG.Debug(String.Format("MySerializationSurrogateWrapper.GetObjectData({0},...", obj.GetType()));
 
             FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
@@ -231,7 +232,7 @@ namespace Spring.Web.Conversation
 
         public object SetObjectData(object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
         {
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
                 LOG.Debug(String.Format("MySerializationSurrogateWrapper.SetObjectData({0},...", obj.GetType()));
 
             FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);

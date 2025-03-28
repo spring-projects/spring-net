@@ -21,7 +21,7 @@
 #region Imports
 
 using AopAlliance.Intercept;
-
+using Microsoft.Extensions.Logging;
 using Spring.Aop.Support;
 using Spring.Collections;
 using Spring.Util;
@@ -146,7 +146,7 @@ namespace Spring.Aop.Target
 			{
 				#region Instrumentation
 
-				if (logger.IsDebugEnabled())
+				if (logger.IsEnabled(LogLevel.Debug))
 				{
 					logger.Debug(string.Format(
 						"No target for apartment prototype '{0}' " +
@@ -185,7 +185,7 @@ namespace Spring.Aop.Target
 		{
 			#region Instrumentation
 
-			if (logger.IsDebugEnabled())
+			if (logger.IsEnabled(LogLevel.Debug))
 			{
 				logger.Debug("Destroying ThreadLocal bindings");
 			}
@@ -204,7 +204,7 @@ namespace Spring.Aop.Target
 					{
 						#region Instrumentation
 
-						if (logger.IsWarnEnabled())
+						if (logger.IsEnabled(LogLevel.Warning))
 						{
 							logger.Warn(string.Format(
 								"Thread-bound target of class '{0}' " +

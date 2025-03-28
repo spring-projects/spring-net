@@ -15,8 +15,7 @@
  */
 
 using System.Collections;
-
-
+using Microsoft.Extensions.Logging;
 using Spring.Aop.Framework;
 using Spring.Data.Common;
 using Spring.Data.Support;
@@ -854,7 +853,7 @@ namespace Spring.Data.NHibernate
             bool existingTransaction = SessionFactoryUtils.IsSessionTransactional(session, SessionFactory);
             if (existingTransaction)
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("Found thread-bound Session for HibernateTemplate");
                 }
@@ -902,7 +901,7 @@ namespace Spring.Data.NHibernate
             {
                 if (existingTransaction)
                 {
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug("Not closing pre-bound Hibernate Session after HibernateTemplate");
                     }

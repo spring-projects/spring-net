@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Messaging.Core;
 using Spring.Messaging.Support.Converters;
@@ -192,7 +193,7 @@ namespace Spring.Messaging.Listener
         {
             if (!Running)
             {
-                if (LOG.IsWarnEnabled())
+                if (LOG.IsEnabled(LogLevel.Warning))
                 {
                     LOG.Warn("Not processing recieved message because of the listener container " +
                              "having been stopped in the meantime: " + message);

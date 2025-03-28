@@ -20,6 +20,7 @@
 
 #region Imports
 
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Pool;
 using Spring.Pool.Support;
@@ -66,7 +67,7 @@ namespace Spring.Aop.Target
 		{
 			#region Instrumentation
 
-			if(logger.IsDebugEnabled())
+			if(logger.IsEnabled(LogLevel.Debug))
 			{
 				logger.Debug("Creating object pool.");
 			}
@@ -135,7 +136,7 @@ namespace Spring.Aop.Target
 		{
 			#region Instrumentation
 
-			if(logger.IsDebugEnabled())
+			if(logger.IsEnabled(LogLevel.Debug))
 			{
 				logger.Debug("Closing pool...");
 			}

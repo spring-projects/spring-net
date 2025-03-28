@@ -19,6 +19,7 @@
 #endregion
 
 using System.Xml;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
@@ -147,7 +148,7 @@ namespace Spring.Objects.Factory.Xml
                 {
                     #region Instrumentation
 
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(string.Format("Error while parsing object scope : '{0}' is an invalid value.",
                                                 value), ex);

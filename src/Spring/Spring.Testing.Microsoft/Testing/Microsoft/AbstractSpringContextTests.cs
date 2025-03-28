@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Util;
@@ -212,7 +213,7 @@ namespace Spring.Testing.Microsoft
 	    /// <param name="locations">Resources to load object definitions from.</param>
 	    protected virtual IConfigurableApplicationContext LoadContextLocations(string[] locations)
         {
-		    if (logger.IsInfoEnabled())
+		    if (logger.IsEnabled(LogLevel.Information))
             {
                 logger.Info("Loading config for: " + StringUtils.CollectionToCommaDelimitedString(locations));
 		    }

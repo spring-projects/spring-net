@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Connections;
 using Spring.Messaging.Ems.Support;
@@ -206,7 +207,7 @@ namespace Spring.Messaging.Ems.Core
                     }
                     sessionToUse = sessionToClose;
                 }
-                if (logger.IsDebugEnabled())
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Executing callback on EMS Session [" + sessionToUse + "]");
                 }
@@ -685,7 +686,7 @@ namespace Spring.Messaging.Ems.Core
                 else {
                     message = messageCreatorDelegate(session);
                 }
-                if (logger.IsDebugEnabled())
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Sending created message [" + message + "]");
                 }

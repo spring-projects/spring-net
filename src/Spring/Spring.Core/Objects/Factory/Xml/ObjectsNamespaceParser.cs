@@ -24,8 +24,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Xml;
-
-
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
@@ -204,7 +203,7 @@ namespace Spring.Objects.Factory.Xml
             {
                 #region Instrumentation
 
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(string.Format(
                         CultureInfo.InvariantCulture,
@@ -312,7 +311,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -837,7 +836,7 @@ namespace Spring.Objects.Factory.Xml
             {
                 if (StringUtils.HasText(typeAttr))
                 {
-                    if (log.IsWarnEnabled())
+                    if (log.IsEnabled(LogLevel.Warning))
                     {
                         log.Warn("The 'type' attribute is redundant when the 'name' attribute has been used on a constructor argument element.");
                     }
@@ -1466,7 +1465,7 @@ namespace Spring.Objects.Factory.Xml
                 {
                     #region Instrumentation
 
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(
                             string.Format("Error while parsing dependency checking mode : '{0}' is an invalid value.",
@@ -1508,7 +1507,7 @@ namespace Spring.Objects.Factory.Xml
                 {
                     #region Instrumentation
 
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(
                             string.Format("Error while parsing autowire mode : '{0}' is an invalid value.",

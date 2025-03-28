@@ -24,6 +24,7 @@ using System.Collections;
 using System.Web;
 using System.Web.Caching;
 using System.Web.SessionState;
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Context.Attributes;
 using Spring.Context.Support;
@@ -81,7 +82,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     if (s_eventHandlersRegistered) return;
 
-                    if (log.IsDebugEnabled()) log.Debug("hooking up event handlers");
+                    if (log.IsEnabled(LogLevel.Debug)) log.Debug("hooking up event handlers");
                     VirtualEnvironment.EndRequest += OnEndRequest;
                     VirtualEnvironment.EndSession += OnEndSession;
 
@@ -529,7 +530,8 @@ namespace Spring.Objects.Factory.Support
                 }
                 catch (Exception ex)
                 {
-                    log.Fatal(string.Format("error during disposing session item with key '{0}'", key), ex);
+                    string message = string.Format("error during disposing session item with key '{0}'", key);
+                    log.LogCritical(ex, message);
                 }
             }
         }

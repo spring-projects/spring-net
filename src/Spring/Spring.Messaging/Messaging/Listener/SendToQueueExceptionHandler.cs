@@ -24,7 +24,7 @@ using Experimental.System.Messaging;
 #else
 using System.Messaging;
 #endif
-
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Listener
 {
@@ -156,7 +156,7 @@ namespace Spring.Messaging.Listener
             {
                 #region Logging
 
-                if (LOG.IsInfoEnabled())
+                if (LOG.IsEnabled(LogLevel.Information))
                 {
                     LOG.Info("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
                 }
@@ -170,7 +170,7 @@ namespace Spring.Messaging.Listener
             {
                 #region Logging
 
-                if (LOG.IsErrorEnabled())
+                if (LOG.IsEnabled(LogLevel.Error))
                 {
                     LOG.Error("Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].",e);
                     LOG.Error("Message will not be processed.  Message Body = " + message.Body);

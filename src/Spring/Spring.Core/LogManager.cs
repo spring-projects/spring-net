@@ -39,18 +39,9 @@ public static class LoggerExtensions
     public static void Debug(this ILogger logger, string message) => logger.LogDebug(message);
     public static void Debug(this ILogger logger, string message, Exception exception) => logger.LogDebug(exception, message);
     public static void Trace(this ILogger logger, string message) => logger.LogTrace(message);
-    public static void Trace(this ILogger logger, string message, Exception exception) => logger.LogTrace(exception, message);
     public static void Info(this ILogger logger, string message) => logger.LogInformation(message);
     public static void Warn(this ILogger logger, string message) => logger.LogWarning(message);
     public static void Warn(this ILogger logger, string message, Exception exception) => logger.LogWarning(exception, message);
     public static void Error(this ILogger logger, string message) => logger.LogError(message);
     public static void Error(this ILogger logger, string message, Exception exception) => logger.LogError(exception, message);
-    public static void Fatal(this ILogger logger, string message) => logger.LogCritical(message);
-    public static void Fatal(this ILogger logger, string message, Exception exception) => logger.LogCritical(exception, message);
-    public static bool IsDebugEnabled(this ILogger logger) => logger.IsEnabled(LogLevel.Debug);
-    public static bool IsTraceEnabled(this ILogger logger) => logger.IsEnabled(LogLevel.Trace);
-    public static bool IsInfoEnabled(this ILogger logger) => logger.IsEnabled(LogLevel.Information);
-    public static bool IsWarnEnabled(this ILogger logger) => logger.IsEnabled(LogLevel.Warning);
-    public static bool IsErrorEnabled(this ILogger logger) => logger.IsEnabled(LogLevel.Error);
-    public static bool IsFatalEnabled(this ILogger logger) => logger.IsEnabled(LogLevel.Critical);
 }

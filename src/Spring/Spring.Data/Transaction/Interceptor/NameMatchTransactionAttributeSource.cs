@@ -21,6 +21,7 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Util;
 
 namespace Spring.Transaction.Interceptor
@@ -157,7 +158,7 @@ namespace Spring.Transaction.Interceptor
 		public void AddTransactionMethod( string methodName, ITransactionAttribute attribute )
         {
             #region Instrumentation
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Adding transactional method [" + methodName + "] with attribute [" + attribute + "]");
             }

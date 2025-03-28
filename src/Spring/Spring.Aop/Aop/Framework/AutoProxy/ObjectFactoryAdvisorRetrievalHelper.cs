@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
@@ -87,7 +88,7 @@ namespace Spring.Aop.Framework.AutoProxy
                             ObjectCurrentlyInCreationException oce = (ObjectCurrentlyInCreationException)rootEx;
                             if (_objectFactory.IsCurrentlyInCreation(oce.ObjectName))
                             {
-                                if (_log.IsDebugEnabled())
+                                if (_log.IsEnabled(LogLevel.Debug))
                                 {
                                     _log.Debug(string.Format("Ignoring currently created advisor '{0}': exception message = {1}",
                                         name, ex.Message));

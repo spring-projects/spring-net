@@ -17,6 +17,7 @@
 using System.Data;
 using System.Reflection;
 using System.Transactions;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Transaction;
 
@@ -284,7 +285,7 @@ namespace Spring.Data.NHibernate
             {
                 SessionHolder sessionHolder =
                     (SessionHolder)TransactionSynchronizationManager.GetResource(SessionFactory);
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("Found thread-bound Session [" + sessionHolder.Session +
                         "] for Hibernate transaction");
@@ -377,7 +378,7 @@ namespace Spring.Data.NHibernate
                     ISession newSession = (interceptor != null ?
                             SessionFactory.OpenSession(interceptor) : SessionFactory.OpenSession());
 
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug("Opened new Session [" + newSession + "] for Hibernate transaction");
                     }
@@ -432,7 +433,7 @@ namespace Spring.Data.NHibernate
                     {
                         conHolder.TimeoutInSeconds = timeout;
                     }
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug("Exposing Hibernate transaction as ADO transaction [" + con + "]");
                     }
@@ -930,7 +931,7 @@ namespace Spring.Data.NHibernate
             
             if (txObject.NewSessionHolder)
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("Closing Hibernate Session [" + session + "] after transaction");
                 }
@@ -939,7 +940,7 @@ namespace Spring.Data.NHibernate
             }
             else
             {
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("Not closing pre-bound Hibernate Session [" + session + "] after transaction");
                 }
@@ -1098,7 +1099,7 @@ namespace Spring.Data.NHibernate
                 if (sfDbProvider != null)
                 {
                     // Use the SessionFactory's DataSource for exposing transactions to ADO.NET code.
-                    if (log.IsInfoEnabled())
+                    if (log.IsEnabled(LogLevel.Information))
                     {
                         log.Info("Derived DbProvider [" + sfDbProvider.DbMetadata.ProductName +
                                 "] of Hibernate SessionFactory for HibernateTransactionManager");

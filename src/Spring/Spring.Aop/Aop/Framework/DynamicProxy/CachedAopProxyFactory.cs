@@ -102,7 +102,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 {
                     #region Instrumentation
 
-                    if (logger.IsDebugEnabled())
+                    if (logger.IsEnabled(LogLevel.Debug))
                     {
                         logger.LogDebug("AOP proxy type found in cache for {CacheKey}", cacheKey);
                     }

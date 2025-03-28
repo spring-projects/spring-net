@@ -19,6 +19,7 @@
 using Spring.Messaging.Nms.Core;
 using Spring.Objects.Factory;
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Nms.Support
 {
@@ -128,7 +129,7 @@ namespace Spring.Messaging.Nms.Support
             }
             if (Tracer.Trace == null)
             {
-                if (logger.IsTraceEnabled())
+                if (logger.IsEnabled(LogLevel.Trace))
                 {
                     logger.Trace("Setting Apache.NMS.Tracer.Trace to default implementation that directs output to Common.Logging");
                 }

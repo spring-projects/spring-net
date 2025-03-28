@@ -19,7 +19,7 @@
 #endregion
 
 using System.ServiceModel;
-
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 
 namespace Spring.ServiceModel
@@ -75,7 +75,7 @@ namespace Spring.ServiceModel
         {
             #region Instrumentation
 
-            if (Log.IsDebugEnabled())
+            if (Log.IsEnabled(LogLevel.Debug))
             {
                 Log.Debug(String.Format(
                     "Creating channel of type '{0}' for the specified endpoint '{1}'...",

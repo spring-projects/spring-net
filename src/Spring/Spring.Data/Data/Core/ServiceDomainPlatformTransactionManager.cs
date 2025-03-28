@@ -19,6 +19,7 @@
 #endregion
 
 using System.EnterpriseServices;
+using Microsoft.Extensions.Logging;
 using Spring.Data.Support;
 using Spring.Objects.Factory;
 using Spring.Transaction;
@@ -147,7 +148,7 @@ namespace Spring.Data.Core
             SimpleServiceConfig serviceConfig = CreateServiceConfig(definition);
             //The context is created when we call Enter.
             serviceDomainTxObject.ServiceDomainAdapter.Enter(serviceConfig);
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Context created. TransactionId = " + ContextUtil.TransactionId
                           + ", ActivityId = " + ContextUtil.ActivityId);
@@ -196,7 +197,7 @@ namespace Spring.Data.Core
             {
 
                 case System.Data.IsolationLevel.Chaos:
-                    if (log.IsInfoEnabled())
+                    if (log.IsEnabled(LogLevel.Information))
                     {
                         log.Info("IsolationLevel Chaos does not have a direct counterpart in EnterpriseServices, using Any");
                     }
@@ -215,7 +216,7 @@ namespace Spring.Data.Core
                     serviceConfig.IsolationLevel = TransactionIsolationLevel.Serializable;
                     break;
                 case System.Data.IsolationLevel.Snapshot:
-                    if (log.IsInfoEnabled())
+                    if (log.IsEnabled(LogLevel.Information))
                     {
                         log.Info("IsolationLevel Snapshot does not have a direct counterpart in EnterpriseServices, using ReadCommitted.  Introduced in SqlServer 2005.  Consider using System.Transactions for transaction management instead.");
                     }
@@ -281,7 +282,7 @@ namespace Spring.Data.Core
                     }
                 }
                 TransactionStatus serviceDomainTxstatus = txObject.ServiceDomainAdapter.Leave();
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("ServiceDomain Transaction Status upon leaving ServiceDomain = " + serviceDomainTxstatus);
                 }

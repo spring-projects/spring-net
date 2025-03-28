@@ -21,7 +21,7 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Resources;
-
+using Microsoft.Extensions.Logging;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
@@ -355,7 +355,7 @@ namespace Spring.Objects.Factory.Support
 
                         #region Instrumentation
 
-                        if (log.IsDebugEnabled())
+                        if (log.IsEnabled(LogLevel.Debug))
                         {
                             log.Debug("Found object name '" + name + "'");
                         }
@@ -375,7 +375,7 @@ namespace Spring.Objects.Factory.Support
 
                         #region Instrumentation
 
-                        if (log.IsDebugEnabled())
+                        if (log.IsEnabled(LogLevel.Debug))
                         {
                             log.Debug("Invalid object name and property [" + nameAndProperty + "]");
                         }
@@ -475,7 +475,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
-            if (log.IsDebugEnabled())
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(pvs.ToString());
             }

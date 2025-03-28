@@ -23,6 +23,7 @@ using System.Data;
 using System.Data.Common;
 using System.Globalization;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Dao.Support;
 using Spring.Data.Common;
 using Spring.Data.Support;
@@ -365,7 +366,7 @@ namespace Spring.Data.Core
         public virtual int ExecuteNonQuery(CommandType cmdType, string cmdText)
         {
             #region Instrumentation
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing NonQuery " + cmdType + "[" + cmdText + "]");
             }
@@ -404,7 +405,7 @@ namespace Spring.Data.Core
                                            IDbParameters parameters)
         {
             #region Instrumentation
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing NonQuery.  " + cmdType + "[" + cmdText + "]");
             }
@@ -426,7 +427,7 @@ namespace Spring.Data.Core
                                            ICommandSetter commandSetter)
         {
             #region Instrumentation
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing NonQuery. " + cmdType + "[" + cmdText + "]");
             }
@@ -519,7 +520,7 @@ namespace Spring.Data.Core
                                     ICommandSetter commandSetter)
         {
             #region Instrumentation
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing ExecuteScalar. " + cmdType + "[" + cmdText + "]");
             }
@@ -719,7 +720,7 @@ namespace Spring.Data.Core
 
             //TODO check for parameter placeholders...
 
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing SQL [" + sql + "]");
             }
@@ -770,7 +771,7 @@ namespace Spring.Data.Core
 
             //TODO check for parameter placeholders...
 
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing SQL [" + sql + "]");
             }
@@ -1136,7 +1137,7 @@ namespace Spring.Data.Core
             ValidateFillArguments(dataTable, sql);
 
             #region Instrumentation
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing DataTableFill " + commandType + "[" + sql + "]");
             }
@@ -1154,7 +1155,7 @@ namespace Spring.Data.Core
             ValidateFillArguments(dataTable, sql);
 
             #region Instrumentation
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing DataTableFill " + commandType + "[" + sql + "] with table mapping name " + tableMappingName);
             }
@@ -1475,7 +1476,7 @@ namespace Spring.Data.Core
             ValidateFillArguments(dataSet, sql);
 
             #region Instrumentation
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing DataSetFill " + commandType + "[" + sql + "]");
             }
@@ -1495,7 +1496,7 @@ namespace Spring.Data.Core
             ValidateFillArguments(dataSet, sql);
 
             #region Instrumentation
-            if (LOG.IsDebugEnabled())
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing DataSetFill " + commandType + "[" + sql + "] with table names " + tableNames);
             }
@@ -2790,7 +2791,7 @@ namespace Spring.Data.Core
                     commandSetter.SetValues(command);
                 }
                 Object rowsAffected = command.ExecuteNonQuery();
-                if (LOG.IsDebugEnabled())
+                if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.Debug("ExecuteNonQuery affected " + rowsAffected + " rows");
                 }
@@ -2856,7 +2857,7 @@ namespace Spring.Data.Core
                     commandSetter.SetValues(command);
                 }
                 Object returnValue = command.ExecuteScalar();
-                if (LOG.IsDebugEnabled())
+                if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.Debug("ExecuteScalar return value = " + returnValue);
                 }

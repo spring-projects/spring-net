@@ -18,7 +18,7 @@
 
 #endregion
 
-
+using Microsoft.Extensions.Logging;
 using Spring.Context.Events;
 using Spring.Util;
 
@@ -172,7 +172,7 @@ namespace Spring.Context.Support
 
                 #region Instrumentation
 
-                if (log.IsDebugEnabled())
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(String.Format("Registering context '{0}' under name '{1}'.", context, context.Name));
                 }
@@ -288,7 +288,7 @@ namespace Spring.Context.Support
 
                     #region Instrumentation
 
-                    if (log.IsDebugEnabled())
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(String.Format(
                             "Returning context '{0}' registered under name '{1}'.", ctx, name));
@@ -322,7 +322,7 @@ namespace Spring.Context.Support
                 // contexts will be removed from contextMap during OnContextEvent handler
                 // but someone might choose to override AbstractApplicationContext.Dispose() without
                 // calling base.Dispose() ...
-                if (log.IsWarnEnabled())
+                if (log.IsEnabled(LogLevel.Warning))
                 {
                     if (instance.contextMap.Count > 0)
                     {
