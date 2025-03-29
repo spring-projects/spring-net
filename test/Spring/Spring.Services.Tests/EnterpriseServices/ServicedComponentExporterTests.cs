@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2007 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.EnterpriseServices;
 using System.Reflection;
@@ -29,8 +23,6 @@ using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.EnterpriseServices;
 
@@ -168,8 +160,6 @@ public class ServicedComponentExporterTests
         return assembly.GetType(objectName + "Service");
     }
 
-    #region Private helpers & classes
-
     public class CountingMethodInterceptor : IMethodInterceptor
     {
         private int Calls = 0;
@@ -200,6 +190,4 @@ public class ServicedComponentExporterTests
 
         return (Type) result;
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using AopAlliance.Aop;
 using NUnit.Framework;
@@ -43,8 +39,6 @@ public class InfrastructureAdvisorAutoProxyCreatorTests
     {
         public string Name;
 
-        #region Implementation of IAdvisor
-
         public bool IsPerInstance
         {
             get { throw new NotImplementedException(); }
@@ -54,8 +48,6 @@ public class InfrastructureAdvisorAutoProxyCreatorTests
         {
             get { throw new NotImplementedException(); }
         }
-
-        #endregion
     }
 
     [Test]

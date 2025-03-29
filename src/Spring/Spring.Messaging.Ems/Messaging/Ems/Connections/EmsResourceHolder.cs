@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using Microsoft.Extensions.Logging;
@@ -38,13 +34,7 @@ namespace Spring.Messaging.Ems.Connections;
 /// <author>Mark Pollack (.NET)</author>
 public class EmsResourceHolder : ResourceHolderSupport
 {
-    #region Logging
-
     private static readonly ILogger<EmsResourceHolder> logger = LogManager.GetLogger<EmsResourceHolder>();
-
-    #endregion
-
-    #region Fields
 
     private IConnectionFactory connectionFactory;
 
@@ -55,10 +45,6 @@ public class EmsResourceHolder : ResourceHolderSupport
     private IList sessions = new LinkedList();
 
     private IDictionary sessionsPerConnection = new Hashtable();
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary> Create a new EmsResourceHolder that is open for resources to be added.</summary>
     public EmsResourceHolder()
@@ -114,10 +100,6 @@ public class EmsResourceHolder : ResourceHolderSupport
         this.frozen = true;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets a value indicating whether this <see cref="EmsResourceHolder"/> is frozen, namely that
     /// additional resources can be registered with the holder.  If using any of the constructors with
@@ -131,10 +113,6 @@ public class EmsResourceHolder : ResourceHolderSupport
             return frozen;
         }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Adds the connection to the list of resources managed by this holder.
@@ -291,6 +269,4 @@ public class EmsResourceHolder : ResourceHolderSupport
     {
         return this.sessions.Contains(session);
     }
-
-    #endregion
 }

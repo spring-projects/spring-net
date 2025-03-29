@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Text.RegularExpressions;
 using Spring.Expressions;
 using Spring.Util;
@@ -30,8 +26,6 @@ namespace Spring.Validation.Validators;
 /// <author>Goran Milosavljevic</author>
 public class ISBNValidator : BaseSimpleValidator
 {
-    #region Constructors
-
     /// <summary>
     /// Creates a new instance of the <b>ISBNValidator</b> class.
     /// </summary>
@@ -61,10 +55,6 @@ public class ISBNValidator : BaseSimpleValidator
         AssertUtils.ArgumentNotNull(test, "test");
     }
 
-    #endregion
-
-    #region BaseValidator methods
-
     /// <summary>
     /// Validates the supplied <paramref name="objectToValidate"/>.
     /// </summary>
@@ -88,10 +78,6 @@ public class ISBNValidator : BaseSimpleValidator
 
         return IsValid(isbn);
     }
-
-    #endregion
-
-    #region ISBNValidator methods
 
     /// <summary>
     /// Validates <paramref name="isbn"/> against ISBN-10 or ISBN-13 validation
@@ -129,10 +115,6 @@ public class ISBNValidator : BaseSimpleValidator
         return match.Success && match.Index == 0 && match.Length == code.Length;
     }
 
-    #endregion
-
-    #region Data members
-
     private static readonly String SEP = "(?:\\-|\\s)";
     private static readonly String GROUP = "(\\d{1,5})";
     private static readonly String PUBLISHER = "(\\d{1,7})";
@@ -157,6 +139,4 @@ public class ISBNValidator : BaseSimpleValidator
     /// 1-5 characters, third 1-7, fourth 1-6, and fifth is 1 digit.
     /// </remarks>
     static readonly String ISBN13_PATTERN = "^(978|979)(?:(\\d{10})|(?:" + SEP + GROUP + SEP + PUBLISHER + SEP + TITLE + SEP + "([0-9])))$";
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Apache.NMS;
 using FakeItEasy;
 using NUnit.Framework;
 using Spring.Messaging.Nms.Core;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Messaging.Nms.Connections;
 
@@ -248,15 +240,11 @@ internal class AssertSessionCallback : ISessionCallback
         this.session = session;
     }
 
-    #region ISessionCallback Members
-
     public object DoInNms(ISession session)
     {
         Assert.IsTrue(this.session == session);
         return null;
     }
-
-    #endregion
 }
 
 internal class AssertNotSameSessionCallback : ISessionCallback
@@ -268,13 +256,9 @@ internal class AssertNotSameSessionCallback : ISessionCallback
         this.session = session;
     }
 
-    #region ISessionCallback Members
-
     public object DoInNms(ISession session)
     {
         Assert.IsTrue(this.session != session);
         return null;
     }
-
-    #endregion
 }

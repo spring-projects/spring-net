@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Data;
 using System.Reflection;
 using Spring.Dao;
@@ -31,17 +27,11 @@ namespace Spring.Data.Common;
 /// <author>Mark Pollack (.NET)</author>
 public class DbParameters : IDbParameters
 {
-    #region Fields
-
     private IDbProvider dbProvider;
 
     //Just used as a container for the underlying parameter collection.
     private IDbCommand dbCommand;
     private IDataParameterCollection dataParameterCollection;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DbParameters"/> class.
@@ -52,16 +42,6 @@ public class DbParameters : IDbParameters
         dbCommand = dbProvider.CreateCommand();
         dataParameterCollection = dbCommand.Parameters;
     }
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Methods
-
-    #endregion
 
     public IDataParameter this[string parameterName]
     {

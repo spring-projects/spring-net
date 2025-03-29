@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Reflection;
 using Spring.Util;
 
 namespace Spring.Reflection.Dynamic;
-
-#region IDynamicProperty interface
 
 /// <summary>
 /// Defines methods that dynamic property class has to implement.
@@ -77,10 +71,6 @@ public interface IDynamicProperty
     void SetValue(object target, object value, params object[] index);
 }
 
-#endregion
-
-#region Safe wrapper
-
 /// <summary>
 /// Safe wrapper for the dynamic property.
 /// </summary>
@@ -92,8 +82,6 @@ public interface IDynamicProperty
 public class SafeProperty : IDynamicProperty
 {
     private readonly PropertyInfo propertyInfo;
-
-    #region Cache
 
     private static readonly IDictionary<PropertyInfo, DynamicPropertyCacheEntry> propertyCache = new Dictionary<PropertyInfo, DynamicPropertyCacheEntry>();
 
@@ -129,8 +117,6 @@ public class SafeProperty : IDynamicProperty
 
         return propertyInfo;
     }
-
-    #endregion
 
     private readonly PropertyGetterDelegate getter;
     private readonly PropertySetterDelegate setter;
@@ -215,8 +201,6 @@ public class SafeProperty : IDynamicProperty
         get { return propertyInfo; }
     }
 }
-
-#endregion
 
 /// <summary>
 /// Factory class for dynamic properties.

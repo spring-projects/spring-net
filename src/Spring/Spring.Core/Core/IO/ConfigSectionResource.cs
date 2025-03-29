@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text;
 using System.Xml;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -48,8 +40,6 @@ public class ConfigSectionResource : AbstractResource
 {
     private XmlElement configElement;
     private string sectionName;
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates new instance of the
@@ -85,10 +75,6 @@ public class ConfigSectionResource : AbstractResource
         sectionName = GetResourceNameWithoutProtocol(resourceName);
         configElement = (XmlElement) ConfigurationUtils.GetSection(sectionName);
     }
-
-    #endregion
-
-    #region IResource Members
 
     /// <summary>
     /// Returns the <see cref="System.Uri"/> handle for this resource.
@@ -158,10 +144,6 @@ public class ConfigSectionResource : AbstractResource
         get { return false; }
     }
 
-    #endregion
-
-    #region IInputStreamSource Members
-
     /// <summary>
     /// Return an <see cref="System.IO.Stream"/> for this resource.
     /// </summary>
@@ -185,10 +167,6 @@ public class ConfigSectionResource : AbstractResource
         }
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Exposes the actual <see cref="System.Xml.XmlElement"/> for the
     /// configuration section.
@@ -202,6 +180,4 @@ public class ConfigSectionResource : AbstractResource
     {
         get { return configElement; }
     }
-
-    #endregion
 }

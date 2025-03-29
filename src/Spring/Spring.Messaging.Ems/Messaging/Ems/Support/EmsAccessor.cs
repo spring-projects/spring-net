@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Messaging.Ems.Common;
 using Spring.Objects.Factory;
@@ -34,23 +30,13 @@ namespace Spring.Messaging.Ems.Support;
 /// <author>Mark Pollack (.NET)</author>
 public class EmsAccessor : IInitializingObject
 {
-    #region Logging
-
     private readonly ILogger<EmsAccessor> logger = LogManager.GetLogger<EmsAccessor>();
-
-    #endregion
-
-    #region Fields
 
     private IConnectionFactory connectionFactory;
 
     private bool sessionTransacted = false;
 
     private int sessionAcknowledgeMode = Session.AUTO_ACKNOWLEDGE;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the connection factory to use for obtaining EMS Connections.
@@ -118,8 +104,6 @@ public class EmsAccessor : IInitializingObject
             }
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Verify that ConnectionFactory property has been set.

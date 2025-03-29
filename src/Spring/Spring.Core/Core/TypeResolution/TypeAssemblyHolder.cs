@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.TypeResolution;
 
@@ -32,8 +24,6 @@ namespace Spring.Core.TypeResolution;
 /// </summary>
 public class TypeAssemblyHolder
 {
-    #region Constants
-
     /// <summary>
     /// The string that separates a <see cref="System.Type"/> name
     /// from the name of it's attendant <see cref="System.Reflection.Assembly"/>
@@ -41,16 +31,8 @@ public class TypeAssemblyHolder
     /// </summary>
     public const string TypeAssemblySeparator = ",";
 
-    #endregion
-
-    #region Fields
-
     private string unresolvedAssemblyName;
     private string unresolvedTypeName;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the TypeAssemblyHolder class.
@@ -62,10 +44,6 @@ public class TypeAssemblyHolder
     {
         SplitTypeAndAssemblyNames(unresolvedTypeName);
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The (unresolved) type name portion of the original type name.
@@ -91,10 +69,6 @@ public class TypeAssemblyHolder
         get { return StringUtils.HasText(AssemblyName); }
     }
 
-    #endregion
-
-    #region Methods
-
     private void SplitTypeAndAssemblyNames(string originalTypeName)
     {
         // generic types may look like:
@@ -115,6 +89,4 @@ public class TypeAssemblyHolder
                 typeAssemblyIndex + 1).Trim();
         }
     }
-
-    #endregion
 }

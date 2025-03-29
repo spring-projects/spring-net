@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Aop;
 using Spring.Aop.Support;
@@ -42,22 +38,16 @@ public class ObjectFactoryTransactionAttributeSourceAdvisor : AbstractObjectFact
             this.outer = outer;
         }
 
-        #region Overrides of AbstractTransactionAttributeSourcePointcut
-
         protected override ITransactionAttributeSource TransactionAttributeSource
         {
             get { return outer._transactionAttributeSource; }
         }
-
-        #endregion
     }
 
     public ITransactionAttributeSource TransactionAttributeSource
     {
         set { _transactionAttributeSource = value; }
     }
-
-    #region Overrides of AbstractPointcutAdvisor
 
     /// <summary>
     /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
@@ -67,6 +57,4 @@ public class ObjectFactoryTransactionAttributeSourceAdvisor : AbstractObjectFact
         get { return _pointcut; }
         set { _pointcut = value; }
     }
-
-    #endregion
 }

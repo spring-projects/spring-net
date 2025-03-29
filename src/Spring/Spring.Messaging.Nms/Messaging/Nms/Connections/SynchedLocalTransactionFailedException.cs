@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 using Apache.NMS;
 
@@ -31,8 +27,6 @@ namespace Spring.Messaging.Nms.Connections;
 [Serializable]
 public class SynchedLocalTransactionFailedException : NMSException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Initializes a new instance of the <see cref="SynchedLocalTransactionFailedException"/> class.
     /// </summary>
@@ -74,6 +68,4 @@ public class SynchedLocalTransactionFailedException : NMSException
         : base(info, context)
     {
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Globalization;
 using Spring.Core.IO;
-
-#endregion
 
 namespace Spring.Core.TypeConversion;
 
@@ -37,8 +29,6 @@ namespace Spring.Core.TypeConversion;
 public class StreamConverter : TypeConverter
 {
     private ResourceConverter resourceConverter;
-
-    #region Constructors
 
     /// <summary>
     /// Create a new StreamConverter using the default
@@ -60,10 +50,6 @@ public class StreamConverter : TypeConverter
             ? new ResourceConverter()
             : resourceConverter;
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Returns whether this converter can convert an object of one
@@ -125,6 +111,4 @@ public class StreamConverter : TypeConverter
 
         return base.ConvertFrom(context, culture, val);
     }
-
-    #endregion
 }

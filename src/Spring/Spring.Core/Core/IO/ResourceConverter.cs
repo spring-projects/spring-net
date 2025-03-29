@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -67,8 +59,6 @@ public class ResourceConverter : TypeConverter
     private static readonly ILogger<ResourceConverter> _log = LogManager.GetLogger<ResourceConverter>();
     private IResourceLoader _resourceLoader;
 
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Core.IO.ResourceConverter"/> class.
@@ -88,8 +78,6 @@ public class ResourceConverter : TypeConverter
         AssertUtils.ArgumentNotNull(resourceLoader, "resourceLoader");
         _resourceLoader = resourceLoader;
     }
-
-    #endregion
 
     /// <summary>
     /// Returns whether this converter can convert an object of one
@@ -183,8 +171,6 @@ public class ResourceConverter : TypeConverter
             }
             else
             {
-                #region Instrumentation
-
                 if (_log.IsEnabled(LogLevel.Warning))
                 {
                     _log.LogWarning(string.Format(
@@ -192,8 +178,6 @@ public class ResourceConverter : TypeConverter
                         "Could not resolve placeholder '{0}' in resource path " +
                         "'{1}' as an environment variable.", expression, path));
                 }
-
-                #endregion
             }
         }
 

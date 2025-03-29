@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004-2009 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Apache.NMS;
 using NUnit.Framework;
@@ -78,8 +74,6 @@ public class NmsTemplateTests : AbstractDependencyInjectionSpringContextTests
         Assert.AreEqual(msgText, text);
     }
 
-    #region Overrides of AbstractDependencyInjectionSpringContextTests
-
     /// <summary>
     /// Subclasses must implement this property to return the locations of their
     /// config files. A plain path will be treated as a file system location.
@@ -89,6 +83,4 @@ public class NmsTemplateTests : AbstractDependencyInjectionSpringContextTests
     {
         get { return new string[] { "assembly://Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Core/NmsTemplateTests.xml" }; }
     }
-
-    #endregion
 }

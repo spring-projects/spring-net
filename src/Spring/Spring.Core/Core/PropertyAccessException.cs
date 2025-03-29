@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -52,8 +44,6 @@ public abstract class PropertyAccessException : ReflectionException, IErrorCoded
 
     private PropertyChangeEventArgs _propertyChangeEventArgs;
 
-    #region Methods
-
     /// <summary>
     /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
     /// the data needed to serialize the target object.
@@ -73,8 +63,6 @@ public abstract class PropertyAccessException : ReflectionException, IErrorCoded
         base.GetObjectData(info, context);
         info.AddValue("PropertyChangeArgs", PropertyChangeArgs);
     }
-
-    #endregion
 
     /// <summary>
     /// Create a new instance of the PropertyAccessException class.

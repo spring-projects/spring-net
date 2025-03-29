@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Text.RegularExpressions;
 using AopAlliance.Intercept;
@@ -52,8 +48,6 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
         timeSpanConverter = new TimeSpanConverter();
     }
 
-    #region Fields
-
     private SleepHandler sleepHandler;
 
     [NonSerialized] private RetryExceptionHandler retryExceptionHandler;
@@ -69,10 +63,6 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
 
     //retry 3x rate 10n+5
     private string rateRegex = @"^(\d+)x\s+(rate)\s+(\(.*?\))?$";
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the retry expression.
@@ -104,8 +94,6 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
         set { onExceptionRegex = value; }
     }
 
-    #endregion
-
     /// <summary>
     /// Creates a new RetryAdvice instance, using <see cref="Thread.Sleep(TimeSpan)"/> for delaying retries
     /// </summary>
@@ -121,8 +109,6 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
     {
         this.sleepHandler = sleepHandler;
     }
-
-    #region IMethodInterceptor implementation
 
     /// <summary>
     /// Implement this method to perform extra treatments before and after
@@ -225,10 +211,6 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
         }
     }
 
-    #endregion
-
-    #region IInitializingObject implementation
-
     /// <summary>
     /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
     /// after it has injected all of an object's dependencies.
@@ -270,8 +252,6 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
 
         retryExceptionHandler = handler;
     }
-
-    #endregion
 
     /// <summary>
     /// Parses the specified handler string.

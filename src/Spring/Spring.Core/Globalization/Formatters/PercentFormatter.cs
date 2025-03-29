@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using Spring.Util;
@@ -49,8 +45,6 @@ public class PercentFormatter : IFormatter
     private static int[] negativePatterns = new int[] { 8, 5, 1 };
 
     private NumberFormatInfo formatInfo;
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PercentFormatter"/> class
@@ -91,10 +85,6 @@ public class PercentFormatter : IFormatter
     {
         this.formatInfo = formatInfo;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the number of decimal digits.
@@ -183,8 +173,6 @@ public class PercentFormatter : IFormatter
         get { return formatInfo.PerMilleSymbol; }
         set { formatInfo.PerMilleSymbol = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Formats the specified percentage value.

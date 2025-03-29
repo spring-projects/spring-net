@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Xml;
 using NVelocity.Runtime;
@@ -29,8 +23,6 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Template.Velocity.Config;
 
@@ -388,8 +380,6 @@ public class TemplateNamespaceParser : ObjectsNamespaceParser
     }
 }
 
-#region Element & Attribute Name Constants
-
 /// <summary>
 /// Template definition constants
 /// </summary>
@@ -505,5 +495,3 @@ public class TemplateDefinitionConstants
     /// </summary>
     public const string SpringResourceLoaderClass = "Spring.Template.Velocity.SpringResourceLoader; Spring.Template.Velocity.Castle";
 }
-
-#endregion

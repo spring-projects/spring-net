@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Apache.NMS;
 using FakeItEasy;
@@ -437,8 +433,6 @@ public class TestSession : ISession
         get { throw new NotImplementedException(); }
     }
 
-    #region Transaction State Events
-
     public void TransactionStarted()
     {
         if (TransactionStartedListener != null)
@@ -468,8 +462,6 @@ public class TestSession : ISession
     public event SessionTxEventDelegate TransactionCommittedListener;
 
     public event SessionTxEventDelegate TransactionRolledBackListener;
-
-    #endregion
 
     public void Dispose()
     {

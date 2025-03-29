@@ -10,11 +10,7 @@ public class LoggingExceptionHandler : IExceptionHandler
 {
     private TimeSpan recoveryTimeSpan;
 
-    #region Logging Definition
-
     private static readonly ILog LOG = LogManager.GetLogger(typeof(LoggingExceptionHandler));
-
-    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LoggingExceptionHandler"/> class with
@@ -34,8 +30,6 @@ public class LoggingExceptionHandler : IExceptionHandler
     {
         set { recoveryTimeSpan = value; }
     }
-
-    #region IExceptionListener Members
 
     public void OnException(Exception exception, Message message)
     {
@@ -60,6 +54,4 @@ public class LoggingExceptionHandler : IExceptionHandler
             LOG.LogError(exception, "got exception");
         }
     }
-
-    #endregion
 }

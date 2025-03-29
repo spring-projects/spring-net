@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Pool;
 using Spring.Pool.Support;
-
-#endregion
 
 namespace Spring.Aop.Target;
 
@@ -65,14 +57,10 @@ public class SimplePoolTargetSource : AbstractPoolingTargetSource, IPoolableObje
     /// <seealso cref="Spring.Objects.Factory.IObjectFactoryAware.ObjectFactory"/>
     protected override void CreatePool(IObjectFactory factory)
     {
-        #region Instrumentation
-
         if (logger.IsEnabled(LogLevel.Debug))
         {
             logger.LogDebug("Creating object pool.");
         }
-
-        #endregion
 
         this.objectPool = CreateObjectPool();
     }
@@ -134,14 +122,10 @@ public class SimplePoolTargetSource : AbstractPoolingTargetSource, IPoolableObje
     /// </remarks>
     public override void Dispose()
     {
-        #region Instrumentation
-
         if (logger.IsEnabled(LogLevel.Debug))
         {
             logger.LogDebug("Closing pool...");
         }
-
-        #endregion
 
         this.objectPool.Close();
     }

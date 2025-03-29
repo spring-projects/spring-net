@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Data;
 using Spring.Data.Common;
@@ -36,8 +32,6 @@ public abstract class AdoAccessor : IInitializingObject
     protected object AdoUtils;
 
     private int commandTimeout = -1;
-
-    #region Properties
 
     /// <summary>
     /// An instance of a DbProvider implementation.
@@ -99,8 +93,6 @@ public abstract class AdoAccessor : IInitializingObject
         get { return commandTimeout; }
         set { commandTimeout = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Prepare the command setting the transaction timeout.
@@ -209,8 +201,6 @@ public abstract class AdoAccessor : IInitializingObject
         return parameters;
     }
 
-    #region Parameter Creation Helper Methods
-
     /// <summary>
     /// Creates a new instance of <see cref="DbParameters"/>
     /// </summary>
@@ -237,6 +227,4 @@ public abstract class AdoAccessor : IInitializingObject
     /// <param name="includeReturnParameter">if set to <c>true</c> to include return parameter.</param>
     /// <returns>The stored procedure parameters</returns>
     public abstract IDataParameter[] DeriveParameters(string procedureName, bool includeReturnParameter);
-
-    #endregion
 }

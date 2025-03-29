@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Web.Support;
 
@@ -33,8 +25,6 @@ namespace Spring.Web.Support;
 public class MimeMediaType
 {
     private static readonly List<string> ContentTypes = new List<string>(new string[] { "application", "audio", "example", "image", "message", "model", "multipart", "text", "video" });
-
-    #region Predefined Instances
 
     /// <summary>
     /// Predefines common application media types
@@ -124,10 +114,6 @@ public class MimeMediaType
         public static readonly MimeMediaType Css = Parse("text/css");
     }
 
-    #endregion
-
-    #region Static Methods
-
     /// <summary>
     /// Parses a string into a <see cref="MimeMediaType"/> instance.
     /// </summary>
@@ -152,8 +138,6 @@ public class MimeMediaType
             return new MimeMediaType(parts[0], parts[1]);
         }
     }
-
-    #endregion Static Methods
 
     private readonly string _contentType;
     private readonly string _subType;

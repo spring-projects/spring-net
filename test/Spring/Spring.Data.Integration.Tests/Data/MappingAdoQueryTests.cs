@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Data.Common;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Data;
 
@@ -38,19 +30,9 @@ namespace Spring.Data;
 [TestFixture]
 public class MappingAdoQueryTests
 {
-    #region Fields
-
     IDbProvider dbProvider;
 
-    #endregion
-
-    #region Constants
-
     private IApplicationContext ctx;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MappingAdoQueryTests"/> class.
@@ -58,14 +40,6 @@ public class MappingAdoQueryTests
     public MappingAdoQueryTests()
     {
     }
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Methods
 
     [SetUp]
     public void CreateDbProvider()
@@ -106,6 +80,4 @@ public class MappingAdoQueryTests
         IList testObjectList = testObjectQuery.QueryByNamedParam(inParams);
         Assert.AreEqual(1, testObjectList.Count);
     }
-
-    #endregion
 }

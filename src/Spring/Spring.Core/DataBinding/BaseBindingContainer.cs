@@ -9,13 +9,7 @@ namespace Spring.DataBinding;
 /// <author>Aleksandar Seovic</author>
 public class BaseBindingContainer : IBindingContainer
 {
-    #region Fields
-
     private IList<IBinding> bindings = new List<IBinding>();
-
-    #endregion
-
-    #region Constructor(s)
 
     /// <summary>
     /// Creates a new instance of <see cref="BaseBindingContainer"/>.
@@ -23,10 +17,6 @@ public class BaseBindingContainer : IBindingContainer
     public BaseBindingContainer()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets a list of bindings for this container.
@@ -38,10 +28,6 @@ public class BaseBindingContainer : IBindingContainer
     {
         get { return bindings; }
     }
-
-    #endregion
-
-    #region IBindingContainer Implementation
 
     /// <summary>
     /// Gets a value indicating whether this instance has bindings.
@@ -157,10 +143,6 @@ public class BaseBindingContainer : IBindingContainer
         return binding;
     }
 
-    #endregion
-
-    #region IBinding Implementation
-
     /// <summary>
     /// Binds source object to target object.
     /// </summary>
@@ -254,6 +236,4 @@ public class BaseBindingContainer : IBindingContainer
     public virtual void SetErrorMessage(string messageId, params string[] errorProviders)
     {
     }
-
-    #endregion
 }

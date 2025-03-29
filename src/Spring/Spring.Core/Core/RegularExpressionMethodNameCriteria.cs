@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -36,16 +28,10 @@ namespace Spring.Core;
 /// <author>Rick Evans</author>
 public class RegularExpressionMethodNameCriteria : RegularExpressionCriteria
 {
-    #region Constants
-
     /// <summary>
     /// The default method name pattern... matches pretty much any method name.
     /// </summary>
     private const string MatchAnyMethodNamePattern = ".+";
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -71,10 +57,6 @@ public class RegularExpressionMethodNameCriteria : RegularExpressionCriteria
         Pattern = StringUtils.HasText(methodNamePattern) ? methodNamePattern : RegularExpressionMethodNameCriteria.MatchAnyMethodNamePattern;
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
     /// this instance?
@@ -95,6 +77,4 @@ public class RegularExpressionMethodNameCriteria : RegularExpressionCriteria
 
         return satisfied;
     }
-
-    #endregion
 }

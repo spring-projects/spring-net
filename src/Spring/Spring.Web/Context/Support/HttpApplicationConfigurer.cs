@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Web;
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Context.Support;
 
@@ -37,8 +29,6 @@ namespace Spring.Context.Support;
 public class HttpApplicationConfigurer
 {
     private static readonly ILogger<HttpApplicationConfigurer> Log = LogManager.GetLogger<HttpApplicationConfigurer>();
-
-    #region ModuleDefinitionsTable class
 
     private class ModuleDefinitionsTable : Hashtable
     {
@@ -76,8 +66,6 @@ public class HttpApplicationConfigurer
             }
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Holds shared application Template

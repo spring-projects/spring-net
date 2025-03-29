@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using NHibernate.Type;
 using Spring.Data.NHibernate.Support;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -34,18 +26,12 @@ namespace Spring.Data.NHibernate
     /// <author>Mark Pollack (.NET)</author>
     public class TestObjectDao : HibernateDaoSupport, ITestObjectDao
     {
-        #region Constructor (s)
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TestObjectDao"/> class.
         /// </summary>
         public TestObjectDao()
         {
         }
-
-        #endregion
-
-        #region ITestObjectDao Members
 
         public void Create(TestObject to)
         {
@@ -88,6 +74,6 @@ namespace Spring.Data.NHibernate
             throw new Exception("My expected exception for test purposes.");
         }
 
-        #endregion
+        
     }
 }

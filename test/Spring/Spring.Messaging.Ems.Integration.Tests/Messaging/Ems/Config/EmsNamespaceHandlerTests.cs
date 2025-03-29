@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Listener;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Messaging.Ems.Config;
 

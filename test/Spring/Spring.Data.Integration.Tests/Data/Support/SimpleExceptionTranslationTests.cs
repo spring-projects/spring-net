@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
@@ -28,30 +22,18 @@ using Spring.Context.Support;
 using Spring.Data.Common;
 using Spring.Data.Core;
 
-#endregion
-
 namespace Spring.Data.Support;
 
 [TestFixture]
 public class SimpleExceptionTranslationTests
 {
-    #region Fields
-
     private IDbProvider dbProvider;
     private IAdoOperations adoOperations;
-
-    #endregion
-
-    #region Constants
 
     /// <summary>
     /// The shared ILog instance for this class (and derived classes).
     /// </summary>
     protected static readonly ILog log = LogManager.GetLogger<SimpleExceptionTranslationTests>();
-
-    #endregion
-
-    #region Methods
 
     [SetUp]
     public void CreateAdoTemplate()
@@ -83,6 +65,4 @@ public class SimpleExceptionTranslationTests
             Assert.Fail("did not throw exception of type BadSqlGrammerException");
         }
     }
-
-    #endregion
 }

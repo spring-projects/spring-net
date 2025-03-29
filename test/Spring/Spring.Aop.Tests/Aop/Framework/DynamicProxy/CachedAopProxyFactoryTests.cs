@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Objects;
 using Spring.Aop.Support;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy;
 
@@ -144,8 +136,6 @@ public sealed class CachedAopProxyFactoryTests : DefaultAopProxyFactoryTests
         Assert.AreEqual(count, CachedAopProxyFactory.CountCachedTypes);
     }
 
-    #region Helper classes definitions
-
     public interface ICommand
     {
         void Execute();
@@ -165,6 +155,4 @@ public sealed class CachedAopProxyFactoryTests : DefaultAopProxyFactoryTests
         {
         }
     }
-
-    #endregion
 }

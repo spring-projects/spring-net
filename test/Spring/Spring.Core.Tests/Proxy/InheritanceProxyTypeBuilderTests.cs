@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Proxy;
 
@@ -322,8 +314,6 @@ public sealed class InheritanceProxyTypeBuilderTests : AbstractProxyTypeBuilderT
     }
 }
 
-#region Helper Classes
-
 public class NotSealedClass
 {
     public bool IsAnyoneThere()
@@ -335,5 +325,3 @@ public class NotSealedClass
 public sealed class SealedClass
 {
 }
-
-#endregion

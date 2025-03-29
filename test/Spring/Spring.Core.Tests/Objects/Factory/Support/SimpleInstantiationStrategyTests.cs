@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support;
 
@@ -34,8 +26,6 @@ namespace Spring.Objects.Factory.Support;
 [TestFixture]
 public sealed class SimpleInstantiationStrategyTests
 {
-    #region SetUp
-
     /// <summary>
     /// The setup logic executed before the execution of each individual test.
     /// </summary>
@@ -53,8 +43,6 @@ public sealed class SimpleInstantiationStrategyTests
         myFactory.RegisterObjectDefinition("TestObjectFactoryDefinition", TestObjectFactoryDefinition);
         _factory = myFactory;
     }
-
-    #endregion
 
     [Test]
     public void InstantiateWithNulls()

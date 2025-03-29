@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using Microsoft.Extensions.Logging;
@@ -146,16 +142,12 @@ internal class WebObjectDefinitionParserHelper : ObjectDefinitionParserHelper
             }
             catch (ArgumentException ex)
             {
-                #region Instrumentation
-
                 if (log.IsEnabled(LogLevel.Debug))
                 {
                     string message = string.Format("Error while parsing object scope : '{0}' is an invalid value.",
                         value);
                     log.LogDebug(ex, message);
                 }
-
-                #endregion
             }
         }
 

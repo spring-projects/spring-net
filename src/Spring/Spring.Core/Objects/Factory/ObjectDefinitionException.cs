@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Spring.Objects.Factory.Xml;
@@ -33,13 +29,7 @@ namespace Spring.Objects.Factory;
 [Serializable]
 public class ObjectDefinitionException : Exception
 {
-    #region Fields
-
     private string _className;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the ObjectDefinitionException class.
@@ -92,10 +82,6 @@ public class ObjectDefinitionException : Exception
         _className = info.GetString("MyClassName");
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The message about the exception.
     /// </summary>
@@ -106,10 +92,6 @@ public class ObjectDefinitionException : Exception
             return String.Format("The specified name ('{0}') cannot be used to resolve any System.Type instance", _className);
         }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
@@ -130,6 +112,4 @@ public class ObjectDefinitionException : Exception
         base.GetObjectData(info, context);
         info.AddValue("MyClassName", _className);
     }
-
-    #endregion
 }

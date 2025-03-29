@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 
@@ -47,16 +43,10 @@ namespace Spring.Util;
 [Serializable]
 public class Properties : Hashtable
 {
-    #region Constants
-
     private const string Comments = "#!";
     private const string Separators = ":=";
     private const string Whitespace = " \t\r\n";
     private const string WhitespaceWithSeparators = Whitespace + Separators;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates an empty property list with no default values.
@@ -72,10 +62,6 @@ public class Properties : Hashtable
     public Properties(Properties p) : base(p)
     {
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Reads a property list (key and element pairs) from the input stream.
@@ -310,10 +296,6 @@ public class Properties : Hashtable
         }
     }
 
-    #endregion
-
-    #region IDictionary Members
-
     /// <summary>
     /// Adds the specified key / object pair to this collection.
     /// </summary>
@@ -343,6 +325,4 @@ public class Properties : Hashtable
     {
         base.Add(key as string, value as string);
     }
-
-    #endregion
 }

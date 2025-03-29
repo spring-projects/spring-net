@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using Spring.Aop.Framework;
 using Spring.Aop.Interceptor;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Aop.Support;
 
@@ -207,8 +199,6 @@ public sealed class ControlFlowPointcutTests
             "Must not match - under cflow of Type specified in ctor, but no match on method name.");
     }
 
-    #region Helper Classes
-
     /// <summary>
     /// Pointcut to catch all methods beginning with 'Set'.
     /// </summary>
@@ -221,6 +211,4 @@ public sealed class ControlFlowPointcutTests
             return methodBase.Name.StartsWith("Set");
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring;
 
@@ -31,8 +23,6 @@ namespace Spring;
 /// </summary>
 public abstract class StandardsComplianceTest
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.StandardsComplianceTest"/> class.
@@ -45,10 +35,6 @@ public abstract class StandardsComplianceTest
     /// </remarks>
     protected StandardsComplianceTest() { }
 
-    #endregion
-
-    #region Properties
-
     protected Type CheckedType
     {
         get
@@ -60,8 +46,6 @@ public abstract class StandardsComplianceTest
             checkedType = value;
         }
     }
-
-    #endregion
 
     private bool IsCheckedType(Type type)
     {
@@ -104,9 +88,5 @@ public abstract class StandardsComplianceTest
 
     protected abstract void CheckStandardsCompliance(Assembly assembly, Type t);
 
-    #region Fields
-
     private Type checkedType;
-
-    #endregion
 }

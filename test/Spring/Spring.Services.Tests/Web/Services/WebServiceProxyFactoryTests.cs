@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2007 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using System.Xml.Serialization;
 using System.Web.Services;
@@ -32,8 +26,6 @@ using Spring.Core.IO;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Web.Services;
 
@@ -528,8 +520,6 @@ public class WebServiceProxyFactoryTests
         ObjectUtils.InstantiateType(proxyType);
     }
 
-    #region NestedSchema
-
     [Test]
     public void NestedSchema()
     {
@@ -558,8 +548,6 @@ public class WebServiceProxyFactoryTests
     public class UserCredentials
     {
     }
-
-    #endregion
 
     public void WcfBasicHttpBinding()
     {
@@ -604,8 +592,6 @@ public class WebServiceProxyFactoryTests
             return count.ToString();
         }
     }
-
-    #region Test Classes
 
     public interface IHelloWorld
     {
@@ -657,6 +643,4 @@ public class WebServiceProxyFactoryTests
     public class CustomClientProtocol : SoapHttpClientProtocol
     {
     }
-
-    #endregion
 }

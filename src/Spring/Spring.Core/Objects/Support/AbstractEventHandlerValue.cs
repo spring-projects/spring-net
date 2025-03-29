@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Globalization;
 using Spring.Util;
 
@@ -29,8 +25,6 @@ namespace Spring.Objects.Support;
 /// <author>Rick Evans</author>
 public abstract class AbstractEventHandlerValue : IEventHandlerValue
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Objects.Support.AbstractEventHandlerValue"/> class.
@@ -62,10 +56,6 @@ public abstract class AbstractEventHandlerValue : IEventHandlerValue
         _source = source;
         _methodName = methodName;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The source of the event (may be unresolved, as in the case
@@ -114,10 +104,6 @@ public abstract class AbstractEventHandlerValue : IEventHandlerValue
         }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Wires up the specified handler to the named event on the
     /// supplied event source.
@@ -143,13 +129,7 @@ public abstract class AbstractEventHandlerValue : IEventHandlerValue
             "{0} [Source = '{1}', Method = '{2}']", GetType().FullName, Source, MethodName);
     }
 
-    #endregion
-
-    #region Fields
-
     private object _source;
     private string _methodName;
     private string _eventName;
-
-    #endregion
 }

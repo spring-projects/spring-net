@@ -393,8 +393,6 @@ public abstract class Set<T> : ISet<T>, ICollection<T>, IEnumerable<T>,
         this.Add(item);
     }
 
-    #region Protected helpers
-
     /// <summary>
     /// Performs CopyTo when called trhough non-generic ISet (ICollection) interface
     /// </summary>
@@ -461,10 +459,6 @@ public abstract class Set<T> : ISet<T>, ICollection<T>, IEnumerable<T>,
 
         return resultSet;
     }
-
-    #endregion Protected helpers
-
-    #region ISet implementation
 
     void ICollection.CopyTo(Array array, int index)
     {
@@ -557,6 +551,4 @@ public abstract class Set<T> : ISet<T>, ICollection<T>, IEnumerable<T>,
 
         return this.RetainAll(col);
     }
-
-    #endregion ISet implementation
 }

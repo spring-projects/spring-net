@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Web;
 using System.Web.UI;
-
-#endregion
 
 namespace Spring.Util;
 
@@ -33,10 +25,6 @@ namespace Spring.Util;
 /// <author>Aleksandar Seovic</author>
 public sealed class WebUtils
 {
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the <see cref="Spring.Util.WebUtils"/> class.
     /// </summary>
@@ -48,10 +36,6 @@ public sealed class WebUtils
     private WebUtils()
     {
     }
-
-    // CLOVER:ON
-
-    #endregion
 
     /// <summary>
     /// Default protocol used for resolving resources in web applications

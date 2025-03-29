@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using System.Xml;
@@ -38,8 +34,6 @@ namespace Spring.Objects.Factory.Xml;
 /// <author>Mark Pollack (.NET)</author>
 public class ObjectDefinitionParserHelper
 {
-    #region Fields
-
     /// <summary>
     /// The shared <see cref="ILogger"/> instance for this class (and derived classes).
     /// </summary>
@@ -52,8 +46,6 @@ public class ObjectDefinitionParserHelper
     private readonly ObjectsNamespaceParser objectsNamespaceParser;
 
     private readonly HashSet<string> usedNames = new HashSet<string>();
-
-    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ObjectDefinitionParserHelper"/> class.
@@ -107,18 +99,12 @@ public class ObjectDefinitionParserHelper
     {
         DocumentDefaultsDefinition ddd = new DocumentDefaultsDefinition();
 
-        #region Instrumentation
-
         if (log.IsEnabled(LogLevel.Debug))
         {
             log.LogDebug("Loading object definitions...");
         }
 
-        #endregion
-
         ddd.LazyInit = GetAttributeValue(root, ObjectDefinitionConstants.DefaultLazyInitAttribute);
-
-        #region Instrumentation
 
         if (log.IsEnabled(LogLevel.Debug))
         {
@@ -127,11 +113,7 @@ public class ObjectDefinitionParserHelper
                 ddd.LazyInit));
         }
 
-        #endregion
-
         ddd.DependencyCheck = GetAttributeValue(root, ObjectDefinitionConstants.DefaultDependencyCheckAttribute);
-
-        #region Instrumentation
 
         if (log.IsEnabled(LogLevel.Debug))
         {
@@ -140,11 +122,7 @@ public class ObjectDefinitionParserHelper
                 ddd.DependencyCheck));
         }
 
-        #endregion
-
         ddd.Autowire = GetAttributeValue(root, ObjectDefinitionConstants.DefaultAutowireAttribute);
-
-        #region Instrumentation
 
         if (log.IsEnabled(LogLevel.Debug))
         {
@@ -153,11 +131,7 @@ public class ObjectDefinitionParserHelper
                 ddd.Autowire));
         }
 
-        #endregion
-
         ddd.Merge = GetAttributeValue(root, ObjectDefinitionConstants.DefaultMergeAttribute);
-
-        #region Instrumentation
 
         if (log.IsEnabled(LogLevel.Debug))
         {
@@ -166,11 +140,7 @@ public class ObjectDefinitionParserHelper
                 ddd.Merge));
         }
 
-        #endregion
-
         ddd.AutowireCandidates = GetAttributeValue(root, ObjectDefinitionConstants.DefaultAutowireCandidatesAttribute);
-
-        #region Instrumentation
 
         if (log.IsEnabled(LogLevel.Debug))
         {
@@ -179,11 +149,7 @@ public class ObjectDefinitionParserHelper
                 ddd.InitMethod));
         }
 
-        #endregion
-
         ddd.DestroyMethod = GetAttributeValue(root, ObjectDefinitionConstants.DefaultDestroyMethodAttribute);
-
-        #region Instrumentation
 
         if (log.IsEnabled(LogLevel.Debug))
         {
@@ -192,11 +158,7 @@ public class ObjectDefinitionParserHelper
                 ddd.DestroyMethod));
         }
 
-        #endregion
-
         ddd.AutowireCandidates = GetAttributeValue(root, ObjectDefinitionConstants.DefaultAutowireCandidatesAttribute);
-
-        #region Instrumentation
 
         if (log.IsEnabled(LogLevel.Debug))
         {
@@ -205,11 +167,7 @@ public class ObjectDefinitionParserHelper
                 ddd.AutowireCandidates));
         }
 
-        #endregion
-
         ddd.InitMethod = GetAttributeValue(root, ObjectDefinitionConstants.DefaultInitMethodAttribute);
-
-        #region Instrumentation
 
         if (log.IsEnabled(LogLevel.Debug))
         {
@@ -218,11 +176,7 @@ public class ObjectDefinitionParserHelper
                 ddd.InitMethod));
         }
 
-        #endregion
-
         ddd.DestroyMethod = GetAttributeValue(root, ObjectDefinitionConstants.DefaultDestroyMethodAttribute);
-
-        #region Instrumentation
 
         if (log.IsEnabled(LogLevel.Debug))
         {
@@ -230,8 +184,6 @@ public class ObjectDefinitionParserHelper
                 "Default destroy method '{0}'.",
                 ddd.DestroyMethod));
         }
-
-        #endregion
 
         defaults = ddd;
     }
@@ -366,16 +318,12 @@ public class ObjectDefinitionParserHelper
                     }
                 }
 
-                #region Instrumentation
-
                 if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.LogDebug(string.Format(
                         "Neither XML '{0}' nor '{1}' specified - using generated object name [{2}]",
                         ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute, objectName));
                 }
-
-                #endregion
             }
 
             return CreateObjectDefinitionHolder(element, definition, objectName, aliases);

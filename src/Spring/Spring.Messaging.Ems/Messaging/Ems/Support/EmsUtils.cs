@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Util;
@@ -30,11 +26,7 @@ namespace Spring.Messaging.Ems.Support;
 /// </summary>
 public abstract class EmsUtils
 {
-    #region Logging
-
     private static readonly ILogger<EmsUtils> logger = LogManager.GetLogger<EmsUtils>();
-
-    #endregion
 
     /// <summary> Close the given EMS Connection and ignore any thrown exception.
     /// This is useful for typical <code>finally</code> blocks in manual EMS code.

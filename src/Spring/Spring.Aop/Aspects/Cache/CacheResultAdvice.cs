@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection;
 using AopAlliance.Intercept;
@@ -27,8 +21,6 @@ using Spring.Caching;
 using Spring.Util;
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
-
-#endregion
 
 namespace Spring.Aspects.Cache;
 
@@ -50,8 +42,6 @@ namespace Spring.Aspects.Cache;
 /// <author>Aleksandar Seovic</author>
 public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
 {
-    #region CacheResultAttribute & CacheResultItemsAttribute caching
-
     private class CacheResultInfo
     {
         public readonly CacheResultAttribute ResultInfo;
@@ -78,8 +68,6 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
 
         return cacheResultInfo;
     }
-
-    #endregion
 
     /// <summary>
     /// Inner class to help cache null values.
@@ -173,11 +161,7 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
     {
         if (resultInfo != null)
         {
-            #region Instrumentation
-
             bool isLogDebugEnabled = logger.IsEnabled(LogLevel.Debug);
-
-            #endregion
 
             AssertUtils.ArgumentNotNull(resultInfo.KeyExpression, "Key",
                 "The cache attribute is missing the key definition.");
@@ -197,14 +181,10 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
             Type returnType = invocation.Method.ReturnType;
             if (returnValue != null && !returnType.IsInstanceOfType(returnValue))
             {
-                #region Instrumentation
-
                 if (isLogDebugEnabled)
                 {
                     logger.LogDebug(String.Format("Object for key [{0}] was of type [{1}] which is not compatible with return type [{2}]. Proceeding...", resultKey, returnValue.GetType(), returnType));
                 }
-
-                #endregion
 
                 cacheHit = false;
                 returnValue = null;
@@ -212,40 +192,28 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
 
             if (!cacheHit)
             {
-                #region Instrumentation
-
                 if (isLogDebugEnabled)
                 {
                     logger.LogDebug(String.Format("Object for key [{0}] was not found in cache [{1}]. Proceeding...", resultKey, resultInfo.CacheName));
                 }
 
-                #endregion
-
                 returnValue = invocation.Proceed();
                 if (EvalCondition(resultInfo.Condition, resultInfo.ConditionExpression, returnValue, vars))
                 {
-                    #region Instrumentation
-
                     if (isLogDebugEnabled)
                     {
                         logger.LogDebug(String.Format("Caching object for key [{0}] into cache [{1}].", resultKey, resultInfo.CacheName));
                     }
-
-                    #endregion
 
                     cache.Insert(resultKey, (returnValue == null) ? NullValue : returnValue, resultInfo.TimeToLiveTimeSpan);
                 }
             }
             else
             {
-                #region Instrumentation
-
                 if (isLogDebugEnabled)
                 {
                     logger.LogDebug(String.Format("Object for key [{0}] found in cache [{1}]. Aborting invocation...", resultKey, resultInfo.CacheName));
                 }
-
-                #endregion
             }
 
             return returnValue;
@@ -276,11 +244,7 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
 
             ICache cache = GetCache(itemInfo.CacheName);
 
-            #region Instrumentation
-
             bool isDebugEnabled = logger.IsEnabled(LogLevel.Debug);
-
-            #endregion
 
             foreach (object item in items)
             {
@@ -288,14 +252,10 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
                 {
                     object itemKey = itemInfo.KeyExpression.GetValue(item, vars);
 
-                    #region Instrumentation
-
                     if (isDebugEnabled)
                     {
                         logger.LogDebug("Caching collection item for key [" + itemKey + "].");
                     }
-
-                    #endregion
 
                     cache.Insert(itemKey, (item == null ? NullValue : item), itemInfo.TimeToLiveTimeSpan);
                 }

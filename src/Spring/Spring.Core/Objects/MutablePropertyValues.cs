@@ -350,8 +350,6 @@ public class MutablePropertyValues : IPropertyValues
         return PropertyValues.GetEnumerator();
     }
 
-    // CLOVER:OFF
-
     /// <summary>
     /// Convert the object to a string representation.
     /// </summary>

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2005 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Lifetime;
 using NUnit.Framework;
@@ -28,8 +22,6 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Remoting;
 

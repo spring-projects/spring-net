@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Globalization;
 using Spring.Objects;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Web.Support;
 

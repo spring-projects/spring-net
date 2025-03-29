@@ -195,8 +195,6 @@ public class ThreadLocalTargetSourceTests
         //    name, ((IMultiThreadInterface)mtObject).Name));
     }
 
-    #region Helper classes
-
     public interface IMultiThreadInterface
     {
         string Name { get; }
@@ -221,6 +219,4 @@ public class ThreadLocalTargetSourceTests
             return generated;
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 
 namespace Spring.Collections;
@@ -32,8 +28,6 @@ public class LinkedList : IList
     private int _nodeIndex;
     private Node _rootNode;
     private int _modId;
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the
@@ -58,10 +52,6 @@ public class LinkedList : IList
     {
         AddAll(list);
     }
-
-    #endregion
-
-    #region IList Members
 
     /// <summary>
     /// Is list read only?
@@ -223,10 +213,6 @@ public class LinkedList : IList
         get { return false; }
     }
 
-    #endregion
-
-    #region Private Methods
-
     /// <summary>
     /// Checks whether the list can be modified.
     /// </summary>
@@ -331,10 +317,6 @@ public class LinkedList : IList
         _modId++;
     }
 
-    #endregion
-
-    #region ICollection Members
-
     /// <summary>
     /// Returns <see langword="true"/> if the list is synchronized across
     /// threads.
@@ -424,10 +406,6 @@ public class LinkedList : IList
         get { return this; }
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     /// <summary>
     /// Gets an enumerator for the elements in the
     /// <see cref="Spring.Collections.LinkedList"/>.
@@ -445,10 +423,6 @@ public class LinkedList : IList
     {
         return new LinkedListEnumerator(this);
     }
-
-    #endregion
-
-    #region Inner Classes
 
     [Serializable]
     private class Node
@@ -539,6 +513,4 @@ public class LinkedList : IList
             _current = _ll._rootNode;
         }
     }
-
-    #endregion
 }

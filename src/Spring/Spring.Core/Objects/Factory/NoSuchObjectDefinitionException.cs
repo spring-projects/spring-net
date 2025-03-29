@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -34,8 +30,6 @@ namespace Spring.Objects.Factory;
 [Serializable]
 public class NoSuchObjectDefinitionException : ObjectsException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Objects.Factory.NoSuchObjectDefinitionException"/> class.
@@ -147,10 +141,6 @@ public class NoSuchObjectDefinitionException : ObjectsException
         _objectType = typeName != null ? Type.GetType(typeName) : null;
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
     /// the data needed to serialize the target object.
@@ -172,10 +162,6 @@ public class NoSuchObjectDefinitionException : ObjectsException
         info.AddValue("ObjectTypeName", ObjectType?.AssemblyQualifiedNameWithoutVersion());
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Return the required <see cref="System.Type"/> of object, if it was a
     /// lookup by <see cref="System.Type"/> that failed.
@@ -194,12 +180,6 @@ public class NoSuchObjectDefinitionException : ObjectsException
         get { return _objectName; }
     }
 
-    #endregion
-
-    #region Fields
-
     private Type _objectType;
     private string _objectName;
-
-    #endregion
 }

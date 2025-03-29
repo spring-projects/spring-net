@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 namespace Spring.Aop.Framework.Adapter;
 
@@ -40,10 +36,6 @@ public sealed class GlobalAdvisorAdapterRegistry : DefaultAdvisorAdapterRegistry
         get { return instance; }
     }
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Aop.Framework.Adapter.GlobalAdvisorAdapterRegistry"/> class.
@@ -59,6 +51,4 @@ public sealed class GlobalAdvisorAdapterRegistry : DefaultAdvisorAdapterRegistry
     }
 
     // CLOVER:ON
-
-    #endregion
 }

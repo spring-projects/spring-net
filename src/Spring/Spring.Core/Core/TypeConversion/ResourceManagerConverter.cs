@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using Spring.Core.TypeResolution;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.TypeConversion;
 
@@ -42,8 +34,6 @@ public class ResourceManagerConverter : TypeConverter
     /// </summary>
     public static readonly string APP_GLOBALRESOURCES_ASSEMBLYNAME = "App_GlobalResources";
 
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Core.TypeConversion.ResourceManagerConverter"/> class.
@@ -51,10 +41,6 @@ public class ResourceManagerConverter : TypeConverter
     public ResourceManagerConverter()
     {
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Returns whether this converter can convert an object of one
@@ -159,6 +145,4 @@ public class ResourceManagerConverter : TypeConverter
 
         return base.ConvertFrom(context, culture, value);
     }
-
-    #endregion
 }

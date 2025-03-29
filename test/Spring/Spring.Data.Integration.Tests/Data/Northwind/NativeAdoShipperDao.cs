@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,22 +14,14 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using System.Data.SqlClient;
-
-#endregion
 
 namespace Spring.Data.Northwind;
 
 /// <author>Mark Pollack (.NET)</author>
 public class NativeAdoShipperDao : IShipperDao
 {
-    #region IShipperDao Members
-
     public Shipper Create(string name, string phone)
     {
         string connectionString = "Data Source=SPRINGQA;Initial Catalog=Northwind;Persist Security Info=True;User ID=springqa;Password=springqa";
@@ -87,6 +77,4 @@ public class NativeAdoShipperDao : IShipperDao
 
         return new Shipper(id, name, phone); //17
     }
-
-    #endregion
 }

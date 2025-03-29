@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,19 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-#endregion
-
 namespace Spring.Data.Northwind;
 
 /// <author>Mark Pollack (.NET)</author>
 public class Shipper
 {
-    #region Fields
-
     public int Id
     {
         get { return id; }
@@ -51,10 +41,6 @@ public class Shipper
     private string name;
     private string phone;
 
-    #endregion
-
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Shipper"/> class.
     /// </summary>
@@ -68,14 +54,4 @@ public class Shipper
         this.name = name;
         this.phone = phone;
     }
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Methods
-
-    #endregion
 }

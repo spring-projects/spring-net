@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using NHibernate;
 using NUnit.Framework;
@@ -32,8 +26,6 @@ using System.Transactions;
 using Spring.Core.IO;
 using NHibernate.Cfg;
 using System.Diagnostics;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {

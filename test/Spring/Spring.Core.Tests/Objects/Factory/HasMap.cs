@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Collections.Specialized;
 using Spring.Collections;
-
-#endregion
 
 namespace Spring.Objects.Factory;
 
@@ -33,8 +25,6 @@ namespace Spring.Objects.Factory;
 /// </summary>
 public class HasMap
 {
-    #region Properties
-
     public IDictionary Map
     {
         get
@@ -107,16 +97,10 @@ public class HasMap
         }
     }
 
-    #endregion
-
-    #region Fields
-
     private IDictionary _map;
     private Set _set;
     private NameValueCollection _props;
     private object[] _objectArray;
     private Type[] _classArray;
     private int[] _intArray;
-
-    #endregion
 }

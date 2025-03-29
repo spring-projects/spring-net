@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using System.Reflection;
@@ -53,8 +49,6 @@ public abstract class ExceptionsTest : StandardsComplianceTest
         CheckedType = typeof(Exception);
     }
 
-    #region Tests
-
     [Test]
     public void TestStandardsCompliance()
     {
@@ -66,10 +60,6 @@ public abstract class ExceptionsTest : StandardsComplianceTest
     {
         ProcessAssembly(Assembly.GetAssembly(GetType()));
     }
-
-    #endregion
-
-    #region Methods
 
     protected override void CheckStandardsCompliance(Assembly assembly, Type t)
     {
@@ -258,10 +248,6 @@ public abstract class ExceptionsTest : StandardsComplianceTest
         }
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// We will test all of the exceptions in this assembly for their correctness.
     /// </summary>
@@ -271,12 +257,8 @@ public abstract class ExceptionsTest : StandardsComplianceTest
         set { _assemblyToCheck = value; }
     }
 
-    #endregion
-
     private Assembly _assemblyToCheck = null;
 }
-
-#region Inner Class : SimpleTestException
 
 /// <summary>
 /// Do nothing exception to verify that the exception tester
@@ -285,8 +267,6 @@ public abstract class ExceptionsTest : StandardsComplianceTest
 [Serializable]
 public class SimpleTestException : ApplicationException
 {
-    #region Public Instance Constructors
-
     public SimpleTestException()
     {
     }
@@ -300,23 +280,13 @@ public class SimpleTestException : ApplicationException
     {
     }
 
-    #endregion Public Instance Constructors
-
-    #region Protected Instance Constructors
-
     // deserialization constructor
     protected SimpleTestException(
         SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }
-
-    #endregion Protected Instance Constructors
 }
-
-#endregion
-
-#region Inner Class : TestException
 
 /// <summary>
 /// Exception to verify that the exception tester is working correctly.
@@ -324,13 +294,7 @@ public class SimpleTestException : ApplicationException
 [Serializable]
 public class TestException : ApplicationException, ISerializable
 {
-    #region Private Instance Fields
-
     private int _value;
-
-    #endregion Private Instance Fields
-
-    #region Public Instance Constructors
 
     public TestException()
     {
@@ -351,28 +315,16 @@ public class TestException : ApplicationException, ISerializable
         _value = value;
     }
 
-    #endregion Public Instance Constructors
-
-    #region Protected Instance Constructors
-
     // deserialization constructor
     protected TestException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
         _value = info.GetInt32("Value");
     }
 
-    #endregion Protected Instance Constructors
-
-    #region Public Instance Properties
-
     public int Value
     {
         get { return _value; }
     }
-
-    #endregion Public Instance Properties
-
-    #region Override implementation of ApplicationException
 
     // Called by the frameworks during serialization
     // to fetch the data from an object.
@@ -397,13 +349,7 @@ public class TestException : ApplicationException, ISerializable
             return base.Message + Environment.NewLine + s;
         }
     }
-
-    #endregion Override implementation of ApplicationException
 }
-
-#endregion
-
-#region Inner Class : SealedTestException
 
 /// <summary>
 /// Exception to verify that the exception tester is working on
@@ -412,8 +358,6 @@ public class TestException : ApplicationException, ISerializable
 [Serializable]
 public sealed class SealedTestException : TestException
 {
-    #region Public Instance Constructors
-
     public SealedTestException()
     {
     }
@@ -433,18 +377,10 @@ public sealed class SealedTestException : TestException
     {
     }
 
-    #endregion Public Instance Constructors
-
-    #region Private Instance Constructors
-
     // deserialization constructor
     private SealedTestException(
         SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }
-
-    #endregion Private Instance Constructors
 }
-
-#endregion

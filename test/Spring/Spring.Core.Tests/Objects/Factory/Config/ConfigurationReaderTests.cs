@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Text;
 using NUnit.Framework;
 using Spring.Core.IO;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config;
 

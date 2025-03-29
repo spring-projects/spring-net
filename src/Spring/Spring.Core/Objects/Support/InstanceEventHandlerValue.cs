@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Reflection;
 using Spring.Util;
 
@@ -29,15 +25,9 @@ namespace Spring.Objects.Support;
 /// <author>Rick Evans</author>
 public class InstanceEventHandlerValue : AbstractWiringEventHandlerValue
 {
-    #region Constants
-
     private static readonly BindingFlags InstanceMethodFlags =
         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |
         BindingFlags.IgnoreCase | BindingFlags.Static;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -61,10 +51,6 @@ public class InstanceEventHandlerValue : AbstractWiringEventHandlerValue
         : base(source, methodName)
     {
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Gets the event handler.
@@ -105,6 +91,4 @@ public class InstanceEventHandlerValue : AbstractWiringEventHandlerValue
 
         return callback;
     }
-
-    #endregion
 }

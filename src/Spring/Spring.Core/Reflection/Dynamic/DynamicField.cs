@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Reflection;
 using Spring.Util;
 
 namespace Spring.Reflection.Dynamic;
-
-#region IDynamicField interface
 
 /// <summary>
 /// Defines methods that dynamic field class has to implement.
@@ -53,10 +47,6 @@ public interface IDynamicField
     void SetValue(object target, object value);
 }
 
-#endregion
-
-#region Safe wrapper
-
 /// <summary>
 /// Safe wrapper for the dynamic field.
 /// </summary>
@@ -68,8 +58,6 @@ public interface IDynamicField
 public class SafeField : IDynamicField
 {
     private readonly FieldInfo fieldInfo;
-
-    #region Cache
 
     private static readonly IDictionary<FieldInfo, DynamicFieldCacheEntry> fieldCache = new Dictionary<FieldInfo, DynamicFieldCacheEntry>();
 
@@ -105,8 +93,6 @@ public class SafeField : IDynamicField
 
         return fieldInfo;
     }
-
-    #endregion
 
     private readonly FieldGetterDelegate getter;
     private readonly FieldSetterDelegate setter;
@@ -158,8 +144,6 @@ public class SafeField : IDynamicField
         get { return fieldInfo; }
     }
 }
-
-#endregion
 
 /// <summary>
 /// Factory class for dynamic fields.

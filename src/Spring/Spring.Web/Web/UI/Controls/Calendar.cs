@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections.Specialized;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Web.UI.Controls;
 
@@ -217,8 +209,6 @@ public class Calendar : WebControl, IPostBackDataHandler
         writer.RenderEndTag();
     }
 
-    #region IPostBackDataHandler Members
-
     /// <summary>
     /// Raises the <c>SelectionChanged</c> event.
     /// </summary>
@@ -263,8 +253,6 @@ public class Calendar : WebControl, IPostBackDataHandler
 
         return changed;
     }
-
-    #endregion
 
     /// <summary>
     /// The method that is called on postback if the date has changed.

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Objects.Factory;
 
@@ -37,8 +29,6 @@ public class LifecycleObject :
     IObjectFactoryAware,
     IDisposable
 {
-    #region Methods
-
     public virtual void PostProcessBeforeInit()
     {
         if (inited)
@@ -81,10 +71,6 @@ public class LifecycleObject :
         postProcessedAfterInit = true;
     }
 
-    #endregion
-
-    #region Properties
-
     public bool Destroyed
     {
         get
@@ -97,20 +83,12 @@ public class LifecycleObject :
         }
     }
 
-    #endregion
-
-    #region Fields
-
     private string objectName;
     private IObjectFactory owningFactory;
     private bool postProcessedBeforeInit;
     private bool inited;
     private bool postProcessedAfterInit;
     private bool destroyed;
-
-    #endregion
-
-    #region IObjectNameAware Members
 
     public string ObjectName
     {
@@ -123,10 +101,6 @@ public class LifecycleObject :
             objectName = value;
         }
     }
-
-    #endregion
-
-    #region IInitializingObject Members
 
     public void AfterPropertiesSet()
     {
@@ -148,10 +122,6 @@ public class LifecycleObject :
         inited = true;
     }
 
-    #endregion
-
-    #region IObjectFactoryAware Members
-
     public IObjectFactory ObjectFactory
     {
         get
@@ -164,10 +134,6 @@ public class LifecycleObject :
         }
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     public void Dispose()
     {
         if (destroyed)
@@ -177,10 +143,6 @@ public class LifecycleObject :
 
         destroyed = true;
     }
-
-    #endregion
-
-    #region Inner Class : PostProcessor
 
     public class PostProcessor : IObjectPostProcessor, IObjectFactoryAware
     {
@@ -212,6 +174,4 @@ public class LifecycleObject :
             get { return objectFactory; }
         }
     }
-
-    #endregion
 }

@@ -1,6 +1,4 @@
-﻿#region License
-
-// /*
+﻿// /*
 //  * Copyright 2018 the original author or authors.
 //  *
 //  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +14,7 @@
 //  * limitations under the License.
 //  */
 
-#endregion
-
-#region using
-
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring;
 

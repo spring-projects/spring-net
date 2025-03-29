@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Core;
@@ -33,13 +29,7 @@ namespace Spring.Messaging.Ems.Listener;
 /// </summary>
 public abstract class AbstractMessageListenerContainer : AbstractListenerContainer
 {
-    #region Logging
-
     private readonly ILogger<AbstractMessageListenerContainer> logger = LogManager.GetLogger<AbstractMessageListenerContainer>();
-
-    #endregion
-
-    #region Fields
 
     private object destination;
 
@@ -58,10 +48,6 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
     private bool exposeListenerSession = true;
 
     private bool acceptMessagesWhileStopping = false;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the destination to receive messages from. Will be <code>null</code>
@@ -264,8 +250,6 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
         set { acceptMessagesWhileStopping = value; }
     }
 
-    #endregion
-
     /// <summary>
     /// Validate that the destination is not null and that if the subscription is durable, then we are not
     /// using the Pub/Sub domain.
@@ -282,8 +266,6 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
             throw new ArgumentException("A durable subscription requires a topic (pub-sub domain)");
         }
     }
-
-    #region Template methods for listeners
 
     /// <summary>
     /// Executes the specified listener,
@@ -321,15 +303,11 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
     {
         if (!AcceptMessagesWhileStopping && !IsRunning)
         {
-            #region Logging
-
             if (logger.IsEnabled(LogLevel.Warning))
             {
                 logger.LogWarning("Rejecting received message because of the listener container " +
                                   "having been stopped in the meantime: " + message);
             }
-
-            #endregion
 
             RollbackIfNecessary(session);
             throw new MessageRejectedWhileStoppingException();
@@ -597,8 +575,6 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
             exListener.OnException(ex);
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Checks the message listener, throwing an exception

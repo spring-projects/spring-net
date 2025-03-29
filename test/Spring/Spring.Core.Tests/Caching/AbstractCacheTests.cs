@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using FakeItEasy;
 using NUnit.Framework;
 
@@ -31,8 +27,6 @@ namespace Spring.Caching;
 [TestFixture]
 public class AbstractCacheTests
 {
-    #region ExposingAbstractCache utility class
-
     /// <summary>
     /// Exposes DoInsert() method for testing
     /// </summary>
@@ -45,8 +39,6 @@ public class AbstractCacheTests
 
         public abstract void DoInsertExposed(object key, object value, TimeSpan timeToLive);
     }
-
-    #endregion
 
     TimeSpan expectedPerItemTTL;
     TimeSpan expectedPerCacheTTL;

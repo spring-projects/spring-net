@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -42,8 +34,6 @@ namespace Spring.Core;
 /// <author>Rick Evans</author>
 public class MethodParametersCountCriteria : ICriteria
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="MethodParametersCountCriteria"/> class.
@@ -76,10 +66,6 @@ public class MethodParametersCountCriteria : ICriteria
         ExpectedParameterCount = expectedParameterCount;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The number of parameters that a <see cref="System.Reflection.MethodInfo"/>
     /// must have to satisfy this criteria.
@@ -101,10 +87,6 @@ public class MethodParametersCountCriteria : ICriteria
             _count = value;
         }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
@@ -136,11 +118,5 @@ public class MethodParametersCountCriteria : ICriteria
         return satisfied;
     }
 
-    #endregion
-
-    #region Fields
-
     private int _count;
-
-    #endregion
 }

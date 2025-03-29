@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using AopAlliance.Aop;
 using Spring.Aop.Support;
 using Spring.Objects;
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Aop.Target;
 
@@ -69,8 +61,6 @@ namespace Spring.Aop.Target;
 public abstract class AbstractPoolingTargetSource
     : AbstractPrototypeTargetSource, PoolingConfig, IDisposable, IAdvice
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Aop.Target.AbstractPoolingTargetSource"/>
@@ -85,8 +75,6 @@ public abstract class AbstractPoolingTargetSource
     protected AbstractPoolingTargetSource()
     {
     }
-
-    #endregion
 
     /// <summary>
     /// Returns the target object (acquired from the pool).

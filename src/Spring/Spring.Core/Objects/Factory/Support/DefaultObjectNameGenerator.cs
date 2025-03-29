@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Objects.Factory.Config;
 
@@ -34,8 +30,6 @@ namespace Spring.Objects.Factory.Support;
 /// <author>Mark Pollack (.NET)</author>
 public class DefaultObjectNameGenerator : IObjectNameGenerator
 {
-    #region IObjectNameGenerator Members
-
     /// <summary>
     /// Generates an object name for the given object definition.
     /// </summary>
@@ -55,6 +49,4 @@ public class DefaultObjectNameGenerator : IObjectNameGenerator
 
         return ObjectDefinitionReaderUtils.GenerateObjectName(objectDef, registry);
     }
-
-    #endregion
 }

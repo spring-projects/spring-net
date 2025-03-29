@@ -1,5 +1,3 @@
-#region License
-
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -16,8 +14,6 @@
 //  * limitations under the License.
 //  */
 
-#endregion
-
 using Apache.NMS;
 using Spring.Util;
 
@@ -29,15 +25,9 @@ namespace Spring.Messaging.Nms.Support.Destinations;
 /// <see cref="NmsDestinationAccessor"/>
 public class NmsDestinationAccessorAsync : NmsAccessorAsync
 {
-    #region Fields
-
     private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
 
     private bool pubSubDomain = false;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the destination resolver that is to be used to resolve
@@ -83,8 +73,6 @@ public class NmsDestinationAccessorAsync : NmsAccessorAsync
             this.pubSubDomain = value;
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Resolves the given destination name to a NMS destination.

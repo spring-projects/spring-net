@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Util;
 
@@ -38,8 +34,6 @@ public class MutableSortDefinition : ISortDefinition
     private bool _ascending = true;
     private bool _toggleAscendingOnProperty = false;
 
-    #region Properties
-
     private bool ToggleAscendingOnProperty
     {
         get
@@ -51,10 +45,6 @@ public class MutableSortDefinition : ISortDefinition
             this._toggleAscendingOnProperty = value;
         }
     }
-
-    #endregion
-
-    #region ISortDefinition Properties
 
     /// <summary>
     /// The name of the property to sort by.
@@ -114,10 +104,6 @@ public class MutableSortDefinition : ISortDefinition
             return _ascending;
         }
     }
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the
@@ -179,10 +165,6 @@ public class MutableSortDefinition : ISortDefinition
         this.ToggleAscendingOnProperty = toggleAscendingOnSameProperty;
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Overrides the default <see cref="System.Object.Equals(object)"/> method
     /// </summary>
@@ -216,6 +198,4 @@ public class MutableSortDefinition : ISortDefinition
         result = 29 * result + (this.Ascending ? 1 : 0);
         return result;
     }
-
-    #endregion
 }

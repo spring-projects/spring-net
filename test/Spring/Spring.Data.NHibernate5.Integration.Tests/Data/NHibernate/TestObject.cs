@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Data.NHibernate
 {
     /// <summary>
@@ -26,15 +22,9 @@ namespace Spring.Data.NHibernate
     /// <author>Mark Pollack (.NET)</author>
     public class TestObject
     {
-        #region Fields
-
         private int age;
         private string name;
         private int objectNumber;
-
-        #endregion
-
-        #region Constructor (s)
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestObject"/> class.
@@ -42,10 +32,6 @@ namespace Spring.Data.NHibernate
         public TestObject()
         {
         }
-
-        #endregion
-
-        #region Properties
 
         public virtual int Age
         {
@@ -65,10 +51,10 @@ namespace Spring.Data.NHibernate
             set { objectNumber = value; }
         }
 
-        #endregion
+        
 
-        #region Methods
+        
 
-        #endregion
+        
     }
 }

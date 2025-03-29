@@ -18,8 +18,6 @@ namespace Spring.Expressions;
 [Serializable]
 public class SpringAST : Parser.antlr.BaseAST, ISerializable
 {
-    #region Global SpringAST Factory
-
     internal class SpringASTCreator : Parser.antlr.ASTNodeCreator
     {
         public override Parser.antlr.collections.AST Create()
@@ -38,14 +36,8 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
     /// </summary>
     internal static readonly SpringASTCreator Creator = new SpringASTCreator();
 
-    #endregion
-
-    #region Members
-
     private string text;
     private int ttype;
-
-    #endregion
 
     /// <summary>
     /// Create an instance
@@ -123,8 +115,6 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
         return this.text;
     }
 
-    #region ISerializable Implementation
-
     /// <summary>
     /// Create a new instance from SerializationInfo
     /// </summary>
@@ -146,6 +136,4 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
         info.AddValue("ttype", this.Type, typeof(int));
         info.AddValue("text", this.Text, typeof(string));
     }
-
-    #endregion
 }

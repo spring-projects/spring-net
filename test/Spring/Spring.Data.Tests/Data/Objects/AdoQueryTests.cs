@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -35,10 +29,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
-
-#region Imports
 
 using System.Collections;
 using System.Data;
@@ -47,8 +37,6 @@ using FakeItEasy;
 using NUnit.Framework;
 using Spring.Dao;
 using Spring.Data.Common;
-
-#endregion
 
 namespace Spring.Data.Objects;
 

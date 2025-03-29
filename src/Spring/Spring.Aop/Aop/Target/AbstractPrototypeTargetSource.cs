@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Target;
 
@@ -46,8 +38,6 @@ namespace Spring.Aop.Target;
 public abstract class AbstractPrototypeTargetSource
     : ITargetSource, IObjectFactoryAware, IInitializingObject
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Aop.Target.AbstractPrototypeTargetSource"/>
@@ -62,10 +52,6 @@ public abstract class AbstractPrototypeTargetSource
     protected AbstractPrototypeTargetSource()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The name of the target object to be created on each invocation.
@@ -135,8 +121,6 @@ public abstract class AbstractPrototypeTargetSource
                     "Singleton object; instances would not be independent.");
             }
 
-            #region Instrumentation
-
             if (logger.IsEnabled(LogLevel.Debug))
             {
                 logger.LogDebug(string.Format(
@@ -144,31 +128,21 @@ public abstract class AbstractPrototypeTargetSource
                     TargetObjectName));
             }
 
-            #endregion
-
             _targetType = _owningObjectFactory.GetType(TargetObjectName);
         }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Subclasses should use this method to create a new prototype instance.
     /// </summary>
     protected virtual object NewPrototypeInstance()
     {
-        #region Instrumentation
-
         if (logger.IsEnabled(LogLevel.Debug))
         {
             logger.LogDebug(string.Format(
                 "Creating new target from object '{0}'.",
                 TargetObjectName));
         }
-
-        #endregion
 
         return ObjectFactory.GetObject(TargetObjectName);
     }
@@ -217,10 +191,6 @@ public abstract class AbstractPrototypeTargetSource
             "The 'TargetObjectName' property must have a value.");
     }
 
-    #endregion
-
-    #region Fields
-
     /// <summary>
     /// Returns a textual representation of this target source instance.
     /// This implementation returns <see cref="GetDescription"/>
@@ -246,6 +216,4 @@ public abstract class AbstractPrototypeTargetSource
     private String _targetObjectName;
     private IObjectFactory _owningObjectFactory;
     private Type _targetType;
-
-    #endregion
 }

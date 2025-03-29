@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using NUnit.Framework;
 using Spring.Expressions.Processors;
-
-#endregion
 
 namespace Spring.Expressions;
 
@@ -94,8 +86,6 @@ public class MethodNodeTests
         }
     }
 
-    #region StopWatch
-
     private class StopWatch
     {
         private DateTime _startTime;
@@ -145,6 +135,4 @@ public class MethodNodeTests
             get { return _elapsed; }
         }
     }
-
-    #endregion
 }

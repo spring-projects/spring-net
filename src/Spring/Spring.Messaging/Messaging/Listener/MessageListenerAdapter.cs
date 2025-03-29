@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Context;
@@ -114,18 +110,12 @@ namespace Spring.Messaging.Listener;
 /// <author>Mark Pollack</author>
 public class MessageListenerAdapter : IMessageListener, IApplicationContextAware, IInitializingObject
 {
-    #region Logging
-
     private static readonly ILogger logger = LogManager.GetLogger(typeof(MessageListenerAdapter));
-
-    #endregion
 
     /// <summary>
     /// Out-of-the-box value for the default listener method: "HandleMessage"
     /// </summary>
     public static readonly string ORIGINAL_DEFAULT_LISTENER_METHOD = "HandleMessage";
-
-    #region Fields
 
     private IApplicationContext applicationContext;
 
@@ -142,10 +132,6 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
     private MessageQueueTemplate messageQueueTemplate;
 
     private IMessageQueueFactory messageQueueFactory;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MessageListenerAdapter"/> class.
@@ -165,8 +151,6 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
         InitDefaultStrategies();
         this.handlerObject = handlerObject;
     }
-
-    #endregion
 
     /// <summary>
     /// Gets or sets the handler object to delegate message listening to.
@@ -209,8 +193,6 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
         get { return processingExpression; }
         set { processingExpression = value; }
     }
-
-    #region IInitializingObject Members
 
     /// <summary>
     /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
@@ -260,10 +242,6 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
         }
     }
 
-    #endregion
-
-    #region IApplicationContextAware Members
-
     /// <summary>
     /// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
     /// object runs in.
@@ -295,8 +273,6 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
         get { return applicationContext; }
         set { applicationContext = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Gets or sets the message queue factory.
@@ -390,8 +366,6 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
         set { messageQueueTemplate = value; }
     }
 
-    #region IMessageListener Members
-
     /// <summary>
     /// Called when message is received.
     /// </summary>
@@ -418,8 +392,6 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
             logger.LogDebug("No result object given - no result to handle");
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Gets the name of the handler method.

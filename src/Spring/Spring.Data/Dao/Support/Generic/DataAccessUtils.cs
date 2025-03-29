@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Util.Generic;
 
 namespace Spring.Dao.Support.Generic;
@@ -29,18 +25,12 @@ namespace Spring.Dao.Support.Generic;
 /// <author>Mark Pollack (.NET)</author>
 public class DataAccessUtils
 {
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="DataAccessUtils"/> class.
     /// </summary>
     public DataAccessUtils()
     {
     }
-
-    #endregion
-
-    #region Methods
 
     public static T RequiredUniqueResultSet<T>(IList<T> results)
     {
@@ -59,6 +49,4 @@ public class DataAccessUtils
         enumerator.MoveNext();
         return enumerator.Current;
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * All the source code provided by AOP Alliance is Public Domain.
  *
@@ -7,13 +5,7 @@
  *
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace AopAlliance.Intercept;
 

@@ -1,13 +1,9 @@
-#region License
-
 /*
  * All the source code provided by AOP Alliance is Public Domain.
  *
  *      http://aopalliance.sourceforge.net/
  *
  */
-
-#endregion
 
 namespace AopAlliance.Aop;
 

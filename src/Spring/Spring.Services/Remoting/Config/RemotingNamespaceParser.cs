@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using Spring.Core.TypeResolution;
@@ -430,8 +426,6 @@ public sealed class RemotingNamespaceParser : ObjectsNamespaceParser
         return typeName;
     }
 
-    #region Element & Attribute Name Constants
-
     private class RemotingConfigurerConstants
     {
         public const string RemotingConfigurerElement = "configurer";
@@ -490,6 +484,4 @@ public sealed class RemotingNamespaceParser : ObjectsNamespaceParser
         public const string TargetNameAttribute = "targetName";
         public const string InfiniteAttribute = "infinite";
     }
-
-    #endregion
 }

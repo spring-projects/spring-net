@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Core.IO;
 using Spring.Objects;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
-
-#endregion
 
 namespace Spring.Context;
 
@@ -135,8 +127,6 @@ public class MockApplicationContext : AbstractApplicationContext
         actualCloseCalls++;
     }
 
-    #region IMockObject Members
-
     public void NotImplemented(string methodName)
     {
         throw new NotImplementedException(methodName + " is not currently implemented");
@@ -148,10 +138,6 @@ public class MockApplicationContext : AbstractApplicationContext
         set { _mockName = value; }
     }
 
-    #endregion
-
-    #region IVerifiable Members
-
     public void Verify()
     {
         Assert.AreEqual(actualCloseCalls, expectedCloseCalls, "Did not receive the expected Count for object " + MockName);
@@ -162,6 +148,4 @@ public class MockApplicationContext : AbstractApplicationContext
     {
         get { return _isVerified; }
     }
-
-    #endregion
 }

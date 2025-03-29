@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Expressions;
 
@@ -36,15 +32,9 @@ namespace Spring.Validation;
 /// <author>Erich Eichinger</author>
 public abstract class BaseValidator : IValidator
 {
-    #region Fields
-
     private IList<IValidationAction> actions = new List<IValidationAction>();
 
     private IExpression when;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the <see cref="BaseValidator"/> class.
@@ -71,10 +61,6 @@ public abstract class BaseValidator : IValidator
         this.when = when;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets or sets the expression that determines if this validator should be evaluated.
     /// </summary>
@@ -95,8 +81,6 @@ public abstract class BaseValidator : IValidator
         set { actions = value; }
     }
 
-    #endregion
-
     /// <summary>
     /// Validates the specified object.
     /// </summary>
@@ -116,8 +100,6 @@ public abstract class BaseValidator : IValidator
     /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
     /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
     public abstract bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors);
-
-    #region Helper Methods
 
     /// <summary>
     /// Evaluates when expression.
@@ -152,6 +134,4 @@ public abstract class BaseValidator : IValidator
             }
         }
     }
-
-    #endregion
 }

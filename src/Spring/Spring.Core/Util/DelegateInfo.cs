@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Util;
 
@@ -34,16 +26,10 @@ namespace Spring.Util;
 /// <author>Rick Evans</author>
 public sealed class DelegateInfo
 {
-    #region Constants
-
     /// <summary>
     /// The method name associated with a delegate invocation.
     /// </summary>
     private const string InvocationMethod = "Invoke";
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -77,10 +63,6 @@ public sealed class DelegateInfo
         DelegateType = type;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The <see cref="System.Type"/> of the delegate.
     /// </summary>
@@ -97,10 +79,6 @@ public sealed class DelegateInfo
             _delegateType = value;
         }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Checks to see if the method encapsulated by the supplied method
@@ -245,11 +223,5 @@ public sealed class DelegateInfo
         return compatible;
     }
 
-    #endregion
-
-    #region Fields
-
     private Type _delegateType;
-
-    #endregion
 }

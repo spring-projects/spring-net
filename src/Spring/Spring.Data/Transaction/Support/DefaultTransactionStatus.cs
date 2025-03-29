@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 namespace Spring.Transaction.Support;
 
@@ -78,8 +74,6 @@ public class DefaultTransactionStatus : ITransactionStatus
         _debug = debug;
         _suspendedResources = suspendedResources;
     }
-
-    #region Properties
 
     /// <summary>
     /// Gets a value indicating whether the progress of this transaction is debugged.
@@ -192,10 +186,6 @@ public class DefaultTransactionStatus : ITransactionStatus
         get { return (Transaction is ISavepointManager); }
     }
 
-    #endregion
-
-    #region ITransactionStatus Members
-
     /// <summary>
     /// Returns <b>true</b> if the transaction is new, else <b>false</b> if participating
     /// in an existing transaction.
@@ -240,8 +230,6 @@ public class DefaultTransactionStatus : ITransactionStatus
         _rollbackOnly = true;
     }
 
-    #endregion
-
     /// <summary>
     /// Determine the rollback-only flag via checking this TransactionStatus.  Will only
     /// return true if the application set the property RollbackOnly to true on this
@@ -264,8 +252,6 @@ public class DefaultTransactionStatus : ITransactionStatus
                     ((ISmartTransactionObject) _transaction).RollbackOnly);
         }
     }
-
-    #region ISavepointManager Members
 
     /// <summary>
     /// This implementation delegates to the underlying transaction object
@@ -301,8 +287,6 @@ public class DefaultTransactionStatus : ITransactionStatus
     {
         SavepointManager.ReleaseSavepoint(savepoint);
     }
-
-    #endregion
 
     /// <summary>
     /// Create a savepoint and hold it for the transaction.

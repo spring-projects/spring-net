@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using Spring.Objects.Factory.Support;
@@ -42,8 +38,6 @@ namespace Spring.Objects.Factory.Xml;
 /// <author>Mark Pollack (.NET)</author>
 public class AbstractSingleObjectDefinitionParser : AbstractObjectDefinitionParser
 {
-    #region Methods
-
     /// <summary>
     /// Central template method to actually parse the supplied XmlElement
     /// into one or more IObjectDefinitions.
@@ -160,6 +154,4 @@ public class AbstractSingleObjectDefinitionParser : AbstractObjectDefinitionPars
     protected virtual void DoParse(XmlElement element, ObjectDefinitionBuilder builder)
     {
     }
-
-    #endregion
 }

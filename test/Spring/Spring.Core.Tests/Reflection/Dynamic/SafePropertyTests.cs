@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.CodeDom.Compiler;
 using System.Reflection;
@@ -142,8 +138,6 @@ public class SafePropertyTests : BasePropertyTests
         Assert.AreEqual(123, first.GetValue(something));
     }
 
-    #region VB TestClass Code
-
     private static Type s__visualBasicTestObjectType;
     private static IDynamicField ThisLastPropertyValue;
     private static IDynamicField ThisArg1;
@@ -190,11 +184,7 @@ public class SafePropertyTests : BasePropertyTests
 
         return s__visualBasicTestObject;
     }
-
-    #endregion
 }
-
-#region Test Classes
 
 public class MyClassWithPrivateProperties
 {
@@ -273,5 +263,3 @@ public class MyClassWithPrivateProperties
         set { _vt = value; }
     }
 }
-
-#endregion

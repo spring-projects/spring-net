@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Collections.Specialized;
 using NUnit.Framework;
@@ -27,8 +21,6 @@ using Spring.Aop.Framework;
 using Spring.Caching;
 using Spring.Context.Support;
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Aspects.Cache;
 
@@ -162,8 +154,6 @@ public sealed class CacheAspectIntegrationTests
     }
 }
 
-#region Inner Class : CacheParameterTarget
-
 public interface IInventorStore
 {
     IList GetAll();
@@ -233,5 +223,3 @@ public sealed class GenericDao<T, IdT> : IGenericDao<T, IdT>
         return default(T);
     }
 }
-
-#endregion

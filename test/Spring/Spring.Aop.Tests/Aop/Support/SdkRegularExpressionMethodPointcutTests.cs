@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Support;
 

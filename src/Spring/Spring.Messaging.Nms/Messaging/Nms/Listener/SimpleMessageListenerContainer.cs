@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Collections;
 using Spring.Messaging.Nms.Core;
@@ -36,13 +32,7 @@ namespace Spring.Messaging.Nms.Listener;
 /// <author>Mark Pollack</author>
 public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, IExceptionListener
 {
-    #region Logging
-
     private readonly ILogger<SimpleMessageListenerContainer> logger = LogManager.GetLogger<SimpleMessageListenerContainer>();
-
-    #endregion
-
-    #region fields
 
     /// <summary>
     /// The default recovery time interval between connection reconnection attempts
@@ -67,10 +57,6 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
     private TimeSpan recoveryInterval = new TimeSpan(0, 0, 0, 5, 0);
 
     private TimeSpan maxRecoveryTime = new TimeSpan(0, 0, 10, 0, 0);
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets a value indicating whether to inhibit the delivery of messages published by its own connection.
@@ -131,8 +117,6 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
     {
         get { return true; }
     }
-
-    #endregion
 
     /// <summary>
     /// Call base class for valdation and then check that if the subscription is durable that the number of

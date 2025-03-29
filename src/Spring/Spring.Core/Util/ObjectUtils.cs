@@ -58,8 +58,6 @@ public sealed class ObjectUtils
         GetHashCodeMethodInfo = type.GetMethod("GetHashCode");
     }
 
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the <see cref="Spring.Util.ObjectUtils"/> class.
     /// </summary>
@@ -71,8 +69,6 @@ public sealed class ObjectUtils
     private ObjectUtils()
     {
     }
-
-    // CLOVER:ON
 
     /// <summary>
     /// Instantiates the type using the assembly specified to load the type.

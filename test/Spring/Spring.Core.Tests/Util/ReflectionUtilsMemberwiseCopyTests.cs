@@ -89,8 +89,6 @@ public class ReflectionUtilsMemberwiseCopyTests
     }
 }
 
-#region Test Support Classes
-
 public class SampleBaseClass
 {
     private const string MyConstant = "SampleBaseClass.MyConstant";
@@ -160,5 +158,3 @@ public class SampleFurtherDerivedClass : SampleDerivedClass
     {
     }
 }
-
-#endregion

@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Data.Common;
 
 /// <summary>
@@ -31,8 +27,6 @@ namespace Spring.Data.Common;
 /// <author>Mark Pollack (.NET)</author>
 public class ErrorCodes
 {
-    #region Fields
-
     private string[] databaseProductNames;
 
     private string[] badSqlGrammarCodes = new String[0];
@@ -57,20 +51,12 @@ public class ErrorCodes
 
     // CustomErrorCodesTranslation[] customTranslations;
 
-    #endregion
-
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ErrorCodes"/> class.
     /// </summary>
     public ErrorCodes()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     public string DatabaseProductName
     {
@@ -145,6 +131,4 @@ public class ErrorCodes
         get { return duplicateKeyCodes; }
         set { duplicateKeyCodes = value; }
     }
-
-    #endregion
 }

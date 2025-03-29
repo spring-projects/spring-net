@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -30,8 +24,6 @@ using Spring.Data.Core;
 using Spring.Reflection.Dynamic;
 using Spring.Transaction.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Data;
 

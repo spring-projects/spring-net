@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,12 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-#endregion
-
 namespace Spring.Objects.Factory.Xml;
 
 /// <summary>
@@ -31,8 +23,6 @@ namespace Spring.Objects.Factory.Xml;
 /// <author>Rick Evans (.NET)</author>
 public class ConstructorDependenciesObject
 {
-    #region Constructor (s) / Destructor
-
     public ConstructorDependenciesObject(int age)
     {
         this.age = age;
@@ -60,10 +50,6 @@ public class ConstructorDependenciesObject
         this.spouse2 = spouse2;
         this.other = other;
     }
-
-    #endregion
-
-    #region Properties
 
     public int Age
     {
@@ -93,15 +79,9 @@ public class ConstructorDependenciesObject
         get { return other; }
     }
 
-    #endregion
-
-    #region Fields
-
     private int age;
     private string name;
     private ITestObject spouse1;
     private ITestObject spouse2;
     private IndexedTestObject other;
-
-    #endregion
 }

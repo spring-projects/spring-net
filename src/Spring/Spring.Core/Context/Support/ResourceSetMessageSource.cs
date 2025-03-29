@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Globalization;
 using System.Resources;
 using System.Text;
 using Spring.Objects.Factory;
 using Spring.Core.TypeConversion;
-
-#endregion
 
 namespace Spring.Context.Support;
 
@@ -44,12 +36,8 @@ namespace Spring.Context.Support;
 /// <author>Aleksandar Seovic (.NET)</author>
 public class ResourceSetMessageSource : AbstractMessageSource, IInitializingObject
 {
-    #region Fields
-
     private Dictionary<string, object> _cachedResources;
     private IList<object> _resourceManagers;
-
-    #endregion
 
     /// <summary>
     /// Creates a new instance of the

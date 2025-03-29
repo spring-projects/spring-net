@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using Spring.Collections;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework;
 
@@ -365,10 +357,6 @@ public sealed class AopUtils
         return true;
     }
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="AopUtils"/> class.
@@ -382,10 +370,6 @@ public sealed class AopUtils
     private AopUtils()
     {
     }
-
-    // CLOVER:ON
-
-    #endregion
 
     /// <summary>
     /// Gets the type of the target.

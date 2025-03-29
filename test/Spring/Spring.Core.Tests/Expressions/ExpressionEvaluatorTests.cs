@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
-
-#region Imports
 
 using System.Collections;
 using System.Diagnostics;
@@ -45,8 +39,6 @@ using Spring.Objects.Factory;
 using Spring.Threading;
 using Spring.Util;
 
-#endregion
-
 namespace Spring.Expressions;
 
 /// <summary>
@@ -56,8 +48,6 @@ namespace Spring.Expressions;
 [TestFixture]
 public sealed class ExpressionEvaluatorTests
 {
-    #region Helper classes for threading tests
-
     public class AsyncTestExpressionEvaluation : AsyncTestTask
     {
         private IExpression exp;
@@ -82,13 +72,9 @@ public sealed class ExpressionEvaluatorTests
         }
     }
 
-    #endregion
-
     private Inventor tesla;
     private Inventor pupin;
     private Society ieee;
-
-    #region SetUp and TearDown
 
     /// <summary>
     /// The setup logic executed before the execution of each individual test.
@@ -122,10 +108,6 @@ public sealed class ExpressionEvaluatorTests
     {
         //DynamicCodeManager.SaveAssembly();
     }
-
-    #endregion
-
-    #region Serialization Tests
 
     /// <summary>
     /// GetObjectData() is not overridden on purpose !!!
@@ -260,8 +242,6 @@ public sealed class ExpressionEvaluatorTests
 
         return exp;
     }
-
-    #endregion Serialization Tests
 
     [Test]
     public void TestConstantRead()
@@ -1798,8 +1778,6 @@ public sealed class ExpressionEvaluatorTests
                 new Dictionary<string, object>()));
     }
 
-    #region Collection Processor and Aggregator tests
-
     [Test]
     public void TestCountAggregator()
     {
@@ -2032,8 +2010,6 @@ public sealed class ExpressionEvaluatorTests
         object[] result = new ArrayList((ICollection) ExpressionEvaluator.GetValue(arr, "reverse()")).ToArray();
         Assert.AreEqual(new object[] { 4.1f, "3", 2.1m, 1, "0" }, result);
     }
-
-    #endregion
 
     /// <summary>
     /// Type SetValue.
@@ -2603,8 +2579,6 @@ public sealed class ExpressionEvaluatorTests
         Assert.AreEqual("PublicMethod", ExpressionEvaluator.GetValue(cases, "GetPublicMethod()"));
     }
 
-    #region TestAccessVisibility Classes
-
     internal class AccessVisibilityCases
     {
         private readonly string _privateReadonlyField = "_privateReadonlyField";
@@ -2632,19 +2606,11 @@ public sealed class ExpressionEvaluatorTests
         public string GetPublicMethod() { return "PublicMethod"; }
     }
 
-    #endregion
-
-    #region TestMethodInvocation Classes
-
     class MethodInvokationCases
     {
         public string Foo(string stringArg) { return stringArg; }
         public int Foo(int intArg) { return intArg; }
     }
-
-    #endregion
-
-    #region Set operations tests
 
     [Test]
     public void TestUnionOperator()
@@ -2772,10 +2738,6 @@ public sealed class ExpressionEvaluatorTests
         Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} - 'something'"));
     }
 
-    #endregion
-
-    #region Performance tests
-
     private DateTime start, stop;
 
     //[Test]
@@ -2856,10 +2818,6 @@ public sealed class ExpressionEvaluatorTests
                 iterations / duration));
     }
 
-    #endregion
-
-    #region Method Inheritance tests
-
     [Test]
     public void TestInheritedMethodInvocation()
     {
@@ -2879,8 +2837,6 @@ public sealed class ExpressionEvaluatorTests
         Assert.AreEqual("DerivedSingleMethodTestClass.ShadowedStaticMethod", ExpressionEvaluator.GetValue(null, string.Format("T({0}).ShadowedStaticMethod()", typeof(DerivedSingleMethodTestClass).FullName)));
     }
 
-    #endregion
-
     private static void DumpNode(AST rootNode, int level)
     {
         Trace.WriteLine(new string(' ', level) + rootNode.ToString());
@@ -2897,8 +2853,6 @@ public sealed class ExpressionEvaluatorTests
         }
     }
 }
-
-#region Helper classes
 
 internal class SingleMethodTestClass
 {
@@ -3102,10 +3056,6 @@ internal class Sample
     }
 }
 
-#endregion
-
-#region Shadowing Test Helper Classes
-
 internal class ShadowingTestsBaseClass
 {
     private object _someValue;
@@ -3157,5 +3107,3 @@ internal class ShadowingTestsMoreSpezializedClass : ShadowingTestsSpezializedCla
 internal class ShadowingTestsMostSpezializedClass : ShadowingTestsMoreSpezializedClass
 {
 }
-
-#endregion // Shadowing Test Helper Classes

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy;
 
@@ -71,8 +63,6 @@ public class CompositionAopProxyTests : AbstractAopProxyTests
         Assert.IsFalse(proxy is TestObject);
     }
 
-    #region ReturnsThisWhenProxyIsIncompatible
-
     [Test]
     public void ReturnsThisWhenProxyIsIncompatible()
     {
@@ -112,6 +102,4 @@ public class CompositionAopProxyTests : AbstractAopProxyTests
             return this;
         }
     }
-
-    #endregion
 }

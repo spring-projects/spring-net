@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Xml;
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml;
 
@@ -60,12 +52,8 @@ public sealed class XmlParserResolverTests
         Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser(typeof(NotImplementedXmlObjectDefinitionParser), string.Empty, null));
     }
 
-    #region Inner Class : NotImplementedXmlObjectDefinitionParser
-
     private sealed class NotImplementedXmlObjectDefinitionParser : INamespaceParser
     {
-        #region IXmlObjectDefinitionParser Members
-
         /// <summary>
         /// Invoked by <see cref="NamespaceParserRegistry"/> after construction but before any
         /// elements have been parsed.
@@ -74,8 +62,6 @@ public sealed class XmlParserResolverTests
         {
             throw new NotImplementedException();
         }
-
-        #endregion
 
         public IObjectDefinition ParseElement(XmlElement element, ParserContext parserContext)
         {
@@ -88,6 +74,4 @@ public sealed class XmlParserResolverTests
             throw new NotImplementedException();
         }
     }
-
-    #endregion
 }

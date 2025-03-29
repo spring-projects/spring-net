@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Data;
@@ -47,13 +43,7 @@ public class MultiDelegatingDbProvider : IDbProvider, IInitializingObject
 
     private IDictionary targetDbProviders = new SynchronizedHashtable();
 
-    #region Logging Definition
-
     private static readonly ILogger<MultiDelegatingDbProvider> LOG = LogManager.GetLogger<MultiDelegatingDbProvider>();
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MultiDelegatingDbProvider"/> class.
@@ -70,8 +60,6 @@ public class MultiDelegatingDbProvider : IDbProvider, IInitializingObject
     {
         this.targetDbProviders = targetDbProviders;
     }
-
-    #endregion
 
     /// <summary>
     /// Sets the default IDbProvider. This will be returned if no DbProvider is found in thread local storage.
@@ -117,8 +105,6 @@ public class MultiDelegatingDbProvider : IDbProvider, IInitializingObject
             }
         }
     }
-
-    #region IDbProvider methods
 
     /// <summary>
     /// Returns a new command object for executing SQL statments/Stored Procedures
@@ -259,8 +245,6 @@ public class MultiDelegatingDbProvider : IDbProvider, IInitializingObject
     {
         return false;
     }
-
-    #endregion
 
     /// <summary>
     /// Gets the target provider based on the thread local name "dbProviderName"

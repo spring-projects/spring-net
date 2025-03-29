@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Objects;
 
@@ -33,8 +25,6 @@ namespace Spring.Objects;
 [TestFixture]
 public sealed class MutablePropertyValuesTests
 {
-    #region SetUp
-
     /// <summary>
     /// The setup logic executed before the execution of this test fixture.
     /// </summary>
@@ -47,10 +37,6 @@ public sealed class MutablePropertyValuesTests
     [SetUp]
     public void SetUp() { }
 
-    #endregion
-
-    #region TearDown
-
     /// <summary>
     /// The tear down logic executed after the execution of each individual test.
     /// </summary>
@@ -62,8 +48,6 @@ public sealed class MutablePropertyValuesTests
     /// </summary>
     [OneTimeTearDown]
     public void FixtureTearDown() { }
-
-    #endregion
 
     [Test]
     public void Instantiation()

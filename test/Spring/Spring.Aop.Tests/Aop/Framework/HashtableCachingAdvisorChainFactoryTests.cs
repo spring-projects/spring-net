@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Aop.Framework;
 
@@ -33,8 +25,6 @@ namespace Spring.Aop.Framework;
 [TestFixture]
 public sealed class HashtableCachingAdvisorChainFactoryTests
 {
-    #region SetUp
-
     /// <summary>
     /// The setup logic executed before the execution of this test fixture.
     /// </summary>
@@ -51,10 +41,6 @@ public sealed class HashtableCachingAdvisorChainFactoryTests
     {
     }
 
-    #endregion
-
-    #region TearDown
-
     /// <summary>
     /// The tear down logic executed after the execution of each individual test.
     /// </summary>
@@ -70,8 +56,6 @@ public sealed class HashtableCachingAdvisorChainFactoryTests
     public void FixtureTearDown()
     {
     }
-
-    #endregion
 
     [Test]
     public void Instantiation()

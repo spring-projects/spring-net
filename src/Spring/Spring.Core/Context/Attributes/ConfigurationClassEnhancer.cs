@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2010-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Reflection;
@@ -83,11 +79,7 @@ public class ConfigurationClassEnhancer
 
     private sealed class ConfigurationClassInterceptor : IConfigurationClassInterceptor
     {
-        #region Logging
-
         private static readonly ILogger<ConfigurationClassInterceptor> Logger = LogManager.GetLogger<ConfigurationClassInterceptor>();
-
-        #endregion
 
         private readonly IConfigurableListableObjectFactory _configurableListableObjectFactory;
 
@@ -126,8 +118,6 @@ public class ConfigurationClassEnhancer
             return true;
         }
     }
-
-    #region Proxy builder classes definition
 
     private sealed class ConfigurationClassProxyTypeBuilder : InheritanceProxyTypeBuilder
     {
@@ -277,6 +267,4 @@ public class ConfigurationClassEnhancer
             }
         }
     }
-
-    #endregion
 }

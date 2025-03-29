@@ -613,15 +613,11 @@ public abstract class BaseAST : AST
         }
     }
 
-    #region Implementation of ICloneable
-
     [Obsolete("Deprecated since version 2.7.2. Use ASTFactory.dup() instead.", false)]
     public virtual object Clone()
     {
         return MemberwiseClone();
     }
-
-    #endregion
 
     public override Int32 GetHashCode()
     {

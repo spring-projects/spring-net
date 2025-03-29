@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy;
 
@@ -90,14 +82,10 @@ public class DefaultAopProxyFactoryTests
         Assert.IsTrue(AopUtils.IsDecoratorAopProxy(aopProxy));
     }
 
-    #region Helper classes definitions
-
     public class DoesNotImplementAnyInterfacesTestObject
     {
         public virtual void SomeMethod()
         {
         }
     }
-
-    #endregion
 }

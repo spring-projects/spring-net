@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Reflection;
 using Spring.Util;
 
 namespace Spring.Reflection.Dynamic;
-
-#region IDynamicConstructor interface
 
 /// <summary>
 /// Defines constructors that dynamic constructor class has to implement.
@@ -42,10 +36,6 @@ public interface IDynamicConstructor
     object Invoke(object[] arguments);
 }
 
-#endregion
-
-#region Safe wrapper
-
 /// <summary>
 /// Safe wrapper for the dynamic constructor.
 /// </summary>
@@ -57,8 +47,6 @@ public interface IDynamicConstructor
 public class SafeConstructor : IDynamicConstructor
 {
     private ConstructorInfo constructorInfo;
-
-    #region Generated Function Cache
 
     private static readonly IDictionary<ConstructorInfo, ConstructorDelegate> constructorCache = new Dictionary<ConstructorInfo, ConstructorDelegate>();
 
@@ -79,8 +67,6 @@ public class SafeConstructor : IDynamicConstructor
 
         return method;
     }
-
-    #endregion
 
     private ConstructorDelegate constructor;
 
@@ -108,8 +94,6 @@ public class SafeConstructor : IDynamicConstructor
         return constructor(arguments);
     }
 }
-
-#endregion
 
 /// <summary>
 /// Factory class for dynamic constructors.

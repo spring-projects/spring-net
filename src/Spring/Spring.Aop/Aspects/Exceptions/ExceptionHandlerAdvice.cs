@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Reflection;
@@ -68,8 +64,6 @@ namespace Spring.Aspects.Exceptions;
 [Serializable]
 public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
 {
-    #region Fields
-
     /// <summary>
     /// Log instance available to subclasses
     /// </summary>
@@ -85,10 +79,6 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
     private string onExceptionNameRegex = @"^(on\s+exception\s+name)\s+(.*?)\s+(log|translate|wrap|replace|return|swallow|execute)\s*(.*?)$";
 
     private string onExceptionRegex = @"^(on\s+exception\s+)(\(.*?\))\s+(log|translate|wrap|replace|return|swallow|execute)\s*(.*?)$";
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the Regex string used to parse advice expressions starting with 'on exception name' and exception handling actions.
@@ -131,10 +121,6 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
     {
         get { return exceptionHandlerTable; }
     }
-
-    #endregion
-
-    #region IMethodInterceptor implementation
 
     /// <summary>
     /// Implement this method to perform extra treatments before and after
@@ -209,10 +195,6 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
         }
     }
 
-    #endregion
-
-    #region IInitializingObject implementation
-
     /// <summary>
     /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
     /// after it has injected all of an object's dependencies.
@@ -273,10 +255,6 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
         //TODO sync.
         exceptionHandlers = newExceptionHandlers;
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Invokes handlers registered for the passed exception and <see cref="IMethodInvocation"/>
@@ -569,10 +547,6 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
         }
     }
 
-    #endregion
-
-    #region ExceptionHandlerTable class
-
     /// <summary>
     /// A specialized dictionary for key value pairs of (string, IExceptionHandler)
     /// </summary>
@@ -635,6 +609,4 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
             }
         }
     }
-
-    #endregion
 }

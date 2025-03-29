@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using Spring.Util;
@@ -39,8 +35,6 @@ public class IntegerFormatter : IFormatter
 {
     private string format = "{0:D}";
 
-    #region Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegerFormatter"/> class,
     /// using default format string of '{0:D}'.
@@ -57,8 +51,6 @@ public class IntegerFormatter : IFormatter
     {
         this.format = format;
     }
-
-    #endregion
 
     /// <summary>
     /// Formats the specified integer value.

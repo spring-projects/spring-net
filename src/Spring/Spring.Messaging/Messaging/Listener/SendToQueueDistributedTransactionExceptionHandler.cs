@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
@@ -37,13 +33,7 @@ namespace Spring.Messaging.Listener;
 public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQueueExceptionHandler,
     IDistributedTransactionExceptionHandler
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(SendToQueueDistributedTransactionExceptionHandler));
-
-    #endregion
-
-    #region IDistributedTransactionExceptionHandler Members
 
     /// <summary>
     /// Determines whether the incoming message is a poison message.  This method is
@@ -114,8 +104,6 @@ public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQ
         }
     }
 
-    #endregion
-
     /// <summary>
     /// Sends the message to queue.
     /// </summary>
@@ -125,29 +113,21 @@ public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQ
         MessageQueue mq = MessageQueueFactory.CreateMessageQueue(MessageQueueObjectName);
         try
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Information))
             {
                 LOG.LogInformation("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
             }
 
-            #endregion
-
             mq.Send(message, MessageQueueTransactionType.Automatic);
         }
         catch (Exception e)
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Error))
             {
                 string message1 = "Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].";
                 LOG.LogError(e, message1);
                 LOG.LogError("Message will not be processed.  Message Body = " + message.Body);
             }
-
-            #endregion
         }
     }
 }

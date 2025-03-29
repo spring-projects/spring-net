@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
@@ -30,8 +24,6 @@ using System.Web.Compilation;
 using System.Web.UI;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Web.Support;
 
@@ -109,8 +101,6 @@ internal abstract class LocalResourceManager : ResourceManager
         return localResourceAssembly;
     }
 
-    #region ResourceProviderResourceManager
-
     private class ResourceProviderResourceManager : ResourceManager
     {
         private bool _hasException;
@@ -172,10 +162,6 @@ internal abstract class LocalResourceManager : ResourceManager
         }
     }
 
-    #endregion
-
-    #region LocalResXAssemblyResourceManager
-
     private class LocalResXAssemblyResourceManager : ResourceManager
     {
         private bool _isMissingManifest = false;
@@ -227,6 +213,4 @@ internal abstract class LocalResourceManager : ResourceManager
             return null;
         }
     }
-
-    #endregion
 }

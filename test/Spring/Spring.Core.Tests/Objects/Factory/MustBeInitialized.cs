@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,12 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-#endregion
-
 namespace Spring.Objects.Factory;
 
 /// <summary>
@@ -31,16 +23,10 @@ namespace Spring.Objects.Factory;
 /// <author>Rick Evans (.NET)</author>
 public class MustBeInitialized : IInitializingObject
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the <see cref="Spring.Objects.Factory.MustBeInitialized"/> class.
     /// </summary>
     public MustBeInitialized() { }
-
-    #endregion
-
-    #region Methods
 
     public void AfterPropertiesSet()
     {
@@ -60,11 +46,5 @@ public class MustBeInitialized : IInitializingObject
         }
     }
 
-    #endregion
-
-    #region Fields
-
     private bool inited;
-
-    #endregion
 }

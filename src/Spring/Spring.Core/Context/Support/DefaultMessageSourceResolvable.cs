@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using Spring.Util;
@@ -42,8 +38,6 @@ public class DefaultMessageSourceResolvable : IMessageSourceResolvable
     private IList<string> codes;
     private object[] arguments;
     private string defaultMessage;
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -121,8 +115,6 @@ public class DefaultMessageSourceResolvable : IMessageSourceResolvable
     {
     }
 
-    #endregion
-
     /// <summary>
     /// Return the default code for this resolvable.
     /// </summary>
@@ -174,8 +166,6 @@ public class DefaultMessageSourceResolvable : IMessageSourceResolvable
         return visitor.VisitMessageSourceResolvableString(this);
     }
 
-    #region IMessageSourceResolvable Members
-
     /// <summary>
     /// Return the codes to be used to resolve this message, in the order
     /// that they are to be tried.
@@ -215,6 +205,4 @@ public class DefaultMessageSourceResolvable : IMessageSourceResolvable
     {
         get { return defaultMessage; }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2007 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
-
-#endregion
 
 namespace Spring.Scheduling.Quartz.Integration.Tests;
 

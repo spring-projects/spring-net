@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Objects.Factory.Config;
 
@@ -39,8 +35,6 @@ internal class MessageConverterFactoryObject : IConfigurableFactoryObject
         set { messageConverterCreatorDelegate = value; }
     }
 
-    #region IConfigurableFactoryObject Members
-
     /// <summary>
     /// Gets the template object definition that should be used
     /// to configure the instance of the object managed by this factory.
@@ -51,10 +45,6 @@ internal class MessageConverterFactoryObject : IConfigurableFactoryObject
         get { return productTemplate; }
         set { productTemplate = value; }
     }
-
-    #endregion
-
-    #region IFactoryObject Members
 
     public object GetObject()
     {
@@ -70,6 +60,4 @@ internal class MessageConverterFactoryObject : IConfigurableFactoryObject
     {
         get { return false; }
     }
-
-    #endregion
 }

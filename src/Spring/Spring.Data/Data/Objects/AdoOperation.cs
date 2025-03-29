@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Dao;
 using Spring.Data.Common;
@@ -39,13 +35,7 @@ namespace Spring.Data.Objects;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class AdoOperation : AbstractAdoOperation
 {
-    #region Fields
-
     private AdoTemplate adoTemplate = new AdoTemplate();
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AdoOperation"/> class.
@@ -83,10 +73,6 @@ public abstract class AdoOperation : AbstractAdoOperation
         DbProvider = provider;
         Sql = sql;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the ADO template.
@@ -137,10 +123,6 @@ public abstract class AdoOperation : AbstractAdoOperation
         set { adoTemplate.CommandTimeout = value; }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Compiles this operation.  Ignores subsequent attempts to compile.
     /// </summary>
@@ -171,6 +153,4 @@ public abstract class AdoOperation : AbstractAdoOperation
             Compiled = true;
         }
     }
-
-    #endregion
 }

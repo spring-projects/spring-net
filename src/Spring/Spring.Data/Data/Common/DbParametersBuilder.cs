@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 
 namespace Spring.Data.Common;
@@ -32,14 +28,8 @@ namespace Spring.Data.Common;
 /// <author>Mark Pollack (.NET)</author>
 public class DbParametersBuilder : IDbParametersBuilder
 {
-    #region Fields
-
     private IDbProvider dbProvider;
     private IList parameterList;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DbParametersBuilder"/> class.
@@ -49,10 +39,6 @@ public class DbParametersBuilder : IDbParametersBuilder
         this.dbProvider = dbProvider;
         parameterList = new ArrayList();
     }
-
-    #endregion
-
-    #region Methods
 
     public IDbParameter Create()
     {
@@ -85,6 +71,4 @@ public class DbParametersBuilder : IDbParametersBuilder
     {
         return new DbParameters(dbProvider);
     }
-
-    #endregion
 }

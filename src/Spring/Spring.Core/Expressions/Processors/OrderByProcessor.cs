@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using Spring.Util;
 
@@ -30,8 +26,6 @@ namespace Spring.Expressions.Processors;
 /// <author>Erich Eichinger</author>
 public class OrderByProcessor : ICollectionProcessor
 {
-    #region Comparer Helper Implementations
-
     private class SimpleExpressionComparer : IComparer
     {
         private readonly IExpression _expression;
@@ -98,8 +92,6 @@ public class OrderByProcessor : ICollectionProcessor
             return (int) _fnCompare.DynamicInvoke(new object[] { x, y });
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Sorts the source collection using custom sort criteria.

@@ -22,8 +22,6 @@ namespace Spring;
 /// </remarks>
 public class TestResourceLoader
 {
-    #region WebRequest
-
     public class TestResourceWebResponse : WebResponse
     {
         private Type resourceType;
@@ -67,8 +65,6 @@ public class TestResourceLoader
             return new TestResourceWebRequest(uri);
         }
     }
-
-    #endregion
 
     static TestResourceLoader()
     {

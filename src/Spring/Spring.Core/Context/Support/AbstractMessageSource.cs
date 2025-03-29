@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using Microsoft.Extensions.Logging;
@@ -56,8 +52,6 @@ namespace Spring.Context.Support;
 /// <seealso cref="Spring.Context.IHierarchicalMessageSource"/>
 public abstract class AbstractMessageSource : IHierarchicalMessageSource
 {
-    #region Fields
-
     /// <summary>
     /// holds the logger instance shared with subclasses.
     /// </summary>
@@ -66,10 +60,6 @@ public abstract class AbstractMessageSource : IHierarchicalMessageSource
     private IMessageSource parentMessageSource;
     private bool useCodeAsDefaultMessage = false;
 
-    #endregion
-
-    #region Constructor
-
     /// <summary>
     /// Initializes this instance.
     /// </summary>
@@ -77,10 +67,6 @@ public abstract class AbstractMessageSource : IHierarchicalMessageSource
     {
         log = LogManager.GetLogger(GetType());
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>Gets or Sets a value indicating whether to use the message code as 
     /// default message instead of throwing a NoSuchMessageException. 
@@ -109,10 +95,6 @@ public abstract class AbstractMessageSource : IHierarchicalMessageSource
         get { return useCodeAsDefaultMessage; }
         set { useCodeAsDefaultMessage = value; }
     }
-
-    #endregion
-
-    #region IHierarchicalMessageSource Members
 
     /// <summary>
     /// The parent message source used to try and resolve messages that
@@ -371,10 +353,6 @@ public abstract class AbstractMessageSource : IHierarchicalMessageSource
         if (ParentMessageSource != null) ParentMessageSource.ApplyResources(value, objectName, culture);
     }
 
-    #endregion
-
-    #region Protected Methods
-
     /// <summary>Resolve the given code and arguments as message in the given culture,
     /// returning null if not found. Does <i>not</i> fall back to the code
     /// as default message. Invoked by GetMessage methods.
@@ -554,10 +532,6 @@ public abstract class AbstractMessageSource : IHierarchicalMessageSource
         ApplyResourcesToObject(value, objectName, cultureInfo);
     }
 
-    #endregion
-
-    #region Protected Abstract Methods
-
     /// <summary>
     /// Subclasses must implement this method to resolve a message.
     /// </summary>
@@ -605,6 +579,4 @@ public abstract class AbstractMessageSource : IHierarchicalMessageSource
     /// resource is associated.
     /// </param>
     protected abstract void ApplyResourcesToObject(object value, string objectName, CultureInfo cultureInfo);
-
-    #endregion
 }

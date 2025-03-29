@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,12 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-#endregion
-
 namespace Spring.Objects.Factory.Xml;
 
 /// <summary>
@@ -31,18 +23,12 @@ namespace Spring.Objects.Factory.Xml;
 /// <author>Rick Evans (.NET)</author>
 public class DependenciesObject
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the  DependenciesObject class.
     /// </summary>
     public DependenciesObject()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     public int Age
     {
@@ -62,13 +48,7 @@ public class DependenciesObject
         set { this.spouse = value; }
     }
 
-    #endregion
-
-    #region Fields
-
     private int age;
     private string name;
     private ITestObject spouse;
-
-    #endregion
 }

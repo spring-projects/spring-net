@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using FakeItEasy;
 using NUnit.Framework;
 using Spring.Core.IO;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Remoting;
 

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Web;
@@ -43,8 +39,6 @@ namespace Spring.Caching;
 /// <author>Erich Eichinger</author>
 public class AspNetCache : AbstractCache
 {
-    #region Internal Abstractions
-
     /// <summary>
     /// Abstracts the underlying runtime cache
     /// </summary>
@@ -99,10 +93,6 @@ public class AspNetCache : AbstractCache
         }
     }
 
-    #endregion
-
-    #region Fields
-
     // logger instance for this class
     private static readonly ILogger<AspNetCache> Log = LogManager.GetLogger<AspNetCache>();
 
@@ -115,8 +105,6 @@ public class AspNetCache : AbstractCache
     // hold default values for this cache instance.
     private CacheItemPriority _priority = CacheItemPriority.Default;
     private bool _slidingExpiration = false;
-
-    #endregion
 
     /// <summary>
     /// Initializes a new instance of <see cref="AspNetCache"/>
@@ -138,8 +126,6 @@ public class AspNetCache : AbstractCache
         _cacheName = typeof(AspNetCache).FullName + "[" + this.GetHashCode() + "].";
     }
 
-    #region Configurable Properties
-
     /// <summary>
     /// Gets/Sets a flag, whether to use sliding expiration policy.
     /// </summary>
@@ -157,8 +143,6 @@ public class AspNetCache : AbstractCache
         get { return _priority; }
         set { _priority = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Gets a collection of all cache item keys.

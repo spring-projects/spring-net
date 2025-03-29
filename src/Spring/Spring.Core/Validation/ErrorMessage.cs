@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -33,8 +29,6 @@ namespace Spring.Validation;
 [Serializable]
 public class ErrorMessage : IXmlSerializable
 {
-    #region Constructors
-
     /// <summary>
     /// Default constructor.
     /// </summary>
@@ -63,10 +57,6 @@ public class ErrorMessage : IXmlSerializable
         this.parameters = other.parameters;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets or sets the resource identifier for this message.
     /// </summary>
@@ -84,10 +74,6 @@ public class ErrorMessage : IXmlSerializable
     {
         get { return parameters; }
     }
-
-    #endregion
-
-    #region IXmlSerializable implementations
 
     /// <summary>
     /// This property is reserved, apply the
@@ -153,10 +139,6 @@ public class ErrorMessage : IXmlSerializable
         }
     }
 
-    #endregion
-
-    #region ErrorMessage methods
-
     /// <summary>
     /// Resolves the message against specified <see cref="IMessageSource"/>.
     /// </summary>
@@ -178,8 +160,6 @@ public class ErrorMessage : IXmlSerializable
             return messageSource.GetMessage(Id, Parameters);
         }
     }
-
-    #endregion
 
     ///<summary>
     ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
@@ -206,10 +186,6 @@ public class ErrorMessage : IXmlSerializable
         return id.GetHashCode();
     }
 
-    #region Data members
-
     private string id;
     private object[] parameters;
-
-    #endregion
 }

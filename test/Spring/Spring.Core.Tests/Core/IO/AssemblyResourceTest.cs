@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -34,8 +26,6 @@ namespace Spring.Core.IO;
 [TestFixture]
 public class AssemblyResourceTest
 {
-    #region SetUp/TearDown
-
     [SetUp]
     public void SetUp()
     {
@@ -45,8 +35,6 @@ public class AssemblyResourceTest
     public void TearDown()
     {
     }
-
-    #endregion
 
     /// <summary>
     /// Use incorrect format for an assembly resource.  Using

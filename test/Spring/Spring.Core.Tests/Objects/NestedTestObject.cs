@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
-
-#endregion
 
 namespace Spring.Objects;
 
@@ -76,8 +68,6 @@ public class NestedTestObject : INestedTestObject
     }
 }
 
-#region Inner Class : NestedTestObjectConverter
-
 public class NestedTestObjectConverter : TypeConverter
 {
     public override bool CanConvertTo(
@@ -122,5 +112,3 @@ public class NestedTestObjectConverter : TypeConverter
         return base.ConvertTo(context, culture, param, destinationType);
     }
 }
-
-#endregion

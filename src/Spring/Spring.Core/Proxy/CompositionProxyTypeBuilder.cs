@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using System.Reflection.Emit;
-
-#endregion
 
 namespace Spring.Proxy;
 
@@ -40,18 +32,12 @@ namespace Spring.Proxy;
 /// <author>Bruno Baia</author>
 public class CompositionProxyTypeBuilder : AbstractProxyTypeBuilder
 {
-    #region Fields
-
     private bool explicitInterfaceImplementation = false;
 
     /// <summary>
     /// Target instance calls should be delegated to.
     /// </summary>
     protected FieldBuilder targetInstance;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets a value indicating whether interfaces should be implemented explicitly.
@@ -65,10 +51,6 @@ public class CompositionProxyTypeBuilder : AbstractProxyTypeBuilder
         set { explicitInterfaceImplementation = value; }
     }
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="CompositionProxyTypeBuilder"/> class.
@@ -77,10 +59,6 @@ public class CompositionProxyTypeBuilder : AbstractProxyTypeBuilder
     {
         Name = "CompositionProxy";
     }
-
-    #endregion
-
-    #region IProxyTypeBuilder Members
 
     /// <summary>
     /// Creates a proxy that delegates calls to an instance of the
@@ -137,16 +115,12 @@ public class CompositionProxyTypeBuilder : AbstractProxyTypeBuilder
         return new TargetProxyMethodBuilder(typeBuilder, this, explicitInterfaceImplementation);
     }
 
-    #endregion
-
     /// <summary>
     /// Allows subclasses to generate additional code
     /// </summary>
     protected virtual void ImplementCustom(TypeBuilder builder)
     {
     }
-
-    #region IProxyTypeGenerator Members
 
     /// <summary>
     /// Generates the IL instructions that pushes
@@ -158,10 +132,6 @@ public class CompositionProxyTypeBuilder : AbstractProxyTypeBuilder
         il.Emit(OpCodes.Ldarg_0);
         il.Emit(OpCodes.Ldfld, targetInstance);
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Deaclares a field that holds the target object instance.
@@ -199,6 +169,4 @@ public class CompositionProxyTypeBuilder : AbstractProxyTypeBuilder
         il.Emit(OpCodes.Newobj, constructor);
         il.Emit(OpCodes.Stfld, targetInstance);
     }
-
-    #endregion
 }

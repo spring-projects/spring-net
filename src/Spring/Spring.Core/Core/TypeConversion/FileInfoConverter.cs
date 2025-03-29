@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Globalization;
-
-#endregion
 
 namespace Spring.Core.TypeConversion;
 
@@ -34,17 +26,11 @@ namespace Spring.Core.TypeConversion;
 /// <author>Mark Pollack (.NET)</author>
 public class FileInfoConverter : TypeConverter
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Core.TypeConversion.FileInfoConverter"/> class.
     /// </summary>
     public FileInfoConverter() { }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Returns whether this converter can convert an object of one
@@ -105,6 +91,4 @@ public class FileInfoConverter : TypeConverter
 
         return base.ConvertFrom(context, culture, value);
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Data.Core;
@@ -115,13 +111,7 @@ namespace Spring.Messaging.Listener;
 /// </remarks>
 public class TransactionalMessageListenerContainer : AbstractTransactionalMessageListenerContainer
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(TransactionalMessageListenerContainer));
-
-    #endregion
-
-    #region Fields
 
     private bool useContainerManagedMessageQueueTransaction = false;
 
@@ -130,10 +120,6 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
     private bool exposeContainerManagedMessageQueueTransaction = true;
 
     private IMessageTransactionExceptionHandler messageTransactionExceptionHandler;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets a value indicating whether the MessageListenerContainer should be
@@ -199,10 +185,6 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
         set { messageTransactionExceptionHandler = value; }
     }
 
-    #endregion
-
-    #region Public Methods
-
     /// <summary>
     /// Determine if the container should create its own
     /// MessageQueueTransaction when a IResourceTransactionManager is specified.
@@ -240,10 +222,6 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
         // Proceed with superclass initialization.
         base.Initialize();
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Does the receive and execute using platform transaction manager.
@@ -295,18 +273,12 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
     protected virtual bool DoRecieveAndExecuteUsingMessageQueueTransactionManager(MessageQueue mq,
         ITransactionStatus status)
     {
-        #region Logging
-
         if (LOG.IsEnabled(LogLevel.Debug))
         {
             LOG.LogDebug("Executing DoRecieveAndExecuteUsingMessageQueueTransactionManager");
         }
 
-        #endregion Logging
-
         Message message;
-
-        #region Receive message
 
         try
         {
@@ -329,15 +301,11 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
             {
                 // A real issue in receiving the message
 
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Error))
                 {
                     LOG.LogError("Error receiving message from DefaultMessageQueue [" + mq.Path +
                                  "], closing queue and clearing connection cache.");
                 }
-
-                #endregion
 
                 lock (messageQueueMonitor)
                 {
@@ -349,18 +317,12 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
             }
         }
 
-        #endregion
-
         if (message == null)
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Trace))
             {
                 LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
             }
-
-            #endregion
 
             status.SetRollbackOnly();
             return false; // no more peeking unless this is the last listener thread
@@ -368,26 +330,18 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
         try
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
             }
 
-            #endregion
-
             MessageReceived(message);
             DoExecuteListener(message);
-
-            #region Logging
 
             if (LOG.IsEnabled(LogLevel.Trace))
             {
                 LOG.LogTrace("MessageListener executed");
             }
-
-            #endregion
         }
         catch (Exception ex)
         {
@@ -397,15 +351,11 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 HandleTransactionalListenerException(ex, message, QueueUtils.GetMessageQueueTransaction(null));
             if (action == TransactionAction.Rollback)
             {
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.LogDebug("Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
                                  mq.Path + "]");
                 }
-
-                #endregion
 
                 status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
@@ -432,42 +382,28 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
     protected virtual bool DoRecieveAndExecuteUsingResourceTransactionManagerWithTxQueue(MessageQueue mq,
         ITransactionStatus status)
     {
-        #region Logging
-
         if (LOG.IsEnabled(LogLevel.Debug))
         {
             LOG.LogDebug("Executing DoRecieveAndExecuteUsingResourceTransactionManagerWithTxQueue");
         }
 
-        #endregion Logging
-
         using (MessageQueueTransaction messageQueueTransaction = new MessageQueueTransaction())
         {
             messageQueueTransaction.Begin();
-
-            #region Logging
 
             if (LOG.IsEnabled(LogLevel.Trace))
             {
                 LOG.LogTrace("Started MessageQueueTransaction for queue = [" + mq.Path + "]");
             }
 
-            #endregion
-
             Message message;
-
-            #region ReceiveMessage
 
             try
             {
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
                     LOG.LogTrace("Receiving message with zero timeout for queue = [" + mq.Path + "]");
                 }
-
-                #endregion
 
                 message = mq.Receive(TimeSpan.Zero, messageQueueTransaction);
             }
@@ -477,14 +413,10 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 {
                     //expected to occur occasionally
 
-                    #region Logging
-
                     if (LOG.IsEnabled(LogLevel.Trace))
                     {
                         LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
                     }
-
-                    #endregion
 
                     status.SetRollbackOnly();
                     return false; // no more peeking unless this is the last listener thread
@@ -493,15 +425,11 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 {
                     // A real issue in receiving the message
 
-                    #region Logging
-
                     if (LOG.IsEnabled(LogLevel.Error))
                     {
                         LOG.LogError("Error receiving message from DefaultMessageQueue [" + mq.Path +
                                      "], closing queue and clearing connection cache.");
                     }
-
-                    #endregion
 
                     lock (messageQueueMonitor)
                     {
@@ -513,18 +441,12 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 }
             }
 
-            #endregion
-
             if (message == null)
             {
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
                     LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
                 }
-
-                #endregion
 
                 status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
@@ -532,14 +454,10 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
             try
             {
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
                 }
-
-                #endregion
 
                 MessageReceived(message);
 
@@ -552,25 +470,17 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
                 DoExecuteListener(message);
 
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
                     LOG.LogTrace("MessageListener executed");
                 }
 
-                #endregion
-
                 messageQueueTransaction.Commit();
-
-                #region Logging
 
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
                     LOG.LogTrace("Committed MessageQueueTransaction for queue [" + mq.Path + "]");
                 }
-
-                #endregion
             }
             catch (Exception ex)
             {
@@ -580,30 +490,22 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 {
                     messageQueueTransaction.Abort();
 
-                    #region Logging
-
                     if (LOG.IsEnabled(LogLevel.Debug))
                     {
                         LOG.LogDebug("Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
                                      mq.Path + "]");
                     }
-
-                    #endregion
                 }
                 else
                 {
                     // Will remove from the message queue
                     messageQueueTransaction.Commit();
 
-                    #region Logging
-
                     if (LOG.IsEnabled(LogLevel.Debug))
                     {
                         LOG.LogDebug("Exception handler's TransactionAction has committed MessageQueueTransaction for queue [" +
                                      mq.Path + "]");
                     }
-
-                    #endregion
                 }
 
                 //Outer db-tx will rollback
@@ -684,6 +586,4 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
             return TransactionAction.Rollback;
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Globalization;
@@ -34,8 +30,6 @@ public class ListFactoryObject : AbstractFactoryObject
 {
     private IList _sourceList;
     private Type _targetListType = typeof(ArrayList);
-
-    #region Properties
 
     /// <summary>
     /// Set the source <see cref="System.Collections.IList"/>.
@@ -103,8 +97,6 @@ public class ListFactoryObject : AbstractFactoryObject
     {
         get { return typeof(IList); }
     }
-
-    #endregion
 
     /// <summary>
     /// Constructs a new instance of the target dictionary.

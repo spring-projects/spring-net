@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -29,8 +23,6 @@ using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using Spring.Core.TypeResolution;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.TypeConversion;
 

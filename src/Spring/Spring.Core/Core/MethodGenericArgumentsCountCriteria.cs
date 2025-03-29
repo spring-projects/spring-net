@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -39,8 +31,6 @@ namespace Spring.Core;
 /// <author>Bruno Baia</author>
 public class MethodGenericArgumentsCountCriteria : ICriteria
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="MethodGenericArgumentsCountCriteria"/> class.
@@ -73,10 +63,6 @@ public class MethodGenericArgumentsCountCriteria : ICriteria
         ExpectedGenericArgumentCount = expectedGenericArgumentCount;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The number of generic arguments that a <see cref="System.Reflection.MethodInfo"/>
     /// must have to satisfy this criteria.
@@ -99,10 +85,6 @@ public class MethodGenericArgumentsCountCriteria : ICriteria
         }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
     /// this instance?
@@ -124,11 +106,5 @@ public class MethodGenericArgumentsCountCriteria : ICriteria
         return satisfied;
     }
 
-    #endregion
-
-    #region Fields
-
     private int _count;
-
-    #endregion
 }

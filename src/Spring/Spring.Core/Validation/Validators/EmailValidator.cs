@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Text.RegularExpressions;
 using Spring.Expressions;
@@ -36,8 +32,6 @@ namespace Spring.Validation.Validators;
 /// <author>Goran Milosavljevic</author>
 public class EmailValidator : BaseSimpleValidator
 {
-    #region Constructors
-
     /// <summary>
     /// Creates a new instance of the <b>EmailValidator</b> class.
     /// </summary>
@@ -67,10 +61,6 @@ public class EmailValidator : BaseSimpleValidator
         AssertUtils.ArgumentNotNull(test, "test");
     }
 
-    #endregion
-
-    #region BaseValidator methods
-
     /// <summary>
     /// Validates the supplied <paramref name="objectToValidate"/>.
     /// </summary>
@@ -97,14 +87,8 @@ public class EmailValidator : BaseSimpleValidator
         return match.Success && match.Index == 0 && match.Length == text.Length;
     }
 
-    #endregion
-
-    #region Data members
-
     /// <summary>
     /// Regular expression used for validation of object passed to this <see cref="EmailValidator"/>.
     /// </summary>
     private static string emailCheck = @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-
-    #endregion
 }

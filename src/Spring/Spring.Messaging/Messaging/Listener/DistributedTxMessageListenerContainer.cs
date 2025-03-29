@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Transactions;
 using Microsoft.Extensions.Logging;
@@ -54,11 +50,7 @@ namespace Spring.Messaging.Listener;
 /// </remarks>
 public class DistributedTxMessageListenerContainer : AbstractTransactionalMessageListenerContainer
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(DistributedTxMessageListenerContainer));
-
-    #endregion
 
     private IDistributedTransactionExceptionHandler distributedTransactionExceptionHandler;
 
@@ -100,14 +92,10 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
     protected override bool DoReceiveAndExecuteUsingPlatformTransactionManager(MessageQueue mq,
         ITransactionStatus status)
     {
-        #region Logging
-
         if (LOG.IsEnabled(LogLevel.Debug))
         {
             LOG.LogDebug("Executing DoReceiveAndExecuteUsingTxScopeTransactionManager");
         }
-
-        #endregion Logging
 
         //We are sure to be talking to a second resource manager, so avoid going through
         //the promotable transaction and force a distributed transaction right from the start.
@@ -124,14 +112,10 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
             {
                 //expected to occur occasionally
 
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
                     LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
                 }
-
-                #endregion
 
                 status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
@@ -151,14 +135,10 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
 
         if (message == null)
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Trace))
             {
                 LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
             }
-
-            #endregion
 
             status.SetRollbackOnly();
             return false; // no more peeking unless this is the last listener thread
@@ -166,14 +146,10 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
 
         try
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
             }
-
-            #endregion
 
             MessageReceived(message);
             if (DistributedTransactionExceptionHandler != null)

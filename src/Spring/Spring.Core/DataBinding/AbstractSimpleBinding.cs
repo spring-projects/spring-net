@@ -11,14 +11,8 @@ namespace Spring.DataBinding;
 /// <author>Aleksandar Seovic</author>
 public abstract class AbstractSimpleBinding : AbstractBinding
 {
-    #region Fields
-
     private readonly ILogger log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     private IFormatter formatter;
-
-    #endregion
-
-    #region Constructor(s)
 
     /// <summary>
     /// Initialize a new instance of <see cref="AbstractSimpleBinding"/> without any <see cref="IFormatter"/>
@@ -36,10 +30,6 @@ public abstract class AbstractSimpleBinding : AbstractBinding
         this.formatter = formatter;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets or sets the <see cref="IFormatter"/> to use.
     /// </summary>
@@ -49,10 +39,6 @@ public abstract class AbstractSimpleBinding : AbstractBinding
         get { return formatter; }
         set { formatter = value; }
     }
-
-    #endregion
-
-    #region IBinding Implementation
 
     /// <summary>
     /// Binds source object to target object.
@@ -163,10 +149,6 @@ public abstract class AbstractSimpleBinding : AbstractBinding
         this.SetSourceValue(source, value, variables);
     }
 
-    #endregion
-
-    #region Abstract Methods
-
     /// <summary>
     /// Gets the source value for the binding.
     /// </summary>
@@ -222,6 +204,4 @@ public abstract class AbstractSimpleBinding : AbstractBinding
     ///   Variables for expression evaluation.
     /// </param>
     protected abstract void SetTargetValue(object target, object value, IDictionary<string, object> variables);
-
-    #endregion
 }

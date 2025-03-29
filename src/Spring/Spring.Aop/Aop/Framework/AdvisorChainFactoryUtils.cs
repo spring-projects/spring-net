@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using AopAlliance.Intercept;
 using Spring.Aop.Framework.Adapter;
-
-#endregion
 
 namespace Spring.Aop.Framework;
 
@@ -94,10 +86,6 @@ public sealed class AdvisorChainFactoryUtils
         return interceptors;
     }
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Aop.Framework.AdvisorChainFactoryUtils"/>
@@ -114,6 +102,4 @@ public sealed class AdvisorChainFactoryUtils
     }
 
     // CLOVER:ON
-
-    #endregion
 }

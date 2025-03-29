@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Dao;
@@ -35,26 +31,16 @@ namespace Spring.Data.Support;
 /// <author>Mark Pollack (.NET)</author>
 public class ErrorCodeExceptionTranslator : IAdoExceptionTranslator
 {
-    #region Fields
-
     private ErrorCodes errorCodes;
 
     private IAdoExceptionTranslator fallbackTranslator;
 
     private IDbProvider dbProvider;
 
-    #endregion
-
-    #region Constants
-
     /// <summary>
     /// The shared log instance for this class (and derived classes).
     /// </summary>
     protected static readonly ILogger log = LogManager.GetLogger(typeof(ErrorCodeExceptionTranslator));
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ErrorCodeExceptionTranslator"/> class.
@@ -75,10 +61,6 @@ public class ErrorCodeExceptionTranslator : IAdoExceptionTranslator
         DbProvider = provider;
         errorCodes = ec;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Sets the db provider.
@@ -105,8 +87,6 @@ public class ErrorCodeExceptionTranslator : IAdoExceptionTranslator
         }
     }
 
-    #endregion
-
     /// <summary>
     /// Gets or sets the fallback translator to use in case error code based translation
     /// fails.
@@ -123,10 +103,6 @@ public class ErrorCodeExceptionTranslator : IAdoExceptionTranslator
             fallbackTranslator = value;
         }
     }
-
-    #region Methods
-
-    #endregion
 
     /// <summary>
     /// Translate the given <see cref="System.SystemException"/> into a generic data access exception.

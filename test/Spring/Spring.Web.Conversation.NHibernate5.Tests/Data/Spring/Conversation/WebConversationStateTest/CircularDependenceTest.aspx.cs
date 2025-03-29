@@ -35,14 +35,10 @@ public partial class CircularDependenceTest : System.Web.UI.Page, IApplicationCo
         Session["CircularDependenceTest"] = sbErrors.ToString();
     }
 
-    #region IApplicationContextAware Members
-
     private IApplicationContext applicationContext;
 
     public IApplicationContext ApplicationContext
     {
         set { this.applicationContext = value; }
     }
-
-    #endregion
 }

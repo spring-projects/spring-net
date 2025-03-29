@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 #if !MONO
 
@@ -38,8 +34,6 @@ namespace Spring.EnterpriseServices;
 /// <author>Aleksandar Seovic</author>
 public class ServicedComponentFactory : IConfigurableFactoryObject, IInitializingObject
 {
-    #region Fields
-
     private string name;
     private string server;
 
@@ -49,10 +43,6 @@ public class ServicedComponentFactory : IConfigurableFactoryObject, IInitializin
     private Type componentType;
     private object singletonInstance;
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates new instance of serviced component factory.
     /// </summary>
@@ -60,10 +50,6 @@ public class ServicedComponentFactory : IConfigurableFactoryObject, IInitializin
     {
         this.isSingleton = false;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets component name, as registered with COM+ Services.
@@ -82,10 +68,6 @@ public class ServicedComponentFactory : IConfigurableFactoryObject, IInitializin
         get { return server; }
         set { server = value; }
     }
-
-    #endregion
-
-    #region IConfigurableFactoryObject Members
 
     /// <summary>
     /// Returns configured instance of the serviced component.
@@ -135,10 +117,6 @@ public class ServicedComponentFactory : IConfigurableFactoryObject, IInitializin
         set { productTemplate = value; }
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Initializes factory object.
     /// </summary>
@@ -148,10 +126,6 @@ public class ServicedComponentFactory : IConfigurableFactoryObject, IInitializin
         componentType = Type.GetTypeFromProgID(Name, Server);
         AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
     }
-
-    #endregion
-
-    #region Private Methods
 
     private void ValidateConfiguration()
     {
@@ -174,8 +148,6 @@ public class ServicedComponentFactory : IConfigurableFactoryObject, IInitializin
     {
         return Assembly.LoadFrom(componentType.Assembly.CodeBase);
     }
-
-    #endregion
 }
 
 #endif // !MONO

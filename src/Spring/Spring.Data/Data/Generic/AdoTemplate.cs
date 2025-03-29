@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Data;
@@ -38,19 +34,9 @@ namespace Spring.Data.Generic;
 /// <author>Mark Pollack (.NET)</author>
 public class AdoTemplate : AdoAccessor, IAdoOperations
 {
-    #region Logging Definition
-
     private static readonly ILogger<AdoTemplate> LOG = LogManager.GetLogger<AdoTemplate>();
 
-    #endregion
-
-    #region Fields
-
     private Core.AdoTemplate classicAdoTemplate;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AdoTemplate"/> class.
@@ -93,10 +79,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         this.classicAdoTemplate = classicAdoTemplate;
         AfterPropertiesSet();
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// An instance of a DbProvider implementation.
@@ -175,10 +157,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
             classicAdoTemplate.CommandTimeout = value;
         }
     }
-
-    #endregion
-
-    #region General Execute Callback methods
 
     /// <summary>
     /// Execute a ADO.NET operation on a command object using a interface based callback.
@@ -521,10 +499,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         }
     }
 
-    #endregion
-
-    #region ExecuteNonQuery
-
     /// <summary>
     /// Executes a non query returning the number of rows affected.
     /// </summary>
@@ -596,10 +570,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
     {
         return classicAdoTemplate.ExecuteNonQuery(commandCreator);
     }
-
-    #endregion
-
-    #region ExecuteScalar
 
     /// <summary>
     /// Execute the query with the specified command text.
@@ -675,10 +645,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         return classicAdoTemplate.ExecuteScalar(commandCreator);
     }
 
-    #endregion
-
-    #region Queries with RowCallback
-
     /// <summary>
     /// Execute a query given IDbCommand's type and text by
     /// passing the created IDbCommand to a ICommandSetter implementation
@@ -748,10 +714,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
             parameter);
     }
 
-    #endregion
-
-    #region Queries with RowCallback Delegate
-
     public virtual void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate)
     {
         classicAdoTemplate.QueryWithRowCallbackDelegate(cmdType, sql, rowCallbackDelegate);
@@ -774,10 +736,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         classicAdoTemplate.QueryWithRowCallbackDelegate(cmdType, sql, rowCallbackDelegate, parameters);
     }
 
-    #endregion
-
-    #region Queries with RowMapper<T>
-
     public virtual IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper)
     {
         return QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor<T>(rowMapper));
@@ -799,10 +757,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
     {
         return QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor<T>(rowMapper), parameters);
     }
-
-    #endregion
-
-    #region Queries with RowMapperDelegate<T>
 
     public virtual IList<T> QueryWithRowMapperDelegate<T>(CommandType cmdType, string cmdText, RowMapperDelegate<T> rowMapperDelegate)
     {
@@ -829,10 +783,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         return QueryWithResultSetExtractor(cmdType, cmdText, new RowMapperResultSetExtractor<T>(rowMapperDelegate),
             parameters);
     }
-
-    #endregion
-
-    #region Queries with ResultSetExtractor<T>
 
     public virtual T QueryWithResultSetExtractor<T>(CommandType cmdType,
         string cmdText,
@@ -882,10 +832,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
             resultSetExtractor,
             commandSetterDelegate));
     }
-
-    #endregion
-
-    #region Queries with ResultSetExtractorDelegate<T>
 
     public virtual T QueryWithResultSetExtractorDelegate<T>(CommandType cmdType,
         string cmdText,
@@ -937,10 +883,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
             commandSetterDelegate));
     }
 
-    #endregion
-
-    #region Query for Object<T>
-
     public virtual T QueryForObject<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper)
     {
         IList<T> results = QueryWithRowMapper(cmdType, cmdText, rowMapper);
@@ -966,10 +908,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         return DataAccessUtils.RequiredUniqueResultSet(results);
     }
 
-    #endregion
-
-    #region Query for ObjectDelegate<T>
-
     public virtual T QueryForObjectDelegate<T>(CommandType cmdType, string cmdText, RowMapperDelegate<T> rowMapperDelegate)
     {
         IList<T> results = QueryWithRowMapperDelegate(cmdType, cmdText, rowMapperDelegate);
@@ -994,10 +932,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         IList<T> results = QueryWithRowMapperDelegate(cmdType, cmdText, rowMapperDelegate, parameterName, dbType, size, parameterValue);
         return DataAccessUtils.RequiredUniqueResultSet(results);
     }
-
-    #endregion
-
-    #region Query with CommandCreator
 
     public virtual T QueryWithCommandCreator<T>(IDbCommandCreator cc, IResultSetExtractor<T> rse)
     {
@@ -1049,10 +983,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         return classicAdoTemplate.Execute(cc, new AdoResultProcessorsQueryCommandCallback<T, U>(this, namedResultSetProcessors)) as IDictionary;
     }
 
-    #endregion
-
-    #region General Helper Methods
-
     /// <summary>
     /// Checks if DbProvider is not null and creates ExceptionTranslator if not LazyInit.
     /// </summary>
@@ -1072,10 +1002,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         return classicAdoTemplate.CreateDataReaderWrapper(readerToWrap);
     }
 
-    #endregion
-
-    #region Parameter Creation Helper Methods
-
     /// <summary>
     /// Derives the parameters of a stored procedure including the return parameter
     /// </summary>
@@ -1086,10 +1012,6 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
     {
         return classicAdoTemplate.DeriveParameters(procedureName, includeReturnParameter);
     }
-
-    #endregion
-
-    #region Internal Helper classes
 
     internal class QueryCallback<T> : IDbCommandCallback<T>, ICommandTextProvider
     {
@@ -1650,6 +1572,4 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
             return returnedResults;
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Globalization;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Context.Support;
 
@@ -51,13 +43,7 @@ namespace Spring.Context.Support;
 /// <seealso cref="Spring.Context.Support.AbstractApplicationContext"/>
 public class DelegatingMessageSource : IHierarchicalMessageSource
 {
-    #region Fields
-
     private IMessageSource _parentMessageSource;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -80,10 +66,6 @@ public class DelegatingMessageSource : IHierarchicalMessageSource
         ParentMessageSource = parentMessageSource;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The parent message source used to try and resolve messages that
     /// this object can't resolve.
@@ -102,10 +84,6 @@ public class DelegatingMessageSource : IHierarchicalMessageSource
         }
         set { _parentMessageSource = value; }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Resolve the message identified by the supplied
@@ -315,10 +293,6 @@ public class DelegatingMessageSource : IHierarchicalMessageSource
         ParentMessageSource.ApplyResources(value, objectName, culture);
     }
 
-    #endregion
-
-    #region Inner Class : SpecialCaseNullMessageSource
-
     private sealed class SpecialCaseNullMessageSource : IMessageSource
     {
         public string GetMessage(string name)
@@ -381,6 +355,4 @@ public class DelegatingMessageSource : IHierarchicalMessageSource
                     value, objectName, culture));
         }
     }
-
-    #endregion
 }

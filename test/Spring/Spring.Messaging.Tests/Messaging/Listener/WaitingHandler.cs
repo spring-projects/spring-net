@@ -4,11 +4,7 @@ namespace Spring.Messaging.Listener;
 
 public class WaitingHandler
 {
-    #region Logging
-
     private static readonly ILogger<WaitingHandler> LOG = LogManager.GetLogger<WaitingHandler>();
-
-    #endregion
 
     private int messageCount;
 

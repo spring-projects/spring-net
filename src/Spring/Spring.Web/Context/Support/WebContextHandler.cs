@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Web.Configuration;
 using System.Xml;
 using Microsoft.Extensions.Logging;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Context.Support;
 

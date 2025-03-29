@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using Spring.Util;
@@ -48,8 +44,6 @@ public class DateTimeFormatter : IFormatter
     private DateTimeFormatInfo formatInfo;
     private string format;
 
-    #region Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="DateTimeFormatter"/> class
     /// using default <see cref="DateTimeFormatInfo"/> for the current thread's culture.
@@ -80,8 +74,6 @@ public class DateTimeFormatter : IFormatter
         this.format = format;
         this.formatInfo = culture.DateTimeFormat;
     }
-
-    #endregion
 
     /// <summary>
     /// Formats the specified <see cref="DateTime"/> value.

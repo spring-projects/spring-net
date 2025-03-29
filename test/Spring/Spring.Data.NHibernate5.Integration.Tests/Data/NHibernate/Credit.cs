@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,20 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Data.NHibernate
 {
     public class Credit
     {
-        #region Fields
-
         private int creditId;
         private float amount;
-
-        #endregion
-
-        #region Constructor (s)
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Credit"/> class.
@@ -37,10 +27,6 @@ namespace Spring.Data.NHibernate
         public Credit()
         {
         }
-
-        #endregion
-
-        #region Properties
 
         public int CreditID
         {
@@ -54,10 +40,10 @@ namespace Spring.Data.NHibernate
             set { amount = value; }
         }
 
-        #endregion
+        
 
-        #region Methods
+        
 
-        #endregion
+        
     }
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
@@ -31,8 +27,6 @@ namespace Spring.Objects.Factory;
 [Serializable]
 public class ObjectNotOfRequiredTypeException : ObjectsException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the ObjectNotOfRequiredTypeException class.
     /// </summary>
@@ -113,10 +107,6 @@ public class ObjectNotOfRequiredTypeException : ObjectsException
         name = info.GetString("Name");
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The actual <see cref="System.Type"/> of the actual object
     /// instance that was retrieved.
@@ -164,10 +154,6 @@ public class ObjectNotOfRequiredTypeException : ObjectsException
         }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
     /// the data needed to serialize the target object.
@@ -190,13 +176,7 @@ public class ObjectNotOfRequiredTypeException : ObjectsException
         info.AddValue("Name", name);
     }
 
-    #endregion
-
-    #region Fields
-
     private Type requiredType;
     private object actualInstance;
     private string name;
-
-    #endregion
 }

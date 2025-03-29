@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Messaging.Ems.Common;
 
 public class EmsMessageProducer : IMessageProducer
@@ -28,8 +24,6 @@ public class EmsMessageProducer : IMessageProducer
     {
         this.nativeMessageProducer = messageProducer;
     }
-
-    #region Implementation of IMessageProducer
 
     public MessageProducer NativeMessageProducer
     {
@@ -111,6 +105,4 @@ public class EmsMessageProducer : IMessageProducer
         get { return nativeMessageProducer.TimeToLive; }
         set { nativeMessageProducer.TimeToLive = value; }
     }
-
-    #endregion
 }

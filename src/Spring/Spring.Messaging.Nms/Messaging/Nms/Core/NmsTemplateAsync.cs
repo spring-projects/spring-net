@@ -1,5 +1,3 @@
-#region License
-
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -15,8 +13,6 @@
 //  * See the License for the specific language governing permissions and
 //  * limitations under the License.
 //  */
-
-#endregion
 
 using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Support;
@@ -35,13 +31,7 @@ namespace Spring.Messaging.Nms.Core;
 /// <see cref="NmsTemplate"/>
 public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
 {
-    #region Logging
-
     private readonly ILogger<NmsTemplate> logger = LogManager.GetLogger<NmsTemplate>();
-
-    #endregion
-
-    #region Fields
 
     /// <summary>
     /// Timeout value indicating that a receive operation should
@@ -76,10 +66,6 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
 
     private MsgDeliveryMode deliveryMode = NMSConstants.defaultDeliveryMode;
 
-    #endregion
-
-    #region Constructor (s)
-
     /// <summary> Create a new NmsTemplate.</summary>
     /// <remarks>
     /// <para>Note: The ConnectionFactory has to be set before using the instance.
@@ -101,10 +87,6 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
         ConnectionFactory = connectionFactory;
         AfterPropertiesSet();
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary> Initialize the default implementations for the template's strategies:
     /// DynamicDestinationResolver and SimpleMessageConverter.
@@ -183,10 +165,6 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
             await ConnectionFactoryUtils.ReleaseConnectionAsync(conToClose, ConnectionFactory, startConnection).Awaiter();
         }
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the default destination to be used on send/receive operations that do not
@@ -360,8 +338,6 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
         set { timeToLive = value; }
     }
 
-    #endregion
-
     /// <summary>
     /// Extract the content from the given JMS message.
     /// </summary>
@@ -376,8 +352,6 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
 
         return null;
     }
-
-    #region NMS Factory Methods
 
     /// <summary> Fetch an appropriate Connection from the given MessageResourceHolder.
     /// </summary>
@@ -585,10 +559,6 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
             await producer.SendAsync(message).Awaiter();
         }
     }
-
-    #endregion
-
-    #region IMessageOperations Implementation
 
     /// <summary>
     /// Execute the action specified by the given action object within
@@ -1192,10 +1162,6 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
         return DoConvertFromMessage(await ReceiveSelected(destinationName, messageSelector).Awaiter());
     }
 
-    #endregion
-
-    #region Supporting Internal Classes
-
     /// <summary>
     /// ResourceFactory implementation that delegates to this template's callback methods.
     /// </summary>
@@ -1400,8 +1366,6 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
             }
         }
     }
-
-    #endregion
 
     private class ExecuteSessionCallbackUsingDelegateAsync : ISessionCallbackAsync
     {

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using System.Data;
 using Spring.Data.Common;
@@ -26,8 +22,6 @@ namespace Spring.Data;
 
 public interface ICommonAdoOperations
 {
-    #region ExecuteScalar
-
     /// <summary>
     /// Execute the query with the specified command text returning a scalar result
     /// </summary>
@@ -89,10 +83,6 @@ public interface ICommonAdoOperations
     /// <returns>A dictionary containing output parameters, if any</returns>
     IDictionary ExecuteScalar(IDbCommandCreator commandCreator);
 
-    #endregion
-
-    #region ExecuteNonQuery
-
     /// <summary>
     /// Executes a non query returning the number of rows affected.
     /// </summary>
@@ -150,10 +140,6 @@ public interface ICommonAdoOperations
     /// <returns>The number of rows affected.</returns>
     IDictionary ExecuteNonQuery(IDbCommandCreator commandCreator);
 
-    #endregion
-
-    #region Query with RowCallback
-
     /// <summary>
     /// Execute a query given IDbCommand's type and text, reading a
     /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
@@ -209,10 +195,6 @@ public interface ICommonAdoOperations
     void QueryWithRowCallback(CommandType cmdType, String cmdText, IRowCallback rowCallback,
         ICommandSetter commandSetter);
 
-    #endregion
-
-    #region Query with RowCallback Delegate
-
     void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate);
 
     void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, ICommandSetter commandSetter);
@@ -222,13 +204,7 @@ public interface ICommonAdoOperations
 
     void QueryWithRowCallbackDelegate(CommandType cmdType, string sql, RowCallbackDelegate rowCallbackDelegate, IDbParameters parameters);
 
-    #endregion
-
-    #region Query with CommandCreator
-
     void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback);
 
     void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback, IDictionary returnedParameters);
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using AopAlliance.Intercept;
 using Microsoft.Extensions.Logging;
 using Spring.Aop.Support;
 using Spring.Collections;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Target;
 
@@ -56,8 +48,6 @@ namespace Spring.Aop.Target;
 public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
     IThreadLocalTargetSourceStats, IDisposable, IMethodInterceptor
 {
-    #region Fields
-
     /// <summary>
     /// ThreadLocal holding the target associated with the current thread.
     /// </summary>
@@ -77,10 +67,6 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
 
     private int _invocations;
     private int _hits;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets the number of invocations of the <see cref="GetTarget()"/> and
@@ -120,10 +106,6 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
         get { return Thread.GetData(_targetInThread); }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Returns the target object.
     /// </summary>
@@ -144,8 +126,6 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
         object target = ThreadBoundTarget;
         if (target == null)
         {
-            #region Instrumentation
-
             if (logger.IsEnabled(LogLevel.Debug))
             {
                 logger.LogDebug(string.Format(
@@ -153,8 +133,6 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
                     "found in thread: creating one and binding it to thread '#{1}'",
                     TargetObjectName, Thread.CurrentThread.GetHashCode()));
             }
-
-            #endregion
 
             target = NewPrototypeInstance();
             Thread.SetData(_targetInThread, target);
@@ -184,14 +162,10 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
     /// <seealso cref="System.IDisposable.Dispose"/>
     public void Dispose()
     {
-        #region Instrumentation
-
         if (logger.IsEnabled(LogLevel.Debug))
         {
             logger.LogDebug("Destroying ThreadLocal bindings");
         }
-
-        #endregion
 
         foreach (object target in _targetSet)
         {
@@ -203,8 +177,6 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
                 }
                 catch (Exception ex)
                 {
-                    #region Instrumentation
-
                     if (logger.IsEnabled(LogLevel.Warning))
                     {
                         string message = string.Format(
@@ -213,8 +185,6 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
                             target.GetType());
                         logger.LogWarning(ex, message);
                     }
-
-                    #endregion
                 }
             }
         }
@@ -239,6 +209,4 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
 
         return invocation.Method.Invoke(GetTarget(), invocation.Arguments);
     }
-
-    #endregion
 }

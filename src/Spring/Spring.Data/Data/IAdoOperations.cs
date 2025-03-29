@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using System.Data;
 using Spring.Data.Common;
@@ -30,8 +26,6 @@ namespace Spring.Data;
 /// <author>Mark Pollack (.NET)</author>
 public interface IAdoOperations : ICommonAdoOperations
 {
-    #region General Execute Methods with Callbacks
-
     /// <summary>
     /// Execute a ADO.NET operation on a command object using a delegate callback.
     /// </summary>
@@ -66,10 +60,6 @@ public interface IAdoOperations : ICommonAdoOperations
     /// <param name="dataAdapterCallback">The data adapter callback.</param>
     /// <returns>A result object returned by the callback or null</returns>
     object Execute(IDataAdapterCallback dataAdapterCallback);
-
-    #endregion
-
-    #region Queries With ResultSetExtractor
 
     // Static Queries
 
@@ -140,10 +130,6 @@ public interface IAdoOperations : ICommonAdoOperations
     object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor,
         IDbParameters parameters);
 
-    #endregion
-
-    #region Queries With ResultSetExtractorDelegate
-
     // Static Queries
 
     /// <summary>
@@ -213,10 +199,6 @@ public interface IAdoOperations : ICommonAdoOperations
     object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate,
         IDbParameters parameters);
 
-    #endregion
-
-    #region Queries with RowMapperDelegate
-
     /// <summary>
     /// Execute a query given static SQL, mapping each row to a .NET object
     /// via a RowMapper
@@ -233,10 +215,6 @@ public interface IAdoOperations : ICommonAdoOperations
         string parameterName, Enum dbType, int size, object parameterValue);
 
     IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelgate, IDbParameters parameter);
-
-    #endregion
-
-    #region Queries with RowMapper
 
     // Static Queries
 
@@ -259,10 +237,6 @@ public interface IAdoOperations : ICommonAdoOperations
         string name, Enum dbType, int size, object parameterValue);
 
     IList QueryWithRowMapper(CommandType cmdType, string cmdText, IRowMapper rowMapper, IDbParameters parameter);
-
-    #endregion
-
-    #region Query for Object
 
     /// <summary>
     /// Execute a query with the specified command text, mapping a single result
@@ -335,10 +309,6 @@ public interface IAdoOperations : ICommonAdoOperations
     object QueryForObject(CommandType cmdType, string cmdText, IRowMapper rowMapper,
         string parameterName, Enum dbType, int size, object parameterValue);
 
-    #endregion
-
-    #region Query for ObjectDelegate
-
     /// <summary>
     /// Execute a query with the specified command text, mapping a single result
     /// row to an object via a RowMapper.
@@ -404,10 +374,6 @@ public interface IAdoOperations : ICommonAdoOperations
     object QueryForObjectDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelegate,
         string parameterName, Enum dbType, int size, object parameterValue);
 
-    #endregion
-
-    #region Query With CommandCreator
-
     // Using IResultSetExtractor to process one result set.
     object QueryWithCommandCreator(IDbCommandCreator commandCreator, IResultSetExtractor resultSetExtractor);
 
@@ -424,10 +390,6 @@ public interface IAdoOperations : ICommonAdoOperations
     // and multiple output parameters.
     IDictionary QueryWithCommandCreator(IDbCommandCreator commandCreator, IList resultProcessors);
 
-    #endregion
-
-    #region DataTable Create operations without parameters
-
     DataTable DataTableCreate(CommandType commandType, string sql);
 
     DataTable DataTableCreate(CommandType commandType, string sql,
@@ -439,10 +401,6 @@ public interface IAdoOperations : ICommonAdoOperations
     DataTable DataTableCreate(CommandType commandType, string sql,
         ITableMapping tableMapping,
         IDataAdapterSetter setter);
-
-    #endregion
-
-    #region DataTable Create operations with parameters
 
     DataTable DataTableCreateWithParams(CommandType commandType, string sql,
         IDbParameters parameters);
@@ -459,10 +417,6 @@ public interface IAdoOperations : ICommonAdoOperations
         IDbParameters parameters,
         ITableMapping tableMapping,
         IDataAdapterSetter dataAdapterSetter);
-
-    #endregion
-
-    #region DataTable Fill operations without parameters
 
     /// <summary>
     /// Fill a  <see cref="DataTable"/> based on a select command that requires no parameters.
@@ -483,10 +437,6 @@ public interface IAdoOperations : ICommonAdoOperations
         ITableMapping tableMapping,
         IDataAdapterSetter setter);
 
-    #endregion
-
-    #region DataTable Fill operations with parameters
-
     int DataTableFillWithParams(DataTable dataTable, CommandType commandType, string sql,
         IDbParameters parameters);
 
@@ -502,10 +452,6 @@ public interface IAdoOperations : ICommonAdoOperations
         IDbParameters parameters,
         ITableMapping tableMapping,
         IDataAdapterSetter dataAdapterSetter);
-
-    #endregion
-
-    #region DataTable Update operations
 
     int DataTableUpdateWithCommandBuilder(DataTable dataTable,
         CommandType commandType,
@@ -547,10 +493,6 @@ public interface IAdoOperations : ICommonAdoOperations
         CommandType deleteCommandtype, string deleteSql, IDbParameters deleteParameters,
         IDataAdapterSetter dataAdapterSetter);
 
-    #endregion
-
-    #region DataSet Create operations without parameters
-
     DataSet DataSetCreate(CommandType commandType, string sql);
 
     DataSet DataSetCreate(CommandType commandType, string sql,
@@ -567,10 +509,6 @@ public interface IAdoOperations : ICommonAdoOperations
         ITableMappingCollection tableMapping,
         IDataAdapterSetter setter,
         IDataSetFillLifecycleProcessor fillLifecycleProcessor);
-
-    #endregion
-
-    #region DataSet Create operations with parameters
 
     DataSet DataSetCreateWithParams(CommandType commandType, string sql,
         IDbParameters parameters);
@@ -593,10 +531,6 @@ public interface IAdoOperations : ICommonAdoOperations
         ITableMappingCollection tableMapping,
         IDataAdapterSetter dataAdapterSetter,
         IDataSetFillLifecycleProcessor fillLifecycleProcessor);
-
-    #endregion
-
-    #region DataSet Fill operations without parameters
 
     /// <summary>
     /// Fill a  <see cref="DataSet"/> based on a select command that requires no parameters.
@@ -633,10 +567,6 @@ public interface IAdoOperations : ICommonAdoOperations
         IDataAdapterSetter setter,
         IDataSetFillLifecycleProcessor fillLifecycleProcessor);
 
-    #endregion
-
-    #region DataSet Fill operations with parameters
-
     int DataSetFillWithParameters(DataSet dataSet, CommandType commandType, string sql,
         IDbParameters parameters);
 
@@ -658,10 +588,6 @@ public interface IAdoOperations : ICommonAdoOperations
         ITableMappingCollection tableMapping,
         IDataAdapterSetter dataAdapterSetter,
         IDataSetFillLifecycleProcessor fillLifecycleProcessor);
-
-    #endregion
-
-    #region DataSet Update operations
 
     int DataSetUpdateWithCommandBuilder(DataSet dataSet,
         CommandType commandType,
@@ -715,10 +641,6 @@ public interface IAdoOperations : ICommonAdoOperations
         IDbCommand deleteCommand,
         IDataAdapterSetter dataAdapterSetter);
 
-    #endregion
-
-    #region Parameter Creation Helper Methods
-
     IDbParameters CreateDbParameters();
 
     /// <summary>
@@ -730,10 +652,6 @@ public interface IAdoOperations : ICommonAdoOperations
     IDataParameter[] DeriveParameters(string procedureName);
 
     IDataParameter[] DeriveParameters(string procedureName, bool includeReturnParameter);
-
-    #endregion
-
-    #region Behavioral Control Properties
 
     /// <summary>
     /// An instance of a DbProvider implementation.
@@ -758,6 +676,4 @@ public interface IAdoOperations : ICommonAdoOperations
     /// </remarks>
     /// <value>The command timeout.</value>
     int CommandTimeout { get; set; }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
@@ -157,8 +153,6 @@ public abstract class AbstractExceptionHandlerAdvice : IMethodInterceptor, IInit
         return reg.Match(adviceExpressionString);
     }
 
-    #region Serialization
-
     void IDeserializationCallback.OnDeserialization(object sender)
     {
         OnDeserialization(sender);
@@ -170,6 +164,4 @@ public abstract class AbstractExceptionHandlerAdvice : IMethodInterceptor, IInit
     protected virtual void OnDeserialization(object sender)
     {
     }
-
-    #endregion
 }

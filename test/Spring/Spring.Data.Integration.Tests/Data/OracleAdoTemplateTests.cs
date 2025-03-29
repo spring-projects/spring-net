@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region
-
 using System.Collections;
 using System.Data;
 using System.Data.Common;
@@ -31,8 +25,6 @@ using Spring.Data.Common;
 using Spring.Data.Core;
 using Spring.Objects;
 
-#endregion
-
 namespace Spring.Data;
 
 /// <summary>
@@ -43,8 +35,6 @@ namespace Spring.Data;
 [Ignore("ORACLE-dependent tests disabled for integration runs")]
 public class OracleAdoTemplateTests
 {
-    #region Setup/Teardown
-
     [SetUp]
     public void CreateAdoTemplate()
     {
@@ -57,8 +47,6 @@ public class OracleAdoTemplateTests
         adoOperations = new AdoTemplate(dbProvider);
     }
 
-    #endregion
-
     private IAdoOperations adoOperations;
     private IDbProvider dbProvider;
 
@@ -69,8 +57,6 @@ public class OracleAdoTemplateTests
 
     private class TestObjectExtractor : IResultSetExtractor
     {
-        #region IResultSetExtractor Members
-
         public object ExtractData(IDataReader reader)
         {
             IList testObjects = new ArrayList();
@@ -85,8 +71,6 @@ public class OracleAdoTemplateTests
 
             return testObjects;
         }
-
-        #endregion
     }
 
     [Test]

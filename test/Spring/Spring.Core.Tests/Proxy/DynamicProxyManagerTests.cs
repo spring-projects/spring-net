@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection.Emit;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Proxy;
 
@@ -33,8 +25,6 @@ namespace Spring.Proxy;
 [TestFixture]
 public class DynamicProxyManagerTests
 {
-    #region WorkerThread Class
-
     public class WorkerThread
     {
         private Exception _exception;
@@ -76,8 +66,6 @@ public class DynamicProxyManagerTests
             }
         }
     }
-
-    #endregion WorkerThread Class
 
     [Test]
     public void CreateTypeBuilderMustNotBeCalledTwiceWithSameArguments()

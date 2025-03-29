@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Remoting.Support;
@@ -33,21 +29,11 @@ namespace Spring.Remoting;
 /// <author>Bruno Baia</author>
 public class CaoFactoryObject : IFactoryObject, IInitializingObject
 {
-    #region Logging
-
     private static readonly ILogger<CaoFactoryObject> LOG = LogManager.GetLogger<CaoFactoryObject>();
-
-    #endregion
-
-    #region Fields
 
     private string remoteTargetName;
     private string serviceUrl;
     private object[] constructorArguments;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The remote target name to activate.
@@ -76,20 +62,12 @@ public class CaoFactoryObject : IFactoryObject, IInitializingObject
         set { constructorArguments = value; }
     }
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the <see cref="CaoFactoryObject"/> class.
     /// </summary>
     public CaoFactoryObject()
     {
     }
-
-    #endregion
-
-    #region IInitializingObject Members
 
     /// <summary>
     /// Callback method called once all factory properties have been set.
@@ -107,10 +85,6 @@ public class CaoFactoryObject : IFactoryObject, IInitializingObject
             throw new ArgumentException("The ServiceUrl property is required.");
         }
     }
-
-    #endregion
-
-    #region IFactoryObject Members
 
     /// <summary>
     /// Always return false.
@@ -151,6 +125,4 @@ public class CaoFactoryObject : IFactoryObject, IInitializingObject
             return remoteFactory.GetObject();
         }
     }
-
-    #endregion
 }

@@ -130,12 +130,8 @@ public class ASTNULLType : AST
         return getText();
     }
 
-    #region Implementation of ICloneable
-
     public object Clone()
     {
         return MemberwiseClone();
     }
-
-    #endregion
 }

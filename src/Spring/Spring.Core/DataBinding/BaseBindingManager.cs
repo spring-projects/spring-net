@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.DataBinding;
 
 /// <summary>
@@ -27,14 +23,10 @@ namespace Spring.DataBinding;
 /// <author>Aleksandar Seovic</author>
 public class BaseBindingManager : BaseBindingContainer
 {
-    #region Constructor(s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseBindingManager"/> class.
     /// </summary>
     public BaseBindingManager()
     {
     }
-
-    #endregion
 }

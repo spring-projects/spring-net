@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using System.Text;
@@ -35,8 +31,6 @@ namespace Spring.Aspects.Logging;
 [Serializable]
 public class SimpleLoggingAdvice : AbstractLoggingAdvice
 {
-    #region Fields
-
     /// <summary>
     /// Flag to indicate if unique identifier should be in the log message.
     /// </summary>
@@ -67,10 +61,6 @@ public class SimpleLoggingAdvice : AbstractLoggingAdvice
     /// </summary>
     private LogLevel logLevel = LogLevel.Trace;
 
-    #endregion
-
-    #region Constructor(s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="SimpleLoggingAdvice"/> class.
     /// </summary>
@@ -96,10 +86,6 @@ public class SimpleLoggingAdvice : AbstractLoggingAdvice
         : base(defaultLogger)
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets a value indicating whether to log a unique identifier with the log message.
@@ -160,10 +146,6 @@ public class SimpleLoggingAdvice : AbstractLoggingAdvice
         get { return logLevel; }
         set { logLevel = value; }
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Subclasses must override this method to perform any tracing around the supplied
@@ -406,10 +388,6 @@ public class SimpleLoggingAdvice : AbstractLoggingAdvice
         return RemoveLastSeparator(sb.ToString(), "; ");
     }
 
-    #endregion
-
-    #region Private Methods
-
     private string RemoveLastSeparator(string str, string separator)
     {
         if (str.EndsWith(separator))
@@ -479,6 +457,4 @@ public class SimpleLoggingAdvice : AbstractLoggingAdvice
                 break;
         }
     }
-
-    #endregion
 }

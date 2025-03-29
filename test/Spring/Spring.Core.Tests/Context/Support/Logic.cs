@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Objects.Factory;
 
 namespace Spring.Context.Support;
@@ -33,12 +29,8 @@ public class Logic : IObjectNameAware
         set { assembler = value; }
     }
 
-    #region IObjectNameAware Members
-
     public string ObjectName
     {
         set { objectName = value; }
     }
-
-    #endregion
 }

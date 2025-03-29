@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using System.Data;
 using Spring.Data.Common;
@@ -30,8 +26,6 @@ namespace Spring.Data.Generic;
 /// <author>Mark Pollack (.NET)</author>
 public interface IAdoOperations : ICommonAdoOperations
 {
-    #region General Execute Callback Methods
-
     /// <summary>
     /// Execute a ADO.NET operation on a command object using a generic interface based callback.
     /// </summary>
@@ -100,10 +94,6 @@ public interface IAdoOperations : ICommonAdoOperations
     /// <returns>A result object returned by the callback or null</returns>
     T Execute<T>(DataAdapterDelegate<T> del);
 
-    #endregion
-
-    #region Queries with RowMapper<T>
-
     IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper);
 
     IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper,
@@ -115,10 +105,6 @@ public interface IAdoOperations : ICommonAdoOperations
     IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper,
         IDbParameters parameters);
 
-    #endregion
-
-    #region Queries with RowMapperDelegate<T>
-
     IList<T> QueryWithRowMapperDelegate<T>(CommandType cmdType, string cmdText, RowMapperDelegate<T> rowMapperDelegate);
 
     IList<T> QueryWithRowMapperDelegate<T>(CommandType cmdType, string cmdText, RowMapperDelegate<T> rowMapperDelegate,
@@ -129,10 +115,6 @@ public interface IAdoOperations : ICommonAdoOperations
 
     IList<T> QueryWithRowMapperDelegate<T>(CommandType cmdType, string cmdText, RowMapperDelegate<T> rowMapperDelegate,
         IDbParameters parameters);
-
-    #endregion
-
-    #region Queries with ResultSetExtractor<T>
 
     T QueryWithResultSetExtractor<T>(CommandType cmdType, string cmdText, IResultSetExtractor<T> resultSetExtractor);
 
@@ -148,10 +130,6 @@ public interface IAdoOperations : ICommonAdoOperations
     T QueryWithResultSetExtractor<T>(CommandType cmdType, string cmdText, IResultSetExtractor<T> resultSetExtractor,
         CommandSetterDelegate commandSetterDelegate);
 
-    #endregion
-
-    #region Queries with ResultSetExtractorDelegate<T>
-
     T QueryWithResultSetExtractorDelegate<T>(CommandType cmdType, string cmdText, ResultSetExtractorDelegate<T> resultSetExtractor);
 
     T QueryWithResultSetExtractorDelegate<T>(CommandType cmdType, string cmdText, ResultSetExtractorDelegate<T> resultSetExtractor,
@@ -166,10 +144,6 @@ public interface IAdoOperations : ICommonAdoOperations
     T QueryWithResultSetExtractorDelegate<T>(CommandType cmdType, string cmdText, ResultSetExtractorDelegate<T> resultSetExtractor,
         CommandSetterDelegate commandSetterDelegate);
 
-    #endregion
-
-    #region Queries for Object<T>
-
     T QueryForObject<T>(CommandType cmdType, string sql, IRowMapper<T> rowMapper);
 
     T QueryForObject<T>(CommandType cmdType, string sql, IRowMapper<T> rowMapper, ICommandSetter commandSetter);
@@ -179,10 +153,6 @@ public interface IAdoOperations : ICommonAdoOperations
     T QueryForObject<T>(CommandType cmdType, string sql, IRowMapper<T> rowMapper,
         string name, Enum dbType, int size, object parameterValue);
 
-    #endregion
-
-    #region Queries for ObjectDelegate<T>
-
     T QueryForObjectDelegate<T>(CommandType cmdType, string sql, RowMapperDelegate<T> rowMapper);
 
     T QueryForObjectDelegate<T>(CommandType cmdType, string sql, RowMapperDelegate<T> rowMapper, ICommandSetter commandSetter);
@@ -191,10 +161,6 @@ public interface IAdoOperations : ICommonAdoOperations
 
     T QueryForObjectDelegate<T>(CommandType cmdType, string sql, RowMapperDelegate<T> rowMapper,
         string name, Enum dbType, int size, object parameterValue);
-
-    #endregion
-
-    #region Query With CommandCreator
 
     T QueryWithCommandCreator<T>(IDbCommandCreator cc, IResultSetExtractor<T> rse);
 
@@ -209,10 +175,6 @@ public interface IAdoOperations : ICommonAdoOperations
 
     IDictionary QueryWithCommandCreator<T, U>(IDbCommandCreator cc, IList namedResultSetProcessors);
 
-    #endregion
-
-    #region Parameter Creation Helper Methods
-
     IDbParameters CreateDbParameters();
 
     /// <summary>
@@ -224,10 +186,6 @@ public interface IAdoOperations : ICommonAdoOperations
     IDataParameter[] DeriveParameters(string procedureName);
 
     IDataParameter[] DeriveParameters(string procedureName, bool includeReturnParameter);
-
-    #endregion
-
-    #region Behavioral Control Properties
 
     /// <summary>
     /// An instance of a DbProvider implementation.
@@ -252,6 +210,4 @@ public interface IAdoOperations : ICommonAdoOperations
     /// </remarks>
     /// <value>The command timeout.</value>
     int CommandTimeout { get; set; }
-
-    #endregion
 }

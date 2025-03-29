@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright  2002-2005 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
@@ -31,8 +25,6 @@ using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml;
 
@@ -72,8 +64,6 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
     /// </summary>
     protected static readonly ILogger<ObjectsNamespaceParser> log = LogManager.GetLogger<ObjectsNamespaceParser>();
 
-    #region IXmlObjectDefinitionParser Members
-
     /// <summary>
     /// Invoked by <see cref="NamespaceParserRegistry"/> after construction but before any
     /// elements have been parsed.
@@ -82,8 +72,6 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
     public void Init()
     {
     }
-
-    #endregion
 
     /// <summary>
     /// Parse the specified XmlElement and register the resulting
@@ -198,16 +186,12 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
         string location = GetAttributeValue(resource, ObjectDefinitionConstants.ImportResourceAttribute);
         try
         {
-            #region Instrumentation
-
             if (log.IsEnabled(LogLevel.Debug))
             {
                 log.LogDebug(string.Format(
                     CultureInfo.InvariantCulture,
                     "Attempting to import object definitions from '{0}'.", location));
             }
-
-            #endregion
 
             IResource importResource = parserContext.ReaderContext.Resource.CreateRelative(location);
             parserContext.ReaderContext.Reader.LoadObjectDefinitions(importResource);
@@ -304,16 +288,12 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
 
         holder = parserContext.ParserHelper.DecorateObjectDefinitionIfRequired(element, holder);
 
-        #region Instrumentation
-
         if (log.IsEnabled(LogLevel.Debug))
         {
             log.LogDebug(string.Format(
                 CultureInfo.InvariantCulture,
                 "Registering object definition with id '{0}'.", holder.ObjectName));
         }
-
-        #endregion
 
         return holder;
     }
@@ -1257,8 +1237,6 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
         XmlNodeList entryElements = SelectNodes(mapEle, ObjectDefinitionConstants.EntryElement);
         foreach (XmlElement entryEle in entryElements)
         {
-            #region Key
-
             object key = null;
 
             XmlAttribute keyAtt = entryEle.Attributes[ObjectDefinitionConstants.KeyAttribute];
@@ -1305,10 +1283,6 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
                 }
             }
 
-            #endregion
-
-            #region Value
-
             XmlAttribute inlineValueAtt = entryEle.Attributes[ObjectDefinitionConstants.ValueAttribute];
             if (inlineValueAtt != null)
             {
@@ -1350,8 +1324,6 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
 
                 dictionary[key] = ParsePropertySubElement((XmlElement) valueElements.Item(0), name, parserContext);
             }
-
-            #endregion
         }
 
         return dictionary;
@@ -1503,16 +1475,12 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
             }
             catch (ArgumentException ex)
             {
-                #region Instrumentation
-
                 if (log.IsEnabled(LogLevel.Debug))
                 {
                     string message = string.Format("Error while parsing dependency checking mode : '{0}' is an invalid value.",
                         value);
                     log.LogDebug(ex, message);
                 }
-
-                #endregion
             }
         }
 
@@ -1546,16 +1514,12 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
             }
             catch (ArgumentException ex)
             {
-                #region Instrumentation
-
                 if (log.IsEnabled(LogLevel.Debug))
                 {
                     string message = string.Format("Error while parsing autowire mode : '{0}' is an invalid value.",
                         value);
                     log.LogDebug(ex, message);
                 }
-
-                #endregion
             }
         }
 

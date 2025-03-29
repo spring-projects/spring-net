@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using Spring.Util;
@@ -52,8 +48,6 @@ namespace Spring.Transaction.Interceptor;
 /// <author>Griffin Caprio (.NET)</author>
 public class TransactionAttributeSourceEditor
 {
-    #region PropertiesEditor Class
-
     /// <summary>
     /// Internal class to parse property values.
     /// </summary>
@@ -98,8 +92,6 @@ public class TransactionAttributeSourceEditor
             }
         }
     }
-
-    #endregion
 
     private ITransactionAttributeSource _attributeSource;
 

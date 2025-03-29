@@ -1,12 +1,8 @@
-#region Imports
-
 using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Data;
 

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using AopAlliance.Aop;
 using NUnit.Framework;
 using AopAlliance.Intercept;
 using Spring.Threading;
-
-#endregion
 
 namespace Spring.Aop.Framework;
 
@@ -87,8 +79,6 @@ public sealed class AopContextTests
         AopContext.PopProxy();
         Assert.IsFalse(AopContext.IsActive);
     }
-
-    #region CurrentProxyIsThreadSafe
 
     [Test, Explicit]
     public void ProxyPerformanceTests()
@@ -244,6 +234,4 @@ public sealed class AopContextTests
             return ret;
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using FakeItEasy;
 using NUnit.Framework;
@@ -207,8 +203,6 @@ public class AbstractApplicationContextTests
         Assert.IsNull(_context.ParentContext.ParentContext, "parent is null");
     }
 
-    #region OrderOfKnownProcessorInterfaces Utility Classes
-
     public enum ObjectProcessingState
     {
         SetObjectName,
@@ -334,8 +328,6 @@ public class AbstractApplicationContextTests
             return instance;
         }
     }
-
-    #endregion
 
     [Test]
     public void OrderOfKnownProcessorInterfaces()

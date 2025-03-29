@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -48,8 +40,6 @@ namespace Spring.Core.IO;
 /// <author>Rick Evans (.NET)</author>
 public class InputStreamResource : AbstractResource
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Core.IO.InputStreamResource"/> class.
@@ -71,10 +61,6 @@ public class InputStreamResource : AbstractResource
         _inputStream = inputStream;
         _description = description == null ? string.Empty : description;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The input <see cref="System.IO.Stream"/> to use.
@@ -129,12 +115,6 @@ public class InputStreamResource : AbstractResource
         get { return true; }
     }
 
-    #endregion
-
-    #region Fields
-
     private Stream _inputStream;
     private string _description;
-
-    #endregion
 }

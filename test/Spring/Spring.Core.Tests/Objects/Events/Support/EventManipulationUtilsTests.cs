@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Objects.Events.Support.Tests;
 
@@ -80,8 +72,6 @@ public sealed class EventManipulationUtilsTests
             Assert.IsNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(NoEventSubscriber)));
         }
     }
-
-    #region Helper Classes
 
     internal delegate void Delegate1(object source, string name);
 
@@ -142,6 +132,4 @@ public sealed class EventManipulationUtilsTests
             return String.Empty;
         }
     }
-
-    #endregion
 }

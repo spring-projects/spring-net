@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NHibernate;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -36,22 +28,12 @@ namespace Spring.Data.NHibernate
 
         private ISessionFactory sessionFactory;
 
-        #region Constructor (s)
-
         /// <summary>
         /// Initializes a new instance of the <see cref="NativeNHTestObjectDao"/> class.
         /// </summary>
         public NativeNHTestObjectDao()
         {
         }
-
-        #endregion
-
-        #region Methods
-
-        #endregion
-
-        #region ITestObjectDao Members
 
         public void Create(TestObject to)
         {
@@ -102,6 +84,6 @@ namespace Spring.Data.NHibernate
             // TODO:  Add NativeNHTestObjectDao.CreateUpdateRollback implementation
         }
 
-        #endregion
+        
     }
 }

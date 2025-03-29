@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Objects.Factory;
 
@@ -33,19 +25,11 @@ namespace Spring.Objects.Factory;
 /// <author>Bruno Baia</author>
 public class DummyConfigurableFactory : DummyFactory, IConfigurableFactoryObject
 {
-    #region Fields
-
     private IObjectDefinition productTemplate;
-
-    #endregion
-
-    #region IConfigurableFactoryObject Members
 
     public IObjectDefinition ProductTemplate
     {
         get { return productTemplate; }
         set { productTemplate = value; }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2005 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using NUnit.Framework;
 using Spring.Core;
@@ -281,8 +277,6 @@ public sealed class XmlApplicationContextTests
         genericCtx = new GenericApplicationContext("test", true, ctx);
     }
 
-    #region Helper classes
-
     public class DisposeTester : IDisposable
     {
         private bool isDisposed = false;
@@ -339,8 +333,6 @@ public sealed class XmlApplicationContextTests
             count++;
         }
 
-        #region IObjectPostProcessor Members
-
         /// <summary>
         /// No op implementation
         /// </summary>
@@ -362,8 +354,6 @@ public sealed class XmlApplicationContextTests
         {
             return obj;
         }
-
-        #endregion
     }
 
     /// <summary>
@@ -390,8 +380,6 @@ public sealed class XmlApplicationContextTests
             count++;
         }
 
-        #region IObjectFactoryPostProcessor Members
-
         /// <summary>
         /// no op
         /// </summary>
@@ -399,18 +387,12 @@ public sealed class XmlApplicationContextTests
         public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
         {
         }
-
-        #endregion
     }
-
-    #endregion
 }
 
 public class SingletonTestingObjectPostProcessor : IObjectPostProcessor, IApplicationContextAware
 {
     private IApplicationContext applicationContext;
-
-    #region IObjectPostProcessor Members
 
     public object PostProcessBeforeInitialization(object instance, string name)
     {
@@ -428,14 +410,8 @@ public class SingletonTestingObjectPostProcessor : IObjectPostProcessor, IApplic
         return instance;
     }
 
-    #endregion
-
-    #region IApplicationContextAware Members
-
     public IApplicationContext ApplicationContext
     {
         set { this.applicationContext = value; }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using Spring.Util;
@@ -46,8 +42,6 @@ namespace Spring.Globalization.Formatters;
 public class CurrencyFormatter : IFormatter
 {
     private NumberFormatInfo formatInfo;
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CurrencyFormatter"/> class
@@ -88,10 +82,6 @@ public class CurrencyFormatter : IFormatter
     {
         this.formatInfo = formatInfo;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the currency decimal digits.
@@ -169,8 +159,6 @@ public class CurrencyFormatter : IFormatter
         get { return formatInfo.CurrencyPositivePattern; }
         set { formatInfo.CurrencyPositivePattern = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Formats the specified currency value.

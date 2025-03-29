@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -33,13 +25,9 @@ namespace Spring.Core.IO;
 /// <author>Erich Eichinger</author>
 public class StringResource : AbstractResource
 {
-    #region Fields
-
     private readonly string _description;
     private readonly string _content;
     private readonly Encoding _encoding;
-
-    #endregion
 
     /// <summary>
     /// Creates a new instance of the <see cref="StringResource"/> class.

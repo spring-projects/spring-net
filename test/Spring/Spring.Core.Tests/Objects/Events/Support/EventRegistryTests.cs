@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using NUnit.Framework;
 
 namespace Spring.Objects.Events.Support.Tests;
@@ -25,8 +21,6 @@ namespace Spring.Objects.Events.Support.Tests;
 [TestFixture]
 public class EventRegistryTests
 {
-    #region Helper Classes
-
     internal delegate void SimpleClientEvent(object sender, MyClientEventArgs args);
 
     internal delegate string SimpleClientEvent2(MyClientEventArgs args);
@@ -166,8 +160,6 @@ public class EventRegistryTests
             return String.Empty;
         }
     }
-
-    #endregion
 
     [Test]
     public void RespectsInheritance()

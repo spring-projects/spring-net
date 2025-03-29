@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections.Specialized;
 using System.Globalization;
@@ -74,8 +70,6 @@ public abstract class PropertyResourceConfigurer
     /// <seealso cref="Spring.Objects.Factory.Config.PropertyResourceConfigurer.ConfigSections"/>
     public static readonly string DefaultConfigSectionName = "spring-config";
 
-    #region Fields
-
     private readonly ILogger _log;
 
     private int _order = Int32.MaxValue; // default: same as non-Ordered
@@ -84,10 +78,6 @@ public abstract class PropertyResourceConfigurer
     private string[] _configSections;
     private bool _ignoreResourceNotFound = false;
     private bool _lastLocationOverrides = true;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -104,10 +94,6 @@ public abstract class PropertyResourceConfigurer
     {
         _log = LogManager.GetLogger(this.GetType());
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The policy for resolving conflicting property overrides from
@@ -218,8 +204,6 @@ public abstract class PropertyResourceConfigurer
         set { _ignoreResourceNotFound = value; }
     }
 
-    #endregion
-
     /// <summary>
     /// Modify the application context's internal object factory after its
     /// standard initialization.
@@ -269,16 +253,12 @@ public abstract class PropertyResourceConfigurer
             int sectionNameIndex = 0;
             foreach (IResource resource in _locations)
             {
-                #region Instrumentation
-
                 if (_log.IsEnabled(LogLevel.Debug))
                 {
                     _log.LogDebug(string.Format(
                         CultureInfo.InvariantCulture,
                         "Loading configuration from '{0}'.", resource));
                 }
-
-                #endregion
 
                 string sectionName = configSections[sectionNameIndex];
                 if (resource is ConfigSectionResource)
@@ -298,14 +278,10 @@ public abstract class PropertyResourceConfigurer
                         string errorMessage = "Could not load configuration from " + resource;
                         if (_ignoreResourceNotFound)
                         {
-                            #region Instrumentation
-
                             if (_log.IsEnabled(LogLevel.Warning))
                             {
                                 _log.LogWarning(errorMessage);
                             }
-
-                            #endregion
                         }
                         else
                         {

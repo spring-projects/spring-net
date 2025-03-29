@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using AopAlliance.Aop;
 using Spring.Objects.Factory;
@@ -60,8 +56,6 @@ public abstract class AbstractObjectFactoryPointcutAdvisor : AbstractPointcutAdv
         set { adviceObjectName = value; }
     }
 
-    #region IObjectFactoryAware Members
-
     /// <summary>
     /// Callback that supplies the owning factory to an object instance.
     /// </summary>
@@ -85,8 +79,6 @@ public abstract class AbstractObjectFactoryPointcutAdvisor : AbstractPointcutAdv
     {
         set { objectFactory = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Return the advice part of this aspect.

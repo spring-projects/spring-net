@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region
-
 using System.Runtime.Serialization;
 using Apache.NMS;
-
-#endregion
 
 namespace Spring.Messaging.Nms.Listener;
 

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Text.RegularExpressions;
 using Spring.Expressions;
 using Spring.Util;
@@ -30,8 +26,6 @@ namespace Spring.Validation.Validators;
 /// <author>Goran Milosavljevic</author>
 public class UrlValidator : BaseSimpleValidator
 {
-    #region Constructors
-
     /// <summary>
     /// Creates a new instance of the <b>UrlValidator</b> class.
     /// </summary>
@@ -61,10 +55,6 @@ public class UrlValidator : BaseSimpleValidator
         AssertUtils.ArgumentNotNull(test, "test");
     }
 
-    #endregion
-
-    #region BaseValidator methods
-
     /// <summary>
     /// Validates the supplied <paramref name="objectToValidate"/>.
     /// </summary>
@@ -89,14 +79,8 @@ public class UrlValidator : BaseSimpleValidator
         return match.Success && match.Index == 0 && match.Length == text.Length;
     }
 
-    #endregion
-
-    #region Data members
-
     /// <summary>
     /// Regular expression used for validation of object passed to this <see cref="UrlValidator"/>.
     /// </summary>
     private static string urlCheck = "((http|https)://)?[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(([0-9]{1,5})?/.*)?";
-
-    #endregion
 }

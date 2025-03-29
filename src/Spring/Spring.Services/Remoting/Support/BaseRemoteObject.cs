@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Runtime.Remoting.Lifetime;
 
@@ -36,16 +32,10 @@ namespace Spring.Remoting.Support;
 /// <author>Aleksandar Seovic</author>
 public abstract class BaseRemoteObject : MarshalByRefObject
 {
-    #region Fields
-
     private bool isInfinite = false;
     private TimeSpan initialLeaseTime = TimeSpan.Zero;
     private TimeSpan renewOnCallTime = TimeSpan.Zero;
     private TimeSpan sponsorshipTimeout = TimeSpan.Zero;
-
-    #endregion
-
-    #region Constructor(s) / Destructor
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseRemoteObject"/> class.
@@ -53,10 +43,6 @@ public abstract class BaseRemoteObject : MarshalByRefObject
     public BaseRemoteObject()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets a value indicating whether this instance has infinite lifetime.
@@ -105,10 +91,6 @@ public abstract class BaseRemoteObject : MarshalByRefObject
         set { sponsorshipTimeout = value; }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Obtains a lifetime service object to control the lifetime policy for this instance.
     /// </summary>
@@ -155,6 +137,4 @@ public abstract class BaseRemoteObject : MarshalByRefObject
 
         return lease;
     }
-
-    #endregion
 }

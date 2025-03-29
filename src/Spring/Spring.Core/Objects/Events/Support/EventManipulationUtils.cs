@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using Spring.Core;
@@ -93,10 +89,6 @@ public sealed class EventManipulationUtils
         return null;
     }
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the EventManipulationUtilities class.
     /// </summary>
@@ -110,6 +102,4 @@ public sealed class EventManipulationUtils
     }
 
     // CLOVER:ON
-
-    #endregion
 }

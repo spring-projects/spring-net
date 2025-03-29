@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Web;
 using FakeItEasy;
 using NUnit.Framework;
@@ -33,8 +29,6 @@ namespace Spring.Web.Support;
 [TestFixture]
 public class AbstractHandlerFactoryTests
 {
-    #region TestFindWebObjectDefinition Helper
-
     private class TestFindWebObjectDefinitionHandlerFactory : AbstractHandlerFactory
     {
         private class Type1
@@ -73,17 +67,11 @@ public class AbstractHandlerFactoryTests
             return FindWebObjectDefinition(url, of);
         }
 
-        #region AbstractHandlerFactory implementations
-
         protected override IHttpHandler CreateHandlerInstance(IConfigurableApplicationContext appContext, HttpContext context, string requestType, string url, string physicalPath)
         {
             throw new NotImplementedException();
         }
-
-        #endregion
     }
-
-    #endregion TestFindWebObjectDefinition Helper
 
     [Test]
     public void FindWebObjectDefinition()
@@ -91,8 +79,6 @@ public class AbstractHandlerFactoryTests
         TestFindWebObjectDefinitionHandlerFactory f = new TestFindWebObjectDefinitionHandlerFactory();
         f.TestFindWebObjectDefinition();
     }
-
-    #region TestHandlerFactory
 
     public abstract class TestHandlerFactory : AbstractHandlerFactory
     {
@@ -115,8 +101,6 @@ public class AbstractHandlerFactoryTests
 
         public abstract IApplicationContext GetContextStub(string virtualPath);
     }
-
-    #endregion
 
     [Test]
     public void GetCheckedApplicationContextThrowsExceptionsOnNonConfigurableContexts()

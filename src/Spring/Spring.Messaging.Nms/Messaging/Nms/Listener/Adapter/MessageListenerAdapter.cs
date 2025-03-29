@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using Spring.Expressions;
@@ -66,13 +62,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter;
 /// <author>Mark Pollack (.NET)</author>
 public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageListener
 {
-    #region Logging
-
     private readonly ILogger logger = LogManager.GetLogger(typeof(MessageListenerAdapter));
-
-    #endregion
-
-    #region Fields
 
     /// <summary>
     /// The default handler method name.
@@ -90,10 +80,6 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
     private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
 
     private IMessageConverter messageConverter;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MessageListenerAdapter"/> class with default settings.
@@ -113,8 +99,6 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
         InitDefaultStrategies();
         this.handlerObject = handlerObject;
     }
-
-    #endregion
 
     /// <summary>
     /// Gets or sets the handler object to delegate message listening to.

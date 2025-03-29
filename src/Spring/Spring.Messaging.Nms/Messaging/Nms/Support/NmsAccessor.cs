@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Messaging.Nms.Core;
 using Spring.Objects.Factory;
@@ -36,21 +32,11 @@ namespace Spring.Messaging.Nms.Support;
 /// <author>Mark Pollack (.NET)</author>
 public class NmsAccessor : IInitializingObject
 {
-    #region Logging
-
     private readonly ILogger<NmsAccessor> logger = LogManager.GetLogger<NmsAccessor>();
-
-    #endregion
-
-    #region Fields
 
     private IConnectionFactory connectionFactory;
 
     private AcknowledgementMode sessionAcknowledgeMode = AcknowledgementMode.AutoAcknowledge;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the connection factory to use for obtaining NMS Connections.
@@ -118,8 +104,6 @@ public class NmsAccessor : IInitializingObject
             }
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Verify that ConnectionFactory property has been set.

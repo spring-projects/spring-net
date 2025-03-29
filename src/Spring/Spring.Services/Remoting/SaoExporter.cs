@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Reflection;
@@ -46,11 +42,7 @@ namespace Spring.Remoting;
 /// <author>Erich Eichinger</author>
 public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializingObject, IDisposable
 {
-    #region Logging
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(SaoExporter));
-
-    #endregion
 
     /// <summary>
     /// Holds EXPORTER_ID to SaoExporter instance mappings.
@@ -76,8 +68,6 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
         return target;
     }
 
-    #region Fields
-
     private readonly string EXPORTER_ID = Guid.NewGuid().ToString();
     private string targetName;
     private string applicationName;
@@ -86,10 +76,6 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
 
     private IObjectFactory objectFactory;
     private MarshalByRefObject remoteObject;
-
-    #endregion
-
-    #region Constructor(s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the <see cref="SaoExporter"/> class.
@@ -109,10 +95,6 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
     {
         Dispose(false);
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the name of the target object definition.
@@ -160,10 +142,6 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
         set { interfaces = value; }
     }
 
-    #endregion
-
-    #region IObjectFactoryAware Members
-
     /// <summary>
     /// Sets object factory to use.
     /// </summary>
@@ -171,10 +149,6 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
     {
         set { objectFactory = value; }
     }
-
-    #endregion
-
-    #region IInitializingObject Members
 
     /// <summary>
     /// Publish the object
@@ -184,10 +158,6 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
         ValidateConfiguration();
         Export();
     }
-
-    #endregion
-
-    #region IDisposable Members
 
     /// <summary>
     /// Disconnect the remote object from the registered remoting channels.
@@ -216,10 +186,6 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
             objectFactory = null;
         }
     }
-
-    #endregion
-
-    #region Private Methods
 
     private object GetTargetInstance()
     {
@@ -278,19 +244,11 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
 
         RemotingServices.Marshal(remoteObject, objectUri);
 
-        #region Instrumentation
-
         if (LOG.IsEnabled(LogLevel.Debug))
         {
             LOG.LogDebug(String.Format("Target '{0}' exported as '{1}'.", targetName, objectUri));
         }
-
-        #endregion
     }
-
-    #endregion
-
-    #region SaoRemoteObjectProxyTypeBuilder inner class definition
 
     /// <summary>
     /// Builds a proxy type based on <see cref="BaseRemoteObject"/> to wrap a target object
@@ -301,15 +259,9 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
     /// </remarks>
     private sealed class SaoRemoteObjectProxyTypeBuilder : RemoteObjectProxyTypeBuilder
     {
-        #region Fields
-
         private static readonly MethodInfo SaoExporter_GetTargetInstance = typeof(SaoExporter).GetMethod("GetTarget", new Type[] { typeof(string) });
 
         private SaoExporter _saoExporter;
-
-        #endregion
-
-        #region Constructor(s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the
@@ -327,10 +279,6 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
             BaseType = typeof(BaseRemoteObject);
         }
 
-        #endregion
-
-        #region IProxyTypeGenerator Members
-
         /// <summary>
         /// Generates the IL instructions that pushes
         /// the target instance on which calls should be delegated to.
@@ -341,10 +289,6 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
             il.Emit(OpCodes.Ldstr, this._saoExporter.EXPORTER_ID);
             il.Emit(OpCodes.Call, SaoExporter_GetTargetInstance);
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Implements constructors for the proxy class.
@@ -374,9 +318,5 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
         protected override void DeclareTargetInstanceField(TypeBuilder builder)
         {
         }
-
-        #endregion
     }
-
-    #endregion
 }

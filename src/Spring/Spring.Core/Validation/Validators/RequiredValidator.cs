@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Expressions;
 using Spring.Util;
@@ -64,8 +60,6 @@ namespace Spring.Validation;
 /// <author>Aleksandar Seovic</author>
 public class RequiredValidator : BaseSimpleValidator
 {
-    #region Constructors
-
     /// <summary>
     /// Creates a new instance of the <see cref="RequiredValidator"/> class.
     /// </summary>
@@ -92,8 +86,6 @@ public class RequiredValidator : BaseSimpleValidator
     {
         AssertUtils.ArgumentNotNull(test, "test");
     }
-
-    #endregion
 
     /// <summary>
     /// Validates the supplied <paramref name="objectToValidate"/>.

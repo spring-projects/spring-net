@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Remoting;
 using Microsoft.Extensions.Logging;
 using Spring.Core;
@@ -32,8 +28,6 @@ namespace Spring.Remoting;
 /// <author>Bruno Baia</author>
 public class RemotingConfigurer : IObjectFactoryPostProcessor, IOrdered
 {
-    #region Fields
-
     private static readonly ILogger<RemotingConfigurer> log = LogManager.GetLogger<RemotingConfigurer>();
 
     private int _order = Int32.MinValue;
@@ -42,20 +36,12 @@ public class RemotingConfigurer : IObjectFactoryPostProcessor, IOrdered
     private bool _useConfigFile = true;
     private bool _ensureSecurity = false;
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Initializes a new instance of the <see cref="RemotingConfigurer"/> class.
     /// </summary>
     public RemotingConfigurer()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the name of the remoting configuration file.
@@ -95,10 +81,6 @@ public class RemotingConfigurer : IObjectFactoryPostProcessor, IOrdered
         set { _ensureSecurity = value; }
     }
 
-    #endregion
-
-    #region IObjectFactoryPostProcessor Members
-
     /// <summary>
     /// Modify the application context's internal object factory after its
     /// standard initialization.
@@ -119,8 +101,6 @@ public class RemotingConfigurer : IObjectFactoryPostProcessor, IOrdered
 
         RemotingConfiguration.Configure(filename, EnsureSecurity);
 
-        #region Instrumentation
-
         if (log.IsEnabled(LogLevel.Debug))
         {
             if (filename == null)
@@ -132,13 +112,7 @@ public class RemotingConfigurer : IObjectFactoryPostProcessor, IOrdered
                 log.LogDebug(String.Format("Remoting infrastructure configured using file '{0}'.", filename));
             }
         }
-
-        #endregion
     }
-
-    #endregion
-
-    #region IOrdered Members
 
     /// <summary>
     /// Return the order value of this object,
@@ -148,6 +122,4 @@ public class RemotingConfigurer : IObjectFactoryPostProcessor, IOrdered
     {
         get { return _order; }
     }
-
-    #endregion
 }

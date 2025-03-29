@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using Microsoft.Extensions.Logging;
@@ -57,11 +53,7 @@ namespace Spring.Messaging.Ems.Connections;
 /// <author>Mark Pollack (.NET)</author>
 public class CachingConnectionFactory : SingleConnectionFactory
 {
-    #region Logging Definition
-
     private static readonly ILog LOG = LogManager.GetLogger(typeof(CachingConnectionFactory));
-
-    #endregion
 
     private int sessionCacheSize = 1;
 

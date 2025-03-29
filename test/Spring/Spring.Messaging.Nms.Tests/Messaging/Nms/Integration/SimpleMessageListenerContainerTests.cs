@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Messaging.Nms.Core;
 using Spring.Messaging.Nms.Listener;
 using Spring.Testing.NUnit;
-
-#endregion
 
 namespace Spring.Messaging.Nms.Integration;
 

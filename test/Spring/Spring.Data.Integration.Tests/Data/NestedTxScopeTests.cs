@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using System.Data.SqlClient;
 using System.Transactions;
@@ -28,8 +22,6 @@ using Spring.Data.Common;
 using Spring.Data.Core;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Data;
 
@@ -157,15 +149,11 @@ public class NestedTxScopeTests
             cn2005.Open();
             cmd.ExecuteNonQuery();
 
-            #region logging
-
             Console.WriteLine("TransactionSynchronizationManager.CurrentTransactionIsolationLevel = " +
                               TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
             Console.WriteLine("System.Transactions.Transaction.Current.IsolationLevel = " + System.Transactions.Transaction.Current.IsolationLevel);
             string name = TransactionSynchronizationManager.CurrentTransactionName;
             bool read = TransactionSynchronizationManager.CurrentTransactionReadOnly;
-
-            #endregion
         }
     }
 }

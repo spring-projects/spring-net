@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using System.Web.UI.WebControls;
 using NUnit.Framework;
@@ -27,8 +21,6 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.TestSupport;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Util;
 

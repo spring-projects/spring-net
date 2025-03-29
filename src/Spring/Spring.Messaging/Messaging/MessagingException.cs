@@ -9,8 +9,6 @@ namespace Spring.Messaging;
 [Serializable]
 public class MessagingException : ApplicationException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>Creates a new instance of the MessagingException class.</summary>
     public MessagingException()
     {
@@ -47,6 +45,4 @@ public class MessagingException : ApplicationException
         : base(info, context)
     {
     }
-
-    #endregion
 }

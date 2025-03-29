@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.ServiceModel;
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
@@ -32,11 +28,7 @@ namespace Spring.ServiceModel;
 /// <author>Bruno Baia</author>
 public class ChannelFactoryObject<T> : ChannelFactory<T>, IFactoryObject
 {
-    #region Logging
-
     private static readonly ILogger Log = LogManager.GetLogger(typeof(ChannelFactoryObject<>));
-
-    #endregion
 
     private bool _isSingleton = true;
     private string _endpointConfigurationName;
@@ -61,8 +53,6 @@ public class ChannelFactoryObject<T> : ChannelFactory<T>, IFactoryObject
         get { return this._endpointConfigurationName; }
     }
 
-    #region IFactoryObject Membres
-
     /// <summary>
     /// Return an instance (possibly shared or independent) of the channel
     /// managed by this factory.
@@ -73,16 +63,12 @@ public class ChannelFactoryObject<T> : ChannelFactory<T>, IFactoryObject
     /// </returns>
     public object GetObject()
     {
-        #region Instrumentation
-
         if (Log.IsEnabled(LogLevel.Debug))
         {
             Log.LogDebug(String.Format(
                 "Creating channel of type '{0}' for the specified endpoint '{1}'...",
                 typeof(T).FullName, this._endpointConfigurationName));
         }
-
-        #endregion
 
         return this.CreateChannel();
     }
@@ -107,6 +93,4 @@ public class ChannelFactoryObject<T> : ChannelFactory<T>, IFactoryObject
         get { return this._isSingleton; }
         set { this._isSingleton = value; }
     }
-
-    #endregion
 }

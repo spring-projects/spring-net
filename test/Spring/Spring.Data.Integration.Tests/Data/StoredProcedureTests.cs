@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Data;
 using NUnit.Framework;
@@ -27,8 +21,6 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Data.Common;
 using Spring.Data.Core;
-
-#endregion
 
 namespace Spring.Data;
 
@@ -39,12 +31,8 @@ namespace Spring.Data;
 [TestFixture]
 public class StoredProcedureTests
 {
-    #region Fields
-
     IAdoOperations adoOperations;
     IDbProvider dbProvider;
-
-    #endregion
 
     [SetUp]
     public void CreateAdoTemplate()

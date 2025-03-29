@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NHibernate;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Data.NHibernate.Support;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -38,13 +30,7 @@ namespace Spring.Data.NHibernate
     [Ignore("Trouble running on Appveyor")]
     public class MultipleDbTests
     {
-        #region Fields
-
         private IApplicationContext ctx;
-
-        #endregion
-
-        #region Constructor (s)
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MultipleDbTests"/> class.
@@ -52,8 +38,6 @@ namespace Spring.Data.NHibernate
         public MultipleDbTests()
         {
         }
-
-        #endregion
 
         [SetUp]
         public void SetUp()

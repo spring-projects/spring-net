@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -44,8 +36,6 @@ namespace Spring.Core;
 /// <author>Bruno Baia</author>
 public class MethodParametersCriteria : ICriteria
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="MethodParametersCriteria"/> class.
@@ -72,10 +62,6 @@ public class MethodParametersCriteria : ICriteria
     {
         _parameters = parameters;
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
@@ -115,11 +101,5 @@ public class MethodParametersCriteria : ICriteria
         return satisfied;
     }
 
-    #endregion
-
-    #region Fields
-
     private readonly Type[] _parameters;
-
-    #endregion
 }

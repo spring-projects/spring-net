@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Messaging.Ems.Support.Converter;
 
 /// <summary> Thrown by IMessageConverter implementations when the conversion
@@ -26,8 +22,6 @@ namespace Spring.Messaging.Ems.Support.Converter;
 /// <author>Mark Pollack</author>
 public class MessageConversionException : EMSException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the IMessageConverterException class. with the specified message.
     /// </summary>
@@ -54,6 +48,4 @@ public class MessageConversionException : EMSException
     {
         LinkedException = rootCause;
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using Spring.Data.Common;
 
@@ -30,8 +26,6 @@ namespace Spring.Data.Objects;
 /// <author>Mark Pollack (.NET)</author>
 public class AdoScalar : AdoOperation
 {
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="AdoScalar"/> class.
     /// </summary>
@@ -55,10 +49,6 @@ public class AdoScalar : AdoOperation
     {
     }
 
-    #endregion
-
-    #region Methods
-
     public IDictionary ExecuteScalar(params object[] inParameterValues)
     {
         ValidateParameters(inParameterValues);
@@ -70,6 +60,4 @@ public class AdoScalar : AdoOperation
         ValidateNamedParameters(inParams);
         return AdoTemplate.ExecuteScalar(NewCommandCreator(inParams));
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using Apache.NMS;
 using FakeItEasy;
@@ -27,8 +21,6 @@ using NUnit.Framework;
 using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Support.Destinations;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Messaging.Nms.Core;
 

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using AopAlliance.Aop;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Support;
 
@@ -62,8 +54,6 @@ public class RegularExpressionMethodPointcutAdvisor : AbstractGenericPointcutAdv
 {
     private AbstractRegularExpressionMethodPointcut pointcut;
 
-    #region Constructors
-
     /// <summary>
     /// Creates a new instance of the <see cref="RegularExpressionMethodPointcutAdvisor"/>
     /// class.
@@ -84,10 +74,6 @@ public class RegularExpressionMethodPointcutAdvisor : AbstractGenericPointcutAdv
         Advice = advice;
         InitPointcut();
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// A single pattern to be used during method evaluation.
@@ -126,8 +112,6 @@ public class RegularExpressionMethodPointcutAdvisor : AbstractGenericPointcutAdv
             pointcut = value as AbstractRegularExpressionMethodPointcut;
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Initialises the pointcut.

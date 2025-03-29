@@ -11,8 +11,6 @@ namespace Spring.Messaging;
 [Serializable]
 public class MessageAlreadyProcessedException : MessagingException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>Creates a new instance of the MessageAlreadyProcessedException class.</summary>
     public MessageAlreadyProcessedException()
     {
@@ -59,6 +57,4 @@ public class MessageAlreadyProcessedException : MessagingException
         : base(info, context)
     {
     }
-
-    #endregion
 }

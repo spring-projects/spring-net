@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Data;
 using Spring.Util;
@@ -45,17 +41,11 @@ namespace Spring.Data.Generic;
 /// <author>Mark Pollack (.NET)</author>
 public class RowMapperResultSetExtractor<T> : IResultSetExtractor<IList<T>>
 {
-    #region Fields
-
     private IRowMapper<T> rowMapper;
 
     private RowMapperDelegate<T> rowMapperDelegate;
 
     private int rowsExpected;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Spring.Data.Core.RowMapperResultSetExtractor"/> class.
@@ -102,10 +92,6 @@ public class RowMapperResultSetExtractor<T> : IResultSetExtractor<IList<T>>
         this.rowsExpected = rowsExpected;
     }
 
-    #endregion
-
-    #region IResultSetExtractor Members
-
     public IList<T> ExtractData(IDataReader reader)
     {
         // Use the more efficient collection if we know how many rows to expect:
@@ -137,6 +123,4 @@ public class RowMapperResultSetExtractor<T> : IResultSetExtractor<IList<T>>
 
         return results;
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using NHibernate;
 using NUnit.Framework;
@@ -30,8 +24,6 @@ using Spring.Data.Support;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
-#endregion
-
 namespace Spring.Data.NHibernate
 {
     /// <summary>
@@ -41,17 +33,11 @@ namespace Spring.Data.NHibernate
     [TestFixture]
     public class TemplateTests
     {
-        #region Fields
-
         private IDbProvider dbProvider;
 
         private IPlatformTransactionManager transactionManager;
 
         private IApplicationContext ctx;
-
-        #endregion
-
-        #region Constants
 
         /// <summary>
         /// The shared <see cref="log4net.ILog"/> instance for this class (and derived classes). 
@@ -62,18 +48,12 @@ namespace Spring.Data.NHibernate
         // force Spring.Data.NHibernate to be preloaded by runtime
         private Type TLocalSessionFactoryObject = typeof(LocalSessionFactoryObject);
 
-        #endregion
-
-        #region Constructor (s)
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TemplateTests"/> class.
         /// </summary>
         public TemplateTests()
         {
         }
-
-        #endregion
 
         [SetUp]
         public void SetUp()

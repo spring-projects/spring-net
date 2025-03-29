@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Runtime.Serialization;
 using Spring.Expressions.Parser.antlr;
@@ -65,8 +61,6 @@ internal class SyntaxErrorException : RecognitionException, ISerializable
         get { return _expression; }
     }
 
-    #region Public Instance Constructors
-
     /// <summary>
     /// TODO
     /// </summary>
@@ -75,10 +69,6 @@ internal class SyntaxErrorException : RecognitionException, ISerializable
     {
         _expression = expression;
     }
-
-    #endregion Public Instance Constructors
-
-    #region Protected Instance Constructors
 
     /// <summary>
     /// TODO
@@ -105,6 +95,4 @@ internal class SyntaxErrorException : RecognitionException, ISerializable
         info.AddValue("Message", base.Message);
         info.AddValue("Expression", this._expression);
     }
-
-    #endregion Protected Instance Constructors
 }

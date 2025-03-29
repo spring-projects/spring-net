@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Remoting.Support;
 
 /// <summary>
@@ -26,16 +22,10 @@ namespace Spring.Remoting.Support;
 /// <author>Bruno Baia</author>
 public class ConfigurableLifetime : ILifetime
 {
-    #region Fields
-
     private bool infinite = true;
     private TimeSpan initialLeaseTime = TimeSpan.Zero;
     private TimeSpan renewOnCallTime = TimeSpan.Zero;
     private TimeSpan sponsorshipTimeout = TimeSpan.Zero;
-
-    #endregion
-
-    #region ILifetime Members
 
     /// <summary>
     /// Gets or sets a value indicating whether this instance has infinite lifetime.
@@ -82,6 +72,4 @@ public class ConfigurableLifetime : ILifetime
         get { return sponsorshipTimeout; }
         set { sponsorshipTimeout = value; }
     }
-
-    #endregion
 }

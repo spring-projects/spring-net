@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using NUnit.Framework;
 using Spring.TestSupport;
-
-#endregion
 
 namespace Spring.Web.UI.Controls;
 

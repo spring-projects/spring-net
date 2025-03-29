@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
@@ -41,11 +37,7 @@ namespace Spring.Messaging.Listener;
 /// <author>Mark Pollack</author>
 public abstract class AbstractListenerContainer : IInitializingObject, IObjectNameAware, IDisposable
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(AbstractListenerContainer));
-
-    #endregion
 
     private bool autoStartup = true;
 
@@ -53,8 +45,6 @@ public abstract class AbstractListenerContainer : IInitializingObject, IObjectNa
     private bool active;
     private bool running;
     private object lifecycleMonitor = new object();
-
-    #region Properties
 
     /// <summary>
     /// Sets a value indicating whether to automatically start the container after initialization.
@@ -99,8 +89,6 @@ public abstract class AbstractListenerContainer : IInitializingObject, IObjectNa
         }
     }
 
-    #region IObjectNameAware Members
-
     /// <summary>
     /// Return the object name that this listener container has been assigned
     /// in its containing object factory, if any.
@@ -111,12 +99,6 @@ public abstract class AbstractListenerContainer : IInitializingObject, IObjectNa
         get { return objectName; }
     }
 
-    #endregion
-
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Delegates to <see cref="ValidateConfiguration"/> and <see cref="Initialize"/>
     /// </summary>
@@ -126,10 +108,6 @@ public abstract class AbstractListenerContainer : IInitializingObject, IObjectNa
         Initialize();
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     /// <summary>
     /// Calls <see cref="Shutdown"/> when the application context destroys the container instance.
     /// </summary>
@@ -137,8 +115,6 @@ public abstract class AbstractListenerContainer : IInitializingObject, IObjectNa
     {
         Shutdown();
     }
-
-    #endregion
 
     /// <summary>
     /// Validates the configuration of this container
@@ -245,8 +221,6 @@ public abstract class AbstractListenerContainer : IInitializingObject, IObjectNa
         return true;
     }
 
-    #region Abstract Methods
-
     /// <summary>
     /// Subclasses need to implement this method for their specific
     /// listener management process.
@@ -258,6 +232,4 @@ public abstract class AbstractListenerContainer : IInitializingObject, IObjectNa
     /// listener management process.
     /// </summary>
     protected abstract void DoShutdown();
-
-    #endregion
 }

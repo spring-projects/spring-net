@@ -16,8 +16,6 @@ public abstract class BasePropertyTests
     protected Inventor pupin;
     protected Society ieee;
 
-    #region SetUp and TearDown
-
     /// <summary>
     /// The setup logic executed before the execution of each individual test.
     /// </summary>
@@ -46,8 +44,6 @@ public abstract class BasePropertyTests
     {
         //DynamicReflectionManager.SaveAssembly();
     }
-
-    #endregion
 
     protected abstract IDynamicProperty Create(PropertyInfo property);
 
@@ -151,8 +147,6 @@ public abstract class BasePropertyTests
         Assert.Throws<MethodAccessException>(() => second.GetValue(something));
     }
 
-    #region Performance tests
-
     private DateTime start, stop;
 
     [Test]
@@ -202,11 +196,7 @@ public abstract class BasePropertyTests
     {
         Debug.WriteLine(String.Format("{0,-60} {1,12:#,###} {2,12:##0.000} {3,12:#,###}", name, iterations, duration, iterations / duration));
     }
-
-    #endregion
 }
-
-#region IL generation helper classes (they help if you look at them in Reflector ;-)
 
 public class ValueTypeProperty //: IDynamicProperty
 {
@@ -247,8 +237,6 @@ public class StaticProperty //: IDynamicProperty
         MyStaticClass.MyProperty = (string) value;
     }
 }
-
-#endregion
 
 public class MyStaticClass
 {

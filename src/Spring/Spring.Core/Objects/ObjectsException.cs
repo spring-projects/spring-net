@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 
 namespace Spring.Objects;
@@ -30,8 +26,6 @@ namespace Spring.Objects;
 [Serializable]
 public class ObjectsException : ApplicationException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>Creates a new instance of the ObjectsException class.</summary>
     public ObjectsException()
     {
@@ -78,6 +72,4 @@ public class ObjectsException : ApplicationException
         : base(info, context)
     {
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Data;
 using Spring.Objects.Factory;
@@ -62,8 +58,6 @@ public class DelegatingDbProvider : IDbProvider, IInitializingObject
             targetDbProvider = value;
         }
     }
-
-    #region IDbProvider Members
 
     /// <summary>
     /// Returns a new command object for executing SQL statments/Stored Procedures
@@ -180,10 +174,6 @@ public class DelegatingDbProvider : IDbProvider, IInitializingObject
         return TargetDbProvider.IsDataAccessException(e);
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
     /// after it has injected all of an object's dependencies.
@@ -217,6 +207,4 @@ public class DelegatingDbProvider : IDbProvider, IInitializingObject
             throw new ArgumentNullException("Property 'TargetDbProvider' is required.");
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Aop.Interceptor;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy;
 
@@ -242,8 +234,6 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         base.ProxyGenericMethodWithRefOutParametersWithStandardReflection();
     }
 
-    #region Attributes
-
     [Test]
     public void ProxyTargetVirtualMethodAttributes()
     {
@@ -370,10 +360,6 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's return value.");
     }
 
-    #endregion
-
-    #region Helper classes definitions
-
     internal class NonPublicTestObject
     {
     }
@@ -418,6 +404,4 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
     public class DerivedDoesNotImplementInterfaceTestObject : DoesNotImplementInterfaceTestObject
     {
     }
-
-    #endregion
 }

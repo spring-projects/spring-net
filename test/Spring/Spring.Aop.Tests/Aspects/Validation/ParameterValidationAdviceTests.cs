@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using FakeItEasy;
@@ -81,8 +77,6 @@ public sealed class ParameterValidationAdviceTests
     }
 }
 
-#region Inner Class : ValidationTarget
-
 public interface IValidationTarget
 {
     void Save(Inventor inventor);
@@ -95,5 +89,3 @@ public sealed class ValidationTarget : IValidationTarget
         inventor.Name = inventor.Name.ToUpper();
     }
 }
-
-#endregion

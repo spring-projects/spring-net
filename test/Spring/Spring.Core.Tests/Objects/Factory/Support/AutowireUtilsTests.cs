@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support;
 
@@ -35,8 +27,6 @@ namespace Spring.Objects.Factory.Support;
 [TestFixture]
 public sealed class AutowireUtilsTests
 {
-    #region GetTypeDifferenceWeight Tests
-
     [Test]
     public void GetTypeDifferenceWeightForZeroArgCtor()
     {
@@ -166,10 +156,6 @@ public sealed class AutowireUtilsTests
         Assert.AreEqual(expectedWeight, actualWeight, "AutowireUtils.GetTypeDifferenceWeight() was wrong, evidently.");
     }
 
-    #endregion
-
-    #region SortConstructors Tests
-
     [Test]
     public void SortCtorsReallyIsGreedy()
     {
@@ -197,10 +183,6 @@ public sealed class AutowireUtilsTests
     {
         AutowireUtils.SortConstructors(null);
     }
-
-    #endregion
-
-    #region Inner Class used to test ctor sorting
 
     private class Fool
     {
@@ -238,10 +220,6 @@ public sealed class AutowireUtilsTests
         }
     }
 
-    #endregion
-
-    #region Inner Classes (deep inheritance chain) used to test type weighting
-
     private sealed class Fable
     {
         public Fable()
@@ -272,6 +250,4 @@ public sealed class AutowireUtilsTests
     private sealed class EnglishCharacter : NurseryRhymeCharacter
     {
     }
-
-    #endregion
 }

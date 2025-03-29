@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Aop.Support;
 
@@ -35,8 +27,6 @@ namespace Spring.Aop.Support;
 [Serializable]
 public abstract class DynamicMethodMatcher : IMethodMatcher
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Aop.Support.DynamicMethodMatcher"/>
@@ -51,8 +41,6 @@ public abstract class DynamicMethodMatcher : IMethodMatcher
     protected DynamicMethodMatcher()
     {
     }
-
-    #endregion
 
     /// <summary>
     /// Is this <see cref="Spring.Aop.IMethodMatcher"/> dynamic?

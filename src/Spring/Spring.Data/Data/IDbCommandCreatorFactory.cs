@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using System.Data;
 using Spring.Dao;
@@ -33,8 +29,6 @@ namespace Spring.Data;
 /// <author>Mark Pollack (.NET)</author>
 public class IDbCommandCreatorFactory
 {
-    #region Fields
-
     private String sql;
 
     private IDbParameters declaredParameters;
@@ -42,10 +36,6 @@ public class IDbCommandCreatorFactory
     private IDbProvider dbProvider;
 
     private CommandType commandType;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IDbCommandCreatorFactory"/> class.
@@ -57,10 +47,6 @@ public class IDbCommandCreatorFactory
         this.commandType = commandType;
         this.declaredParameters = declaredParameters;
     }
-
-    #endregion
-
-    #region Properties
 
     public IDbParameters DeclaredParameters
     {
@@ -85,10 +71,6 @@ public class IDbCommandCreatorFactory
         get { return commandType; }
     }
 
-    #endregion
-
-    #region Methods
-
     public IDbCommandCreator NewDbCommandCreatorWithParamValues(params object[] inParamValues)
     {
         return new CommandCreatorWithParamValues(this, inParamValues != null ? ArrayList.Adapter(inParamValues) : new ArrayList());
@@ -98,8 +80,6 @@ public class IDbCommandCreatorFactory
     {
         return new CommandCreatorImpl(this, inParameters != null ? inParameters : new Hashtable());
     }
-
-    #endregion
 
     private class CommandCreatorWithParamValues : IDbCommandCreator
     {

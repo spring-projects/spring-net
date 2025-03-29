@@ -88,8 +88,6 @@ internal class ExpressionParser : antlr.LLkParser
     public const int SIGN = 70;
     public const int REAL_TYPE_SUFFIX = 71;
 
-    // CLOVER:OFF
-
     public override void reportError(RecognitionException ex)
     {
         //base.reportError(ex);

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using Microsoft.Extensions.Logging;
@@ -116,8 +112,6 @@ public class InnerConversationList : IList<IConversationState>, IList
         }
     }
 
-    #region IList<IConversationState> Members
-
     /// <summary>
     /// <see cref="T:IList`1"/>
     /// </summary>
@@ -167,10 +161,6 @@ public class InnerConversationList : IList<IConversationState>, IList
             this.PostAddProcessor(value);
         }
     }
-
-    #endregion
-
-    #region ICollection<IConversationState> Members
 
     /// <summary>
     /// <see cref="T:ICollection`1"/>
@@ -237,10 +227,6 @@ public class InnerConversationList : IList<IConversationState>, IList
         return this.innerList.Remove(item);
     }
 
-    #endregion
-
-    #region IEnumerable<IConversationState> Members
-
     /// <summary>
     /// <see cref="T:IEnumerable`1"/>
     /// </summary>
@@ -250,10 +236,6 @@ public class InnerConversationList : IList<IConversationState>, IList
         return this.innerList.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     /// <summary>
     /// <see cref="IEnumerable"/>
     /// </summary>
@@ -262,10 +244,6 @@ public class InnerConversationList : IList<IConversationState>, IList
     {
         return this.innerList.GetEnumerator();
     }
-
-    #endregion
-
-    #region IList Members
 
     /// <summary>
     /// <see cref="T:IList`1"/>
@@ -342,10 +320,6 @@ public class InnerConversationList : IList<IConversationState>, IList
         }
     }
 
-    #endregion
-
-    #region ICollection Members
-
     /// <summary>
     /// <see cref="ICollection"/>
     /// </summary>
@@ -373,6 +347,4 @@ public class InnerConversationList : IList<IConversationState>, IList
     {
         get { return this; }
     }
-
-    #endregion
 }

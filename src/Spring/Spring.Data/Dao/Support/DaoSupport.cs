@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 
@@ -33,20 +29,10 @@ namespace Spring.Dao.Support;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class DaoSupport : IInitializingObject
 {
-    #region Fields
-
-    #endregion
-
-    #region Constants
-
     /// <summary>
     /// The shared <see cref="ILogger"/> instance for this class (and derived classes).
     /// </summary>
     protected static readonly ILogger log = LogManager.GetLogger(typeof(DaoSupport));
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DaoSupport"/> class.
@@ -54,14 +40,6 @@ public abstract class DaoSupport : IInitializingObject
     public DaoSupport()
     {
     }
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Abstract subclasses must override this to check their configuration.
@@ -84,8 +62,6 @@ public abstract class DaoSupport : IInitializingObject
     protected virtual void InitDao()
     {
     }
-
-    #endregion
 
     public void AfterPropertiesSet()
     {

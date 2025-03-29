@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,19 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-#endregion
-
 namespace Spring.Core.TypeConversion;
-
-#region Specifier parsers
 
 using TimeSpanNullable = Nullable<TimeSpan>;
 
@@ -187,8 +177,6 @@ class MillisecondSpecifier : SpecifierParser
     }
 }
 
-#endregion
-
 /// <summary>
 /// Converter for <see cref="System.TimeSpan"/> instances.
 /// </summary>
@@ -196,23 +184,13 @@ class MillisecondSpecifier : SpecifierParser
 /// <author>Roberto Paterlini</author>
 public class TimeSpanConverter : System.ComponentModel.TimeSpanConverter
 {
-    #region Constants
-
     static readonly SpecifierParser[] Specifiers = { new DaySpecifier(), new HourSpecifier(), new MinuteSpecifier(), new SecondSpecifier(), new MillisecondSpecifier() };
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Core.TypeConversion.TimeSpanConverter"/> class.
     /// </summary>
     public TimeSpanConverter() { }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Convert from a string value to a <see cref="System.TimeSpan"/> instance.
@@ -253,6 +231,4 @@ public class TimeSpanConverter : System.ComponentModel.TimeSpanConverter
 
         return base.ConvertFrom(context, culture, value);
     }
-
-    #endregion
 }

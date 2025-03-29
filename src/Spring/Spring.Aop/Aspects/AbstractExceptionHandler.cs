@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using Microsoft.Extensions.Logging;
 using Spring.Expressions;
@@ -30,8 +26,6 @@ namespace Spring.Aspects;
 /// <author>Mark Pollack</author>
 public abstract class AbstractExceptionHandler : IExceptionHandler
 {
-    #region Fields
-
     /// <summary>
     /// The logging instance
     /// </summary>
@@ -42,10 +36,6 @@ public abstract class AbstractExceptionHandler : IExceptionHandler
     private string actionExpressionText;
     private bool continueProcessing = false;
     private string constraintExpressionText;
-
-    #endregion
-
-    #region Constructor(s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AbstractExceptionHandler"/> class.
@@ -67,12 +57,6 @@ public abstract class AbstractExceptionHandler : IExceptionHandler
             SourceExceptionNames.Add(exceptionName);
         }
     }
-
-    #endregion
-
-    #region Implementation of IExceptionHandler
-
-    #region Properties
 
     /// <summary>
     /// Gets the source exception names.
@@ -123,8 +107,6 @@ public abstract class AbstractExceptionHandler : IExceptionHandler
         get { return continueProcessing; }
         set { continueProcessing = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Determines whether this instance can handle the exception the specified exception.
@@ -179,6 +161,4 @@ public abstract class AbstractExceptionHandler : IExceptionHandler
     /// </summary>
     /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
     public abstract object HandleException(IDictionary<string, object> callContextDictionary);
-
-    #endregion
 }

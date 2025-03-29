@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using Spring.Collections;
-
-#endregion
 
 namespace Spring.Util;
 

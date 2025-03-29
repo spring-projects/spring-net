@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,12 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-#endregion
-
 namespace Spring.Objects.Factory.Xml;
 
 /// <summary>
@@ -32,8 +24,6 @@ namespace Spring.Objects.Factory.Xml;
 /// <author>Rick Evans (.NET)</author>
 public class FactoryMethods
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Objects.Factory.Xml.FactoryMethods"/> class.
@@ -49,10 +39,6 @@ public class FactoryMethods
         _name = name;
         _number = number;
     }
-
-    #endregion
-
-    #region Properties
 
     public TestObject Object
     {
@@ -76,10 +62,6 @@ public class FactoryMethods
         get { return _number; }
     }
 
-    #endregion
-
-    #region Methods
-
     public static FactoryMethods DefaultInstance()
     {
         TestObject obj = new TestObject();
@@ -97,14 +79,8 @@ public class FactoryMethods
         return new FactoryMethods(obj, name, num);
     }
 
-    #endregion
-
-    #region Fields
-
     private int _number;
     private TestObject _object;
     private string _name = "default";
     private string _value;
-
-    #endregion
 }

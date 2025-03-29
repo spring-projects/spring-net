@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
@@ -53,8 +49,6 @@ public class ActiveXMessageConverter : IMessageConverter
         this.messageFormatter = messageFormatter;
     }
 
-    #region IMessageConverter Members
-
     /// <summary>
     /// Convert the given object to a Message.
     /// </summary>
@@ -79,10 +73,6 @@ public class ActiveXMessageConverter : IMessageConverter
         return message.Body;
     }
 
-    #endregion
-
-    #region ICloneable Members
-
     /// <summary>
     /// Creates a new object that is a copy of the current instance.
     /// </summary>
@@ -94,6 +84,4 @@ public class ActiveXMessageConverter : IMessageConverter
         ActiveXMessageConverter mc = new ActiveXMessageConverter(messageFormatter.Clone() as ActiveXMessageFormatter);
         return mc;
     }
-
-    #endregion
 }

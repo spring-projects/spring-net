@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -29,8 +23,6 @@ using Spring.Util;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Xml;
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Web.Services;
 
@@ -290,8 +282,6 @@ public sealed class WebServiceExporterTests
         Assert.IsTrue(typeof(CustomWebService).IsAssignableFrom(proxyType));
     }
 
-    #region Test classes
-
     public interface IService
     {
         string SomeMethod(int param);
@@ -319,6 +309,4 @@ public sealed class WebServiceExporterTests
     public class CustomWebService : WebService
     {
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Collections.Specialized;
@@ -357,14 +353,10 @@ public class PropertiesObjectDefinitionReader : AbstractObjectDefinitionReader
                 {
                     string name = nameAndProperty.Substring(0, sepIndx);
 
-                    #region Instrumentation
-
                     if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.LogDebug("Found object name '" + name + "'");
                     }
-
-                    #endregion
 
                     if (!Registry.ContainsObjectDefinition(name))
                     {
@@ -378,14 +370,10 @@ public class PropertiesObjectDefinitionReader : AbstractObjectDefinitionReader
                     // Ignore it: it wasn't a valid object name and property,
                     // although it did start with the required prefix
 
-                    #region Instrumentation
-
                     if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.LogDebug("Invalid object name and property [" + nameAndProperty + "]");
                     }
-
-                    #endregion
                 }
             } // if the key started with the prefix we're looking for
         } // while there are more keys

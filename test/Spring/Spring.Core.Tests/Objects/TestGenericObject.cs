@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,12 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-#endregion
-
 namespace Spring.Objects;
 
 /// <summary>
@@ -30,16 +22,10 @@ namespace Spring.Objects;
 /// <author>Bruno Baia</author>
 public class TestGenericObject<T, U>
 {
-    #region Fields
-
     private int _id = 0;
     private string _name = string.Empty;
     private IList<int> _someGenericList = new List<int>();
     private IDictionary<string, int> _someGenericDictionary = new Dictionary<string, int>();
-
-    #endregion
-
-    #region Properties
 
     public int ID
     {
@@ -65,10 +51,6 @@ public class TestGenericObject<T, U>
         set { this._someGenericDictionary = value; }
     }
 
-    #endregion
-
-    #region Constructor (s) / Destructor
-
     public TestGenericObject()
     {
     }
@@ -84,10 +66,6 @@ public class TestGenericObject<T, U>
         this._name = name;
     }
 
-    #endregion
-
-    #region Methods
-
     public static List<V> CreateList<V>()
     {
         return new List<V>();
@@ -97,6 +75,4 @@ public class TestGenericObject<T, U>
     {
         return new TestGenericObject<V, W>();
     }
-
-    #endregion
 }

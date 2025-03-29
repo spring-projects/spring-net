@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Util;
 
@@ -34,8 +26,6 @@ namespace Spring.Util;
 [Serializable]
 public class ReflectionException : ApplicationException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>Creates a new instance of the ObjectsException class.</summary>
     public ReflectionException()
     {
@@ -82,6 +72,4 @@ public class ReflectionException : ApplicationException
         : base(info, context)
     {
     }
-
-    #endregion
 }

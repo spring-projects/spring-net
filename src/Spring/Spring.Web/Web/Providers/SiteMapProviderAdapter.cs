@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections.Specialized;
 using System.Security.Permissions;
 using System.Web;
 using Spring.Context.Support;
-
-#endregion
 
 namespace Spring.Web.Providers;
 
@@ -43,16 +35,10 @@ namespace Spring.Web.Providers;
 [AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 public class SiteMapProviderAdapter : SiteMapProvider, ISiteMapProvider
 {
-    #region Field
-
     /// <summary>
     /// Reference to wrapped provider (defined in Spring context).
     /// </summary>
     private SiteMapProvider wrappedProvider;
-
-    #endregion
-
-    #region ProviderBase members
 
     ///<summary>
     ///Initializes the provider.
@@ -104,10 +90,6 @@ public class SiteMapProviderAdapter : SiteMapProvider, ISiteMapProvider
     {
         get { return this.wrappedProvider.Description; }
     }
-
-    #endregion
-
-    #region System.Web.SiteMapProvider members
 
     ///<summary>
     ///Retrieves a <see cref="T:System.Web.SiteMapNode"></see> object that represents the currently requested page using the specified <see cref="T:System.Web.HttpContext"></see> object.
@@ -355,6 +337,4 @@ public class SiteMapProviderAdapter : SiteMapProvider, ISiteMapProvider
     {
         get { return this.wrappedProvider.RootNode; }
     }
-
-    #endregion
 }

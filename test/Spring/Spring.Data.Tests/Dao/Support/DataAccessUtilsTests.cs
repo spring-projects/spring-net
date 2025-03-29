@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Dao.Support;
 
@@ -48,8 +40,6 @@ public class DataAccessUtilsTests
 
 public class MapPersistenceExceptionTranslator : IPersistenceExceptionTranslator
 {
-    #region IPersistenceExceptionTranslator Members
-
     private IDictionary translations = new Hashtable();
 
     public void AddTranslation(Exception inException, Exception outException)
@@ -61,6 +51,4 @@ public class MapPersistenceExceptionTranslator : IPersistenceExceptionTranslator
     {
         return (DataAccessException) translations[ex];
     }
-
-    #endregion
 }

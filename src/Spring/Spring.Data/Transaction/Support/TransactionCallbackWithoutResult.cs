@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Transaction.Support;
 
 /// <summary>
@@ -28,8 +24,6 @@ namespace Spring.Transaction.Support;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class TransactionCallbackWithoutResult : ITransactionCallback
 {
-    #region Methods
-
     /// <summary>
     /// Gets called by TransactionTemplate.execute within a transactional context
     /// when no return value is required.
@@ -45,10 +39,6 @@ public abstract class TransactionCallbackWithoutResult : ITransactionCallback
     /// </remarks>
     public abstract void DoInTransactionWithoutResult(ITransactionStatus status);
 
-    #endregion
-
-    #region ITransactionCallback Members
-
     /// <summary>
     /// Gets called by TransactionTemplate.Execute within a
     /// transaction context.
@@ -60,6 +50,4 @@ public abstract class TransactionCallbackWithoutResult : ITransactionCallback
         DoInTransactionWithoutResult(status);
         return null;
     }
-
-    #endregion
 }

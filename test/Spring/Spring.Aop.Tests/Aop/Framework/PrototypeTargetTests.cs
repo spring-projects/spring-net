@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
 using AopAlliance.Intercept;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Aop.Framework;
 

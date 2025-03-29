@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -54,8 +46,6 @@ public class NullValueInNestedPathException : FatalReflectionException
     {
         get { return type; }
     }
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -140,10 +130,6 @@ public class NullValueInNestedPathException : FatalReflectionException
         property = info.GetString("PropertyName");
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
     /// the data needed to serialize the target object.
@@ -164,6 +150,4 @@ public class NullValueInNestedPathException : FatalReflectionException
         info.AddValue("ObjectType", ObjectType);
         info.AddValue("PropertyName", PropertyName);
     }
-
-    #endregion
 }

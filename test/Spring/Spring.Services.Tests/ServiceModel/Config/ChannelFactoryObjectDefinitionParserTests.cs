@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ServiceModel;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Objects.Factory.Support;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.ServiceModel.Config;
 
@@ -129,14 +121,10 @@ public class ChannelFactoryObjectDefinitionParserTests
         Assert.IsNotNull(contract);
     }
 
-    #region Test classes
-
     [ServiceContract(Namespace = "http://Spring.Services.Tests")]
     public interface IContract
     {
         [OperationContract(Name = "MySomeMethod")]
         string SomeMethod(int param);
     }
-
-    #endregion
 }

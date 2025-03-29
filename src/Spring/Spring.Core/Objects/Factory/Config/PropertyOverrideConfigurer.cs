@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections.Specialized;
 using System.Globalization;
@@ -173,25 +169,17 @@ public class PropertyOverrideConfigurer : PropertyResourceConfigurer
         }
         else
         {
-            #region Instrumentation
-
             if (_logger.IsEnabled(LogLevel.Warning))
             {
                 _logger.LogWarning(string.Format(CultureInfo.InvariantCulture,
                     "Cannot find object '{0}' when overriding properties; check configuration.", name));
             }
-
-            #endregion
         }
-
-        #region Instrumentation
 
         if (_logger.IsEnabled(LogLevel.Debug))
         {
             _logger.LogDebug(string.Format(CultureInfo.InvariantCulture,
                 "Property '{0}' set to '{1}'.", key, value));
         }
-
-        #endregion
     }
 }

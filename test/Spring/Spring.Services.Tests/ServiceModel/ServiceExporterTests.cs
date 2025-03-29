@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text;
 using System.Reflection;
 using System.Net.Security;
@@ -28,8 +22,6 @@ using NUnit.Framework;
 using Spring.Core.IO;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.ServiceModel;
 
@@ -317,8 +309,6 @@ public sealed class ServiceExporterTests
         Assert.AreEqual("MySomeMethod", oca.Name);
     }
 
-    #region Test classes
-
     public interface IContract
     {
         string SomeMethod(int param);
@@ -382,6 +372,4 @@ public sealed class ServiceExporterTests
     //        return param.ToString();
     //    }
     //}
-
-    #endregion
 }

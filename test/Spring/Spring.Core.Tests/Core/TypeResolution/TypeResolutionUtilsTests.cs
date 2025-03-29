@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Core.TypeResolution;
 
@@ -100,12 +92,8 @@ public sealed class TypeResolutionUtilsTests
         Assert.IsTrue(TypeResolutionUtils.MethodMatch("AddPeriodicElement(string, string)", addPeriodicElementMethod), "Should match 'AddPeriodicElement(string, string)'");
     }
 
-    #region Helper classes
-
     internal interface IFoo
     {
         bool Spanglish(string foo, object[] args);
     }
-
-    #endregion
 }

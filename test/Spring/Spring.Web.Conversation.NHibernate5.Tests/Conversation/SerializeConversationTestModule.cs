@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Web;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
@@ -32,18 +28,12 @@ namespace Spring.Web.Conversation;
 /// </summary>
 public class SerializeConversationTestModule : IHttpModule
 {
-    #region Logging
-
     private static readonly ILogger<SerializeConversationTestModule> LOG = LogManager.GetLogger<SerializeConversationTestModule>();
-
-    #endregion
 
     /// <summary>
     /// Serialized Session Content.
     /// </summary>
     private static MemoryStream SerializedSessionContentStream = new MemoryStream();
-
-    #region IHttpModule Members
 
     /// <summary>
     /// TODO:
@@ -133,14 +123,10 @@ public class SerializeConversationTestModule : IHttpModule
             }
         }
     }
-
-    #endregion
 }
 
 public class MyBinder : SerializationBinder
 {
-    #region Logging
-
     private ILog LOG
     {
         get
@@ -148,8 +134,6 @@ public class MyBinder : SerializationBinder
             return LogManager.GetLogger(typeof(SerializeConversationTestModule));
         }
     }
-
-    #endregion
 
     public override Type BindToType(string assemblyName, string typeName)
     {
@@ -201,13 +185,7 @@ public class MyBinder : SerializationBinder
 /// </summary>
 public class MySerializationSurrogate : ISerializationSurrogate
 {
-    #region Logging
-
     private static readonly ILogger<SerializeConversationTestModule> LOG = LogManager.GetLogger<SerializeConversationTestModule>();
-
-    #endregion
-
-    #region ISerializationSurrogate Members
 
     public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
     {
@@ -251,6 +229,4 @@ public class MySerializationSurrogate : ISerializationSurrogate
 
         return obj;
     }
-
-    #endregion
 }

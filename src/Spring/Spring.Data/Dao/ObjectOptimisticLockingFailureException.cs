@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 
 namespace Spring.Dao;
@@ -30,15 +26,9 @@ namespace Spring.Dao;
 [Serializable]
 public class ObjectOptimisticLockingFailureException : OptimisticLockingFailureException, ISerializable
 {
-    #region Fields
-
     private object persistentClass;
 
     private object identifier;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ObjectOptimisticLockingFailureException"/> class.
@@ -100,8 +90,6 @@ public class ObjectOptimisticLockingFailureException : OptimisticLockingFailureE
     {
     }
 
-    #endregion
-
     public Type PersistentClass
     {
         get { return persistentClass as Type; }
@@ -125,16 +113,6 @@ public class ObjectOptimisticLockingFailureException : OptimisticLockingFailureE
         }
     }
 
-    #region Properties
-
-    #endregion
-
-    #region Methods
-
-    #endregion
-
-    #region ISerializable Members
-
     /// <summary>
     /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/>
     /// with information about the exception.
@@ -148,6 +126,4 @@ public class ObjectOptimisticLockingFailureException : OptimisticLockingFailureE
         info.AddValue("identifier", identifier);
         base.GetObjectData(info, context);
     }
-
-    #endregion
 }

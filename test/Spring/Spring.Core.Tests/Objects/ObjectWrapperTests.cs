@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -33,8 +27,6 @@ using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects;
 
@@ -56,8 +48,6 @@ public sealed class ObjectWrapperTests
         // enable logging (to nowhere), just to exercise the logging code...
         LogManager.LoggerFactory = NullLoggerFactory.Instance;
     }
-
-    #region Classes Used During Tests
 
     public class Person
     {
@@ -424,10 +414,6 @@ public sealed class ObjectWrapperTests
         public int[] intArray;
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Factory method for getting an ObjectWrapper instance.
     /// </summary>
@@ -450,8 +436,6 @@ public sealed class ObjectWrapperTests
     {
         return new ObjectWrapper(objectToBeWrapped);
     }
-
-    #endregion
 
     [Test]
     public void SetPropertyUsingValueThatNeedsConversionWithNoCustomConverterRegistered()
@@ -1050,8 +1034,6 @@ public sealed class ObjectWrapperTests
             pt.stringArray[3].Equals("fum"), "in correct values of string array");
     }
 
-    #region Test for DateTime Properties
-
     internal class DateTimeTestObject
     {
         private DateTime _dt;
@@ -1073,10 +1055,6 @@ public sealed class ObjectWrapperTests
 
         Assert.AreEqual(1991, ((DateTime) wrapper.GetPropertyValue("TriggerDateTime")).Year);
     }
-
-    #endregion
-
-    #region Test for CultureInfo Properties
 
     internal class CultureTestObject
     {
@@ -1101,10 +1079,6 @@ public sealed class ObjectWrapperTests
             ((CultureInfo) wrapper.GetPropertyValue("Cult")).Name);
     }
 
-    #endregion
-
-    #region Tests for URI Properties
-
     internal class URITestObject
     {
         private Uri _uri;
@@ -1126,10 +1100,6 @@ public sealed class ObjectWrapperTests
         Assert.AreEqual("www.springframework.net",
             ((Uri) wrapper.GetPropertyValue("ResourceIdentifier")).Host);
     }
-
-    #endregion
-
-    #region Tests for Indexed Array Properties
 
     [Test]
     public void GetIndexedFromArrayProperty()
@@ -1191,10 +1161,6 @@ public sealed class ObjectWrapperTests
         to.Array = new int[] { 1, 2, 3, 4, 5 };
         Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("Array[]"));
     }
-
-    #endregion
-
-    #region Tests for Indexed List Properties
 
     internal class ListTestObject
     {
@@ -1313,10 +1279,6 @@ public sealed class ObjectWrapperTests
         Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("List[]"));
     }
 
-    #endregion
-
-    #region Tests for Indexed Dictionary Properties
-
     internal class DictionaryTestObject
     {
         private IDictionary _dictionary;
@@ -1369,10 +1331,6 @@ public sealed class ObjectWrapperTests
         wrapper.SetPropertyValue("PeriodictabLE", elements);
         Assert.AreEqual(3, to.PeriodicTable.Count);
     }
-
-    #endregion
-
-    #region Tests for Indexed Set Properties
 
     internal class SetTestObject
     {
@@ -1442,10 +1400,6 @@ public sealed class ObjectWrapperTests
         Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("Set[]"));
     }
 
-    #endregion
-
-    #region Test for Enumeration Properties
-
     internal class EnumTestObject
     {
         private FileMode FileModeEnum;
@@ -1465,8 +1419,6 @@ public sealed class ObjectWrapperTests
         wrapper.SetPropertyValue("FileMode", FileMode.Create);
         Assert.AreEqual(FileMode.Create, (FileMode) wrapper.GetPropertyValue("FileMode"));
     }
-
-    #endregion
 
     [Test]
     public void SetTypePropertyWithString()

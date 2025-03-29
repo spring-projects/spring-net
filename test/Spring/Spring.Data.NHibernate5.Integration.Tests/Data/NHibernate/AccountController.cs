@@ -10,13 +10,11 @@ namespace Spring.Data.NHibernate
             set { accountManager = value; }
         }
 
-        #region Implementation of IAccountController
-
         public void DoWork()
         {
             accountManager.DoTransfer(30, 30);
         }
 
-        #endregion
+        
     }
 }

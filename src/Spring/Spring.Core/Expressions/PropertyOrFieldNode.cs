@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Reflection;
@@ -498,8 +494,6 @@ public class PropertyOrFieldNode : BaseNode
         //}
     }
 
-    #region IValueAccessor interface
-
     private interface IValueAccessor
     {
         object Get(object context);
@@ -512,10 +506,6 @@ public class PropertyOrFieldNode : BaseNode
         MemberInfo MemberInfo { get; }
         bool RequiresRefresh(Type contextType);
     }
-
-    #endregion
-
-    #region BaseValueAccessor implementation
 
     private abstract class BaseValueAccessor : IValueAccessor
     {
@@ -553,10 +543,6 @@ public class PropertyOrFieldNode : BaseNode
             return false;
         }
     }
-
-    #endregion
-
-    #region PropertyValueAccessor implementation
 
     private class PropertyValueAccessor : BaseValueAccessor
     {
@@ -628,10 +614,6 @@ public class PropertyOrFieldNode : BaseNode
         }
     }
 
-    #endregion
-
-    #region FieldValueAccessor implementation
-
     private class FieldValueAccessor : BaseValueAccessor
     {
         private SafeField field;
@@ -683,10 +665,6 @@ public class PropertyOrFieldNode : BaseNode
         }
     }
 
-    #endregion
-
-    #region EnumValueAccessor implementation
-
     private class EnumValueAccessor : BaseValueAccessor
     {
         private object enumValue;
@@ -706,10 +684,6 @@ public class PropertyOrFieldNode : BaseNode
             throw new NotSupportedException("Cannot set the value of an enum.");
         }
     }
-
-    #endregion
-
-    #region ExpandoObjectValueAccessor implementation
 
     private class ExpandoObjectValueAccessor : BaseValueAccessor
     {
@@ -738,10 +712,6 @@ public class PropertyOrFieldNode : BaseNode
             throw new NotSupportedException("Cannot set the value of an expando object.");
         }
     }
-
-    #endregion
-
-    #region DynamicObjectValueAccessor implementation
 
     private class DynamicObjectValueAccessor : BaseValueAccessor
     {
@@ -786,10 +756,6 @@ public class PropertyOrFieldNode : BaseNode
         }
     }
 
-    #endregion
-
-    #region TypeValueAccessor implementation
-
     private class TypeValueAccessor : BaseValueAccessor
     {
         private Type type;
@@ -809,6 +775,4 @@ public class PropertyOrFieldNode : BaseNode
             throw new NotSupportedException("Cannot set the value of a type.");
         }
     }
-
-    #endregion
 }

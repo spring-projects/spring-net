@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
@@ -49,13 +45,7 @@ namespace Spring.Messaging.Ems.Core;
 /// <author>Mark Pollack (.NET)</author>
 public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
 {
-    #region Logging
-
     private readonly ILogger<EmsTemplate> logger = LogManager.GetLogger<EmsTemplate>();
-
-    #endregion
-
-    #region Fields
 
     /// <summary>
     /// Timeout value indicating that a receive operation should
@@ -85,10 +75,6 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
 
     private long timeToLive = Message.DEFAULT_TIME_TO_LIVE;
 
-    #endregion
-
-    #region Constructor (s)
-
     /// <summary> Create a new EmsTemplate.</summary>
     /// <remarks>
     /// <para>Note: The ConnectionFactory has to be set before using the instance.
@@ -110,10 +96,6 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
         ConnectionFactory = connectionFactory;
         AfterPropertiesSet();
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary> Initialize the default implementations for the template's strategies:
     /// DynamicDestinationResolver and SimpleMessageConverter.
@@ -224,10 +206,6 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
             }*/
         }
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the default destination to be used on send/receive operations that do not
@@ -396,8 +374,6 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
         set { cacheEmsResources = value; }
     }*/
 
-    #endregion
-
     /// <summary>
     /// Extract the content from the given JMS message.
     /// </summary>
@@ -412,8 +388,6 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
 
         return null;
     }
-
-    #region EMS Factory Methods
 
     /// <summary> Fetch an appropriate Connection from the given EmsResourceHolder.
     /// </summary>
@@ -720,10 +694,6 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
             producer.Send(message);
         }
     }
-
-    #endregion
-
-    #region IEmsOperations Implementation
 
     /// <summary>
     /// Execute the action specified by the given action object within
@@ -1539,8 +1509,6 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
         }, true);
     }
 
-    #endregion
-
     /// <summary>
     /// Creates the queue browser.
     /// </summary>
@@ -1552,8 +1520,6 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
     {
         return session.CreateBrowser(queue, selector);
     }
-
-    #region Supporting Internal Classes
 
     /// <summary>
     /// ResourceFactory implementation that delegates to this template's callback methods.
@@ -1764,8 +1730,6 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
             return del(session);
         }
     }
-
-    #endregion
 }
 
 /// <summary>

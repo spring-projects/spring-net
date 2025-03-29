@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
-
-#endregion
 
 namespace Spring.Aop.Framework;
 
@@ -50,8 +42,6 @@ public class TimestampIntroductionInterceptor : IAdvice, ITimeStamped, IIntercep
         this.ts = ts;
     }
 
-    #region ITimeStamped Members
-
     public DateTime TimeStamp
     {
         get
@@ -63,6 +53,4 @@ public class TimestampIntroductionInterceptor : IAdvice, ITimeStamped, IIntercep
             this.ts = value;
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using Spring.Data.Common;
 
@@ -30,8 +26,6 @@ namespace Spring.Data.Objects;
 /// <remarks>The default CommandType is CommandType.Text</remarks>
 public class AdoNonQuery : AdoOperation
 {
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="AdoNonQuery"/> class.
     /// </summary>
@@ -55,14 +49,6 @@ public class AdoNonQuery : AdoOperation
     {
     }
 
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Methods
-
     public IDictionary ExecuteNonQuery(params object[] inParameterValues)
     {
         ValidateParameters(inParameterValues);
@@ -74,6 +60,4 @@ public class AdoNonQuery : AdoOperation
         ValidateNamedParameters(inParams);
         return AdoTemplate.ExecuteNonQuery(NewCommandCreator(inParams));
     }
-
-    #endregion
 }

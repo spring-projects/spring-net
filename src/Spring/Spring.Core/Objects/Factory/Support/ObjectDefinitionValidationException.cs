@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 
 namespace Spring.Objects.Factory.Support;
@@ -30,8 +26,6 @@ namespace Spring.Objects.Factory.Support;
 [Serializable]
 public class ObjectDefinitionValidationException : FatalObjectException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Objects.Factory.Support.ObjectDefinitionValidationException"/>
@@ -84,6 +78,4 @@ public class ObjectDefinitionValidationException : FatalObjectException
         : base(info, context)
     {
     }
-
-    #endregion
 }

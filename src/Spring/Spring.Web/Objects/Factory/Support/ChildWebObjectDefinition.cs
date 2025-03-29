@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using Spring.Objects.Factory.Config;
@@ -38,8 +34,6 @@ public class ChildWebObjectDefinition : ChildObjectDefinition, IWebObjectDefinit
 {
 //        private ObjectScope _scope = ObjectScope.Default;
     private string _pageName;
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the
@@ -97,8 +91,6 @@ public class ChildWebObjectDefinition : ChildObjectDefinition, IWebObjectDefinit
     {
         _pageName = WebUtils.CombineVirtualPaths(VirtualEnvironment.CurrentExecutionFilePath, pageName);
     }
-
-    #endregion
 
     /// <summary>
     /// Object scope.
