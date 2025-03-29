@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Reflection;
 using Spring.Proxy;
 using Spring.Objects.Factory;
@@ -32,17 +28,11 @@ namespace Spring.Remoting;
 /// <author>Bruno Baia</author>
 public class RemoteObjectFactory : ConfigurableLifetime, IInitializingObject, IFactoryObject
 {
-    #region Fields
-
     private object target;
     private Type baseType = typeof(BaseRemoteObject);
     private string[] interfaces;
 
     private ConstructorInfo proxyConstructor;
-
-    #endregion
-
-    #region Constructor(s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the MarshalByRefObjectFactory.
@@ -50,10 +40,6 @@ public class RemoteObjectFactory : ConfigurableLifetime, IInitializingObject, IF
     public RemoteObjectFactory()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the target object.
@@ -88,10 +74,6 @@ public class RemoteObjectFactory : ConfigurableLifetime, IInitializingObject, IF
         set { interfaces = value; }
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Initializes factory object.
     /// </summary>
@@ -100,10 +82,6 @@ public class RemoteObjectFactory : ConfigurableLifetime, IInitializingObject, IF
         ValidateConfiguration();
         GenerateProxy();
     }
-
-    #endregion
-
-    #region IFactoryObject Members
 
     /// <summary>
     /// Returns type of the remotable target proxy.
@@ -139,10 +117,6 @@ public class RemoteObjectFactory : ConfigurableLifetime, IInitializingObject, IF
         }
     }
 
-    #endregion
-
-    #region Private Methods
-
     private void ValidateConfiguration()
     {
         if (Target == null)
@@ -170,6 +144,4 @@ public class RemoteObjectFactory : ConfigurableLifetime, IInitializingObject, IF
 
         proxyConstructor = remotableObjectType.GetConstructor(new Type[1] { builder.TargetType });
     }
-
-    #endregion
 }

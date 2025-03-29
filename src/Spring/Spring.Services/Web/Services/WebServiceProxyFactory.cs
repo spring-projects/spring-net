@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Xml.Schema;
@@ -54,13 +50,7 @@ namespace Spring.Web.Services;
 /// <author>Aleksandar Seovic</author>
 public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingObject
 {
-    #region Logging
-
     private static readonly ILogger<WebServiceProxyFactory> LOG = LogManager.GetLogger<WebServiceProxyFactory>();
-
-    #endregion
-
-    #region Fields
 
     private IObjectDefinition _productTemplate;
     private Type _webServiceProxyBaseType = typeof(SoapHttpClientProtocol);
@@ -79,10 +69,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
     /// </summary>
     protected ConstructorInfo proxyConstructor;
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="WebServiceProxyFactory"/> class.
@@ -90,10 +76,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
     public WebServiceProxyFactory()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the base type that web service proxy should inherit.
@@ -211,10 +193,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
         set { _memberAttributes = value; }
     }
 
-    #endregion
-
-    #region IConfigurableFactoryObject Members
-
     /// <summary>
     /// Returns type of the web service proxy.
     /// </summary>
@@ -255,10 +233,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
         set { _productTemplate = value; }
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Initializes factory object.
     /// </summary>
@@ -266,10 +240,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
     {
         ValidateConfiguration();
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Validates the configuration.
@@ -325,8 +295,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
 
         proxyConstructor = wrapper.GetConstructor(Type.EmptyTypes);
 
-        #region Instrumentation
-
         if (LOG.IsEnabled(LogLevel.Debug))
         {
             if (ServiceUri != null)
@@ -340,13 +308,7 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
                     ProxyType.FullName));
             }
         }
-
-        #endregion
     }
-
-    #endregion
-
-    #region Private Methods
 
     /// <summary>
     /// Gets XML Web Services documents from a Spring resource.
@@ -422,23 +384,13 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
         }
     }
 
-    #endregion
-
-    #region SoapHttpClientProxyTypeBuilder inner class implementation
-
     /// <summary>
     /// Proxy type builder that can be used to create a proxy for
     /// <see cref="System.Web.Services.Protocols.SoapHttpClientProtocol"/> derived classes.
     /// </summary>
     private sealed class SoapHttpClientProxyTypeBuilder : AbstractProxyTypeBuilder
     {
-        #region Logging
-
         private static readonly ILogger<SoapHttpClientProxyTypeBuilder> LOG = LogManager.GetLogger<SoapHttpClientProxyTypeBuilder>();
-
-        #endregion
-
-        #region Fields
 
         // Binding/Type related
         private IResource serviceUri;
@@ -453,10 +405,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
         private SoapOperationBinding soapOperationBinding;
         private XmlMembersMapping inputMembersMapping;
         private XmlMembersMapping outputMembersMapping;
-
-        #endregion
-
-        #region Constructor(s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the
@@ -475,10 +423,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
 
             Initialize(wsDocuments, bindingName);
         }
-
-        #endregion
-
-        #region IProxyTypeBuilder Members
 
         /// <summary>
         /// Creates the proxy type.
@@ -511,10 +455,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
             return typeBuilder.CreateType();
         }
 
-        #endregion
-
-        #region IProxyTypeGenerator Members
-
         /// <summary>
         /// Generates the IL instructions that pushes
         /// the target instance on which calls should be delegated to.
@@ -524,10 +464,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
         {
             PushProxy(il);
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Implements constructors for the proxy class.
@@ -677,11 +613,7 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
             }
 */
 
-        #endregion
-
-        #region Private Methods
-
-        private void Initialize(DiscoveryClientDocumentCollection wsDocuments, string bindingName)
+private void Initialize(DiscoveryClientDocumentCollection wsDocuments, string bindingName)
         {
             // Service descriptions
             this.wsDescriptions = new ServiceDescriptionCollection();
@@ -745,14 +677,10 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
                 {
                     foreach (Binding binding in description.Bindings)
                     {
-                        #region Instrumentation
-
                         if (LOG.IsEnabled(LogLevel.Information))
                         {
                             LOG.LogInformation(String.Format("The binding '{0}', found in the WSDL document located at '{1}', will be use.", binding.Name, this.serviceUri.Description));
                         }
-
-                        #endregion
 
                         return binding;
                     }
@@ -945,24 +873,14 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
             return cabb.Build();
         }
 
-        #endregion
-
-        #region SoapHttpClientProxyMethodBuilder inner class implementation
-
         /// <summary>
         /// Proxy method builder that can be used to create a proxy method
         /// for web services operation invocation.
         /// </summary>
         private sealed class SoapHttpClientProxyMethodBuilder : AbstractProxyMethodBuilder
         {
-            #region Fields
-
             private static readonly MethodInfo Invoke =
                 typeof(SoapHttpClientProtocol).GetMethod("Invoke", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            #endregion
-
-            #region Constructor(s) / Destructor
 
             /// <summary>
             /// Creates a new instance of the method builder.
@@ -976,10 +894,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
                 : base(typeBuilder, proxyGenerator, false)
             {
             }
-
-            #endregion
-
-            #region Protected Methods
 
             /// <summary>
             /// Generates the proxy method.
@@ -1087,16 +1001,8 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
                     }
                 }
             }
-
-            #endregion
         }
-
-        #endregion
     }
-
-    #endregion
-
-    #region WebServiceProxyProxyTypeBuilder inner class implementation
 
     /// <summary>
     /// Proxy type builder that can be used to create a proxy for
@@ -1104,8 +1010,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
     /// </summary>
     private sealed class WebServiceProxyProxyTypeBuilder : InheritanceProxyTypeBuilder
     {
-        #region Constructor(s) / Destructor
-
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="WebServiceProxyProxyTypeBuilder"/> class.
@@ -1115,10 +1019,6 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
             this.Name = "WebServiceProxyProxy";
             this.DeclaredMembersOnly = true;
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Gets the mapping of the interface to proxy
@@ -1151,9 +1051,5 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
 
             return mapping;
         }
-
-        #endregion
     }
-
-    #endregion
 }

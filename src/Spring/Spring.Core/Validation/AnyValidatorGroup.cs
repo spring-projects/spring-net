@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Expressions;
 
@@ -41,8 +37,6 @@ namespace Spring.Validation;
 /// <author>Erich Eichinger</author>
 public class AnyValidatorGroup : BaseValidatorGroup
 {
-    #region Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="AnyValidatorGroup"/> class.
     /// </summary>
@@ -70,8 +64,6 @@ public class AnyValidatorGroup : BaseValidatorGroup
     {
         this.FastValidate = true;
     }
-
-    #endregion
 
     /// <summary>
     /// Validates the specified object.

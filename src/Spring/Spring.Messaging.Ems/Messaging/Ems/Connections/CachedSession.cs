@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using Microsoft.Extensions.Logging;
@@ -37,11 +33,7 @@ namespace Spring.Messaging.Ems.Connections;
 /// <author>Mark Pollack</author>
 public class CachedSession : IDecoratorSession
 {
-    #region Logging Definition
-
     private static readonly ILogger<CachedSession> LOG = LogManager.GetLogger<CachedSession>();
-
-    #endregion
 
     private readonly ISession target;
     private readonly LinkedList sessionList;
@@ -90,27 +82,19 @@ public class CachedSession : IDecoratorSession
             IMessageProducer producer = (IMessageProducer) cachedProducers[destination];
             if (producer != null)
             {
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.LogDebug("Found cached MessageProducer for destination [" + destination + "]");
                 }
-
-                #endregion
             }
             else
             {
                 producer = target.CreateProducer(destination);
 
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.LogDebug("Creating cached MessageProducer for destination [" + destination + "]");
                 }
-
-                #endregion
 
                 cachedProducers.Add(destination, producer);
             }
@@ -177,14 +161,10 @@ public class CachedSession : IDecoratorSession
         // Allow for multiple close calls...
         if (!sessionList.Contains(this))
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.LogDebug("Returning cached Session: " + target);
             }
-
-            #endregion
 
             sessionList.Add(this); //add to end of linked list.
         }
@@ -338,8 +318,6 @@ public class CachedSession : IDecoratorSession
 
         return new CachedMessageConsumer(consumer);
     }
-
-    #region Pass through implementations
 
     /// <summary>
     /// Gets the queue.
@@ -592,8 +570,6 @@ public class CachedSession : IDecoratorSession
             return target.IsTransacted;
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.

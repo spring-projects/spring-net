@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Globalization;
 using Spring.Core.TypeResolution;
-
-#endregion
 
 namespace Spring.Core.TypeConversion;
 
@@ -41,17 +33,11 @@ namespace Spring.Core.TypeConversion;
 /// <author>Rick Evans (.NET)</author>
 public class RuntimeTypeConverter : TypeConverter
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Core.TypeConversion.RuntimeTypeConverter"/> class.
     /// </summary>
     public RuntimeTypeConverter() { }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Returns whether this converter can convert an object of one
@@ -172,6 +158,4 @@ public class RuntimeTypeConverter : TypeConverter
 
         return base.ConvertTo(context, culture, value, destinationType);
     }
-
-    #endregion
 }

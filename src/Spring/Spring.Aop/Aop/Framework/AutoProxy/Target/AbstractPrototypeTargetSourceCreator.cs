@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Microsoft.Extensions.Logging;
 using Spring.Aop.Target;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
-
-#endregion
 
 namespace Spring.Aop.Framework.AutoProxy.Target;
 
@@ -38,8 +30,6 @@ public abstract class AbstractPrototypeTargetSourceCreator : ITargetSourceCreato
     /// The logger
     /// </summary>
     protected readonly ILogger logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-    #region ITargetSourceCreator Members
 
     /// <summary>
     /// Create a special TargetSource for the given object, if any.
@@ -90,8 +80,6 @@ public abstract class AbstractPrototypeTargetSourceCreator : ITargetSourceCreato
             return prototypeTargetSource;
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Creates the prototype target source.

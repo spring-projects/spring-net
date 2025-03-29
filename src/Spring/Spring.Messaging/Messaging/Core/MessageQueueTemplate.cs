@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Context;
@@ -73,13 +69,7 @@ namespace Spring.Messaging.Core;
 /// </remarks>
 public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject, IApplicationContextAware
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(MessageQueueTemplate));
-
-    #endregion
-
-    #region Fields
 
     private string defaultMessageQueueObjectName;
     private string messageConverterObjectName;
@@ -96,10 +86,6 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
     /// </summary>
     public const string METADATA_CACHE_NAME = "__MessageQueueMetadataCache__";
 
-    #endregion
-
-    #region Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="MessageQueueTemplate"/> class.
     /// </summary>
@@ -115,10 +101,6 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
     {
         defaultMessageQueueObjectName = messageQueueName;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the message queue factory to use for creating MessageQueue and IMessageConverters.
@@ -214,10 +196,6 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
         set { metadataCache = value; }
     }
 
-    #endregion
-
-    #region IApplicationContextAware Members
-
     /// <summary>
     /// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
     /// object runs in.
@@ -260,10 +238,6 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
             applicationContext = ctx;
         }
     }
-
-    #endregion
-
-    #region IInitializingObject Members
 
     /// <summary>
     /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
@@ -321,24 +295,16 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
                 }
                 else
                 {
-                    #region Logging
-
                     if (LOG.IsEnabled(LogLevel.Warning))
                     {
                         LOG.LogWarning("The ApplicationContext property has not been set, so the MessageQueueMetadataCache can not be automatically generated.  " +
                                        "Please explictly set the MessageQueueMetadataCache using the property MetadataCache or set the ApplicationContext property.  " +
                                        "This will only effect the use of MessageQueueTemplate when publishing to remote queues.");
                     }
-
-                    #endregion
                 }
             }
         }
     }
-
-    #endregion
-
-    #region IMessageQueueOperations Members
 
     /// <summary>
     /// Send the given object to the default destination, converting the object
@@ -494,10 +460,6 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
     {
         DoSend(messageQueue, message);
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Sends the message to the given message queue.
@@ -683,6 +645,4 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
             throw new SystemException("No DefaultMessageQueueObjectName specified. Check configuration of MessageQueueTemplate.");
         }
     }
-
-    #endregion
 }

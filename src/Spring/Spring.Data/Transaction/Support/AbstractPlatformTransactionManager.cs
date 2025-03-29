@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Data;
@@ -56,8 +52,6 @@ namespace Spring.Transaction.Support;
 [Serializable]
 public abstract class AbstractPlatformTransactionManager : IPlatformTransactionManager
 {
-    #region Private SuspendedResourcesHolder Helper class
-
     private class SuspendedResourcesHolder
     {
         private IList _suspendedSynchronizations;
@@ -114,30 +108,18 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
         }
     }
 
-    #endregion
-
-    #region Private Variables
-
     private TransactionSynchronizationState _transactionSyncState = TransactionSynchronizationState.Never;
     private bool _nestedTransactionsAllowed;
     private bool _rollbackOnCommitFailure;
     private bool _failEarlyOnGlobalRollbackOnly;
     private int _defaultTimeout = DefaultTransactionDefinition.TIMEOUT_DEFAULT;
 
-    #region Logging Definition
-
     [NonSerialized()] protected readonly ILogger log;
-
-    #endregion
 
     protected AbstractPlatformTransactionManager()
     {
         log = LogManager.GetLogger(this.GetType());
     }
-
-    #endregion
-
-    #region Public Properties
 
     /// <summary>
     /// Sets and gets when this transaction manager should activate the thread-bound
@@ -231,10 +213,6 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
             _defaultTimeout = value;
         }
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Return the current transaction object.
@@ -468,10 +446,6 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
     protected virtual void DoCleanupAfterCompletion(object transaction)
     {
     }
-
-    #endregion
-
-    #region IPlatformTransactionManager Members
 
     /// <summary>
     /// Return a currently active transaction or create a new one.
@@ -978,10 +952,6 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
         }
     }
 
-    #endregion
-
-    #region Protected Method
-
     private DefaultTransactionStatus NewTransactionStatus(ITransactionDefinition definition,
         object transaction, bool newTransaction,
         bool newSynchronization, bool debug,
@@ -1018,10 +988,6 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
 
         return _defaultTimeout;
     }
-
-    #endregion
-
-    #region Private Methods
 
     /// <summary>
     /// Suspend the given transaction. Suspends transaction synchronization first,
@@ -1285,6 +1251,4 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
             Resume(status.Transaction, status.SuspendedResources);
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Diagnostics;
@@ -114,8 +110,6 @@ public class PriorityQueue : AbstractQueue, ISerializable
         }
     }
 
-    #region Private Fields
-
     private const int DEFAULT_INITIAL_CAPACITY = 11;
 
     /// <summary>
@@ -147,10 +141,6 @@ public class PriorityQueue : AbstractQueue, ISerializable
     /// <i>structurally modified</i>.
     /// </summary>
     [NonSerialized] private int _queueModificationCount = 0;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates a <see cref="Spring.Collections.PriorityQueue"/> with the default initial capacity
@@ -224,10 +214,6 @@ public class PriorityQueue : AbstractQueue, ISerializable
             fillFromUnsorted(collection);
         }
     }
-
-    #endregion
-
-    #region Private Helper Methods
 
     /// <summary>
     /// Common code to initialize underlying queue array across
@@ -458,10 +444,6 @@ public class PriorityQueue : AbstractQueue, ISerializable
         Array.Copy(_queue, 0, newQueue, 0, _queue.Length);
         _queue = newQueue;
     }
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     /// Gets the Capacity of this queue.  Will equal <see cref="System.Collections.ICollection.Count"/>
@@ -709,10 +691,6 @@ public class PriorityQueue : AbstractQueue, ISerializable
         return _comparator;
     }
 
-    #endregion
-
-    #region ISerializable Implementation
-
     /// <summary>
     /// Save the state of the instance to a stream (that
     /// is, serialize it).
@@ -766,10 +744,6 @@ public class PriorityQueue : AbstractQueue, ISerializable
             _queue[i] = serializationInfo.GetValue("Spring.Collections.PriorityQueueData" + i, typeof(Object));
         }
     }
-
-    #endregion
-
-    #region ICollection Implementation
 
     ///<summary>
     ///Copies the elements of the <see cref="T:System.Collections.ICollection"></see> to an <see cref="T:System.Array"></see>, starting at a particular <see cref="T:System.Array"></see> index.
@@ -837,6 +811,4 @@ public class PriorityQueue : AbstractQueue, ISerializable
     {
         get { return _priorityQueueSize == 0; }
     }
-
-    #endregion
 }

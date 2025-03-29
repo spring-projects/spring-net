@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using Spring.Core.TypeResolution;
@@ -38,8 +34,6 @@ namespace Spring.Messaging.Ems.Config;
 /// <author>Mark Pollack (.NET)</author>
 public class MessageListenerContainerObjectDefinitionParser : IObjectDefinitionParser
 {
-    #region Fields
-
     private readonly string LISTENER_ELEMENT = "listener";
 
     private readonly string ID_ATTRIBUTE = "id";
@@ -98,10 +92,6 @@ public class MessageListenerContainerObjectDefinitionParser : IObjectDefinitionP
 
     private readonly string EXCEPTION_LISTENER_ATTRIBUTE = "exception-listener";
 
-    #endregion
-
-    #region IObjectDefinitionParser Members
-
     /// <summary>
     /// Parse the specified XmlElement and register the resulting
     /// ObjectDefinitions with the <see cref="ParserContext.Registry"/> IObjectDefinitionRegistry
@@ -134,8 +124,6 @@ public class MessageListenerContainerObjectDefinitionParser : IObjectDefinitionP
 
         return null;
     }
-
-    #endregion
 
     private void ParseListener(XmlElement listenerElement, XmlElement containerElement, ParserContext parserContext)
     {

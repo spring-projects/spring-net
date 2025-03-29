@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.Xml;
-
-#endregion
 
 namespace Spring.Core.TypeConversion;
 
@@ -77,8 +69,6 @@ namespace Spring.Core.TypeConversion;
 /// <author>Simon White (.NET)</author>
 public class NameValueConverter : TypeConverter
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Core.TypeConversion.NameValueConverter"/> class.
@@ -86,8 +76,6 @@ public class NameValueConverter : TypeConverter
     public NameValueConverter()
     {
     }
-
-    #endregion
 
     /// <summary>
     /// Returns whether this converter can convert an object of one

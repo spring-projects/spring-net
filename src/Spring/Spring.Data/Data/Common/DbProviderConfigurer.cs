@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Core.IO;
@@ -31,17 +27,11 @@ namespace Spring.Data.Common;
 /// <author>Mark Pollack</author>
 public class DbProviderConfigurer : IObjectFactoryPostProcessor, IOrdered
 {
-    #region Fields
-
     private static readonly ILogger<DbProviderConfigurer> log = LogManager.GetLogger<DbProviderConfigurer>();
 
     private int order = Int32.MinValue;
 
     private IResource providerResource;
-
-    #endregion
-
-    #region Constructor
 
     /// <summary>
     /// Initializes a new instance of the <see cref="T:System.Object"/> class.
@@ -49,10 +39,6 @@ public class DbProviderConfigurer : IObjectFactoryPostProcessor, IOrdered
     public DbProviderConfigurer()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the provider resource which contains additional IDbProvider definitions.
@@ -63,10 +49,6 @@ public class DbProviderConfigurer : IObjectFactoryPostProcessor, IOrdered
         get { return providerResource; }
         set { providerResource = value; }
     }
-
-    #endregion
-
-    #region Implementation of IObjectFactoryPostProcessor
 
     /// <summary>
     /// Modify the application context's internal object factory after its
@@ -88,14 +70,8 @@ public class DbProviderConfigurer : IObjectFactoryPostProcessor, IOrdered
         DbProviderFactory.DBPROVIDER_ADDITIONAL_RESOURCE_NAME = providerResource.Uri.AbsoluteUri;
     }
 
-    #endregion
-
-    #region Implementation of IOrdered
-
     public int Order
     {
         get { return order; }
     }
-
-    #endregion
 }

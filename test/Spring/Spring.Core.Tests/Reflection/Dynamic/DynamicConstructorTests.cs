@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Diagnostics;
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Context.Support;
-
-#endregion
 
 namespace Spring.Reflection.Dynamic;
 
@@ -39,8 +31,6 @@ public sealed class DynamicConstructorTests
     private Inventor tesla;
     private Inventor pupin;
     private Society ieee;
-
-    #region SetUp and TearDown
 
     /// <summary>
     /// The setup logic executed before the execution of each individual test.
@@ -71,8 +61,6 @@ public sealed class DynamicConstructorTests
         //DynamicReflectionManager.SaveAssembly();
     }
 
-    #endregion
-
     [Test]
     public void TestConstructors()
     {
@@ -85,8 +73,6 @@ public sealed class DynamicConstructorTests
             typeof(DateTime).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(int) }));
         Assert.AreEqual(DateTime.Today, newDate.Invoke(new object[] { DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day }));
     }
-
-    #region Performance tests
 
     private DateTime start, stop;
 
@@ -140,6 +126,4 @@ public sealed class DynamicConstructorTests
     {
         Debug.WriteLine(String.Format("{0,-60} {1,12:#,###} {2,12:##0.000} {3,12:#,###}", name, iterations, duration, iterations / duration));
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -16,15 +14,9 @@
 //  * limitations under the License.
 //  */
 
-#endregion
-
-#region Imports
-
 using Apache.NMS;
 using FakeItEasy;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Messaging.Nms.Connections;
 

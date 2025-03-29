@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Util;
 
@@ -65,8 +61,6 @@ public class AttributeTypeFilter : ITypeFilter
     /// <param name="checkInherited">if set to <c>true</c> [check inherited].</param>
     public AttributeTypeFilter(Type attributeType, bool checkInherited)
     {
-        #region parameter validation
-
         AssertUtils.ArgumentNotNull(attributeType, "attributeType");
         if (!typeof(Attribute).IsAssignableFrom(attributeType))
         {
@@ -75,8 +69,6 @@ public class AttributeTypeFilter : ITypeFilter
                     "The [{0}] Type must be derived from the [System.Attribute] class.",
                     attributeType));
         }
-
-        #endregion
 
         this.attributeType = attributeType;
         this.checkInherited = checkInherited;

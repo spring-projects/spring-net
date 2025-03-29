@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,12 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-#endregion
-
 namespace Spring.Core;
 
 /// <summary>
@@ -30,8 +22,6 @@ namespace Spring.Core;
 /// </summary>
 public class ComposedCriteria : ICriteria
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="ComposedCriteria"/> class.
@@ -52,10 +42,6 @@ public class ComposedCriteria : ICriteria
         _criteria = new List<ICriteria>();
         Add(criteria);
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
@@ -94,8 +80,6 @@ public class ComposedCriteria : ICriteria
         }
     }
 
-    #endregion
-
     /// <summary>
     /// The list of <see cref="Spring.Core.ICriteria"/> composing this
     /// instance.
@@ -105,9 +89,5 @@ public class ComposedCriteria : ICriteria
         get { return _criteria; }
     }
 
-    #region Fields
-
     private IList<ICriteria> _criteria;
-
-    #endregion
 }

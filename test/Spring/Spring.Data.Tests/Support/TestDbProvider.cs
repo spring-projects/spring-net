@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using Spring.Data.Common;
-
-#endregion
 
 namespace Spring.Support;
 
@@ -150,12 +142,8 @@ public class TestDbProvider : IDbProvider
         }
     }
 
-    #region Stub method to set behavior
-
     public IDbConnection ConnectionToCreate
     {
         set { connection = value; }
     }
-
-    #endregion
 }

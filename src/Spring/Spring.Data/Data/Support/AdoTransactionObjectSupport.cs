@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Data;
 using Spring.Transaction;
 using Spring.Transaction.Support;
@@ -33,17 +29,11 @@ namespace Spring.Data.Support;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class AdoTransactionObjectSupport : ISavepointManager, ISmartTransactionObject
 {
-    #region Fields
-
     private ConnectionHolder connectionHolder;
 
     private IsolationLevel previousIsolationLevel;
 
     private bool savepointAllowed;
-
-    #endregion
-
-    #region Properties
 
     public ConnectionHolder ConnectionHolder
     {
@@ -74,8 +64,6 @@ public abstract class AdoTransactionObjectSupport : ISavepointManager, ISmartTra
     /// <value></value>
     /// <returns>True of the transaction is marked as rollback-only.</returns>
     public abstract bool RollbackOnly { get; }
-
-    #endregion
 
     /// <summary>
     /// Create a new savepoint.

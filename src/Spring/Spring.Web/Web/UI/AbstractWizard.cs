@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Web.UI;
@@ -53,8 +49,6 @@ public abstract class AbstractWizard : Page
         get { return steps; }
         set { steps = value; }
     }
-
-    #region Wizard navigation members
 
     /// <summary>
     /// Gets or sets current step using step index.
@@ -110,10 +104,6 @@ public abstract class AbstractWizard : Page
             CurrentStep++;
         }
     }
-
-    #endregion
-
-    #region Page lifecycle methods
 
     /// <summary>
     /// Initializes wizard steps.
@@ -176,14 +166,8 @@ public abstract class AbstractWizard : Page
         return step;
     }
 
-    #endregion
-
-    #region Abstract members
-
     /// <summary>
     /// Panel that should serve as a container for wizard steps.
     /// </summary>
     protected abstract Panel StepPanel { get; }
-
-    #endregion
 }

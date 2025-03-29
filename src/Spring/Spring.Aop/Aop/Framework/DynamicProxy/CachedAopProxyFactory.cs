@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text;
 using System.Collections;
 using Microsoft.Extensions.Logging;
 using Spring.Proxy;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy;
 
@@ -101,21 +93,15 @@ public class CachedAopProxyFactory : DefaultAopProxyFactory
             }
             else
             {
-                #region Instrumentation
-
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.LogDebug("AOP proxy type found in cache for {CacheKey}", cacheKey);
                 }
-
-                #endregion
             }
         }
 
         return proxyType;
     }
-
-    #region ProxyTypeCacheKey inner class implementation
 
     /// <summary>
     /// Uniquely identifies a proxytype in the cache
@@ -214,6 +200,4 @@ public class CachedAopProxyFactory : DefaultAopProxyFactory
             return buffer.ToString();
         }
     }
-
-    #endregion
 }

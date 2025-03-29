@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Text;
 using System.Web;
 using Spring.Collections;
 using Spring.Expressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Web.Support;
 
@@ -75,8 +67,6 @@ namespace Spring.Web.Support;
 [Serializable]
 public class Result : IResult
 {
-    #region Constants
-
     /// <summary>
     /// The default <see cref="Spring.Web.Support.ResultMode"/>.
     /// </summary>
@@ -88,17 +78,9 @@ public class Result : IResult
     /// <seealso cref="Spring.Web.Support.ResultMode"/>
     public const ResultMode DefaultResultMode = ResultMode.Transfer;
 
-    #endregion
-
-    #region Fields
-
     private ResultMode mode = DefaultResultMode;
     private string targetPage;
     private IDictionary parameters;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the <see cref="Spring.Web.Support.Result"/> class.
@@ -175,10 +157,6 @@ public class Result : IResult
         targetPage = result.Trim();
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The <see cref="Spring.Web.Support.ResultMode"/>. Defines which
     /// method will be used to navigate to the
@@ -243,8 +221,6 @@ public class Result : IResult
     {
         get { return (Mode == ResultMode.Redirect); }
     }
-
-    #endregion
 
     /// <summary>
     /// Navigates to the <see cref="Spring.Web.Support.Result.TargetPage"/>

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections.Specialized;
 using System.Security.Permissions;
 using System.Web;
 using System.Web.Security;
 using Spring.Context.Support;
-
-#endregion
 
 namespace Spring.Web.Providers;
 
@@ -44,16 +36,10 @@ namespace Spring.Web.Providers;
 [AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 public class RoleProviderAdapter : RoleProvider, IRoleProvider
 {
-    #region Field
-
     /// <summary>
     /// Reference to wrapped provider (defined in Spring context).
     /// </summary>
     private RoleProvider wrappedProvider;
-
-    #endregion
-
-    #region ProviderBase members
 
     ///<summary>
     ///Initializes the provider.
@@ -106,10 +92,6 @@ public class RoleProviderAdapter : RoleProvider, IRoleProvider
     {
         get { return this.wrappedProvider.Description; }
     }
-
-    #endregion
-
-    #region System.Web.Security.RoleProvider members
 
     ///<summary>
     ///Gets a value indicating whether the specified user is in the specified role for the configured applicationName.
@@ -256,6 +238,4 @@ public class RoleProviderAdapter : RoleProvider, IRoleProvider
         get { return this.wrappedProvider.ApplicationName; }
         set { this.wrappedProvider.ApplicationName = value; }
     }
-
-    #endregion
 }

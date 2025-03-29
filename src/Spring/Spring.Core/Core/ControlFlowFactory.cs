@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Diagnostics;
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -51,8 +43,6 @@ public abstract class ControlFlowFactory
     {
         private StackTrace _stackTrace;
 
-        #region Constructor (s) / Destructor
-
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Core.ControlFlowFactory.DefaultControlFlow"/> class.
@@ -61,10 +51,6 @@ public abstract class ControlFlowFactory
         {
             _stackTrace = new StackTrace();
         }
-
-        #endregion
-
-        #region IControlFlow Members
 
         /// <summary>
         /// Detects whether the caller is under the supplied <see cref="System.Type"/>,
@@ -144,7 +130,5 @@ public abstract class ControlFlowFactory
 
             private Type _typeToMatch;
         }
-
-        #endregion
     }
 }

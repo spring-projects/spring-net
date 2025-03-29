@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright  2002-2005 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Configuration;
 using System.Reflection;
 using System.Xml;
@@ -28,8 +22,6 @@ using Spring.Core;
 using Spring.Core.TypeResolution;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Context.Support;
 
@@ -239,8 +231,6 @@ public class ContextHandler : IConfigurationSectionHandler
     {
         XmlElement contextElement = section as XmlElement;
 
-        #region Sanity Checks
-
         if (contextElement == null)
         {
             throw ConfigurationUtils.CreateConfigurationException(
@@ -254,8 +244,6 @@ public class ContextHandler : IConfigurationSectionHandler
                 String.Format("Parent context must be of type IApplicationContext, but was '{0}'", parent.GetType().FullName));
         }
 
-        #endregion
-
         // determine name of context to be created
         string contextName = GetContextName(configContext, contextElement);
         if (!StringUtils.HasLength(contextName))
@@ -263,11 +251,7 @@ public class ContextHandler : IConfigurationSectionHandler
             contextName = AbstractApplicationContext.DefaultRootContextName;
         }
 
-        #region Instrumentation
-
         if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("creating context '{0}'", contextName));
-
-        #endregion
 
         IApplicationContext context = null;
         try
@@ -489,8 +473,6 @@ public class ContextHandler : IConfigurationSectionHandler
         return contextNodes;
     }
 
-    #region Inner Class : ContextInstantiator
-
     private abstract class ContextInstantiator
     {
         protected ContextInstantiator(
@@ -546,10 +528,6 @@ public class ContextHandler : IConfigurationSectionHandler
         private IList<string> _resources;
     }
 
-    #endregion
-
-    #region Inner Class : RootContextInstantiator
-
     private sealed class RootContextInstantiator : ContextInstantiator
     {
         public RootContextInstantiator(
@@ -569,10 +547,6 @@ public class ContextHandler : IConfigurationSectionHandler
             return (IApplicationContext) (new SafeConstructor(ctor).Invoke(new object[] { ContextName, CaseSensitive, Resources }));
         }
     }
-
-    #endregion
-
-    #region Inner Class : DescendantContextInstantiator
 
     private sealed class DescendantContextInstantiator : ContextInstantiator
     {
@@ -598,10 +572,6 @@ public class ContextHandler : IConfigurationSectionHandler
 
         private IApplicationContext parentContext;
     }
-
-    #endregion
-
-    #region Context Schema Constants
 
     /// <summary>
     /// Constants defining the structure and values associated with the
@@ -653,6 +623,4 @@ public class ContextHandler : IConfigurationSectionHandler
         /// </summary>
         public const string URIAttribute = "uri";
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Context;
@@ -33,8 +29,6 @@ namespace Spring.Data.Common;
 [TestFixture]
 public class DbProviderFactoryTests
 {
-    #region Helper classes for threading tests
-
     public class AsyncTestDbProviderFactory : AsyncTestTask
     {
         private readonly string providerName;
@@ -51,8 +45,6 @@ public class DbProviderFactoryTests
             Assert.IsNotNull(result);
         }
     }
-
-    #endregion
 
     private IApplicationContext ctx;
 

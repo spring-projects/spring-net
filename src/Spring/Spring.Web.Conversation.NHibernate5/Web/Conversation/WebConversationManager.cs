@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using NHibernate;
@@ -52,8 +48,6 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
 
     private readonly IDictionary<String, IConversationState> conversations = new Dictionary<String, IConversationState>();
     private IConversationState activeConversation = null;
-
-    #region IConversationManager Members
 
     /// <summary>
     /// <see cref="IConversationManager"/>
@@ -261,10 +255,6 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
         set { endPaused = value; }
     }
 
-    #endregion
-
-    #region SessionPerConversationScope Members
-
     /// <summary>
     /// Ends all conversations and Closes all their Session.
     /// </summary>
@@ -282,8 +272,6 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
         this.conversations.Clear();
         this.sessionFactory = null;
     }
-
-    #endregion
 
     /// <summary>
     /// Remove conversation.
@@ -304,8 +292,6 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
             this.MutexEditDic.ReleaseMutex();
         }
     }
-
-    #region IApplicationContextAware Members
 
     private String applicationContextName;
     [NonSerialized] private IApplicationContext applicationContext = null;
@@ -330,6 +316,4 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
             return this.applicationContext;
         }
     }
-
-    #endregion
 }

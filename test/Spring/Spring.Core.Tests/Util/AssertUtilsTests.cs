@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 #if !NETCOREAPP
 using System.Runtime.Remoting;
@@ -28,8 +22,6 @@ using System.Runtime.Remoting.Proxies;
 #endif
 using NUnit.Framework;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Util;
 

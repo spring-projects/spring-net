@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Core.TypeResolution;
@@ -59,8 +55,6 @@ public class JndiLookupFactoryObject : JndiObjectLocator, IConfigurableFactoryOb
         set { defaultObject = value; }
     }
 
-    #region Implementation of IFactoryObject
-
     /// <summary>
     /// Return the Jndi object
     /// </summary>
@@ -95,8 +89,6 @@ public class JndiLookupFactoryObject : JndiObjectLocator, IConfigurableFactoryOb
     {
         get { return true; }
     }
-
-    #endregion
 
     public override void AfterPropertiesSet()
     {

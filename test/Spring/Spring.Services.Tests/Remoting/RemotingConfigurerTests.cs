@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Runtime.Remoting.Channels;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
-
-#endregion
 
 namespace Spring.Remoting;
 

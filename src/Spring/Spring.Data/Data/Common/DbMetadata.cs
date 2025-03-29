@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Reflection;
 using Spring.Util;
 
@@ -29,8 +25,6 @@ namespace Spring.Data.Common;
 /// <author>Mark Pollack (.NET)</author>
 public class DbMetadata : IDbMetadata
 {
-    #region Fields
-
     private bool supportsDeriveParametersMethod = true;
 
     private string productName;
@@ -56,10 +50,6 @@ public class DbMetadata : IDbMetadata
     private string errorCodeExceptionExpression = string.Empty;
 
     private ErrorCodes errorCodes;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DbMetadata"/> class.
@@ -176,10 +166,6 @@ public class DbMetadata : IDbMetadata
     {
         return "DbProvider product name = " + productName;
     }
-
-    #endregion
-
-    #region IDbMetadata Members
 
     /// <summary>
     /// Gets a value indicating whether to use param name prefix in parameter collection.
@@ -395,6 +381,4 @@ public class DbMetadata : IDbMetadata
     {
         get { return errorCodeExceptionExpression; }
     }
-
-    #endregion
 }

@@ -70,8 +70,6 @@ public abstract class AbstractSendToQueueExceptionHandler : IInitializingObject,
         set { messageQueueObjectName = value; }
     }
 
-    #region IApplicationContextAware Members
-
     /// <summary>
     /// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
     /// object runs in.
@@ -104,10 +102,6 @@ public abstract class AbstractSendToQueueExceptionHandler : IInitializingObject,
         set { applicationContext = value; }
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Ensure that the MessageQueueObject name is set and creates a
     /// <see cref="DefaultMessageQueueFactory"/> if no <see cref="IMessageQueueFactory"/>
@@ -136,6 +130,4 @@ public abstract class AbstractSendToQueueExceptionHandler : IInitializingObject,
         //Create an instance so we can 'fail-fast' if there isn't an DefaultMessageQueue unde
         MessageQueue mq = MessageQueueFactory.CreateMessageQueue(messageQueueObjectName);
     }
-
-    #endregion
 }

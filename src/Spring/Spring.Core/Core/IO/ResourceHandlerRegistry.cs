@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using Spring.Context.Support;
@@ -228,8 +224,6 @@ public class ResourceHandlerRegistry
     /// </exception>
     public static void RegisterResourceHandler(string protocolName, Type handlerType)
     {
-        #region Sanity Checks
-
         AssertUtils.ArgumentHasText(protocolName, "protocolName");
         AssertUtils.ArgumentNotNull(handlerType, "handlerType");
         if (!typeof(IResource).IsAssignableFrom(handlerType))
@@ -237,8 +231,6 @@ public class ResourceHandlerRegistry
             throw new ArgumentException(
                 string.Format("[{0}] does not implement [{1}] interface (it must).", handlerType.FullName, typeof(IResource).FullName));
         }
-
-        #endregion
 
         lock (syncRoot)
         {

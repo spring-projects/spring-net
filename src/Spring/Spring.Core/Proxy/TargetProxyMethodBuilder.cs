@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using System.Reflection.Emit;
-
-#endregion
 
 namespace Spring.Proxy;
 
@@ -33,8 +25,6 @@ namespace Spring.Proxy;
 /// <author>Bruno Baia</author>
 public class TargetProxyMethodBuilder : AbstractProxyMethodBuilder
 {
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the method builder.
     /// </summary>
@@ -51,10 +41,6 @@ public class TargetProxyMethodBuilder : AbstractProxyMethodBuilder
         : base(typeBuilder, proxyGenerator, explicitImplementation)
     {
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Generates the proxy method.
@@ -88,6 +74,4 @@ public class TargetProxyMethodBuilder : AbstractProxyMethodBuilder
             il.Emit(OpCodes.Ldloc, returnValue);
         }
     }
-
-    #endregion
 }

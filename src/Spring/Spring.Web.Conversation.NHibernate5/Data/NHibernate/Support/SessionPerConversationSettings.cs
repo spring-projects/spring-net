@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using NHibernate;
 
@@ -68,8 +64,6 @@ public class SessionPerConversationScopeSettings
         this.defaultFlushMode = defaultFlushMode;
     }
 
-    #region Properties
-
     /// <summary>
     /// Gets the configured <see cref="IInterceptor"/> instance to be used.
     /// </summary>
@@ -100,8 +94,6 @@ public class SessionPerConversationScopeSettings
         get { return defaultFlushMode; }
         set { defaultFlushMode = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Override this method to resolve an <see cref="IInterceptor"/> instance according to your chosen strategy.

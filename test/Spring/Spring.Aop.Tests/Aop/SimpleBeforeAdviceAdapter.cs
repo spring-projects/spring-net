@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
 using Spring.Aop.Framework.Adapter;
-
-#endregion
 
 namespace Spring.Aop;
 
@@ -36,8 +28,6 @@ namespace Spring.Aop;
 [Serializable]
 public class SimpleBeforeAdviceAdapter : IAdvisorAdapter
 {
-    #region IAdvisorAdapter Members
-
     public bool SupportsAdvice(IAdvice advice)
     {
         return advice is ISimpleBeforeAdvice;
@@ -48,6 +38,4 @@ public class SimpleBeforeAdviceAdapter : IAdvisorAdapter
         ISimpleBeforeAdvice advice = (ISimpleBeforeAdvice) advisor.Advice;
         return new SimpleBeforeAdviceInterceptor(advice);
     }
-
-    #endregion
 }

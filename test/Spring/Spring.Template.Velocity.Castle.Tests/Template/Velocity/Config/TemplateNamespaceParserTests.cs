@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Text;
 using Commons.Collections;
@@ -30,8 +24,6 @@ using NVelocity.Runtime.Resource;
 using NVelocity.Runtime.Resource.Loader;
 using Spring.Core.IO;
 
-#endregion
-
 namespace Spring.Template.Velocity.Config;
 
 /// <summary>
@@ -41,23 +33,15 @@ namespace Spring.Template.Velocity.Config;
 [TestFixture]
 public class TemplateNamespaceParserTests : VelocityEngineTestBase
 {
-    #region convinience properties aliases
-
     private const string PropertyModificationCheck =
         TemplateDefinitionConstants.PropertyResourceLoaderModificationCheckInterval;
 
     private const string PropertyResourceLoaderCachce =
         TemplateDefinitionConstants.PropertyResourceLoaderCaching;
 
-    #endregion
-
-    #region test constants
-
     private const int DEFAULT_CACHE_SIZE = 200;
     private const int DEFAULT_MOD_CHECK = 30;
     private const bool DEFAULT_CACHE_FLAG = true;
-
-    #endregion
 
     /// <summary>
     /// Test a full file-base configuration
@@ -177,8 +161,6 @@ public class TemplateNamespaceParserTests : VelocityEngineTestBase
         AssertMergedValue(velocityEngine, "Template/Velocity/SimpleTemplate.vm");
     }
 
-    #region internal test methods
-
     /// <summary>
     /// Grab a single property from (if it's an array return the first value) from the velocityEngine
     /// </summary>
@@ -193,11 +175,7 @@ public class TemplateNamespaceParserTests : VelocityEngineTestBase
 
         return (string) property;
     }
-
-    #endregion
 }
-
-#region test classes
 
 /// <summary>
 /// Test class for a custom resource loader class
@@ -223,5 +201,3 @@ internal sealed class TestCustomResourceLoader : ResourceLoader
         return resource.LastModified;
     }
 }
-
-#endregion

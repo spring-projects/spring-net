@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using Spring.Messaging.Ems.Common;
@@ -109,8 +105,6 @@ public class SimpleMessageConverter : IMessageConverter
         return messageToConvert;
     }
 
-    #region To Converter Methods
-
     /// <summary> Create a EMS TextMessage for the given String.</summary>
     /// <param name="text">the String to convert
     /// </param>
@@ -179,10 +173,6 @@ public class SimpleMessageConverter : IMessageConverter
         return session.CreateObjectMessage(objectToSend);
     }
 
-    #endregion
-
-    #region From Converter Mehtods
-
     /// <summary> Extract a String from the given TextMessage.</summary>
     /// <param name="message">the message to convert
     /// </param>
@@ -236,6 +226,4 @@ public class SimpleMessageConverter : IMessageConverter
     {
         return message.TheObject;
     }
-
-    #endregion
 }

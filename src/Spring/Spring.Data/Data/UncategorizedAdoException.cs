@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 using Spring.Dao;
 
@@ -31,8 +27,6 @@ namespace Spring.Data;
 [Serializable]
 public class UncategorizedAdoException : UncategorizedDataAccessException, ISerializable
 {
-    #region Fields
-
     /// <summary>
     /// SQL that led to the problem
     /// </summary>
@@ -42,10 +36,6 @@ public class UncategorizedAdoException : UncategorizedDataAccessException, ISeri
     /// The error code, if available, that was unable to be categorized.
     /// </summary>
     private readonly string errorCode;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UncategorizedAdoException"/> class.
@@ -87,10 +77,6 @@ public class UncategorizedAdoException : UncategorizedDataAccessException, ISeri
     /// <inheritdoc />
     protected UncategorizedAdoException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Return the underlying error code if available from the underlying provider.
     /// </summary>
@@ -107,14 +93,6 @@ public class UncategorizedAdoException : UncategorizedDataAccessException, ISeri
         get { return sql; }
     }
 
-    #endregion
-
-    #region Methods
-
-    #endregion
-
-    #region ISerializable Members
-
     /// <summary>
     /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/>
     /// with information about the exception.
@@ -128,6 +106,4 @@ public class UncategorizedAdoException : UncategorizedDataAccessException, ISeri
         info.AddValue("errorCode", errorCode);
         base.GetObjectData(info, context);
     }
-
-    #endregion
 }

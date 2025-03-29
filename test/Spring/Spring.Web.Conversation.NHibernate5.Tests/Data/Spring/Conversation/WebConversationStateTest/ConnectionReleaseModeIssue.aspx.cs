@@ -244,14 +244,10 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
         pInfoConnectionReleaseMode.SetValue(settings, mode, null);
     }
 
-    #region IApplicationContextAware Members
-
     private IApplicationContext applicationContext;
 
     public IApplicationContext ApplicationContext
     {
         set { this.applicationContext = value; }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Util;
 
 namespace Spring.Globalization.Formatters;
@@ -32,8 +28,6 @@ public class BooleanFormatter : IFormatter
     private string trueString;
     private string falseString;
     private bool ignoreCase;
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BooleanFormatter"/> class
@@ -53,10 +47,6 @@ public class BooleanFormatter : IFormatter
         this.falseString = falseString;
         this.ignoreCase = ignoreCase;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Set/Get value to control casesensitivity of <see cref="Parse"/>
@@ -93,8 +83,6 @@ public class BooleanFormatter : IFormatter
         get { return this.falseString; }
         set { this.falseString = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Formats the specified boolean value.

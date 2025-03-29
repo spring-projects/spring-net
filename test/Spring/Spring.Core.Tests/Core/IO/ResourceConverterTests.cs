@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Core.IO;
 

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Apache.NMS;
 using FakeItEasy;
 using NUnit.Framework;
@@ -31,8 +25,6 @@ using Spring.Messaging.Nms.Listener;
 using Spring.Objects;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Messaging.Nms.Config;
 

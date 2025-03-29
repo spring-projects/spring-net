@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using Spring.Util;
@@ -36,8 +32,6 @@ public class ChannelFactoryObjectDefinitionParser : ObjectsNamespaceParser, IObj
 {
     private static readonly string ChannelTypeAttribute = "channelType";
     private static readonly string EndpointConfigurationNameAttribute = "endpointConfigurationName";
-
-    #region IObjectDefinitionParser Members
 
     /// <summary>
     /// Parse the specified XmlElement and register the resulting
@@ -94,6 +88,4 @@ public class ChannelFactoryObjectDefinitionParser : ObjectsNamespaceParser, IObj
 
         return null;
     }
-
-    #endregion
 }

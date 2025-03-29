@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections.Specialized;
 using System.Reflection;
@@ -57,8 +53,6 @@ namespace Spring.Transaction.Interceptor;
 public class TransactionAspectSupport : IInitializingObject
 {
     //TODO work on serialization support.
-
-    #region TransactionInfo Class
 
     /// <summary>
     /// Opaque object used to hold transaction information.
@@ -156,13 +150,7 @@ public class TransactionAspectSupport : IInitializingObject
         }
     }
 
-    #endregion
-
-    #region Logging Definition
-
     [NonSerialized] protected ILogger log = LogManager.GetLogger(typeof(TransactionAspectSupport));
-
-    #endregion
 
     /// <summary>
     /// The name in thread local storage where the TransactionInfo object is located
@@ -349,14 +337,10 @@ public class TransactionAspectSupport : IInitializingObject
         {
             // We need a transaction for this method
 
-            #region Instrumentation
-
             if (log.IsEnabled(LogLevel.Debug))
             {
                 log.LogDebug("Getting transaction for " + transactionInfo.JoinpointIdentification);
             }
-
-            #endregion
 
             // The transaction manager will flag an error if an incompatible tx already exists
             transactionInfo.TransactionStatus = _transactionManager.GetTransaction(txAttr);
@@ -407,14 +391,10 @@ public class TransactionAspectSupport : IInitializingObject
     {
         if (transactionInfo != null && transactionInfo.HasTransaction)
         {
-            #region Instrumentation
-
             if (log.IsEnabled(LogLevel.Debug))
             {
                 log.LogDebug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "]");
             }
-
-            #endregion
 
             _transactionManager.Commit(transactionInfo.TransactionStatus);
         }

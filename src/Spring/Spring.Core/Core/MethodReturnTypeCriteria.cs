@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -33,17 +25,11 @@ namespace Spring.Core;
 /// <author>Rick Evans</author>
 public class MethodReturnTypeCriteria : ICriteria
 {
-    #region Constants
-
     /// <summary>
     /// The return <see cref="System.Type"/> to match against if no
     /// <see cref="System.Type"/> is provided explictly.
     /// </summary>
     private static readonly Type DefaultType = typeof(void);
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -68,10 +54,6 @@ public class MethodReturnTypeCriteria : ICriteria
         ReturnType = type;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The <see cref="System.Type"/> that the return type of a given
     /// <see cref="System.Reflection.MethodInfo"/> must match in order to satisfy
@@ -82,10 +64,6 @@ public class MethodReturnTypeCriteria : ICriteria
         get { return _type; }
         set { _type = value == null ? DefaultType : value; }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
@@ -108,11 +86,5 @@ public class MethodReturnTypeCriteria : ICriteria
         return satisfied;
     }
 
-    #endregion
-
-    #region Fields
-
     private Type _type;
-
-    #endregion
 }

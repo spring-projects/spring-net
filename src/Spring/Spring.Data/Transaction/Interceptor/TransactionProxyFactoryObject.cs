@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections.Specialized;
 using Spring.Aop;
@@ -222,8 +218,6 @@ public class TransactionProxyFactoryObject : ProxyConfig, IFactoryObject, IIniti
         set { _advisorAdapterRegistry = value; }
     }
 
-    #region IFactoryObject Members
-
     /// <summary>
     /// Returns the object <see cref="System.Type"/> for this proxy factory.
     /// </summary>
@@ -265,10 +259,6 @@ public class TransactionProxyFactoryObject : ProxyConfig, IFactoryObject, IIniti
             return true;
         }
     }
-
-    #endregion
-
-    #region IInitializingObject Members
 
     /// <summary>
     /// Method run after all the properties have been set for this object.
@@ -330,8 +320,6 @@ public class TransactionProxyFactoryObject : ProxyConfig, IFactoryObject, IIniti
 
         _proxy = proxyFactory.GetProxy();
     }
-
-    #endregion
 
     /// <summary>
     /// Set the target or <see cref="Spring.Aop.ITargetSource"/>.

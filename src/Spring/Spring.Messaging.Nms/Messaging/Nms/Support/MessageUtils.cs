@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Util;
 using Apache.NMS;
 using Microsoft.Extensions.Logging;
@@ -30,11 +26,7 @@ namespace Spring.Messaging.Nms.Support;
 /// </summary>
 public abstract class NmsUtils
 {
-    #region Logging
-
     private static readonly ILogger<NmsUtils> logger = LogManager.GetLogger<NmsUtils>();
-
-    #endregion
 
     /// <summary> Close the given NMS Connection and ignore any thrown exception.
     /// This is useful for typical <code>finally</code> blocks in manual NMS code.

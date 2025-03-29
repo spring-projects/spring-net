@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using System.Data;
 using Microsoft.Extensions.Logging;
@@ -31,20 +27,10 @@ namespace Spring.Data.Support;
 /// <author>Mark Pollack (.NET)</author>
 public class ParameterUtils
 {
-    #region Fields
-
-    #endregion
-
-    #region Constants
-
     /// <summary>
     /// The shared log instance for this class (and derived classes).
     /// </summary>
     protected static readonly ILogger log = LogManager.GetLogger(typeof(ParameterUtils));
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParameterUtils"/> class.
@@ -52,14 +38,6 @@ public class ParameterUtils
     public ParameterUtils()
     {
     }
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Copies the parameters from IDbParameters to the parameter collection in IDbCommand
@@ -113,8 +91,6 @@ public class ParameterUtils
             }
         }
     }
-
-    #endregion
 
     public static void ExtractOutputParameters(IDictionary returnedParameters, IDbCommand command)
     {

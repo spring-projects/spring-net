@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -33,8 +29,6 @@ namespace Spring.ServiceModel.Support;
 /// <author>Bruno Baia</author>
 public class ServiceProxyTypeBuilder : CompositionProxyTypeBuilder
 {
-    #region Fields
-
     private static readonly MethodInfo GetObject =
         //typeof(IObjectFactory).GetMethod("GetObject", new Type[] { typeof(string) });
         ReflectionUtils.GetMethod(typeof(IObjectFactory), "GetObject", new Type[] { typeof(string) });
@@ -49,10 +43,6 @@ public class ServiceProxyTypeBuilder : CompositionProxyTypeBuilder
     /// Target instance calls should be delegated to.
     /// </summary>
     protected FieldBuilder objectFactoryField;
-
-    #endregion
-
-    #region Constructor(s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -83,10 +73,6 @@ public class ServiceProxyTypeBuilder : CompositionProxyTypeBuilder
         this.Name = serviceTypeName;
         this.TargetType = objectFactory.GetType(targetName);
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Creates a proxy that delegates calls to an instance of the target object.
@@ -169,6 +155,4 @@ public class ServiceProxyTypeBuilder : CompositionProxyTypeBuilder
 
         return typeBuilder;
     }
-
-    #endregion
 }

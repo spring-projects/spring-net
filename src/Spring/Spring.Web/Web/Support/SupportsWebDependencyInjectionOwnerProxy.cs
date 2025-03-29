@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using System.Security;
 using System.Security.Permissions;
@@ -27,8 +21,6 @@ using System.Web.UI;
 using Spring.Context;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Web.Support;
 

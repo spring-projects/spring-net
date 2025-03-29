@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using Microsoft.Extensions.Logging;
 using Spring.Objects;
 using Spring.Transaction.Interceptor;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Data;
 
@@ -36,14 +28,8 @@ namespace Spring.Data;
 /// <author>Mark Pollack (.NET)</author>
 public class TestObjectManager : ITestObjectManager
 {
-    #region Fields
-
     ITestObjectDao testObjectDao;
     private static readonly ILogger<TestObjectManager> LOG = LogManager.GetLogger<TestObjectManager>();
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TestObjectManager"/> class.
@@ -52,19 +38,11 @@ public class TestObjectManager : ITestObjectManager
     {
     }
 
-    #endregion
-
-    #region Properties
-
     public ITestObjectDao TestObjectDao
     {
         get { return testObjectDao; }
         set { testObjectDao = value; }
     }
-
-    #endregion
-
-    #region Methods
 
     [Transaction]
     public void SaveTwoTestObjects(TestObject to1, TestObject to2)
@@ -96,6 +74,4 @@ public class TestObjectManager : ITestObjectManager
             }
         }
     }
-
-    #endregion
 }

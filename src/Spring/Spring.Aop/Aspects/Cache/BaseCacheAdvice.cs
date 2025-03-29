@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Spring.Caching;
 using Spring.Context;
 using Spring.Expressions;
-
-#endregion
 
 namespace Spring.Aspects.Cache;
 

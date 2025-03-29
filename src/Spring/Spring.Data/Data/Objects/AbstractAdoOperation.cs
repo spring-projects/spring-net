@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Data;
@@ -34,13 +30,7 @@ namespace Spring.Data.Objects;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class AbstractAdoOperation : IInitializingObject
 {
-    #region Logging Definition
-
     protected readonly ILogger log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-    #endregion
-
-    #region Fields
 
     private string sql;
 
@@ -60,10 +50,6 @@ public abstract class AbstractAdoOperation : IInitializingObject
     /// efficiently, based on this class's declared parameters.
     /// </summary>
     private IDbCommandCreatorFactory commandFactory;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the type of the command.
@@ -147,10 +133,6 @@ public abstract class AbstractAdoOperation : IInitializingObject
     {
         set;
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Ensures compilation if used in an IApplicationContext
@@ -318,6 +300,4 @@ public abstract class AbstractAdoOperation : IInitializingObject
     {
         return commandFactory.NewDbCommandCreatorWithParamValues(inParams);
     }
-
-    #endregion
 }

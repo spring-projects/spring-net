@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Diagnostics;
@@ -112,8 +108,6 @@ namespace Spring.EnterpriseServices;
 /// <author>Erich Eichinger</author>
 public class EnterpriseServicesExporter : IInitializingObject, IObjectFactoryAware
 {
-    #region Fields
-
     private IObjectFactory objectFactory;
 
     private IList components = new ArrayList();
@@ -127,20 +121,12 @@ public class EnterpriseServicesExporter : IInitializingObject, IObjectFactoryAwa
     private string assemblyName;
     private bool useSpring;
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates new enterprise services exporter.
     /// </summary>
     public EnterpriseServicesExporter()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets list of components to export.
@@ -232,10 +218,6 @@ public class EnterpriseServicesExporter : IInitializingObject, IObjectFactoryAwa
         set { useSpring = value; }
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Called by Spring container after object is configured in order to initialize it.
     /// </summary>
@@ -249,10 +231,6 @@ public class EnterpriseServicesExporter : IInitializingObject, IObjectFactoryAwa
         Export();
     }
 
-    #endregion
-
-    #region IObjectFactoryAware Members
-
     /// <summary>
     /// Sets object factory instance.
     /// </summary>
@@ -260,10 +238,6 @@ public class EnterpriseServicesExporter : IInitializingObject, IObjectFactoryAwa
     {
         set { objectFactory = value; }
     }
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     /// Creates ServicedComponent wrappers for the specified components and registers
@@ -361,10 +335,6 @@ public class EnterpriseServicesExporter : IInitializingObject, IObjectFactoryAwa
         regHelper.UninstallAssemblyFromConfig(ref config);
     }
 
-    #endregion
-
-    #region Private Methods
-
     /// <summary>
     /// Reads key pair from embedded resource.
     /// </summary>
@@ -454,10 +424,6 @@ public class EnterpriseServicesExporter : IInitializingObject, IObjectFactoryAwa
 
         return role;
     }
-
-    #endregion
-
-    #region SpringServicedComponent generation
 
     /// <summary>
     /// Creates the SpringServicedComponent base class to derive all <see cref="ServicedComponent"/>s from.
@@ -606,6 +572,4 @@ public class EnterpriseServicesExporter : IInitializingObject, IObjectFactoryAwa
         mb3.SetImplementationFlags(MethodImplAttributes.Managed | MethodImplAttributes.Runtime);
         return typeBuilder.CreateType();
     }
-
-    #endregion
 }

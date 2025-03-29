@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Globalization;
@@ -753,12 +749,8 @@ public sealed class ReflectionUtils
     public static bool ParameterTypesMatch(
         MethodInfo candidate, Type[] parameterTypes)
     {
-        #region Sanity Checks
-
         AssertUtils.ArgumentNotNull(candidate, "candidate");
         AssertUtils.ArgumentNotNull(parameterTypes, "parameterTypes");
-
-        #endregion
 
         Type[] candidatesParameterTypes
             = ReflectionUtils.GetParameterTypes(candidate);
@@ -932,8 +924,6 @@ public sealed class ReflectionUtils
     public static CustomAttributeBuilder CreateCustomAttribute(
         Type type, object[] ctorArgs, Attribute sourceAttribute)
     {
-        #region Sanity Checks
-
         AssertUtils.ArgumentNotNull(type, "type");
         if (!typeof(Attribute).IsAssignableFrom(type))
         {
@@ -941,8 +931,6 @@ public sealed class ReflectionUtils
                 string.Format("[{0}] does not derive from the [System.Attribute] class.",
                     type.FullName));
         }
-
-        #endregion
 
         ConstructorInfo ci = type.GetConstructor(ReflectionUtils.GetTypes(ctorArgs));
         if (ci == null && ctorArgs.Length == 0)
@@ -1662,8 +1650,6 @@ public sealed class ReflectionUtils
         return handler;
     }
 
-    #region Field Cache Management for "MemberwiseCopy"
-
     private const BindingFlags FIELDBINDINGS =
         BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic;
 
@@ -1696,26 +1682,16 @@ public sealed class ReflectionUtils
         CollectFieldsRecursive(type.BaseType, fieldList);
     }
 
-    #endregion Field Cache Management for "MemberwiseCopy"
-
-    #region CustomAttributeBuilderBuilder inner class definition
-
     /// <summary>
     /// Creates a <see cref=" CustomAttributeBuilder"/>.
     /// </summary>
     /// <author>Bruno Baia</author>
     public class CustomAttributeBuilderBuilder
     {
-        #region Fields
-
         private Type type;
         private ArrayList constructorArgs;
         private List<PropertyInfo> namedProperties;
         private List<object> propertyValues;
-
-        #endregion
-
-        #region Constructor(s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the
@@ -1749,10 +1725,6 @@ public sealed class ReflectionUtils
             this.namedProperties = new List<PropertyInfo>();
             this.propertyValues = new List<object>();
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Adds the specified values to the constructor argument list
@@ -1807,9 +1779,5 @@ public sealed class ReflectionUtils
                 return new CustomAttributeBuilder(ci, caArray);
             }
         }
-
-        #endregion
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Web;
 using Spring.Context;
@@ -27,8 +21,6 @@ using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Web.Support;
 

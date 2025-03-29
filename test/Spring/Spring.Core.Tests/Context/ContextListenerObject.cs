@@ -1,7 +1,5 @@
 using Spring.Context.Events;
 
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -17,8 +15,6 @@ using Spring.Context.Events;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 namespace Spring.Context;
 

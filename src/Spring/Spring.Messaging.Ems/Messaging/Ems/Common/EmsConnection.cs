@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Ems.Common;
@@ -27,11 +23,7 @@ namespace Spring.Messaging.Ems.Common;
 /// </summary>
 public class EmsConnection : IConnection
 {
-    #region Logging
-
     private readonly ILogger<EmsConnection> logger = LogManager.GetLogger<EmsConnection>();
-
-    #endregion
 
     private Connection nativeConnection;
 
@@ -44,8 +36,6 @@ public class EmsConnection : IConnection
         this.nativeConnection = connection;
         this.nativeConnection.ExceptionHandler += HandleEmsException;
     }
-
-    #region Implementation of IConnection
 
     /// <summary>
     /// Gets the native TIBCO EMS connection.
@@ -183,8 +173,6 @@ public class EmsConnection : IConnection
     {
         nativeConnection.Stop();
     }
-
-    #endregion
 
     private void HandleEmsException(object sender, EMSExceptionEventArgs arg)
     {

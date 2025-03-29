@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Reflection;
 using Spring.Aop.Support;
 
@@ -25,8 +21,6 @@ namespace Spring.Transaction.Interceptor;
 
 public abstract class AbstractTransactionAttributeSourcePointcut : StaticMethodMatcherPointcut
 {
-    #region Overrides of StaticMethodMatcher
-
     /// <summary>
     /// Does the supplied <paramref name="method"/> satisfy this matcher?
     /// </summary>
@@ -50,8 +44,6 @@ public abstract class AbstractTransactionAttributeSourcePointcut : StaticMethodM
         ITransactionAttributeSource tas = TransactionAttributeSource;
         return (tas == null || TransactionAttributeSource.ReturnTransactionAttribute(method, targetType) != null);
     }
-
-    #endregion
 
     protected abstract ITransactionAttributeSource TransactionAttributeSource { get; }
 }

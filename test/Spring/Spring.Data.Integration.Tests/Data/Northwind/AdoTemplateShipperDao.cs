@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using Spring.Data.Common;
 using Spring.Data.Core;
-
-#endregion
 
 namespace Spring.Data.Northwind;
 
@@ -34,8 +26,6 @@ namespace Spring.Data.Northwind;
 /// <author>Mark Pollack (.NET)</author>
 public class AdoTemplateShipperDao : AdoDaoSupport, IShipperDao
 {
-    #region IShipperDao Members
-
     public Shipper Create(string name, string phone)
     {
         string sql = "INSERT INTO Shippers (CompanyName, Phone) VALUES (@CompanyName, @Phone) SET @ShipperID = SCOPE_IDENTITY()";
@@ -54,6 +44,4 @@ public class AdoTemplateShipperDao : AdoDaoSupport, IShipperDao
 
         return new Shipper(id, name, phone); //10
     }
-
-    #endregion
 }

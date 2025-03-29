@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
@@ -187,8 +183,6 @@ public class MessageQueueFactoryObject : IConfigurableFactoryObject, IObjectName
         set { remoteQueueIsTransactional = value; }
     }
 
-    #region IFactoryObject Members
-
     /// <summary>
     /// Retrun a configured MessageQueue object.
     /// </summary>
@@ -236,8 +230,6 @@ public class MessageQueueFactoryObject : IConfigurableFactoryObject, IObjectName
         get { return false; }
     }
 
-    #region IConfigurableFactoryObject Members
-
     /// <summary>
     /// Gets the template object definition that should be used
     /// to configure the instance of the object managed by this factory.
@@ -248,10 +240,6 @@ public class MessageQueueFactoryObject : IConfigurableFactoryObject, IObjectName
         get { return productTemplate; }
         set { productTemplate = value; }
     }
-
-    #endregion
-
-    #endregion
 
     /// <summary>
     /// Set the name of the object in the object factory that created this object.

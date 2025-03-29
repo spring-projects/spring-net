@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Apache.NMS;
 using Spring.Messaging.Nms.Core;
@@ -40,12 +36,8 @@ public class TestMessageListener : IMessageListener
         set { message = value; }
     }
 
-    #region IMessageListener Members
-
     public void OnMessage(IMessage message)
     {
         this.message = message;
     }
-
-    #endregion
 }

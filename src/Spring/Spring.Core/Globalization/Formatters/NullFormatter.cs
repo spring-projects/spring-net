@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Globalization.Formatters;
 
 /// <summary>
@@ -29,16 +25,12 @@ namespace Spring.Globalization.Formatters;
 /// <author>Erich Eichinger</author>
 public class NullFormatter : IFormatter
 {
-    #region Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="NullFormatter"/> class.
     /// </summary>
     public NullFormatter()
     {
     }
-
-    #endregion
 
     /// <summary>
     /// Converts the passed value to a string by calling <see cref="Object.ToString()"/>.

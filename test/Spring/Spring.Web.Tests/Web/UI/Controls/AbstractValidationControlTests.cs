@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using System.Web.UI;
@@ -266,8 +262,6 @@ public class AbstractValidationControlTests
         Assert.AreEqual(1, outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
     }
 
-    #region TestValidationControl
-
     private class TestValidationControl : AbstractValidationControl
     {
         public class CapturingRenderer : IValidationErrorsRenderer
@@ -332,6 +326,4 @@ public class AbstractValidationControlTests
             get { return base.DesignMode; }
         }
     }
-
-    #endregion
 }

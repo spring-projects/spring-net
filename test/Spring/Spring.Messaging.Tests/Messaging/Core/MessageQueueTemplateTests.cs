@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Messaging;
 using NUnit.Framework;
 using Spring.Data.Core;
 using Spring.Testing.NUnit;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Messaging.Core;
 
@@ -104,8 +96,6 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
         Assert.IsNotNull(q);
         Assert.AreEqual(q.DefaultMessageQueue, q.MessageQueueFactory.CreateMessageQueue(q.DefaultMessageQueueObjectName));
     }
-
-    #region Integration Tests - to be moved to another test assembly
 
     [Test]
     public void SendAndReceiveNonTransactional()
@@ -222,14 +212,10 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
         });
     }
 
-    #endregion
-
     protected override string[] ConfigLocations
     {
         get { return new string[] { "assembly://Spring.Messaging.Tests/Spring.Messaging.Core/MessageQueueTemplateTests.xml" }; }
     }
-
-    #region Some simple driver code for debugging
 
     public void SimpleRemoteConsumption()
     {
@@ -256,6 +242,4 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
             Console.WriteLine(q.ReceiveAndConvert());
         }
     }
-
-    #endregion
 }

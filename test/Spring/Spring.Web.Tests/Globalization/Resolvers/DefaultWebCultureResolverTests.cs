@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Globalization;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Globalization.Resolvers;
 
@@ -34,8 +26,6 @@ namespace Spring.Globalization.Resolvers;
 [TestFixture]
 public class DefaultWebCultureResolverTests
 {
-    #region TestDefaultWebCultureResolver utility class
-
     /// <summary>
     /// Override GetRequestLanguage() to return test language instead of HttpRequest.UserLanguages[0]
     /// </summary>
@@ -56,8 +46,6 @@ public class DefaultWebCultureResolverTests
             return _requestLanguage;
         }
     }
-
-    #endregion
 
     private readonly CultureInfo EXPECTED_NEUTRALCULTURE = new CultureInfo("fr");
 

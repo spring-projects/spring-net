@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Spring.Aop;
 using Spring.Caching;
-
-#endregion
 
 namespace Spring.Aspects.Cache;
 
@@ -54,8 +46,6 @@ namespace Spring.Aspects.Cache;
 /// <author>Aleksandar Seovic</author>
 public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
 {
-    #region InvalidateCacheAttribute caching
-
     private readonly Hashtable _invalidateCacheAttributeCache = new Hashtable();
 
     private InvalidateCacheAttribute[] GetInvalidateCacheInfo(MethodInfo method)
@@ -69,8 +59,6 @@ public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
 
         return cacheInfoArray;
     }
-
-    #endregion
 
     /// <summary>
     /// Executes after <paramref name="target"/> <paramref name="method"/>
@@ -95,11 +83,7 @@ public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
     /// <seealso cref="AopAlliance.Intercept.IMethodInterceptor.Invoke"/>
     public void AfterReturning(object returnValue, MethodInfo method, object[] arguments, object target)
     {
-        #region Instrumentation
-
         bool isLogDebugEnabled = logger.IsEnabled(LogLevel.Debug);
-
-        #endregion
 
         InvalidateCacheAttribute[] cacheInfoArray = GetInvalidateCacheInfo(method);
 
@@ -117,41 +101,29 @@ public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
                         object keys = cacheInfo.KeysExpression.GetValue(returnValue, vars);
                         if (keys is ICollection)
                         {
-                            #region Instrumentation
-
                             if (isLogDebugEnabled)
                             {
                                 logger.LogDebug(string.Format("Removing objects for keys [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
                             }
 
-                            #endregion
-
                             cache.RemoveAll((ICollection) keys);
                         }
                         else
                         {
-                            #region Instrumentation
-
                             if (isLogDebugEnabled)
                             {
                                 logger.LogDebug(string.Format("Removing object for key [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
                             }
-
-                            #endregion
 
                             cache.Remove(keys);
                         }
                     }
                     else
                     {
-                        #region Instrumentation
-
                         if (isLogDebugEnabled)
                         {
                             logger.LogDebug(string.Format("Invalidate cache [{0}].", cacheInfo.CacheName));
                         }
-
-                        #endregion
 
                         cache.Clear();
                     }

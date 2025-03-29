@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Util;
 
@@ -77,8 +73,6 @@ public class ObjectFactoryCreatingFactoryObject
     private string _targetObjectName;
     private IObjectFactory _objectFactory;
 
-    #region Properties
-
     /// <summary>
     /// Sets the name of the target object.
     /// </summary>
@@ -112,8 +106,6 @@ public class ObjectFactoryCreatingFactoryObject
     {
         get { return typeof(IGenericObjectFactory); }
     }
-
-    #endregion
 
     /// <summary>
     /// Returns an instance of the object factory.

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Objects.Factory.Support;
-
-#endregion
 
 namespace Spring.Objects.Factory;
 
@@ -346,8 +338,6 @@ public sealed class MethodReplacerTests
         Assert.IsFalse(ReferenceEquals(feed1, feed2));
     }
 
-    #region Rainy Day Scenarios
-
     [Test]
     public void FailWithLookupMethodOnSealedClass()
     {
@@ -436,8 +426,6 @@ public sealed class MethodReplacerTests
         factory.RegisterObjectDefinition("feed", feedDef);
         Assert.Throws<ObjectCreationException>(() => factory.GetObject("manager"));
     }
-
-    #endregion
 }
 
 public interface INewsFeedManager

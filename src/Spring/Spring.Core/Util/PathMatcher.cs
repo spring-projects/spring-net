@@ -1,7 +1,5 @@
 //// <fragments>
 
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -18,14 +16,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text;
 using System.Text.RegularExpressions;
-
-#endregion
 
 namespace Spring.Util;
 
@@ -208,10 +200,6 @@ public sealed class PathMatcher
         return true;
     }
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the <see cref="Spring.Util.PathMatcher"/> class.
     /// </summary>
@@ -225,7 +213,5 @@ public sealed class PathMatcher
     }
 
     // CLOVER:ON
-
-    #endregion
 }
 //// </fragments>

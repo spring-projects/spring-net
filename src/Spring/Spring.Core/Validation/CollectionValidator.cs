@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using Spring.Expressions;
@@ -47,14 +43,8 @@ namespace Spring.Validation;
 /// <author>Aleksandar Seovic</author>
 public class CollectionValidator : BaseValidatorGroup
 {
-    #region Fields
-
     private bool includeElementErrors = false;
     private IExpression context;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the value that indicates whether to validate all elements of the collection
@@ -86,10 +76,6 @@ public class CollectionValidator : BaseValidatorGroup
         get { return context; }
         set { context = value; }
     }
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CollectionValidator"/> class.
@@ -142,8 +128,6 @@ public class CollectionValidator : BaseValidatorGroup
         this.FastValidate = validateAll;
         this.includeElementErrors = includeElementErrors;
     }
-
-    #endregion
 
     /// <summary>
     /// Validates the specified collection of objects.

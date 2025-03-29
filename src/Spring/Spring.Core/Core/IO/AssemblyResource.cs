@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Globalization;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -45,8 +37,6 @@ namespace Spring.Core.IO;
 /// <author>Federico Spinazzi (.NET)</author>
 public class AssemblyResource : AbstractResource
 {
-    #region Fields
-
     private Assembly _assembly;
     private string[] _resources;
     private string _resourceName;
@@ -54,10 +44,6 @@ public class AssemblyResource : AbstractResource
     private string _resourceNamespace;
     private string _resourceAssemblyName;
     private static readonly ILogger<AssemblyResource> log = LogManager.GetLogger<AssemblyResource>();
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the
@@ -105,10 +91,6 @@ public class AssemblyResource : AbstractResource
         this._resourceNamespace = info[1];
         this._resourceName = String.Format("{0}.{1}", info[1], info[2]);
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Return an <see cref="System.IO.Stream"/> for this resource.
@@ -256,8 +238,6 @@ public class AssemblyResource : AbstractResource
             return new Uri(_fullResourceName);
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Does the supplied <paramref name="resourceName"/> relative ?

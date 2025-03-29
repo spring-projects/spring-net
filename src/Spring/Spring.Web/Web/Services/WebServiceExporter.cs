@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -28,8 +22,6 @@ using Spring.Core.TypeResolution;
 using Spring.Objects.Factory;
 using Spring.Util;
 using Spring.Proxy;
-
-#endregion
 
 namespace Spring.Web.Services;
 
@@ -84,8 +76,6 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
         return target;
     }
 
-    #region Fields
-
     private WsiProfiles _wsiProfile = WsiProfiles.BasicProfile1_1;
     private readonly string EXPORTER_ID = Guid.NewGuid().ToString();
     private Type _webServiceBaseType = typeof(WebService);
@@ -112,10 +102,6 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
     /// </summary>
     protected Type proxyType;
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the <see cref="WebServiceExporter"/> class.
     /// </summary>
@@ -134,8 +120,6 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
     {
         Dispose(false);
     }
-
-    #region IDisposable Members
 
     /// <summary>
     /// Disconnect the remote object from the registered remoting channels.
@@ -162,12 +146,6 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
             objectFactory = null;
         }
     }
-
-    #endregion
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or Sets the Web Services Interoperability (WSI) specification
@@ -294,10 +272,6 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
         set { _memberAttributes = value; }
     }
 
-    #endregion
-
-    #region IObjectFactoryAware Members
-
     /// <summary>
     /// Callback that supplies the owning factory to an object instance.
     /// </summary>
@@ -323,10 +297,6 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
         set { objectFactory = value; }
     }
 
-    #endregion
-
-    #region IObjectNameAware Members
-
     /// <summary>
     /// Set the name of the object in the object factory that created this object.
     /// </summary>
@@ -347,10 +317,6 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
         set { objectName = value; }
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Exports specified object as a web service.
     /// </summary>
@@ -363,10 +329,6 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
         ValidateConfiguration();
         GenerateProxy();
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Returns the Web Service wrapper type for the object that is to be exposed.
@@ -413,22 +375,12 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
         return objectFactory.GetObject(TargetName);
     }
 
-    #endregion
-
-    #region WebServiceProxyTypeBuilder inner class implementation
-
     private sealed class WebServiceProxyTypeBuilder : CompositionProxyTypeBuilder
     {
-        #region Fields
-
         private static readonly MethodInfo WebServiceExporter_GetTargetInstance = typeof(WebServiceExporter).GetMethod("GetTarget", new Type[] { typeof(string) });
         private WebServiceExporter exporter;
         private CustomAttributeBuilder webServiceAttribute;
         private CustomAttributeBuilder webServiceBindingAttribute;
-
-        #endregion
-
-        #region Constructor(s) / Destructor
 
         public WebServiceProxyTypeBuilder(WebServiceExporter exporter, string description, string name, string ns)
         {
@@ -482,10 +434,6 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
 
             return cabb.Build();
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Implements constructors for the proxy class.
@@ -578,9 +526,5 @@ public class WebServiceExporter : IInitializingObject, IObjectFactoryAware, IObj
         {
             return DynamicProxyManager.CreateTypeBuilder(name, baseType);
         }
-
-        #endregion
     }
-
-    #endregion
 }

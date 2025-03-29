@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Security.Permissions;
 using System.Web;
@@ -27,8 +21,6 @@ using System.Web.UI;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Web.Support;
-
-#endregion
 
 namespace Spring.Web.UI.Controls;
 
@@ -173,8 +165,6 @@ public class Panel : System.Web.UI.WebControls.Panel, ISupportsWebDependencyInje
         get { return base.Context; }
     }
 
-    #region Dependency Injection Support
-
     private IApplicationContext _defaultApplicationContext;
 
     /// <summary>
@@ -218,6 +208,4 @@ public class Panel : System.Web.UI.WebControls.Panel, ISupportsWebDependencyInje
             return new InitRecursiveInterceptingControlsCollection(this);
         }
     }
-
-    #endregion Dependency Injection Support
 }

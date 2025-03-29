@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Proxy;
 
@@ -36,8 +28,6 @@ namespace Spring.Proxy;
 /// <author>Bruno Baia</author>
 public sealed class DynamicProxyManager
 {
-    #region Fields
-
     /// <summary>
     /// The name of the assembly that defines proxy types created.
     /// </summary>
@@ -47,10 +37,6 @@ public sealed class DynamicProxyManager
     /// The attributes of the proxy type to generate.
     /// </summary>
     private const TypeAttributes TYPE_ATTRIBUTES = TypeAttributes.BeforeFieldInit | TypeAttributes.Public;
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     /// Creates an appropriate type builder.
@@ -97,6 +83,4 @@ public sealed class DynamicProxyManager
     {
         DynamicCodeManager.SaveAssembly(ASSEMBLY_NAME);
     }
-
-    #endregion
 }

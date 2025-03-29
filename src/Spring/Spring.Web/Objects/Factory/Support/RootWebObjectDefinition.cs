@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Globalization;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support;
 
@@ -42,8 +34,6 @@ public class RootWebObjectDefinition : RootObjectDefinition, IWebObjectDefinitio
 {
 //        private ObjectScope _scope = ObjectScope.Default;
     private string _pageName;
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the
@@ -138,8 +128,6 @@ public class RootWebObjectDefinition : RootObjectDefinition, IWebObjectDefinitio
             this._pageName = ((IWebObjectDefinition) other).PageName;
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Object scope.

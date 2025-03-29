@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Util;
@@ -41,8 +37,6 @@ namespace Spring.Objects.Factory.Config;
 [Serializable]
 public class LogFactoryObject : IFactoryObject, IInitializingObject
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="LogFactoryObject"/>
@@ -69,8 +63,6 @@ public class LogFactoryObject : IFactoryObject, IInitializingObject
     {
         LogName = logName;
     }
-
-    #endregion
 
     /// <summary>
     /// The name of the <see cref="ILogger"/> instance served up by

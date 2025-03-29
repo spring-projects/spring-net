@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Context;
@@ -43,13 +39,7 @@ namespace Spring.Messaging.Listener;
 /// <author>Mark Pollack</author>
 public abstract class AbstractMessageListenerContainer : AbstractListenerContainer, IApplicationContextAware
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(AbstractMessageListenerContainer));
-
-    #endregion
-
-    #region Fields
 
     private string messageQueueObjectName;
 
@@ -67,10 +57,6 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
     private IMessageListener messageListener;
 
     private TimeSpan recoveryTimeSpan = new TimeSpan(0, 0, 0, 1, 0);
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the message queue factory.
@@ -123,10 +109,6 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
         set { recoveryTimeSpan = value; }
     }
 
-    #endregion
-
-    #region IApplicationContextAware Members
-
     /// <summary>
     /// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
     /// object runs in.
@@ -158,10 +140,6 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
         get { return applicationContext; }
         set { applicationContext = value; }
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Validates that the <see cref="messageQueueObjectName"/> is not null.  If <see cref="MessageQueueFactory"/>
@@ -244,6 +222,4 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
             mq.Dispose();
         }
     }
-
-    #endregion
 }

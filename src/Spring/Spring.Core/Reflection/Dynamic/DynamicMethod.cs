@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using System.Reflection;
 using Spring.Util;
 
 namespace Spring.Reflection.Dynamic;
-
-#region IDynamicMethod interface
 
 /// <summary>
 /// Defines methods that dynamic method class has to implement.
@@ -46,10 +40,6 @@ public interface IDynamicMethod
     object Invoke(object target, params object[] arguments);
 }
 
-#endregion
-
-#region Safe wrapper
-
 /// <summary>
 /// Safe wrapper for the dynamic method.
 /// </summary>
@@ -69,8 +59,6 @@ public class SafeMethod : IDynamicMethod
     {
         get { return methodInfo.DeclaringType; }
     }
-
-    #region Generated Function Cache
 
     private class SafeMethodState
     {
@@ -102,8 +90,6 @@ public class SafeMethod : IDynamicMethod
     }
 
     private static readonly Hashtable stateCache = new IdentityTable();
-
-    #endregion
 
     private readonly SafeMethodState state;
 
@@ -162,8 +148,6 @@ public class SafeMethod : IDynamicMethod
         return this.state.method(target, arguments);
     }
 }
-
-#endregion
 
 /// <summary>
 /// Factory class for dynamic methods.

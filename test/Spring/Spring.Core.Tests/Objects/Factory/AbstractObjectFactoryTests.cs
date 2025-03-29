@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
@@ -27,8 +21,6 @@ using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Threading;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Objects.Factory;
 
@@ -40,8 +32,6 @@ namespace Spring.Objects.Factory;
 /// <author>Rick Evans (.NET)</author>
 public abstract class AbstractObjectFactoryTests
 {
-    #region Properties
-
     protected internal abstract AbstractObjectFactory CreateObjectFactory(bool caseSensitive);
 
     private AbstractObjectFactory cachedFactory;
@@ -51,10 +41,6 @@ public abstract class AbstractObjectFactoryTests
         get { return cachedFactory; }
         set { cachedFactory = value; }
     }
-
-    #endregion
-
-    #region Case Insensitive Tests
 
     [Test]
     public void RespectsCaseInsensitiveNamesAndAliases()
@@ -79,8 +65,6 @@ public abstract class AbstractObjectFactoryTests
         Assert.AreEqual(testObject, of.GetObject("nAmE"));
         Assert.AreEqual(testObject, of.GetObject("ALIAS"));
     }
-
-    #endregion
 
     /// <summary>
     /// Roderick objects inherits from rod, overriding name only.

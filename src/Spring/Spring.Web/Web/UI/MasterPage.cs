@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Web.UI;
 using Spring.Collections;
@@ -33,11 +27,7 @@ using System.Globalization;
 using System.Resources;
 using Spring.Web.Support;
 
-#endregion Imports
-
 namespace Spring.Web.UI;
-
-#region ASP.NET 2.0 Spring Master Page Implementation
 
 /// <summary>
 /// Spring.NET Master Page implementation for ASP.NET 2.0
@@ -45,8 +35,6 @@ namespace Spring.Web.UI;
 /// <author>Aleksandar Seovic</author>
 public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, ISupportsWebDependencyInjection, IWebNavigable
 {
-    #region Instance Fields
-
     private ILocalizer localizer;
     private IValidationErrors validationErrors = new ValidationErrors();
     private IMessageSource messageSource;
@@ -54,10 +42,6 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
     private IApplicationContext defaultApplicationContext;
     private IWebNavigator webNavigator;
     private IDictionary args;
-
-    #endregion
-
-    #region Lifecycle methods
 
     /// <summary>
     /// Initialize a new MasterPage instance.
@@ -148,10 +132,6 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
         return control;
     }
 
-    #endregion Control lifecycle methods
-
-    #region Data binding events
-
     /// <summary>
     /// This event is raised after all controls have been populated with values
     /// from the data model.
@@ -188,10 +168,6 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
         }
     }
 
-    #endregion
-
-    #region Application context support
-
     /// <summary>
     /// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
     /// object runs in.
@@ -226,10 +202,6 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
         get { return applicationContext; }
         set { applicationContext = value; }
     }
-
-    #endregion
-
-    #region Message source and localization support
 
     /// <summary>
     /// Gets or sets the localizer.
@@ -353,10 +325,6 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
         get { return Page.UserCulture; }
         set { Page.UserCulture = value; }
     }
-
-    #endregion
-
-    #region Result support
 
     /// <summary>
     /// Ensure, that <see cref="WebNavigator"/> is set to a valid instance.
@@ -497,10 +465,6 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
         return ResolveUrl(WebNavigator.GetResultUri(resultName, this, context));
     }
 
-    #endregion
-
-    #region Validation support
-
     /// <summary>
     /// Evaluates specified validators and returns <c>True</c> if all of them are valid.
     /// </summary>
@@ -573,10 +537,6 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
         return parameters;
     }
 
-    #endregion
-
-    #region Spring Page support
-
     /// <summary>
     /// Overrides Page property to return <see cref="Spring.Web.UI.Page"/>
     /// instead of <see cref="System.Web.UI.Page"/>.
@@ -587,10 +547,6 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
     {
         get { return (Page) base.Page; }
     }
-
-    #endregion
-
-    #region Dependency Injection Support
 
     /// <summary>
     /// Holds the default ApplicationContext to be used during DI.
@@ -609,8 +565,4 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
         control = WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
         base.AddedControl(control, index);
     }
-
-    #endregion Dependency Injection Support
 }
-
-#endregion

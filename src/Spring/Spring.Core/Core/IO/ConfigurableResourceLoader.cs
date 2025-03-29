@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Util;
 using Spring.Reflection.Dynamic;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -188,9 +180,5 @@ public class ConfigurableResourceLoader : IResourceLoader
         return pos == -1 ? null : resourceName.Substring(0, pos);
     }
 
-    #region Fields
-
     private string defaultProtocol = "file";
-
-    #endregion
 }

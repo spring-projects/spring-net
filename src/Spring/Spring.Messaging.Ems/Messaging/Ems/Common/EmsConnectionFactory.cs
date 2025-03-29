@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Runtime.Serialization;
@@ -56,25 +52,15 @@ public class EmsConnectionFactory : IConnectionFactory, IInitializingObject
         this.nativeConnectionFactory = nativeConnectionFactory;
     }
 
-    #region Implementation of ISerializable
-
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         nativeConnectionFactory.GetObjectData(info, context);
     }
 
-    #endregion
-
-    #region Implementation of ICloneable
-
     public object Clone()
     {
         return nativeConnectionFactory.Clone();
     }
-
-    #endregion
-
-    #region Implementation of IConnectionFactory
 
     public ConnectionFactory NativeConnectionFactory
     {
@@ -255,10 +241,6 @@ public class EmsConnectionFactory : IConnectionFactory, IInitializingObject
         }
     }
 
-    #endregion
-
-    #region Implementation of IInitializingObject
-
     public void AfterPropertiesSet()
     {
         if (this.sslProxyAuthUsername != null && sslProxyAuthPassword != null)
@@ -271,6 +253,4 @@ public class EmsConnectionFactory : IConnectionFactory, IInitializingObject
             nativeConnectionFactory.SetSSLProxy(this.sslProxyHost, this.sslProxyPort);
         }
     }
-
-    #endregion
 }

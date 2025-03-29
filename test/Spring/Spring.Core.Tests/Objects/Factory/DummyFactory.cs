@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Objects.Factory;
 
@@ -42,13 +34,7 @@ public class DummyFactory :
     IInitializingObject,
     IDisposable
 {
-    #region Constants
-
     public const string SINGLETON_NAME = "Factory singleton";
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -60,10 +46,6 @@ public class DummyFactory :
         testObject.Name = SINGLETON_NAME;
         testObject.Age = 25;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Was this initialized by invocation of the
@@ -93,10 +75,6 @@ public class DummyFactory :
         set { otherTestObject = value; }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Clear static state.
     /// </summary>
@@ -104,10 +82,6 @@ public class DummyFactory :
     {
         prototypeCreated = false;
     }
-
-    #endregion
-
-    #region Fields
 
     /// <summary> Default is for factories to return a singleton instance.</summary>
     private bool singleton = true;
@@ -119,10 +93,6 @@ public class DummyFactory :
     private static bool prototypeCreated;
     private TestObject testObject;
     private ITestObject otherTestObject;
-
-    #endregion
-
-    #region IFactoryObject Members
 
     public Type ObjectType
     {
@@ -166,10 +136,6 @@ public class DummyFactory :
         set { singleton = value; }
     }
 
-    #endregion
-
-    #region IObjectFactoryAware Members
-
     public IObjectFactory ObjectFactory
     {
         get { return objectFactory; }
@@ -180,19 +146,11 @@ public class DummyFactory :
         }
     }
 
-    #endregion
-
-    #region IObjectNameAware Members
-
     public string ObjectName
     {
         get { return objectName; }
         set { objectName = value; }
     }
-
-    #endregion
-
-    #region IInitializingObject Members
 
     public void AfterPropertiesSet()
     {
@@ -205,10 +163,6 @@ public class DummyFactory :
         initialized = true;
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     public void Dispose()
     {
         if (testObject != null)
@@ -216,6 +170,4 @@ public class DummyFactory :
             testObject.Name = null;
         }
     }
-
-    #endregion
 }

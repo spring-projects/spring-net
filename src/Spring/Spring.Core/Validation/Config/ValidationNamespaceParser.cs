@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using Spring.Core.TypeResolution;
@@ -355,8 +351,6 @@ public sealed class ValidationNamespaceParser : ObjectsNamespaceParser
         return reference;
     }
 
-    #region Element & Attribute Name Constants
-
     private class ValidatorDefinitionConstants
     {
         public const string PropertyElement = "property";
@@ -393,6 +387,4 @@ public sealed class ValidationNamespaceParser : ObjectsNamespaceParser
         public const string ProvidersAttribute = "providers";
         public const string ParameterValueAttribute = "value";
     }
-
-    #endregion
 }

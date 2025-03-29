@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Messaging.Ems.Common;
 
 public class EmsTopicSubscriber : EmsMessageConsumer, ITopicSubscriber
@@ -26,8 +22,6 @@ public class EmsTopicSubscriber : EmsMessageConsumer, ITopicSubscriber
         : base(topicSubscriber)
     {
     }
-
-    #region Implementation of ITopicSubscriber
 
     public bool NoLocal
     {
@@ -38,6 +32,4 @@ public class EmsTopicSubscriber : EmsMessageConsumer, ITopicSubscriber
     {
         get { return ((TopicSubscriber) nativeMessageConsumer).Topic; }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.ServiceModel;
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
@@ -31,13 +27,7 @@ namespace Spring.ServiceModel.Activation;
 /// <author>Bruno Baia</author>
 public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IObjectFactoryAware, IDisposable
 {
-    #region Logging
-
     private static readonly ILogger<ServiceHostFactoryObject> LOG = LogManager.GetLogger<ServiceHostFactoryObject>();
-
-    #endregion
-
-    #region Fields
 
     private string _targetName;
     private bool _useServiceProxyTypeCache = true;
@@ -52,10 +42,6 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
     /// The <see cref="Spring.ServiceModel.SpringServiceHost" /> instance managed by this factory.
     /// </summary>
     protected SpringServiceHost springServiceHost;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the name of the target object that should be exposed as a service.
@@ -91,10 +77,6 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
         set { _useServiceProxyTypeCache = value; }
     }
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.ServiceModel.Activation.ServiceHostFactoryObject"/> class.
@@ -102,10 +84,6 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
     public ServiceHostFactoryObject()
     {
     }
-
-    #endregion
-
-    #region IObjectFactoryAware Members
 
     /// <summary>
     /// Callback that supplies the owning factory to an object instance.
@@ -131,10 +109,6 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
         protected get { return this.objectFactory; }
         set { this.objectFactory = value; }
     }
-
-    #endregion
-
-    #region IFactoryObject Members
 
     /// <summary>
     /// Return a <see cref="Spring.ServiceModel.SpringServiceHost" /> instance
@@ -166,10 +140,6 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
         get { return false; }
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Publish the object.
     /// </summary>
@@ -181,19 +151,11 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
 
         springServiceHost.Open();
 
-        #region Instrumentation
-
         if (LOG.IsEnabled(LogLevel.Information))
         {
             LOG.LogInformation(String.Format("The service '{0}' is ready and can now be accessed.", TargetName));
         }
-
-        #endregion
     }
-
-    #endregion
-
-    #region IDisposable Members
 
     /// <summary>
     /// Close the SpringServiceHost
@@ -206,10 +168,6 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
         }
     }
 
-    #endregion
-
-    #region Protected Methods
-
     /// <summary>
     /// Validates the configuration.
     /// </summary>
@@ -220,6 +178,4 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
             throw new ArgumentException("The TargetName property is required.");
         }
     }
-
-    #endregion
 }

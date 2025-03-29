@@ -32,8 +32,6 @@ namespace Spring.Objects.Factory.Support;
 /// <author>Rick Evans (.NET)</author>
 public sealed class AutowireUtils
 {
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the AutowireUtils class.
     /// </summary>
@@ -46,8 +44,6 @@ public sealed class AutowireUtils
     private AutowireUtils()
     {
     }
-
-    // CLOVER:ON
 
     /// <summary>
     /// Gets those <see cref="System.Reflection.ConstructorInfo"/>s

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Reflection;
@@ -37,8 +33,6 @@ namespace Spring.Util;
 [TestFixture]
 public sealed class ReflectionUtilsTests
 {
-    #region MapsInterfaceMethodsToImplementation utility classes
-
     interface IMapsInterfaceMethodInterface
     {
         void SomeMethodA();
@@ -78,8 +72,6 @@ public sealed class ReflectionUtilsTests
             }
         }
     }
-
-    #endregion
 
     private class DummyException : ApplicationException
     {
@@ -193,8 +185,6 @@ public sealed class ReflectionUtilsTests
         Assert.AreSame(instance.PropGetterInfo, method);
     }
 
-    #region Helper class for http: //jira.springframework.org/browse/SPRNET-992 tests
-
     public class Foo
     {
         public readonly string a = "";
@@ -221,8 +211,6 @@ public sealed class ReflectionUtilsTests
         {
         }
     }
-
-    #endregion
 
     [Test(Description = "http://jira.springframework.org/browse/SPRNET-992")]
     public void ShouldPickDefaultConstructorWithoutArgs()
@@ -937,8 +925,6 @@ public sealed class ReflectionUtilsTests
         Assert.AreSame(candidateConstructors[1], resolvedConstructor);
     }
 
-    #region GetInterfaces
-
     [Test]
     public void GetInterfaces()
     {
@@ -969,10 +955,6 @@ public sealed class ReflectionUtilsTests
     public interface IInterface5
     {
     }
-
-    #endregion
-
-    #region IsTypeVisible Tests
 
     [Test]
     public void IsTypeVisibleWithInternalType()
@@ -1182,10 +1164,6 @@ public sealed class ReflectionUtilsTests
 #endif
     }
 
-    #endregion
-
-    #region GetExplicitBaseException
-
     [Test]
     public void GetExplicitBaseExceptionWithNoInnerException()
     {
@@ -1234,10 +1212,6 @@ public sealed class ReflectionUtilsTests
         Assert.AreEqual("System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, int>>", ReflectionUtils.GetTypeFriendlyName(t));
     }
 
-    #endregion
-
-    #region Helper Methods
-
     public int Add(ref int one, int two)
     {
         return one + two;
@@ -1275,11 +1249,7 @@ public sealed class ReflectionUtilsTests
         return classBuilder.CreateType();
     }
 #endif
-
-    #endregion
 }
-
-#region Simple Helper Classes
 
 public class PublicType
 {
@@ -1596,5 +1566,3 @@ public sealed class ClassWithAttributes
     {
     }
 }
-
-#endregion

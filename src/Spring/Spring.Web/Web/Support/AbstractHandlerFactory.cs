@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Security;
 using System.Security.Permissions;
@@ -31,8 +25,6 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Web.Support;
 
@@ -49,8 +41,6 @@ namespace Spring.Web.Support;
 /// <author>Aleksandar Seovic</author>
 public abstract class AbstractHandlerFactory : IHttpHandlerFactory
 {
-    #region NamedObjectDefinition Utility
-
     /// <summary>
     /// Holds a named <see cref="IObjectDefinition"/>
     /// </summary>
@@ -85,8 +75,6 @@ public abstract class AbstractHandlerFactory : IHttpHandlerFactory
             get { return _objectDefinition; }
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Holds all handlers having <see cref="IHttpHandler.IsReusable"/> == true.
@@ -172,12 +160,8 @@ public abstract class AbstractHandlerFactory : IHttpHandlerFactory
     {
         bool isDebug = Log.IsEnabled(LogLevel.Debug);
 
-        #region Instrumentation
-
         if (isDebug)
             Log.LogDebug(string.Format("GetHandler():resolving url '{0}'", url));
-
-        #endregion
 
         IHttpHandler handler = null;
         lock (_reusableHandlerCache.SyncRoot)
@@ -187,14 +171,10 @@ public abstract class AbstractHandlerFactory : IHttpHandlerFactory
 
         if (handler != null)
         {
-            #region Instrumentation
-
             if (isDebug)
             {
                 Log.LogDebug(string.Format("GetHandler():resolved url '{0}' from reusable handler cache", url));
             }
-
-            #endregion
 
             return handler;
         }

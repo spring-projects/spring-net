@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
@@ -35,19 +31,9 @@ namespace Spring.Messaging.Listener;
 /// </summary>
 public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, IMessageTransactionExceptionHandler
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(SendToQueueExceptionHandler));
 
-    #endregion
-
-    #region Fields
-
     private string[] messageAlreadyProcessedExceptionNames;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the exception anmes that indicate the message has already
@@ -61,10 +47,6 @@ public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, 
         set { messageAlreadyProcessedExceptionNames = value; }
         get { return messageAlreadyProcessedExceptionNames; }
     }
-
-    #endregion
-
-    #region IMessageTransactionExceptionHandler Members
 
     /// <summary>
     /// Called when an exception is thrown during listener processing under the
@@ -116,10 +98,6 @@ public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, 
         }
     }
 
-    #endregion
-
-    #region Protected Methods
-
     /// <summary>
     /// Determines whether this exception was already processed.
     /// </summary>
@@ -155,30 +133,22 @@ public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, 
         MessageQueue mq = MessageQueueFactory.CreateMessageQueue(MessageQueueObjectName);
         try
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Information))
             {
                 LOG.LogInformation("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
             }
-
-            #endregion
 
             ProcessExceptionalMessage(message);
             mq.Send(message, messageQueueTransaction);
         }
         catch (Exception e)
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Error))
             {
                 string message1 = "Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].";
                 LOG.LogError(e, message1);
                 LOG.LogError("Message will not be processed.  Message Body = " + message.Body);
             }
-
-            #endregion
         }
 
         return TransactionAction.Commit;
@@ -200,8 +170,6 @@ public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, 
             message.CorrelationId = message.Id;
         }
     }
-
-    #endregion
 }
 
 internal class MessageStats

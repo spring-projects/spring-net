@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Apache.NMS;
 
@@ -134,8 +130,6 @@ public class CachedMessageProducer : IMessageProducer
     {
         return target.SendAsync(destination, message, deliveryMode, priority, timeToLive);
     }
-
-    #region Odd Message Creationg Methods on IMessageProducer - not in-line with JMS APIs.
 
     /// <summary>
     /// Creates the message.
@@ -263,8 +257,6 @@ public class CachedMessageProducer : IMessageProducer
         get { return target.ProducerTransformer; }
         set { target.ProducerTransformer = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Gets or sets a value indicating what DeliveryMode this <see cref="CachedMessageProducer"/>

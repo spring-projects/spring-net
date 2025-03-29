@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Objects;
 
@@ -134,8 +130,6 @@ public abstract class ApplicationObjectSupport : IApplicationContextAware
         get { return _messageSourceAccessor; }
     }
 
-    #region IApplicationContextAware Members
-
     /// <summary>
     /// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
     /// object runs in.
@@ -200,6 +194,4 @@ public abstract class ApplicationObjectSupport : IApplicationContextAware
 
         return false;
     }
-
-    #endregion
 }

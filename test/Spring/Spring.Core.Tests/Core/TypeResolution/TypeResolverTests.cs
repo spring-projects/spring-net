@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using NUnit.Framework;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Core.TypeResolution;
 

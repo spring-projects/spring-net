@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Util;
 using Apache.NMS;
@@ -35,15 +31,9 @@ namespace Spring.Messaging.Nms.Support.Destinations;
 /// <author>Mark Pollack (.NET)</author>
 public class NmsDestinationAccessor : NmsAccessor
 {
-    #region Fields
-
     private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
 
     private bool pubSubDomain = false;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the destination resolver that is to be used to resolve
@@ -89,8 +79,6 @@ public class NmsDestinationAccessor : NmsAccessor
             this.pubSubDomain = value;
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Resolves the given destination name to a NMS destination.

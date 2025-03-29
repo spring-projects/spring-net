@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
@@ -38,11 +34,7 @@ namespace Spring.Messaging.Listener;
 /// <author>Mark Pollack</author>
 public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageListenerContainer
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(NonTransactionalMessageListenerContainer));
-
-    #endregion
 
     private IExceptionHandler exceptionHandler;
 
@@ -83,14 +75,10 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
         Message message = null;
         try
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Trace))
             {
                 LOG.LogTrace("Receiving message with zero timeout for queue = [" + mq.Path + "]");
             }
-
-            #endregion
 
             BeforeMessageReceived(mq);
             message = mq.Receive(TimeSpan.Zero);
@@ -101,14 +89,10 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
             {
                 //expected to occur occasionally
 
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
                     LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
                 }
-
-                #endregion
 
                 return false; // no more peeking unless this is the last listener thread
             }
@@ -116,15 +100,11 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
             {
                 // A real issue in receiving the message
 
-                #region Logging
-
                 if (LOG.IsEnabled(LogLevel.Error))
                 {
                     LOG.LogError("Error receiving message from MessageQueue [" + mq.Path +
                                  "], closing queue and clearing connection cache.");
                 }
-
-                #endregion
 
                 lock (messageQueueMonitor)
                 {
@@ -138,28 +118,20 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
 
         if (message == null)
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Trace))
             {
                 LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
             }
-
-            #endregion
 
             return false; // no more peeking unless this is the last listener thread
         }
 
         try
         {
-            #region Logging
-
             if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
             }
-
-            #endregion
 
             MessageReceived(message);
             DoExecuteListener(message);

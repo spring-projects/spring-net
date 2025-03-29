@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,33 +14,21 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
     [TestFixture]
     public class NativeNHTests
     {
-        #region Constructor (s)
-
         /// <summary>
         /// Initializes a new instance of the <see cref="NativeNHTests"/> class.
         /// </summary>
         public NativeNHTests()
         {
         }
-
-        #endregion
-
-        #region Methods
 
         [Test]
         public void CreateNative()
@@ -59,6 +45,6 @@ namespace Spring.Data.NHibernate
             dao.Create(toGeorge);
         }
 
-        #endregion
+        
     }
 }

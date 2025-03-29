@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -796,10 +792,6 @@ public sealed class ObjectDefinitionConstants
     public static readonly string AutowireAutoDetectValue
         = Enum.GetName(typeof(AutoWiringMode), AutoWiringMode.AutoDetect);
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Objects.Factory.Xml.ObjectDefinitionConstants"/>
@@ -816,6 +808,4 @@ public sealed class ObjectDefinitionConstants
     }
 
     // CLOVER:ON
-
-    #endregion
 }

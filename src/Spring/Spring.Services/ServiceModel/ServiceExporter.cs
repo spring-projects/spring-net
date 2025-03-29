@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Reflection;
@@ -39,13 +35,7 @@ namespace Spring.ServiceModel;
 /// <author>Bruno Baia</author>
 public class ServiceExporter : IFactoryObject, IInitializingObject, IObjectFactoryAware, IObjectNameAware
 {
-    #region Logging
-
     //private static readonly ILogger<ServiceExporter> LOG = LogManager.GetLogger<ServiceExporter>();
-
-    #endregion
-
-    #region Fields
 
     private string _targetName;
     private Type _contractInterface;
@@ -75,20 +65,12 @@ public class ServiceExporter : IFactoryObject, IInitializingObject, IObjectFacto
     /// </summary>
     private Type proxyType;
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the <see cref="ServiceExporter"/> class.
     /// </summary>
     public ServiceExporter()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the name of the target object definition.
@@ -227,10 +209,6 @@ public class ServiceExporter : IFactoryObject, IInitializingObject, IObjectFacto
         set { _sessionMode = value; }
     }
 
-    #endregion
-
-    #region IObjectFactoryAware Members
-
     /// <summary>
     /// Callback that supplies the owning factory to an object instance.
     /// </summary>
@@ -267,10 +245,6 @@ public class ServiceExporter : IFactoryObject, IInitializingObject, IObjectFacto
         }
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Publish the object
     /// </summary>
@@ -279,10 +253,6 @@ public class ServiceExporter : IFactoryObject, IInitializingObject, IObjectFacto
         ValidateConfiguration();
         GenerateProxy();
     }
-
-    #endregion
-
-    #region IFactoryObject Members
 
     /// <summary>
     /// Return an instance (possibly shared or independent) of the object
@@ -323,10 +293,6 @@ public class ServiceExporter : IFactoryObject, IInitializingObject, IObjectFacto
         get { return false; }
     }
 
-    #endregion
-
-    #region IObjectNameAware Members
-
     /// <summary>
     /// Set the name of the object in the object factory that created this object.
     /// </summary>
@@ -346,10 +312,6 @@ public class ServiceExporter : IFactoryObject, IInitializingObject, IObjectFacto
         protected get { return this.objectName; }
         set { this.objectName = value; }
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Validates the configuration.
@@ -381,10 +343,6 @@ public class ServiceExporter : IFactoryObject, IInitializingObject, IObjectFacto
 
         proxyType = builder.BuildProxyType();
     }
-
-    #endregion
-
-    #region ConfigurableServiceProxyTypeBuilder inner class implementation
 
     /// <summary>
     /// Builds a WCF service type.
@@ -588,6 +546,4 @@ public class ServiceExporter : IFactoryObject, IInitializingObject, IObjectFacto
             }
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Diagnostics;
 using System.Reflection;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring;
 
@@ -38,15 +30,11 @@ namespace Spring;
 /// </remarks>
 public abstract class CompilerOptionsTests
 {
-    #region Tests
-
     [Test]
     public void TestBuildCompliance()
     {
         ProcessAssembly(AssemblyToCheck);
     }
-
-    #endregion
 
     private void ProcessAssembly(Assembly assembly)
     {
@@ -113,8 +101,6 @@ public abstract class CompilerOptionsTests
         }
     }
 
-    #region Properties
-
     /// <summary>
     /// Specify the assembly whose metadata will be checked for a given release mode (debug/release).
     /// </summary>
@@ -123,8 +109,6 @@ public abstract class CompilerOptionsTests
         get { return _assemblyToCheck; }
         set { _assemblyToCheck = value; }
     }
-
-    #endregion
 
     private Assembly _assemblyToCheck = null;
 }

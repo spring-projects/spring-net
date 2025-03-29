@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Configuration;
 using System.Reflection;
 using System.Web;
@@ -27,8 +21,6 @@ using NUnit.Framework;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Context.Support;
 
@@ -235,8 +227,6 @@ public class HttpApplicationConfigurerTests
         return appContext;
     }
 
-    #region Test Classes
-
     public class ModuleEntry
     {
         // Fields
@@ -296,6 +286,4 @@ public class HttpApplicationConfigurerTests
         {
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Runtime.Serialization;
 
@@ -39,8 +35,6 @@ namespace Spring.Objects.Factory;
 [Serializable]
 public class ObjectInitializationException : FatalObjectException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the ObjectInitializationException class.
     /// </summary>
@@ -89,6 +83,4 @@ public class ObjectInitializationException : FatalObjectException
         : base(info, context)
     {
     }
-
-    #endregion
 }

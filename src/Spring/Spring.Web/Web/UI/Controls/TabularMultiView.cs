@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.ComponentModel;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-#endregion
 
 namespace Spring.Web.UI.Controls;
 
@@ -39,8 +31,6 @@ namespace Spring.Web.UI.Controls;
 [ParseChildren(false)]
 public class TabularMultiView : WebControl
 {
-    #region Style Properties
-
     private string m_MenuStyle = "TabMenu";
     private string m_BodyStyle = "TabBody";
     private string m_TabItemStyle = "TabItem";
@@ -85,10 +75,6 @@ public class TabularMultiView : WebControl
         get { return m_BodyStyle; }
         set { m_BodyStyle = value; }
     }
-
-    #endregion
-
-    #region Public Members
 
     /// <summary>
     /// Initializes a new instance.
@@ -144,10 +130,6 @@ public class TabularMultiView : WebControl
         remove { base.Events.RemoveHandler(_eventActiveTabChanged, value); }
     }
 
-    #endregion Public Members
-
-    #region Customizable Members
-
     /// <summary>
     /// Create the container for tab items.
     /// </summary>
@@ -176,10 +158,6 @@ public class TabularMultiView : WebControl
         return content;
     }
 
-    #endregion
-
-    #region Fields
-
     private static readonly object _eventActiveTabChanged = new object();
 
     private int _activeViewIndexCached = -1;
@@ -192,8 +170,6 @@ public class TabularMultiView : WebControl
     /// keeps parsed views until multiView is created
     /// </summary>
     private ArrayList _parsedViews = new ArrayList();
-
-    #endregion
 
     /// <summary>
     /// Initialize this control.

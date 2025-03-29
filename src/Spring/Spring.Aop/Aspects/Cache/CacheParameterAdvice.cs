@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Spring.Aop;
 using Spring.Caching;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aspects.Cache;
 
@@ -53,8 +45,6 @@ namespace Spring.Aspects.Cache;
 /// <author>Aleksandar Seovic</author>
 public class CacheParameterAdvice : BaseCacheAdvice, IAfterReturningAdvice
 {
-    #region CacheParameterAttribute caching
-
     private class CacheParameterInfo
     {
         public readonly ParameterInfo[] Parameters;
@@ -90,8 +80,6 @@ public class CacheParameterAdvice : BaseCacheAdvice, IAfterReturningAdvice
         return cpi;
     }
 
-    #endregion
-
     /// <summary>
     /// Executes after target <paramref name="method"/>
     /// returns <b>successfully</b>.
@@ -115,11 +103,7 @@ public class CacheParameterAdvice : BaseCacheAdvice, IAfterReturningAdvice
     /// <seealso cref="AopAlliance.Intercept.IMethodInterceptor.Invoke"/>
     public void AfterReturning(object returnValue, MethodInfo method, object[] arguments, object target)
     {
-        #region Instrumentation
-
         bool isLogDebugEnabled = logger.IsEnabled(LogLevel.Debug);
-
-        #endregion
 
         CacheParameterInfo cpi = GetCacheParameterInfo(method);
         CacheParameterAttribute[][] cacheParameterAttributes = cpi.CacheParameterAttributes;
@@ -140,14 +124,10 @@ public class CacheParameterAdvice : BaseCacheAdvice, IAfterReturningAdvice
 
                         object key = paramInfo.KeyExpression.GetValue(arguments[i], vars);
 
-                        #region Instrumentation
-
                         if (isLogDebugEnabled)
                         {
                             logger.LogDebug(string.Format("Caching parameter for key [{0}] into cache [{1}].", key, paramInfo.CacheName));
                         }
-
-                        #endregion
 
                         cache.Insert(key, arguments[i], paramInfo.TimeToLiveTimeSpan);
                     }

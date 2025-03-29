@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using Apache.NMS;
@@ -107,8 +103,6 @@ public class SimpleMessageConverter : IMessageConverter
         }
     }
 
-    #region To Converter Methods
-
     /// <summary> Create a NMS ITextMessage for the given String.</summary>
     /// <param name="text">the String to convert
     /// </param>
@@ -178,10 +172,6 @@ public class SimpleMessageConverter : IMessageConverter
         return session.CreateObjectMessage(objectToSend);
     }
 
-    #endregion
-
-    #region From Converter Mehtods
-
     /// <summary> Extract a String from the given ITextMessage.</summary>
     /// <param name="message">the message to convert
     /// </param>
@@ -233,6 +223,4 @@ public class SimpleMessageConverter : IMessageConverter
     {
         return message.Body;
     }
-
-    #endregion
 }

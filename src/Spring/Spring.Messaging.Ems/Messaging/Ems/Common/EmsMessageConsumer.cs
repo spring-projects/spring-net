@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Messaging.Ems.Common;
 
 public class EmsMessageConsumer : IMessageConsumer
@@ -29,8 +25,6 @@ public class EmsMessageConsumer : IMessageConsumer
         nativeMessageConsumer = messageConsumer;
         nativeMessageConsumer.MessageHandler += MessageHandler;
     }
-
-    #region Implementation of IMessageConsumer
 
     public MessageConsumer NativeMessageConsumer
     {
@@ -69,6 +63,4 @@ public class EmsMessageConsumer : IMessageConsumer
     {
         return nativeMessageConsumer.ReceiveNoWait();
     }
-
-    #endregion
 }

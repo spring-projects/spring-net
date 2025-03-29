@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Messaging.Ems.Common;
 
 public class EmsSession : ISession
@@ -28,8 +24,6 @@ public class EmsSession : ISession
     {
         this.nativeSession = session;
     }
-
-    #region Implementation of ISession
 
     public Session NativeSession
     {
@@ -201,6 +195,4 @@ public class EmsSession : ISession
     {
         get { return nativeSession.Transacted; }
     }
-
-    #endregion
 }

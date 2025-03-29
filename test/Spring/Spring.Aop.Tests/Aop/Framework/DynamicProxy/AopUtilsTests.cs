@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Reflection;
@@ -169,8 +165,6 @@ public sealed class AopUtilsTests
         Assert.IsTrue(AopUtils.CanApply(mockIntroAdvisor, typeof(TestObject), null));
     }
 
-    #region Helper Classes
-
     private sealed class OneMethodTestPointcut : StaticMethodMatcherPointcut
     {
         public override bool Matches(MethodInfo m, Type targetClass)
@@ -223,6 +217,4 @@ public sealed class AopUtilsTests
             throw new NotImplementedException();
         }
     }
-
-    #endregion
 }

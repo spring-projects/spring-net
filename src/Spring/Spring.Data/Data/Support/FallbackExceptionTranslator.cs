@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Dao;
 
 namespace Spring.Data.Support;
@@ -32,16 +28,12 @@ namespace Spring.Data.Support;
 /// <author>Mark Pollack (.NET)</author>
 public class FallbackExceptionTranslator : IAdoExceptionTranslator
 {
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="FallbackExceptionTranslator"/> class.
     /// </summary>
     public FallbackExceptionTranslator()
     {
     }
-
-    #endregion
 
     /// <summary>
     /// Translate the given <see cref="System.SystemException"/> into a generic data access exception.

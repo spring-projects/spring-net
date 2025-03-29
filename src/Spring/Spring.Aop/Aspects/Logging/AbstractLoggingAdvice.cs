@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -36,8 +32,6 @@ namespace Spring.Aspects.Logging;
 [Serializable]
 public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializationCallback
 {
-    #region Fields
-
     /// <summary>
     /// The default <code>ILog</code> instance used to write logging messages.
     /// </summary>
@@ -52,10 +46,6 @@ public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializati
     /// Indicates whether or not proxy type names should be hidden when using dynamic loggers.
     /// </summary>
     private bool hideProxyTypeNames = false;
-
-    #endregion
-
-    #region Constructor
 
     /// <summary>
     /// Creates a new advice instance using this advice type's name for logging by default.
@@ -72,10 +62,6 @@ public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializati
     {
         this.defaultLogger = defaultLogger;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Sets a value indicating whether to use a dynamic logger or static logger
@@ -131,10 +117,6 @@ public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializati
     {
         set { hideProxyTypeNames = value; }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Adds logging to the method invocation.
@@ -257,8 +239,6 @@ public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializati
             return LogManager.GetLogger(logCategoryType);
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Sets the default logger to the given name.

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using Spring.Util;
 
@@ -30,18 +26,12 @@ namespace Spring.Dao.Support;
 /// <author>Mark Pollack (.NET)</author>
 public class DataAccessUtils
 {
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="DataAccessUtils"/> class.
     /// </summary>
     public DataAccessUtils()
     {
     }
-
-    #endregion
-
-    #region Methods
 
     public static object RequiredUniqueResultSet(IList results)
     {
@@ -74,6 +64,4 @@ public class DataAccessUtils
         AssertUtils.ArgumentNotNull(pet, "PersistenceExceptionTranslator must not be null");
         return pet.TranslateExceptionIfPossible(rawException);
     }
-
-    #endregion
 }

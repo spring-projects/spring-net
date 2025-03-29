@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Expressions;
 using Spring.Objects.Factory;
@@ -39,18 +35,12 @@ namespace Spring.Validation;
 /// <author>Aleksandar Seovic</author>
 public class ValidatorReference : IValidator, IObjectFactoryAware
 {
-    #region Fields
-
     private IObjectFactory objectFactory;
 
     private string name;
     private IExpression context;
     private IExpression when;
     private IValidator validator;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the <see cref="ValidatorReference"/> class.
@@ -81,10 +71,6 @@ public class ValidatorReference : IValidator, IObjectFactoryAware
         this.when = when;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets or sets the name of the referenced validator.
     /// </summary>
@@ -114,8 +100,6 @@ public class ValidatorReference : IValidator, IObjectFactoryAware
         get { return when; }
         set { when = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Validates the specified object.

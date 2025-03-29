@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,12 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-#endregion
-
 namespace Spring.Objects;
 
 /// <summary>
@@ -32,13 +24,7 @@ namespace Spring.Objects;
 /// <author>Mark Pollack (.NET)</author>
 public class LazyTestObject
 {
-    #region Fields
-
     private static int count = 0;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LazyTestObject"/> class
@@ -50,24 +36,14 @@ public class LazyTestObject
         Thread.Sleep(2000);
     }
 
-    #endregion
-
-    #region Properties
-
     public static int Count
     {
         get { return count; }
         set { count = value; }
     }
 
-    #endregion
-
-    #region Methods
-
     public override string ToString()
     {
         return String.Format("LazyTestObject, Count = [{0}]", count);
     }
-
-    #endregion
 }

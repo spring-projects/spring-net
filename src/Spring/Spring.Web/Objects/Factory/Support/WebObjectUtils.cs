@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Microsoft.Extensions.Logging;
 using Spring.Util;
 using IHttpHandler = System.Web.IHttpHandler;
@@ -33,8 +29,6 @@ public sealed class WebObjectUtils
 {
     private static ILogger s_log = LogManager.GetLogger(typeof(WebObjectUtils));
 
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the <see cref="Spring.Util.WebUtils"/> class.
     /// </summary>
@@ -46,8 +40,6 @@ public sealed class WebObjectUtils
     private WebObjectUtils()
     {
     }
-
-    // CLOVER:ON
 
     /// <summary>
     /// Creates an instance of the ASPX page

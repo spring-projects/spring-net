@@ -11,11 +11,7 @@ namespace Spring.Messaging.Core;
 /// </summary>
 public class MessageQueueMetadataCache : IApplicationContextAware, IInitializingObject
 {
-    #region Logging Definition
-
     private static readonly ILogger<MessageQueueMetadataCache> LOG = LogManager.GetLogger<MessageQueueMetadataCache>();
-
-    #endregion
 
     private readonly IDictionary itemStore = new Hashtable();
 
@@ -68,15 +64,11 @@ public class MessageQueueMetadataCache : IApplicationContextAware, IInitializing
                     }
                     else
                     {
-                        #region Logging
-
                         if (LOG.IsEnabled(LogLevel.Warning))
                         {
                             LOG.LogWarning("Path for MessageQueueFactoryObject named [" +
                                            mqfo.ObjectName + "] is null, so can't cache its metadata.");
                         }
-
-                        #endregion
                     }
                 }
                 else

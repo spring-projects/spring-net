@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 namespace Spring.Messaging.Ems.Connections;
 
@@ -37,12 +33,8 @@ public class TestMessageListener : IMessageListener
         set { message = value; }
     }
 
-    #region IMessageListener Members
-
     public void OnMessage(Message message)
     {
         this.message = "Test1";
     }
-
-    #endregion
 }

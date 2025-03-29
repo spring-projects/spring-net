@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
-
-#region Imports
 
 using System.Collections;
 using System.Collections.Specialized;
@@ -37,8 +31,6 @@ using Spring.Validation;
 using Spring.Web.Support;
 using IValidator = Spring.Validation.IValidator;
 
-#endregion
-
 namespace Spring.Web.UI;
 
 /// <summary>
@@ -48,16 +40,10 @@ namespace Spring.Web.UI;
 public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, IWebDataBound, ISupportsWebDependencyInjection,
     IPostBackDataHandler, IValidationContainer, IWebNavigable
 {
-    #region Static fields
-
     private static readonly object EventPreLoadViewState = new object();
     private static readonly object EventDataBindingsInitialized = new object();
     private static readonly object EventDataBound = new object();
     private static readonly object EventDataUnbound = new object();
-
-    #endregion
-
-    #region Instance Fields
 
     private object controller;
     private ILocalizer localizer;
@@ -70,10 +56,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
     private IApplicationContext applicationContext;
     private IApplicationContext defaultApplicationContext;
     private bool needsUnbind = false;
-
-    #endregion
-
-    #region Control lifecycle methods
 
     /// <summary>
     /// Initialize a new UserControl instance.
@@ -276,10 +258,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         return control;
     }
 
-    #endregion
-
-    #region Model Management Support
-
     private IModelPersistenceMedium modelPersistenceMedium = new SessionModelPersistenceMedium();
 
     /// <summary>
@@ -361,10 +339,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         return null;
     }
 
-    #endregion<
-
-    #region Controller Support
-
     /// <summary>
     /// Gets or sets controller for the control.
     /// </summary>
@@ -424,10 +398,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         return controller;
     }
 
-    #endregion Controller Support
-
-    #region Shared State support
-
     /// <summary>
     /// Returns a thread-safe dictionary that contains state that is shared by
     /// all instances of this control.
@@ -465,10 +435,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
             return sharedState;
         }
     }
-
-    #endregion Shared State support
-
-    #region Result support
 
     /// <summary>
     /// Ensure, that <see cref="WebNavigator"/> is set to a valid instance.
@@ -609,10 +575,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         return ResolveUrl(WebNavigator.GetResultUri(resultName, this, context));
     }
 
-    #endregion
-
-    #region Validation support
-
     /// <summary>
     /// Evaluates specified validators and returns <c>True</c> if all of them are valid.
     /// </summary>
@@ -689,10 +651,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
 
         return parameters;
     }
-
-    #endregion
-
-    #region Data binding support
 
     /// <summary>
     /// Initializes the data bindings.
@@ -887,10 +845,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         }
     }
 
-    #endregion
-
-    #region Application context support
-
     /// <summary>
     /// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
     /// object runs in.
@@ -925,10 +879,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         get { return applicationContext; }
         set { applicationContext = value; }
     }
-
-    #endregion
-
-    #region Message source and localization support
 
     /// <summary>
     /// Gets or sets the localizer.
@@ -1063,10 +1013,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         set { Page.UserCulture = value; }
     }
 
-    #endregion
-
-    #region Spring Page support
-
     /// <summary>
     /// Overrides Page property to return <see cref="Spring.Web.UI.Page"/>
     /// instead of <see cref="System.Web.UI.Page"/>.
@@ -1091,10 +1037,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         }
     }
 
-    #endregion
-
-    #region Helper Methods
-
     /// <summary>
     /// Creates a key for shared state, taking into account whether
     /// this page belongs to a process or not.
@@ -1105,10 +1047,6 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
     {
         return key;
     }
-
-    #endregion
-
-    #region Dependency Injection Support
 
     /// <summary>
     /// Holds the default ApplicationContext to be used during DI.
@@ -1127,6 +1065,4 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         WebDependencyInjectionUtils.InjectDependenciesRecursive(defaultApplicationContext, control);
         base.AddedControl(control, index);
     }
-
-    #endregion Dependency Injection Support
 }

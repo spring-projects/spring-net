@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Expressions;
 using Spring.Util;
@@ -34,8 +30,6 @@ namespace Spring.Validation.Validators;
 /// </remarks>
 public class CreditCardValidator : BaseSimpleValidator
 {
-    #region Properties
-
     /// <summary>
     /// Credit card type validator to use.
     /// </summary>
@@ -50,10 +44,6 @@ public class CreditCardValidator : BaseSimpleValidator
         get { return m_cardType; }
         set { m_cardType = value; }
     }
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the <b>UrlValidator</b> class.
@@ -88,10 +78,6 @@ public class CreditCardValidator : BaseSimpleValidator
         this.m_cardType = cardType;
     }
 
-    #endregion
-
-    #region BaseValidator methods
-
     /// <summary>
     /// Validates the supplied <paramref name="objectToValidate"/>.
     /// </summary>
@@ -116,10 +102,6 @@ public class CreditCardValidator : BaseSimpleValidator
 
         return IsValid(text);
     }
-
-    #endregion
-
-    #region CreditCardValidator methods
 
     /// <summary>
     /// Checks if the <paramref name="card"/> is a valid credit card number.
@@ -219,16 +201,8 @@ public class CreditCardValidator : BaseSimpleValidator
         return (sum == 0) ? false : (sum % 10 == 0);
     }
 
-    #endregion
-
-    #region Data members
-
     private ICreditCardType m_cardType;
-
-    #endregion
 }
-
-#region CreditCardType classes
 
 /// <summary>
 /// CreditCardType interface defines how validation is performed
@@ -314,5 +288,3 @@ public class Mastercard : ICreditCardType
         return ((PREFIX.IndexOf(prefix2) != -1) && (card.Length == 16));
     }
 }
-
-#endregion

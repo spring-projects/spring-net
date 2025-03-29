@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Core;
-
-#endregion
 
 namespace Spring.Objects.Support;
 
@@ -243,8 +235,6 @@ public sealed class MethodInvokerTests
             "PreparedArguments should revert to the empty object[] when set to null; must NEVER be null.");
     }
 
-    #region Inner Class : Foo
-
     private sealed class Foo
     {
         public Foo()
@@ -298,10 +288,6 @@ public sealed class MethodInvokerTests
         }
     }
 
-    #endregion
-
-    #region Inner Class : MyMethodInvoker
-
     private sealed class MyMethodInvoker : MethodInvoker
     {
         public MyMethodInvoker()
@@ -318,6 +304,4 @@ public sealed class MethodInvokerTests
             return PreparedArguments;
         }
     }
-
-    #endregion
 }

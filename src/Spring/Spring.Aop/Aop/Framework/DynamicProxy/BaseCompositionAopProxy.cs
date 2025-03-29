@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy;
 
@@ -34,8 +26,6 @@ namespace Spring.Aop.Framework.DynamicProxy;
 [Serializable]
 public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerializable
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Default constructor.
     /// </summary>
@@ -70,10 +60,6 @@ public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerial
         base.GetObjectData(info, context);
     }
 
-    #endregion
-
-    #region IAopProxy Members
-
     /// <summary>
     /// Returns this proxy instance
     /// </summary>
@@ -82,10 +68,6 @@ public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerial
     {
         return this;
     }
-
-    #endregion
-
-    #region Equal, HashCode and ToString overrides
 
     /// <summary>
     /// Delegate to target object handling of equals method.
@@ -165,6 +147,4 @@ public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerial
         m_targetSource.ReleaseTarget(target);
         return str;
     }
-
-    #endregion
 }

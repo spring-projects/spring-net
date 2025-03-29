@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Objects;
 using Spring.Aop.Interceptor;
 using System.Reflection;
 using Spring.Expressions;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy;
 
@@ -341,8 +333,6 @@ public class InheritanceAopProxyTests
     }
 }
 
-#region Helper Classes
-
 public interface IIncrementable
 {
     int Value { get; set; }
@@ -375,8 +365,6 @@ public class InheritanceTestObject : IIncrementable
         this._value = value;
     }
 
-    #region IIncrementable Members
-
     // non virtual method that belongs to an interface
     private int _value;
 
@@ -392,8 +380,6 @@ public class InheritanceTestObject : IIncrementable
         // this call
         this._value++;
     }
-
-    #endregion
 
     // final method
     public void Reset()
@@ -433,5 +419,3 @@ public class InheritanceTestObject : IIncrementable
 public class DerivedInheritanceTestObject : InheritanceTestObject
 {
 }
-
-#endregion

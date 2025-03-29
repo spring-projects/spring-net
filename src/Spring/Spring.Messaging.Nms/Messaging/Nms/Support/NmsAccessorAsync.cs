@@ -1,5 +1,3 @@
-#region License
-
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -16,8 +14,6 @@
 //  * limitations under the License.
 //  */
 
-#endregion
-
 using Spring.Messaging.Nms.Core;
 using Spring.Objects.Factory;
 using Apache.NMS;
@@ -31,21 +27,11 @@ namespace Spring.Messaging.Nms.Support;
 /// <see cref="NmsAccessor"/>
 public class NmsAccessorAsync : IInitializingObject
 {
-    #region Logging
-
     private readonly ILogger<NmsAccessor> logger = LogManager.GetLogger<NmsAccessor>();
-
-    #endregion
-
-    #region Fields
 
     private IConnectionFactory connectionFactory;
 
     private AcknowledgementMode sessionAcknowledgeMode = AcknowledgementMode.AutoAcknowledge;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the connection factory to use for obtaining NMS Connections.
@@ -113,8 +99,6 @@ public class NmsAccessorAsync : IInitializingObject
             }
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Verify that ConnectionFactory property has been set.

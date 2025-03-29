@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Collections.Specialized;
@@ -157,14 +153,10 @@ public class NameMatchTransactionAttributeSource : ITransactionAttributeSource, 
     /// </param>
     public void AddTransactionMethod(string methodName, ITransactionAttribute attribute)
     {
-        #region Instrumentation
-
         if (log.IsEnabled(LogLevel.Debug))
         {
             log.LogDebug("Adding transactional method [" + methodName + "] with attribute [" + attribute + "]");
         }
-
-        #endregion
 
         nameMap.Add(methodName, attribute);
     }
@@ -189,8 +181,6 @@ public class NameMatchTransactionAttributeSource : ITransactionAttributeSource, 
             AddTransactionMethod(methodName, editor.Value);
         }
     }
-
-    #region ITransactionAttributeSource Members
 
     /// <summary>
     /// Return the <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> for this
@@ -228,6 +218,4 @@ public class NameMatchTransactionAttributeSource : ITransactionAttributeSource, 
 
         return attribute;
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Data;
 using Microsoft.Extensions.Logging;
 using Spring.Data.Common;
@@ -31,11 +27,7 @@ namespace Spring.Data.Support;
 /// </summary>
 public abstract class ConnectionUtils
 {
-    #region Logging
-
     private static readonly ILogger<ConnectionUtils> LOG = LogManager.GetLogger<ConnectionUtils>();
-
-    #endregion
 
     public static readonly int CONNECTION_SYNCHRONIZATION_ORDER = 1000;
 

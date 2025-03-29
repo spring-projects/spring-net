@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 namespace Spring.Bsn;
 
@@ -35,8 +31,6 @@ public class ConversationEvidenceBsnImpl : IConversationEvidenceBsn
         uniqueId = Guid.NewGuid().ToString();
     }
 
-    #region IConversationEvidenceBsn Members
-
     /// <summary>
     /// <see cref="IConversationEvidenceBsn"/>
     /// </summary>
@@ -45,6 +39,4 @@ public class ConversationEvidenceBsnImpl : IConversationEvidenceBsn
     {
         return this.uniqueId;
     }
-
-    #endregion
 }

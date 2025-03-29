@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using Spring.Util;
@@ -52,8 +48,6 @@ namespace Spring.Globalization.Formatters;
 public class NumberFormatter : IFormatter
 {
     private NumberFormatInfo formatInfo;
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NumberFormatter"/> class
@@ -94,10 +88,6 @@ public class NumberFormatter : IFormatter
     {
         this.formatInfo = formatInfo;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the number of decimal digits.
@@ -153,8 +143,6 @@ public class NumberFormatter : IFormatter
         get { return formatInfo.NumberNegativePattern; }
         set { formatInfo.NumberNegativePattern = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Formats the specified number value.

@@ -8,21 +8,13 @@ namespace Spring.Data.Support;
 /// </summary>
 public abstract class AdoUtils
 {
-    #region Logging
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(AdoUtils));
-
-    #endregion
-
-    #region Constants
 
     /// <summary>
     /// Order value for TransactionSynchronization objects that clean up
     /// ADO.NET Connections.
     /// </summary>
     public static readonly int CONNECTION_SYNCHRONIZATION_ORDER = 1000;
-
-    #endregion
 
     /// <summary>
     /// Property dispose of the command.  Useful in finally or catch blocks.

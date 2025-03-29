@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection;
 using AopAlliance.Intercept;
 using Microsoft.Extensions.Logging;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework.Adapter;
 
@@ -161,14 +153,10 @@ public sealed class ThrowsAdviceInterceptor : IMethodInterceptor
                 Type lastParametersType = method.GetParameters()[numParams - 1].ParameterType;
                 if (typeof(Exception).IsAssignableFrom(lastParametersType))
                 {
-                    #region Instrumentation
-
                     if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.LogDebug("Found exception handler method: " + method);
                     }
-
-                    #endregion
 
                     if (this.exceptionHandlers.Contains(lastParametersType))
                     {
@@ -263,14 +251,10 @@ public sealed class ThrowsAdviceInterceptor : IMethodInterceptor
     {
         Type exceptionClass = exception.GetType();
 
-        #region Instrumentation
-
         if (log.IsEnabled(LogLevel.Debug))
         {
             log.LogDebug("Trying to find handler for exception of type [" + exception.GetType().Name + "].");
         }
-
-        #endregion
 
         MethodInfo handler = (MethodInfo) this.exceptionHandlers[exceptionClass];
         while (handler == null && !exceptionClass.Equals(typeof(Exception)))

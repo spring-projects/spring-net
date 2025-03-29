@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Threading;
 
@@ -129,8 +121,6 @@ public abstract class CommonThreadStorageTests
         Assert.IsNull(helper.value);
     }
 
-    #region Test Utility Classes
-
     private class ThreadTestHelper
     {
         private CommonThreadStorageTests outer;
@@ -157,6 +147,4 @@ public abstract class CommonThreadStorageTests
             value = storage.GetData("key");
         }
     }
-
-    #endregion Test Utility Classes
 }

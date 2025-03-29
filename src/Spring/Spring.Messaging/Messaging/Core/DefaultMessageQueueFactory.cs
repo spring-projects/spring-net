@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using Microsoft.Extensions.Logging;
@@ -55,8 +51,6 @@ public class DefaultMessageQueueFactory : IMessageQueueFactory, IApplicationCont
         UniqueKey.GetTypeScopedString(typeof(DefaultMessageQueueFactory), "Converter");
 
     private IConfigurableApplicationContext applicationContext;
-
-    #region IMessageQueueFactory Members
 
     /// <summary>
     /// Registers the message queue, its creation specified via the factory method
@@ -176,10 +170,6 @@ public class DefaultMessageQueueFactory : IMessageQueueFactory, IApplicationCont
         return applicationContext.ContainsObject(messageConverterObjectName);
     }
 
-    #endregion
-
-    #region IApplicationContextAware Members
-
     /// <summary>
     /// Gets or sets the <see cref="Spring.Context.IApplicationContext"/> that this
     /// object runs in.
@@ -222,6 +212,4 @@ public class DefaultMessageQueueFactory : IMessageQueueFactory, IApplicationCont
             applicationContext = ctx;
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2010-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using Spring.Core.IO;
@@ -40,8 +36,6 @@ public class ConfigurationClassAssemblyResource : IResource
         _type = type;
         _containingAssemblyFileName = Assembly.GetAssembly(_type.GetType()).Location;
     }
-
-    #region IResource Members
 
     /// <summary>
     /// Creates a resource relative to this resource.
@@ -195,6 +189,4 @@ public class ConfigurationClassAssemblyResource : IResource
     {
         get { throw new InvalidOperationException(); }
     }
-
-    #endregion
 }

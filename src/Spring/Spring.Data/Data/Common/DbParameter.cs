@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Data;
 
 namespace Spring.Data.Common;
@@ -28,8 +24,6 @@ namespace Spring.Data.Common;
 /// <author>Mark Pollack (.NET)</author>
 public class DbParameter : Spring.Data.Common.IDbParameter
 {
-    #region Fields
-
     private Enum dbType;
     private ParameterDirection direction;
     private bool isNullable;
@@ -40,10 +34,6 @@ public class DbParameter : Spring.Data.Common.IDbParameter
     private byte precision;
     private byte scale;
     private int size;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DbParameter"/> class.
@@ -57,10 +47,6 @@ public class DbParameter : Spring.Data.Common.IDbParameter
         direction = ParameterDirection.Input;
     }
 
-    #endregion
-
-    #region IDbParameter Members
-
     public Enum DbType
     {
         set
@@ -68,8 +54,6 @@ public class DbParameter : Spring.Data.Common.IDbParameter
             dbType = value;
         }
     }
-
-    #endregion
 
     public IDbParameter Type(Enum dbType)
     {

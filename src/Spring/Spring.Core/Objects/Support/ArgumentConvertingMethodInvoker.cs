@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.ComponentModel;
 using Spring.Core.TypeConversion;
@@ -34,8 +30,6 @@ namespace Spring.Objects.Support;
 /// <seealso cref="MethodInvoker"/>
 public class ArgumentConvertingMethodInvoker : MethodInvoker
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Objects.Support.ArgumentConvertingMethodInvoker"/> class.
@@ -44,18 +38,10 @@ public class ArgumentConvertingMethodInvoker : MethodInvoker
     {
     }
 
-    #endregion
-
-    #region Properties
-
     private ObjectWrapper Wrapper
     {
         get { return _wrapper; }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Prepare the specified method.
@@ -102,11 +88,5 @@ public class ArgumentConvertingMethodInvoker : MethodInvoker
         TypeConverterRegistry.RegisterConverter(requiredType, typeConverter);
     }
 
-    #endregion
-
-    #region Fields
-
     private readonly ObjectWrapper _wrapper = new ObjectWrapper();
-
-    #endregion
 }

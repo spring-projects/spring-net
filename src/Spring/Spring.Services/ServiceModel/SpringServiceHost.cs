@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Util;
 using Spring.Context;
 using Spring.Context.Support;
@@ -32,8 +28,6 @@ namespace Spring.ServiceModel;
 /// <author>Bruno Baia</author>
 public class SpringServiceHost : System.ServiceModel.ServiceHost
 {
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the <see cref="Spring.ServiceModel.SpringServiceHost"/> class.
     /// </summary>
@@ -105,6 +99,4 @@ public class SpringServiceHost : System.ServiceModel.ServiceHost
         return new ServiceProxyTypeBuilder(serviceName, objectFactory, useServiceProxyTypeCache)
             .BuildProxyType();
     }
-
-    #endregion
 }

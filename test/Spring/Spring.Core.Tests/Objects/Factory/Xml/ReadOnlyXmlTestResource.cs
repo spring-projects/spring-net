@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text;
 using Spring.Core.IO;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml;
 

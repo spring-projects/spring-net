@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Runtime.Remoting;
 using Microsoft.Extensions.Logging;
@@ -36,13 +32,7 @@ namespace Spring.Remoting;
 /// <author>Bruno Baia</author>
 public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObjectFactoryAware, IInitializingObject, IDisposable
 {
-    #region Logging
-
     private static readonly ILogger<CaoExporter> LOG = LogManager.GetLogger<CaoExporter>();
-
-    #endregion
-
-    #region Fields
 
     private string targetName;
     private string[] interfaces;
@@ -52,20 +42,12 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
 
     private CaoRemoteFactory remoteFactory;
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the <see cref="CaoExporter"/> class.
     /// </summary>
     public CaoExporter()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the name of the target object definition.
@@ -89,10 +71,6 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
         get { return interfaces; }
         set { interfaces = value; }
     }
-
-    #endregion
-
-    #region IApplicationContextAware Members
 
     /// <summary>
     /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
@@ -126,10 +104,6 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
         set { applicationContext = value; }
     }
 
-    #endregion
-
-    #region IObjectFactoryAware Members
-
     /// <summary>
     /// Sets object factory to use.
     /// </summary>
@@ -137,10 +111,6 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
     {
         set { objectFactory = (AbstractObjectFactory) value; }
     }
-
-    #endregion
-
-    #region IInitializingObject Members
 
     /// <summary>
     /// Publish the object
@@ -151,10 +121,6 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
         Export();
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     /// <summary>
     /// Disconnect the remote object from the registered remoting channels.
     /// </summary>
@@ -162,10 +128,6 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
     {
         RemotingServices.Disconnect(remoteFactory);
     }
-
-    #endregion
-
-    #region Private Methods
 
     private void ValidateConfiguration()
     {
@@ -181,19 +143,11 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
 
         RemotingServices.Marshal(remoteFactory, targetName);
 
-        #region Instrumentation
-
         if (LOG.IsEnabled(LogLevel.Debug))
         {
             LOG.LogDebug(String.Format("Target '{0}' registered.", targetName));
         }
-
-        #endregion
     }
-
-    #endregion
-
-    #region BaseCao inner class definition
 
     /// <summary>
     /// This class extends <see cref="Spring.Remoting.Support.BaseRemoteObject"/> to allow CAOs
@@ -201,31 +155,17 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
     /// </summary>
     public abstract class BaseCao : BaseRemoteObject, IDisposable
     {
-        #region IDisposable Members
-
         void IDisposable.Dispose()
         {
             RemotingServices.Disconnect(this);
         }
-
-        #endregion
     }
-
-    #endregion
-
-    #region CaoRemoteFactory inner class definition
 
     private sealed class CaoRemoteFactory : MarshalByRefObject, ICaoRemoteFactory
     {
-        #region Fields
-
         private AbstractObjectFactory objectFactory;
         private string targetName;
         private RemoteObjectFactory remoteObjectFactory;
-
-        #endregion
-
-        #region Constructor(s) / Destructor
 
         /// <summary>
         /// Create a new instance of the RemoteFactory.
@@ -244,10 +184,6 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
             this.remoteObjectFactory.RenewOnCallTime = lifetime.RenewOnCallTime;
             this.remoteObjectFactory.SponsorshipTimeout = lifetime.SponsorshipTimeout;
         }
-
-        #endregion
-
-        #region Membres de ICaoRemoteFactory
 
         /// <summary>
         /// Returns the CAO proxy.
@@ -287,10 +223,6 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
             return remoteObjectFactory.GetObject();
         }
 
-        #endregion
-
-        #region Overrided Methods
-
         /// <summary>
         /// Set infinite lifetime.
         /// </summary>
@@ -298,9 +230,5 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
         {
             return null;
         }
-
-        #endregion
     }
-
-    #endregion
 }

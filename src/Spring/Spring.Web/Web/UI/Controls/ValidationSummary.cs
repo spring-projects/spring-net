@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Web.UI.Validation;
-
-#endregion
 
 namespace Spring.Web.UI.Controls;
 

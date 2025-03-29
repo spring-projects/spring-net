@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using System.Reflection.Emit;
@@ -36,13 +32,7 @@ namespace Spring.Proxy;
 /// <author>Bruno Baia</author>
 public class InheritanceProxyTypeBuilder : AbstractProxyTypeBuilder
 {
-    #region Fields
-
     private bool declaredMembersOnly = false;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets a value indicating whether inherited members should be proxied.
@@ -56,10 +46,6 @@ public class InheritanceProxyTypeBuilder : AbstractProxyTypeBuilder
         set { declaredMembersOnly = value; }
     }
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="InheritanceProxyTypeBuilder"/> class.
@@ -69,10 +55,6 @@ public class InheritanceProxyTypeBuilder : AbstractProxyTypeBuilder
         Name = "InheritanceProxy";
         //ProxyTargetAttributes = false;
     }
-
-    #endregion
-
-    #region IProxyTypeBuilder Members
 
     /// <summary>
     /// Creates a proxy that inherits the proxied object's class.
@@ -120,10 +102,6 @@ public class InheritanceProxyTypeBuilder : AbstractProxyTypeBuilder
         return typeBuilder.CreateTypeInfo();
     }
 
-    #endregion
-
-    #region IProxyTypeGenerator Members
-
     /// <summary>
     /// Generates the IL instructions that pushes
     /// the target instance on which calls should be delegated to.
@@ -133,10 +111,6 @@ public class InheritanceProxyTypeBuilder : AbstractProxyTypeBuilder
     {
         PushProxy(il);
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Generates the proxy constructor.
@@ -163,6 +137,4 @@ public class InheritanceProxyTypeBuilder : AbstractProxyTypeBuilder
 
         il.Emit(OpCodes.Call, constructor);
     }
-
-    #endregion
 }

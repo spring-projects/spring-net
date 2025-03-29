@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Apache.NMS;
 using Microsoft.Extensions.Logging;
@@ -34,8 +30,6 @@ public class SimpleMessageListener : IMessageListener
         get { return messageCount; }
     }
 
-    #region Implementation of IMessageListener
-
     public void OnMessage(IMessage message)
     {
         messageCount++;
@@ -50,6 +44,4 @@ public class SimpleMessageListener : IMessageListener
             LOG.LogWarning("Can not process message of type " + message.GetType());
         }
     }
-
-    #endregion
 }

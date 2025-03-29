@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.EnterpriseServices;
@@ -45,17 +41,11 @@ namespace Spring.EnterpriseServices;
 /// <author>Erich Eichinger</author>
 public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
 {
-    #region Fields
-
     private string _objectName;
     private string _targetName;
     private string[] _interfaces;
     private IList _typeAttributes = new ArrayList();
     private IDictionary _memberAttributes = new Hashtable();
-
-    #endregion
-
-    #region Constructor(s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -64,10 +54,6 @@ public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
     public ServicedComponentExporter()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets name of the target object that should be exposed as a serviced component.
@@ -116,10 +102,6 @@ public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
         set { _memberAttributes = value; }
     }
 
-    #endregion
-
-    #region IInitializingObject Members
-
     /// <summary>
     /// Validate configuration.
     /// </summary>
@@ -127,10 +109,6 @@ public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
     {
         ValidateConfiguration();
     }
-
-    #endregion
-
-    #region IObjectNameAware Members
 
     /// <summary>
     /// Set the name of the object in the object factory
@@ -140,10 +118,6 @@ public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
     {
         set { _objectName = value; }
     }
-
-    #endregion
-
-    #region Methods
 
     private void ValidateConfiguration()
     {
@@ -216,10 +190,6 @@ public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
         return componentType;
     }
 
-    #endregion
-
-    #region ServicedComponentProxyTypeBuilder inner class definition
-
     private class ServicedComponentTargetProxyMethodBuilder : TargetProxyMethodBuilder
     {
         public ServicedComponentTargetProxyMethodBuilder(TypeBuilder typeBuilder, IProxyTypeGenerator proxyGenerator, bool explicitImplementation) : base(typeBuilder, proxyGenerator, explicitImplementation)
@@ -265,44 +235,26 @@ public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
     {
         private readonly ModuleBuilder module;
 
-        #region Constructor(s) / Destructor
-
         public SimpleServicedComponentProxyTypeBuilder(ModuleBuilder module, Type baseType)
         {
             this.module = module;
             BaseType = baseType;
         }
 
-        #endregion
-
-        #region Protected Methods
-
         protected override TypeBuilder CreateTypeBuilder(string name, Type baseType)
         {
             return module.DefineType(name, System.Reflection.TypeAttributes.Public, baseType);
         }
-
-        #endregion
     }
 
     private sealed class SpringManagedServicedComponentProxyTypeBuilder : ServicedComponentProxyTypeBuilder
     {
-        #region Fields
-
         private delegate object GetTargetDelegate(ServicedComponent component, string name);
 
         private static readonly MethodInfo ServicedComponentExporter_GetTarget = new GetTargetDelegate(ServicedComponentHelper.GetObject).Method;
 
-        #endregion
-
-        #region Fields
-
         private readonly ServicedComponentExporter exporter;
         private readonly ModuleBuilder module;
-
-        #endregion
-
-        #region Constructor(s) / Destructor
 
         public SpringManagedServicedComponentProxyTypeBuilder(ModuleBuilder module, Type baseType, ServicedComponentExporter exporter)
         {
@@ -310,10 +262,6 @@ public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
             this.exporter = exporter;
             BaseType = baseType;
         }
-
-        #endregion
-
-        #region Protected Methods
 
         protected override TypeBuilder CreateTypeBuilder(string name, Type baseType)
         {
@@ -324,10 +272,6 @@ public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
         {
             //base.DeclareTargetInstanceField(builder);
         }
-
-        #endregion
-
-        #region IProxyTypeGenerator Members
 
         /// <summary>
         /// Generates the IL instructions that pushes
@@ -342,9 +286,5 @@ public class ServicedComponentExporter : IInitializingObject, IObjectNameAware
             il.Emit(OpCodes.Ldstr, this.exporter.TargetName);
             il.Emit(OpCodes.Callvirt, getObjectRef.FieldType.GetMethod("Invoke"));
         }
-
-        #endregion
     }
-
-    #endregion
 }

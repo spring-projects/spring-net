@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.TypeResolution;
 
@@ -45,8 +37,6 @@ namespace Spring.Core.TypeResolution;
 /// <seealso cref="Spring.Context.Support.TypeAliasesSectionHandler"/>
 public sealed class TypeRegistry
 {
-    #region Constants
-
     /// <summary>
     /// Name of the .Net config section that contains Spring.Net type aliases.
     /// </summary>
@@ -422,16 +412,8 @@ public sealed class TypeRegistry
     /// </summary>
     public const string NullableBoolArrayAlias = "bool?[]";
 
-    #endregion
-
-    #region Fields
-
     private static readonly object syncRoot = new object();
     private static IDictionary<string, Type> types = new Dictionary<string, Type>();
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Registers standard and user-configured type aliases.
@@ -549,8 +531,6 @@ public sealed class TypeRegistry
             ConfigurationUtils.GetSection(TypeAliasesSectionName);
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Registers an alias for the specified <see cref="System.Type"/>.

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,12 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-#endregion
-
 namespace Spring.Aop;
 
 /// <summary>
@@ -33,8 +25,6 @@ public class SimpleBeforeAdviceImpl : ISimpleBeforeAdvice
 {
     private int _invocationCounter;
 
-    #region Properties
-
     public int InvocationCounter
     {
         get
@@ -43,22 +33,12 @@ public class SimpleBeforeAdviceImpl : ISimpleBeforeAdvice
         }
     }
 
-    #endregion
-
-    #region Constructors
-
     public SimpleBeforeAdviceImpl()
     {
     }
-
-    #endregion
-
-    #region ISimpleBeforeAdvice Members
 
     public void Before()
     {
         ++_invocationCounter;
     }
-
-    #endregion
 }

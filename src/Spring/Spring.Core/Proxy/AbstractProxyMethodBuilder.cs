@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using System.Reflection.Emit;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Proxy;
 
@@ -34,8 +26,6 @@ namespace Spring.Proxy;
 /// <author>Bruno Baia</author>
 public abstract class AbstractProxyMethodBuilder : IProxyMethodBuilder
 {
-    #region Fields
-
     /// <summary>
     /// The type builder to use.
     /// </summary>
@@ -50,10 +40,6 @@ public abstract class AbstractProxyMethodBuilder : IProxyMethodBuilder
     /// Indicates whether interfaces should be implemented explicitly.
     /// </summary>
     protected bool explicitImplementation;
-
-    #endregion
-
-    #region Constructor(s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the method builder.
@@ -73,10 +59,6 @@ public abstract class AbstractProxyMethodBuilder : IProxyMethodBuilder
         this.proxyGenerator = proxyGenerator;
         this.explicitImplementation = explicitImplementation;
     }
-
-    #endregion
-
-    #region IProxyMethodBuilder Members
 
     /// <summary>
     /// Dynamically builds proxy method.
@@ -107,10 +89,6 @@ public abstract class AbstractProxyMethodBuilder : IProxyMethodBuilder
 
         return methodBuilder;
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Generates the IL instructions that pushes
@@ -377,11 +355,7 @@ public abstract class AbstractProxyMethodBuilder : IProxyMethodBuilder
         il.Emit(OpCodes.Newobj, NewException);
         il.Emit(OpCodes.Throw);
     }
-
-    #endregion
 }
-
-#region References helper class definition
 
 internal struct References
 {
@@ -392,5 +366,3 @@ internal struct References
     public static readonly MethodInfo UnderstandsMethod =
         typeof(AssertUtils).GetMethod("Understands", new Type[] { typeof(object), typeof(string), typeof(Type) });
 }
-
-#endregion

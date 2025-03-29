@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Apache.NMS;
 using Microsoft.Extensions.Logging;
 
@@ -32,11 +28,7 @@ namespace Spring.Messaging.Nms.Core;
 /// <author>Mark Pollack</author>
 public class NmsTrace : ITrace
 {
-    #region Logging Definition
-
     private readonly ILogger log;
-
-    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NmsTrace"/> class. The log name used is typeof(NmsTrace).

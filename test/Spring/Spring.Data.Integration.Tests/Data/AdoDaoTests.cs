@@ -119,8 +119,6 @@ public class AdoDaoTests : AbstractTransactionalSpringContextTests
         Assert.IsNull(to3);
     }
 
-    #region Overrides of AbstractDependencyInjectionSpringContextTests
-
     /// <summary>
     /// Subclasses must implement this property to return the locations of their
     /// config files. A plain path will be treated as a file system location.
@@ -139,6 +137,4 @@ public class AdoDaoTests : AbstractTransactionalSpringContextTests
         TestObjectDao.Cleanup();
         base.OnSetUp();
     }
-
-    #endregion
 }

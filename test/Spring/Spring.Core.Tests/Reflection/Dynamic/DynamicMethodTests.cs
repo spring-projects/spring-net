@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Diagnostics;
@@ -37,8 +33,6 @@ public sealed class DynamicMethodTests
     private Inventor tesla;
     private Inventor pupin;
     private Society ieee;
-
-    #region SetUp and TearDown
 
     /// <summary>
     /// The setup logic executed before the execution of each individual test.
@@ -68,8 +62,6 @@ public sealed class DynamicMethodTests
     {
         //DynamicReflectionManager.SaveAssembly();
     }
-
-    #endregion
 
     private string RespectsPermissionsPrivateMethod()
     {
@@ -271,8 +263,6 @@ public sealed class DynamicMethodTests
         Assert.AreEqual("done", done);
     }
 
-    #region Performance tests
-
     private DateTime start, stop;
 
     //[Test]
@@ -324,10 +314,6 @@ public sealed class DynamicMethodTests
         Debug.WriteLine(String.Format("{0,-60} {1,12:#,###} {2,12:##0.000} {3,12:#,###}", name, iterations, duration, iterations / duration));
     }
 
-    #endregion
-
-    #region Helper Classes
-
     public class TestMethods
     {
         public static object PassReferenceArgumentStatic(object arg)
@@ -350,11 +336,7 @@ public sealed class DynamicMethodTests
             return arg;
         }
     }
-
-    #endregion
 }
-
-#region IL generation helper classes (they help if you look at them in Reflector ;-)
 
 public class InstanceMethod : IDynamicMethod
 {
@@ -447,5 +429,3 @@ public class RefOutTestObject : IRefOutTestObject
         reference++;
     }
 }
-
-#endregion

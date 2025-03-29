@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Data.Core;
@@ -59,11 +55,7 @@ public class MessageQueueTransactionManager : AbstractPlatformTransactionManager
     public static readonly string CURRENT_TRANSACTION_SLOTNAME =
         UniqueKey.GetTypeScopedString(typeof(MessageQueueTransaction), "Current");
 
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(MessageQueueTransactionManager));
-
-    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MessageQueueTransactionManager"/> class.
@@ -272,13 +264,9 @@ public class MessageQueueTransactionManager : AbstractPlatformTransactionManager
             set { resourceHolder = value; }
         }
 
-        #region ISmartTransactionObject Members
-
         public bool RollbackOnly
         {
             get { return resourceHolder.RollbackOnly; }
         }
-
-        #endregion
     }
 }

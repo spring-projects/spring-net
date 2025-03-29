@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Context.Events;
@@ -55,10 +51,6 @@ public sealed class ContextRegistry
 
     private IDictionary<string, IApplicationContext> contextMap = new Dictionary<string, IApplicationContext>(StringComparer.OrdinalIgnoreCase);
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the ContextRegistry class.
     /// </summary>
@@ -71,10 +63,6 @@ public sealed class ContextRegistry
     static ContextRegistry()
     {
     }
-
-    // CLOVER:ON
-
-    #endregion
 
     /// <summary>
     /// This event is fired, if ContextRegistry.Clear() is called.<br/>
@@ -167,14 +155,10 @@ public sealed class ContextRegistry
             instance.contextMap[context.Name] = context;
             context.ContextEvent += OnContextEvent;
 
-            #region Instrumentation
-
             if (log.IsEnabled(LogLevel.Debug))
             {
                 log.LogDebug(String.Format("Registering context '{0}' under name '{1}'.", context, context.Name));
             }
-
-            #endregion
 
             if (rootContextName == null)
             {
@@ -284,15 +268,11 @@ public sealed class ContextRegistry
                         name));
                 }
 
-                #region Instrumentation
-
                 if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.LogDebug(String.Format(
                         "Returning context '{0}' registered under name '{1}'.", ctx, name));
                 }
-
-                #endregion
 
                 return ctx;
             }

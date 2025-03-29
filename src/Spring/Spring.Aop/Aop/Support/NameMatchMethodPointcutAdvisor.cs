@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using AopAlliance.Aop;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Support;
 
@@ -38,8 +30,6 @@ namespace Spring.Aop.Support;
 public class NameMatchMethodPointcutAdvisor : AbstractGenericPointcutAdvisor
 {
     private NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
-
-    #region Constructor(s)
 
     /// <summary>
     /// Creates a new instance of the
@@ -59,10 +49,6 @@ public class NameMatchMethodPointcutAdvisor : AbstractGenericPointcutAdvisor
     {
         Advice = advice;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The <see cref="Spring.Aop.ITypeFilter"/> for this pointcut.
@@ -121,6 +107,4 @@ public class NameMatchMethodPointcutAdvisor : AbstractGenericPointcutAdvisor
             pointcut = value as NameMatchMethodPointcut;
         }
     }
-
-    #endregion
 }

@@ -10,8 +10,6 @@ namespace Spring.Caching;
 [Serializable]
 public abstract class BaseCacheAttribute : Attribute
 {
-    #region Fields
-
     /// <summary>
     /// The <see cref="TimeSpanConverter"/> instance used to parse <see cref="TimeSpan"/> values.
     /// </summary>
@@ -26,10 +24,6 @@ public abstract class BaseCacheAttribute : Attribute
     private IExpression conditionExpression;
     private string timeToLive = null;
     private TimeSpan timeToLiveTimeSpan = TimeSpan.MinValue;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates an attribute instance.
@@ -64,10 +58,6 @@ public abstract class BaseCacheAttribute : Attribute
         this.CacheName = cacheName;
         this.Key = key;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the name of the cache to use.
@@ -178,6 +168,4 @@ public abstract class BaseCacheAttribute : Attribute
     {
         get { return timeToLiveTimeSpan; }
     }
-
-    #endregion
 }

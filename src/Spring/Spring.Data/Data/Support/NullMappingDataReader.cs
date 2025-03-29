@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Data;
 
 namespace Spring.Data.Support;
@@ -29,14 +25,8 @@ namespace Spring.Data.Support;
 /// <author>Mark Pollack (.NET)</author>
 public class NullMappingDataReader : IDataReaderWrapper
 {
-    #region Fields
-
     protected IDataReader dataReader;
     private bool alreadyDisposed = false;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NullMappingDataReader"/> class.
@@ -54,14 +44,10 @@ public class NullMappingDataReader : IDataReaderWrapper
         this.dataReader = dataReader;
     }
 
-    #endregion
-
     ~NullMappingDataReader()
     {
         Dispose(false);
     }
-
-    #region Methods
 
     protected virtual void Dispose(bool isDisposing)
     {
@@ -80,10 +66,6 @@ public class NullMappingDataReader : IDataReaderWrapper
         alreadyDisposed = true;
     }
 
-    #endregion
-
-    #region IDataReaderWrapper Members
-
     public IDataReader WrappedReader
     {
         get
@@ -95,10 +77,6 @@ public class NullMappingDataReader : IDataReaderWrapper
             dataReader = value;
         }
     }
-
-    #endregion
-
-    #region IDataReader Members
 
     public int RecordsAffected
     {
@@ -144,19 +122,11 @@ public class NullMappingDataReader : IDataReaderWrapper
         return dataReader.GetSchemaTable();
     }
 
-    #endregion
-
-    #region IDisposable Members
-
     public void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(true);
     }
-
-    #endregion
-
-    #region IDataRecord Members
 
     /// <summary>
     /// Gets the 32-bit signed integer value of the specified field.
@@ -337,6 +307,4 @@ public class NullMappingDataReader : IDataReaderWrapper
     {
         return dataReader.IsDBNull(i) ? (short) 0 : dataReader.GetInt16(i);
     }
-
-    #endregion
 }

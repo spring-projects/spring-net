@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Diagnostics;
 using System.Reflection;
@@ -36,8 +32,6 @@ public class DynamicFieldTests
     protected Inventor tesla;
     protected Inventor pupin;
     protected Society ieee;
-
-    #region SetUp and TearDown
 
     /// <summary>
     /// The setup logic executed before the execution of each individual test.
@@ -67,8 +61,6 @@ public class DynamicFieldTests
     {
         //DynamicReflectionManager.SaveAssembly();
     }
-
-    #endregion
 
     protected virtual IDynamicField Create(FieldInfo field)
     {
@@ -190,8 +182,6 @@ public class DynamicFieldTests
         Assert.AreEqual(2008, myField.GetValue(null));
     }
 
-    #region Performance tests
-
     private DateTime start, stop;
 
     //[Test]
@@ -240,11 +230,7 @@ public class DynamicFieldTests
     {
         Debug.WriteLine(String.Format("{0,-60} {1,12:#,###} {2,12:##0.000} {3,12:#,###}", name, iterations, duration, iterations / duration));
     }
-
-    #endregion
 }
-
-#region IL generation helper classes (they help if you look at them in Reflector ;-)
 
 public class ValueTypeField : IDynamicField
 {
@@ -297,5 +283,3 @@ public class StaticConst : IDynamicField
     {
     }
 }
-
-#endregion

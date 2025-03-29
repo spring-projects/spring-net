@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Data;
 using Apache.NMS;
@@ -69,11 +65,7 @@ namespace Spring.Messaging.Nms.Connections;
 public class NmsTransactionManager : AbstractPlatformTransactionManager,
     IResourceTransactionManager, IInitializingObject
 {
-    #region Logging Definition
-
     private static readonly ILogger<NmsTransactionManager> LOG = LogManager.GetLogger<NmsTransactionManager>();
-
-    #endregion
 
     private IConnectionFactory connectionFactory;
 
@@ -121,8 +113,6 @@ public class NmsTransactionManager : AbstractPlatformTransactionManager,
         }
     }
 
-    #region IInitializingObject Members
-
     /// <summary>
     /// Make sure the ConnectionFactory has been set.
     /// </summary>
@@ -134,10 +124,6 @@ public class NmsTransactionManager : AbstractPlatformTransactionManager,
         }
     }
 
-    #endregion
-
-    #region IResourceTransactionManager Members
-
     /// <summary>
     /// Gets the resource factory that this transaction manager operates on,
     /// In tihs case the ConnectionFactory
@@ -147,8 +133,6 @@ public class NmsTransactionManager : AbstractPlatformTransactionManager,
     {
         get { return ConnectionFactory; }
     }
-
-    #endregion
 
     /// <summary>
     /// Get the MessageTransactionObject.
@@ -420,13 +404,9 @@ public class NmsTransactionManager : AbstractPlatformTransactionManager,
             set { resourceHolder = value; }
         }
 
-        #region ISmartTransactionObject Members
-
         public bool RollbackOnly
         {
             get { return resourceHolder.RollbackOnly; }
         }
-
-        #endregion
     }
 }

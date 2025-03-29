@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 
@@ -61,8 +57,6 @@ public class MatchAlwaysTransactionAttributeSource : ITransactionAttributeSource
         set { _transactionAttribute = value; }
     }
 
-    #region ITransactionAttributeSource Members
-
     /// <summary>
     /// Return the <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> for this
     /// method.
@@ -80,8 +74,6 @@ public class MatchAlwaysTransactionAttributeSource : ITransactionAttributeSource
     {
         return _transactionAttribute;
     }
-
-    #endregion
 
     /// <summary>
     /// Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Data;
 using Microsoft.Extensions.Logging;
@@ -37,11 +33,7 @@ public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager,
 {
     private IDbProvider dbProvider;
 
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(AdoPlatformTransactionManager));
-
-    #endregion
 
     public AdoPlatformTransactionManager()
     {
@@ -53,15 +45,11 @@ public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager,
         DbProvider = dbProvider;
     }
 
-    #region Propeties
-
     public IDbProvider DbProvider
     {
         get { return dbProvider; }
         set { dbProvider = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Return the current transaction object.

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Core.IO;
@@ -36,16 +32,10 @@ namespace Spring.Objects.Factory.Support;
 /// <author>Rick Evans (.NET)</author>
 public abstract class AbstractObjectDefinitionReader : IObjectDefinitionReader
 {
-    #region Constants
-
     /// <summary>
     /// The <see cref="ILogger"/> instance for this class (and derived classes).
     /// </summary>
     protected readonly ILogger log;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -103,10 +93,6 @@ public abstract class AbstractObjectDefinitionReader : IObjectDefinitionReader
         }
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets the
     /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
@@ -156,10 +142,6 @@ public abstract class AbstractObjectDefinitionReader : IObjectDefinitionReader
         get { return _resourceLoader; }
         set { _resourceLoader = value; }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Load object definitions from the supplied <paramref name="resource"/>.
@@ -256,14 +238,8 @@ public abstract class AbstractObjectDefinitionReader : IObjectDefinitionReader
         return counter;
     }
 
-    #endregion
-
-    #region Fields
-
     private IObjectDefinitionRegistry _registry;
     private AppDomain _domain;
     private IResourceLoader _resourceLoader;
     private IObjectNameGenerator _objectNameGenerator = new DefaultObjectNameGenerator();
-
-    #endregion
 }

@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Reflection;
 using System.Reflection.Emit;
 using Spring.Proxy;
@@ -31,8 +27,6 @@ namespace Spring.Remoting.Support;
 /// <author>Bruno Baia</author>
 internal class RemoteObjectProxyTypeBuilder : CompositionProxyTypeBuilder
 {
-    #region Fields
-
     private static readonly MethodInfo TimeSpan_FromTicks =
         typeof(TimeSpan).GetMethod("FromTicks", BindingFlags.Public | BindingFlags.Static);
 
@@ -50,10 +44,6 @@ internal class RemoteObjectProxyTypeBuilder : CompositionProxyTypeBuilder
 
     private ILifetime lifetime;
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="RemoteObjectProxyTypeBuilder"/> class.
@@ -67,10 +57,6 @@ internal class RemoteObjectProxyTypeBuilder : CompositionProxyTypeBuilder
 
         Name = "RemoteObjectProxy";
     }
-
-    #endregion
-
-    #region IProxyTypeBuilder Members
 
     /// <summary>
     /// Creates a remotable proxy type based on <see cref="BaseRemoteObject"/>.
@@ -90,10 +76,6 @@ internal class RemoteObjectProxyTypeBuilder : CompositionProxyTypeBuilder
 
         return base.BuildProxyType();
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Implements constructors for the proxy class.
@@ -164,6 +146,4 @@ internal class RemoteObjectProxyTypeBuilder : CompositionProxyTypeBuilder
             }
         }
     }
-
-    #endregion
 }

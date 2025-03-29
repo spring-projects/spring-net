@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Configuration;
 using System.Xml;
-
-#endregion
 
 namespace Spring.Context.Support;
 
@@ -38,8 +30,6 @@ namespace Spring.Context.Support;
 /// <author>Aleksandar Seovic</author>
 public class DefaultSectionHandler : IConfigurationSectionHandler
 {
-    #region Methods
-
     /// <summary>
     /// Returns the configuration section as an <see cref="System.Xml.XmlElement"/>
     /// </summary>
@@ -60,6 +50,4 @@ public class DefaultSectionHandler : IConfigurationSectionHandler
     {
         return section as XmlElement;
     }
-
-    #endregion
 }

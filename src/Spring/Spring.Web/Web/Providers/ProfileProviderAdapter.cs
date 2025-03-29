@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections.Specialized;
 using System.Configuration;
@@ -41,16 +37,10 @@ namespace Spring.Web.Providers;
 [AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 public class ProfileProviderAdapter : ProfileProvider, IProfileProvider
 {
-    #region Field
-
     /// <summary>
     /// Reference to wrapped provider (defined in Spring context).
     /// </summary>
     private ProfileProvider wrappedProvider;
-
-    #endregion
-
-    #region ProviderBase members
 
     ///<summary>
     ///Initializes the provider.
@@ -103,10 +93,6 @@ public class ProfileProviderAdapter : ProfileProvider, IProfileProvider
     {
         get { return this.wrappedProvider.Description; }
     }
-
-    #endregion
-
-    #region System.Web.Profile.ProfileProvider members
 
     ///<summary>
     ///Returns the collection of settings property values for the specified application instance and settings property group.
@@ -292,6 +278,4 @@ public class ProfileProviderAdapter : ProfileProvider, IProfileProvider
         return this.wrappedProvider.FindInactiveProfilesByUserName(authenticationOption, usernameToMatch, userInactiveSinceDate,
             pageIndex, pageSize, out totalRecords);
     }
-
-    #endregion
 }

@@ -1,8 +1,6 @@
 using NUnit.Framework;
 using Spring.Objects;
 
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -18,8 +16,6 @@ using Spring.Objects;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 namespace Spring.Context.Support;
 

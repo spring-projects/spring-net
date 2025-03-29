@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections.Specialized;
 using System.Globalization;
@@ -161,8 +157,6 @@ public class PropertyPlaceholderConfigurer : PropertyResourceConfigurer
         logger = LogManager.GetLogger(this.GetType());
     }
 
-    #region Properties
-
     /// <summary>
     /// The placeholder prefix (the default is <c>${</c>).
     /// </summary>
@@ -210,8 +204,6 @@ public class PropertyPlaceholderConfigurer : PropertyResourceConfigurer
     {
         set { includeAncestors = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Apply the given properties to the supplied
@@ -299,16 +291,12 @@ public class PropertyPlaceholderConfigurer : PropertyResourceConfigurer
                 {
                     resolvedValue = ParseString(properties, resolvedValue, visitedPlaceholders);
 
-                    #region Instrumentation
-
                     if (logger.IsEnabled(LogLevel.Debug))
                     {
                         logger.LogDebug(string.Format(
                             CultureInfo.InvariantCulture,
                             "Resolving placeholder '{0}' to '{1}'.", placeholder, resolvedValue));
                     }
-
-                    #endregion
 
                     strVal = strVal.Substring(0, startIndex) + resolvedValue + strVal.Substring(endIndex + 1);
                     startIndex = strVal.IndexOf(placeholderPrefix, startIndex + resolvedValue.Length);
@@ -407,8 +395,6 @@ public class PropertyPlaceholderConfigurer : PropertyResourceConfigurer
         return props[placeholder];
     }
 
-    #region Helper class
-
     private class PlaceholderResolveHandlerAdapter : IStringValueResolver
     {
         private readonly PropertyPlaceholderConfigurer ppc;
@@ -425,6 +411,4 @@ public class PropertyPlaceholderConfigurer : PropertyResourceConfigurer
             return ppc.ParseString(props, name, new HashedSet());
         }
     }
-
-    #endregion
 }

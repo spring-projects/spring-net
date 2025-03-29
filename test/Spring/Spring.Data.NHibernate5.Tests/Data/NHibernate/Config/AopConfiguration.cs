@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Aop.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Transaction;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Config
 {

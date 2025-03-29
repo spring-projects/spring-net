@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
@@ -28,8 +22,6 @@ using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Aop.Framework.AutoProxy;
 
@@ -75,8 +67,6 @@ public class AdvisorAutoProxyCreatorCircularReferencesTests
         Assert.AreEqual(1, countingAdvisor.GetCalls());
     }
 }
-
-#region Support Classes
 
 public class TestDefaultAdvisorAutoProxyCreator : DefaultAdvisorAutoProxyCreator, IInitializingObject
 {
@@ -220,5 +210,3 @@ public class TestObjectFactoryObject : IFactoryObject, IInitializingObject
         initialized = true;
     }
 }
-
-#endregion

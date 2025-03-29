@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using System.Runtime.InteropServices;
 using FakeItEasy;
@@ -26,8 +22,6 @@ using Spring.Pool.Support;
 using Spring.Threading;
 
 namespace Spring.Pool;
-
-#region Inner Class : Helper
 
 public class Helper
 {
@@ -70,16 +64,12 @@ public class Helper
     }
 }
 
-#endregion
-
 /// <summary>
 /// Unit tests for the SimplePool class.
 /// </summary>
 [TestFixture]
 public sealed class SimplePoolTests
 {
-    #region Inner Class : MyFactory (IPoolableObjectFactory implementation)
-
     private sealed class MyFactory : IPoolableObjectFactory
     {
         public object MakeObject()
@@ -104,8 +94,6 @@ public sealed class SimplePoolTests
         {
         }
     }
-
-    #endregion
 
     private IPoolableObjectFactory factory;
     private SimplePool pool;

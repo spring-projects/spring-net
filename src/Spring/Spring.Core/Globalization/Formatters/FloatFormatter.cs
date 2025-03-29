@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using Spring.Util;
@@ -44,8 +40,6 @@ public class FloatFormatter : IFormatter
 
     private string format;
     private NumberFormatInfo numberInfo;
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FloatFormatter"/> class,
@@ -94,8 +88,6 @@ public class FloatFormatter : IFormatter
         this.format = format;
         this.numberInfo = culture.NumberFormat;
     }
-
-    #endregion
 
     /// <summary>
     /// Formats the specified float value.

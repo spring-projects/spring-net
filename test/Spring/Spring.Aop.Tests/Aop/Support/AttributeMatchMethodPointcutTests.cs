@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Aop.Support;
 
@@ -195,8 +187,6 @@ public sealed class AttributeMatchMethodPointcutTests
         }
     }
 
-    #region Helper classes definitions
-
     [AttributeUsage(AttributeTargets.Method)]
     private sealed class MarkupAttribute : Attribute
     {
@@ -255,6 +245,4 @@ public sealed class AttributeMatchMethodPointcutTests
 
         public void TestMethod(string param) { }
     }
-
-    #endregion
 }

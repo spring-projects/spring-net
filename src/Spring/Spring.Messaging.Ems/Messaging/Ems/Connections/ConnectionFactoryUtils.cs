@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;
@@ -33,11 +29,7 @@ namespace Spring.Messaging.Ems.Connections;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class ConnectionFactoryUtils
 {
-    #region Logging
-
     private static readonly ILogger<ConnectionFactoryUtils> LOG = LogManager.GetLogger<ConnectionFactoryUtils>();
-
-    #endregion
 
     /// <summary>
     /// Releases the given connection, stopping it (if necessary) and eventually closing it.
@@ -249,8 +241,6 @@ public abstract class ConnectionFactoryUtils
         return session;
     }
 
-    #region ResourceFactory helper classes
-
     private class AnonymousClassResourceFactory : ResourceFactory
     {
         private IConnection existingCon;
@@ -295,10 +285,6 @@ public abstract class ConnectionFactoryUtils
             get { return synchedLocalTransactionAllowed; }
         }
     }
-
-    #endregion
-
-    #region Helper classes/interfaces
 
     /// <summary> Callback interface for resource creation.
     /// Serving as argument for the <code>DoGetTransactionalSession</code> method.
@@ -414,6 +400,4 @@ public abstract class ConnectionFactoryUtils
             }
         }
     }
-
-    #endregion
 }

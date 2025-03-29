@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004-2009 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Messaging;
-
-#endregion
 
 namespace Spring;
 

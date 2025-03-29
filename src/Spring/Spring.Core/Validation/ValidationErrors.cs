@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using System.Xml.Schema;
@@ -41,18 +37,12 @@ namespace Spring.Validation;
 [Serializable]
 public class ValidationErrors : IValidationErrors, IXmlSerializable
 {
-    #region Constructors
-
     /// <summary>
     /// Default constructor.
     /// </summary>
     public ValidationErrors()
     {
     }
-
-    #endregion
-
-    #region IXmlSerializable implementations
 
     /// <summary>
     /// This property is reserved, apply the
@@ -136,10 +126,6 @@ public class ValidationErrors : IValidationErrors, IXmlSerializable
             writer.WriteEndElement();
         }
     }
-
-    #endregion
-
-    #region ValidationErrors methods
 
     /// <summary>
     /// Does this instance contain any validation errors?
@@ -287,11 +273,5 @@ public class ValidationErrors : IValidationErrors, IXmlSerializable
         return messages;
     }
 
-    #endregion
-
-    #region Data members
-
     private readonly IDictionary<string, List<ErrorMessage>> errorMap = new Dictionary<string, List<ErrorMessage>>();
-
-    #endregion
 }

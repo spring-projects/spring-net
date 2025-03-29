@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 using Spring.Dao;
 
@@ -30,16 +26,10 @@ namespace Spring.Data;
 [Serializable]
 public class InvalidResultSetAccessException : InvalidDataAccessResourceUsageException, ISerializable
 {
-    #region Fields
-
     /// <summary>
     /// SQL that led to the problem
     /// </summary>
     private string sql;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InvalidResultSetAccessException"/> class.
@@ -79,10 +69,6 @@ public class InvalidResultSetAccessException : InvalidDataAccessResourceUsageExc
     /// <inheritdoc />
     protected InvalidResultSetAccessException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets the SQL that caused the exception
     /// </summary>
@@ -94,14 +80,6 @@ public class InvalidResultSetAccessException : InvalidDataAccessResourceUsageExc
             return sql;
         }
     }
-
-    #endregion
-
-    #region Methods
-
-    #endregion
-
-    #region ISerializable Members
 
     /// <summary>
     /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/>
@@ -115,6 +93,4 @@ public class InvalidResultSetAccessException : InvalidDataAccessResourceUsageExc
         info.AddValue("sql", sql);
         base.GetObjectData(info, context);
     }
-
-    #endregion
 }

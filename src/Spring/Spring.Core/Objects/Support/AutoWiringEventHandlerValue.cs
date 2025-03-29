@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Globalization;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
@@ -33,8 +29,6 @@ namespace Spring.Objects.Support;
 /// <author>Rick Evans</author>
 public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
 {
-    #region Constants
-
     private const string EventNamePlaceHolder = "${event}";
 
     private const string DefaultMethodPrefix = "On";
@@ -42,10 +36,6 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
     private const string DefaultMethodName = DefaultMethodPrefix + EventNamePlaceHolder;
 
     private static readonly ILogger<AutoWiringEventHandlerValue> log = LogManager.GetLogger<AutoWiringEventHandlerValue>();
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -56,10 +46,6 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
         MethodName = DefaultMethodName;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The name of the method that is going to handle the event.
     /// </summary>
@@ -68,10 +54,6 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
         get { return base.MethodName; }
         set { base.MethodName = StringUtils.HasText(value) ? value.Trim() : DefaultMethodName; }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Wires up the specified handler to the named event on the supplied event source.
@@ -93,10 +75,6 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
         wirer.Wire();
     }
 
-    #endregion
-
-    #region Inner Class : AutoWirer
-
     /// <summary>
     /// Performs the matching up of handler methods to one or more source events.
     /// </summary>
@@ -115,8 +93,6 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
     /// </remarks>
     private sealed class AutoWirer
     {
-        #region Constructor (s) / Destructor
-
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Objects.Support.AutoWiringEventHandlerValue.AutoWirer"/> class.
@@ -141,10 +117,6 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
             Handler = handler;
             MethodName = methodName;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Wires up events on the source to methods exposed on the handler.
@@ -202,8 +174,6 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
             // and for each method that satisfied the criteria...
             foreach (MethodInfo method in methods)
             {
-                #region Instrumentation
-
                 if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.LogDebug(string.Format(
@@ -212,8 +182,6 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
                         method.Name,
                         theEvent.Name));
                 }
-
-                #endregion
 
                 IEventHandlerValue myHandler = method.IsStatic ? new StaticEventHandlerValue() : (IEventHandlerValue) new InstanceEventHandlerValue();
                 myHandler.EventName = theEvent.Name;
@@ -239,10 +207,6 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
 
             return methodName;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The object exposing the event (s) being wired up.
@@ -296,18 +260,10 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
             set { _eventName = value; }
         }
 
-        #endregion
-
-        #region Fields
-
         private object _source;
         private object _handler;
         private string _methodName;
         private string _eventName;
         private Type _handlerType;
-
-        #endregion
     }
-
-    #endregion
 }

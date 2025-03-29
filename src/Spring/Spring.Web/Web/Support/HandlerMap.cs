@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Web;
 using Microsoft.Extensions.Logging;
-
-#endregion
 
 namespace Spring.Web.Support;
 
@@ -184,8 +176,6 @@ public class HandlerMap : IDictionary
         return ((IEnumerable) this._internalTable).GetEnumerator();
     }
 
-    #region Unsupported methods
-
     /// <summary>
     /// Not supported by this implementation.
     /// </summary>
@@ -231,6 +221,4 @@ public class HandlerMap : IDictionary
             throw new NotSupportedException();
         }
     }
-
-    #endregion
 }

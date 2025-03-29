@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Expressions;
 
@@ -33,8 +25,6 @@ namespace Spring.Expressions;
 [TestFixture]
 public class ConstructorNodeTests
 {
-    #region Test Classes
-
     public class PublicTestClass
     {
         public string _s;
@@ -59,8 +49,6 @@ public class ConstructorNodeTests
         {
         }
     }
-
-    #endregion Test Classes
 
     [Test]
     public void CanCreatePublicInstance()

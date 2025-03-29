@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Xml;
 using NUnit.Framework;
 using Spring.Core.IO;
@@ -29,8 +23,6 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Xml;
 using Spring.Validation.Actions;
 using Spring.Validation.Config;
-
-#endregion
 
 namespace Spring.Validation;
 

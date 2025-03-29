@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using Spring.Aop.Framework;
@@ -41,13 +37,7 @@ namespace Spring.Transaction.Interceptor;
 [Serializable]
 public class TransactionAttributeSourceAdvisor : StaticMethodMatcherPointcutAdvisor
 {
-    #region Fields
-
     private ITransactionAttributeSource _transactionAttributeSource;
-
-    #endregion
-
-    #region Constructor(s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TransactionAttributeSourceAdvisor"/> class.
@@ -75,10 +65,6 @@ public class TransactionAttributeSourceAdvisor : StaticMethodMatcherPointcutAdvi
         SetTxAttributeSource(transactionInterceptor);
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Sets the transaction interceptor.
     /// </summary>
@@ -92,10 +78,6 @@ public class TransactionAttributeSourceAdvisor : StaticMethodMatcherPointcutAdvi
             SetTxAttributeSource(value);
         }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Tests the input method to see if it's covered by the advisor.
@@ -124,6 +106,4 @@ public class TransactionAttributeSourceAdvisor : StaticMethodMatcherPointcutAdvi
 
         _transactionAttributeSource = transactionInterceptor.TransactionAttributeSource;
     }
-
-    #endregion
 }

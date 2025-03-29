@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Runtime.Serialization;
@@ -38,15 +34,11 @@ public abstract class BaseNode : SpringAST, IExpression
         }
     }
 
-    #region EvaluationContext class
-
     /// <summary>
     /// Holds the state during evaluating an expression.
     /// </summary>
     protected class EvaluationContext
     {
-        #region Holder classes
-
         private class ThisContextHolder : IDisposable
         {
             private readonly EvaluationContext owner;
@@ -81,8 +73,6 @@ public abstract class BaseNode : SpringAST, IExpression
                 owner.LocalVariables = savedLocalVariables;
             }
         }
-
-        #endregion
 
         /// <summary>
         /// Gets/Sets the root context of the current evaluation
@@ -137,8 +127,6 @@ public abstract class BaseNode : SpringAST, IExpression
             return new LocalVariablesHolder(this, newLocalVariables);
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Create a new instance

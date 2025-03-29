@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Reflection;
@@ -39,11 +35,7 @@ public class MethodMapTransactionAttributeSource : ITransactionAttributeSource
     private IDictionary _methodMap;
     private IDictionary _nameMap;
 
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(MethodMapTransactionAttributeSource));
-
-    #endregion
 
     /// <summary>
     /// Creates a new instance of the
@@ -224,8 +216,6 @@ public class MethodMapTransactionAttributeSource : ITransactionAttributeSource
         return PatternMatchUtils.SimpleMatch(mappedName, methodName);
     }
 
-    #region ITransactionAttributeSource Members
-
     /// <summary>
     /// Return the <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> for this
     /// method.
@@ -286,6 +276,4 @@ public class MethodMapTransactionAttributeSource : ITransactionAttributeSource
 
         return (ITransactionAttribute) _methodMap[method];
     }
-
-    #endregion
 }

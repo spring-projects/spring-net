@@ -10,8 +10,6 @@ namespace Spring.DataBinding;
 /// <author>Aleksandar Seovic</author>
 public abstract class AbstractBinding : IBinding
 {
-    #region Fields
-
     /// <summary>
     /// The name of the always filled error provider
     /// </summary>
@@ -23,10 +21,6 @@ public abstract class AbstractBinding : IBinding
     private BindingDirection direction = BindingDirection.Bidirectional;
     private BindingErrorMessage errorMessage;
     private string[] errorProviders;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets a flag specifying whether this binding is valid.
@@ -99,8 +93,6 @@ public abstract class AbstractBinding : IBinding
         get { return errorProviders; }
     }
 
-    #endregion
-
     /// <summary>
     /// Initializes a new instance of the <see cref="T:System.Object"></see> class.
     /// </summary>
@@ -109,8 +101,6 @@ public abstract class AbstractBinding : IBinding
         this.errorMessage = new BindingErrorMessage(this.Id, "Binding-Error");
         this.errorProviders = new string[] { ALL_BINDINGERRORS_PROVIDER };
     }
-
-    #region IBinding Implementation
 
     /// <summary>
     /// Binds source object to target object.
@@ -206,8 +196,6 @@ public abstract class AbstractBinding : IBinding
         providers.CopyTo(errorProviders, 0);
         this.errorProviders = errorProviders;
     }
-
-    #endregion
 
     ///<summary>
     ///Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.

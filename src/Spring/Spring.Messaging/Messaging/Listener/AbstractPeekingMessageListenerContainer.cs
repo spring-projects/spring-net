@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
@@ -51,13 +47,7 @@ namespace Spring.Messaging.Listener;
 /// </remarks>
 public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageListenerContainer
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(AbstractPeekingMessageListenerContainer));
-
-    #endregion
-
-    #region Fields
 
     private Thread dispatcherThread;
 
@@ -73,10 +63,6 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
     private object activeListenerMonitor = new object();
 
     private TimeSpan listenerTimeLimit = TimeSpan.Zero;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the listener time limit to continuously receive messages.
@@ -120,10 +106,6 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
     {
         get { return messageQueue; }
     }
-
-    #endregion
-
-    #region Protected Container Lifecycle Methods
 
     /// <summary>
     /// Retrieves a MessageQueue instance given the MessageQueueObjectName
@@ -179,10 +161,6 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
             LOG.LogDebug("Dispatcher thread terminated.");
         }
     }
-
-    #endregion
-
-    #region Protected Methods
 
     /// <summary>
     /// Starts peeking on the DefaultMessageQueue.  This is the method that must be called
@@ -245,8 +223,6 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
 
                 LOG.LogDebug("Submitting " + numberOfListenersToSchedule + " listener work items");
 
-                #region Submit to thread pool up to max number of concurrent listeners
-
                 for (int i = 1; i <= numberOfListenersToSchedule; i++)
                 {
                     bool wasQueued = ThreadPool.QueueUserWorkItem(new WaitCallback(ReceiveAndExecute), MessageQueue);
@@ -264,8 +240,6 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
 
                 Monitor.PulseAll(activeListenerMonitor);
             }
-
-            #endregion
         }
         catch (MessageQueueException mex)
         {
@@ -316,8 +290,6 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
         {
             LOG.LogDebug("Executing ReceiveAndExecute");
 
-            #region Increment Active Listener Count
-
             lock (activeListenerMonitor)
             {
                 activeListenerCount++;
@@ -326,8 +298,6 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
                 LOG.LogDebug("ScheduledListenerCount = " + scheduledListenerCount);
                 Monitor.PulseAll(activeListenerMonitor);
             }
-
-            #endregion
 
             DateTime expirationTime = DateTime.Now.Add(ListenerTimeLimit);
             while (!listenerTimeOut && messageReceived)
@@ -361,8 +331,6 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
         {
             LOG.LogDebug("Exiting ReceiveAndExecute");
 
-            #region Decrementing Listener Count and call StartPeeking if last listener or there are still messages to process
-
             lock (activeListenerMonitor)
             {
                 activeListenerCount--;
@@ -382,8 +350,6 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
 
                 Monitor.PulseAll(activeListenerMonitor);
             }
-
-            #endregion
         }
     }
 
@@ -450,6 +416,4 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
     protected virtual void BeforeMessageReceived(MessageQueue messageQueue)
     {
     }
-
-    #endregion
 }

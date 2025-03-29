@@ -4,8 +4,6 @@ namespace Spring.Messaging.Nms.Connections;
 
 public class TestConnectionFactory : IConnectionFactory
 {
-    #region IConnectionFactory Members
-
     public IConnection CreateConnection()
     {
         return new TestConnection();
@@ -89,6 +87,4 @@ public class TestConnectionFactory : IConnectionFactory
         get { throw new NotImplementedException(); }
         set { throw new NotImplementedException(); }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Context;
 using Spring.Messaging.Support.Converters;
@@ -97,8 +93,6 @@ internal class MessageQueueResourceSynchronization : ITransactionSynchronization
         this.resourceKey = resourceKey;
     }
 
-    #region ITransactionSynchronization Members
-
     public void Suspend()
     {
         if (holderActive)
@@ -135,8 +129,6 @@ internal class MessageQueueResourceSynchronization : ITransactionSynchronization
     {
         //TODO SPRNET-1244
     }
-
-    #endregion
 }
 
 /// <summary> Callback interface for resource creation.

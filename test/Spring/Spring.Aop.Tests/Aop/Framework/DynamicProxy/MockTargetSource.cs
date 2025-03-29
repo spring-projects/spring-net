@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
-
-#region Imports
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy;
 
@@ -54,8 +46,6 @@ public class MockTargetSource : ITargetSource
             throw new Exception("Expectation failed: " + gets + " gets and " + releases + " releases");
     }
 
-    #region ITargetSource Members
-
     public Type TargetType
     {
         get { return _target.GetType(); }
@@ -78,6 +68,4 @@ public class MockTargetSource : ITargetSource
             throw new Exception("Released wrong target");
         ++releases;
     }
-
-    #endregion
 }

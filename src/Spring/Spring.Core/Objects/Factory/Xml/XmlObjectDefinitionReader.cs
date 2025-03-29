@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright  2002-2005 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Xml;
 using System.Xml.Schema;
 using Microsoft.Extensions.Logging;
@@ -27,8 +21,6 @@ using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml;
 
@@ -53,8 +45,6 @@ namespace Spring.Objects.Factory.Xml;
 /// <author>Rick Evans (.NET)</author>
 public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
 {
-    #region Utility Classes
-
     /// <summary>
     /// For retrying the parse process
     /// </summary>
@@ -65,19 +55,11 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
         }
     }
 
-    #endregion
-
-    #region Fields
-
     [NonSerialized] private XmlResolver resolver;
 
     private Type documentReaderType;
     private INamespaceParserResolver namespaceParserResolver;
     private IObjectDefinitionFactory objectDefinitionFactory;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -127,10 +109,6 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
         Resolver = resolver;
         this.objectDefinitionFactory = objectDefinitionFactory;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The <see cref="System.Xml.XmlResolver"/>to be used for parsing.
@@ -197,10 +175,6 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
         }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Load object definitions from the supplied XML <paramref name="resource"/>.
     /// </summary>
@@ -221,14 +195,10 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
                 ("Resource cannot be null: expected an XML resource.");
         }
 
-        #region Instrumentation
-
         if (log.IsEnabled(LogLevel.Debug))
         {
             log.LogDebug("Loading XML object definitions from " + resource);
         }
-
-        #endregion
 
         try
         {
@@ -245,25 +215,17 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
             }
             finally
             {
-                #region Close stream
-
                 try
                 {
                     stream.Close();
                 }
                 catch (IOException ex)
                 {
-                    #region Instrumentation
-
                     if (log.IsEnabled(LogLevel.Warning))
                     {
                         log.LogWarning(ex, "Could not close stream.");
                     }
-
-                    #endregion
                 }
-
-                #endregion
             }
         }
         catch (IOException ex)
@@ -342,16 +304,12 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
             reader = XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(), HandleValidation);
         }
 
-        #region Instrumentation
-
         if (log.IsEnabled(LogLevel.Debug))
         {
             log.LogDebug("Using the following XmlReader implementation : " + reader.GetType());
         }
 
         return reader;
-
-        #endregion
     }
 
     /// <summary>
@@ -379,15 +337,11 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
         }
         else
         {
-            #region Instrumentation
-
             if (log.IsEnabled(LogLevel.Warning))
             {
                 string message = "Ignored XML validation warning: " + args.Message;
                 log.LogWarning(args.Exception, message);
             }
-
-            #endregion
         }
     }
 
@@ -456,6 +410,4 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
     {
         return new DefaultNamespaceHandlerResolver();
     }
-
-    #endregion
 }

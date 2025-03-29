@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -27,8 +21,6 @@ using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 using Spring.Core.TypeResolution;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Proxy;
 
@@ -48,8 +40,6 @@ namespace Spring.Proxy;
 /// <author>Bruno Baia</author>
 public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGenerator
 {
-    #region Fields
-
     /// <summary>
     /// The shared <see cref="ILogger"/> instance for this class (and derived classes).
     /// </summary>
@@ -64,10 +54,6 @@ public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGe
     private bool _proxyTargetAttributes = true;
     private IList _typeAttributes = new ArrayList();
     private IDictionary _memberAttributes = new Hashtable();
-
-    #endregion
-
-    #region IProxyTypeBuilder Members
 
     /// <summary>
     /// Creates the proxy type.
@@ -171,10 +157,6 @@ public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGe
         set { _memberAttributes = value; }
     }
 
-    #endregion
-
-    #region IProxyTypeGenerator Members
-
     /// <summary>
     /// Generates the IL instructions that pushes
     /// the proxy instance on stack.
@@ -192,12 +174,6 @@ public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGe
     /// <param name="il">The IL generator to use.</param>
     public abstract void PushTarget(ILGenerator il);
 
-    #endregion
-
-    #region Protected Methods
-
-    #region Type generation
-
     /// <summary>
     /// Creates an appropriate type builder.
     /// </summary>
@@ -212,10 +188,6 @@ public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGe
 
         return DynamicProxyManager.CreateTypeBuilder(typeName, baseType);
     }
-
-    #endregion
-
-    #region Attributes generation
 
     /// <summary>
     /// Applies attributes to the proxy class.
@@ -543,10 +515,6 @@ public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGe
     private static readonly FieldInfo CustomAttributeConstructorField =
         typeof(CustomAttributeBuilder).GetField("m_con", BindingFlags.Instance | BindingFlags.NonPublic);
 
-    #endregion
-
-    #region Constructors generation
-
     /// <summary>
     /// Defines the types of the parameters for the specified constructor.
     /// </summary>
@@ -594,10 +562,6 @@ public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGe
         ConstructorBuilder builder, ILGenerator il, ConstructorInfo constructor)
     {
     }
-
-    #endregion
-
-    #region Members generation
 
     /// <summary>
     /// Implements an interface.
@@ -877,8 +841,6 @@ public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGe
         }
     }
 
-    #endregion
-
     /// <summary>
     /// Returns an array of <see cref="System.Type"/>s that represent
     /// the proxiable interfaces.
@@ -935,6 +897,4 @@ public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGe
     {
         return intf == typeof(ISerializable);
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Globalization;
@@ -79,8 +75,6 @@ namespace Spring.Objects.Support;
 /// <author>Simon White (.NET)</author>
 public class MethodInvoker
 {
-    #region Fields
-
     /// <summary>
     /// The value returned from the invocation of a method that returns void.
     /// </summary>
@@ -109,10 +103,6 @@ public class MethodInvoker
         BindingFlags.NonPublic |
         BindingFlags.IgnoreCase;
 
-    #endregion
-
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the <see cref="Spring.Objects.Support.MethodInvoker"/> class.
     /// </summary>
@@ -122,10 +112,6 @@ public class MethodInvoker
         NamedArguments = new Hashtable();
         PreparedArguments = new object[] { };
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The target <see cref="System.Type"/> on which to call the target method.
@@ -276,10 +262,6 @@ public class MethodInvoker
             }
         }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Prepare the specified method.
@@ -539,6 +521,4 @@ public class MethodInvoker
 
         return (result == null ? Void : result);
     }
-
-    #endregion
 }

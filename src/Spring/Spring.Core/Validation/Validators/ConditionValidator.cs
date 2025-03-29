@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Expressions;
 using Spring.Util;
 
@@ -29,8 +25,6 @@ namespace Spring.Validation;
 /// <author>Aleksandar Seovic</author>
 public class ConditionValidator : BaseSimpleValidator
 {
-    #region Constructors
-
     /// <summary>
     /// Creates a new instance of the <see cref="ConditionValidator"/> class.
     /// </summary>
@@ -57,8 +51,6 @@ public class ConditionValidator : BaseSimpleValidator
     {
         AssertUtils.ArgumentNotNull(test, "test");
     }
-
-    #endregion
 
     /// <summary>
     /// Evaluates the test using condition evaluator.

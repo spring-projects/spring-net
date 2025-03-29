@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Data;
 using System.Reflection;
@@ -243,8 +239,6 @@ public class SimpleAdoTestUtils
             blockCollector.Add(tmp);
     }
 
-    #region To be probably added in a future version
-
     //        public static void ExecuteSqlScript( AdoTemplate adoTemplate, IResource scriptResource, string blockDelimiter, bool continueOnError )
     //        {
     //            ExecuteSqlScript( adoTemplate, new EncodedResource(scriptResource), new Regex( Regex.Escape(blockDelimiter), REGEX_OPTIONS ), continueOnError );
@@ -282,8 +276,6 @@ public class SimpleAdoTestUtils
     //            return exps;
     //        }
     //
-
-    #endregion
 
     private class PlatformTransactionHolder : IPlatformTransaction
     {

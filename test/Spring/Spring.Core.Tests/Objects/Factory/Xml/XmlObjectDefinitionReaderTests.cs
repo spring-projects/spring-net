@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using System.Xml;
 using NUnit.Framework;
@@ -27,8 +21,6 @@ using Spring.Aop.Config;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml;
 
@@ -245,8 +237,6 @@ public class XmlObjectDefinitionReaderTests
         }
     }
 
-    #region ThrowsObjectDefinitionStoreExceptionOnErrorDuringObjectDefinitionRegistration Helper
-
     private class TestXmlObjectDefinitionReader : XmlObjectDefinitionReader
     {
         public TestXmlObjectDefinitionReader(IObjectDefinitionRegistry registry)
@@ -267,8 +257,6 @@ public class XmlObjectDefinitionReaderTests
             return new ThrowingObjectDefinitionDocumentReader();
         }
     }
-
-    #endregion
 
     [Test]
     public void ThrowsObjectDefinitionStoreExceptionOnErrorDuringObjectDefinitionRegistration()

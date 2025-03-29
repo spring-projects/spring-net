@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
-
-#endregion
 
 namespace Spring.Aop.Framework;
 
@@ -166,10 +158,6 @@ public sealed class AopContext
         proxyStack.Pop();
     }
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Aop.Framework.AopContext"/> class.
@@ -184,6 +172,4 @@ public sealed class AopContext
     }
 
     // CLOVER:ON
-
-    #endregion
 }

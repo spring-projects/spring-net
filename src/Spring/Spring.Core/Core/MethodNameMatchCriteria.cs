@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -41,8 +33,6 @@ namespace Spring.Core;
 /// <author>Bruno Baia</author>
 public class MethodNameMatchCriteria : ICriteria
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="MethodNameMatchCriteria"/> class.
@@ -72,10 +62,6 @@ public class MethodNameMatchCriteria : ICriteria
         Pattern = pattern;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The number of parameters that a <see cref="System.Reflection.MethodInfo"/>
     /// must have to satisfy this criteria.
@@ -92,10 +78,6 @@ public class MethodNameMatchCriteria : ICriteria
             pattern = value;
         }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
@@ -118,11 +100,5 @@ public class MethodNameMatchCriteria : ICriteria
         return satisfied;
     }
 
-    #endregion
-
-    #region Fields
-
     private string pattern;
-
-    #endregion
 }

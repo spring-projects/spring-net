@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -35,8 +27,6 @@ namespace Spring.Core;
 [Serializable]
 public class CannotLoadObjectTypeException : FatalReflectionException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CannotLoadObjectTypeException"/> class.
     /// </summary>
@@ -106,10 +96,6 @@ public class CannotLoadObjectTypeException : FatalReflectionException
         objectTypeName = info.GetString("ObjectTypeName");
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets he name of the object we are trying to load.
     /// </summary>
@@ -137,10 +123,6 @@ public class CannotLoadObjectTypeException : FatalReflectionException
         get { return resourceDescription; }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
     /// the data needed to serialize the target object.
@@ -162,13 +144,7 @@ public class CannotLoadObjectTypeException : FatalReflectionException
         info.AddValue("ObjectTypeName", ObjectTypeName);
     }
 
-    #endregion
-
-    #region Fields
-
     private string resourceDescription;
     private string objectName;
     private string objectTypeName;
-
-    #endregion
 }

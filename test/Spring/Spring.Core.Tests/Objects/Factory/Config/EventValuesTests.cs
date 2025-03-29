@@ -50,8 +50,6 @@ public class EventValuesTests
 
     internal class MyEventHandler : IEventHandlerValue
     {
-        #region IEventHandlerValue Members
-
         private object _source = new object();
         private string _eventName = "MyEvent";
         private string _methodName = "MyEventHandlerMethod";
@@ -95,14 +93,10 @@ public class EventValuesTests
         public void Wire(object source, object handler)
         {
         }
-
-        #endregion
     }
 
     internal class MyEventHandler2 : IEventHandlerValue
     {
-        #region IEventHandlerValue Members
-
         private object _source = new object();
         private string _eventName = "MyEvent";
         private string _methodName = "MyEventHandlerMethod";
@@ -146,7 +140,5 @@ public class EventValuesTests
         public void Wire(object source, object handler)
         {
         }
-
-        #endregion
     }
 }

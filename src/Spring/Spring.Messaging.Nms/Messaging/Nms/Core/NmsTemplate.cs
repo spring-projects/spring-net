@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Support;
@@ -48,13 +44,7 @@ namespace Spring.Messaging.Nms.Core;
 /// <author>Mark Pollack (.NET)</author>
 public class NmsTemplate : NmsDestinationAccessor, INmsOperations
 {
-    #region Logging
-
     private readonly ILogger<NmsTemplate> logger = LogManager.GetLogger<NmsTemplate>();
-
-    #endregion
-
-    #region Fields
 
     /// <summary>
     /// Timeout value indicating that a receive operation should
@@ -89,10 +79,6 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
 
     private MsgDeliveryMode deliveryMode = NMSConstants.defaultDeliveryMode;
 
-    #endregion
-
-    #region Constructor (s)
-
     /// <summary> Create a new NmsTemplate.</summary>
     /// <remarks>
     /// <para>Note: The ConnectionFactory has to be set before using the instance.
@@ -114,10 +100,6 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
         ConnectionFactory = connectionFactory;
         AfterPropertiesSet();
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary> Initialize the default implementations for the template's strategies:
     /// DynamicDestinationResolver and SimpleMessageConverter.
@@ -196,10 +178,6 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
             ConnectionFactoryUtils.ReleaseConnection(conToClose, ConnectionFactory, startConnection);
         }
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the default destination to be used on send/receive operations that do not
@@ -373,8 +351,6 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
         set { timeToLive = value; }
     }
 
-    #endregion
-
     /// <summary>
     /// Extract the content from the given JMS message.
     /// </summary>
@@ -389,8 +365,6 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
 
         return null;
     }
-
-    #region NMS Factory Methods
 
     /// <summary> Fetch an appropriate Connection from the given MessageResourceHolder.
     /// </summary>
@@ -598,10 +572,6 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
             producer.Send(message);
         }
     }
-
-    #endregion
-
-    #region IMessageOperations Implementation
 
     /// <summary>
     /// Execute the action specified by the given action object within
@@ -1204,10 +1174,6 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
         return DoConvertFromMessage(ReceiveSelected(destinationName, messageSelector));
     }
 
-    #endregion
-
-    #region Supporting Internal Classes
-
     /// <summary>
     /// ResourceFactory implementation that delegates to this template's callback methods.
     /// </summary>
@@ -1412,8 +1378,6 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
             }
         }
     }
-
-    #endregion
 
     private class ExecuteSessionCallbackUsingDelegate : ISessionCallback
     {

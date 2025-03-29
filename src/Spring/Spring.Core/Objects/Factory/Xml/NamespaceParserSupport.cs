@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using Spring.Objects.Factory.Config;
@@ -36,8 +32,6 @@ namespace Spring.Objects.Factory.Xml;
 public abstract class NamespaceParserSupport : INamespaceParser
 {
     private readonly IDictionary<string, IObjectDefinitionParser> objectParsers = new Dictionary<string, IObjectDefinitionParser>();
-
-    #region IXmlObjectDefinitionParser Members
 
     /// <summary>
     /// Invoked by <see cref="NamespaceParserRegistry"/> after construction but before any
@@ -110,6 +104,4 @@ public abstract class NamespaceParserSupport : INamespaceParser
         AssertUtils.ArgumentNotNull(parser, "parser");
         objectParsers[elementName] = parser;
     }
-
-    #endregion
 }

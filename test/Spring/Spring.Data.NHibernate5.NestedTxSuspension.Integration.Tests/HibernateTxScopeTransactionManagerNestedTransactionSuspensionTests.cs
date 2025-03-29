@@ -6,12 +6,8 @@ namespace Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests;
 [TestFixture]
 public class HibernateTxScopeTransactionManagerNestedTransactionSuspensionTests : AbstractTransactionalSpringContextTests
 {
-    #region DI
-
     public IService1 Service1 { get; set; }
     public IService2 Service2 { get; set; }
-
-    #endregion
 
     protected override string[] ConfigLocations
     {

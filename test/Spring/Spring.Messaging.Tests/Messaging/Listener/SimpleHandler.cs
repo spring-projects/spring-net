@@ -4,11 +4,7 @@ namespace Spring.Messaging.Listener;
 
 public class SimpleHandler
 {
-    #region Logging
-
     private static readonly ILogger<SimpleHandler> LOG = LogManager.GetLogger<SimpleHandler>();
-
-    #endregion
 
     private int messageCount;
 

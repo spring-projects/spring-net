@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.ComponentModel;
 using System.Reflection;
 using System.Security.Permissions;
@@ -33,8 +27,6 @@ using Spring.Globalization;
 using Spring.Util;
 using AttributeCollection = System.Web.UI.AttributeCollection;
 using BindingDirection = Spring.DataBinding.BindingDirection;
-
-#endregion
 
 namespace Spring.Web.UI.Controls;
 

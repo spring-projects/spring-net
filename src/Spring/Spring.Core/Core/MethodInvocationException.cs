@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -45,8 +37,6 @@ public class MethodInvocationException : PropertyAccessException
             return "methodInvocation";
         }
     }
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the MethodInvocationException class.
@@ -112,6 +102,4 @@ public class MethodInvocationException : PropertyAccessException
         : base(info, context)
     {
     }
-
-    #endregion
 }

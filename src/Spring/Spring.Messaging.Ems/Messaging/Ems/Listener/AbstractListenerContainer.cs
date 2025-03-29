@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Context;
@@ -46,13 +42,7 @@ namespace Spring.Messaging.Ems.Listener;
 /// <author>Mark Pollack</author>
 public abstract class AbstractListenerContainer : EmsDestinationAccessor, ILifecycle, IObjectNameAware, IDisposable
 {
-    #region Logging
-
     private readonly ILogger<AbstractListenerContainer> logger = LogManager.GetLogger<AbstractListenerContainer>();
-
-    #endregion
-
-    #region Fields
 
     private String clientId;
 
@@ -77,8 +67,6 @@ public abstract class AbstractListenerContainer : EmsDestinationAccessor, ILifec
     /// The monitor object to lock on when performing operations that update the lifecycle of the container.
     /// </summary>
     protected object lifecycleMonitor = new object();
-
-    #endregion
 
     /// <summary>
     /// Gets or sets the client id for a shared Connection created and used by this container.

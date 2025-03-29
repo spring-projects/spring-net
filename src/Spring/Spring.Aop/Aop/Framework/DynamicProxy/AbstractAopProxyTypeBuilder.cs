@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection.Emit;
 using Spring.Proxy;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy;
 
@@ -36,8 +28,6 @@ namespace Spring.Aop.Framework.DynamicProxy;
 public abstract class AbstractAopProxyTypeBuilder :
     AbstractProxyTypeBuilder, IAopProxyTypeGenerator
 {
-    #region IProxyTypeGenerator Members
-
     /// <summary>
     /// Generates the IL instructions that pushes
     /// the target instance on which calls should be delegated to.
@@ -50,10 +40,6 @@ public abstract class AbstractAopProxyTypeBuilder :
         il.EmitCall(OpCodes.Callvirt, References.GetTargetMethod, null);
     }
 
-    #endregion
-
-    #region IAopProxyTypeGenerator Members
-
     /// <summary>
     /// Generates the IL instructions that pushes
     /// the current <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/>
@@ -61,10 +47,6 @@ public abstract class AbstractAopProxyTypeBuilder :
     /// </summary>
     /// <param name="il">The IL generator to use.</param>
     public abstract void PushAdvisedProxy(ILGenerator il);
-
-    #endregion
-
-    #region Protected Methods
 
     /// <inheritdoc />
     protected override IList GetTypeAttributes(Type type)
@@ -85,6 +67,4 @@ public abstract class AbstractAopProxyTypeBuilder :
 
         return attrs;
     }
-
-    #endregion
 }

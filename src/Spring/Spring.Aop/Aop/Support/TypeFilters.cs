@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
-
-#region Imports
-
-#endregion
 
 namespace Spring.Aop.Support;
 
@@ -133,10 +125,6 @@ public sealed class TypeFilters
         }
     }
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Aop.Support.TypeFilters"/> class.
@@ -151,6 +139,4 @@ public sealed class TypeFilters
     }
 
     // CLOVER:ON
-
-    #endregion
 }

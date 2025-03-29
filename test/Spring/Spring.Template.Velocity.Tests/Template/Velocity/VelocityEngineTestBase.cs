@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Text;
 using NUnit.Framework;
 using NVelocity.App;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Template.Velocity;
 
@@ -51,8 +43,6 @@ public class VelocityEngineTestBase
     /// </summary>
     protected const string TEST_VALUE = "TEST_VALUE";
 
-    #region setup
-
     /// <summary>
     /// Test setup.
     /// </summary>
@@ -66,10 +56,6 @@ public class VelocityEngineTestBase
         model.Add("var1", TEST_VALUE);
     }
 
-    #endregion
-
-    #region teardown
-
     /// <summary>
     /// Test cleanup.
     /// </summary>
@@ -80,10 +66,6 @@ public class VelocityEngineTestBase
         model.Clear();
     }
 
-    #endregion
-
-    #region base helper methods
-
     /// <summary>
     /// Basic method for asserting the expected TEST_VALUE in the merged template
     /// </summary>
@@ -92,6 +74,4 @@ public class VelocityEngineTestBase
         string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngine, template, Encoding.UTF8.WebName, model);
         Assert.AreEqual(string.Format("value={0}", TEST_VALUE), mergedTemplate);
     }
-
-    #endregion
 }

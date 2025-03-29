@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.TypeResolution;
 
@@ -40,16 +32,8 @@ namespace Spring.Core.TypeResolution;
 /// <author>Bruno Baia</author>
 public sealed class TypeResolutionUtils
 {
-    #region Fields
-
     private static readonly ITypeResolver internalTypeResolver
         = new CachedTypeResolver(new GenericTypeResolver());
-
-    #endregion
-
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
 
     /// <summary>
     /// Creates a new instance of the <see cref="Spring.Core.TypeResolution.TypeResolutionUtils"/> class.
@@ -62,12 +46,6 @@ public sealed class TypeResolutionUtils
     private TypeResolutionUtils()
     {
     }
-
-    // CLOVER:ON
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Resolves the supplied type name into a <see cref="System.Type"/>
@@ -146,8 +124,6 @@ public sealed class TypeResolutionUtils
         return interfaces;
     }
 
-    #region MethodMatch
-
     // TODO : Use the future Pointcut expression language instead
 
     private readonly static Regex methodMatchRegex = new Regex(
@@ -201,8 +177,4 @@ public sealed class TypeResolutionUtils
 
         return true;
     }
-
-    #endregion
-
-    #endregion
 }

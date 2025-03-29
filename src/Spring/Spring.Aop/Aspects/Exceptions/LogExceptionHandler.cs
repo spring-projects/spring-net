@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Microsoft.Extensions.Logging;
 using Spring.Expressions;
 
@@ -29,8 +25,6 @@ namespace Spring.Aspects.Exceptions;
 /// <author>Mark Pollack</author>
 public class LogExceptionHandler : AbstractExceptionHandler
 {
-    #region Fields
-
     private string logName = "LogExceptionHandler";
 
     private LogLevel logLevel = LogLevel.Trace;
@@ -40,8 +34,6 @@ public class LogExceptionHandler : AbstractExceptionHandler
     private bool first = true;
 
     private string actionExpressionText;
-
-    #endregion
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LogExceptionHandler"/> class.

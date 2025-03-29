@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -35,8 +29,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Text.RegularExpressions;
 using Spring.Expressions;
@@ -56,15 +48,9 @@ namespace Spring.Validation;
 /// <author>Aleksandar Seovic</author>
 public class RegularExpressionValidator : BaseSimpleValidator
 {
-    #region Fields
-
     private string expression = string.Empty;
     private bool allowPartialMatching = false;
     private RegexOptions options;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the <see cref="RegularExpressionValidator"/> class.
@@ -99,10 +85,6 @@ public class RegularExpressionValidator : BaseSimpleValidator
         this.expression = expression;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// The regular expression <b>text</b> to match against.
     /// </summary>
@@ -133,8 +115,6 @@ public class RegularExpressionValidator : BaseSimpleValidator
         get { return options; }
         set { options = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Validates an object.

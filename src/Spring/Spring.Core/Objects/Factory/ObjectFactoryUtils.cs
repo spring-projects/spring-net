@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Runtime.CompilerServices;
 using Spring.Util;
@@ -38,8 +34,6 @@ namespace Spring.Objects.Factory;
 /// <author>Rick Evans (.NET)</author>
 public sealed class ObjectFactoryUtils
 {
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Objects.Factory.ObjectFactoryUtils"/> class.
@@ -53,8 +47,6 @@ public sealed class ObjectFactoryUtils
     private ObjectFactoryUtils()
     {
     }
-
-    // CLOVER:ON
 
     /// <summary>
     /// Used to dereference an <see cref="Spring.Objects.Factory.IFactoryObject"/>

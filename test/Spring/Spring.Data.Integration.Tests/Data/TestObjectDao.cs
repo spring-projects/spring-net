@@ -125,8 +125,6 @@ public class TestObjectDao : AdoDaoSupport, ITestObjectDao
 
     private class TestObjectRowMapper : IRowMapper
     {
-        #region IRowMapper Members
-
         public object MapRow(IDataReader dataReader, int rowNum)
         {
             TestObject to = new TestObject();
@@ -135,8 +133,6 @@ public class TestObjectDao : AdoDaoSupport, ITestObjectDao
             to.Name = dataReader.GetString(2);
             return to;
         }
-
-        #endregion
     }
 
     public void Cleanup()

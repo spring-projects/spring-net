@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Objects.Factory;
 using Spring.Util;
 
@@ -33,15 +29,9 @@ namespace Spring.Data.Common;
 /// </remarks>
 public class DbProviderFactoryObject : IFactoryObject, IInitializingObject
 {
-    #region Fields
-
     private string provider;
     private string connectionString;
     private IDbProvider dbProvider;
-
-    #endregion
-
-    #region Constructor
 
     /// <summary>
     /// Creates a new instance of the <see cref="DbProviderFactoryObject"/> class.
@@ -49,10 +39,6 @@ public class DbProviderFactoryObject : IFactoryObject, IInitializingObject
     public DbProviderFactoryObject()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the name of the database provider.
@@ -81,10 +67,6 @@ public class DbProviderFactoryObject : IFactoryObject, IInitializingObject
             connectionString = value.Trim();
         }
     }
-
-    #endregion
-
-    #region IFactoryObject Members
 
     /// <summary>
     /// Return an instance of and IDbProvider as configured by this factory
@@ -148,10 +130,6 @@ public class DbProviderFactoryObject : IFactoryObject, IInitializingObject
         get { return true; }
     }
 
-    #endregion
-
-    #region IInitializingObject Memebers
-
     /// <summary>
     /// Validates that the provider name is specified.
     /// </summary>
@@ -167,10 +145,6 @@ public class DbProviderFactoryObject : IFactoryObject, IInitializingObject
         ValidateProperties();
     }
 
-    #endregion
-
-    #region Private Memebers
-
     /// <summary>
     /// Validates the properties.
     /// </summary>
@@ -181,6 +155,4 @@ public class DbProviderFactoryObject : IFactoryObject, IInitializingObject
             throw new ArgumentException("The 'DbProviderName' property has not been set.");
         }
     }
-
-    #endregion
 }

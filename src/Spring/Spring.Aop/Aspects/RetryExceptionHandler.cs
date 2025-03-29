@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Aspects;
 
 /// <summary>
@@ -29,18 +25,12 @@ namespace Spring.Aspects;
 /// <author>Mark Pollack</author>
 public class RetryExceptionHandler : AbstractExceptionHandler
 {
-    #region Fields
-
     private int maximumRetryCount;
 
     private bool isDelayBased;
 
     private TimeSpan delayTimeSpan;
     private string delayRateExpression;
-
-    #endregion
-
-    #region Constructor
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RetryExceptionHandler"/> class.
@@ -56,10 +46,6 @@ public class RetryExceptionHandler : AbstractExceptionHandler
     public RetryExceptionHandler(string[] exceptionNames) : base(exceptionNames)
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets the maximum retry count.
@@ -104,10 +90,6 @@ public class RetryExceptionHandler : AbstractExceptionHandler
         set { delayRateExpression = value; }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Handles the exception.
     /// </summary>
@@ -119,6 +101,4 @@ public class RetryExceptionHandler : AbstractExceptionHandler
     {
         return null;
     }
-
-    #endregion
 }

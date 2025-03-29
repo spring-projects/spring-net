@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Web;
 using System.Web.UI;
@@ -43,8 +39,6 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
         get { return conversationManagerName; }
         set { conversationManagerName = value; }
     }
-
-    #region IHttpModule Members
 
     /// <summary>
     /// Add PostRequestHandlerExecute event to clear conversations with timeout exceeded.
@@ -124,10 +118,6 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
         }
     }
 
-    #endregion
-
-    #region IApplicationContextAware Members
-
     private IApplicationContext applicationContext;
 
     /// <summary>
@@ -161,6 +151,4 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
     {
         set { this.applicationContext = value; }
     }
-
-    #endregion
 }

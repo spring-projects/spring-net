@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections.Specialized;
 using System.Security.Permissions;
 using System.Web;
 using System.Web.Security;
 using Spring.Context.Support;
-
-#endregion
 
 namespace Spring.Web.Providers;
 
@@ -44,16 +36,10 @@ namespace Spring.Web.Providers;
 [AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 public class MembershipProviderAdapter : MembershipProvider, IMembershipProvider
 {
-    #region Field
-
     /// <summary>
     /// Reference to wrapped provider (defined in Spring context).
     /// </summary>
     private MembershipProvider wrappedProvider;
-
-    #endregion
-
-    #region ProviderBase members
 
     ///<summary>
     ///Initializes the provider.
@@ -108,10 +94,6 @@ public class MembershipProviderAdapter : MembershipProvider, IMembershipProvider
     {
         get { return this.wrappedProvider.Description; }
     }
-
-    #endregion
-
-    #region System.Web.Security.MembershipProvider members
 
     ///<summary>
     ///Adds a new membership user to the data source.
@@ -507,6 +489,4 @@ public class MembershipProviderAdapter : MembershipProvider, IMembershipProvider
     {
         get { return this.wrappedProvider.PasswordStrengthRegularExpression; }
     }
-
-    #endregion
 }

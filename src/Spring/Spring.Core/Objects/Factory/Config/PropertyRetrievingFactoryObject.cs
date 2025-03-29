@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using System.Text;
@@ -39,8 +35,6 @@ namespace Spring.Objects.Factory.Config;
 [Serializable]
 public class PropertyRetrievingFactoryObject : AbstractFactoryObject, IInitializingObject
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Objects.Factory.Config.PropertyRetrievingFactoryObject"/> class.
@@ -49,10 +43,6 @@ public class PropertyRetrievingFactoryObject : AbstractFactoryObject, IInitializ
     {
         Arguments = new object[] { };
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The <see cref="System.Type.AssemblyQualifiedName"/> of the static property
@@ -72,8 +62,6 @@ public class PropertyRetrievingFactoryObject : AbstractFactoryObject, IInitializ
                 {
                     indexWherePropertyStarts = typeName.LastIndexOf('.');
 
-                    #region Sanity Check
-
                     if (indexWherePropertyStarts == -1
                         || indexWherePropertyStarts == typeName.Length)
                     {
@@ -82,8 +70,6 @@ public class PropertyRetrievingFactoryObject : AbstractFactoryObject, IInitializ
                             "qualified Type plus property name: " +
                             "e.g. 'Example.MyExampleClass.MyProperty, MyAssembly'");
                     }
-
-                    #endregion
 
                     typeName = typeName.Substring(0, indexWherePropertyStarts);
                     StringBuilder buffer = new StringBuilder(typeName);
@@ -177,10 +163,6 @@ public class PropertyRetrievingFactoryObject : AbstractFactoryObject, IInitializ
         get { return _property; }
         set { _property = value; }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
@@ -288,16 +270,10 @@ public class PropertyRetrievingFactoryObject : AbstractFactoryObject, IInitializ
         return instance;
     }
 
-    #endregion
-
-    #region Fields
-
     private string _targetProperty;
     private ObjectWrapper _targetObjectWrapper;
     private object _targetObject;
     private Type _targetType;
     private PropertyInfo _property;
     private object[] _arguments;
-
-    #endregion
 }

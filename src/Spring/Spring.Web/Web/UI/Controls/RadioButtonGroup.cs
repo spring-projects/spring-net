@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -139,8 +135,6 @@ public class RadioButtonGroup : WebControl, IPostBackDataHandler
         this.RenderChildren(writer);
     }
 
-    #region IPostBackDataHandler Members
-
     /// <summary>
     /// Loads postback data into the control.
     /// </summary>
@@ -167,8 +161,6 @@ public class RadioButtonGroup : WebControl, IPostBackDataHandler
     {
         OnSelectionChanged(EventArgs.Empty);
     }
-
-    #endregion
 
     /// <summary>
     /// Method that is called on postback if selected radio button has changed.

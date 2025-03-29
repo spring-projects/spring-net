@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text.RegularExpressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -34,16 +26,10 @@ namespace Spring.Core;
 /// <author>Rick Evans</author>
 public abstract class RegularExpressionCriteria : ICriteria
 {
-    #region Constants
-
     /// <summary>
     /// The default pattern... matches absolutely anything.
     /// </summary>
     protected const string MatchAnyThingPattern = ".*";
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the
@@ -64,10 +50,6 @@ public abstract class RegularExpressionCriteria : ICriteria
     {
         Pattern = pattern;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The regular expression pattern to be applied.
@@ -100,10 +82,6 @@ public abstract class RegularExpressionCriteria : ICriteria
         set { _expression = value; }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
     /// this instance?
@@ -127,13 +105,7 @@ public abstract class RegularExpressionCriteria : ICriteria
         return Expression.IsMatch(input);
     }
 
-    #endregion
-
-    #region Fields
-
     private string _pattern;
     private RegexOptions _options;
     private Regex _expression;
-
-    #endregion
 }

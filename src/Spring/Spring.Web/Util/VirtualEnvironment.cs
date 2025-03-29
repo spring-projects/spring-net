@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.Web;
@@ -27,8 +21,6 @@ using System.Web.Caching;
 using System.Web.Compilation;
 using System.Web.SessionState;
 using Microsoft.Extensions.Logging;
-
-#endregion
 
 namespace Spring.Util;
 
@@ -73,15 +65,11 @@ public sealed class VirtualEnvironment
         return prevEnvironment;
     }
 
-    #region default IVirtualEnvironment Adapter for HttpRuntime
-
     /// <summary>
     /// Implementation for running within HttpRuntime
     /// </summary>
     private class HttpRuntimeEnvironment : IVirtualEnvironment
     {
-        #region HttpSessionState Adapter
-
         private class SessionDictionaryAdapter : ISessionState
         {
             private readonly HttpSessionState _sessionState;
@@ -229,8 +217,6 @@ public sealed class VirtualEnvironment
 #endif
         }
 
-        #endregion //HttpSessionState Adapter
-
         private static readonly ILogger log = LogManager.GetLogger(typeof(HttpRuntimeEnvironment));
 
         private class RewriteContext : IDisposable
@@ -259,14 +245,10 @@ public sealed class VirtualEnvironment
 
                     ctx.RewritePath(newPath, rebaseClientPath);
 
-                    #region Instrumentation
-
                     if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.LogDebug("rewriting path from " + currentFileDirectory + " to " + newPath + " results in " + ctx.Request.FilePath);
                     }
-
-                    #endregion
                 }
             }
 
@@ -378,8 +360,6 @@ public sealed class VirtualEnvironment
             return result;
         }
     }
-
-    #endregion
 
     /// <summary>
     /// The virtual (rooted) path of the current Application containing a leading '/' as well as a trailing '/'

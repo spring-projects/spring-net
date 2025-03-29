@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Web.Mvc;
 using NUnit.Framework;
 using Spring.Context.Support;
@@ -28,8 +24,6 @@ namespace Spring.Web.Mvc.Tests;
 [TestFixture]
 public class SpringMvcDependencyResolverTests
 {
-    #region Setup/Teardown
-
     [SetUp]
     public void _TestSetup()
     {
@@ -44,8 +38,6 @@ public class SpringMvcDependencyResolverTests
 
         _resolver.ApplicationContextName = string.Empty;
     }
-
-    #endregion
 
     private MvcApplicationContext _context;
     private MvcApplicationContext _mvcNamedContext;

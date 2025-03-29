@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Objects.Factory;
 

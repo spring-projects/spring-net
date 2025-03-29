@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Messaging.Ems.Connections;
 
 /// <summary> Exception thrown when a synchronized local transaction failed to complete
@@ -28,8 +24,6 @@ namespace Spring.Messaging.Ems.Connections;
 [Serializable]
 public class SynchedLocalTransactionFailedException : EMSException
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the SynchedLocalTransactionFailedException class. with the specified message.
     /// </summary>
@@ -55,6 +49,4 @@ public class SynchedLocalTransactionFailedException : EMSException
     {
         LinkedException = rootCause;
     }
-
-    #endregion
 }

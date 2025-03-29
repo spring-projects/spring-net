@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Runtime.Serialization;
 using Spring.Dao;
@@ -34,16 +30,10 @@ namespace Spring.Data;
 [Serializable]
 public class DuplicateKeyException : DataIntegrityViolationException
 {
-    #region Fields
-
     /// <summary>
     /// SQL that led to the problem
     /// </summary>
     private string sql;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DuplicateKeyException"/> class.
@@ -83,10 +73,6 @@ public class DuplicateKeyException : DataIntegrityViolationException
     /// <inheritdoc />
     protected DuplicateKeyException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets the SQL that caused the exception
     /// </summary>
@@ -98,14 +84,6 @@ public class DuplicateKeyException : DataIntegrityViolationException
             return sql;
         }
     }
-
-    #endregion
-
-    #region Methods
-
-    #endregion
-
-    #region ISerializable Members
 
     /// <summary>
     /// When overridden in a derived class, sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/>
@@ -119,6 +97,4 @@ public class DuplicateKeyException : DataIntegrityViolationException
         info.AddValue("sql", sql);
         base.GetObjectData(info, context);
     }
-
-    #endregion
 }

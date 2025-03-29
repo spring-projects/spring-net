@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Objects.Factory;
 
@@ -37,14 +33,8 @@ namespace Spring.Remoting;
 /// <author>Bruno Baia</author>
 public class SaoFactoryObject : IFactoryObject, IInitializingObject
 {
-    #region Fields
-
     private Type serviceInterface;
     private string serviceUrl;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The remote service interface.
@@ -64,20 +54,12 @@ public class SaoFactoryObject : IFactoryObject, IInitializingObject
         set { serviceUrl = value; }
     }
 
-    #endregion
-
-    #region Constructor(s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the SaoFactoryObject class.
     /// </summary>
     public SaoFactoryObject()
     {
     }
-
-    #endregion
-
-    #region IInitializingObject Members
 
     /// <summary>
     /// Callback method called once all factory properties have been set.
@@ -100,10 +82,6 @@ public class SaoFactoryObject : IFactoryObject, IInitializingObject
             throw new ArgumentException("ServiceInterface must be an interface");
         }
     }
-
-    #endregion
-
-    #region IFactoryObject Members
 
     /// <summary>
     /// Is the object managed by this factory a singleton or a prototype?
@@ -129,6 +107,4 @@ public class SaoFactoryObject : IFactoryObject, IInitializingObject
     {
         return Activator.GetObject(serviceInterface, serviceUrl);
     }
-
-    #endregion
 }

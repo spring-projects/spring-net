@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Web;
@@ -48,8 +44,6 @@ public class WebConversationSpringState : IConversationState, IObjectNameAware, 
         " Current: '{0}'. Tried: '{1}'";
 
     private IDictionary<string, object> state = new Dictionary<string, object>();
-
-    #region IConversationState Members
 
     private String id;
 
@@ -392,10 +386,6 @@ public class WebConversationSpringState : IConversationState, IObjectNameAware, 
         }
     }
 
-    #endregion
-
-    #region IObjectNameAware Members
-
     /// <summary>
     /// <see cref="IObjectNameAware"/>. It is used to valddate <see cref="Id"/>
     /// </summary>
@@ -411,10 +401,6 @@ public class WebConversationSpringState : IConversationState, IObjectNameAware, 
             if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("Begin of Conversation '{0}'", this.id));
         }
     }
-
-    #endregion
-
-    #region IDictionary<string,object> Members
 
     /// <summary>
     /// <see cref="T:IDictionary`2"/>
@@ -529,10 +515,6 @@ public class WebConversationSpringState : IConversationState, IObjectNameAware, 
         }
     }
 
-    #endregion
-
-    #region ICollection<KeyValuePair<string,object>> Members
-
     /// <summary>
     /// <see cref="T:ICollection`1"/>
     /// </summary>
@@ -613,10 +595,6 @@ public class WebConversationSpringState : IConversationState, IObjectNameAware, 
         return this.state.Remove(item);
     }
 
-    #endregion
-
-    #region IEnumerable<KeyValuePair<string,object>> Members
-
     /// <summary>
     /// <see cref="T:IEnumerable`1"/>
     /// </summary>
@@ -626,10 +604,6 @@ public class WebConversationSpringState : IConversationState, IObjectNameAware, 
         return this.state.GetEnumerator();
     }
 
-    #endregion
-
-    #region IEnumerable Members
-
     /// <summary>
     /// <see cref="IEnumerable"/>
     /// </summary>
@@ -638,8 +612,6 @@ public class WebConversationSpringState : IConversationState, IObjectNameAware, 
     {
         return this.state.GetEnumerator();
     }
-
-    #endregion
 
     /// <summary>
     /// A String representation from conversation.
@@ -661,8 +633,6 @@ public class WebConversationSpringState : IConversationState, IObjectNameAware, 
             innerConsversationsStr
         );
     }
-
-    #region IApplicationContextAware Members
 
     private String applicationContextName;
     [NonSerialized] private IApplicationContext applicationContext = null;
@@ -687,6 +657,4 @@ public class WebConversationSpringState : IConversationState, IObjectNameAware, 
             return this.applicationContext;
         }
     }
-
-    #endregion
 }

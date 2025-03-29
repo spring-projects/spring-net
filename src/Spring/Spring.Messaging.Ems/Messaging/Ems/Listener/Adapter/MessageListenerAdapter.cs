@@ -45,18 +45,12 @@ namespace Spring.Messaging.Ems.Listener.Adapter;
 /// <author>Mark Pollack (.NET)</author>
 public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageListener
 {
-    #region Logging
-
     private readonly ILog logger = LogManager.GetLogger(typeof(MessageListenerAdapter));
-
-    #endregion
 
     /// <summary>
     /// The default handler method name.
     /// </summary>
     public static string ORIGINAL_DEFAULT_HANDLER_METHOD = "HandleMessage";
-
-    #region Fields
 
     private object handlerObject;
 
@@ -69,10 +63,6 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
     private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
 
     private IMessageConverter messageConverter;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MessageListenerAdapter"/> class with default settings.
@@ -92,10 +82,6 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
         InitDefaultStrategies();
         this.handlerObject = handlerObject;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the handler object to delegate message listening to.
@@ -203,8 +189,6 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
         get { return messageConverter; }
         set { messageConverter = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Standard JMS {@link MessageListener} entry point.

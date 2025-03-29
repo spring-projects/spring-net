@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Expressions;
 using Spring.Globalization;
 
@@ -30,14 +26,8 @@ namespace Spring.DataBinding;
 /// <author>Aleksandar Seovic</author>
 public class SimpleExpressionBinding : AbstractSimpleBinding
 {
-    #region Fields
-
     private IExpression sourceExpression;
     private IExpression targetExpression;
-
-    #endregion
-
-    #region Constructor(s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SimpleExpressionBinding"/> class.
@@ -73,10 +63,6 @@ public class SimpleExpressionBinding : AbstractSimpleBinding
         this.targetExpression = Expression.Parse(targetExpression);
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Gets the source expression.
     /// </summary>
@@ -94,10 +80,6 @@ public class SimpleExpressionBinding : AbstractSimpleBinding
     {
         get { return targetExpression; }
     }
-
-    #endregion
-
-    #region Abstract Methods Implementation
 
     /// <summary>
     /// Gets the source value for the binding.
@@ -166,6 +148,4 @@ public class SimpleExpressionBinding : AbstractSimpleBinding
     {
         this.TargetExpression.SetValue(target, variables, value);
     }
-
-    #endregion
 }

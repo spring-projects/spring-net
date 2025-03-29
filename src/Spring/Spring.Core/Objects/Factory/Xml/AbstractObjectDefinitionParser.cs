@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using Spring.Objects.Factory.Config;
@@ -51,8 +47,6 @@ public abstract class AbstractObjectDefinitionParser : IObjectDefinitionParser
     /// </summary>
     public static readonly string ID_ATTRIBUTE = "id";
 
-    #region Properties
-
     /// <summary>
     /// Gets a value indicating whether an ID should be generated instead of read
     /// from the passed in XmlElement.
@@ -80,10 +74,6 @@ public abstract class AbstractObjectDefinitionParser : IObjectDefinitionParser
     {
         get { return false; }
     }
-
-    #endregion
-
-    #region IObjectDefinitionParser Members
 
     /// <summary>
     /// Parse the specified XmlElement and register the resulting
@@ -128,10 +118,6 @@ public abstract class AbstractObjectDefinitionParser : IObjectDefinitionParser
 
         return definition;
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Resolves the ID for the supplied <see cref="IObjectDefinition"/>.
@@ -224,10 +210,6 @@ public abstract class AbstractObjectDefinitionParser : IObjectDefinitionParser
         return defaultValue;
     }
 
-    #endregion
-
-    #region Abstract Methods
-
     /// <summary>
     /// Central template method to actually parse the supplied XmlElement
     /// into one or more IObjectDefinitions.
@@ -237,6 +219,4 @@ public abstract class AbstractObjectDefinitionParser : IObjectDefinitionParser
     /// provides access to a <see cref="IObjectDefinitionRegistry"/> </param>
     /// <returns>The primary IObjectDefinition resulting from the parsing of the supplied XmlElement</returns>
     protected abstract AbstractObjectDefinition ParseInternal(XmlElement element, ParserContext parserContext);
-
-    #endregion
 }

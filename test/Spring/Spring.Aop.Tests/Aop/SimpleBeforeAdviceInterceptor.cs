@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using AopAlliance.Intercept;
-
-#endregion
 
 namespace Spring.Aop;
 
@@ -35,22 +27,14 @@ public class SimpleBeforeAdviceInterceptor : IMethodInterceptor
 {
     private ISimpleBeforeAdvice _advice;
 
-    #region Constructors
-
     public SimpleBeforeAdviceInterceptor(ISimpleBeforeAdvice advice)
     {
         this._advice = advice;
     }
-
-    #endregion
-
-    #region IMethodInterceptor Members
 
     public object Invoke(IMethodInvocation mi)
     {
         _advice.Before();
         return mi.Proceed();
     }
-
-    #endregion
 }

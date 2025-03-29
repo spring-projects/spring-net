@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Reflection;
@@ -302,8 +298,6 @@ public sealed class DynamicReflectionManager
             }
     */
 
-    #region Shared Code Generation
-
     private static void EmitFieldGetter(ILGenerator il, FieldInfo fieldInfo, bool isInstanceMethod)
     {
         if (fieldInfo.IsLiteral)
@@ -497,8 +491,6 @@ public sealed class DynamicReflectionManager
 
         EmitMethodReturn(il, constructor.DeclaringType);
     }
-
-    #endregion
 
     private static OpCode[] LdArgOpCodes = { OpCodes.Ldarg_0, OpCodes.Ldarg_1, OpCodes.Ldarg_2 };
 

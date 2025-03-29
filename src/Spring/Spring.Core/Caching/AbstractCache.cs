@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 
 namespace Spring.Caching;
@@ -30,14 +26,8 @@ namespace Spring.Caching;
 /// <author>Erich Eichinger</author>
 public abstract class AbstractCache : ICache
 {
-    #region Fields
-
     private bool _enforceTimeToLive = false;
     private TimeSpan _timeToLive = TimeSpan.Zero;
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets/Set the Default time-to-live (TTL) for items inserted into this cache.
@@ -59,12 +49,6 @@ public abstract class AbstractCache : ICache
         get { return _enforceTimeToLive; }
         set { _enforceTimeToLive = value; }
     }
-
-    #endregion
-
-    #region ICache Implementation
-
-    #region
 
     /// <summary>
     /// Gets the number of items in the cache.
@@ -170,12 +154,6 @@ public abstract class AbstractCache : ICache
         DoInsert(key, value, timeToLive);
     }
 
-    #endregion
-
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Actually does the cache implementation specific insert operation into the cache.
     /// </summary>
@@ -192,6 +170,4 @@ public abstract class AbstractCache : ICache
     /// Item's time-to-live (TTL).
     /// </param>
     protected abstract void DoInsert(object key, object value, TimeSpan timeToLive);
-
-    #endregion
 }

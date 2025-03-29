@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Configuration;
 using System.Reflection;
 using System.Xml;
@@ -29,8 +23,6 @@ using Spring.Proxy;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
 using ConfigurationException = System.Configuration.ConfigurationException;
-
-#endregion
 
 namespace Spring.Context.Support;
 

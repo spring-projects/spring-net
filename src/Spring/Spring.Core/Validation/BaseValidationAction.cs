@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Expressions;
 
@@ -37,13 +33,7 @@ namespace Spring.Validation;
 /// <author>Aleksandar Seovic</author>
 public abstract class BaseValidationAction : IValidationAction
 {
-    #region Fields
-
     private IExpression when;
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseValidationAction"/> class.
@@ -51,10 +41,6 @@ public abstract class BaseValidationAction : IValidationAction
     public BaseValidationAction()
     {
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the expression that determines if this validator should be evaluated.
@@ -65,8 +51,6 @@ public abstract class BaseValidationAction : IValidationAction
         get { return when; }
         set { when = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Executes the action.
@@ -90,10 +74,6 @@ public abstract class BaseValidationAction : IValidationAction
         }
     }
 
-    #region Abstract methods
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Called when associated validator is valid.
     /// </summary>
@@ -114,12 +94,6 @@ public abstract class BaseValidationAction : IValidationAction
     {
     }
 
-    // CLOVER:ON
-
-    #endregion
-
-    #region Helper methods
-
     /// <summary>
     /// Evaluates 'when' expression.
     /// </summary>
@@ -135,6 +109,4 @@ public abstract class BaseValidationAction : IValidationAction
 
         return Convert.ToBoolean(When.GetValue(rootContext, contextParams));
     }
-
-    #endregion
 }

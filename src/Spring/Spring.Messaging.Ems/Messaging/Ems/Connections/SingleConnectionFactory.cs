@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
@@ -58,13 +54,7 @@ namespace Spring.Messaging.Ems.Connections;
 /// <author>Mark Pollack (.NET)</author>
 public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, IInitializingObject, IDisposable
 {
-    #region Logging Definition
-
     private static readonly ILog LOG = LogManager.GetLogger(typeof(SingleConnectionFactory));
-
-    #endregion
-
-    #region Fields
 
     private IConnectionFactory targetConnectionFactory;
 
@@ -99,10 +89,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
     private bool sslProxyAuthPasswordSet;
     private bool sslProxyAuthUsernameSet;
 
-    #endregion
-
-    #region Constructors
-
     /// <summary>
     /// Initializes a new instance of the <see cref="SingleConnectionFactory"/> class.
     /// </summary>
@@ -133,10 +119,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
             "TargetSession ConnectionFactory must not be null");
         this.targetConnectionFactory = targetConnectionFactory;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the target connection factory which will be used to create a single
@@ -213,10 +195,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
     {
         get { return clientId; }
     }
-
-    #endregion
-
-    #region Implementation of IConnectionFactory
 
     /// <summary>
     /// Creates the connection.
@@ -414,25 +392,15 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
         set { TargetConnectionFactory.Metric = value; }
     }
 
-    #endregion
-
-    #region Implementation of ISerializable
-
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         TargetConnectionFactory.GetObjectData(info, context);
     }
 
-    #endregion
-
-    #region Implementation of ICloneable
-
     public object Clone()
     {
         return TargetConnectionFactory.Clone();
     }
-
-    #endregion
 
     /// <summary>
     /// Initialize the underlying shared Connection. Closes and reinitializes the Connection if an underlying
@@ -552,8 +520,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
         }
     }
 
-    #region IInitializingObject Members
-
     /// <summary>
     /// Ensure that the connection or TargetConnectionFactory are specified.
     /// </summary>
@@ -576,8 +542,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
             TargetConnectionFactory.NativeConnectionFactory.SetSSLProxy(SSLProxyHost, SSLProxyPort);
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Close the underlying shared connection. The provider of this ConnectionFactory needs to care for proper shutdown.
@@ -762,8 +726,6 @@ internal class CloseSupressingConnection : IConnection
         }
     }
 
-    #region Pass through implementations to the target connection
-
     public event EMSExceptionHandler EMSExceptionHandler
     {
         add
@@ -805,6 +767,4 @@ internal class CloseSupressingConnection : IConnection
     {
         get { return target.MetaData; }
     }
-
-    #endregion
 }

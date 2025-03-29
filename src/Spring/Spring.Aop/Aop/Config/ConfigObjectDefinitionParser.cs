@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Xml;
 using Spring.Aop.Support;
@@ -47,8 +43,6 @@ public class ConfigObjectDefinitionParser : IObjectDefinitionParser
     private static readonly string ADVICE_OBJECT_NAME = "adviceObjectName";
 
     private static readonly string POINTCUT_REF = "pointcut-ref";
-
-    #region IObjectDefinitionParser Members
 
     /// <summary>
     /// Parse the specified XmlElement and register the resulting
@@ -148,6 +142,4 @@ public class ConfigObjectDefinitionParser : IObjectDefinitionParser
             AopNamespaceUtils.ForceAutoProxyCreatorToUseDecoratorProxy(parserContext.Registry);
         }
     }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Transaction.Support;
 
 /// <summary>
@@ -33,8 +29,6 @@ namespace Spring.Transaction.Support;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class TransactionSynchronizationAdapter : ITransactionSynchronization, IComparable
 {
-    #region ITransactionSynchronization Members
-
     /// <summary>
     /// Suspend this synchronization.
     /// </summary>
@@ -121,8 +115,6 @@ public abstract class TransactionSynchronizationAdapter : ITransactionSynchroniz
     /// </p>
     /// </remarks>
     public virtual void AfterCompletion(TransactionSynchronizationStatus status) { }
-
-    #endregion
 
     ///<summary>
     ///Compares the current instance with another object of the same type.

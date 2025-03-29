@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 
 namespace Spring.Dao;
@@ -33,8 +29,6 @@ public class ObjectRetrievalFailureException : DataRetrievalFailureException
     private object persistentClass;
 
     private object identifier;
-
-    #region Constructor (s)
 
     /// <summary>
     /// Creates a new instance of the
@@ -93,8 +87,6 @@ public class ObjectRetrievalFailureException : DataRetrievalFailureException
         SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }
-
-    #endregion
 
     public object PersistentClass
     {

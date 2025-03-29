@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Policy;
 using NUnit.Framework;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Util;
 
@@ -297,8 +289,6 @@ public class ObjectUtilsTests
         Assert.Throws<ArgumentOutOfRangeException>(() => ObjectUtils.EnumerateElementAtIndex(list, -10));
     }
 
-    #region Helper Classes
-
     private interface IFoo
     {
     }
@@ -377,6 +367,4 @@ public class ObjectUtilsTests
             throw new ThrowingWithinConstructorException();
         }
     }
-
-    #endregion
 }

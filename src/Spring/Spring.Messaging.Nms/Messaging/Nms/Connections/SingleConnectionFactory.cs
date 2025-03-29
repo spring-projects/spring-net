@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Apache.NMS;
 using Microsoft.Extensions.Logging;
@@ -57,13 +53,7 @@ namespace Spring.Messaging.Nms.Connections;
 /// <author>Mark Pollack (.NET)</author>
 public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, IInitializingObject, IDisposable
 {
-    #region Logging Definition
-
     private static readonly ILogger<SingleConnectionFactory> LOG = LogManager.GetLogger<SingleConnectionFactory>();
-
-    #endregion
-
-    #region Fields
 
     private IConnectionFactory targetConnectionFactory;
 
@@ -92,10 +82,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
     /// Synchronization monitor for the shared Connection
     /// </summary>
     private SemaphoreSlimLock connectionMonitor = new SemaphoreSlimLock();
-
-    #endregion
-
-    #region Constructors
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SingleConnectionFactory"/> class.
@@ -127,10 +113,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
             "TargetSession ConnectionFactory must not be null");
         this.targetConnectionFactory = targetConnectionFactory;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets the target connection factory which will be used to create a single
@@ -287,10 +269,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
         set { started = value; }
     }
 
-    #endregion
-
-    #region IConnectionFactory Members
-
     /// <summary>
     /// Creates the connection.
     /// </summary>
@@ -343,8 +321,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
     {
         throw new InvalidOperationException("SingleConnectionFactory does not support custom username and password.");
     }
-
-    #endregion
 
     /// <summary>
     /// Initialize the underlying shared Connection. Closes and reinitializes the Connection if an underlying
@@ -469,8 +445,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
         }
     }
 
-    #region IInitializingObject Members
-
     /// <summary>
     /// Ensure that the connection or TargetConnectionFactory are specified.
     /// </summary>
@@ -481,8 +455,6 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
             throw new ArgumentException("Connection or 'TargetConnectionFactory' is required.");
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Close the underlying shared connection. The provider of this ConnectionFactory needs to care for proper shutdown.
@@ -649,8 +621,6 @@ internal class CloseSupressingConnection : IConnection
         return await target.CreateSessionAsync(acknowledgementMode).Awaiter();
     }
 
-    #region Pass through implementations to the target connection
-
     public void PurgeTempDestinations()
     {
         target.PurgeTempDestinations();
@@ -700,8 +670,6 @@ internal class CloseSupressingConnection : IConnection
         get { return target.RedeliveryPolicy; }
         set { target.RedeliveryPolicy = value; }
     }
-
-    #endregion
 
     /// <summary>
     /// Add information to show this is a shared NMS connection

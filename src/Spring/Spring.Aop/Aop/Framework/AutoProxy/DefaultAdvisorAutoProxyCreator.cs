@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Aop.Framework.AutoProxy;
 
@@ -44,8 +36,6 @@ public class DefaultAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator, I
     private bool usePrefix;
     private string advisorObjectNamePrefix;
     private List<IAdvisor> cachedAdvisors;
-
-    #region Properties
 
     /// <summary>
     /// Gets or sets a value indicating whether to exclude
@@ -70,10 +60,6 @@ public class DefaultAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator, I
         set { advisorObjectNamePrefix = value; }
     }
 
-    #endregion
-
-    #region IObjectNameAware Members
-
     /// <summary>
     /// Set the name of the object in the object factory that created this object.
     /// </summary>
@@ -97,8 +83,6 @@ public class DefaultAdvisorAutoProxyCreator : AbstractAdvisorAutoProxyCreator, I
             }
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Find all possible advisor candidates to use in auto-proxying

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
@@ -58,11 +54,7 @@ public class TransactionTemplate : DefaultTransactionDefinition, ITransactionOpe
 {
     private IPlatformTransactionManager _platformTransactionManager;
 
-    #region Logging Definition
-
     protected readonly ILogger<TransactionTemplate> log = LogManager.GetLogger<TransactionTemplate>();
-
-    #endregion
 
     /// <summary>
     /// Creates a new instance of the
@@ -111,8 +103,6 @@ public class TransactionTemplate : DefaultTransactionDefinition, ITransactionOpe
         set { _platformTransactionManager = value; }
     }
 
-    #region IInitializingObject Members
-
     /// <summary>
     /// Ensures that the
     /// <see cref="Spring.Transaction.Support.TransactionTemplate.PlatformTransactionManager"/>
@@ -125,8 +115,6 @@ public class TransactionTemplate : DefaultTransactionDefinition, ITransactionOpe
             throw new ArgumentException("IPlatformTransactionManager instance is required.");
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Executes the the action specified by the given delegate callback within a transaction.

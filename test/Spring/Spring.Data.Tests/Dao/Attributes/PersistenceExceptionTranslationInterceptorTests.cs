@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Spring.Aop.Framework;
 using Spring.Dao.Support;
 using Spring.Objects.Factory.Support;
 using Spring.Stereotype;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Dao.Attributes;
 

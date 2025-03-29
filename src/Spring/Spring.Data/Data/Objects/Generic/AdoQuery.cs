@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using Spring.Dao.Support.Generic;
 using Spring.Data.Common;
 using Spring.Data.Generic;
@@ -31,12 +27,6 @@ namespace Spring.Data.Objects.Generic;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class AdoQuery : AdoOperation
 {
-    #region Fields
-
-    #endregion
-
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="AdoQuery"/> class.
     /// </summary>
@@ -54,14 +44,6 @@ public abstract class AdoQuery : AdoOperation
         DbProvider = provider;
         Sql = sql;
     }
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Convenient method to execute query without parameters or calling context.
@@ -133,6 +115,4 @@ public abstract class AdoQuery : AdoOperation
     }
 
     protected abstract IRowMapper<T> NewRowMapper<T>(System.Collections.IDictionary inParams, System.Collections.IDictionary callingContext);
-
-    #endregion
 }

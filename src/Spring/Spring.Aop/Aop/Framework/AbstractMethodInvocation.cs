@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection;
 using System.Text;
 using AopAlliance.Intercept;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework;
 

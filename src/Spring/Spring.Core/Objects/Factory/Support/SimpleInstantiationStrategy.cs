@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using System.Reflection;
@@ -198,14 +194,10 @@ public class SimpleInstantiationStrategy : IInstantiationStrategy
                 CultureInfo.InvariantCulture,
                 "Factory method '{0}' threw an Exception.", factoryMethod);
 
-            #region Instrumentation
-
             if (log.IsEnabled(LogLevel.Warning))
             {
                 log.LogWarning(ex.InnerException, msg);
             }
-
-            #endregion
 
             throw new ObjectDefinitionStoreException(msg, ex.InnerException);
         }

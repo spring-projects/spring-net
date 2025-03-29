@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Context.Support;
-
-#region Test Utility Classes
-
-#endregion
 
 /// <author>Mark Pollack</author>
 public class Assembler

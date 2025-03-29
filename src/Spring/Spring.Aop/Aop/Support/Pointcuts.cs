@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Aop.Support;
 
@@ -121,10 +113,6 @@ public sealed class Pointcuts
                && firstPointcut.MethodMatcher == secondPointcut.MethodMatcher;
     }
 
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Aop.Support.Pointcuts"/> class.
@@ -140,6 +128,4 @@ public sealed class Pointcuts
     }
 
     // CLOVER:ON
-
-    #endregion
 }

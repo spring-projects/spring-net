@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text.RegularExpressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.TypeResolution;
 
@@ -38,8 +30,6 @@ namespace Spring.Core.TypeResolution;
 /// </remarks>
 public class GenericArgumentsHolder
 {
-    #region Constants
-
     private static readonly Regex ClrPattern = new Regex(
         "^"
         + @"(?'name'\w[\w\d\.]+)"
@@ -95,18 +85,10 @@ public class GenericArgumentsHolder
     /// </summary>
     public const char GenericArgumentsSeparator = ',';
 
-    #endregion
-
-    #region Fields
-
     private string unresolvedGenericTypeName;
     private string unresolvedGenericMethodName;
     private string[] unresolvedGenericArguments;
     private string arrayDeclaration;
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the GenericArgumentsHolder class.
@@ -119,10 +101,6 @@ public class GenericArgumentsHolder
     {
         ParseGenericTypeDeclaration(value);
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The (unresolved) generic type name portion
@@ -195,10 +173,6 @@ public class GenericArgumentsHolder
     {
         get { return arrayDeclaration != null; }
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Returns an array of unresolved generic arguments types.
@@ -356,6 +330,4 @@ public class GenericArgumentsHolder
 
 //            return (string[])args.ToArray(typeof(string));
     }
-
-    #endregion
 }

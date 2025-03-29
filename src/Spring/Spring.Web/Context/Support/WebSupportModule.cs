@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Globalization;
 using System.Reflection;
@@ -173,8 +169,6 @@ public class WebSupportModule : IHttpModule
         }
     }
 
-    #region IHttpHandler configuration
-
     /// <summary>
     /// Configures the current IHttpHandler as specified by <see cref="Spring.Web.Support.PageHandlerFactory" />. If the
     /// <see cref="Spring.Web.Support.PageHandlerFactory" /> is not executed for the current request and an instance of
@@ -282,8 +276,6 @@ public class WebSupportModule : IHttpModule
         return handler;
     }
 
-    #endregion
-
     /// <summary>
     /// Disposes this instance
     /// </summary>
@@ -291,8 +283,6 @@ public class WebSupportModule : IHttpModule
     {
         // noop
     }
-
-    #region Session Handling Stuff
 
     private static void OnCacheItemRemoved(string key, object value, CacheItemRemovedReason reason)
     {
@@ -373,6 +363,4 @@ public class WebSupportModule : IHttpModule
             , CultureInfo.InvariantCulture
         );
     }
-
-    #endregion Session Handling Stuff
 }

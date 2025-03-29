@@ -65,15 +65,11 @@ public class CommonASTWithHiddenTokens : CommonAST
         hiddenAfter = t.getHiddenAfter();
     }
 
-    #region Implementation of ICloneable
-
     [Obsolete("Deprecated since version 2.7.2. Use ASTFactory.dup() instead.", false)]
     override public object Clone()
     {
         return new CommonASTWithHiddenTokens(this);
     }
-
-    #endregion
 
     public class CommonASTWithHiddenTokensCreator : ASTNodeCreator
     {

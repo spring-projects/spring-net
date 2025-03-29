@@ -1,7 +1,3 @@
-#region License
-
-#endregion
-
 namespace Spring.Transaction;
 
 /// <summary>

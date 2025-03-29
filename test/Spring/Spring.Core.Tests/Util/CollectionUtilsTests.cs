@@ -11,8 +11,6 @@ public class CollectionUtilsTests
     {
         internal class Iterator : IEnumerator
         {
-            #region IEnumerator Members
-
             public void Reset()
             {
                 // TODO:  Add Iterator.Reset implementation
@@ -32,8 +30,6 @@ public class CollectionUtilsTests
                 // TODO:  Add Iterator.MoveNext implementation
                 return false;
             }
-
-            #endregion
         }
 
         public void CopyTo(Array array, int index)

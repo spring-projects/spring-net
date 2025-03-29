@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Web.UI;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.TestSupport;
-
-#endregion
 
 namespace Spring.Web.Support;
 
@@ -176,8 +168,6 @@ public class ControlInterceptionTests
     }
 }
 
-#region Test Support Classes
-
 public class MockControl : UserControl, IApplicationContextAware
 {
     private bool _gotIt = false;
@@ -284,10 +274,6 @@ public class ControlSupportingWebDI : Control, ISupportsWebDependencyInjection
     }
 }
 
-#endregion Test Support Classes
-
-#region DI Templates // look at them using reflector
-
 internal class DIControlCollection : ControlCollection, ISupportsWebDependencyInjection
 {
     private IApplicationContext _defaultApplicationContext;
@@ -314,5 +300,3 @@ internal class DIControlCollection : ControlCollection, ISupportsWebDependencyIn
         base.AddAt(index, child);
     }
 }
-
-#endregion

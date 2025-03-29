@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml
 {
@@ -36,8 +28,6 @@ namespace Spring.Objects.Factory.Xml
     [TestFixture]
     public class XmlListableObjectFactoryTests : AbstractListableObjectFactoryTests
     {
-        #region Inner Class : AnonymousClassObjectPostProcessor
-
         private class AnonymousClassObjectPostProcessor : IObjectPostProcessor
         {
             public AnonymousClassObjectPostProcessor()
@@ -67,8 +57,6 @@ namespace Spring.Objects.Factory.Xml
             }
         }
 
-        #endregion
-
         protected internal override AbstractObjectFactory CreateObjectFactory(bool caseSensitive)
         {
             return new DefaultListableObjectFactory(caseSensitive);
@@ -76,8 +64,6 @@ namespace Spring.Objects.Factory.Xml
 
         private DefaultListableObjectFactory parent;
         //		private XmlObjectFactory factory;
-
-        #region Test SetUp
 
         [SetUp]
         protected void SetUp()
@@ -109,8 +95,6 @@ namespace Spring.Objects.Factory.Xml
             factory.PreInstantiateSingletons();
             base.ObjectFactory = factory;
         }
-
-        #endregion
 
         [Test]
         public virtual void FactoryNesting()

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Spring.Util;
 
@@ -102,8 +98,6 @@ public class DelegateFactoryObject : AbstractFactoryObject
         return instance;
     }
 
-    #region Properties
-
     /// <summary>
     /// The <see cref="System.Type"/> of <see cref="System.Delegate"/>
     /// created by this factory.
@@ -165,14 +159,8 @@ public class DelegateFactoryObject : AbstractFactoryObject
         set { _targetObject = value; }
     }
 
-    #endregion
-
-    #region Fields
-
     private Type _delegateType;
     private string _methodName;
     private Type _targetType;
     private object _targetObject;
-
-    #endregion
 }

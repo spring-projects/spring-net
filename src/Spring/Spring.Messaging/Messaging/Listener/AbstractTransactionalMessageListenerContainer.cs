@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using Microsoft.Extensions.Logging;
 using Spring.Data.Core;
@@ -51,11 +47,7 @@ namespace Spring.Messaging.Listener;
 /// </remarks>
 public abstract class AbstractTransactionalMessageListenerContainer : AbstractPeekingMessageListenerContainer
 {
-    #region Logging Definition
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(AbstractTransactionalMessageListenerContainer));
-
-    #endregion
 
     private IPlatformTransactionManager platformTransactionManager;
 

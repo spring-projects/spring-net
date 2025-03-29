@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Util.Generic;
 
@@ -36,8 +28,6 @@ namespace Spring.Util.Generic;
 /// <author>Mark Pollack (.NET)</author>
 public sealed class CollectionUtils
 {
-    #region Methods
-
     /// <summary>
     /// Determine whether a given collection only contains
     /// a single unique object
@@ -158,6 +148,4 @@ public sealed class CollectionUtils
             }
         }
     }
-
-    #endregion
 }

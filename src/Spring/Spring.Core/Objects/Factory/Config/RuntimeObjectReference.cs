@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Globalization;
 
 namespace Spring.Objects.Factory.Config;
@@ -32,8 +28,6 @@ namespace Spring.Objects.Factory.Config;
 [Serializable]
 public class RuntimeObjectReference
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Objects.Factory.Config.RuntimeObjectReference"/>
@@ -73,10 +67,6 @@ public class RuntimeObjectReference
         _isToParent = isToParent;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     /// Return the target object name.
     /// </summary>
@@ -98,10 +88,6 @@ public class RuntimeObjectReference
         get { return _isToParent; }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Returns a string representation of this instance.
     /// </summary>
@@ -112,17 +98,9 @@ public class RuntimeObjectReference
             CultureInfo.InvariantCulture, "<{0}>", ObjectName);
     }
 
-    #endregion
-
-    #region Fields
-
     private string _objectName;
 
     private bool _isToParent;
-
-    #endregion
-
-    #region Equality Members
 
     /// <summary>
     /// Determines whether the specified RuntimeObjectReference is equal to the current RuntimeObjectReference.
@@ -156,6 +134,4 @@ public class RuntimeObjectReference
             return (_objectName.GetHashCode() * 397) ^ _isToParent.GetHashCode();
         }
     }
-
-    #endregion
 }

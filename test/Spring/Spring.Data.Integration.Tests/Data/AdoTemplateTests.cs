@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Data;
 using System.Data.Common;
@@ -33,8 +27,6 @@ using Spring.Objects;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
-#endregion
-
 namespace Spring.Data;
 
 /// <summary>
@@ -44,15 +36,9 @@ namespace Spring.Data;
 [TestFixture]
 public class AdoTemplateTests
 {
-    #region Fields
-
     IAdoOperations adoOperations;
     IDbProvider dbProvider;
     private IPlatformTransactionManager transactionManager;
-
-    #endregion
-
-    #region Constructor (s)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AdoTemplateTests"/> class.
@@ -60,10 +46,6 @@ public class AdoTemplateTests
     public AdoTemplateTests()
     {
     }
-
-    #endregion
-
-    #region Methods
 
     [SetUp]
     public void CreateAdoTemplate()
@@ -315,8 +297,6 @@ public class AdoTemplateTests
         //are re-associated, and so the parameter collection is re-usable.
         adoOperations.ExecuteNonQuery(CommandType.Text, sql, parameters);
     }
-
-    #endregion
 
     private class TestObjectExtractor : IResultSetExtractor
     {

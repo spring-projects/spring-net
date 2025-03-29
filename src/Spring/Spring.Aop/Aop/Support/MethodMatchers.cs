@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Aop.Support;
 
@@ -85,8 +77,6 @@ public sealed class MethodMatchers
         return new IntersectionMethodMatcher(firstMatcher, secondMatcher);
     }
 
-    #region Inner Class : UnionMethodMatcher
-
     [Serializable]
     private sealed class UnionMethodMatcher : IMethodMatcher
     {
@@ -114,10 +104,6 @@ public sealed class MethodMatchers
             return a.Matches(m, targetType, args) || b.Matches(m, targetType, args);
         }
     }
-
-    #endregion
-
-    #region Inner Class : IntersectionMethodMatcher
 
     [Serializable]
     private sealed class IntersectionMethodMatcher : IMethodMatcher
@@ -152,12 +138,6 @@ public sealed class MethodMatchers
         }
     }
 
-    #endregion
-
-    #region Constructor (s) / Destructor
-
-    // CLOVER:OFF
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Aop.Support.MethodMatchers"/> class.
@@ -173,6 +153,4 @@ public sealed class MethodMatchers
     }
 
     // CLOVER:ON
-
-    #endregion
 }

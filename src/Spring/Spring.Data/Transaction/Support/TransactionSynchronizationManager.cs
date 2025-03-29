@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Data;
@@ -65,13 +61,7 @@ namespace Spring.Transaction.Support;
 /// <author>Mark Pollack (.NET)</author>
 public sealed class TransactionSynchronizationManager
 {
-    #region Logging
-
     private static readonly ILogger LOG = LogManager.GetLogger(typeof(TransactionSynchronizationManager));
-
-    #endregion
-
-    #region Fields
 
     private static readonly string syncsDataSlotName = "Spring.Transactions:syncList";
 
@@ -86,10 +76,6 @@ public sealed class TransactionSynchronizationManager
     private static readonly string actualTxActiveDataSlotName = "Spring.Transactions:actualTxActive";
 
     private static IComparer syncComparer = new OrderComparator();
-
-    #endregion
-
-    #region Management of transaction-associated resource handles
 
     /// <summary>
     /// Return all resources that are bound to the current thread.
@@ -223,8 +209,6 @@ public sealed class TransactionSynchronizationManager
         return val;
     }
 
-    #endregion
-
     /// <summary>
     /// Activate transaction synchronization for the current thread.
     /// </summary>
@@ -319,8 +303,6 @@ public sealed class TransactionSynchronizationManager
     {
         return obj == null ? "" : obj + "@" + obj.GetHashCode().ToString("X");
     }
-
-    #region Properties
 
     /// <summary>
     /// Return an unmodifiable list of all registered synchronizations
@@ -498,6 +480,4 @@ public sealed class TransactionSynchronizationManager
             LogicalThreadContext.SetData(currentTxIsolationLevelDataSlotName, value);
         }
     }
-
-    #endregion
 }

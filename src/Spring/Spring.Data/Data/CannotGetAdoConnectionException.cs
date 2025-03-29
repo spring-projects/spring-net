@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Runtime.Serialization;
 using Spring.Dao;
 
@@ -31,8 +27,6 @@ namespace Spring.Data;
 [Serializable]
 public class CannotGetAdoConnectionException : InvalidDataAccessResourceUsageException
 {
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CannotGetAdoConnectionException"/> class.
     /// </summary>
@@ -60,6 +54,4 @@ public class CannotGetAdoConnectionException : InvalidDataAccessResourceUsageExc
 
     /// <inheritdoc />
     protected CannotGetAdoConnectionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
-
-    #endregion
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-#endregion
 
 namespace Spring.Web.UI.Controls;
 

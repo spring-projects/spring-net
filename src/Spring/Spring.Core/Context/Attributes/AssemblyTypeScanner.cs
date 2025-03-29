@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2010-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Reflection;
 using Microsoft.Extensions.Logging;
@@ -107,8 +103,6 @@ public abstract class AssemblyTypeScanner : IAssemblyTypeScanner
         }
         set { _scanStartFolderPath = value; }
     }
-
-    #region IAssemblyTypeScanner Members
 
     /// <summary>
     /// Assemblies the type of the having.
@@ -248,8 +242,6 @@ public abstract class AssemblyTypeScanner : IAssemblyTypeScanner
 
         return this;
     }
-
-    #endregion
 
     private List<string> GetAllAssembliesInPath(string folderPath)
     {

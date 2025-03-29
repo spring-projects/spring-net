@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Data;
 using NUnit.Framework;
 using Spring.Context;
@@ -29,8 +23,6 @@ using Spring.Data.Core;
 using Spring.Objects;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Data;
 

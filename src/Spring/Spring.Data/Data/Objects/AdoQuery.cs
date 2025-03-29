@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System.Collections;
 using Spring.Dao.Support;
 using Spring.Data.Common;
@@ -31,12 +27,6 @@ namespace Spring.Data.Objects;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class AdoQuery : AdoOperation
 {
-    #region Fields
-
-    #endregion
-
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="AdoQuery"/> class.
     /// </summary>
@@ -49,14 +39,6 @@ public abstract class AdoQuery : AdoOperation
         DbProvider = provider;
         Sql = sql;
     }
-
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Methods
 
     public IList Query()
     {
@@ -99,6 +81,4 @@ public abstract class AdoQuery : AdoOperation
     }
 
     protected abstract IRowMapper NewRowMapper(IDictionary inParams, IDictionary callingContext);
-
-    #endregion
 }

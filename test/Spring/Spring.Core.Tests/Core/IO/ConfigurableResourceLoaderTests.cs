@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -40,8 +32,6 @@ public sealed class ConfigurableResourceLoaderTests
     {
         loader = new ConfigurableResourceLoader();
     }
-
-    #region ConfigurableResourceLoader.GetResource Tests
 
     /// <summary>
     /// Tests that loader correctly loads files specified by absolute name, regardless
@@ -173,8 +163,6 @@ public sealed class ConfigurableResourceLoaderTests
         Assert.IsNotNull(res, "Resource should not be null");
         Assert.AreEqual(typeof(AssemblyResource), res.GetType());
     }
-
-    #endregion
 
     [Test]
     public void GetResourceForNonMappedProtocol()

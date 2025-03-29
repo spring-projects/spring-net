@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2010 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using NUnit.Framework;
 using Spring.Messaging.Ems.Common;
 using Spring.Testing.NUnit;
-
-#endregion
 
 namespace Spring.Messaging.Ems.Core;
 
@@ -119,8 +111,6 @@ public class EmsTemplateTests : AbstractDependencyInjectionSpringContextTests
         Assert.AreEqual(msgText, text);
     }
 
-    #region Overrides of AbstractDependencyInjectionSpringContextTests
-
     /// <summary>
     /// Subclasses must implement this property to return the locations of their
     /// config files. A plain path will be treated as a file system location.
@@ -130,6 +120,4 @@ public class EmsTemplateTests : AbstractDependencyInjectionSpringContextTests
     {
         get { return new string[] { "assembly://Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Core/EmsTemplateTests.xml" }; }
     }
-
-    #endregion
 }

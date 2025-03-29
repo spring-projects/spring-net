@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Globalization;
@@ -185,8 +181,6 @@ public class MethodInjectingInstantiationStrategy : SimpleInstantiationStrategy
             Type generatedType = (Type) typeCache[objectName];
             if (generatedType == null)
             {
-                #region Instrumentation
-
                 if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.LogDebug(string.Format(CultureInfo.InvariantCulture,
@@ -194,8 +188,6 @@ public class MethodInjectingInstantiationStrategy : SimpleInstantiationStrategy
                         "object definition for the purposes of method injection.",
                         definition.ObjectType, objectName));
                 }
-
-                #endregion
 
                 ModuleBuilder module = DynamicCodeManager.GetModuleBuilder(DYNAMIC_ASSEMBLY_NAME);
                 generatedType = new MethodInjectingTypeBuilder(module, definition).BuildType();
@@ -205,8 +197,6 @@ public class MethodInjectingInstantiationStrategy : SimpleInstantiationStrategy
             return generatedType;
         }
     }
-
-    #region Inner Class : MethodInjectingTypeBuilder
 
     /// <summary>
     /// A <see cref="System.Type"/> factory that generates subclasses of those
@@ -616,6 +606,4 @@ public class MethodInjectingInstantiationStrategy : SimpleInstantiationStrategy
             return attributes;
         }
     }
-
-    #endregion
 }

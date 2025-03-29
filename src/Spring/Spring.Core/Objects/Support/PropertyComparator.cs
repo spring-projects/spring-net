@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Globalization;
@@ -117,15 +113,11 @@ public class PropertyComparator : IComparer
         }
         catch (Exception ex)
         {
-            #region Instrumentation
-
             if (logger.IsEnabled(LogLevel.Warning))
             {
                 string message = "Could not sort objects [" + o1 + "] and [" + o2 + "]";
                 logger.LogWarning(ex, message);
             }
-
-            #endregion
 
             return 0;
         }

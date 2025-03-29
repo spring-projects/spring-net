@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core;
 
@@ -44,8 +36,6 @@ namespace Spring.Core;
 /// <author>Bruno Baia</author>
 public class MethodArgumentsCriteria : ICriteria
 {
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="MethodArgumentsCriteria"/> class.
@@ -72,10 +62,6 @@ public class MethodArgumentsCriteria : ICriteria
     {
         _parameters = ReflectionUtils.GetTypes(arguments);
     }
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
@@ -169,11 +155,5 @@ public class MethodArgumentsCriteria : ICriteria
         return satisfied;
     }
 
-    #endregion
-
-    #region Fields
-
     private readonly Type[] _parameters;
-
-    #endregion
 }

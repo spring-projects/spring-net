@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
 #if !MONO
-
-#region Imports
-
-#endregion
 
 namespace Spring.Web.Providers;
 /* TBD

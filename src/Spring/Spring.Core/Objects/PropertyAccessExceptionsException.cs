@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text;
 using Spring.Core;
-
-#endregion
 
 namespace Spring.Objects;
 
@@ -50,14 +42,8 @@ namespace Spring.Objects;
 [Serializable]
 public class PropertyAccessExceptionsException : ObjectsException
 {
-    #region Constants
-
     private static PropertyAccessException[] EmptyPropertyAccessExceptions
         = new PropertyAccessException[] { };
-
-    #endregion
-
-    #region Constructor (s) / Destructor
 
     /// <summary>
     /// Creates a new instance of the PropertyAccessExceptionsException class.
@@ -119,8 +105,6 @@ public class PropertyAccessExceptionsException : ObjectsException
         : base(info, context)
     {
     }
-
-    #endregion
 
     /// <summary>
     /// Return the <see cref="Spring.Objects.IObjectWrapper"/> that generated

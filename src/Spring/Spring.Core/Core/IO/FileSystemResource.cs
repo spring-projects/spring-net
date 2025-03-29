@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Globalization;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -69,8 +61,6 @@ public class FileSystemResource : AbstractResource
     private FileInfo fileHandle;
     private string rootLocation;
     private string resourcePath;
-
-    #region Constructors
 
     /// <summary>
     /// Creates a new instance of the
@@ -118,10 +108,6 @@ public class FileSystemResource : AbstractResource
             Initialize(resourceName);
         }
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// Returns the underlying <see cref="System.IO.FileInfo"/> handle for
@@ -264,8 +250,6 @@ public class FileSystemResource : AbstractResource
     {
         get { return new UriBuilder("file", null, 0, fileHandle.FullName).Uri; }
     }
-
-    #endregion
 
     /// <summary>
     /// Initializes this instance.

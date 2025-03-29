@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.IO;
 
@@ -72,8 +64,6 @@ public abstract class AbstractResource : IResource
     private string resourceName;
     private string basePathPlaceHolder = DefaultBasePathPlaceHolder;
 
-    #region Constructor (s) / Destructor
-
     /// <summary>
     /// Creates a new instance of the
     /// <see cref="Spring.Core.IO.AbstractResource"/> class.
@@ -111,10 +101,6 @@ public abstract class AbstractResource : IResource
         this.protocol = ConfigurableResourceLoader.GetProtocol(resourceName);
         this.resourceName = resourceName;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     /// The special character that denotes the base (home, or root)
@@ -283,10 +269,6 @@ public abstract class AbstractResource : IResource
         }
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     /// Strips any protocol name from the supplied
     /// <paramref name="resourceName"/>.
@@ -409,10 +391,6 @@ public abstract class AbstractResource : IResource
     {
         return Description.GetHashCode();
     }
-
-    #endregion
-
-    #region Relative Resource Support
 
     /// <summary>
     /// Factory Method. Create a new instance of the current resource type using the given resourceName
@@ -751,6 +729,4 @@ public abstract class AbstractResource : IResource
 
         return count;
     }
-
-    #endregion
 }

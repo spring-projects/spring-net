@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.EnterpriseServices;
 using Microsoft.Extensions.Logging;
@@ -41,8 +37,6 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
     private string trackingAppName = "Spring.NET";
     private string trackingComponentName = "ServiceDomainPlatformTransactionManager";
 
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ServiceDomainPlatformTransactionManager"/> class.
     /// </summary>
@@ -60,8 +54,6 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
     {
         this.txAdapter = txAdapter;
     }
-
-    #endregion
 
     /// <summary>
     /// Gets or sets a value indicating whether tracking is enabled.

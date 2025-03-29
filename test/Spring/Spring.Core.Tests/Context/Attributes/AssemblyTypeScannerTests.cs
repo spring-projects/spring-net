@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2010-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 using NUnit.Framework;
 using Spring.Core;
 using Spring.Util;
@@ -27,15 +23,11 @@ namespace Spring.Context.Attributes;
 [TestFixture]
 public class AssemblyTypeScannerTests
 {
-    #region Setup/Teardown
-
     [SetUp]
     public void _TestSetup()
     {
         _scanner = new AssemblyObjectDefinitionScanner();
     }
-
-    #endregion
 
     [Test]
     public void AssemblyHavingType_T_Adds_Assembly()

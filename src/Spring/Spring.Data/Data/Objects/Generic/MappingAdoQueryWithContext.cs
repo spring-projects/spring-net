@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System.Collections;
 using System.Data;
@@ -38,8 +34,6 @@ namespace Spring.Data.Objects.Generic;
 /// <author>Mark Pollack (.NET)</author>
 public abstract class MappingAdoQueryWithContext : AdoQuery
 {
-    #region Constructor (s)
-
     /// <summary>
     /// Initializes a new instance of the <see cref="MappingAdoQueryWithContext"/> class.
     /// </summary>
@@ -51,14 +45,6 @@ public abstract class MappingAdoQueryWithContext : AdoQuery
     {
     }
 
-    #endregion
-
-    #region Properties
-
-    #endregion
-
-    #region Methods
-
     protected override IRowMapper<T> NewRowMapper<T>(System.Collections.IDictionary inParams,
         System.Collections.IDictionary callingContext)
     {
@@ -66,8 +52,6 @@ public abstract class MappingAdoQueryWithContext : AdoQuery
     }
 
     protected abstract T MapRow<T>(IDataReader reader, int rowNum, IDictionary inParams, IDictionary callingContext);
-
-    #endregion
 
     private class RowMapperImpl<T> : IRowMapper<T>
     {

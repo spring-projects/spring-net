@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Web;
 using System.Web.Caching;
@@ -30,8 +24,6 @@ using Spring.Context.Attributes;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support;
 
@@ -63,8 +55,6 @@ public class WebObjectFactory : DefaultListableObjectFactory
     /// matching this factory's case-sensitivity
     /// </summary>
     private readonly ObjectDictionaryCreationHandler createObjectDictionary;
-
-    #region Constructor (s) / Destructor
 
     static WebObjectFactory()
     {
@@ -123,8 +113,6 @@ public class WebObjectFactory : DefaultListableObjectFactory
         InstantiationStrategy = new WebInstantiationStrategy();
     }
 
-    #endregion
-
     /// <summary>
     /// Returns the virtual path this object factory is associated with.
     /// </summary>
@@ -132,8 +120,6 @@ public class WebObjectFactory : DefaultListableObjectFactory
     {
         get { return contextPath; }
     }
-
-    #region Convenience accessors for Http* objects
 
     /// <summary>
     /// Convinience accessor for HttpContext
@@ -184,8 +170,6 @@ public class WebObjectFactory : DefaultListableObjectFactory
             return objecttable;
         }
     }
-
-    #endregion
 
     /// <summary>
     /// Creates a dictionary matching this factory's case sensitivity behaviour.
