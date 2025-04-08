@@ -57,6 +57,8 @@
 
     </object>
 
+    <alias name="MicrosoftSqlServer" alias="Microsoft.Data.SqlClient" />
+	
     <object id="MicrosoftSqlServer" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
         <constructor-arg name="dbMetaData">
             <object type="Spring.Data.Common.DbMetadata">
