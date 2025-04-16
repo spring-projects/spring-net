@@ -51,17 +51,10 @@ public class NumberFormatterTests
     public void FormatUsingDefaults()
     {
         NumberFormatter fmt = new NumberFormatter("en-US");
-#if NETFRAMEWORK
         Assert.AreEqual("1,234.00", fmt.Format(1234));
         Assert.AreEqual("1,234.56", fmt.Format(1234.56));
         Assert.AreEqual("-1,234.00", fmt.Format(-1234));
         Assert.AreEqual("-1,234.56", fmt.Format(-1234.56));
-#else
-        Assert.AreEqual("1,234.000", fmt.Format(1234));
-        Assert.AreEqual("1,234.560", fmt.Format(1234.56));
-        Assert.AreEqual("-1,234.000", fmt.Format(-1234));
-        Assert.AreEqual("-1,234.560", fmt.Format(-1234.56));
-#endif
 
         fmt = new NumberFormatter("sr-SP-Latn");
 #if NETFRAMEWORK

@@ -51,13 +51,8 @@ public class FloatFormatterTests
     public void FormatUsingDefaults()
     {
         FloatFormatter fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "en-US");
-#if NETFRAMEWORK
         Assert.AreEqual("1234.00", fmt.Format(1234));
         Assert.AreEqual("-1234.00", fmt.Format(-1234));
-#else
-        Assert.AreEqual("1234.000", fmt.Format(1234));
-        Assert.AreEqual("-1234.000", fmt.Format(-1234));
-#endif
 
         fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "sr-SP-Latn");
 #if NETFRAMEWORK
