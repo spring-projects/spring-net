@@ -65,10 +65,10 @@ public class CurrencyFormatterTests
 
         fmt = new CurrencyFormatter(CultureInfoUtils.SerbianCyrillicCultureName);
 
-        Assert.AreEqual("1.234 RSD", fmt.Format(1234));
-        Assert.AreEqual("1.235 RSD", fmt.Format(1234.56));
-        Assert.AreEqual("-1.234 RSD", fmt.Format(-1234));
-        Assert.AreEqual("-1.235 RSD", fmt.Format(-1234.56));
+        Assert.AreEqual("1.234,00 дин.", fmt.Format(1234));
+        Assert.AreEqual("1.234,56 дин.", fmt.Format(1234.56));
+        Assert.AreEqual("-1.234,00 дин.", fmt.Format(-1234));
+        Assert.AreEqual("-1.234,56 дин.", fmt.Format(-1234.56));
     }
 
     [Test]
