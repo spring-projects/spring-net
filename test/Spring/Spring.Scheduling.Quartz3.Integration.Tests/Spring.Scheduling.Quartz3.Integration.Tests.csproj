@@ -3,6 +3,10 @@
     <TargetFrameworks>net8.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Scheduling\Quartz\LocalDataSourceJobStoreTest-core.xml" />
+    <None Remove="Scheduling\Quartz\LocalDataSourceJobStoreTest.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
     <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.csproj" />
     <ProjectReference Include="..\..\..\src\Spring\Spring.Scheduling.Quartz3\Spring.Scheduling.Quartz3.csproj" />
@@ -13,8 +17,10 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="System.Data.SqlClient" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scheduling\Quartz\LocalDataSourceJobStoreTest-core.xml" />
     <EmbeddedResource Include="Scheduling\Quartz\LocalDataSourceJobStoreTest.xml" />
   </ItemGroup>
 </Project>

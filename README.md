@@ -190,6 +190,21 @@ VS.NET
 Visual Studio 2022 is required to open and build the solution. The free community version of Visual Studio should
 suffice.
 
+### Running tests
+
+- To run tests that require a database connection, you need:
+    - SqlServer running in (local)
+      - Check in `SQL Server Configuration Manager` that `Named Pipes` and `TCP/IP` protocols are enabled
+    - From `build-support` execute 
+	    - `create-integration-test-databases-and-users.sql` 
+    - From `\test\Spring\Spring.Data.Integration.Tests\Data` execute 
+	    - `Spring.Data.Integration.Tests_Spring_database.sql`
+	    - `Spring.Data.Integration.Tests_Credits_database.sql`
+	    - `Spring.Data.Integration.Tests_Debits_database.sql`
+	    - `Spring.Data.Integration.Tests_CreditsAndDebits_database.sql`
+    - Create a database named `quartz` and execute `tables_sqlServer_Below2016.sql` from [Quartz.NET](https://github.com/quartznet/quartznet/blob/main/database/tables/tables_sqlServer_Below2016.sql)
+
+
 ## Acknowledgements
 
 InnovaSys Document X!

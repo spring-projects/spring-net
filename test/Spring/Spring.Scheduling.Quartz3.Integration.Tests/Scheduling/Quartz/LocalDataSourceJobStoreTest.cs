@@ -23,13 +23,18 @@ namespace Spring.Scheduling.Quartz.Integration.Tests;
 [TestFixture]
 public class LocalDataSourceJobStoreTest
 {
-    private IApplicationContext ctx;
+    private IApplicationContext _ctx;
 
     [SetUp]
     public void SetUp()
     {
-        ctx = new XmlApplicationContext(
+#if NETFRAMEWORK
+        _ctx = new XmlApplicationContext(
             "assembly://Spring.Scheduling.Quartz3.Integration.Tests/Spring.Scheduling.Quartz/LocalDataSourceJobStoreTest.xml");
+#else
+        _ctx = new XmlApplicationContext(
+            "assembly://Spring.Scheduling.Quartz3.Integration.Tests/Spring.Scheduling.Quartz/LocalDataSourceJobStoreTest-core.xml");
+#endif
     }
 
     [Test]

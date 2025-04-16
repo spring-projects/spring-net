@@ -12,7 +12,7 @@
         <property name="logMethodArguments" value="true" />
 
         <property name="Separator" value=";" />
-        <property name="LogLevel" value="Info" />
+        <property name="LogLevel" value="Information" />
 
         <property name="HideProxyTypeNames" value="true" />
         <property name="UseDynamicLogger" value="true" />
