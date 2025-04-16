@@ -65,10 +65,17 @@ public class CurrencyFormatterTests
 
         fmt = new CurrencyFormatter(CultureInfoUtils.SerbianCyrillicCultureName);
 
+#if NETFRAMEWORK
         Assert.AreEqual("1.234,00 дин.", fmt.Format(1234));
         Assert.AreEqual("1.234,56 дин.", fmt.Format(1234.56));
         Assert.AreEqual("-1.234,00 дин.", fmt.Format(-1234));
         Assert.AreEqual("-1.234,56 дин.", fmt.Format(-1234.56));
+#else
+        Assert.AreEqual("1.234 RSD", fmt.Format(1234));
+        Assert.AreEqual("1.235 RSD", fmt.Format(1234.56));
+        Assert.AreEqual("-1.234 RSD", fmt.Format(-1234));
+        Assert.AreEqual("-1.235 RSD", fmt.Format(-1234.56));
+#endif
     }
 
     [Test]
@@ -89,10 +96,10 @@ public class CurrencyFormatterTests
         fmt = new CurrencyFormatter(CultureInfoUtils.SerbianCyrillicCultureName);
 
 #if NETFRAMEWORK
-        Assert.AreEqual(1234, fmt.Parse("1.234,00 дин."));
-        Assert.AreEqual(1234.56, fmt.Parse("1.234,56 дин."));
-        Assert.AreEqual(-1234, fmt.Parse("-1.234,00 дин."));
-        Assert.AreEqual(-1234.56, fmt.Parse("-1.234,56 дин."));
+            Assert.AreEqual(1234, fmt.Parse("1.234,00 дин."));
+            Assert.AreEqual(1234.56, fmt.Parse("1.234,56 дин."));
+            Assert.AreEqual(-1234, fmt.Parse("-1.234,00 дин."));
+            Assert.AreEqual(-1234.56, fmt.Parse("-1.234,56 дин."));
 #endif
     }
 
@@ -122,10 +129,10 @@ public class CurrencyFormatterTests
         fmt.GroupSeparator = "'";
 
 #if NETFRAMEWORK
-        Assert.AreEqual("1'23'4,00 дин.", fmt.Format(1234));
-        Assert.AreEqual("1'23'4,56 дин.", fmt.Format(1234.56));
-        Assert.AreEqual("-1'23'4,00 дин.", fmt.Format(-1234));
-        Assert.AreEqual("-1'23'4,56 дин.", fmt.Format(-1234.56));
+            Assert.AreEqual("1'23'4,00 дин.", fmt.Format(1234));
+            Assert.AreEqual("1'23'4,56 дин.", fmt.Format(1234.56));
+            Assert.AreEqual("-1'23'4,00 дин.", fmt.Format(-1234));
+            Assert.AreEqual("-1'23'4,56 дин.", fmt.Format(-1234.56));
 #else
         Assert.AreEqual("1'23'4 RSD", fmt.Format(1234));
         Assert.AreEqual("1'23'5 RSD", fmt.Format(1234.56));
@@ -159,10 +166,10 @@ public class CurrencyFormatterTests
         fmt.GroupSeparator = "'";
 
 #if NETFRAMEWORK
-        Assert.AreEqual(1234, fmt.Parse("1'23'4,00 дин."));
-        Assert.AreEqual(1234.56, fmt.Parse("1'23'4,56 дин."));
-        Assert.AreEqual(-1234, fmt.Parse("-1'23'4,00 дин."));
-        Assert.AreEqual(-1234.56, fmt.Parse("-1'23'4,56 дин."));
+            Assert.AreEqual(1234, fmt.Parse("1'23'4,00 дин."));
+            Assert.AreEqual(1234.56, fmt.Parse("1'23'4,56 дин."));
+            Assert.AreEqual(-1234, fmt.Parse("-1'23'4,00 дин."));
+            Assert.AreEqual(-1234.56, fmt.Parse("-1'23'4,56 дин."));
 #endif
     }
 }
