@@ -22,11 +22,18 @@ public class TestMessageConsumer : IMessageConsumer
 {
     public string MessageSelector { get; }
     public event MessageListener Listener;
+    public event AsyncMessageListener AsyncListener;
 
     private void InvokeListener(IMessage message)
     {
         MessageListener listener = Listener;
         if (listener != null) listener(message);
+    }
+
+    private void InvokeAsyncListener(IMessage message)
+    {
+        AsyncMessageListener listener = AsyncListener;
+        if (listener != null) listener(message, CancellationToken.None);
     }
 
     public IMessage Receive()

@@ -119,4 +119,10 @@ public class NmsConsumer : INMSConsumer
         add => consumer.Listener += value;
         remove => consumer.Listener -= value;
     }
+
+    public event AsyncMessageListener AsyncListener
+    {
+        add => consumer.AsyncListener += value;
+        remove => consumer.AsyncListener -= value;
+    }
 }
