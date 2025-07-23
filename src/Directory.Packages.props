@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Antlr3.Runtime" Version="3.5.1" />
-    <PackageVersion Include="Apache.NMS" Version="2.0.0" />
+    <PackageVersion Include="Apache.NMS" Version="2.2.0" />
     <PackageVersion Include="Castle.NVelocity" Version="1.1.1" />
     <PackageVersion Include="Common.Logging" Version="3.4.1" />
     <PackageVersion Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0.1" />

@@ -131,10 +131,16 @@ public class SimpleMessageListenerContainerTests
     {
         public string MessageSelector { get; }
         public event MessageListener Listener;
+        public event AsyncMessageListener AsyncListener;
 
         public void SendMessage(IMessage message)
         {
             Listener(message);
+        }
+
+        public void SendAsyncMessage(IMessage message)
+        {
+            AsyncListener(message, CancellationToken.None);
         }
 
         public IMessage Receive()

@@ -59,14 +59,17 @@ public class CachedMessageConsumer : IMessageConsumer
     /// </summary>
     public event MessageListener Listener
     {
-        add
-        {
-            target.Listener += value;
-        }
-        remove
-        {
-            target.Listener -= value;
-        }
+        add => target.Listener += value;
+        remove => target.Listener -= value;
+    }
+
+    /// <summary>
+    /// An asynchronous listener which can be used to consume messages asynchronously.
+    /// </summary>
+    public event AsyncMessageListener AsyncListener
+    {
+        add => target.AsyncListener += value;
+        remove => target.AsyncListener -= value;
     }
 
     /// <summary>
