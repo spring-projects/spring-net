@@ -21,7 +21,7 @@
     "@fortawesome/free-brands-svg-icons": "^7.0.0",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "bulma": "^0.9.4",
+    "bulma": "^1.0.4",
     "gatsby": "^5.12.12",
     "gatsby-plugin-image": "^3.14.0",
     "gatsby-plugin-manifest": "^5.14.0",
