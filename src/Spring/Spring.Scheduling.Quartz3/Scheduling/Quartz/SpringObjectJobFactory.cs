@@ -76,11 +76,11 @@ public class SpringObjectJobFactory : AdaptableJobFactory, ISchedulerContextAwar
             MutablePropertyValues pvs = new MutablePropertyValues();
             if (schedulerContext != null)
             {
-                pvs.AddAll(schedulerContext);
+                pvs.AddAll((IDictionary<string, object>) schedulerContext);
             }
 
-            pvs.AddAll(bundle.JobDetail.JobDataMap);
-            pvs.AddAll(bundle.Trigger.JobDataMap);
+            pvs.AddAll((IDictionary<string, object>) bundle.JobDetail.JobDataMap);
+            pvs.AddAll((IDictionary<string, object>) bundle.Trigger.JobDataMap);
             if (ignoredUnknownProperties != null)
             {
                 for (int i = 0; i < ignoredUnknownProperties.Length; i++)
