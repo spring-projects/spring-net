@@ -62,8 +62,8 @@ public abstract class QuartzJobObject : IJob
         {
             ObjectWrapper bw = new ObjectWrapper(this);
             MutablePropertyValues pvs = new MutablePropertyValues();
-            pvs.AddAll(context.Scheduler.Context);
-            pvs.AddAll(context.MergedJobDataMap);
+            pvs.AddAll((IDictionary<string, object>) context.Scheduler.Context);
+            pvs.AddAll((IDictionary<string, object>) context.MergedJobDataMap);
             bw.SetPropertyValues(pvs, true);
         }
         catch (SchedulerException ex)

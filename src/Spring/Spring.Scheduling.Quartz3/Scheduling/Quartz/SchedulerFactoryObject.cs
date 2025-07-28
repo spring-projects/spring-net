@@ -702,7 +702,7 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
         lock (repository)
         {
             IScheduler existingScheduler = schedulerName != null
-                ? repository.Lookup(schedulerName).ConfigureAwait(false).GetAwaiter().GetResult()
+                ? repository.Lookup(schedulerName)
                 : null;
 
             IScheduler newScheduler =

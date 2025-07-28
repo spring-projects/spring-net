@@ -139,8 +139,7 @@ public class SchedulerAccessorObject : SchedulerAccessor, IObjectFactoryAware, I
             }
         }
 
-        IScheduler schedulerInRepo = SchedulerRepository.Instance.Lookup(schedulerName)
-            .ConfigureAwait(false).GetAwaiter().GetResult();
+        IScheduler schedulerInRepo = SchedulerRepository.Instance.Lookup(schedulerName);
         if (schedulerInRepo == null)
         {
             throw new InvalidOperationException("No Scheduler named '" + schedulerName + "' found");

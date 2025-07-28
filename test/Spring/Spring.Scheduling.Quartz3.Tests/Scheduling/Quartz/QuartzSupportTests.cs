@@ -923,9 +923,10 @@ public class QuartzSupportTests
     public async Task TestSchedulerRepositoryExposure()
     {
         XmlApplicationContext ctx = new XmlApplicationContext("schedulerRepositoryExposure.xml");
-        var expected = await SchedulerRepository.Instance.Lookup("myScheduler");
+        var expected = SchedulerRepository.Instance.Lookup("myScheduler");
         Assert.AreSame(expected, ctx.GetObject("scheduler"));
         ctx.Dispose();
+        await Task.CompletedTask;
     }
 
     /// <summary>
