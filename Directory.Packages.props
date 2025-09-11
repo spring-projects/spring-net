@@ -24,7 +24,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Microsoft.Win32.Registry" Version="4.7.0" />
-    <PackageVersion Include="NHibernate" Version="5.5.2" />
+    <PackageVersion Include="NHibernate" Version="5.5.3" />
     <PackageVersion Include="Nuke.Common" Version="8.0.0" />
     <PackageVersion Include="NUnit" Version="3.14.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
