@@ -29,7 +29,7 @@
     <PackageVersion Include="NUnit" Version="3.14.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
     <PackageVersion Include="NVelocity" Version="1.2.0" />
-    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Quartz" Version="3.12.0" />
     <PackageVersion Include="System.CodeDom" Version="5.0.0" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
