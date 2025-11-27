@@ -28,15 +28,11 @@ namespace Spring.Objects.Factory.Config;
 /// <author>Mark Pollack</author>
 public class DependencyDescriptor
 {
-    private MethodParameter methodParameter;
-
-    private PropertyInfo property;
-
-    private FieldInfo field;
-
-    private readonly bool required;
-
-    private readonly bool eager;
+    private readonly MethodParameter _methodParameter;
+    private readonly PropertyInfo _property;
+    private FieldInfo _field;
+    private readonly bool _required;
+    private readonly bool _eager;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DependencyDescriptor"/> class for a method or constructor parameter.
@@ -58,9 +54,9 @@ public class DependencyDescriptor
     /// eagerly resolving potential target objects for type matching.</param>
     public DependencyDescriptor(MethodParameter methodParameter, bool required, bool eager)
     {
-        this.methodParameter = methodParameter;
-        this.required = required;
-        this.eager = eager;
+        this._methodParameter = methodParameter;
+        this._required = required;
+        this._eager = eager;
     }
 
     /// <summary>
@@ -83,9 +79,9 @@ public class DependencyDescriptor
     /// </summary>
     public DependencyDescriptor(PropertyInfo property, bool required, bool eager)
     {
-        this.property = property;
-        this.required = required;
-        this.eager = eager;
+        this._property = property;
+        this._required = required;
+        this._eager = eager;
     }
 
     /// <summary>
@@ -108,9 +104,9 @@ public class DependencyDescriptor
     /// </summary>
     public DependencyDescriptor(FieldInfo field, bool required, bool eager)
     {
-        this.field = field;
-        this.required = required;
-        this.eager = eager;
+        this._field = field;
+        this._required = required;
+        this._eager = eager;
     }
 
     /// <summary>
@@ -119,7 +115,7 @@ public class DependencyDescriptor
     /// <value><c>true</c> if required; otherwise, <c>false</c>.</value>
     public bool Required
     {
-        get { return required; }
+        get { return _required; }
     }
 
     /// <summary>
@@ -130,12 +126,12 @@ public class DependencyDescriptor
     {
         get
         {
-            if (methodParameter != null)
-                return methodParameter.ParameterType;
-            if (property != null)
-                return property.PropertyType;
-            if (field != null)
-                return field.FieldType;
+            if (_methodParameter != null)
+                return _methodParameter.ParameterType;
+            if (_property != null)
+                return _property.PropertyType;
+            if (_field != null)
+                return _field.FieldType;
 
             return null;
         }
@@ -148,7 +144,7 @@ public class DependencyDescriptor
     /// <value><c>true</c> if eager; otherwise, <c>false</c>.</value>
     public bool Eager
     {
-        get { return this.eager; }
+        get { return this._eager; }
     }
 
     /// <summary>
@@ -157,7 +153,7 @@ public class DependencyDescriptor
     /// <value>The method parameter.</value>
     public MethodParameter MethodParameter
     {
-        get { return methodParameter; }
+        get { return _methodParameter; }
     }
 
     /// <summary>
@@ -167,12 +163,12 @@ public class DependencyDescriptor
     {
         get
         {
-            if (methodParameter != null)
-                return methodParameter.ParameterAttributes;
-            if (property != null)
-                return Attribute.GetCustomAttributes(property);
-            if (field != null)
-                return Attribute.GetCustomAttributes(field);
+            if (_methodParameter != null)
+                return _methodParameter.ParameterAttributes;
+            if (_property != null)
+                return Attribute.GetCustomAttributes(_property);
+            if (_field != null)
+                return Attribute.GetCustomAttributes(_field);
 
             return new Attribute[0];
         }
@@ -185,12 +181,12 @@ public class DependencyDescriptor
     {
         get
         {
-            if (methodParameter != null)
-                return methodParameter.ParameterName();
-            if (property != null)
-                return property.Name;
-            if (field != null)
-                return field.Name;
+            if (_methodParameter != null)
+                return _methodParameter.ParameterName();
+            if (_property != null)
+                return _property.Name;
+            if (_field != null)
+                return _field.Name;
 
             return "";
         }

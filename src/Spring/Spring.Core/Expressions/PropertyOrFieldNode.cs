@@ -616,32 +616,32 @@ public class PropertyOrFieldNode : BaseNode
 
     private class FieldValueAccessor : BaseValueAccessor
     {
-        private SafeField field;
-        private bool isWriteable;
-        private Type targetType;
-        private Type contextType;
+        private readonly SafeField _field;
+        private readonly bool _isWriteable;
+        private readonly Type _targetType;
+        private readonly Type _contextType;
 
         public FieldValueAccessor(FieldInfo fieldInfo)
         {
-            this.field = new SafeField(fieldInfo);
-            this.isWriteable = !(fieldInfo.IsInitOnly || fieldInfo.IsLiteral);
-            this.targetType = fieldInfo.FieldType;
-            this.contextType = fieldInfo.DeclaringType;
+            this._field = new SafeField(fieldInfo);
+            this._isWriteable = !(fieldInfo.IsInitOnly || fieldInfo.IsLiteral);
+            this._targetType = fieldInfo.FieldType;
+            this._contextType = fieldInfo.DeclaringType;
         }
 
         public override object Get(object context)
         {
-            return field.GetValue(context);
+            return _field.GetValue(context);
         }
 
         public override void Set(object context, object value)
         {
-            field.SetValue(context, value);
+            _field.SetValue(context, value);
         }
 
         public override bool IsWriteable
         {
-            get { return isWriteable; }
+            get { return _isWriteable; }
         }
 
         public override bool RequiresContext
@@ -651,17 +651,17 @@ public class PropertyOrFieldNode : BaseNode
 
         public override Type TargetType
         {
-            get { return targetType; }
+            get { return _targetType; }
         }
 
         public override MemberInfo MemberInfo
         {
-            get { return field.FieldInfo; }
+            get { return _field.FieldInfo; }
         }
 
         public override bool RequiresRefresh(Type contextType)
         {
-            return this.contextType != contextType;
+            return this._contextType != contextType;
         }
     }
 

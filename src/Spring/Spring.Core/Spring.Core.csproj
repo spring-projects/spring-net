@@ -12,11 +12,6 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="System.Reflection" />
-    <PackageReference Include="System.Reflection.Primitives" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <Compile Remove="Threading\CallContextStorage.cs" />
   </ItemGroup>
 

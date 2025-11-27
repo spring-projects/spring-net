@@ -26,9 +26,9 @@ public partial class Build
                            """
             ).AssertWaitForExit();
 
-            FileSystemTasks.CopyDirectoryRecursively(ReferenceDocumentationPath / "src" / "styles", targetDir / "html" / "styles", DirectoryExistsPolicy.Merge);
-            FileSystemTasks.CopyDirectoryRecursively(ReferenceDocumentationPath / "src" / "images", targetDir / "html" / "images", DirectoryExistsPolicy.Merge, excludeFile: file => file.Extension != ".gif" && file.Extension != ".svg" && file.Extension != ".jpg" && file.Extension != ".png");
-            FileSystemTasks.CopyDirectoryRecursively(ReferenceDocumentationPath / "lib" / "docbook-xsl-snapshot" / "images", targetDir / "html" / "images", DirectoryExistsPolicy.Merge);
+            (ReferenceDocumentationPath / "src" / "styles").CopyToDirectory(targetDir / "html" / "styles", ExistsPolicy.MergeAndOverwrite);
+            (ReferenceDocumentationPath / "src" / "images").CopyToDirectory(targetDir / "html" / "images", ExistsPolicy.MergeAndOverwrite, excludeFile: file => file.Extension != ".gif" && file.Extension != ".svg" && file.Extension != ".jpg" && file.Extension != ".png");
+            (ReferenceDocumentationPath / "lib" / "docbook-xsl-snapshot" / "images").CopyToDirectory(targetDir / "html" / "images", ExistsPolicy.MergeAndOverwrite);
         });
 
     Target DocsSdk => _ => _
@@ -45,6 +45,6 @@ public partial class Build
             ProcessTasks.StartProcess("yarn", arguments: "build", workingDirectory: webSiteDir).AssertWaitForExit();
 
             // copy reference docs
-            FileSystemTasks.CopyDirectoryRecursively(ReferenceDocumentationPath / "target" / "html", webSiteDir / "public" / "doc-latest" / "reference" / "html", DirectoryExistsPolicy.Merge);
+            (ReferenceDocumentationPath / "target" / "html").CopyToDirectory(webSiteDir / "public" / "doc-latest" / "reference" / "html", ExistsPolicy.MergeAndOverwrite);
         });
 }
