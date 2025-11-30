@@ -14,7 +14,7 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Utilities.Collections;
 using Serilog;
-using static Nuke.Common.IO.FileSystemTasks;
+
 using static Nuke.Common.Tooling.ProcessTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
@@ -184,7 +184,7 @@ partial class Build : NukeBuild
 
             foreach (var file in BuildDirectory.GlobFiles(patterns))
             {
-                CopyFileToDirectory(file, binDirectory / "net", FileExistsPolicy.OverwriteIfNewer);
+                file.CopyToDirectory(binDirectory / "net", ExistsPolicy.FileOverwriteIfNewer);
             }
         });
 
