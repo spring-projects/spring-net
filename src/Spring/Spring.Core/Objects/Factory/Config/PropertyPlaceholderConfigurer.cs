@@ -215,7 +215,7 @@ public class PropertyPlaceholderConfigurer : PropertyResourceConfigurer
     /// </param>
     /// <param name="props">The properties to apply.</param>
     /// <exception cref="Spring.Objects.ObjectsException">
-    /// If an error occured.
+    /// If an error occurred.
     /// </exception>
     protected override void ProcessProperties(IConfigurableListableObjectFactory factory, NameValueCollection props)
     {
