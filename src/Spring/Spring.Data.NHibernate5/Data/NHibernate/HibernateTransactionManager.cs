@@ -658,7 +658,7 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
     /// Convert the given HibernateException to an appropriate exception from
     /// the Spring.Dao hierarchy. Can be overridden in subclasses.
     /// </summary>
-    /// <param name="ex">The HibernateException that occured.</param>
+    /// <param name="ex">The HibernateException that occurred.</param>
     /// <returns>The corresponding DataAccessException instance</returns>
     protected virtual DataAccessException ConvertHibernateAccessException(HibernateException ex)
     {
@@ -678,7 +678,7 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
     /// Convert the given ADOException to an appropriate exception from the
     /// the Spring.Dao hierarchy. Can be overridden in subclasses.
     /// </summary>
-    /// <param name="ex">The ADOException that occured, wrapping the underlying
+    /// <param name="ex">The ADOException that occurred, wrapping the underlying
     /// ADO.NET thrown exception.</param>
     /// <param name="translator">The translator to convert hibernate ADOExceptions.</param>
     /// <returns>
