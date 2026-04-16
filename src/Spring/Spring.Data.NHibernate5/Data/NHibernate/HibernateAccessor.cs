@@ -391,7 +391,7 @@ public abstract class HibernateAccessor : IInitializingObject, IObjectFactoryAwa
     /// <code>org.springframework.dao</code> hierarchy. Will automatically detect
     /// wrapped ADO.NET Exceptions and convert them accordingly.
     /// </summary>
-    /// <param name="ex">HibernateException that occured.</param>
+    /// <param name="ex">HibernateException that occurred.</param>
     /// <returns>
     /// The corresponding DataAccessException instance
     /// </returns>
@@ -413,7 +413,7 @@ public abstract class HibernateAccessor : IInitializingObject, IObjectFactoryAwa
     /// Converts the ADO.NET access exception to an appropriate exception from the
     /// <code>org.springframework.dao</code> hierarchy. Can be overridden in subclasses.
     /// </summary>
-    /// <param name="ex">ADOException that occured, wrapping underlying ADO.NET exception.</param>
+    /// <param name="ex">ADOException that occurred, wrapping underlying ADO.NET exception.</param>
     /// <returns>
     /// the corresponding DataAccessException instance
     /// </returns>
