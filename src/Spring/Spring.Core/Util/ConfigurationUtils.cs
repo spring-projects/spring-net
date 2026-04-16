@@ -101,7 +101,7 @@ public static class ConfigurationUtils
     /// <param name="message">The message to display to the client when the exception is thrown.</param>
     /// <param name="inner">The inner exception.</param>
     /// <param name="fileName">Name of the configuration file.</param>
-    /// <param name="line">The line where exception occured.</param>
+    /// <param name="line">The line where exception occurred.</param>
     /// <returns>Configuration exception.</returns>
     public static Exception CreateConfigurationException(string message, Exception inner, string fileName, int line)
     {
@@ -113,7 +113,7 @@ public static class ConfigurationUtils
     /// </summary>
     /// <param name="message">The message to display to the client when the exception is thrown.</param>
     /// <param name="fileName">Name of the configuration file.</param>
-    /// <param name="line">The line where exception occured.</param>
+    /// <param name="line">The line where exception occurred.</param>
     /// <returns>Configuration exception.</returns>
     public static Exception CreateConfigurationException(string message, string fileName, int line)
     {
@@ -125,7 +125,7 @@ public static class ConfigurationUtils
     /// </summary>
     /// <param name="message">The message to display to the client when the exception is thrown.</param>
     /// <param name="inner">The inner exception.</param>
-    /// <param name="node">XML node where exception occured.</param>
+    /// <param name="node">XML node where exception occurred.</param>
     /// <returns>Configuration exception.</returns>
     public static Exception CreateConfigurationException(string message, Exception inner, XmlNode node)
     {
@@ -136,7 +136,7 @@ public static class ConfigurationUtils
     /// Creates the configuration exception.
     /// </summary>
     /// <param name="message">The message to display to the client when the exception is thrown.</param>
-    /// <param name="node">XML node where exception occured.</param>
+    /// <param name="node">XML node where exception occurred.</param>
     /// <returns>Configuration exception.</returns>
     public static Exception CreateConfigurationException(string message, XmlNode node)
     {
