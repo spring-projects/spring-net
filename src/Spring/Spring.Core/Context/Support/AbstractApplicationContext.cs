@@ -390,7 +390,7 @@ public abstract class AbstractApplicationContext
         {
             Delegate target = ContextEvent.GetInvocationList()[0];
             Exception exception = exceptions[target];
-            throw new ApplicationContextException(string.Format("An unhandled exception occured during processing application event {0} in handler {1}", e.GetType(), target.Method), exception);
+            throw new ApplicationContextException(string.Format("An unhandled exception occurred during processing application event {0} in handler {1}", e.GetType(), target.Method), exception);
         }
     }
 
