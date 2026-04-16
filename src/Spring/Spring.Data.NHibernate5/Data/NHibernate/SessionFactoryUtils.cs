@@ -411,7 +411,7 @@ public abstract class SessionFactoryUtils
     /// handle AdoException specifically by using a AdoExceptionTranslator for the
     /// underlying ADO.NET exception.
     /// </summary>
-    /// <param name="ex">The Hibernate exception that occured.</param>
+    /// <param name="ex">The Hibernate exception that occurred.</param>
     /// <returns>DataAccessException instance</returns>
     public static DataAccessException ConvertHibernateAccessException(HibernateException ex)
     {
