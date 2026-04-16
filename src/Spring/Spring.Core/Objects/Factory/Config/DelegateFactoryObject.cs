@@ -79,7 +79,7 @@ public class DelegateFactoryObject : AbstractFactoryObject
     /// Creates the delegate.
     /// </summary>
     /// <exception cref="System.Exception">
-    /// If an exception occured during object creation.
+    /// If an exception occurred during object creation.
     /// </exception>
     /// <returns>The object returned by this factory.</returns>
     /// <seealso cref="Spring.Objects.Factory.Config.AbstractFactoryObject.CreateInstance()"/>
