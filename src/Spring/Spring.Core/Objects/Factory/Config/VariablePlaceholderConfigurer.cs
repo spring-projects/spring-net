@@ -223,7 +223,7 @@ public class VariablePlaceholderConfigurer : IObjectFactoryPostProcessor, IPrior
     /// used by the application context.
     /// </param>
     /// <exception cref="Spring.Objects.ObjectsException">
-    /// If an error occured.
+    /// If an error occurred.
     /// </exception>
     protected virtual void ProcessProperties(IConfigurableListableObjectFactory factory)
     {
