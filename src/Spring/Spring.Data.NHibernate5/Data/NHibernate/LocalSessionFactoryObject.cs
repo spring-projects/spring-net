@@ -965,7 +965,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
     /// Will automatically apply a specified IAdoExceptionTranslator to a
     /// Hibernate ADOException, else rely on Hibernate's default translation.
     /// </summary>
-    /// <param name="ex">The Hibernate exception that occured.</param>
+    /// <param name="ex">The Hibernate exception that occurred.</param>
     /// <returns>A corresponding DataAccessException</returns>
     protected virtual DataAccessException ConvertHibernateException(HibernateException ex)
     {
@@ -981,7 +981,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
     /// Converts the ADO.NET access exception to an appropriate exception from the
     /// <code>org.springframework.dao</code> hierarchy. Can be overridden in subclasses.
     /// </summary>
-    /// <param name="ex">ADOException that occured, wrapping underlying ADO.NET exception.</param>
+    /// <param name="ex">ADOException that occurred, wrapping underlying ADO.NET exception.</param>
     /// <returns>
     /// the corresponding DataAccessException instance
     /// </returns>
