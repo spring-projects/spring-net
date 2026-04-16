@@ -179,7 +179,7 @@ public abstract class HibernateDaoSupport : DaoSupport
     /// <code>org.springframework.dao</code> hierarchy. Will automatically detect
     /// wrapped ADO.NET Exceptions and convert them accordingly.
     /// </summary>
-    /// <param name="ex">HibernateException that occured.</param>
+    /// <param name="ex">HibernateException that occurred.</param>
     /// <returns>
     /// The corresponding DataAccessException instance
     /// </returns>
