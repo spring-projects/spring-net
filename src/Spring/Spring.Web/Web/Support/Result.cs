@@ -374,7 +374,7 @@ public class Result : IResult
     /// </summary>
     /// <param name="context">the context to be used for evaluation.</param>
     /// <param name="value">the string that might need evaluation</param>
-    /// <returns>the evaluation result. Unodified <paramref name="value"/> if no evalution occured.</returns>
+    /// <returns>the evaluation result. Unodified <paramref name="value"/> if no evalution occurred.</returns>
     protected virtual object ResolveValueIfNecessary(object context, string value)
     {
         return ResolveSpELRuntimeExpressionIfNecessary(context, value);
