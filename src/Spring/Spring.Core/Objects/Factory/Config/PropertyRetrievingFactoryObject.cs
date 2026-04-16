@@ -238,7 +238,7 @@ public class PropertyRetrievingFactoryObject : AbstractFactoryObject, IInitializ
     /// returned by this factory.
     /// </summary>
     /// <exception cref="System.Exception">
-    /// If an exception occured during object creation.
+    /// If an exception occurred during object creation.
     /// </exception>
     /// <returns>The object returned by this factory.</returns>
     protected override object CreateInstance()
