@@ -72,7 +72,7 @@ public class CaoFactoryObject : IFactoryObject, IInitializingObject
     /// <summary>
     /// Callback method called once all factory properties have been set.
     /// </summary>
-    /// <exception cref="System.Exception">if an error occured</exception>
+    /// <exception cref="System.Exception">if an error occurred</exception>
     public void AfterPropertiesSet()
     {
         if (RemoteTargetName == null)
