@@ -205,12 +205,12 @@ public static class LoggerExtensions
     public static IVoidArgumentValidationConfiguration VerifyLog(this ILogger logger, LogLevel level,
         string message)
     {
-        return A.CallTo(() => logger.Log(
-            level,
-            A<EventId>._,
-            A<object>.That.Matches(e => e.ToString().Contains(message)),
-            A<Exception>._,
-            A<Func<object, Exception, string>>._)
-        );
+        // MEL 3+ dispatches Log<FormattedLogValues> (a struct TState), which a typed
+        // Log<object> expectation can never match, so the call is matched untyped.
+        return A.CallTo(logger)
+            .Where(call => call.Method.Name == nameof(ILogger.Log)
+                           && call.Arguments.Get<LogLevel>(0) == level
+                           && call.Arguments[2] != null
+                           && call.Arguments[2].ToString().Contains(message));
     }
 }
