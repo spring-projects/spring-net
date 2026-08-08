@@ -20,6 +20,7 @@ using System.Drawing;
 using System.Net;
 using System.Resources;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using Spring.Core.TypeResolution;
 using Spring.Util;
@@ -57,6 +58,7 @@ public class TypeConverterRegistry
             converters[typeof(ResourceManager)] = new ResourceManagerConverter();
             converters[typeof(Regex)] = new RegexConverter();
             converters[typeof(TimeSpan)] = new TimeSpanConverter();
+            converters[typeof(LogLevel)] = new LogLevelConverter();
             converters[typeof(ICredentials)] = new CredentialConverter();
             converters[typeof(NetworkCredential)] = new CredentialConverter();
             converters[typeof(RegistryKey)] = new RegistryKeyConverter();

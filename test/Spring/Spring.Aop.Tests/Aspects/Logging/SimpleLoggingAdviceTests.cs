@@ -15,12 +15,15 @@
  */
 
 using System.Reflection;
+using System.Text;
 using AopAlliance.Intercept;
 using FakeItEasy;
 using FakeItEasy.Configuration;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Spring.Aop.Framework;
+using Spring.Core.IO;
+using Spring.Objects.Factory.Xml;
 
 namespace Spring.Aspects.Logging;
 
@@ -43,9 +46,18 @@ public class SimpleLoggingAdviceTests
         }
     }
 
+    private ILoggerFactory originalLoggerFactory;
+
     [SetUp]
     public void Setup()
     {
+        originalLoggerFactory = LogManager.LoggerFactory;
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        LogManager.LoggerFactory = originalLoggerFactory;
     }
 
     [Test]
@@ -163,6 +175,93 @@ public class SimpleLoggingAdviceTests
 
         log.VerifyLogMustHaveHappened(LogLevel.Trace, "Entering Bark");
         log.VerifyLogMustHaveHappened(LogLevel.Trace, "Exiting Bark");
+    }
+
+    [Test]
+    public void LoggerFactoryAssignedAfterAdviceConstructionIsUsed()
+    {
+        LogManager.LoggerFactory = null;
+        SimpleLoggingAdvice loggingAdvice = new SimpleLoggingAdvice();
+
+        ProxyFactory pf = new ProxyFactory(new TestTarget());
+        pf.AddAdvice(loggingAdvice);
+        ITestTarget ptt = (ITestTarget) pf.GetProxy();
+
+        RecordingLoggerFactory loggerFactory = new RecordingLoggerFactory();
+        LogManager.LoggerFactory = loggerFactory;
+
+        ptt.DoSomething();
+
+        Assert.That(loggerFactory.Messages, Has.Some.Contains("Entering DoSomething"));
+        Assert.That(loggerFactory.Messages, Has.Some.Contains("Exiting DoSomething"));
+    }
+
+    [Test]
+    public void DefaultLoggerCategoryIsConcreteAdviceType()
+    {
+        RecordingLoggerFactory loggerFactory = new RecordingLoggerFactory();
+        LogManager.LoggerFactory = loggerFactory;
+
+        SimpleLoggingAdvice loggingAdvice = new SimpleLoggingAdvice();
+        ProxyFactory pf = new ProxyFactory(new TestTarget());
+        pf.AddAdvice(loggingAdvice);
+        ((ITestTarget) pf.GetProxy()).DoSomething();
+
+        Assert.That(loggerFactory.Categories, Does.Contain(typeof(SimpleLoggingAdvice).FullName));
+    }
+
+    [Test]
+    public void LegacyLogLevelNameCanBeConfiguredFromXml()
+    {
+        string xml = $@"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net'>
+    <object id='loggingAdvice' type='{typeof(SimpleLoggingAdvice).AssemblyQualifiedName}'>
+        <property name='LogLevel' value='Info'/>
+    </object>
+</objects>";
+
+        XmlObjectFactory objectFactory = new XmlObjectFactory(new StringResource(xml, Encoding.UTF8));
+        SimpleLoggingAdvice advice = (SimpleLoggingAdvice) objectFactory.GetObject("loggingAdvice");
+
+        Assert.That(advice.LogLevel, Is.EqualTo(LogLevel.Information));
+    }
+
+    private sealed class RecordingLoggerFactory : ILoggerFactory
+    {
+        public List<string> Categories { get; } = [];
+        public List<string> Messages { get; } = [];
+
+        public ILogger CreateLogger(string categoryName)
+        {
+            Categories.Add(categoryName);
+            return new RecordingLogger(Messages);
+        }
+
+        public void AddProvider(ILoggerProvider provider)
+        {
+        }
+
+        public void Dispose()
+        {
+        }
+
+        private sealed class RecordingLogger(List<string> messages) : ILogger
+        {
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+            {
+                messages.Add(formatter(state, exception));
+            }
+
+            public bool IsEnabled(LogLevel logLevel)
+            {
+                return true;
+            }
+
+            public IDisposable BeginScope<TState>(TState state)
+            {
+                return null;
+            }
+        }
     }
 }
 
