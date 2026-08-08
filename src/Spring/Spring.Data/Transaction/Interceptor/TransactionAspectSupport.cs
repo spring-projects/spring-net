@@ -421,7 +421,7 @@ public class TransactionAspectSupport : IInitializingObject
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "] after exception: " + exception);
+                log.LogDebug(exception, "Completing transaction for [{JoinpointIdentification}] after exception", transactionInfo.JoinpointIdentification);
             }
 
             if (transactionInfo.TransactionAttribute.RollbackOn(exception))

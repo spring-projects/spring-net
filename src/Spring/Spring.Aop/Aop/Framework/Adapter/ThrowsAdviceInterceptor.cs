@@ -253,7 +253,7 @@ public sealed class ThrowsAdviceInterceptor : IMethodInterceptor
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Trying to find handler for exception of type [" + exception.GetType().Name + "].");
+            log.LogDebug("Trying to find handler for exception of type [{ExceptionType}].", exception.GetType().Name);
         }
 
         MethodInfo handler = (MethodInfo) this.exceptionHandlers[exceptionClass];

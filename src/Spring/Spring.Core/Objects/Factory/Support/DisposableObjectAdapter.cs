@@ -148,15 +148,7 @@ public class DisposableObjectAdapter : IDisposable
 
             catch (Exception ex)
             {
-                string msg = "Invocation of Dispose method failed on object with name '" + this.objectName + "'";
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogWarning(ex, msg);
-                }
-                else
-                {
-                    logger.LogWarning(msg + ": " + ex);
-                }
+                logger.LogWarning(ex, "Invocation of Dispose method failed on object with name '{ObjectName}'", this.objectName);
             }
         }
 
@@ -229,16 +221,8 @@ public class DisposableObjectAdapter : IDisposable
         }
         catch (TargetInvocationException ex)
         {
-            string msg = "Invocation of destroy method '" + this.destroyMethodName +
-                         "' failed on object with name '" + this.objectName + "'";
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogWarning(ex.InnerException, msg);
-            }
-            else
-            {
-                logger.LogWarning(msg + ": " + ex.InnerException);
-            }
+            logger.LogWarning(ex.InnerException, "Invocation of destroy method '{DestroyMethodName}' failed on object with name '{ObjectName}'",
+                this.destroyMethodName, this.objectName);
         }
         catch (Exception ex)
         {

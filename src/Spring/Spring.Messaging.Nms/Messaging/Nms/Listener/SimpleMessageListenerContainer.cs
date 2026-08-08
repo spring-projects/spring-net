@@ -175,7 +175,7 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
         // now try to recover the shared Connection and all consumers...
         if (logger.IsEnabled(LogLevel.Information))
         {
-            logger.LogInformation("Trying to recover from NMS Connection exception: " + exception);
+            logger.LogInformation(exception, "Trying to recover from NMS Connection exception");
         }
 
         try
