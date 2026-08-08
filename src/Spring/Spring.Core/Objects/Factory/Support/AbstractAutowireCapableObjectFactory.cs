@@ -327,7 +327,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     /// <seealso cref="Spring.Objects.Factory.Config.IDestructionAwareObjectPostProcessor.PostProcessBeforeDestruction"/>
     public virtual void ApplyObjectPostProcessBeforeDestruction(object instance, string name)
     {
-        log.LogDebug("Invoking PostProcessBeforeDestruction after IDisposal of object '{ObjectName}", name);
+        log.LogDebug("Invoking PostProcessBeforeDestruction after IDisposal of object '{ObjectName}'", name);
 
         for (var i = 0; i < ObjectPostProcessors.Count; i++)
         {
@@ -1382,7 +1382,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     {
         using (new DisposableObjectAdapter(target, name, GetMergedObjectDefinition(name, true), ObjectPostProcessors))
         {
-            log.LogDebug("Destroying dependant objects for object '{ObjectName}", name);
+            log.LogDebug("Destroying dependant objects for object '{ObjectName}'", name);
             DestroyDependantObjects(name);
         }
     }

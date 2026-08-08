@@ -56,7 +56,7 @@ public class ScannedGenericObjectDefinition : GenericObjectDefinition
 
         if (Log.IsEnabled(LogLevel.Debug))
         {
-            Log.LogDebug("ComponentName: {ComponentNAme}; {Name}", _componentName, ToString());
+            Log.LogDebug("ComponentName: {ComponentName}; {Definition}", _componentName, ToString());
         }
     }
 

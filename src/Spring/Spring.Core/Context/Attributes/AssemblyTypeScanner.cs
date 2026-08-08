@@ -317,7 +317,7 @@ public abstract class AssemblyTypeScanner : IAssemblyTypeScanner
 
         if (Logger.IsEnabled(LogLevel.Debug))
         {
-            Logger.LogDebug("Filtered Assemblies: {0}", StringUtils.ArrayToCommaDelimitedString(filteredAssemblies));
+            Logger.LogDebug("Filtered Assemblies: {FilteredAssemblies}", StringUtils.ArrayToCommaDelimitedString(filteredAssemblies));
         }
 
         return filteredAssemblies;
