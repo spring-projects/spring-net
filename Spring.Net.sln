@@ -102,7 +102,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Benchmark", "test\Sp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{9537C677-ADE5-4503-AFD7-3E0C3B0960EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build-support\nuke-build\_build.csproj", "{0D135B50-2B59-44C1-941A-32B5EC798C88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build-support\build\_build.csproj", "{0D135B50-2B59-44C1-941A-32B5EC798C88}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{C0BAC5A1-AC38-4D36-BE28-F5A74BD9FECD}"
 	ProjectSection(SolutionItems) = preProject

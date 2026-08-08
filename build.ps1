@@ -13,15 +13,15 @@ $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 # CONFIGURATION
 ###########################################################################
 
-$BuildProjectFile = "$PSScriptRoot\build-support\nuke-build\_build.csproj"
-$TempDirectory = "$PSScriptRoot\\.nuke\temp"
+$TempDirectory = Join-Path $PSScriptRoot '.fallout/temp'
 
-$DotNetGlobalFile = "$PSScriptRoot\\global.json"
+$DotNetGlobalFile = Join-Path $PSScriptRoot 'global.json'
 $DotNetInstallUrl = "https://dot.net/v1/dotnet-install.ps1"
 $DotNetChannel = "STS"
 
 $env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
 $env:DOTNET_NOLOGO = 1
+$env:DOTNET_ROLL_FORWARD = "Major"
 
 ###########################################################################
 # EXECUTION
@@ -32,19 +32,17 @@ function ExecSafe([scriptblock] $cmd) {
     if ($LASTEXITCODE) { exit $LASTEXITCODE }
 }
 
-# If dotnet CLI is installed globally and it matches requested version, use for execution
+# If dotnet CLI is installed globally, use it; otherwise provision a local copy under .fallout\temp.
 if ($null -ne (Get-Command "dotnet" -ErrorAction SilentlyContinue) -and `
-     $(dotnet --version) -and $LASTEXITCODE -eq 0) {
+    $(dotnet --version) -and $LASTEXITCODE -eq 0) {
     $env:DOTNET_EXE = (Get-Command "dotnet").Path
 }
 else {
-    # Download install script
-    $DotNetInstallFile = "$TempDirectory\dotnet-install.ps1"
+    $DotNetInstallFile = Join-Path $TempDirectory 'dotnet-install.ps1'
     New-Item -ItemType Directory -Path $TempDirectory -Force | Out-Null
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     (New-Object System.Net.WebClient).DownloadFile($DotNetInstallUrl, $DotNetInstallFile)
 
-    # If global.json exists, load expected version
     if (Test-Path $DotNetGlobalFile) {
         $DotNetGlobal = $(Get-Content $DotNetGlobalFile | Out-String | ConvertFrom-Json)
         if ($DotNetGlobal.PSObject.Properties["sdk"] -and $DotNetGlobal.sdk.PSObject.Properties["version"]) {
@@ -52,23 +50,17 @@ else {
         }
     }
 
-    # Install by channel or version
-    $DotNetDirectory = "$TempDirectory\dotnet-win"
+    $DotNetDirectory = Join-Path $TempDirectory 'dotnet-win'
     if (!(Test-Path variable:DotNetVersion)) {
         ExecSafe { & powershell $DotNetInstallFile -InstallDir $DotNetDirectory -Channel $DotNetChannel -NoPath }
     } else {
         ExecSafe { & powershell $DotNetInstallFile -InstallDir $DotNetDirectory -Version $DotNetVersion -NoPath }
     }
-    $env:DOTNET_EXE = "$DotNetDirectory\dotnet.exe"
+    $env:DOTNET_EXE = Join-Path $DotNetDirectory 'dotnet.exe'
     $env:PATH = "$DotNetDirectory;$env:PATH"
 }
 
 Write-Output "Microsoft (R) .NET SDK version $(& $env:DOTNET_EXE --version)"
 
-if (Test-Path env:NUKE_ENTERPRISE_TOKEN) {
-    & $env:DOTNET_EXE nuget remove source "nuke-enterprise" > $null
-    & $env:DOTNET_EXE nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password $env:NUKE_ENTERPRISE_TOKEN > $null
-}
-
-ExecSafe { & $env:DOTNET_EXE build $BuildProjectFile /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet }
-ExecSafe { & $env:DOTNET_EXE run --project $BuildProjectFile --no-build -- $BuildArguments }
+ExecSafe { & $env:DOTNET_EXE tool restore }
+ExecSafe { & $env:DOTNET_EXE fallout $BuildArguments }

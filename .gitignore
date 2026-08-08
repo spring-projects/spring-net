@@ -27,6 +27,7 @@ _ReSharper*/
 
 #Project files
 [Bb]uild/
+!/build-support/build/
 s3-credentials.ps1
 TIBCO.EMS.*
 
@@ -88,5 +89,5 @@ project.lock.json
 
 BenchmarkDotNet.Artifacts*
 /artifacts
-/.nuke/temp
+/.fallout/temp
 node_modules
