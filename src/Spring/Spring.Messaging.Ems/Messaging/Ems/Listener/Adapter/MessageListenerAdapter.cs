@@ -45,7 +45,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter;
 /// <author>Mark Pollack (.NET)</author>
 public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageListener
 {
-    private readonly ILog logger = LogManager.GetLogger(typeof(MessageListenerAdapter));
+    private readonly ILogger logger = LogManager.GetLogger(typeof(MessageListenerAdapter));
 
     /// <summary>
     /// The default handler method name.

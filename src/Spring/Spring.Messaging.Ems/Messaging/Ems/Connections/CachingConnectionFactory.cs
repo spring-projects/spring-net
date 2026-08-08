@@ -53,7 +53,7 @@ namespace Spring.Messaging.Ems.Connections;
 /// <author>Mark Pollack (.NET)</author>
 public class CachingConnectionFactory : SingleConnectionFactory
 {
-    private static readonly ILog LOG = LogManager.GetLogger(typeof(CachingConnectionFactory));
+    private static readonly ILogger LOG = LogManager.GetLogger(typeof(CachingConnectionFactory));
 
     private int sessionCacheSize = 1;
 

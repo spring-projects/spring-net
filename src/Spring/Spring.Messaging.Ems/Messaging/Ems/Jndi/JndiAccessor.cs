@@ -15,6 +15,7 @@
  */
 
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 
 namespace Spring.Messaging.Ems.Jndi;
@@ -32,7 +33,7 @@ public class JndiAccessor : IInitializingObject
 
     private JndiContextType contextType = JndiContextType.JMS;
 
-    protected ILog logger;
+    protected ILogger logger;
 
     LookupContextFactory contextFactoryObject = new LookupContextFactory();
 

@@ -54,7 +54,7 @@ namespace Spring.Messaging.Ems.Connections;
 /// <author>Mark Pollack (.NET)</author>
 public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, IInitializingObject, IDisposable
 {
-    private static readonly ILog LOG = LogManager.GetLogger(typeof(SingleConnectionFactory));
+    private static readonly ILogger LOG = LogManager.GetLogger(typeof(SingleConnectionFactory));
 
     private IConnectionFactory targetConnectionFactory;
 
