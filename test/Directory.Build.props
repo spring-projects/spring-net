@@ -27,6 +27,12 @@
 
     <ImplicitUsings>enable</ImplicitUsings>
 
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>None</AnalysisMode>
+    <!-- Temporary escape hatch while log call sites are converted to message templates (#265) -->
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);CA2254;CA2253;CA2017;CA1727</WarningsNotAsErrors>
+
   </PropertyGroup>
 
   <ItemGroup>

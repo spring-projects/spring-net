@@ -36,6 +36,16 @@ indent_size = 2
 # IDE0055: Fix formatting
 dotnet_diagnostic.IDE0055.severity = warning
 
+# Logging message template rules (#265)
+# CA1727: Use PascalCase for named placeholders
+dotnet_diagnostic.CA1727.severity = warning
+# CA2017: Parameter count mismatch between message template and arguments
+dotnet_diagnostic.CA2017.severity = warning
+# CA2253: Named placeholders should not be numeric values
+dotnet_diagnostic.CA2253.severity = warning
+# CA2254: Message template should be a static expression
+dotnet_diagnostic.CA2254.severity = warning
+
 # Sort using and Import directives with System.* appearing first
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
