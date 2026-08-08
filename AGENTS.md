@@ -8,7 +8,7 @@ Spring.NET is a port and extension of the Java Spring Framework for .NET: IoC co
 
 ## Build and test commands
 
-Build orchestration is Fallout (`build-support/nuke-build`), the maintained successor to NUKE. Root-level bootstrap scripts install the pinned .NET SDK if missing (`global.json`: 10.0.100, rollForward latestMinor), then run the build through the `fallout` local tool (`dotnet tool restore` + `dotnet fallout`).
+Build orchestration is Fallout (`build-support/build`), the maintained successor to NUKE. Root-level bootstrap scripts install the pinned .NET SDK if missing (`global.json`: 10.0.100, rollForward latestMinor), then run the build through the `fallout` local tool (`dotnet tool restore` + `dotnet fallout`).
 
 ```
 ./build.cmd            # Windows (build.sh on Linux/macOS); default target = Compile

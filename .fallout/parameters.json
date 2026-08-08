@@ -1,4 +1,5 @@
 {
   "$schema": "./build.schema.json",
-  "Solution": "Spring.Net.sln"
+  "Solution": "Spring.Net.sln",
+  "BuildProjectFile": "build-support/build/_build.csproj"
 }
