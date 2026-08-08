@@ -683,8 +683,7 @@ public abstract class AbstractApplicationContext
             {
                 _eventRegistry = (IEventRegistry) candidateRegistry;
 
-                log.LogDebug(StringUtils.Surround(
-                    "Using IEventRegistry [", EventRegistry, "]"));
+                log.LogDebug("Using IEventRegistry [{EventRegistry}]", EventRegistry);
             }
             else
             {
@@ -770,8 +769,7 @@ public abstract class AbstractApplicationContext
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(StringUtils.Surround(
-                        "Using MessageSource [", MessageSource, "]"));
+                    log.LogDebug("Using MessageSource [{MessageSource}]", MessageSource);
                 }
             }
             else

@@ -280,7 +280,7 @@ public abstract class PropertyResourceConfigurer
                         {
                             if (_log.IsEnabled(LogLevel.Warning))
                             {
-                                _log.LogWarning(errorMessage);
+                                _log.LogWarning("Could not load configuration from {Resource}", resource);
                             }
                         }
                         else

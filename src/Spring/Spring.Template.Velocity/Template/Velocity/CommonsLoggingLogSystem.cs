@@ -50,16 +50,16 @@ public class CommonsLoggingLogSystem : ILogSystem
         switch (level)
         {
             case LogLevel.Error:
-                log.LogError(message);
+                log.LogError("{Message}", message);
                 break;
             case LogLevel.Warn:
-                log.LogWarning(message);
+                log.LogWarning("{Message}", message);
                 break;
             case LogLevel.Info:
-                log.LogInformation(message);
+                log.LogInformation("{Message}", message);
                 break;
             case LogLevel.Debug:
-                log.LogDebug(message);
+                log.LogDebug("{Message}", message);
                 break;
         }
     }

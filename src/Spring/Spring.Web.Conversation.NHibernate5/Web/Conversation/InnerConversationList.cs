@@ -41,7 +41,7 @@ public class InnerConversationList : IList<IConversationState>, IList
     {
         if (conversationOwner == null)
         {
-            String message = "'conversationOwner' can not be null";
+            const string message = "'conversationOwner' can not be null";
 
             LOG.LogError(message);
             throw new InvalidOperationException(message);
@@ -102,7 +102,7 @@ public class InnerConversationList : IList<IConversationState>, IList
                     "ConversationState Circular Dependency detected: " +
                     path + "->" + convItem.Id;
 
-                LOG.LogError(exMsgStr);
+                LOG.LogError("{Message}", exMsgStr);
                 throw new InvalidOperationException(exMsgStr);
             }
 

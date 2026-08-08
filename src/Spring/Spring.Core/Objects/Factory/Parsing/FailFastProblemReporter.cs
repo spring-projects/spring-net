@@ -29,18 +29,18 @@ public class FailFastProblemReporter : IProblemReporter
 
     public void Error(Problem problem)
     {
-        _logger.LogError(problem.Message);
+        _logger.LogError("{Message}", problem.Message);
         throw new ObjectDefinitionParsingException(problem);
     }
 
     public void Fatal(Problem problem)
     {
-        _logger.LogCritical(problem.Message);
+        _logger.LogCritical("{Message}", problem.Message);
         throw new ObjectDefinitionParsingException(problem);
     }
 
     public void Warning(Problem problem)
     {
-        _logger.LogWarning(problem.Message);
+        _logger.LogWarning("{Message}", problem.Message);
     }
 }

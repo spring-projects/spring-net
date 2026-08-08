@@ -54,8 +54,7 @@ public class ReturnValueExceptionHandler : AbstractExceptionHandler
         }
         catch (Exception e)
         {
-            string message = "Was not able to evaluate action expression [" + ActionExpressionText + "]";
-            log.LogWarning(e, message);
+            log.LogWarning(e, "Was not able to evaluate action expression [{ActionExpression}]", ActionExpressionText);
         }
 
         return returnVal;

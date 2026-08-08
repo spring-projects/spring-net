@@ -473,12 +473,12 @@ public class PropertiesObjectDefinitionReader : AbstractObjectDefinitionReader
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug(pvs.ToString());
+            log.LogDebug("{Properties}", pvs.ToString());
         }
 
         if (parent == null)
         {
-            log.LogDebug(this.DefaultParentObject);
+            log.LogDebug("{DefaultParentObject}", this.DefaultParentObject);
             parent = this.DefaultParentObject;
         }
 
