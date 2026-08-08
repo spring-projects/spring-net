@@ -24,6 +24,12 @@ public static class LogManager
     /// <summary>
     /// Gets or sets the current log provider based on logger factory.
     /// </summary>
+    /// <remarks>
+    /// Until a factory is assigned, all loggers returned by the <c>GetLogger</c> methods
+    /// are no-op <see cref="NullLogger"/> instances. Assigning a factory takes effect for
+    /// all loggers resolved afterwards, including lazily resolved ones such as those used
+    /// by <c>Spring.Aspects.Logging.AbstractLoggingAdvice</c>.
+    /// </remarks>
     public static ILoggerFactory LoggerFactory { get; set; }
 
     public static ILogger GetLogger(string category) => LoggerFactory?.CreateLogger(category) ?? NullLogger.Instance;

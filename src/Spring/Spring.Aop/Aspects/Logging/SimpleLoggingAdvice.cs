@@ -140,6 +140,12 @@ public class SimpleLoggingAdvice : AbstractLoggingAdvice
     /// <summary>
     /// Gets or sets the entry log level.
     /// </summary>
+    /// <remarks>
+    /// When configured from a string value, the legacy Common.Logging level names used by
+    /// Spring.NET configurations prior to 3.0 are also accepted: <c>All</c> maps to
+    /// <c>Trace</c>, <c>Info</c> to <c>Information</c>, <c>Warn</c> to <c>Warning</c>,
+    /// <c>Fatal</c> to <c>Critical</c> and <c>Off</c> to <c>None</c>.
+    /// </remarks>
     /// <value>The entry log level.</value>
     public LogLevel LogLevel
     {

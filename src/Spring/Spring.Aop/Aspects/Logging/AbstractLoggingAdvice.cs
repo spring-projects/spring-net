@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System.Reflection;
 using System.Runtime.Serialization;
 using AopAlliance.Intercept;
 using Microsoft.Extensions.Logging;
@@ -33,7 +32,9 @@ namespace Spring.Aspects.Logging;
 public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializationCallback
 {
     /// <summary>
-    /// The default <code>ILog</code> instance used to write logging messages.
+    /// The explicitly supplied <see cref="ILogger"/> instance used to write logging messages,
+    /// if any. When <c>null</c>, the logger is resolved through <see cref="LogManager"/>,
+    /// either by <see cref="defaultLoggerName"/> or dynamically per invocation.
     /// </summary>
     [NonSerialized] protected ILogger defaultLogger;
 
@@ -52,7 +53,7 @@ public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializati
     /// </summary>
     protected AbstractLoggingAdvice()
     {
-        SetDefaultLogger(MethodBase.GetCurrentMethod().DeclaringType.FullName);
+        SetDefaultLogger(GetType().FullName);
     }
 
     /// <summary>
@@ -89,8 +90,9 @@ public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializati
     /// Sets the name of the logger to use.
     /// </summary>
     /// <remarks>
-    /// The name will be passed to the underlying logging implementation through Common.Logging,
-    /// getting interpreted as the log category according to the loggers configuration.
+    /// The name will be passed to the underlying logging implementation through the configured
+    /// <see cref="LogManager.LoggerFactory"/>, getting interpreted as the log category
+    /// according to the loggers configuration.
     /// <para>
     /// This can be specified to not log into the category of a Type (whether this
     /// interceptor's class or the class getting called) but rather to a specific named category.
@@ -227,26 +229,35 @@ public abstract class AbstractLoggingAdvice : IMethodInterceptor, IDeserializati
         {
             return defaultLogger;
         }
-        else
-        {
-            object target = invocation.This;
-            Type logCategoryType = target.GetType();
-            if (hideProxyTypeNames)
-            {
-                logCategoryType = AopUtils.GetTargetType(target);
-            }
 
-            return LogManager.GetLogger(logCategoryType);
+        if (defaultLoggerName != null)
+        {
+            return LogManager.GetLogger(defaultLoggerName);
         }
+
+        object target = invocation.This;
+        Type logCategoryType = target.GetType();
+        if (hideProxyTypeNames)
+        {
+            logCategoryType = AopUtils.GetTargetType(target);
+        }
+
+        return LogManager.GetLogger(logCategoryType);
     }
 
     /// <summary>
-    /// Sets the default logger to the given name.
+    /// Sets the name of the default logger.
     /// </summary>
-    /// <param name="name">if <c>null</c>, the default logger is removed.</param>
+    /// <remarks>
+    /// The logger is resolved lazily through <see cref="LogManager"/> on each invocation,
+    /// so a <see cref="LogManager.LoggerFactory"/> assigned after this advice has been
+    /// created is still picked up.
+    /// </remarks>
+    /// <param name="name">if <c>null</c>, the default logger is removed and a dynamic,
+    /// per-target logger is used instead.</param>
     protected void SetDefaultLogger(string name)
     {
-        defaultLogger = (name == null ? null : LogManager.GetLogger(name));
+        defaultLogger = null;
         defaultLoggerName = name;
     }
 

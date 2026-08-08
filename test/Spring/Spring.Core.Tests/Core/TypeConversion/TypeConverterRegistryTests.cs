@@ -34,6 +34,13 @@ public sealed class TypeConverterRegistryTests
     }
 
     [Test]
+    public void GetConverterForLogLevel()
+    {
+        TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(Microsoft.Extensions.Logging.LogLevel));
+        Assert.IsTrue(converter is LogLevelConverter);
+    }
+
+    [Test]
     public void GetInternalConverter()
     {
         TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(int));

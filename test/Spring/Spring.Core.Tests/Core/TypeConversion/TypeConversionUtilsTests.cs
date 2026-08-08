@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace Spring.Core.TypeConversion;
@@ -63,5 +64,18 @@ public class TypeConversionUtilsTests
     {
         object o = TypeConversionUtils.ConvertValueIfNecessary(typeof(Double), "1,2", "foo");
         Assert.That(o, Is.EqualTo(1.2));
+    }
+
+    [Test]
+    public void ConvertsLegacyCommonLoggingLogLevelName()
+    {
+        object o = TypeConversionUtils.ConvertValueIfNecessary(typeof(LogLevel), "Info", "LogLevel");
+        Assert.That(o, Is.EqualTo(LogLevel.Information));
+    }
+
+    [Test]
+    public void ThrowsTypeMismatchForUnknownLogLevelName()
+    {
+        Assert.Throws<TypeMismatchException>(() => TypeConversionUtils.ConvertValueIfNecessary(typeof(LogLevel), "Verbose", "LogLevel"));
     }
 }
