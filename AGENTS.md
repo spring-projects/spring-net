@@ -8,7 +8,7 @@ Spring.NET is a port and extension of the Java Spring Framework for .NET: IoC co
 
 ## Build and test commands
 
-Build orchestration is NUKE (`build-support/nuke-build`). Root-level bootstrap scripts install the pinned .NET SDK if missing (`global.json`: 10.0.100, rollForward latestMinor).
+Build orchestration is Fallout (`build-support/nuke-build`), the maintained successor to NUKE. Root-level bootstrap scripts install the pinned .NET SDK if missing (`global.json`: 10.0.100, rollForward latestMinor), then run the build through the `fallout` local tool (`dotnet tool restore` + `dotnet fallout`).
 
 ```
 ./build.cmd            # Windows (build.sh on Linux/macOS); default target = Compile
@@ -34,7 +34,7 @@ dotnet test test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj -f net8.0 --f
 
 ### Integration tests
 
-NUKE's `Test` target excludes `*.Integration.Tests` projects (and `Spring.Web.Conversation.NHibernate5.Tests`) by default; they need external infrastructure and are gated behind flags: `--test-full`, `--test-integration-data`, `--test-integration-nms`, `--test-integration-ms-mq`, `--test-integration-ems`. `Spring.Services.Tests` is always excluded. Several test projects are Windows-only (net462: Web, Mvc5, Velocity, Messaging/MSMQ).
+Fallout's `Test` target excludes `*.Integration.Tests` projects (and `Spring.Web.Conversation.NHibernate5.Tests`) by default; they need external infrastructure and are gated behind flags: `--test-full`, `--test-integration-data`, `--test-integration-nms`, `--test-integration-ms-mq`, `--test-integration-ems`. `Spring.Services.Tests` is always excluded. Several test projects are Windows-only (net462: Web, Mvc5, Velocity, Messaging/MSMQ).
 
 - SQL Server-backed tests (`Spring.Data.Integration.Tests`, `Spring.Data.NHibernate5.Integration.Tests`, `Spring.Scheduling.Quartz3.Integration.Tests`): `docker-compose.yml` brings up SQL Server; setup scripts in `build-support/*.sql` and the test projects' `Data/` folders. See README.md "Running tests" for the full recipe.
 - TIBCO EMS projects need `TIBCO.EMS.dll` (not in the repo) and are excluded from the solution build; enable with `--build-ems`.
@@ -71,10 +71,10 @@ Key mechanics (defined in `src/Directory.Build.props` and `test/Directory.Build.
 
 ## Legacy areas — do not modify
 
-- NAnt-era build files, superseded by NUKE but still committed: `Spring.build`, `*.include`, `Build-ci.cmd`, `build-release-all.cmd`, `appveyor.yml.old`, most of `build-support/` (exception: `build-support/tools/antlr-2.7.6` is still used by the `Antlr` target).
+- NAnt-era build files, superseded by the Fallout build but still committed: `Spring.build`, `*.include`, `Build-ci.cmd`, `build-release-all.cmd`, `appveyor.yml.old`, most of `build-support/` (exception: `build-support/tools/antlr-2.7.6` is still used by the `Antlr` target).
 - `dev-support/`, `templates/` — VS 2008-era templates. `lib/` — checked-in legacy third-party DLLs. `doc/` — DocBook sources + vendored toolchain (CI ignores `doc/**`).
 - Orphan test folders not in the solution (reference removed projects): `test/Spring/Spring.Web.Mvc.Tests`, `Spring.Messaging.Ems.Tests`, `Spring.Data.NHibernate.Tests`.
 
 ## Website
 
-`website/` is a Gatsby 5 + React + TypeScript site (package manager: **yarn**). Local dev: `yarn install && yarn start`. The full build is `./build.sh website` (NUKE target; also builds the DocBook reference docs, which require Java on PATH). Deployed to GitHub Pages by `.github/workflows/website.yml` on pushes to `main`.
+`website/` is a Gatsby 5 + React + TypeScript site (package manager: **yarn**). Local dev: `yarn install && yarn start`. The full build is `./build.sh website` (Fallout target; also builds the DocBook reference docs, which require Java on PATH). Deployed to GitHub Pages by `.github/workflows/website.yml` on pushes to `main`.

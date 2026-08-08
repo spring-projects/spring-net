@@ -1,6 +1,6 @@
-using Nuke.Common;
-using Nuke.Common.IO;
-using Nuke.Common.Tooling;
+using Fallout.Common;
+using Fallout.Common.IO;
+using Fallout.Common.Tooling;
 
 public partial class Build
 {

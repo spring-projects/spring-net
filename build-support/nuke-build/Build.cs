@@ -3,30 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Nuke.Common;
-using Nuke.Common.CI;
-using Nuke.Common.CI.AppVeyor;
-using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.MSBuild;
-using Nuke.Common.Utilities.Collections;
+using Fallout.Common;
+using Fallout.Common.CI;
+using Fallout.Common.CI.AppVeyor;
+using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using Fallout.Common.Tools.DotNet;
+using Fallout.Common.Tools.MSBuild;
+using Fallout.Common.Utilities.Collections;
+using Fallout.Solutions;
 using Serilog;
 
-using static Nuke.Common.Tooling.ProcessTasks;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
+using static Fallout.Common.Tooling.ProcessTasks;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
+using static Fallout.Common.Tools.MSBuild.MSBuildTasks;
 
 [ShutdownDotNetAfterServerBuild]
-partial class Build : NukeBuild
+partial class Build : FalloutBuild
 {
-    /// Support plugins are available for:
-    ///   - JetBrains ReSharper        https://nuke.build/resharper
-    ///   - JetBrains Rider            https://nuke.build/rider
-    ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
-    ///   - Microsoft VSCode           https://nuke.build/vscode
     public static int Main() => Execute<Build>(x => x.Compile);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")] readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -47,7 +42,7 @@ partial class Build : NukeBuild
     AbsolutePath ExamplesDirectory => RootDirectory / "examples";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
-    string TagVersion => GitRepository.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
+    string TagVersion => GitRepository?.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
 
     bool IsTaggedBuild => !string.IsNullOrWhiteSpace(TagVersion);
 
