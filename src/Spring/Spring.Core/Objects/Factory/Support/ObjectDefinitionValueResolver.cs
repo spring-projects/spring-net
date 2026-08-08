@@ -304,7 +304,7 @@ public class ObjectDefinitionValueResolver
         {
             // keep a reference to the inner object instance, to be able to destroy
             // it on factory shutdown...
-            objectFactory.DisposableInnerObjects.Add(instance);
+            objectFactory.RegisterDisposableInnerObject(name, instance);
         }
 
         return result;

@@ -1721,6 +1721,13 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
         RootObjectDefinition definition = GetMergedObjectDefinition(name, true);
         if (definition != null)
         {
+            // The target instance is externally managed and this method may be called for any
+            // number of instances of the same definition (e.g. once per web request), so it
+            // must not apply container-singleton semantics: otherwise every IDisposable inner
+            // object resolved during configuration would be registered for disposal on factory
+            // shutdown and be kept alive for the lifetime of the factory (GH-239).
+            definition = CreateRootObjectDefinition(definition);
+            definition.IsSingleton = false;
             return ConfigureObject(name, definition, new ObjectWrapper(target));
         }
 
