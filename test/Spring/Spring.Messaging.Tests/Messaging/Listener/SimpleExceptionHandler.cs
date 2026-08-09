@@ -17,7 +17,7 @@ public class SimpleExceptionHandler : IExceptionHandler
 
     public void OnException(Exception exception, Message message)
     {
-        LOG.LogError("Exception Handler processing message id = [" + message.Id + "]");
+        LOG.LogError("Exception Handler processing message id = [{MessageId}]", message.Id);
         LOG.LogError(exception, "Exception = ");
         messageCount++;
     }

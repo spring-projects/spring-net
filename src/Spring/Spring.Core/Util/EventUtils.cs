@@ -151,8 +151,7 @@ public class DefensiveEventRaiser : EventRaiser
         }
         catch (Exception ex)
         {
-            string message = "Error during raising an event from " + new StackTrace();
-            Log.LogWarning(ex, message);
+            Log.LogWarning(ex, "Error during raising an event from {StackTrace}", new StackTrace());
             exceptions.Add(sink, ex);
         }
     }

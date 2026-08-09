@@ -69,6 +69,8 @@ Key mechanics (defined in `src/Directory.Build.props` and `test/Directory.Build.
 
 `.editorconfig` is authoritative: 4-space indents (2 for XML/props/ps1), Allman braces, `System` usings first, no `this.` qualification, language keywords over BCL type names, instance fields `_camelCase`, static fields `s_camelCase`. Match the surrounding code's style. (The `[src/{Analyzers,...}/**]` sections were copied from the Roslyn repo and match nothing here — ignore them.)
 
+**Logging**: all `ILogger` calls use constant message templates with PascalCase named placeholders (`log.LogDebug("Creating object '{ObjectName}'", name)`) — never interpolation, concatenation, or `string.Format`. Pass exceptions to the exception-first overloads; wrap inherently dynamic text as `Log*("{Message}", text)`. Analyzers CA2254/CA2253/CA2017/CA1727 enforce this as build errors. Only guard a log call with `IsEnabled` when argument evaluation is expensive (string building, method calls) — templates already defer formatting.
+
 ## Legacy areas — do not modify
 
 - NAnt-era build files, superseded by the Fallout build but still committed: `Spring.build`, `*.include`, `Build-ci.cmd`, `build-release-all.cmd`, `appveyor.yml.old`, most of `build-support/` (exception: `build-support/tools/antlr-2.7.6` is still used by the `Antlr` target).

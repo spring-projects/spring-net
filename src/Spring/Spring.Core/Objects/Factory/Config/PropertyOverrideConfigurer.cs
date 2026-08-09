@@ -169,17 +169,11 @@ public class PropertyOverrideConfigurer : PropertyResourceConfigurer
         }
         else
         {
-            if (_logger.IsEnabled(LogLevel.Warning))
-            {
-                _logger.LogWarning(string.Format(CultureInfo.InvariantCulture,
-                    "Cannot find object '{0}' when overriding properties; check configuration.", name));
-            }
+            _logger.LogWarning(
+                "Cannot find object '{ObjectName}' when overriding properties; check configuration.", name);
         }
 
-        if (_logger.IsEnabled(LogLevel.Debug))
-        {
-            _logger.LogDebug(string.Format(CultureInfo.InvariantCulture,
-                "Property '{0}' set to '{1}'.", key, value));
-        }
+        _logger.LogDebug(
+            "Property '{Key}' set to '{Value}'.", key, value);
     }
 }

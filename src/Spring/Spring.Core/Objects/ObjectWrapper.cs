@@ -315,8 +315,7 @@ public class ObjectWrapper : IObjectWrapper
             {
                 if (!ignoreUnknown)
                 {
-                    string message = $"Failed setting property '{pv.Name}'";
-                    Log.LogError(ex, message);
+                    Log.LogError(ex, "Failed setting property '{PropertyName}'", pv.Name);
                     throw;
                 }
             }
@@ -324,27 +323,23 @@ public class ObjectWrapper : IObjectWrapper
             {
                 if (!ignoreUnknown)
                 {
-                    string message = $"Failed setting property '{pv.Name}'";
-                    Log.LogError(ex, message);
+                    Log.LogError(ex, "Failed setting property '{PropertyName}'", pv.Name);
                     throw;
                 }
             }
             catch (TypeMismatchException ex) // otherwise, just ignore it and continue...
             {
-                string message = $"Failed setting property '{pv.Name}'";
-                Log.LogError(ex, message);
+                Log.LogError(ex, "Failed setting property '{PropertyName}'", pv.Name);
                 propertyAccessExceptions.Add(ex);
             }
             catch (MethodInvocationException ex)
             {
-                string message = $"Failed setting property '{pv.Name}'";
-                Log.LogError(ex, message);
+                Log.LogError(ex, "Failed setting property '{PropertyName}'", pv.Name);
                 propertyAccessExceptions.Add(ex);
             }
             catch (Exception ex)
             {
-                string message = $"Failed setting property '{pv.Name}' on instance of type '{WrappedType.FullName}'";
-                Log.LogError(ex, message);
+                Log.LogError(ex, "Failed setting property '{PropertyName}' on instance of type '{WrappedType}'", pv.Name, WrappedType.FullName);
                 throw;
             }
         }

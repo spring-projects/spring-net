@@ -136,10 +136,7 @@ public class DisposableObjectAdapter : IDisposable
 
         if (this.invokeDisposableObject)
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Invoking Dispose() on object with name '" + this.objectName + "'");
-            }
+            logger.LogDebug("Invoking Dispose() on object with name '{ObjectName}'", this.objectName);
 
             try
             {
@@ -148,15 +145,7 @@ public class DisposableObjectAdapter : IDisposable
 
             catch (Exception ex)
             {
-                string msg = "Invocation of Dispose method failed on object with name '" + this.objectName + "'";
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogWarning(ex, msg);
-                }
-                else
-                {
-                    logger.LogWarning(msg + ": " + ex);
-                }
+                logger.LogWarning(ex, "Invocation of Dispose method failed on object with name '{ObjectName}'", this.objectName);
             }
         }
 
@@ -217,11 +206,8 @@ public class DisposableObjectAdapter : IDisposable
             args[0] = true;
         }
 
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Invoking destroy method '" + this.destroyMethodName +
-                            "' on object with name '" + this.objectName + "'");
-        }
+        logger.LogDebug("Invoking destroy method '{DestroyMethodName}" +
+                        "' on object with name '{ObjectName}'", this.destroyMethodName, this.objectName);
 
         try
         {
@@ -229,22 +215,13 @@ public class DisposableObjectAdapter : IDisposable
         }
         catch (TargetInvocationException ex)
         {
-            string msg = "Invocation of destroy method '" + this.destroyMethodName +
-                         "' failed on object with name '" + this.objectName + "'";
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogWarning(ex.InnerException, msg);
-            }
-            else
-            {
-                logger.LogWarning(msg + ": " + ex.InnerException);
-            }
+            logger.LogWarning(ex.InnerException, "Invocation of destroy method '{DestroyMethodName}' failed on object with name '{ObjectName}'",
+                this.destroyMethodName, this.objectName);
         }
         catch (Exception ex)
         {
-            string message = "Couldn't invoke destroy method '" + this.destroyMethodName +
-                             "' on object with name '" + this.objectName + "'";
-            logger.LogError(ex, message);
+            logger.LogError(ex, "Couldn't invoke destroy method '{DestroyMethodName}' on object with name '{ObjectName}'",
+                this.destroyMethodName, this.objectName);
         }
     }
 }

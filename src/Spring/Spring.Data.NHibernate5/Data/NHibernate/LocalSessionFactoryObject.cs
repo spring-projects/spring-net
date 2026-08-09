@@ -489,7 +489,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
                 if (log.IsEnabled(LogLevel.Information))
                 {
                     log.LogInformation("Overriding use of Spring's Hibernate Connection Provider with [" +
-                                       hibernateProperties[Environment.ConnectionProvider] + "]");
+                                       "{ConnectionProvider}]", hibernateProperties[Environment.ConnectionProvider]);
                 }
 
                 config.Properties.Remove(Environment.ConnectionProvider);
@@ -639,10 +639,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
     {
         if (sessionFactory != null)
         {
-            if (log.IsEnabled(LogLevel.Information))
-            {
-                log.LogInformation("Closing Hibernate SessionFactory");
-            }
+            log.LogInformation("Closing Hibernate SessionFactory");
 
             sessionFactory.Close();
         }
@@ -831,10 +828,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
     /// <param name="sql"></param>
     protected virtual void ExecuteSchemaStatement(IDbCommand cmd, string sql)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Executing schema statement: " + sql);
-        }
+        log.LogDebug("Executing schema statement: {Sql}", sql);
 
         try
         {
@@ -843,11 +837,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
         }
         catch (ADOException ex)
         {
-            if (log.IsEnabled(LogLevel.Warning))
-            {
-                string message = "Unsuccessful schema statement: " + sql;
-                log.LogWarning((Exception) ex, message);
-            }
+            log.LogWarning(ex, "Unsuccessful schema statement: {Sql}", sql);
         }
     }
 

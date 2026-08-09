@@ -68,10 +68,10 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
 
             if (HttpContext.Current.Session != null)
             {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: Processing HttpContext.Current.Session");
+                LOG.LogDebug("context_PreRequestHandlerExecute: Processing HttpContext.Current.Session");
                 foreach (String convMngName in this.ConversationManagerNameList)
                 {
-                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("context_PreRequestHandlerExecute: Processing ConversationManager: {0}", convMngName));
+                    LOG.LogDebug("context_PreRequestHandlerExecute: Processing ConversationManager: {ConversationManagerName}", convMngName);
                     IConversationManager convMng = (IConversationManager) this.applicationContext.GetObject(convMngName);
                     convMng.EndOnTimeOut();
                     convMng.FreeEnded();
@@ -79,7 +79,7 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
             }
             else
             {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: no HttpContext.Current.Session found.");
+                LOG.LogDebug("context_PreRequestHandlerExecute: no HttpContext.Current.Session found.");
             }
         }
     }
@@ -94,10 +94,10 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
     /// </remarks>
     void page_Unload(object sender, EventArgs e)
     {
-        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("page_Unload HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
+        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("page_Unload HttpContext.Current.Session is null: {SessionIsNull}", HttpContext.Current.Session == null);
         foreach (String convMngName in this.ConversationManagerNameList)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("page_Unload: Processing ConversationManager: {0}", convMngName));
+            LOG.LogDebug("page_Unload: Processing ConversationManager: {ConversationManagerName}", convMngName);
             IConversationManager convMng = (IConversationManager) this.applicationContext.GetObject(convMngName);
             convMng.EndOnTimeOut();
             convMng.FreeEnded();
@@ -107,12 +107,12 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
 
     void context_EndRequest(object sender, EventArgs e)
     {
-        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_EndRequest HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
+        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_EndRequest HttpContext.Current.Session is null: {SessionIsNull}", HttpContext.Current.Session == null);
     }
 
     void context_PostRequestHandlerExecute(object sender, EventArgs e)
     {
-        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PostRequestHandlerExecute HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
+        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PostRequestHandlerExecute HttpContext.Current.Session is null: {SessionIsNull}", HttpContext.Current.Session == null);
         if (HttpContext.Current.Session != null)
         {
         }

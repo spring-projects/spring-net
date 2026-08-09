@@ -345,7 +345,7 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
             PrepareConnection(this.target);
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogInformation("Established shared NMS Connection: " + this.target);
+                LOG.LogInformation("Established shared NMS Connection: {Connection}", this.target);
             }
 
             this.connection = GetSharedConnection(target, acquireLock);
@@ -419,10 +419,7 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
     /// <param name="con">The connection.</param>
     protected virtual void CloseConnection(IConnection con)
     {
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Closing shared NMS Connection: " + this.target);
-        }
+        LOG.LogDebug("Closing shared NMS Connection: {Connection}", this.target);
 
         try
         {

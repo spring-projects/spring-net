@@ -235,10 +235,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
 
         if (IsInfrastructureType(objectType, objectName))
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
-            }
+            logger.LogDebug("Did not attempt to autoproxy infrastructure type [{ObjectType}]", objectType);
 
             nonAdvisedObjects.Add(cacheKey);
             return obj;
@@ -246,10 +243,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
 
         if (ShouldSkip(objectType, objectName))
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug(string.Format("Skipping  type [{0}]", objectType));
-            }
+            logger.LogDebug("Skipping  type [{ObjectType}]", objectType);
 
             nonAdvisedObjects.Add(cacheKey);
             return obj;
@@ -386,10 +380,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
                 if (ts != null)
                 {
                     // found a match
-                    if (logger.IsEnabled(LogLevel.Information))
-                    {
-                        logger.LogInformation(string.Format("TargetSourceCreator [{0} found custom TargetSource for object with objectName '{1}'", tsc, name));
-                    }
+                    logger.LogInformation("TargetSourceCreator [{TargetSourceCreator} found custom TargetSource for object with objectName '{ObjectName}'", tsc, name);
 
                     return ts;
                 }
@@ -513,7 +504,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
         {
             int nrOfCommonInterceptors = commonInterceptors != null ? commonInterceptors.Count : 0;
             int nrOfSpecificInterceptors = specificInterceptors != null ? specificInterceptors.Count : 0;
-            logger.LogInformation(string.Format("Creating implicit proxy for object '{0}' with {1} common interceptors and {2} specific interceptors", targetName, nrOfCommonInterceptors, nrOfSpecificInterceptors));
+            logger.LogInformation("Creating implicit proxy for object '{TargetName}' with {CommonInterceptorCount} common interceptors and {SpecificInterceptorCount} specific interceptors", targetName, nrOfCommonInterceptors, nrOfSpecificInterceptors);
         }
 
         List<IAdvisor> advisors = new List<IAdvisor>(allInterceptors.Count);
@@ -573,10 +564,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
 
             if (IsInfrastructureType(objectType, objectName))
             {
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
-                }
+                logger.LogDebug("Did not attempt to autoproxy infrastructure type [{ObjectType}]", objectType);
 
                 nonAdvisedObjects.Add(cacheKey);
                 return null;
@@ -584,10 +572,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
 
             if (ShouldSkip(objectType, objectName))
             {
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug(string.Format("Skipping  type [{0}]", objectType));
-                }
+                logger.LogDebug("Skipping  type [{ObjectType}]", objectType);
 
                 nonAdvisedObjects.Add(cacheKey);
                 return null;

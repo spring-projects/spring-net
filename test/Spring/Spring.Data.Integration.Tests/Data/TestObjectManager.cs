@@ -47,7 +47,7 @@ public class TestObjectManager : ITestObjectManager
     [Transaction]
     public void SaveTwoTestObjects(TestObject to1, TestObject to2)
     {
-        LOG.LogDebug("TransactionActive = " + TransactionSynchronizationManager.ActualTransactionActive);
+        LOG.LogDebug("TransactionActive = {ActualTransactionActive}", TransactionSynchronizationManager.ActualTransactionActive);
         //Console.WriteLine("TransactionSynchronizationManager.CurrentTransactionIsolationLevel = " +
         //                  TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
         //Console.WriteLine("System.Transactions.Transaction.Current.IsolationLevel = " + System.Transactions.Transaction.Current.IsolationLevel);

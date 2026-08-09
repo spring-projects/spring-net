@@ -159,10 +159,7 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
                     }
                     else
                     {
-                        if (log.IsEnabled(LogLevel.Trace))
-                        {
-                            log.LogTrace("Retrying " + invocation.Method.Name);
-                        }
+                        log.LogTrace("Retrying {MethodName}", invocation.Method.Name);
 
                         callContextDictionary["n"] = numAttempts;
                         Sleep(retryExceptionHandler, callContextDictionary, sleepHandler);
@@ -175,7 +172,7 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
             }
         } while (numAttempts <= retryExceptionHandler.MaximumRetryCount);
 
-        log.LogDebug("Invoked successfully after " + numAttempts + " attempt(s)");
+        log.LogDebug("Invoked successfully after {AttemptCount} attempt(s)", numAttempts);
         return returnVal;
     }
 
@@ -198,14 +195,12 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
             }
             catch (InvalidCastException e)
             {
-                string message = "Was not able to cast expression to decimal [" + handler.DelayRateExpression + "]. Sleeping for 1 second";
-                log.LogWarning(e, message);
+                log.LogWarning(e, "Was not able to cast expression to decimal [{DelayRateExpression}]. Sleeping for 1 second", handler.DelayRateExpression);
                 sleepHandler(new TimeSpan(0, 0, 1));
             }
             catch (Exception e)
             {
-                string message = "Was not able to evaluate rate expression [" + handler.DelayRateExpression + "]. Sleeping for 1 second";
-                log.LogWarning(e, message);
+                log.LogWarning(e, "Was not able to evaluate rate expression [{DelayRateExpression}]. Sleeping for 1 second", handler.DelayRateExpression);
                 sleepHandler(new TimeSpan(0, 0, 1));
             }
         }
@@ -264,7 +259,7 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
 
         if (!parsedAdviceExpression.Success)
         {
-            log.LogWarning("Could not parse retry expression " + retryExpressionString);
+            log.LogWarning("Could not parse retry expression {RetryExpressionString}", retryExpressionString);
             return null;
         }
 
@@ -286,7 +281,7 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
             }
             catch (Exception)
             {
-                log.LogWarning("Could not parse timespan " + match.Groups[3].Value.Trim());
+                log.LogWarning("Could not parse timespan {TimeSpan}", match.Groups[3].Value.Trim());
                 return null;
             }
 

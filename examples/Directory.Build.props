@@ -24,7 +24,6 @@
     <PackageTags>Library</PackageTags>
 
     <NeutralLanguage>en-US</NeutralLanguage>
-    <WarningsAsErrors>True</WarningsAsErrors>
     <NoWarn>1574,1584,1591</NoWarn>
 
     <RepositoryType>git</RepositoryType>
@@ -42,6 +41,9 @@
     <LangVersion>latest</LangVersion>
     <TargetFullFrameworkVersion>net462</TargetFullFrameworkVersion>
 
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>None</AnalysisMode>
   </PropertyGroup>
 
 </Project>

@@ -119,7 +119,7 @@ public class WebApplicationContext : AbstractXmlApplicationContext
         this._constructionUrl = VirtualEnvironment.CurrentVirtualPathAndQuery;
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("created instance " + this.ToString());
+            log.LogDebug("created instance {Context}", this.ToString());
         }
     }
 
@@ -163,13 +163,13 @@ public class WebApplicationContext : AbstractXmlApplicationContext
                     typeof(HttpRuntime).GetField("_beforeFirstRequest", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(runtime);
             }
 
-            s_weblog.LogDebug("BeforeFirstRequest:" + beforeFirstRequest);
+            s_weblog.LogDebug("BeforeFirstRequest:{BeforeFirstRequest}", beforeFirstRequest);
             if (beforeFirstRequest)
             {
                 try
                 {
                     string firstRequestPath = HttpRuntime.AppDomainAppVirtualPath.TrimEnd('/') + "/dummy.context";
-                    s_weblog.LogInformation("Forcing first request " + firstRequestPath);
+                    s_weblog.LogInformation("Forcing first request {FirstRequestPath}", firstRequestPath);
                     SafeMethod fnProcessRequestNow = new SafeMethod(typeof(HttpRuntime).GetMethod("ProcessRequestNow", BindingFlags.Static | BindingFlags.NonPublic));
                     SimpleWorkerRequest wr = new SimpleWorkerRequest(firstRequestPath, string.Empty, new StringWriter());
                     fnProcessRequestNow.Invoke(null, new object[] { wr });
@@ -195,10 +195,7 @@ public class WebApplicationContext : AbstractXmlApplicationContext
         lock (s_webContextCache)
         {
             ILogger<WebApplicationContext> s_weblog = LogManager.GetLogger<WebApplicationContext>();
-            if (s_weblog.IsEnabled(LogLevel.Debug))
-            {
-                s_weblog.LogDebug("received ContextRegistry.Cleared event - clearing webContextCache");
-            }
+            s_weblog.LogDebug("received ContextRegistry.Cleared event - clearing webContextCache");
 
             s_webContextCache.Clear();
         }
@@ -248,7 +245,7 @@ public class WebApplicationContext : AbstractXmlApplicationContext
         {
             if (isLogDebugEnabled)
             {
-                s_weblog.LogDebug(string.Format("looking up web context '{0}' in WebContextCache", contextName));
+                s_weblog.LogDebug("looking up web context '{ContextName}' in WebContextCache", contextName);
             }
 
             // first lookup in our own cache
@@ -258,7 +255,7 @@ public class WebApplicationContext : AbstractXmlApplicationContext
                 // found - nothing to do anymore
                 if (isLogDebugEnabled)
                 {
-                    s_weblog.LogDebug(string.Format("returning WebContextCache hit '{0}' for vpath '{1}' ", context, contextName));
+                    s_weblog.LogDebug("returning WebContextCache hit '{Context}' for vpath '{ContextName}' ", context, contextName);
                 }
 
                 return context;
@@ -269,7 +266,7 @@ public class WebApplicationContext : AbstractXmlApplicationContext
             {
                 if (isLogDebugEnabled)
                 {
-                    s_weblog.LogDebug(string.Format("looking up web context '{0}' in ContextRegistry", contextName));
+                    s_weblog.LogDebug("looking up web context '{ContextName}' in ContextRegistry", contextName);
                 }
 
                 if (ContextRegistry.IsContextRegistered(contextName))
@@ -284,9 +281,9 @@ public class WebApplicationContext : AbstractXmlApplicationContext
                     {
                         if (isLogDebugEnabled)
                         {
-                            s_weblog.LogDebug(string.Format(
-                                "web context for vpath '{0}' not found. Force creation using filepath '{1}'",
-                                contextName, virtualPath));
+                            s_weblog.LogDebug(
+                                "web context for vpath '{ContextName}' not found. Force creation using filepath '{VirtualPath}'",
+                                contextName, virtualPath);
                         }
 
                         // assure context is resolved to the given virtualDirectory
@@ -298,20 +295,19 @@ public class WebApplicationContext : AbstractXmlApplicationContext
                         if (context != null)
                         {
                             if (isLogDebugEnabled)
-                                s_weblog.LogDebug(string.Format("got context '{0}' for vpath '{1}'", context, contextName));
+                                s_weblog.LogDebug("got context '{Context}' for vpath '{ContextName}'", context, contextName);
                         }
                         else
                         {
                             if (isLogDebugEnabled)
-                                s_weblog.LogDebug(string.Format("no context defined for vpath '{0}'", contextName));
+                                s_weblog.LogDebug("no context defined for vpath '{ContextName}'", contextName);
                         }
                     }
                     catch (Exception ex)
                     {
                         if (s_weblog.IsEnabled(LogLevel.Error))
                         {
-                            string message = string.Format("failed creating context '{0}', Stacktrace:\n{1}", contextName, new StackTrace());
-                            s_weblog.LogError(ex, message);
+                            s_weblog.LogError(ex, "failed creating context '{ContextName}', Stacktrace:\n{StackTrace}", contextName, new StackTrace());
                         }
 
                         throw;
@@ -324,7 +320,7 @@ public class WebApplicationContext : AbstractXmlApplicationContext
             s_webContextCache.Add(contextName, context);
             if (isLogDebugEnabled)
             {
-                s_weblog.LogDebug(string.Format("added context '{0}' to WebContextCache for vpath '{1}'", context, contextName));
+                s_weblog.LogDebug("added context '{Context}' to WebContextCache for vpath '{ContextName}'", context, contextName);
             }
 
             if (context != null)
@@ -338,8 +334,8 @@ public class WebApplicationContext : AbstractXmlApplicationContext
                         s_webContextCache.Add(parentContext.Name, parentContext);
                         if (isLogDebugEnabled)
                         {
-                            s_weblog.LogDebug(string.Format("added parent context '{0}' to WebContextCache for vpath '{1}'",
-                                parentContext, parentContext.Name));
+                            s_weblog.LogDebug("added parent context '{ParentContext}' to WebContextCache for vpath '{ParentContextName}'",
+                                parentContext, parentContext.Name);
                         }
                     }
 

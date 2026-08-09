@@ -82,17 +82,17 @@ public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, 
             }
 
             messageStats.Count++;
-            LOG.LogWarning("Message Error Count = [" + messageStats.Count + "] for message id = [" + messageId + "]");
+            LOG.LogWarning("Message Error Count = [{MessageErrorCount}] for message id = [{MessageId}]", messageStats.Count, messageId);
 
             if (messageStats.Count > MaxRetry)
             {
-                LOG.LogInformation("Maximum number of redelivery attempts exceeded for message id = [" + messageId + "]");
+                LOG.LogInformation("Maximum number of redelivery attempts exceeded for message id = [{MessageId}]", messageId);
                 messageMap.Remove(messageId);
                 return SendMessageToQueue(message, messageQueueTransaction);
             }
             else
             {
-                LOG.LogWarning("Rolling back delivery of message id [" + messageId + "]");
+                LOG.LogWarning("Rolling back delivery of message id [{MessageId}]", messageId);
                 return TransactionAction.Rollback;
             }
         }
@@ -133,10 +133,7 @@ public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, 
         MessageQueue mq = MessageQueueFactory.CreateMessageQueue(MessageQueueObjectName);
         try
         {
-            if (LOG.IsEnabled(LogLevel.Information))
-            {
-                LOG.LogInformation("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
-            }
+            LOG.LogInformation("Sending message with id = [{MessageId}] to queue [{Path}].", message.Id, mq.Path);
 
             ProcessExceptionalMessage(message);
             mq.Send(message, messageQueueTransaction);
@@ -145,9 +142,8 @@ public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, 
         {
             if (LOG.IsEnabled(LogLevel.Error))
             {
-                string message1 = "Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].";
-                LOG.LogError(e, message1);
-                LOG.LogError("Message will not be processed.  Message Body = " + message.Body);
+                LOG.LogError(e, "Could not send message with id = [{MessageId}] to queue [{Path}].", message.Id, mq.Path);
+                LOG.LogError("Message will not be processed.  Message Body = {MessageBody}", message.Body);
             }
         }
 

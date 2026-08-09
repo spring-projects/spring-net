@@ -53,7 +53,7 @@ namespace Spring.Messaging.Ems.Connections;
 /// <author>Mark Pollack (.NET)</author>
 public class CachingConnectionFactory : SingleConnectionFactory
 {
-    private static readonly ILog LOG = LogManager.GetLogger(typeof(CachingConnectionFactory));
+    private static readonly ILogger LOG = LogManager.GetLogger(typeof(CachingConnectionFactory));
 
     private int sessionCacheSize = 1;
 
@@ -226,17 +226,14 @@ public class CachingConnectionFactory : SingleConnectionFactory
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Found cached Session for mode " + mode + ": "
-                             + (session is IDecoratorSession ? ((IDecoratorSession) session).TargetSession : session));
+                LOG.LogDebug("Found cached Session for mode {Mode}: {Session}", mode,
+                             (session is IDecoratorSession ? ((IDecoratorSession) session).TargetSession : session));
             }
         }
         else
         {
             ISession targetSession = CreateSession(con, mode);
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Creating cached Session for mode " + mode + ": " + targetSession);
-            }
+            LOG.LogDebug("Creating cached Session for mode {Mode}: {TargetSession}", mode, targetSession);
 
             session = GetCachedSessionWrapper(targetSession, sessionList);
         }

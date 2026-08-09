@@ -214,7 +214,7 @@ public abstract class AbstractSpringContextTests
     {
         if (logger.IsEnabled(LogLevel.Information))
         {
-            logger.LogInformation("Loading config for: " + StringUtils.CollectionToCommaDelimitedString(locations));
+            logger.LogInformation("Loading config for: {Locations}", StringUtils.CollectionToCommaDelimitedString(locations));
         }
 
         return new XmlApplicationContext(locations);

@@ -99,91 +99,61 @@ public class ObjectDefinitionParserHelper
     {
         DocumentDefaultsDefinition ddd = new DocumentDefaultsDefinition();
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Loading object definitions...");
-        }
+        log.LogDebug("Loading object definitions...");
 
         ddd.LazyInit = GetAttributeValue(root, ObjectDefinitionConstants.DefaultLazyInitAttribute);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(string.Format(
-                "Default lazy init '{0}'.",
-                ddd.LazyInit));
-        }
+        log.LogDebug(
+            "Default lazy init '{LazyInit}'.",
+            ddd.LazyInit);
 
         ddd.DependencyCheck = GetAttributeValue(root, ObjectDefinitionConstants.DefaultDependencyCheckAttribute);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(string.Format(
-                "Default dependency check '{0}'.",
-                ddd.DependencyCheck));
-        }
+        log.LogDebug(
+            "Default dependency check '{DependencyCheck}'.",
+            ddd.DependencyCheck);
 
         ddd.Autowire = GetAttributeValue(root, ObjectDefinitionConstants.DefaultAutowireAttribute);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(string.Format(
-                "Default autowire '{0}'.",
-                ddd.Autowire));
-        }
+        log.LogDebug(
+            "Default autowire '{Autowire}'.",
+            ddd.Autowire);
 
         ddd.Merge = GetAttributeValue(root, ObjectDefinitionConstants.DefaultMergeAttribute);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(string.Format(
-                "Default merge '{0}'.",
-                ddd.Merge));
-        }
+        log.LogDebug(
+            "Default merge '{Merge}'.",
+            ddd.Merge);
 
         ddd.AutowireCandidates = GetAttributeValue(root, ObjectDefinitionConstants.DefaultAutowireCandidatesAttribute);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(string.Format(
-                "Default init method '{0}'.",
-                ddd.InitMethod));
-        }
+        log.LogDebug(
+            "Default init method '{InitMethod}'.",
+            ddd.InitMethod);
 
         ddd.DestroyMethod = GetAttributeValue(root, ObjectDefinitionConstants.DefaultDestroyMethodAttribute);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(string.Format(
-                "Default destroy method '{0}'.",
-                ddd.DestroyMethod));
-        }
+        log.LogDebug(
+            "Default destroy method '{DestroyMethod}'.",
+            ddd.DestroyMethod);
 
         ddd.AutowireCandidates = GetAttributeValue(root, ObjectDefinitionConstants.DefaultAutowireCandidatesAttribute);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(string.Format(
-                "Default autowire candidates '{0}'.",
-                ddd.AutowireCandidates));
-        }
+        log.LogDebug(
+            "Default autowire candidates '{AutowireCandidates}'.",
+            ddd.AutowireCandidates);
 
         ddd.InitMethod = GetAttributeValue(root, ObjectDefinitionConstants.DefaultInitMethodAttribute);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(string.Format(
-                "Default init method '{0}'.",
-                ddd.InitMethod));
-        }
+        log.LogDebug(
+            "Default init method '{InitMethod}'.",
+            ddd.InitMethod);
 
         ddd.DestroyMethod = GetAttributeValue(root, ObjectDefinitionConstants.DefaultDestroyMethodAttribute);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(string.Format(
-                "Default destroy method '{0}'.",
-                ddd.DestroyMethod));
-        }
+        log.LogDebug(
+            "Default destroy method '{DestroyMethod}'.",
+            ddd.DestroyMethod);
 
         defaults = ddd;
     }
@@ -281,7 +251,7 @@ public class ObjectDefinitionParserHelper
                 aliases.RemoveAt(0);
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(string.Format("No XML 'id' specified using '{0}' as object name and '{1}' as aliases", objectName, string.Join(",", aliases.ToArray())));
+                    log.LogDebug("No XML 'id' specified using '{ObjectName}' as object name and '{Aliases}' as aliases", objectName, string.Join(",", aliases.ToArray()));
                 }
             }
         }
@@ -318,12 +288,9 @@ public class ObjectDefinitionParserHelper
                     }
                 }
 
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug(string.Format(
-                        "Neither XML '{0}' nor '{1}' specified - using generated object name [{2}]",
-                        ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute, objectName));
-                }
+                log.LogDebug(
+                    "Neither XML '" + ObjectDefinitionConstants.IdAttribute + "' nor '" + ObjectDefinitionConstants.NameAttribute + "' specified - using generated object name [{ObjectName}]",
+                    objectName);
             }
 
             return CreateObjectDefinitionHolder(element, definition, objectName, aliases);

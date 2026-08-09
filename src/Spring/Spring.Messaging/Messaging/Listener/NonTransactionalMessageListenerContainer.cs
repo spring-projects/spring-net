@@ -75,10 +75,7 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
         Message message = null;
         try
         {
-            if (LOG.IsEnabled(LogLevel.Trace))
-            {
-                LOG.LogTrace("Receiving message with zero timeout for queue = [" + mq.Path + "]");
-            }
+            LOG.LogTrace("Receiving message with zero timeout for queue = [{Path}]", mq.Path);
 
             BeforeMessageReceived(mq);
             message = mq.Receive(TimeSpan.Zero);
@@ -89,10 +86,7 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
             {
                 //expected to occur occasionally
 
-                if (LOG.IsEnabled(LogLevel.Trace))
-                {
-                    LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
-                }
+                LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
 
                 return false; // no more peeking unless this is the last listener thread
             }
@@ -100,11 +94,8 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
             {
                 // A real issue in receiving the message
 
-                if (LOG.IsEnabled(LogLevel.Error))
-                {
-                    LOG.LogError("Error receiving message from MessageQueue [" + mq.Path +
-                                 "], closing queue and clearing connection cache.");
-                }
+                LOG.LogError("Error receiving message from MessageQueue [{Path}" +
+                             "], closing queue and clearing connection cache.", mq.Path);
 
                 lock (messageQueueMonitor)
                 {
@@ -118,20 +109,14 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
 
         if (message == null)
         {
-            if (LOG.IsEnabled(LogLevel.Trace))
-            {
-                LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
-            }
+            LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
 
             return false; // no more peeking unless this is the last listener thread
         }
 
         try
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
-            }
+            LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
 
             MessageReceived(message);
             DoExecuteListener(message);

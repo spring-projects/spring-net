@@ -233,18 +233,12 @@ public abstract class AbstractDependencyInjectionSpringContextTests : AbstractSp
         {
             FieldInfo[] fields =
                 type.GetFields(BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Instance);
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Found " + fields.Length + " fields on " + type);
-            }
+            logger.LogDebug("Found {FieldCount} fields on {Type}", fields.Length, type);
 
             for (int i = 0; i < fields.Length; i++)
             {
                 FieldInfo field = fields[i];
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug("Candidate field: " + field);
-                }
+                logger.LogDebug("Candidate field: {Field}", field);
 
                 if (IsProtectedInstanceField(field))
                 {
@@ -252,17 +246,11 @@ public abstract class AbstractDependencyInjectionSpringContextTests : AbstractSp
                     if (oldValue == null)
                     {
                         managedVarNames.Add(field.Name);
-                        if (logger.IsEnabled(LogLevel.Debug))
-                        {
-                            logger.LogDebug("Added managed variable '" + field.Name + "'");
-                        }
+                        logger.LogDebug("Added managed variable '{FieldName}'", field.Name);
                     }
                     else
                     {
-                        if (logger.IsEnabled(LogLevel.Debug))
-                        {
-                            logger.LogDebug("Rejected managed variable '" + field.Name + "'");
-                        }
+                        logger.LogDebug("Rejected managed variable '{FieldName}'", field.Name);
                     }
                 }
             }
@@ -295,25 +283,16 @@ public abstract class AbstractDependencyInjectionSpringContextTests : AbstractSp
                     BeforeProtectedVariableInjection(field);
                     obj = this.applicationContext.GetObject(fieldName, field.FieldType);
                     field.SetValue(this, obj);
-                    if (logger.IsEnabled(LogLevel.Debug))
-                    {
-                        logger.LogDebug("Populated field: " + field);
-                    }
+                    logger.LogDebug("Populated field: {Field}", field);
                 }
                 else
                 {
-                    if (logger.IsEnabled(LogLevel.Warning))
-                    {
-                        logger.LogWarning("No field with name '" + fieldName + "'");
-                    }
+                    logger.LogWarning("No field with name '{FieldName}'", fieldName);
                 }
             }
             catch (NoSuchObjectDefinitionException)
             {
-                if (logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("No object definition with name '" + fieldName + "'");
-                }
+                logger.LogWarning("No object definition with name '{FieldName}'", fieldName);
             }
         }
     }

@@ -136,7 +136,7 @@ public class DataBindingPanel : Panel
                     string msg =
                         string.Format("Error executing action on control '{0}' of type '{1}'", wc.UniqueID,
                             wc.GetType().FullName);
-                    Log.LogError(ex, msg);
+                    Log.LogError(ex, "{Message}", msg);
                     throw new HttpException(msg, ex);
                 }
             }
@@ -219,8 +219,8 @@ public class DataBindingPanel : Panel
             ? relativeControlName + "." + bindingSource
             : relativeControlName;
 
-        Log.LogDebug(string.Format("binding control '{0}' relative to '{1}' using expression '{2}'", controlName,
-            containerName, bindingSource));
+        Log.LogDebug("binding control '{ControlName}' relative to '{ContainerName}' using expression '{BindingSource}'", controlName,
+            containerName, bindingSource);
 
         //get bindingType if any
         IBinding binding = null;

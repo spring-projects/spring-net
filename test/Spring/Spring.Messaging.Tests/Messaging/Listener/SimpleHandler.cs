@@ -28,15 +28,15 @@ public class SimpleHandler
 
     public string HandleMessage(string msgTxt)
     {
-        LOG.LogDebug("Received text = [" + msgTxt + "]");
-        LOG.LogDebug("constructor set state string  = " + stateVariable);
+        LOG.LogDebug("Received text = [{MsgTxt}]", msgTxt);
+        LOG.LogDebug("constructor set state string  = {StateVariable}", stateVariable);
         if (msgTxt.Contains("Goodbye"))
         {
             throw new ArgumentException("Don't like saying goodbye!");
         }
 
         messageCount++;
-        LOG.LogDebug("Message listener count = " + messageCount);
+        LOG.LogDebug("Message listener count = {MessageCount}", messageCount);
         return msgTxt + " - processed!";
     }
 }

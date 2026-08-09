@@ -12,9 +12,9 @@ public class LoggingAroundAdvice : IMethodInterceptor
     {
         try
         {
-            LOG.LogDebug("Advice executing; calling the advised method [" + invocation.Method.Name + "]");
+            LOG.LogDebug("Advice executing; calling the advised method [{MethodName}]", invocation.Method.Name);
             object returnValue = invocation.Proceed();
-            LOG.LogDebug("Advice executed; advised method [" + invocation.Method.Name + "] returned " + returnValue);
+            LOG.LogDebug("Advice executed; advised method [{MethodName}] returned {ReturnValue}", invocation.Method.Name, returnValue);
             return returnValue;
         }
         finally

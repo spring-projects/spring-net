@@ -120,7 +120,7 @@ public abstract class AbstractSimpleBinding : AbstractBinding
             }
             catch (Exception ex)
             {
-                log.LogWarning(string.Format("Failed binding[{0}]:{1}", this.Id, ex));
+                log.LogWarning(ex, "Failed binding[{BindingId}]", this.Id);
                 if (!SetInvalid(validationErrors)) throw;
             }
         }

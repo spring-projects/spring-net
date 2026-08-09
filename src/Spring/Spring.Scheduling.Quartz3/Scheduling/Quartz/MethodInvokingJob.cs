@@ -29,7 +29,6 @@ public class MethodInvokingJob : QuartzJobObject
 {
     private static readonly ILogger<MethodInvokingJob> logger = LogManager.GetLogger<MethodInvokingJob>();
     private MethodInvoker methodInvoker;
-    private string errorMessage;
 
     /// <summary>
     /// Set the MethodInvoker to use.
@@ -39,8 +38,6 @@ public class MethodInvokingJob : QuartzJobObject
         set
         {
             methodInvoker = value ?? throw new ArgumentException("Method invoker cannot be null", nameof(value));
-            errorMessage =
-                $"Could not invoke method '{methodInvoker.TargetMethod}' on target object [{methodInvoker.TargetObject}]";
         }
     }
 
@@ -61,7 +58,7 @@ public class MethodInvokingJob : QuartzJobObject
         }
         catch (TargetInvocationException ex)
         {
-            logger.LogError(ex.GetBaseException(), errorMessage);
+            logger.LogError(ex.GetBaseException(), "Could not invoke method '{TargetMethod}' on target object [{TargetObject}]", methodInvoker.TargetMethod, methodInvoker.TargetObject);
             if (ex.GetBaseException() is JobExecutionException)
             {
                 // -> JobExecutionException, to be logged at info level by Quartz

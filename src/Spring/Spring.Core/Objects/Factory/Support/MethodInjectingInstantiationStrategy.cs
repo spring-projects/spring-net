@@ -15,7 +15,6 @@
  */
 
 using System.Collections;
-using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
 using Microsoft.Extensions.Logging;
@@ -181,13 +180,10 @@ public class MethodInjectingInstantiationStrategy : SimpleInstantiationStrategy
             Type generatedType = (Type) typeCache[objectName];
             if (generatedType == null)
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug(string.Format(CultureInfo.InvariantCulture,
-                        "Generating a subclass of the [{0}] class for the '{1}' " +
-                        "object definition for the purposes of method injection.",
-                        definition.ObjectType, objectName));
-                }
+                log.LogDebug(
+                    "Generating a subclass of the [{ObjectType}] class for the '{ObjectName}' " +
+                    "object definition for the purposes of method injection.",
+                    definition.ObjectType, objectName);
 
                 ModuleBuilder module = DynamicCodeManager.GetModuleBuilder(DYNAMIC_ASSEMBLY_NAME);
                 generatedType = new MethodInjectingTypeBuilder(module, definition).BuildType();

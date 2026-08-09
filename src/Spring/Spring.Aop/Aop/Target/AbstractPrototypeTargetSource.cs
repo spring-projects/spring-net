@@ -121,12 +121,9 @@ public abstract class AbstractPrototypeTargetSource
                     "Singleton object; instances would not be independent.");
             }
 
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug(string.Format(
-                    "Getting object with name '{0}' to determine class.",
-                    TargetObjectName));
-            }
+            logger.LogDebug(
+                "Getting object with name '{ObjectName}' to determine class.",
+                TargetObjectName);
 
             _targetType = _owningObjectFactory.GetType(TargetObjectName);
         }
@@ -137,12 +134,9 @@ public abstract class AbstractPrototypeTargetSource
     /// </summary>
     protected virtual object NewPrototypeInstance()
     {
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug(string.Format(
-                "Creating new target from object '{0}'.",
-                TargetObjectName));
-        }
+        logger.LogDebug(
+            "Creating new target from object '{ObjectName}'.",
+            TargetObjectName);
 
         return ObjectFactory.GetObject(TargetObjectName);
     }

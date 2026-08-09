@@ -85,10 +85,7 @@ public abstract class AbstractTransactionalDbProviderSpringContextTests : Abstra
         for (int i = 0; i < names.Length; i++)
         {
             int rowCount = this.adoTemplate.ExecuteNonQuery(CommandType.Text, "DELETE FROM " + names[i]);
-            if (logger.IsEnabled(LogLevel.Information))
-            {
-                logger.LogInformation("Deleted " + rowCount + " rows from table " + names[i]);
-            }
+            logger.LogInformation("Deleted {RowCount} rows from table {TableName}", rowCount, names[i]);
         }
 
         this.zappedTables = true;

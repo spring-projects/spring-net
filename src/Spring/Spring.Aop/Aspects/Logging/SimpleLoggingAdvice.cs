@@ -413,48 +413,48 @@ public class SimpleLoggingAdvice : AbstractLoggingAdvice
             case LogLevel.Trace:
                 if (log.IsEnabled(LogLevel.Trace))
                 {
-                    if (e == null) log.LogTrace(text);
-                    else log.LogTrace(e, text);
+                    if (e == null) log.LogTrace("{Message}", text);
+                    else log.LogTrace(e, "{Message}", text);
                 }
 
                 break;
             case LogLevel.Debug:
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    if (e == null) log.LogDebug(text);
-                    else log.LogDebug(e, text);
+                    if (e == null) log.LogDebug("{Message}", text);
+                    else log.LogDebug(e, "{Message}", text);
                 }
 
                 break;
             case LogLevel.Error:
                 if (log.IsEnabled(LogLevel.Error))
                 {
-                    if (e == null) log.LogError(text);
-                    else log.LogError(e, text);
+                    if (e == null) log.LogError("{Message}", text);
+                    else log.LogError(e, "{Message}", text);
                 }
 
                 break;
             case LogLevel.Critical:
                 if (log.IsEnabled(LogLevel.Critical))
                 {
-                    if (e == null) log.LogCritical(text);
-                    else log.LogCritical(e, text);
+                    if (e == null) log.LogCritical("{Message}", text);
+                    else log.LogCritical(e, "{Message}", text);
                 }
 
                 break;
             case LogLevel.Information:
                 if (log.IsEnabled(LogLevel.Information))
                 {
-                    if (e == null) log.LogInformation(text);
-                    else log.LogInformation(e, text);
+                    if (e == null) log.LogInformation("{Message}", text);
+                    else log.LogInformation(e, "{Message}", text);
                 }
 
                 break;
             case LogLevel.Warning:
                 if (log.IsEnabled(LogLevel.Warning))
                 {
-                    if (e == null) log.LogWarning(text);
-                    else log.LogWarning(e, text);
+                    if (e == null) log.LogWarning("{Message}", text);
+                    else log.LogWarning(e, "{Message}", text);
                 }
 
                 break;

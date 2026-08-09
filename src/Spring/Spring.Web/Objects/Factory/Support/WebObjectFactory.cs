@@ -73,7 +73,7 @@ public class WebObjectFactory : DefaultListableObjectFactory
             {
                 if (s_eventHandlersRegistered) return;
 
-                if (log.IsEnabled(LogLevel.Debug)) log.LogDebug("hooking up event handlers");
+                log.LogDebug("hooking up event handlers");
                 VirtualEnvironment.EndRequest += OnEndRequest;
                 VirtualEnvironment.EndSession += OnEndSession;
 
@@ -540,8 +540,7 @@ public class WebObjectFactory : DefaultListableObjectFactory
             }
             catch (Exception ex)
             {
-                string message = string.Format("error during disposing session item with key '{0}'", key);
-                log.LogCritical(ex, message);
+                log.LogCritical(ex, "error during disposing session item with key '{Key}'", key);
             }
         }
     }

@@ -103,7 +103,7 @@ public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
                         {
                             if (isLogDebugEnabled)
                             {
-                                logger.LogDebug(string.Format("Removing objects for keys [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
+                                logger.LogDebug("Removing objects for keys [{Keys}] from cache [{CacheName}].", keys.ToString(), cacheInfo.CacheName);
                             }
 
                             cache.RemoveAll((ICollection) keys);
@@ -112,7 +112,7 @@ public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
                         {
                             if (isLogDebugEnabled)
                             {
-                                logger.LogDebug(string.Format("Removing object for key [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
+                                logger.LogDebug("Removing object for key [{Key}] from cache [{CacheName}].", keys, cacheInfo.CacheName);
                             }
 
                             cache.Remove(keys);
@@ -122,7 +122,7 @@ public class InvalidateCacheAdvice : BaseCacheAdvice, IAfterReturningAdvice
                     {
                         if (isLogDebugEnabled)
                         {
-                            logger.LogDebug(string.Format("Invalidate cache [{0}].", cacheInfo.CacheName));
+                            logger.LogDebug("Invalidate cache [{CacheName}].", cacheInfo.CacheName);
                         }
 
                         cache.Clear();

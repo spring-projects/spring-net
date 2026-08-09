@@ -114,9 +114,9 @@ public class AssemblyResource : AbstractResource
             Stream stream = _assembly.GetManifestResourceStream(_resourceName);
             if (stream == null)
             {
-                log.LogError("Could not load resource with name = [" + _resourceName +
-                             "] from assembly + " + _assembly);
-                log.LogError("URI specified = [" + this._fullResourceName + "] Spring.NET URI syntax is 'assembly://assemblyName/namespace/resourceName'.");
+                log.LogError("Could not load resource with name = [{ResourceName}" +
+                             "] from assembly + {Assembly}", _resourceName, _assembly);
+                log.LogError("URI specified = [{FullResourceName}] Spring.NET URI syntax is 'assembly://assemblyName/namespace/resourceName'.", this._fullResourceName);
                 log.LogError("Resource name often has the default namespace prefixed, e.g. 'assembly://MyAssembly/MyNamespace/MyNamespace.MyResource.txt'.");
             }
 

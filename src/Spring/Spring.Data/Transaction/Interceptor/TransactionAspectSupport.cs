@@ -337,10 +337,7 @@ public class TransactionAspectSupport : IInitializingObject
         {
             // We need a transaction for this method
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Getting transaction for " + transactionInfo.JoinpointIdentification);
-            }
+            log.LogDebug("Getting transaction for {JoinpointIdentification}", transactionInfo.JoinpointIdentification);
 
             // The transaction manager will flag an error if an incompatible tx already exists
             transactionInfo.TransactionStatus = _transactionManager.GetTransaction(txAttr);
@@ -350,11 +347,8 @@ public class TransactionAspectSupport : IInitializingObject
             // The TransactionInfo.HasTransaction property will return
             // false. We created it only to preserve the integrity of
             // the ThreadLocal stack maintained in this class.
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Skipping transactional joinpoint [" + joinpointIdentification +
-                             "] because no transaction manager has been configured");
-            }
+            log.LogDebug("Skipping transactional joinpoint [{JoinpointIdentification}" +
+                         "] because no transaction manager has been configured", joinpointIdentification);
         }
 
         // We always bind the TransactionInfo to the thread, even if we didn't create
@@ -391,10 +385,7 @@ public class TransactionAspectSupport : IInitializingObject
     {
         if (transactionInfo != null && transactionInfo.HasTransaction)
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "]");
-            }
+            log.LogDebug("Completing transaction for [{JoinpointIdentification}]", transactionInfo.JoinpointIdentification);
 
             _transactionManager.Commit(transactionInfo.TransactionStatus);
         }
@@ -419,10 +410,7 @@ public class TransactionAspectSupport : IInitializingObject
     {
         if (transactionInfo != null && transactionInfo.HasTransaction)
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "] after exception: " + exception);
-            }
+            log.LogDebug(exception, "Completing transaction for [{JoinpointIdentification}] after exception", transactionInfo.JoinpointIdentification);
 
             if (transactionInfo.TransactionAttribute.RollbackOn(exception))
             {

@@ -64,17 +64,14 @@ public class MessageQueueMetadataCache : IApplicationContextAware, IInitializing
                     }
                     else
                     {
-                        if (LOG.IsEnabled(LogLevel.Warning))
-                        {
-                            LOG.LogWarning("Path for MessageQueueFactoryObject named [" +
-                                           mqfo.ObjectName + "] is null, so can't cache its metadata.");
-                        }
+                        LOG.LogWarning("Path for MessageQueueFactoryObject named [{ObjectName}" +
+                                       "] is null, so can't cache its metadata.", mqfo.ObjectName);
                     }
                 }
                 else
                 {
                     // This would indicate some bug in GetObjectsOfType
-                    LOG.LogError("Unexpected type of " + entry.Value.GetType() + " was given as candidate for caching MessageQueueMetadata.");
+                    LOG.LogError("Unexpected type of {EntryType} was given as candidate for caching MessageQueueMetadata.", entry.Value.GetType());
                 }
             }
 

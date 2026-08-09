@@ -27,6 +27,9 @@
 
     <ImplicitUsings>enable</ImplicitUsings>
 
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>None</AnalysisMode>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,9 +45,5 @@
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Using Include="Microsoft.Extensions.Logging.ILogger" Alias="ILog" />
-  </ItemGroup>
 
 </Project>

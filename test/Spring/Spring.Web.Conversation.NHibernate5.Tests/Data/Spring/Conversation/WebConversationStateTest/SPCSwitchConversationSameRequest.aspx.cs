@@ -101,7 +101,7 @@ public partial class SPCSwitchConversationSameRequest : System.Web.UI.Page
     {
         foreach (SPCDetailEnt sPCDetailEntItem in sPCMasterEnt.SPCDetailEntList)
         {
-            LOG.LogDebug(String.Format("Page_Load({1}): sPCDetailEntItem.Description={0}", sPCDetailEntItem.Description, desc));
+            LOG.LogDebug("Page_Load({Desc}): sPCDetailEntItem.Description={Description}", desc, sPCDetailEntItem.Description);
         }
     }
 }

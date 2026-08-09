@@ -53,7 +53,7 @@ namespace Spring.NmsQuickStart.Client
             }
             catch (Exception e)
             {
-                log.LogError("Spring.NmsQuickStart.Client is broken.", e);
+                log.LogError(e, "Spring.NmsQuickStart.Client is broken.");
             }
         }
 

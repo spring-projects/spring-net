@@ -42,7 +42,7 @@ public class TestObjectMgr : ITestObjectMgr
     [Transaction()]
     public void SaveTwoTestObjects(TestObject to1, TestObject to2)
     {
-        LOG.LogDebug("TransactionActive = " + TransactionSynchronizationManager.ActualTransactionActive);
+        LOG.LogDebug("TransactionActive = {ActualTransactionActive}", TransactionSynchronizationManager.ActualTransactionActive);
     }
 
     [Transaction(TransactionPropagation.Required, IsolationLevel.Unspecified, Timeout = 50,

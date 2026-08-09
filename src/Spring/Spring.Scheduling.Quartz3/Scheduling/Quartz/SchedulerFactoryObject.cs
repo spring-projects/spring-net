@@ -629,10 +629,7 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
 
         if (configLocation != null)
         {
-            if (Logger.IsEnabled(LogLevel.Information))
-            {
-                Logger.LogInformation("Loading Quartz config from [" + configLocation + "]");
-            }
+            Logger.LogInformation("Loading Quartz config from [{ConfigLocation}]", configLocation);
 
             using (StreamReader sr = new StreamReader(configLocation.InputStream))
             {
@@ -766,10 +763,7 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
         }
         else
         {
-            if (Logger.IsEnabled(LogLevel.Information))
-            {
-                Logger.LogInformation("Will start Quartz Scheduler [{SchedulerName}] in {StartDelaySeconds} seconds", sched.SchedulerName, startDelay);
-            }
+            Logger.LogInformation("Will start Quartz Scheduler [{SchedulerName}] in {StartDelaySeconds} seconds", sched.SchedulerName, startDelay);
 
             await sched.StartDelayed(startDelay).ConfigureAwait(false);
         }

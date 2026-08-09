@@ -57,10 +57,7 @@ public class SimplePoolTargetSource : AbstractPoolingTargetSource, IPoolableObje
     /// <seealso cref="Spring.Objects.Factory.IObjectFactoryAware.ObjectFactory"/>
     protected override void CreatePool(IObjectFactory factory)
     {
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Creating object pool.");
-        }
+        logger.LogDebug("Creating object pool.");
 
         this.objectPool = CreateObjectPool();
     }
@@ -122,10 +119,7 @@ public class SimplePoolTargetSource : AbstractPoolingTargetSource, IPoolableObje
     /// </remarks>
     public override void Dispose()
     {
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Closing pool...");
-        }
+        logger.LogDebug("Closing pool...");
 
         this.objectPool.Close();
     }

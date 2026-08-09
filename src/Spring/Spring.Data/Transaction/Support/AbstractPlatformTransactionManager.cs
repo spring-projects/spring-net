@@ -486,7 +486,7 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
 
         if (debugEnabled)
         {
-            log.LogDebug("Using transaction object [" + transaction + "]");
+            log.LogDebug("Using transaction object [{Transaction}]", transaction);
         }
 
         if (definition == null)
@@ -519,7 +519,7 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
             object suspendedResources = Suspend(null);
             if (debugEnabled)
             {
-                log.LogDebug("Creating new transaction with name [" + definition.Name + "]:" + definition);
+                log.LogDebug("Creating new transaction with name [{TransactionName}]:{Definition}", definition.Name, definition);
             }
 
             try
@@ -595,7 +595,7 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
             if (debugEnabled)
             {
                 log.LogDebug("Suspending current transaction, creating new transaction with name [" +
-                             definition.Name + "]:" + definition);
+                             "{TransactionName}]:{Definition}", definition.Name, definition);
             }
 
             object suspendedResources = Suspend(transaction);
@@ -639,7 +639,7 @@ public abstract class AbstractPlatformTransactionManager : IPlatformTransactionM
 
             if (debugEnabled)
             {
-                log.LogDebug("Creating nested transaction with name [" + definition.Name + "]:" + definition);
+                log.LogDebug("Creating nested transaction with name [{TransactionName}]:{Definition}", definition.Name, definition);
             }
 
             if (UseSavepointForNestedTransaction())

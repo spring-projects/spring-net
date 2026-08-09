@@ -76,8 +76,7 @@ public class ExceptionAction : BaseValidationAction
             }
             catch (Exception e)
             {
-                string message = "Was not able to evaluate action expression [" + throwsExpression + "]";
-                log.LogError(e, message);
+                log.LogError(e, "Was not able to evaluate action expression [{ThrowsExpression}]", throwsExpression);
             }
 
             Exception exception = o as Exception;

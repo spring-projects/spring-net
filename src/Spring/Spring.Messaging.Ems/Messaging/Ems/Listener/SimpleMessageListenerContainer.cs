@@ -177,10 +177,7 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
         // First invoke the user-specific ExceptionListener, if any.
         InvokeExceptionListener(exception);
         // now try to recover the shared Connection and all consumers...
-        if (logger.IsEnabled(LogLevel.Information))
-        {
-            logger.LogInformation("Trying to recover from EMS Connection exception: " + exception);
-        }
+        logger.LogInformation(exception, "Trying to recover from EMS Connection exception");
 
         try
         {
@@ -200,8 +197,8 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
         }
         catch (EMSException recoverEx)
         {
-            logger.LogDebug((Exception) recoverEx, "Failed to recover EMS Connection");
-            logger.LogError((Exception) exception, "Encountered non-recoverable EMSException");
+            logger.LogDebug(recoverEx, "Failed to recover EMS Connection");
+            logger.LogError(exception, "Encountered non-recoverable EMSException");
         }
     }
 
@@ -228,15 +225,12 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
             }
             catch (Exception ex)
             {
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Could not refresh Connection - retrying in " + recoveryInterval);
-                }
+                logger.LogInformation("Could not refresh Connection - retrying in {RecoveryInterval}", recoveryInterval);
             }
 
             if (totalTryTime > maxRecoveryTime)
             {
-                logger.LogInformation("Could not refresh Connection after " + totalTryTime + ".  Stopping reconnection attempts.");
+                logger.LogInformation("Could not refresh Connection after {TotalTryTime}.  Stopping reconnection attempts.", totalTryTime);
                 throw new RecoveryTimeExceededException("Could not recover after " + totalTryTime);
             }
 

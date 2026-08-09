@@ -189,10 +189,7 @@ public class TransactionTemplate : DefaultTransactionDefinition, ITransactionOpe
     /// <param name="exception">The thrown application exception or error.</param>
     private void rollbackOnException(ITransactionStatus status, Exception exception)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(exception, "Initiating transaction rollback on application exception");
-        }
+        log.LogDebug(exception, "Initiating transaction rollback on application exception");
 
         try
         {

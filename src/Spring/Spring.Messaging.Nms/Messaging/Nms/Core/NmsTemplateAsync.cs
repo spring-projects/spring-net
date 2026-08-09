@@ -152,10 +152,7 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
                 sessionToUse = sessionToClose;
             }
 
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Executing callback on NMS ISession [" + sessionToUse + "]");
-            }
+            logger.LogDebug("Executing callback on NMS ISession [{Session}]", sessionToUse);
 
             return await action.DoInNms(sessionToUse).Awaiter();
         }
@@ -522,10 +519,7 @@ public class NmsTemplateAsync : NmsDestinationAccessorAsync, INmsOperationsAsync
                 message = messageCreatorDelegate(session);
             }
 
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Sending created message [" + message + "]");
-            }
+            logger.LogDebug("Sending created message [{NmsMessage}]", message);
 
             await DoSend(producer, message).Awaiter();
 

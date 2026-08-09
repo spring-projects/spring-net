@@ -109,10 +109,7 @@ public class CaoFactoryObject : IFactoryObject, IInitializingObject
     public object GetObject()
     {
         string url = serviceUrl.TrimEnd('/') + '/' + remoteTargetName;
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Accessing CAO object of type ICaoRemoteFactory object at url = [" + url + "]");
-        }
+        LOG.LogDebug("Accessing CAO object of type ICaoRemoteFactory object at url = [{Url}]", url);
 
         ICaoRemoteFactory remoteFactory = (ICaoRemoteFactory) Activator.GetObject(typeof(ICaoRemoteFactory), url);
 

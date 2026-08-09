@@ -244,10 +244,7 @@ public class SaoExporter : ConfigurableLifetime, IObjectFactoryAware, IInitializ
 
         RemotingServices.Marshal(remoteObject, objectUri);
 
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug(String.Format("Target '{0}' exported as '{1}'.", targetName, objectUri));
-        }
+        LOG.LogDebug("Target '{TargetName}' exported as '{ObjectUri}'.", targetName, objectUri);
     }
 
     /// <summary>

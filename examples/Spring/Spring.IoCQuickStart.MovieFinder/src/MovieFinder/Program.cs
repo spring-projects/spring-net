@@ -76,7 +76,7 @@ namespace Spring.IocQuickStart.MovieFinder
 			}
 			catch (Exception e)
 			{
-				LOG.LogError("Movie Finder is broken.", e);
+				LOG.LogError(e, "Movie Finder is broken.");
 			}
 			finally
 			{

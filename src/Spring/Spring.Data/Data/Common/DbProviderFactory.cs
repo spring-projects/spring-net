@@ -110,10 +110,7 @@ public class DbProviderFactory
 
                         if (loader.GetResource(DBPROVIDER_ADDITIONAL_RESOURCE_NAME).Exists)
                         {
-                            if (log.IsEnabled(LogLevel.Debug))
-                            {
-                                log.LogDebug("Loading additional DbProviders from " + DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
-                            }
+                            log.LogDebug("Loading additional DbProviders from {AdditionalResourceName}", DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
 
                             ctx = new XmlApplicationContext(DBPROVIDER_CONTEXTNAME, true, new string[] { DBPROVIDER_DEFAULT_RESOURCE_NAME, DBPROVIDER_ADDITIONAL_RESOURCE_NAME });
                         }
@@ -125,13 +122,12 @@ public class DbProviderFactory
                         if (log.IsEnabled(LogLevel.Information))
                         {
                             var dbProviderNames = ctx.GetObjectNames<IDbProvider>();
-                            log.LogInformation($"{dbProviderNames.Count} DbProviders Available. [{StringUtils.CollectionToCommaDelimitedString(dbProviderNames)}]");
+                            log.LogInformation("{DbProviderCount} DbProviders Available. [{DbProviderNames}]", dbProviderNames.Count, StringUtils.CollectionToCommaDelimitedString(dbProviderNames));
                         }
                     }
                     catch (Exception e)
                     {
-                        string message = "Error processing " + DBPROVIDER_DEFAULT_RESOURCE_NAME;
-                        log.LogError(e, message);
+                        log.LogError(e, "Error processing {DefaultResourceName}", DBPROVIDER_DEFAULT_RESOURCE_NAME);
                         throw;
                     }
                 }

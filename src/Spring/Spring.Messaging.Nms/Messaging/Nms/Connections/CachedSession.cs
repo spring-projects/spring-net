@@ -86,17 +86,11 @@ public class CachedSession : IDecoratorSession
         {
             if (cachedUnspecifiedDestinationMessageProducer != null)
             {
-                if (Log.IsEnabled(LogLevel.Debug))
-                {
-                    Log.LogDebug("Found cached MessageProducer for unspecified destination");
-                }
+                Log.LogDebug("Found cached MessageProducer for unspecified destination");
             }
             else
             {
-                if (Log.IsEnabled(LogLevel.Debug))
-                {
-                    Log.LogDebug("Creating cached MessageProducer for unspecified destination");
-                }
+                Log.LogDebug("Creating cached MessageProducer for unspecified destination");
 
                 cachedUnspecifiedDestinationMessageProducer = await target.CreateProducerAsync().Awaiter();
             }
@@ -128,19 +122,13 @@ public class CachedSession : IDecoratorSession
         {
             if (cachedProducers.TryGetValue(destination, out var producer))
             {
-                if (Log.IsEnabled(LogLevel.Debug))
-                {
-                    Log.LogDebug("Found cached MessageProducer for destination [" + destination + "]");
-                }
+                Log.LogDebug("Found cached MessageProducer for destination [{Destination}]", destination);
             }
             else
             {
                 producer = await target.CreateProducerAsync(destination).Awaiter();
 
-                if (Log.IsEnabled(LogLevel.Debug))
-                {
-                    Log.LogDebug("Creating cached MessageProducer for destination [" + destination + "]");
-                }
+                Log.LogDebug("Creating cached MessageProducer for destination [{Destination}]", destination);
 
                 cachedProducers[destination] = producer;
             }
@@ -217,10 +205,7 @@ public class CachedSession : IDecoratorSession
         // Allow for multiple close calls...
         if (!sessionList.Contains(this))
         {
-            if (Log.IsEnabled(LogLevel.Debug))
-            {
-                Log.LogDebug("Returning cached Session: " + target);
-            }
+            Log.LogDebug("Returning cached Session: {TargetSession}", target);
 
             sessionList.Add(this); //add to end of linked list.
         }
@@ -228,10 +213,7 @@ public class CachedSession : IDecoratorSession
 
     private async Task PhysicalClose()
     {
-        if (Log.IsEnabled(LogLevel.Debug))
-        {
-            Log.LogDebug("Closing cached Session: " + target);
-        }
+        Log.LogDebug("Closing cached Session: {TargetSession}", target);
 
         // Explicitly close all MessageProducers and MessageConsumers that
         // this Session happens to cache...
@@ -450,10 +432,7 @@ public class CachedSession : IDecoratorSession
         var cacheKey = new ConsumerCacheKey(destination, selector, noLocal, subscriptionName, durable, shared);
         if (cachedConsumers.TryGetValue(cacheKey, out var consumer))
         {
-            if (Log.IsEnabled(LogLevel.Debug))
-            {
-                Log.LogDebug("Found cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
-            }
+            Log.LogDebug("Found cached NMS MessageConsumer for destination [{Destination}]: {Consumer}", destination, consumer);
         }
         else
         {
@@ -475,10 +454,7 @@ public class CachedSession : IDecoratorSession
             }
         }
 
-        if (Log.IsEnabled(LogLevel.Debug))
-        {
-            Log.LogDebug("Creating cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
-        }
+        Log.LogDebug("Creating cached NMS MessageConsumer for destination [{Destination}]: {Consumer}", destination, consumer);
 
         cachedConsumers[cacheKey] = consumer;
 

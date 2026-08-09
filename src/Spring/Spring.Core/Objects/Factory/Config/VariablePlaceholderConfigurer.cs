@@ -301,12 +301,8 @@ public class VariablePlaceholderConfigurer : IObjectFactoryPostProcessor, IPrior
                         string resolvedValue = variableSource.ResolveVariable(placeholder);
                         resolvedValue = ParseAndResolveVariables(resolvedValue, visitedPlaceholders);
 
-                        if (logger.IsEnabled(LogLevel.Debug))
-                        {
-                            logger.LogDebug(string.Format(
-                                CultureInfo.InvariantCulture,
-                                "Resolving placeholder '{0}' to '{1}'.", placeholder, resolvedValue));
-                        }
+                        logger.LogDebug(
+                            "Resolving placeholder '{Placeholder}' to '{ResolvedValue}'.", placeholder, resolvedValue);
 
                         if (resolvedValue == null
                             && startIndex == 0

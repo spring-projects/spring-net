@@ -68,7 +68,7 @@ public class SimpleInstantiationStrategy : IInstantiationStrategy
         AssertUtils.ArgumentNotNull(definition, "definition");
         AssertUtils.ArgumentNotNull(factory, "factory");
 
-        if (log.IsEnabled(LogLevel.Trace)) log.LogTrace(string.Format("instantiating object '{0}'", name));
+        log.LogTrace("instantiating object '{ObjectName}'", name);
 
         if (definition.HasMethodOverrides)
         {
@@ -194,10 +194,7 @@ public class SimpleInstantiationStrategy : IInstantiationStrategy
                 CultureInfo.InvariantCulture,
                 "Factory method '{0}' threw an Exception.", factoryMethod);
 
-            if (log.IsEnabled(LogLevel.Warning))
-            {
-                log.LogWarning(ex.InnerException, msg);
-            }
+            log.LogWarning(ex.InnerException, "{Message}", msg);
 
             throw new ObjectDefinitionStoreException(msg, ex.InnerException);
         }

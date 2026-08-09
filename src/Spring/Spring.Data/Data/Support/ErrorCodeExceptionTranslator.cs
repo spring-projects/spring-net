@@ -138,10 +138,7 @@ public class ErrorCodeExceptionTranslator : IAdoExceptionTranslator
         }
 
         // Looking for a fallback...
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Unable to translate exception with errorCode '" + errorCode + "', will use the fallback translator");
-        }
+        log.LogDebug("Unable to translate exception with errorCode '{ErrorCode}', will use the fallback translator", errorCode);
 
         IAdoExceptionTranslator fallback = FallbackTranslator;
         if (fallback != null)
@@ -293,13 +290,8 @@ public class ErrorCodeExceptionTranslator : IAdoExceptionTranslator
     /// <param name="b">if set to <c>true</c> [b].</param>
     private void LogTranslation(string task, string sql, string errorCode, Exception exception, bool b)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            String intro = "Translating";
-            log.LogDebug(intro + " ADO exception with error code '" + errorCode
-                         + "', message [" + exception.Message +
-                         "]; SQL was [" + sql + "] for task [" + task + "]");
-        }
+        log.LogDebug("Translating ADO exception with error code '{ErrorCode}', message [{ExceptionMessage}]; SQL was [{Sql}] for task [{Task}]",
+            errorCode, exception.Message, sql, task);
     }
 
     private string ExtractErrorCode(Exception exception)

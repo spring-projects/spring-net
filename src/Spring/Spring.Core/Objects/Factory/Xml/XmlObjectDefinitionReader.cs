@@ -195,10 +195,7 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
                 ("Resource cannot be null: expected an XML resource.");
         }
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Loading XML object definitions from " + resource);
-        }
+        log.LogDebug("Loading XML object definitions from {Resource}", resource);
 
         try
         {
@@ -221,10 +218,7 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
                 }
                 catch (IOException ex)
                 {
-                    if (log.IsEnabled(LogLevel.Warning))
-                    {
-                        log.LogWarning(ex, "Could not close stream.");
-                    }
+                    log.LogWarning(ex, "Could not close stream.");
                 }
             }
         }
@@ -306,7 +300,7 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Using the following XmlReader implementation : " + reader.GetType());
+            log.LogDebug("Using the following XmlReader implementation : {ReaderType}", reader.GetType());
         }
 
         return reader;
@@ -337,11 +331,7 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
         }
         else
         {
-            if (log.IsEnabled(LogLevel.Warning))
-            {
-                string message = "Ignored XML validation warning: " + args.Message;
-                log.LogWarning(args.Exception, message);
-            }
+            log.LogWarning(args.Exception, "Ignored XML validation warning: {ValidationMessage}", args.Message);
         }
     }
 

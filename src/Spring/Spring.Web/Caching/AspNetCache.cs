@@ -190,7 +190,7 @@ public class AspNetCache : AbstractCache
     {
         if (key != null)
         {
-            if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("removing item '{0}' from cache '{1}'", key, this._cacheName));
+            Log.LogDebug("removing item '{Key}' from cache '{CacheName}'", key, this._cacheName);
             _cache.Remove(GenerateKey(key));
         }
     }
@@ -260,7 +260,7 @@ public class AspNetCache : AbstractCache
         AssertUtils.ArgumentNotNull(key, "key");
         AssertUtils.State(TimeSpan.Zero <= timeToLive, "timeToLive");
 
-        if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("adding item '{0}' to cache '{1}'", key, this._cacheName));
+        Log.LogDebug("adding item '{Key}' to cache '{CacheName}'", key, this._cacheName);
 
         if (TimeSpan.Zero < timeToLive)
         {

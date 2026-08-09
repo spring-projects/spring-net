@@ -480,11 +480,8 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
     /// <param name="request">The original request.</param>
     protected virtual void HandleResult(object result, Message request)
     {
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Listener method returned result [" + result +
-                            "] - generating response message for it");
-        }
+        logger.LogDebug("Listener method returned result [{Result}" +
+                        "] - generating response message for it", result);
 
         Message response = BuildMessage(result);
         PostProcessResponse(request, response);
@@ -500,10 +497,7 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
     protected virtual void SendResponse(MessageQueue destination, Message response)
     {
         //Will send with appropriate transaction semantics
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Sending response message to path = [" + destination.Path + "]");
-        }
+        logger.LogDebug("Sending response message to path = [{Path}]", destination.Path);
 
         messageQueueTemplate.Send(destination, response);
     }

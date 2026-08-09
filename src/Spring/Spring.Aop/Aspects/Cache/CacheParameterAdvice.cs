@@ -126,7 +126,7 @@ public class CacheParameterAdvice : BaseCacheAdvice, IAfterReturningAdvice
 
                         if (isLogDebugEnabled)
                         {
-                            logger.LogDebug(string.Format("Caching parameter for key [{0}] into cache [{1}].", key, paramInfo.CacheName));
+                            logger.LogDebug("Caching parameter for key [{Key}] into cache [{CacheName}].", key, paramInfo.CacheName);
                         }
 
                         cache.Insert(key, arguments[i], paramInfo.TimeToLiveTimeSpan);

@@ -26,7 +26,6 @@
     <PackageTags>Library</PackageTags>
 
     <NeutralLanguage>en-US</NeutralLanguage>
-    <WarningsAsErrors>True</WarningsAsErrors>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -45,6 +44,9 @@
 
     <ImplicitUsings>enable</ImplicitUsings>
 
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>None</AnalysisMode>
   </PropertyGroup>
 
   <ItemGroup>

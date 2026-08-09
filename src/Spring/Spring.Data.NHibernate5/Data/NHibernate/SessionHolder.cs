@@ -296,7 +296,7 @@ public class SessionHolder : ResourceHolderSupport
         {
             if (sessionDictionary.ContainsKey(key))
             {
-                log.LogDebug("Overwriting Session in SessionHolder with key = " + key);
+                log.LogDebug("Overwriting Session in SessionHolder with key = {Key}", key);
             }
 
             sessionDictionary[key] = session;

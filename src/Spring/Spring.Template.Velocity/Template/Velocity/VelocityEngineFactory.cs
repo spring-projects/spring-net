@@ -206,10 +206,7 @@ public class VelocityEngineFactory
         // Load config file if set.
         if (configLocation != null)
         {
-            if (log.IsEnabled(LogLevel.Information))
-            {
-                log.LogInformation(string.Format("Loading Velocity config from [{0}]", configLocation));
-            }
+            log.LogInformation("Loading Velocity config from [{ConfigLocation}]", configLocation);
 
             FillProperties(extendedProperties, configLocation, false);
         }
@@ -323,9 +320,8 @@ public class VelocityEngineFactory
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    string message = string.Format("Cannot resolve resource loader path [{0}] to [File]: using SpringResourceLoader",
+                    log.LogError(ex, "Cannot resolve resource loader path [{ResolvedPaths}] to [File]: using SpringResourceLoader",
                         StringUtils.CollectionToCommaDelimitedString(resolvedPaths));
-                    log.LogError(ex, message);
                 }
 
                 InitSpringResourceLoader(velocityEngine, extendedProperties, StringUtils.CollectionToCommaDelimitedString(paths));
@@ -334,10 +330,7 @@ public class VelocityEngineFactory
         else
         {
             // Always load via SpringResourceLoader (without hot detection of template changes).
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("File system access not preferred: using SpringResourceLoader");
-            }
+            log.LogDebug("File system access not preferred: using SpringResourceLoader");
 
             InitSpringResourceLoader(velocityEngine, extendedProperties, StringUtils.CollectionToCommaDelimitedString(paths));
         }

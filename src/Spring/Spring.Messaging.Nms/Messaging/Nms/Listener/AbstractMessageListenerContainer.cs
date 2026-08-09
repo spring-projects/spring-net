@@ -307,11 +307,8 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
     {
         if (!AcceptMessagesWhileStopping && !IsRunning)
         {
-            if (logger.IsEnabled(LogLevel.Warning))
-            {
-                logger.LogWarning("Rejecting received message because of the listener container " +
-                                  "having been stopped in the meantime: " + message);
-            }
+            logger.LogWarning("Rejecting received message because of the listener container " +
+                              "having been stopped in the meantime: {NmsMessage}", message);
 
             RollbackIfNecessary(session);
             throw new MessageRejectedWhileStoppingException();
@@ -388,8 +385,8 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
             // Actually invoke the message listener
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Invoking listener with message of type [" + message.GetType() +
-                                "] and session [" + sessionToUse + "]");
+                logger.LogDebug("Invoking listener with message of type [{MessageType}" +
+                                "] and session [{Session}]", message.GetType(), sessionToUse);
             }
 
             listener.OnMessage(message, sessionToUse);
@@ -497,10 +494,7 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
             if (session.Transacted && IsSessionLocallyTransacted(session))
             {
                 // Transacted session created by this container -> rollback
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug("Initiating transaction rollback on application exception");
-                }
+                logger.LogDebug("Initiating transaction rollback on application exception");
 
                 NmsUtils.RollbackIfNecessary(session);
             }

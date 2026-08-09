@@ -54,7 +54,7 @@ namespace Spring.Messaging.Ems.Connections;
 /// <author>Mark Pollack (.NET)</author>
 public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, IInitializingObject, IDisposable
 {
-    private static readonly ILog LOG = LogManager.GetLogger(typeof(SingleConnectionFactory));
+    private static readonly ILogger LOG = LogManager.GetLogger(typeof(SingleConnectionFactory));
 
     private IConnectionFactory targetConnectionFactory;
 
@@ -425,7 +425,7 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
             PrepareConnection(this.target);
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogInformation("Established shared EMS Connection: " + this.target);
+                LOG.LogInformation("Established shared EMS Connection: {Connection}", this.target);
             }
 
             this.connection = GetSharedConnection(target);
@@ -494,10 +494,7 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
     /// <param name="con">The connection.</param>
     protected virtual void CloseConnection(IConnection con)
     {
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Closing shared EMS Connection: " + this.target);
-        }
+        LOG.LogDebug("Closing shared EMS Connection: {Connection}", this.target);
 
         try
         {

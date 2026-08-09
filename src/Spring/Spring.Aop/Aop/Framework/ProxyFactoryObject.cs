@@ -440,10 +440,7 @@ public class ProxyFactoryObject
         // in the case of a prototype, we need to give the proxy
         // an independent instance of the configuration...
 
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Creating copy of prototype ProxyFactoryObject config: " + this);
-        }
+        logger.LogDebug("Creating copy of prototype ProxyFactoryObject config: {Config}", this);
 
         // The copy needs a fresh advisor chain, and a fresh TargetSource.
         ITargetSource targetSource = FreshTargetSource();
@@ -452,10 +449,7 @@ public class ProxyFactoryObject
         AdvisedSupport copy = new AdvisedSupport();
         copy.CopyConfigurationFrom(this, targetSource, advisorChain, introductionChain);
 
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Using ProxyConfig: " + copy);
-        }
+        logger.LogDebug("Using ProxyConfig: {ProxyConfig}", copy);
 
         object generatedProxy = copy.CreateAopProxy().GetProxy();
         base.IsFrozen = freezeProxy; // freeze after creating proxy to allow for interface autodetection
@@ -469,7 +463,7 @@ public class ProxyFactoryObject
     {
         if (logger.IsEnabled(LogLevel.Debug))
         {
-            logger.LogDebug(string.Format("Initialize: begin configure target, interceptors and introductions for {0}[{1}]", GetType().Name, GetHashCode()));
+            logger.LogDebug("Initialize: begin configure target, interceptors and introductions for {FactoryType}[{HashCode}]", GetType().Name, GetHashCode());
         }
 
         InitializeAdvisorChain();
@@ -477,7 +471,7 @@ public class ProxyFactoryObject
 
         if (logger.IsEnabled(LogLevel.Debug))
         {
-            logger.LogDebug(string.Format("Initialize: completed configuration for {0}[{1}]: {2}", GetType().Name, GetHashCode(), ToProxyConfigString()));
+            logger.LogDebug("Initialize: completed configuration for {FactoryType}[{HashCode}]: {ProxyConfig}", GetType().Name, GetHashCode(), ToProxyConfigString());
         }
     }
 
@@ -521,19 +515,13 @@ public class ProxyFactoryObject
                     throw new AopConfigException("Can only use global advisors or interceptors in conjunction with an IListableObjectFactory.");
                 }
 
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug("Adding global advisor '" + name + "'");
-                }
+                logger.LogDebug("Adding global advisor '{AdvisorName}'", name);
 
                 AddGlobalAdvisor(lof, name.Substring(0, (name.Length - GlobalInterceptorSuffix.Length)));
             }
             else
             {
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug("resolving advisor name " + "'" + name + "'");
-                }
+                logger.LogDebug("resolving advisor name '{AdvisorName}'", name);
 
                 // If we get here, we need to add a named interceptor.
                 // We must check if it's a singleton or prototype.
@@ -557,17 +545,14 @@ public class ProxyFactoryObject
     {
         if (advice is IAdvisors)
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug(string.Format("Adding advisor list '{0}'", name));
-            }
+            logger.LogDebug("Adding advisor list '{AdvisorName}'", name);
 
             IAdvisors advisors = (IAdvisors) advice;
             foreach (object element in advisors.Advisors)
             {
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.LogDebug(string.Format("Adding advisor '{0}' of type {1}", name, element.GetType().FullName));
+                    logger.LogDebug("Adding advisor '{AdvisorName}' of type {AdvisorType}", name, element.GetType().FullName);
                 }
 
                 IAdvisor advisor = NamedObjectToAdvisor(element);
@@ -578,7 +563,7 @@ public class ProxyFactoryObject
         {
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug(string.Format("Adding advisor '{0}' of type {1}", name, advice.GetType().FullName));
+                logger.LogDebug("Adding advisor '{AdvisorName}' of type {AdviceType}", name, advice.GetType().FullName);
             }
 
             IAdvisor advisor = NamedObjectToAdvisor(advice);
@@ -682,10 +667,7 @@ public class ProxyFactoryObject
                 throw new AopConfigException("Found null interceptor name value in the InterceptorNames list; check your configuration.");
             }
 
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Adding introduction '" + name + "'");
-            }
+            logger.LogDebug("Adding introduction '{IntroductionName}'", name);
 
             if (name.EndsWith(GlobalInterceptorSuffix))
             {
@@ -793,7 +775,7 @@ public class ProxyFactoryObject
     /// <param name="name">object name from which we obtained this object in our owning object factory</param>
     private void AddIntroductionOnChainCreation(object introduction, string name)
     {
-        logger.LogDebug($"Adding introduction with name '{name}'");
+        logger.LogDebug("Adding introduction with name '{IntroductionName}'", name);
         IIntroductionAdvisor advisor = NamedObjectToIntroduction(introduction);
         AddIntroduction(advisor);
     }
@@ -805,20 +787,14 @@ public class ProxyFactoryObject
     {
         if (StringUtils.IsNullOrEmpty(targetName))
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Not Refreshing TargetSource: No target name specified");
-            }
+            logger.LogDebug("Not Refreshing TargetSource: No target name specified");
 
             return TargetSource;
         }
 
         AssertUtils.ArgumentNotNull(objectFactory, "ObjectFactory");
 
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Refreshing TargetSource with name '" + targetName + "'");
-        }
+        logger.LogDebug("Refreshing TargetSource with name '{TargetName}'", targetName);
 
         object target = objectFactory.GetObject(targetName);
         ITargetSource targetSource = NamedObjectToTargetSource(target);
@@ -838,10 +814,7 @@ public class ProxyFactoryObject
             if (advisor is PrototypePlaceholder)
             {
                 PrototypePlaceholder pa = (PrototypePlaceholder) advisor;
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug(string.Format("Refreshing advisor '{0}'", pa.ObjectName));
-                }
+                logger.LogDebug("Refreshing advisor '{AdvisorName}'", pa.ObjectName);
 
                 AssertUtils.ArgumentNotNull(objectFactory, "ObjectFactory");
 
@@ -871,10 +844,7 @@ public class ProxyFactoryObject
             if (introduction is PrototypePlaceholder)
             {
                 PrototypePlaceholder pa = (PrototypePlaceholder) introduction;
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug(string.Format("Refreshing introduction '{0}'", pa.ObjectName));
-                }
+                logger.LogDebug("Refreshing introduction '{IntroductionName}'", pa.ObjectName);
 
                 AssertUtils.ArgumentNotNull(objectFactory, "ObjectFactory");
 
@@ -979,10 +949,7 @@ public class ProxyFactoryObject
                 {
                     // The target isn't an interceptor.
                     targetName = finalName;
-                    if (logger.IsEnabled(LogLevel.Debug))
-                    {
-                        logger.LogDebug(string.Format("Object with name '{0}' concluding interceptor chain is not an advisor class: treating it as a target or TargetSource", finalName));
-                    }
+                    logger.LogDebug("Object with name '{ObjectName}' concluding interceptor chain is not an advisor class: treating it as a target or TargetSource", finalName);
 
                     String[] newNames = new String[interceptorNames.Length - 1];
                     Array.Copy(interceptorNames, 0, newNames, 0, newNames.Length);

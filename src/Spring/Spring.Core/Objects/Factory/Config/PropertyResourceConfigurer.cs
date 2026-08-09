@@ -15,7 +15,6 @@
  */
 
 using System.Collections.Specialized;
-using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Core.IO;
@@ -253,12 +252,8 @@ public abstract class PropertyResourceConfigurer
             int sectionNameIndex = 0;
             foreach (IResource resource in _locations)
             {
-                if (_log.IsEnabled(LogLevel.Debug))
-                {
-                    _log.LogDebug(string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Loading configuration from '{0}'.", resource));
-                }
+                _log.LogDebug(
+                    "Loading configuration from '{Resource}'.", resource);
 
                 string sectionName = configSections[sectionNameIndex];
                 if (resource is ConfigSectionResource)
@@ -278,10 +273,7 @@ public abstract class PropertyResourceConfigurer
                         string errorMessage = "Could not load configuration from " + resource;
                         if (_ignoreResourceNotFound)
                         {
-                            if (_log.IsEnabled(LogLevel.Warning))
-                            {
-                                _log.LogWarning(errorMessage);
-                            }
+                            _log.LogWarning("Could not load configuration from {Resource}", resource);
                         }
                         else
                         {

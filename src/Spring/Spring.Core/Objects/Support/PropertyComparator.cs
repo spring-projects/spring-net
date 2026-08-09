@@ -113,11 +113,7 @@ public class PropertyComparator : IComparer
         }
         catch (Exception ex)
         {
-            if (logger.IsEnabled(LogLevel.Warning))
-            {
-                string message = "Could not sort objects [" + o1 + "] and [" + o2 + "]";
-                logger.LogWarning(ex, message);
-            }
+            logger.LogWarning(ex, "Could not sort objects [{FirstObject}] and [{SecondObject}]", o1, o2);
 
             return 0;
         }
@@ -155,10 +151,7 @@ public class PropertyComparator : IComparer
             catch (ObjectsException ex)
             {
                 // if a nested property cannot be read, simply return null...
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug(ex, "Could not access property - treating as null for sorting.");
-                }
+                logger.LogDebug(ex, "Could not access property - treating as null for sorting.");
             }
         }
 

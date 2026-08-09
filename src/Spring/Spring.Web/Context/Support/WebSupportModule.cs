@@ -96,7 +96,7 @@ public class WebSupportModule : IHttpModule
         }
         catch (SecurityException sec)
         {
-            s_log.LogWarning(string.Format("failed reflecting field HttpContext.HideRequestResponse due to security restrictions {0}", sec));
+            s_log.LogWarning(sec, "failed reflecting field HttpContext.HideRequestResponse due to security restrictions");
         }
 
         // register additional resource handler
@@ -227,14 +227,14 @@ public class WebSupportModule : IHttpModule
     {
         if (context.Handler != null)
         {
-            s_log.LogDebug(string.Format("previous handler is present - configuring handler now using application context '{0}' and name '{1}'", applicationContext, name));
+            s_log.LogDebug("previous handler is present - configuring handler now using application context '{ApplicationContext}' and name '{Name}'", applicationContext, name);
             // this is a Server.Execute() or Server.Transfer() request -> configure immediately
             return ConfigureHandlerNow(handler, applicationContext, name, isContainerManaged);
         }
         else
         {
             // remember the resolved object definition name for applying it during PreRequestHandlerExecute
-            s_log.LogDebug(string.Format("no previous handler is present - defer handler configuration using application context '{0}' and name '{1}'", applicationContext, name));
+            s_log.LogDebug("no previous handler is present - defer handler configuration using application context '{ApplicationContext}' and name '{Name}'", applicationContext, name);
             SetCurrentHandlerConfiguration(applicationContext, name, isContainerManaged);
             return handler;
         }
@@ -262,12 +262,12 @@ public class WebSupportModule : IHttpModule
     {
         if (isContainerManaged)
         {
-            s_log.LogDebug(string.Format("configuring managed handler using application context '{0}' and name '{1}'", applicationContext, name));
+            s_log.LogDebug("configuring managed handler using application context '{ApplicationContext}' and name '{Name}'", applicationContext, name);
             handler = (IHttpHandler) applicationContext.ObjectFactory.ConfigureObject(handler, name);
         }
         else
         {
-            s_log.LogDebug(string.Format("configuring unmanaged handler using application context '{0}' and name '{1}'", applicationContext, name));
+            s_log.LogDebug("configuring unmanaged handler using application context '{ApplicationContext}' and name '{Name}'", applicationContext, name);
             // at a minimum we'll apply ObjectPostProcessors
             handler = (IHttpHandler) applicationContext.ObjectFactory.ApplyObjectPostProcessorsBeforeInitialization(handler, name);
             handler = (IHttpHandler) applicationContext.ObjectFactory.ApplyObjectPostProcessorsAfterInitialization(handler, name);
@@ -286,7 +286,7 @@ public class WebSupportModule : IHttpModule
 
     private static void OnCacheItemRemoved(string key, object value, CacheItemRemovedReason reason)
     {
-        s_log.LogDebug("end session " + key + " because of " + reason);
+        s_log.LogDebug("end session {Key} because of {Reason}", key, reason);
 
         try
         {
@@ -296,16 +296,15 @@ public class WebSupportModule : IHttpModule
         }
         catch (Exception ex)
         {
-            string msg = "Failure during EndSession event handling";
             // are we on a current request?
             if (HttpContext.Current != null)
             {
-                s_log.LogError(ex, msg);
+                s_log.LogError(ex, "Failure during EndSession event handling");
             }
             else
             {
                 // this is an async session timeout - log as fatal since this is the thread's exit point!
-                s_log.LogCritical(ex, msg);
+                s_log.LogCritical(ex, "Failure during EndSession event handling");
             }
         }
         finally

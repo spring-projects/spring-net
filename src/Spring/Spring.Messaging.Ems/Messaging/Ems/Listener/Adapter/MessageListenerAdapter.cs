@@ -45,7 +45,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter;
 /// <author>Mark Pollack (.NET)</author>
 public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageListener
 {
-    private readonly ILog logger = LogManager.GetLogger(typeof(MessageListenerAdapter));
+    private readonly ILogger logger = LogManager.GetLogger(typeof(MessageListenerAdapter));
 
     /// <summary>
     /// The default handler method name.
@@ -364,11 +364,8 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
     {
         if (session != null)
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Listener method returned result [" + result +
-                                "] - generating response message for it");
-            }
+            logger.LogDebug("Listener method returned result [{Result}" +
+                            "] - generating response message for it", result);
 
             Message response = BuildMessage(session, result);
             PostProcessResponse(request, response);
@@ -377,11 +374,8 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
         }
         else
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Listener method returned result [" + result +
-                                "]: not generating response message for it because of no EMS Session given");
-            }
+            logger.LogDebug("Listener method returned result [{Result}" +
+                            "]: not generating response message for it because of no EMS Session given", result);
         }
     }
 

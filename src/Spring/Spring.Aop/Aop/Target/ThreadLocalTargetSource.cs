@@ -128,10 +128,10 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
         {
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug(string.Format(
-                    "No target for apartment prototype '{0}' " +
-                    "found in thread: creating one and binding it to thread '#{1}'",
-                    TargetObjectName, Thread.CurrentThread.GetHashCode()));
+                logger.LogDebug(
+                    "No target for apartment prototype '{ObjectName}' " +
+                    "found in thread: creating one and binding it to thread '#{ThreadHashCode}'",
+                    TargetObjectName, Thread.CurrentThread.GetHashCode());
             }
 
             target = NewPrototypeInstance();
@@ -162,10 +162,7 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
     /// <seealso cref="System.IDisposable.Dispose"/>
     public void Dispose()
     {
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Destroying ThreadLocal bindings");
-        }
+        logger.LogDebug("Destroying ThreadLocal bindings");
 
         foreach (object target in _targetSet)
         {
@@ -179,11 +176,11 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
                 {
                     if (logger.IsEnabled(LogLevel.Warning))
                     {
-                        string message = string.Format(
-                            "Thread-bound target of class '{0}' " +
+                        logger.LogWarning(
+                            ex,
+                            "Thread-bound target of class '{TargetType}' " +
                             "threw exception from it's IDisposable.Dispose() method.",
                             target.GetType());
-                        logger.LogWarning(ex, message);
                     }
                 }
             }

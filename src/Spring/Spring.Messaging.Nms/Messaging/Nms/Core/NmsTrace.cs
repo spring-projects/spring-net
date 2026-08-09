@@ -53,7 +53,7 @@ public class NmsTrace : ITrace
     /// <param name="message">The message.</param>
     public void Debug(string message)
     {
-        log.LogDebug(message);
+        log.LogDebug("{Message}", message);
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public class NmsTrace : ITrace
     /// <param name="message">The message.</param>
     public void Info(string message)
     {
-        log.LogInformation(message);
+        log.LogInformation("{Message}", message);
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class NmsTrace : ITrace
     /// <param name="message">The message.</param>
     public void Warn(string message)
     {
-        log.LogWarning(message);
+        log.LogWarning("{Message}", message);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public class NmsTrace : ITrace
     /// <param name="message">The message.</param>
     public void Error(string message)
     {
-        log.LogError(message);
+        log.LogError("{Message}", message);
     }
 
     /// <summary>
@@ -89,7 +89,7 @@ public class NmsTrace : ITrace
     /// <param name="message">The message.</param>
     public void Fatal(string message)
     {
-        log.LogCritical(message);
+        log.LogCritical("{Message}", message);
     }
 
     /// <summary>

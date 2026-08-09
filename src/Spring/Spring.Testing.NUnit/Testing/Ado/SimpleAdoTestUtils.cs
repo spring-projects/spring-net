@@ -175,8 +175,7 @@ public class SimpleAdoTestUtils
                     throw;
                 }
 
-                string message = string.Format("SQL statement failed:{0}", statement);
-                Log.LogWarning(dae, message);
+                Log.LogWarning(dae, "SQL statement failed:{Statement}", statement);
             }
         }
     }

@@ -376,7 +376,7 @@ public abstract class SchedulerAccessor : IResourceLoaderAware
                 {
                     if (logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
                     {
-                        logger.LogDebug($"Unexpectedly found existing trigger, assumably due to cluster race condition: {ex.Message} - can safely be ignored");
+                        logger.LogDebug("Unexpectedly found existing trigger, assumably due to cluster race condition: {ErrorMessage} - can safely be ignored", ex.Message);
                     }
 
                     if (overwriteExistingJobs)

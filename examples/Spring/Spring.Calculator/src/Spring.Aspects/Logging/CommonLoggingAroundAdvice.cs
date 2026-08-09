@@ -77,19 +77,19 @@ namespace Spring.Aspects.Logging
 			{
                 case LogLevel.Trace :
 				case LogLevel.Debug :
-					if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format(text, args));
+					if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("{Message}", String.Format(text, args));
 					break;
 				case LogLevel.Error :
-                    if (LOG.IsEnabled(LogLevel.Error)) LOG.LogError(String.Format(text, args));
+                    if (LOG.IsEnabled(LogLevel.Error)) LOG.LogError("{Message}", String.Format(text, args));
 					break;
 				case LogLevel.Critical :
-                    if (LOG.IsEnabled(LogLevel.Critical)) LOG.LogCritical(String.Format(text, args));
+                    if (LOG.IsEnabled(LogLevel.Critical)) LOG.LogCritical("{Message}", String.Format(text, args));
 					break;
 				case LogLevel.Information :
-                    if (LOG.IsEnabled(LogLevel.Information)) LOG.LogInformation(String.Format(text, args));
+                    if (LOG.IsEnabled(LogLevel.Information)) LOG.LogInformation("{Message}", String.Format(text, args));
 					break;
 				case LogLevel.Warning:
-                    if (LOG.IsEnabled(LogLevel.Warning)) LOG.LogWarning(String.Format(text, args));
+                    if (LOG.IsEnabled(LogLevel.Warning)) LOG.LogWarning("{Message}", String.Format(text, args));
 					break;
                 case LogLevel.None:
 				default :
