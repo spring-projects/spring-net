@@ -328,7 +328,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
     {
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing NonQuery " + cmdType + "[" + cmdText + "]");
+            LOG.LogDebug("Executing NonQuery {CommandType}[{CommandText}]", cmdType, cmdText);
         }
 
         return (int) Execute(new ExecuteNonQueryCallbackWithParameters(cmdType, cmdText, null));
@@ -363,7 +363,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
     {
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing NonQuery.  " + cmdType + "[" + cmdText + "]");
+            LOG.LogDebug("Executing NonQuery.  {CommandType}[{CommandText}]", cmdType, cmdText);
         }
 
         return (int) Execute(new ExecuteNonQueryCallbackWithParameters(cmdType, cmdText, parameters));
@@ -382,7 +382,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
     {
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing NonQuery. " + cmdType + "[" + cmdText + "]");
+            LOG.LogDebug("Executing NonQuery. {CommandType}[{CommandText}]", cmdType, cmdText);
         }
 
         return (int) Execute(new ExecuteNonQueryCallbackWithCommandSetter(cmdType, cmdText, commandSetter));
@@ -463,7 +463,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
     {
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing ExecuteScalar. " + cmdType + "[" + cmdText + "]");
+            LOG.LogDebug("Executing ExecuteScalar. {CommandType}[{CommandText}]", cmdType, cmdText);
         }
 
         return Execute(new ExecuteScalarCallbackWithCommandSetter(cmdType, cmdText, commandSetter));
@@ -627,7 +627,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
 
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing SQL [" + sql + "]");
+            LOG.LogDebug("Executing SQL [{Sql}]", sql);
         }
 
         return Execute(new QueryCallback(this, cmdType, sql, rse, null));
@@ -670,7 +670,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
 
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing SQL [" + sql + "]");
+            LOG.LogDebug("Executing SQL [{Sql}]", sql);
         }
 
         return Execute(new QueryCallback(this, cmdType, sql, resultSetExtractorDelegate, null));
@@ -1005,7 +1005,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
 
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing DataTableFill " + commandType + "[" + sql + "]");
+            LOG.LogDebug("Executing DataTableFill {CommandType}[{Sql}]", commandType, sql);
         }
 
         ITableMappingCollection mappingCollection = DoCreateMappingCollection(null);
@@ -1021,7 +1021,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
 
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing DataTableFill " + commandType + "[" + sql + "] with table mapping name " + tableMappingName);
+            LOG.LogDebug("Executing DataTableFill {CommandType}[{Sql}] with table mapping name {TableMappingName}", commandType, sql, tableMappingName);
         }
 
         if (tableMappingName == null)
@@ -1312,7 +1312,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
 
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing DataSetFill " + commandType + "[" + sql + "]");
+            LOG.LogDebug("Executing DataSetFill {CommandType}[{Sql}]", commandType, sql);
         }
 
         ITableMappingCollection mappingCollection = DoCreateMappingCollection(null);
@@ -1327,7 +1327,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
 
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing DataSetFill " + commandType + "[" + sql + "] with table names " + tableNames);
+            LOG.LogDebug("Executing DataSetFill {CommandType}[{Sql}] with table names {TableNames}", commandType, sql, tableNames);
         }
 
         if (tableNames == null)
@@ -2356,10 +2356,10 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
                         //Will only have possibility of run-time type error if using QueryWithCommandCreator
                         if (namedResultSetProcessor == null)
                         {
-                            LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                         ", is not of expected type NamedResultSetProcessor.  Type = " +
-                                         namedResultSetProcessors[resultSetIndex].GetType() +
-                                         "; Skipping processing for this result set.");
+                            LOG.LogError("NamedResultSetProcessor for result set index {ResultSetIndex}" +
+                                         ", is not of expected type NamedResultSetProcessor.  Type = {ProcessorType}" +
+                                         "; Skipping processing for this result set.",
+                                         resultSetIndex, namedResultSetProcessors[resultSetIndex].GetType());
                             continue;
                         }
                     }
@@ -2614,7 +2614,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
             Object rowsAffected = command.ExecuteNonQuery();
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("ExecuteNonQuery affected " + rowsAffected + " rows");
+                LOG.LogDebug("ExecuteNonQuery affected {RowsAffected} rows", rowsAffected);
             }
 
             return rowsAffected;
@@ -2680,7 +2680,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
             Object returnValue = command.ExecuteScalar();
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("ExecuteScalar return value = " + returnValue);
+                LOG.LogDebug("ExecuteScalar return value = {ReturnValue}", returnValue);
             }
 
             return returnValue;

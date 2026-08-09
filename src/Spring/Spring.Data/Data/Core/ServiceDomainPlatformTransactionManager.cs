@@ -140,8 +140,9 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
         serviceDomainTxObject.ServiceDomainAdapter.Enter(serviceConfig);
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Context created. TransactionId = " + ContextUtil.TransactionId
-                                                             + ", ActivityId = " + ContextUtil.ActivityId);
+            log.LogDebug("Context created. TransactionId = {TransactionId}"
+                                                             + ", ActivityId = {ActivityId}",
+                                                             ContextUtil.TransactionId, ContextUtil.ActivityId);
         }
     }
 
@@ -247,8 +248,8 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
         {
             //TODO Should we throw an exception instead?
             log.LogWarning("The requested transaction propagation option " +
-                           definition.PropagationBehavior + " is not supported.  " +
-                           "Defaulting to Never(Disabled) ");
+                           "{PropagationBehavior} is not supported.  " +
+                           "Defaulting to Never(Disabled) ", definition.PropagationBehavior);
         }
     }
 
@@ -273,7 +274,7 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
             TransactionStatus serviceDomainTxstatus = txObject.ServiceDomainAdapter.Leave();
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("ServiceDomain Transaction Status upon leaving ServiceDomain = " + serviceDomainTxstatus);
+                log.LogDebug("ServiceDomain Transaction Status upon leaving ServiceDomain = {TransactionStatus}", serviceDomainTxstatus);
             }
 
             txObject.TransactionStatus = serviceDomainTxstatus;

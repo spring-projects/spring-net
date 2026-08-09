@@ -170,8 +170,8 @@ public class MethodMapTransactionAttributeSource : ITransactionAttributeSource
                 // method name specification now -> (re-)register method.
                 if (LOG.IsEnabled(LogLevel.Debug) && regularMethodName != null)
                 {
-                    LOG.LogDebug("Replacing attribute for transactional method [" + currentMethod + "]: current name '" +
-                                 name + "' is more specific than '" + regularMethodName + "'");
+                    LOG.LogDebug("Replacing attribute for transactional method [{Method}]: current name '" +
+                                 "{Name}' is more specific than '{RegularMethodName}'", currentMethod, name, regularMethodName);
                 }
 
                 _nameMap.Add(currentMethod, name);
@@ -181,8 +181,8 @@ public class MethodMapTransactionAttributeSource : ITransactionAttributeSource
             {
                 if (LOG.IsEnabled(LogLevel.Debug) && regularMethodName != null)
                 {
-                    LOG.LogDebug("Keeping attribute for transactional method [" + currentMethod + "]: current name '" +
-                                 name + "' is not more specific than '" + regularMethodName + "'");
+                    LOG.LogDebug("Keeping attribute for transactional method [{Method}]: current name '" +
+                                 "{Name}' is not more specific than '{RegularMethodName}'", currentMethod, name, regularMethodName);
                 }
             }
         }

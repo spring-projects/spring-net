@@ -140,7 +140,7 @@ public class ErrorCodeExceptionTranslator : IAdoExceptionTranslator
         // Looking for a fallback...
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Unable to translate exception with errorCode '" + errorCode + "', will use the fallback translator");
+            log.LogDebug("Unable to translate exception with errorCode '{ErrorCode}', will use the fallback translator", errorCode);
         }
 
         IAdoExceptionTranslator fallback = FallbackTranslator;

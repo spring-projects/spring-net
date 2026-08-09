@@ -339,7 +339,7 @@ public class TransactionAspectSupport : IInitializingObject
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("Getting transaction for " + transactionInfo.JoinpointIdentification);
+                log.LogDebug("Getting transaction for {JoinpointIdentification}", transactionInfo.JoinpointIdentification);
             }
 
             // The transaction manager will flag an error if an incompatible tx already exists
@@ -352,8 +352,8 @@ public class TransactionAspectSupport : IInitializingObject
             // the ThreadLocal stack maintained in this class.
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("Skipping transactional joinpoint [" + joinpointIdentification +
-                             "] because no transaction manager has been configured");
+                log.LogDebug("Skipping transactional joinpoint [{JoinpointIdentification}" +
+                             "] because no transaction manager has been configured", joinpointIdentification);
             }
         }
 
@@ -393,7 +393,7 @@ public class TransactionAspectSupport : IInitializingObject
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "]");
+                log.LogDebug("Completing transaction for [{JoinpointIdentification}]", transactionInfo.JoinpointIdentification);
             }
 
             _transactionManager.Commit(transactionInfo.TransactionStatus);

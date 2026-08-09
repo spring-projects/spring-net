@@ -791,7 +791,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         AssertUtils.ArgumentNotNull(cmdText, "cmdText", "CommandText must not be null");
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing CommandText [" + cmdText + "]");
+            LOG.LogDebug("Executing CommandText [{CommandText}]", cmdText);
         }
 
         return Execute<T>(new QueryCallback<T>(this, cmdType, cmdText, resultSetExtractor, null));
@@ -841,7 +841,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         AssertUtils.ArgumentNotNull(resultSetExtractorDelegate, "resultSetExtractorDelegate", "Result set extractor delegate must not be null");
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Executing CommandText [" + cmdText + "]");
+            LOG.LogDebug("Executing CommandText [{CommandText}]", cmdText);
         }
 
         return Execute<T>(new QueryCallback<T>(this, cmdType, cmdText, resultSetExtractorDelegate, null));
@@ -1380,10 +1380,10 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
                             //Will have possibility of run-time type error if using QueryWithCommandCreator
                             if (firstResultSetProcessor == null)
                             {
-                                LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                             ", is not of expected type NamedResultSetProcessor<T>.  Type = " +
-                                             namedResultSetProcessors[resultSetIndex].GetType() +
-                                             "; Skipping processing for this result set.");
+                                LOG.LogError("NamedResultSetProcessor for result set index {ResultSetIndex}" +
+                                             ", is not of expected type NamedResultSetProcessor<T>.  Type = {ProcessorType}" +
+                                             "; Skipping processing for this result set.",
+                                             resultSetIndex, namedResultSetProcessors[resultSetIndex].GetType());
                                 continue;
                             }
                         }
@@ -1393,10 +1393,10 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
                                 namedResultSetProcessors[resultSetIndex] as NamedResultSetProcessor;
                             if (otherResultSetProcessor == null)
                             {
-                                LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                             ", is not of expected type NamedResultSetProcessor  Type = " +
-                                             namedResultSetProcessors[resultSetIndex].GetType() +
-                                             "; Skipping processing for this result set.");
+                                LOG.LogError("NamedResultSetProcessor for result set index {ResultSetIndex}" +
+                                             ", is not of expected type NamedResultSetProcessor  Type = {ProcessorType}" +
+                                             "; Skipping processing for this result set.",
+                                             resultSetIndex, namedResultSetProcessors[resultSetIndex].GetType());
                                 continue;
                             }
                         }
@@ -1478,10 +1478,10 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
                             //Will only have possibility of run-time type error if using QueryWithCommandCreator
                             if (firstResultSetProcessor == null)
                             {
-                                LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                             ", is not of expected type NamedResultSetProcessor<T>  Type = " +
-                                             namedResultSetProcessors[resultSetIndex].GetType() +
-                                             "; Skipping processing for this result set.");
+                                LOG.LogError("NamedResultSetProcessor for result set index {ResultSetIndex}" +
+                                             ", is not of expected type NamedResultSetProcessor<T>  Type = {ProcessorType}" +
+                                             "; Skipping processing for this result set.",
+                                             resultSetIndex, namedResultSetProcessors[resultSetIndex].GetType());
                                 continue;
                             }
                         }
@@ -1491,10 +1491,10 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
                                 = namedResultSetProcessors[resultSetIndex] as NamedResultSetProcessor<U>;
                             if (secondResultSetProcessor == null)
                             {
-                                LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                             ", is not of expected type NamedResultSetProcessor<T>  Type = " +
-                                             namedResultSetProcessors[resultSetIndex].GetType() +
-                                             "; Skipping processing for this result set.");
+                                LOG.LogError("NamedResultSetProcessor for result set index {ResultSetIndex}" +
+                                             ", is not of expected type NamedResultSetProcessor<T>  Type = {ProcessorType}" +
+                                             "; Skipping processing for this result set.",
+                                             resultSetIndex, namedResultSetProcessors[resultSetIndex].GetType());
                                 continue;
                             }
                         }
@@ -1504,10 +1504,10 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
                                 namedResultSetProcessors[resultSetIndex] as NamedResultSetProcessor;
                             if (otherResultSetProcessor == null)
                             {
-                                LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                             ", is not of expected type NamedResultSetProcessor  Type = " +
-                                             namedResultSetProcessors[resultSetIndex].GetType() +
-                                             "; Skipping processing for this result set.");
+                                LOG.LogError("NamedResultSetProcessor for result set index {ResultSetIndex}" +
+                                             ", is not of expected type NamedResultSetProcessor  Type = {ProcessorType}" +
+                                             "; Skipping processing for this result set.",
+                                             resultSetIndex, namedResultSetProcessors[resultSetIndex].GetType());
                                 continue;
                             }
                         }

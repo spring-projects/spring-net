@@ -155,7 +155,7 @@ public class NameMatchTransactionAttributeSource : ITransactionAttributeSource, 
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Adding transactional method [" + methodName + "] with attribute [" + attribute + "]");
+            log.LogDebug("Adding transactional method [{MethodName}] with attribute [{Attribute}]", methodName, attribute);
         }
 
         nameMap.Add(methodName, attribute);
