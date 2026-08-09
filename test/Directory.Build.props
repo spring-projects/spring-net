@@ -46,8 +46,4 @@
     <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Using Include="Microsoft.Extensions.Logging.ILogger" Alias="ILog" />
-  </ItemGroup>
-
 </Project>

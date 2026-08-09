@@ -1,3 +1,26 @@
+Changes (3.0.x to next release)
+========================
+
+1. Logging moved from Common.Logging to Microsoft.Extensions.Logging. Configure logging by
+   assigning Spring.LogManager.LoggerFactory at application startup.
+
+2. All framework log messages are now structured message templates with named placeholders
+   (issue #265). Consequences for log output:
+   - Message text is rendered with the invariant culture instead of the current culture.
+   - Null argument values render as "(null)" instead of an empty string.
+   - Exceptions that were previously flattened into the message text are now passed as the
+     structured exception; whether and how the stack trace is rendered is up to the sink.
+   - A few collection-valued arguments now render as comma-separated lists instead of the
+     collection type name.
+
+3. AdoPlatformTransactionManager and ConnectionUtils no longer include the connection string
+   in debug log messages, since it can contain credentials.
+
+4. The Microsoft.Extensions.Logging.Abstractions dependency floor was raised to 8.0.0.
+   On .NET Framework, ASP.NET applications may need the standard binding redirects for
+   System.Memory and System.Runtime.CompilerServices.Unsafe (Visual Studio generates these
+   automatically for projects with AutoGenerateBindingRedirects).
+
 Changes (2.0 to 3.0)
 ========================
 
