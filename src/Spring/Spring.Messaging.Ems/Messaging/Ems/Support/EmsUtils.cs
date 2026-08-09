@@ -278,7 +278,7 @@ public abstract class EmsUtils
             case Session.SESSION_TRANSACTED:
                 return SessionMode.SessionTransacted;
             default:
-                logger.LogWarning("Integer acknowledgement mode [" + ackMode + "] not valid. Defaulting to SessionMode.AutoAcknowledge");
+                logger.LogWarning("Integer acknowledgement mode [{AckMode}] not valid. Defaulting to SessionMode.AutoAcknowledge", ackMode);
                 return SessionMode.AutoAcknowledge;
         }
     }

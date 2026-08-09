@@ -425,7 +425,7 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
             PrepareConnection(this.target);
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogInformation("Established shared EMS Connection: " + this.target);
+                LOG.LogInformation("Established shared EMS Connection: {Connection}", this.target);
             }
 
             this.connection = GetSharedConnection(target);
@@ -496,7 +496,7 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
     {
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Closing shared EMS Connection: " + this.target);
+            LOG.LogDebug("Closing shared EMS Connection: {Connection}", this.target);
         }
 
         try

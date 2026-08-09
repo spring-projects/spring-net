@@ -366,8 +366,8 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
         {
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Listener method returned result [" + result +
-                                "] - generating response message for it");
+                logger.LogDebug("Listener method returned result [{Result}" +
+                                "] - generating response message for it", result);
             }
 
             Message response = BuildMessage(session, result);
@@ -379,8 +379,8 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
         {
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Listener method returned result [" + result +
-                                "]: not generating response message for it because of no EMS Session given");
+                logger.LogDebug("Listener method returned result [{Result}" +
+                                "]: not generating response message for it because of no EMS Session given", result);
             }
         }
     }

@@ -84,7 +84,7 @@ public class CachedSession : IDecoratorSession
             {
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.LogDebug("Found cached MessageProducer for destination [" + destination + "]");
+                    LOG.LogDebug("Found cached MessageProducer for destination [{Destination}]", destination);
                 }
             }
             else
@@ -93,7 +93,7 @@ public class CachedSession : IDecoratorSession
 
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.LogDebug("Creating cached MessageProducer for destination [" + destination + "]");
+                    LOG.LogDebug("Creating cached MessageProducer for destination [{Destination}]", destination);
                 }
 
                 cachedProducers.Add(destination, producer);
@@ -163,7 +163,7 @@ public class CachedSession : IDecoratorSession
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Returning cached Session: " + target);
+                LOG.LogDebug("Returning cached Session: {TargetSession}", target);
             }
 
             sessionList.Add(this); //add to end of linked list.
@@ -174,7 +174,7 @@ public class CachedSession : IDecoratorSession
     {
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Closing cached Session: " + this.target);
+            LOG.LogDebug("Closing cached Session: {TargetSession}", this.target);
         }
 
         // Explicitly close all MessageProducers and MessageConsumers that
@@ -292,7 +292,7 @@ public class CachedSession : IDecoratorSession
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Found cached EMS MessageConsumer for destination [" + destination + "]: " + consumer);
+                LOG.LogDebug("Found cached EMS MessageConsumer for destination [{Destination}]: {Consumer}", destination, consumer);
             }
         }
         else
@@ -310,7 +310,7 @@ public class CachedSession : IDecoratorSession
 
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Creating cached EMS MessageConsumer for destination [" + destination + "]: " + consumer);
+                LOG.LogDebug("Creating cached EMS MessageConsumer for destination [{Destination}]: {Consumer}", destination, consumer);
             }
 
             cachedConsumers[cacheKey] = consumer;

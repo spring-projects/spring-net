@@ -189,7 +189,7 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Executing callback on EMS Session [" + sessionToUse + "]");
+                logger.LogDebug("Executing callback on EMS Session [{Session}]", sessionToUse);
             }
 
             return action(sessionToUse);
@@ -659,7 +659,7 @@ public class EmsTemplate : EmsDestinationAccessor, IEmsOperations
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Sending created message [" + message + "]");
+                logger.LogDebug("Sending created message [{EmsMessage}]", message);
             }
 
             DoSend(producer, message);

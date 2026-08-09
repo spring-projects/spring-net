@@ -27,7 +27,7 @@ public abstract class JndiLocatorSupport : JndiAccessor
         object jndiObject = Lookup(jndiName, null);
         if (logger.IsEnabled(LogLevel.Debug))
         {
-            logger.LogDebug("Located object with JNDI name [" + jndiName + "]");
+            logger.LogDebug("Located object with JNDI name [{JndiName}]", jndiName);
         }
 
         return jndiObject;
@@ -47,7 +47,7 @@ public abstract class JndiLocatorSupport : JndiAccessor
 
         if (logger.IsEnabled(LogLevel.Debug))
         {
-            logger.LogDebug("Located object with JNDI name [" + jndiName + "]");
+            logger.LogDebug("Located object with JNDI name [{JndiName}]", jndiName);
         }
 
         return jndiObject;

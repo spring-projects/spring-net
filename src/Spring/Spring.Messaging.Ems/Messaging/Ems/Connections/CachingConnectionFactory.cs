@@ -226,8 +226,8 @@ public class CachingConnectionFactory : SingleConnectionFactory
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Found cached Session for mode " + mode + ": "
-                             + (session is IDecoratorSession ? ((IDecoratorSession) session).TargetSession : session));
+                LOG.LogDebug("Found cached Session for mode {Mode}: {Session}", mode,
+                             (session is IDecoratorSession ? ((IDecoratorSession) session).TargetSession : session));
             }
         }
         else
@@ -235,7 +235,7 @@ public class CachingConnectionFactory : SingleConnectionFactory
             ISession targetSession = CreateSession(con, mode);
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Creating cached Session for mode " + mode + ": " + targetSession);
+                LOG.LogDebug("Creating cached Session for mode {Mode}: {TargetSession}", mode, targetSession);
             }
 
             session = GetCachedSessionWrapper(targetSession, sessionList);

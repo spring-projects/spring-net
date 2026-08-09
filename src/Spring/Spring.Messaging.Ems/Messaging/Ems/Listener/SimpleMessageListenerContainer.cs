@@ -230,13 +230,13 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
             {
                 if (logger.IsEnabled(LogLevel.Information))
                 {
-                    logger.LogInformation("Could not refresh Connection - retrying in " + recoveryInterval);
+                    logger.LogInformation("Could not refresh Connection - retrying in {RecoveryInterval}", recoveryInterval);
                 }
             }
 
             if (totalTryTime > maxRecoveryTime)
             {
-                logger.LogInformation("Could not refresh Connection after " + totalTryTime + ".  Stopping reconnection attempts.");
+                logger.LogInformation("Could not refresh Connection after {TotalTryTime}.  Stopping reconnection attempts.", totalTryTime);
                 throw new RecoveryTimeExceededException("Could not recover after " + totalTryTime);
             }
 

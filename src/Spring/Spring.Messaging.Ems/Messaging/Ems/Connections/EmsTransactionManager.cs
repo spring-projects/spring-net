@@ -161,7 +161,7 @@ public class EmsTransactionManager : AbstractPlatformTransactionManager,
             session = CreateSession(con);
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("Created EMS transaction on Session [" + session + "] from Connection [" + con + "]");
+                log.LogDebug("Created EMS transaction on Session [{Session}] from Connection [{Connection}]", session, con);
             }
 
             txObject.ResourceHolder = new EmsResourceHolder(ConnectionFactory, con, session);
@@ -255,7 +255,7 @@ public class EmsTransactionManager : AbstractPlatformTransactionManager,
         {
             if (status.Debug)
             {
-                LOG.LogDebug("Committing EMS transaction on Session [" + session + "]");
+                LOG.LogDebug("Committing EMS transaction on Session [{Session}]", session);
             }
 
             session.Commit();
@@ -285,7 +285,7 @@ public class EmsTransactionManager : AbstractPlatformTransactionManager,
         {
             if (status.Debug)
             {
-                LOG.LogDebug("Rolling back EMS transaction on Session [" + session + "]");
+                LOG.LogDebug("Rolling back EMS transaction on Session [{Session}]", session);
             }
 
             session.Rollback();
