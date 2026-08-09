@@ -1034,6 +1034,128 @@ public void DoWork()
 }</programlisting>
     </sect2>
 
+    <sect2 xml:id="expressions-extensions">
+      <title>Extension Methods and Properties</title>
+
+      <para>Extension methods and extension properties allow you to attach
+      members to any type for the duration of an expression evaluation,
+      without modifying the type itself. Registration is scoped to a variables
+      dictionary -- the very same dictionary that is passed to the
+      <literal>GetValue</literal> method -- and is not global, which means that
+      different parts of an application can register different extensions
+      without interfering with one another.</para>
+
+      <para>An extension can be defined using a Spring lambda expression. The
+      first argument of the lambda receives the target instance the extension
+      was invoked on:<programlisting language="csharp">IDictionary&lt;string, object&gt; vars = new Dictionary&lt;string, object&gt;();
+vars["foo"] = new Foo(41);   // Foo has an int property InternalValue
+
+Expression.RegisterExtensionMethod&lt;Foo&gt;("AddTo", "{|self, arg| $self.InternalValue + $arg}", vars);
+ExpressionEvaluator.GetValue(null, "#foo.AddTo(1)", vars);   // 42
+
+Expression.RegisterExtensionProperty&lt;Foo&gt;("Doubled", "{|self| $self.InternalValue * 2}", vars);
+ExpressionEvaluator.GetValue(null, "#foo.Doubled", vars);    // 82</programlisting></para>
+
+      <para>Alternatively, an extension can be backed by a .NET delegate.
+      Typed <literal>Func&lt;&gt;</literal> overloads are provided for the
+      receiver plus up to three arguments, and a
+      <literal>System.Delegate</literal> overload accepts any other delegate
+      beyond that, for example one that returns <literal>void</literal> or one
+      that takes a larger number of arguments:<programlisting language="csharp">Expression.RegisterExtensionMethod("AddTo", (Foo self, int arg) =&gt; self.InternalValue + arg, vars);
+Expression.RegisterExtensionProperty("Doubled", (Foo self) =&gt; self.InternalValue * 2, vars);</programlisting></para>
+
+      <para>Non-generic overloads that take a <literal>System.Type</literal> as
+      their first parameter exist for all of the forms shown above, for example
+      <literal>Expression.RegisterExtensionMethod(typeof(Foo), ...)</literal>,
+      for the cases where the receiver type is not known at compile
+      time.</para>
+
+      <para>The following rules govern how extensions are resolved:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Real CLR members always win. An extension is consulted only
+          when method or property resolution finds no matching member on the
+          receiver, so an extension can never shadow a real member.</para>
+        </listitem>
+
+        <listitem>
+          <para>Registered collection processors and method call processors
+          (the pre-existing mechanism described in <xref
+          linkend="expressions-processors" />) retain their historical
+          precedence and still take priority over both CLR members and
+          extensions, whenever a variable of that name implements the
+          corresponding processor interface.</para>
+        </listitem>
+
+        <listitem>
+          <para>Lookup walks the receiver's runtime type first, then its base
+          classes, and finally the interfaces it implements. The most derived
+          registration wins. Re-registering the same name for the same type
+          replaces the previous registration.</para>
+        </listitem>
+
+        <listitem>
+          <para>Member name lookup is case-insensitive, just like regular
+          expression language member access.</para>
+        </listitem>
+
+        <listitem>
+          <para>Extensions never apply to a <literal>null</literal>
+          receiver.</para>
+        </listitem>
+
+        <listitem>
+          <para>The receiver has to be an instance. In the expression
+          <literal>Foo.AddTo(1)</literal>, where <literal>Foo</literal> is a
+          type name, no extension registered for <literal>Foo</literal>
+          applies, because the expression dispatches on runtime types only.
+          Use <literal>#foo.AddTo(1)</literal>, where <literal>foo</literal>
+          is a variable, or any other sub-expression that evaluates to a
+          <literal>Foo</literal> instance. An extension registered for
+          <literal>System.Type</literal>, on the other hand, does apply to a
+          type reference, because a type reference is itself a
+          <literal>Type</literal> instance.</para>
+        </listitem>
+
+        <listitem>
+          <para>Extension properties are read-only. Assigning to one throws a
+          <literal>NotWritablePropertyException</literal>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Arguments are passed without any type conversion, exactly as
+          they are for regular method invocation.</para>
+        </listitem>
+
+        <listitem>
+          <para>A lambda literal passed as an argument reaches the extension
+          unevaluated. A lambda-based extension can invoke it using the
+          <literal>$f(...)</literal> syntax.</para>
+        </listitem>
+
+        <listitem>
+          <para>Do not give an extension property the same name as a
+          registered type alias -- a type resolution that has already been
+          cached for that name can take precedence.</para>
+        </listitem>
+
+        <listitem>
+          <para>Register all of the extensions before evaluating expressions
+          concurrently. Registration mutates the variables dictionary, which
+          is not thread-safe for concurrent writes. Once the setup is
+          complete, concurrent evaluation is safe.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Inside a lambda-based extension the receiver is also the
+      evaluation context, so unqualified member names such as
+      <literal>InternalValue</literal> resolve against it. Global
+      <literal>#variables</literal> and the functions registered with
+      <literal>Expression.RegisterFunction</literal> remain accessible as
+      well.</para>
+    </sect2>
+
     <sect2>
       <title>Null Context</title>
 
