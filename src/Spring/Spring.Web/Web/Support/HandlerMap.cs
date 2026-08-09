@@ -59,18 +59,18 @@ public class HandlerMap : IDictionary
     /// <returns>the object name</returns>
     public HandlerMapEntry MapPath(string virtualPath)
     {
-        if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("looking up mapping for url '{0}'", virtualPath));
+        if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug("looking up mapping for url '{VirtualPath}'", virtualPath);
         for (int i = 0; i < this._internalTable.Count; i++)
         {
             HandlerMapEntry handlerMapEntry = (HandlerMapEntry) this._internalTable[i];
             if (handlerMapEntry.UrlPattern.IsMatch(virtualPath))
             {
-                if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("found mapping '{0}' for url '{1}'", handlerMapEntry, virtualPath));
+                if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug("found mapping '{HandlerMapEntry}' for url '{VirtualPath}'", handlerMapEntry, virtualPath);
                 return handlerMapEntry;
             }
         }
 
-        if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("no mapping found for url '{0}'", virtualPath));
+        if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug("no mapping found for url '{VirtualPath}'", virtualPath);
         return null;
     }
 

@@ -68,7 +68,7 @@ public class MvcApplicationContext : AbstractXmlApplicationContext
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("created instance " + this);
+            log.LogDebug("created instance {Context}", this);
         }
     }
 

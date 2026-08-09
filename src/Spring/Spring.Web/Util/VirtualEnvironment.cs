@@ -247,7 +247,7 @@ public sealed class VirtualEnvironment
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.LogDebug("rewriting path from " + currentFileDirectory + " to " + newPath + " results in " + ctx.Request.FilePath);
+                        log.LogDebug("rewriting path from {CurrentFileDirectory} to {NewPath} results in {FilePath}", currentFileDirectory, newPath, ctx.Request.FilePath);
                     }
                 }
             }
@@ -258,7 +258,7 @@ public sealed class VirtualEnvironment
                 {
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.LogDebug("restoring path from " + ctx.Request.FilePath + " back to " + originalPath);
+                        log.LogDebug("restoring path from {FilePath} back to {OriginalPath}", ctx.Request.FilePath, originalPath);
                     }
 
                     ctx.RewritePath(originalPath, rebaseClientPath);

@@ -97,8 +97,8 @@ public class WebContextHandler : ContextHandler
             IApplicationContext ctx = ContextRegistry.GetContext(contextName);
             if (Log.IsEnabled(LogLevel.Debug))
             {
-                Log.LogDebug(string.Format("web context '{0}' already registered - returning existing instance {1}",
-                    contextName, ctx));
+                Log.LogDebug("web context '{ContextName}' already registered - returning existing instance {Context}",
+                    contextName, ctx);
             }
 
             return ctx;

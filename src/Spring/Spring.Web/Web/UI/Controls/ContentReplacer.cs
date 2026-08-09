@@ -71,7 +71,7 @@ public class ContentReplacer : Control
         Control ctl = ctlRoot.FindControl(this.contentPlaceHolderID);
         if (ctl != null)
         {
-            log.LogDebug(string.Format("OnPreRender Content['{0}'] found placeholder - replacing RenderMethod", this.contentPlaceHolderID));
+            log.LogDebug("OnPreRender Content['{ContentPlaceHolderID}'] found placeholder - replacing RenderMethod", this.contentPlaceHolderID);
 
             RenderMethod myRenderMethod = GetRenderMethod();
             //log.Debug(string.Format("OnPreRender Content['{0}'] renderMethod found={1}", this.contentPlaceHolderID,(myRenderMethod != null ? "true" : "false")));

@@ -149,7 +149,7 @@ internal sealed class ControlInterceptor
 
                 if (!bOk)
                 {
-                    LogManager.GetLogger(typeof(ControlInterceptor)).LogWarning(string.Format("dependency injection not supported for control type {0}", ctlAccessor.GetTarget().GetType()));
+                    LogManager.GetLogger(typeof(ControlInterceptor)).LogWarning("dependency injection not supported for control type {ControlType}", ctlAccessor.GetTarget().GetType());
                     strategy = s_noopInterceptionStrategy;
                 }
             }

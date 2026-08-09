@@ -60,7 +60,7 @@ public sealed class WebObjectUtils
     {
         if (s_log.IsEnabled(LogLevel.Debug))
         {
-            s_log.LogDebug("creating page instance '" + pageUrl + "'");
+            s_log.LogDebug("creating page instance '{PageUrl}'", pageUrl);
         }
 
         IHttpHandler page;
@@ -175,19 +175,19 @@ public sealed class WebObjectUtils
     {
         if (s_log.IsEnabled(LogLevel.Debug))
         {
-            s_log.LogDebug("getting page type for " + pageUrl);
+            s_log.LogDebug("getting page type for {PageUrl}", pageUrl);
         }
 
         string rootedVPath = WebUtils.CombineVirtualPaths(VirtualEnvironment.CurrentExecutionFilePath, pageUrl);
         if (s_log.IsEnabled(LogLevel.Debug))
         {
-            s_log.LogDebug("page vpath is " + rootedVPath);
+            s_log.LogDebug("page vpath is {RootedVPath}", rootedVPath);
         }
 
         Type pageType = VirtualEnvironment.GetCompiledType(rootedVPath);
         if (s_log.IsEnabled(LogLevel.Debug))
         {
-            s_log.LogDebug(string.Format("got page type '{0}' for vpath '{1}'", pageType.FullName, rootedVPath));
+            s_log.LogDebug("got page type '{PageType}' for vpath '{RootedVPath}'", pageType.FullName, rootedVPath);
         }
 
         return pageType;
@@ -201,7 +201,7 @@ public sealed class WebObjectUtils
         AssertUtils.ArgumentHasText(controlName, "controlName");
         if (s_log.IsEnabled(LogLevel.Debug))
         {
-            s_log.LogDebug("getting control type for " + controlName);
+            s_log.LogDebug("getting control type for {ControlName}", controlName);
         }
 
 //            HttpContext ctx = HttpContext.Current;
@@ -214,7 +214,7 @@ public sealed class WebObjectUtils
 
         if (s_log.IsEnabled(LogLevel.Debug))
         {
-            s_log.LogDebug("control vpath is " + rootedVPath);
+            s_log.LogDebug("control vpath is {RootedVPath}", rootedVPath);
         }
 
         Type controlType;
@@ -235,7 +235,7 @@ public sealed class WebObjectUtils
 
         if (s_log.IsEnabled(LogLevel.Debug))
         {
-            s_log.LogDebug(string.Format("got control type '{0}' for vpath '{1}'", controlType.FullName, rootedVPath));
+            s_log.LogDebug("got control type '{ControlType}' for vpath '{RootedVPath}'", controlType.FullName, rootedVPath);
         }
 
         return controlType;
