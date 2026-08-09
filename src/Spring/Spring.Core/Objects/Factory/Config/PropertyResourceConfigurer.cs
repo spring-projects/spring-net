@@ -15,7 +15,6 @@
  */
 
 using System.Collections.Specialized;
-using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Core.IO;
@@ -255,9 +254,8 @@ public abstract class PropertyResourceConfigurer
             {
                 if (_log.IsEnabled(LogLevel.Debug))
                 {
-                    _log.LogDebug(string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Loading configuration from '{0}'.", resource));
+                    _log.LogDebug(
+                        "Loading configuration from '{Resource}'.", resource);
                 }
 
                 string sectionName = configSections[sectionNameIndex];

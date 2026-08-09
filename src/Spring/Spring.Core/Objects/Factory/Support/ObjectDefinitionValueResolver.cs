@@ -15,7 +15,6 @@
  */
 
 using System.Collections;
-using System.Globalization;
 using System.Runtime.Remoting;
 using Microsoft.Extensions.Logging;
 using Spring.Core.TypeConversion;
@@ -349,8 +348,8 @@ public class ObjectDefinitionValueResolver
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
-                argumentName, name, reference.ObjectName));
+            log.LogDebug("Resolving reference from property '{ArgumentName}' in object '{ObjectName}' to object '{TargetObjectName}'.",
+                argumentName, name, reference.ObjectName);
         }
 
         try

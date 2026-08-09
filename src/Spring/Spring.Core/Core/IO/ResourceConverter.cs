@@ -173,10 +173,9 @@ public class ResourceConverter : TypeConverter
             {
                 if (_log.IsEnabled(LogLevel.Warning))
                 {
-                    _log.LogWarning(string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Could not resolve placeholder '{0}' in resource path " +
-                        "'{1}' as an environment variable.", expression, path));
+                    _log.LogWarning(
+                        "Could not resolve placeholder '{Expression}' in resource path " +
+                        "'{Path}' as an environment variable.", expression, path);
                 }
             }
         }

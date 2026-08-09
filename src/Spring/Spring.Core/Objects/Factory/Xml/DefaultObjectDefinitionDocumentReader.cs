@@ -97,7 +97,7 @@ public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentRe
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug($"Found {readerContext.Registry.ObjectDefinitionCount} <{ObjectDefinitionConstants.ObjectElement}> elements defining objects.");
+            log.LogDebug("Found {ObjectDefinitionCount} <" + ObjectDefinitionConstants.ObjectElement + "> elements defining objects.", readerContext.Registry.ObjectDefinitionCount);
         }
     }
 
@@ -188,7 +188,7 @@ public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentRe
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Registering object definition with id '{0}'.", bdHolder.ObjectName));
+                log.LogDebug("Registering object definition with id '{ObjectName}'.", bdHolder.ObjectName);
             }
 
             ObjectDefinitionReaderUtils.RegisterObjectDefinition(bdHolder, ReaderContext.Registry);
@@ -221,9 +221,8 @@ public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentRe
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "Attempting to import object definitions from '{0}'.", location));
+                log.LogDebug(
+                    "Attempting to import object definitions from '{Location}'.", location);
             }
 
             IResource importResource = ReaderContext.Resource.CreateRelative(location);

@@ -355,7 +355,7 @@ public class PropertiesObjectDefinitionReader : AbstractObjectDefinitionReader
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.LogDebug("Found object name '" + name + "'");
+                        log.LogDebug("Found object name '{ObjectName}'", name);
                     }
 
                     if (!Registry.ContainsObjectDefinition(name))
@@ -372,7 +372,7 @@ public class PropertiesObjectDefinitionReader : AbstractObjectDefinitionReader
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.LogDebug("Invalid object name and property [" + nameAndProperty + "]");
+                        log.LogDebug("Invalid object name and property [{NameAndProperty}]", nameAndProperty);
                     }
                 }
             } // if the key started with the prefix we're looking for

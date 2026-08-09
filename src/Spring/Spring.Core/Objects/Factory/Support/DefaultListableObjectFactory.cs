@@ -365,7 +365,7 @@ public class DefaultListableObjectFactory :
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug($"Overriding object definition for object '{name}': replacing [{existingDefinition}] with [{objectDefinition}].");
+                log.LogDebug("Overriding object definition for object '{ObjectName}': replacing [{ExistingDefinition}] with [{ObjectDefinition}].", name, existingDefinition, objectDefinition);
             }
 
             objectDefinitionMap[name] = objectDefinition;
@@ -465,7 +465,7 @@ public class DefaultListableObjectFactory :
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Pre-instantiating singletons in factory [" + this + "]");
+            log.LogDebug("Pre-instantiating singletons in factory [{Factory}]", this);
         }
 
         try

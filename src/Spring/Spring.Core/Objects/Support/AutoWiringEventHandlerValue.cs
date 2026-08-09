@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System.Globalization;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Spring.Core;
@@ -176,11 +175,10 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Wiring up this method '{0}' to this event '{1}'",
+                    log.LogDebug(
+                        "Wiring up this method '{MethodName}' to this event '{EventName}'",
                         method.Name,
-                        theEvent.Name));
+                        theEvent.Name);
                 }
 
                 IEventHandlerValue myHandler = method.IsStatic ? new StaticEventHandlerValue() : (IEventHandlerValue) new InstanceEventHandlerValue();

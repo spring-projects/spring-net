@@ -251,7 +251,7 @@ public class ContextHandler : IConfigurationSectionHandler
             contextName = AbstractApplicationContext.DefaultRootContextName;
         }
 
-        if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("creating context '{0}'", contextName));
+        if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug("creating context '{ContextName}'", contextName);
 
         IApplicationContext context = null;
         try
@@ -279,7 +279,7 @@ public class ContextHandler : IConfigurationSectionHandler
             IList<XmlNode> childContexts = GetChildContexts(contextElement);
             CreateChildContexts(context, configContext, childContexts);
 
-            if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("context '{0}' created for name '{1}'", context, contextName));
+            if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug("context '{Context}' created for name '{ContextName}'", context, contextName);
         }
         catch (Exception ex)
         {

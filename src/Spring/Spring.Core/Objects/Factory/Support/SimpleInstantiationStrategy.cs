@@ -68,7 +68,7 @@ public class SimpleInstantiationStrategy : IInstantiationStrategy
         AssertUtils.ArgumentNotNull(definition, "definition");
         AssertUtils.ArgumentNotNull(factory, "factory");
 
-        if (log.IsEnabled(LogLevel.Trace)) log.LogTrace(string.Format("instantiating object '{0}'", name));
+        if (log.IsEnabled(LogLevel.Trace)) log.LogTrace("instantiating object '{ObjectName}'", name);
 
         if (definition.HasMethodOverrides)
         {

@@ -197,7 +197,7 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Loading XML object definitions from " + resource);
+            log.LogDebug("Loading XML object definitions from {Resource}", resource);
         }
 
         try
@@ -306,7 +306,7 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Using the following XmlReader implementation : " + reader.GetType());
+            log.LogDebug("Using the following XmlReader implementation : {ReaderType}", reader.GetType());
         }
 
         return reader;

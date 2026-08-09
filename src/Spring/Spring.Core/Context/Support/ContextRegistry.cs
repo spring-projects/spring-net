@@ -157,7 +157,7 @@ public sealed class ContextRegistry
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(String.Format("Registering context '{0}' under name '{1}'.", context, context.Name));
+                log.LogDebug("Registering context '{Context}' under name '{ContextName}'.", context, context.Name);
             }
 
             if (rootContextName == null)
@@ -270,8 +270,8 @@ public sealed class ContextRegistry
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(String.Format(
-                        "Returning context '{0}' registered under name '{1}'.", ctx, name));
+                    log.LogDebug(
+                        "Returning context '{Context}' registered under name '{ContextName}'.", ctx, name);
                 }
 
                 return ctx;
@@ -304,8 +304,8 @@ public sealed class ContextRegistry
             {
                 if (instance.contextMap.Count > 0)
                 {
-                    log.LogWarning(String.Format(
-                        "Not all contexts were removed from registry during cleanup - did you forget to call base.Dispose() when overriding AbstractApplicationContext.Dispose()?"));
+                    log.LogWarning(
+                        "Not all contexts were removed from registry during cleanup - did you forget to call base.Dispose() when overriding AbstractApplicationContext.Dispose()?");
                 }
             }
 

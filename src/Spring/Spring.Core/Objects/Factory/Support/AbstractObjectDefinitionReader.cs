@@ -212,7 +212,7 @@ public abstract class AbstractObjectDefinitionReader : IObjectDefinitionReader
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Loaded " + loadCount + " object definitions from location [" + location + "]");
+            log.LogDebug("Loaded {LoadCount} object definitions from location [{Location}]", loadCount, location);
         }
 
         return loadCount;

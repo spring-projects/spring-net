@@ -188,9 +188,8 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "Attempting to import object definitions from '{0}'.", location));
+                log.LogDebug(
+                    "Attempting to import object definitions from '{Location}'.", location);
             }
 
             IResource importResource = parserContext.ReaderContext.Resource.CreateRelative(location);
@@ -290,9 +289,8 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug(string.Format(
-                CultureInfo.InvariantCulture,
-                "Registering object definition with id '{0}'.", holder.ObjectName));
+            log.LogDebug(
+                "Registering object definition with id '{ObjectName}'.", holder.ObjectName);
         }
 
         return holder;

@@ -92,7 +92,7 @@ public class ConstructorResolver
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug($"Object '{objectName}' instantiated via constructor [{constructorInstantiationInfo.ConstructorInfo}].");
+            log.LogDebug("Object '{ObjectName}' instantiated via constructor [{ConstructorInfo}].", objectName, constructorInstantiationInfo.ConstructorInfo);
         }
 
         return wrapper;
@@ -351,7 +351,7 @@ public class ConstructorResolver
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug($"Object '{name}' instantiated via factory method [{factoryMethodCandidate}].");
+                log.LogDebug("Object '{ObjectName}' instantiated via factory method [{FactoryMethod}].", name, factoryMethodCandidate);
             }
 
             return wrapper;
@@ -478,7 +478,7 @@ public class ConstructorResolver
             for (var i = 0; i < autowiredObjectNames.Count; i++)
             {
                 string autowiredObjectName = autowiredObjectNames[i];
-                log.LogDebug($"Autowiring by type from object name '{objectName}' via {GetMethodType()} to object named '{autowiredObjectName}'");
+                log.LogDebug("Autowiring by type from object name '{ObjectName}' via {MethodType} to object named '{AutowiredObjectName}'", objectName, GetMethodType(), autowiredObjectName);
             }
         }
 

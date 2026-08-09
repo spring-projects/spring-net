@@ -50,7 +50,7 @@ public abstract class AbstractLoadTypeFilter : ITypeFilter
         catch (Exception)
         {
             RequiredType = null;
-            Logger.LogError("Can't load type defined in expression:" + typeToLoad);
+            Logger.LogError("Can't load type defined in expression:{TypeToLoad}", typeToLoad);
         }
     }
 }

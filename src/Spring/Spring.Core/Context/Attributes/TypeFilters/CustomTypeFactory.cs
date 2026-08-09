@@ -61,7 +61,7 @@ public static class CustomTypeFactory
         }
         catch
         {
-            Logger.LogError(string.Format("Can't instatiate {0}. Type needs to have a non arg constructor.", expression));
+            Logger.LogError("Can't instatiate {Expression}. Type needs to have a non arg constructor.", expression);
         }
 
         return null;
@@ -75,7 +75,7 @@ public static class CustomTypeFactory
         }
         catch (Exception)
         {
-            Logger.LogError("Can't load type defined in exoression:" + typeToLoad);
+            Logger.LogError("Can't load type defined in exoression:{TypeToLoad}", typeToLoad);
         }
 
         return null;
