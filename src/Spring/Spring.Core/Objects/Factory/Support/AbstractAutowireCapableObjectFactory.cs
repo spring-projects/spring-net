@@ -242,7 +242,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
         RootObjectDefinition definition = GetMergedObjectDefinition(name, true);
         if (definition != null)
         {
-            log.LogDebug($"configuring object '{instance}' using definition '{name}'");
+            log.LogDebug("configuring object '{Instance}' using definition '{ObjectName}'", instance, name);
             ApplyPropertyValues(name, definition, new ObjectWrapper(instance), definition.PropertyValues);
         }
     }
@@ -295,7 +295,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
         if (log.IsEnabled(LogLevel.Debug))
         {
             log.LogDebug("Invoking IInstantiationAwareObjectPostProcessors before " +
-                         $"the instantiation of '{objectName}'.");
+                         "the instantiation of '{ObjectName}'.", objectName);
         }
 
         for (var i = 0; i < objectPostProcessors.Count; i++)
@@ -665,17 +665,17 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(string.Format(CultureInfo.InvariantCulture,
-                        "Added autowiring by name from object name '{0}' via " + "property '{1}' to object named '{1}'.", name,
-                        propertyName));
+                    log.LogDebug(
+                        "Added autowiring by name from object name '{ObjectName}' via property '{PropertyName}' to object named '{AutowiredObjectName}'.",
+                        name, propertyName, propertyName);
                 }
             }
             else
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(string.Format(CultureInfo.InvariantCulture,
-                        "Not autowiring property '{0}' of object '{1}' by name: " + "no matching object found.", propertyName, name));
+                    log.LogDebug(
+                        "Not autowiring property '{PropertyName}' of object '{ObjectName}' by name: no matching object found.", propertyName, name);
                 }
             }
         }
@@ -719,9 +719,9 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(string.Format(CultureInfo.InvariantCulture,
-                        "Autowiring by type from object name '{0}' via property " + "'{1}' to object named '{2}'.", name,
-                        propertyName, ObjectUtils.EnumerateFirstElement(matchingObjects.Keys)));
+                    log.LogDebug(
+                        "Autowiring by type from object name '{ObjectName}' via property '{PropertyName}' to object named '{MatchingObjectName}'.",
+                        name, propertyName, ObjectUtils.EnumerateFirstElement(matchingObjects.Keys));
                 }
             }
             else if (matchingObjects != null && matchingObjects.Count > 1)
@@ -737,8 +737,8 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Not autowiring property '{0}' of object '{1}': no matching object found.",
-                        propertyName, name));
+                    log.LogDebug("Not autowiring property '{PropertyName}' of object '{ObjectName}': no matching object found.",
+                        propertyName, name);
                 }
             }
         }
@@ -850,7 +850,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
         var isDebugEnabled = log.IsEnabled(LogLevel.Debug);
         if (isDebugEnabled)
         {
-            log.LogDebug($"Creating instance of Object '{name}' with merged definition [{definition}].");
+            log.LogDebug("Creating instance of Object '{ObjectName}' with merged definition [{Definition}].", name, definition);
         }
 
         // Make sure object type is actually resolved at this point.
@@ -895,7 +895,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
             {
                 if (isDebugEnabled)
                 {
-                    log.LogDebug($"Eagerly caching object '{name}' to allow for resolving potential circular references");
+                    log.LogDebug("Eagerly caching object '{ObjectName}' to allow for resolving potential circular references", name);
                 }
 
                 AddEagerlyCachedSingleton(name, definition, instance);
@@ -1265,7 +1265,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Calling AfterPropertiesSet() on object with name '{0}'.", name));
+                log.LogDebug("Calling AfterPropertiesSet() on object with name '{ObjectName}'.", name);
             }
 
             ((IInitializingObject) target).AfterPropertiesSet();
@@ -1275,8 +1275,8 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Calling custom init method '{0} on object with name '{1}'.",
-                    definition.InitMethodName, name));
+                log.LogDebug("Calling custom init method '{InitMethodName}' on object with name '{ObjectName}'.",
+                    definition.InitMethodName, name);
             }
 
             try
@@ -1336,7 +1336,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
 
         if (targetMethod == null)
         {
-            log.LogError("Couldn't find a method named '" + destroyMethodName + "' on object with name '" + name + "'");
+            log.LogError("Couldn't find a method named '{DestroyMethodName}' on object with name '{ObjectName}'", destroyMethodName, name);
         }
         else
         {
@@ -1637,8 +1637,8 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
-                argumentName, name, reference.ObjectName));
+            log.LogDebug("Resolving reference from property '{ArgumentName}' in object '{ObjectName}' to object '{ReferencedObjectName}'.",
+                argumentName, name, reference.ObjectName);
         }
 
         try
@@ -1766,7 +1766,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug($"Configuring object using definition '{name}'");
+            log.LogDebug("Configuring object using definition '{ObjectName}'", name);
         }
 
         PopulateObject(name, definition, wrapper);
@@ -1776,7 +1776,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug($"Setting the name property on the IObjectNameAware object '{name}'.");
+                log.LogDebug("Setting the name property on the IObjectNameAware object '{ObjectName}'.", name);
             }
 
             ((IObjectNameAware) instance).ObjectName = name;
@@ -1786,7 +1786,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug($"Setting the ObjectFactory property on the IObjectFactoryAware object '{name}'.");
+                log.LogDebug("Setting the ObjectFactory property on the IObjectFactoryAware object '{ObjectName}'.", name);
             }
 
             ((IObjectFactoryAware) instance).ObjectFactory = this;
@@ -1902,7 +1902,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug($"Invoking IObjectPostProcessors before initialization of object '{name}'");
+            log.LogDebug("Invoking IObjectPostProcessors before initialization of object '{ObjectName}'", name);
         }
 
         object result = instance;
@@ -1944,7 +1944,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug($"Invoking IObjectPostProcessors after initialization of object '{name}'");
+            log.LogDebug("Invoking IObjectPostProcessors after initialization of object '{ObjectName}'", name);
         }
 
         object result = instance;

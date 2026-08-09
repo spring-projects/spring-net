@@ -876,7 +876,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format("Calling code asked for normal instance for name '{0}'.", canonicalName));
+                log.LogDebug("Calling code asked for normal instance for name '{CanonicalName}'.", canonicalName);
             }
 
             return instance;
@@ -887,8 +887,8 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format("Calling code asked for IFactoryObject instance for name '{0}'.",
-                    TransformedObjectName(name)));
+                log.LogDebug("Calling code asked for IFactoryObject instance for name '{ObjectName}'.",
+                    TransformedObjectName(name));
             }
 
             return instance;
@@ -896,7 +896,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug(string.Format("Object with name '{0}' is a factory object.", canonicalName));
+            log.LogDebug("Object with name '{CanonicalName}' is a factory object.", canonicalName);
         }
 
         object resultInstance = null;
@@ -910,7 +910,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format("Dereferencing Object with name '{0}'", canonicalName));
+                log.LogDebug("Dereferencing Object with name '{CanonicalName}'", canonicalName);
             }
 
             // return object instance from factory...
@@ -952,7 +952,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format("Returning factory product from cache for Object with name '{0}'", canonicalName));
+                log.LogDebug("Returning factory product from cache for Object with name '{CanonicalName}'", canonicalName);
             }
         }
 
@@ -1000,7 +1000,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug(string.Format("Factory object with name '{0}' is configurable.", TransformedObjectName(objectName)));
+                log.LogDebug("Factory object with name '{ObjectName}' is configurable.", TransformedObjectName(objectName));
             }
 
             if (configurableFactory.ProductTemplate != null)
@@ -2111,7 +2111,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
 
             if (isDebugEnabled)
             {
-                log.LogDebug(string.Format("{2}GetObjectInternal: obtaining instance for name {0} => canonical name {1}", name, objectName, new string(' ', nestingCount * indent)));
+                log.LogDebug("{Indent}GetObjectInternal: obtaining instance for name {Name} => canonical name {CanonicalName}", new string(' ', nestingCount * indent), name, objectName);
             }
 
             object instance;
@@ -2127,12 +2127,12 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
                     {
                         if (IsSingletonCurrentlyInCreation(objectName))
                         {
-                            log.LogDebug("Returning eagerly cached instance of singleton object '" + objectName +
-                                         "' that is not fully initialized yet - a consequence of a circular reference");
+                            log.LogDebug("Returning eagerly cached instance of singleton object '{ObjectName}' " +
+                                         "that is not fully initialized yet - a consequence of a circular reference", objectName);
                         }
                         else
                         {
-                            log.LogDebug($"Returning cached instance of singleton object '{objectName}'.");
+                            log.LogDebug("Returning cached instance of singleton object '{ObjectName}'.", objectName);
                         }
                     }
 
@@ -2232,7 +2232,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
             hasErrors = true;
             if (log.IsEnabled(LogLevel.Error))
             {
-                log.LogError(string.Format("{1}GetObjectInternal: error obtaining object {0}", name, new string(' ', nestingCount * indent)));
+                log.LogError("{Indent}GetObjectInternal: error obtaining object {Name}", new string(' ', nestingCount * indent), name);
             }
 
             throw;
@@ -2251,7 +2251,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
 
                 if (isDebugEnabled)
                 {
-                    log.LogDebug(string.Format("{1}GetObjectInternal: returning instance for objectname {0}", name, new string(' ', nestingCount * indent)));
+                    log.LogDebug("{Indent}GetObjectInternal: returning instance for objectname {Name}", new string(' ', nestingCount * indent), name);
                 }
             }
         }
@@ -2331,7 +2331,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(string.Format("Creating shared instance of singleton object '{0}'", objectName));
+                    log.LogDebug("Creating shared instance of singleton object '{ObjectName}'", objectName);
                 }
 
                 BeforeSingletonCreation(objectName);
@@ -2348,7 +2348,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug(string.Format("Cached shared instance of singleton object '{0}'", objectName));
+                    log.LogDebug("Cached shared instance of singleton object '{ObjectName}'", objectName);
                 }
             }
 
@@ -2377,7 +2377,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug(string.Format("Destroying singletons in factory [{0}].", this));
+            log.LogDebug("Destroying singletons in factory [{Factory}].", this);
         }
 
         prototypesInCreation.Dispose();
@@ -2534,7 +2534,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug($"Ignoring attempt to Register alias '{alias}' for object with name '{name}' because name and alias would be the same value.");
+                log.LogDebug("Ignoring attempt to Register alias '{Alias}' for object with name '{ObjectName}' because name and alias would be the same value.", alias, name);
             }
 
             return;
@@ -2542,7 +2542,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug($"Registering alias '{alias}' for object with name '{name}'.");
+            log.LogDebug("Registering alias '{Alias}' for object with name '{ObjectName}'.", alias, name);
         }
 
         object registeredName = aliasMap[alias];
