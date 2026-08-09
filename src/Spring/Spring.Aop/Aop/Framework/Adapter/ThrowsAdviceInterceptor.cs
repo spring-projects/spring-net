@@ -155,7 +155,7 @@ public sealed class ThrowsAdviceInterceptor : IMethodInterceptor
                 {
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.LogDebug("Found exception handler method: " + method);
+                        log.LogDebug("Found exception handler method: {Method}", method);
                     }
 
                     if (this.exceptionHandlers.Contains(lastParametersType))

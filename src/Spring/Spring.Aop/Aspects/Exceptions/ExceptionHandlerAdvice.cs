@@ -300,7 +300,7 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
 
         if (!parsedAdviceExpression.Success)
         {
-            log.LogWarning("Could not parse exception hander statement " + handlerString);
+            log.LogWarning("Could not parse exception hander statement {HandlerString}", handlerString);
             return null;
         }
 
@@ -434,7 +434,7 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
         }
         else
         {
-            log.LogWarning("Could not parse exception hander statement " + parsedAdviceExpression.AdviceExpression);
+            log.LogWarning("Could not parse exception hander statement {AdviceExpression}", parsedAdviceExpression.AdviceExpression);
         }
 
         return null;

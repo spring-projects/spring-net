@@ -128,10 +128,10 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
         {
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug(string.Format(
-                    "No target for apartment prototype '{0}' " +
-                    "found in thread: creating one and binding it to thread '#{1}'",
-                    TargetObjectName, Thread.CurrentThread.GetHashCode()));
+                logger.LogDebug(
+                    "No target for apartment prototype '{ObjectName}' " +
+                    "found in thread: creating one and binding it to thread '#{ThreadHashCode}'",
+                    TargetObjectName, Thread.CurrentThread.GetHashCode());
             }
 
             target = NewPrototypeInstance();

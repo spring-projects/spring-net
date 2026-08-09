@@ -183,7 +183,7 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
             {
                 if (isLogDebugEnabled)
                 {
-                    logger.LogDebug(String.Format("Object for key [{0}] was of type [{1}] which is not compatible with return type [{2}]. Proceeding...", resultKey, returnValue.GetType(), returnType));
+                    logger.LogDebug("Object for key [{Key}] was of type [{ReturnValueType}] which is not compatible with return type [{ReturnType}]. Proceeding...", resultKey, returnValue.GetType(), returnType);
                 }
 
                 cacheHit = false;
@@ -194,7 +194,7 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
             {
                 if (isLogDebugEnabled)
                 {
-                    logger.LogDebug(String.Format("Object for key [{0}] was not found in cache [{1}]. Proceeding...", resultKey, resultInfo.CacheName));
+                    logger.LogDebug("Object for key [{Key}] was not found in cache [{CacheName}]. Proceeding...", resultKey, resultInfo.CacheName);
                 }
 
                 returnValue = invocation.Proceed();
@@ -202,7 +202,7 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
                 {
                     if (isLogDebugEnabled)
                     {
-                        logger.LogDebug(String.Format("Caching object for key [{0}] into cache [{1}].", resultKey, resultInfo.CacheName));
+                        logger.LogDebug("Caching object for key [{Key}] into cache [{CacheName}].", resultKey, resultInfo.CacheName);
                     }
 
                     cache.Insert(resultKey, (returnValue == null) ? NullValue : returnValue, resultInfo.TimeToLiveTimeSpan);
@@ -212,7 +212,7 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
             {
                 if (isLogDebugEnabled)
                 {
-                    logger.LogDebug(String.Format("Object for key [{0}] found in cache [{1}]. Aborting invocation...", resultKey, resultInfo.CacheName));
+                    logger.LogDebug("Object for key [{Key}] found in cache [{CacheName}]. Aborting invocation...", resultKey, resultInfo.CacheName);
                 }
             }
 
@@ -254,7 +254,7 @@ public class CacheResultAdvice : BaseCacheAdvice, IMethodInterceptor
 
                     if (isDebugEnabled)
                     {
-                        logger.LogDebug("Caching collection item for key [" + itemKey + "].");
+                        logger.LogDebug("Caching collection item for key [{ItemKey}].", itemKey);
                     }
 
                     cache.Insert(itemKey, (item == null ? NullValue : item), itemInfo.TimeToLiveTimeSpan);

@@ -174,7 +174,7 @@ public abstract class AbstractAdvisorAutoProxyCreator : AbstractAutoProxyCreator
             {
                 if (logger.IsEnabled(LogLevel.Information))
                 {
-                    logger.LogInformation($"Candidate advisor [{candidate}] accepted for targetType [{targetType}]");
+                    logger.LogInformation("Candidate advisor [{Advisor}] accepted for targetType [{TargetType}]", candidate, targetType);
                 }
 
                 eligibleAdvisors.Add(candidate);
@@ -190,7 +190,7 @@ public abstract class AbstractAdvisorAutoProxyCreator : AbstractAutoProxyCreator
             {
                 if (logger.IsEnabled(LogLevel.Information))
                 {
-                    logger.LogInformation($"Candidate advisor [{candidate}] accepted for targetType [{targetType}]");
+                    logger.LogInformation("Candidate advisor [{Advisor}] accepted for targetType [{TargetType}]", candidate, targetType);
                 }
 
                 eligibleAdvisors.Add(candidate);
@@ -199,7 +199,7 @@ public abstract class AbstractAdvisorAutoProxyCreator : AbstractAutoProxyCreator
             {
                 if (logger.IsEnabled(LogLevel.Information))
                 {
-                    logger.LogInformation($"Candidate advisor [{candidate}] rejected for targetType [{targetType}]");
+                    logger.LogInformation("Candidate advisor [{Advisor}] rejected for targetType [{TargetType}]", candidate, targetType);
                 }
             }
         }
