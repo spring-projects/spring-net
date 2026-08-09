@@ -303,8 +303,8 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
                 if (LOG.IsEnabled(LogLevel.Error))
                 {
-                    LOG.LogError("Error receiving message from DefaultMessageQueue [" + mq.Path +
-                                 "], closing queue and clearing connection cache.");
+                    LOG.LogError("Error receiving message from DefaultMessageQueue [{Path}" +
+                                 "], closing queue and clearing connection cache.", mq.Path);
                 }
 
                 lock (messageQueueMonitor)
@@ -321,7 +321,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
         {
             if (LOG.IsEnabled(LogLevel.Trace))
             {
-                LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
+                LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
             }
 
             status.SetRollbackOnly();
@@ -332,7 +332,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
+                LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
             }
 
             MessageReceived(message);
@@ -354,7 +354,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     LOG.LogDebug("Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
-                                 mq.Path + "]");
+                                 "{Path}]", mq.Path);
                 }
 
                 status.SetRollbackOnly();
@@ -393,7 +393,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
             if (LOG.IsEnabled(LogLevel.Trace))
             {
-                LOG.LogTrace("Started MessageQueueTransaction for queue = [" + mq.Path + "]");
+                LOG.LogTrace("Started MessageQueueTransaction for queue = [{Path}]", mq.Path);
             }
 
             Message message;
@@ -402,7 +402,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
             {
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
-                    LOG.LogTrace("Receiving message with zero timeout for queue = [" + mq.Path + "]");
+                    LOG.LogTrace("Receiving message with zero timeout for queue = [{Path}]", mq.Path);
                 }
 
                 message = mq.Receive(TimeSpan.Zero, messageQueueTransaction);
@@ -427,8 +427,8 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
                     if (LOG.IsEnabled(LogLevel.Error))
                     {
-                        LOG.LogError("Error receiving message from DefaultMessageQueue [" + mq.Path +
-                                     "], closing queue and clearing connection cache.");
+                        LOG.LogError("Error receiving message from DefaultMessageQueue [{Path}" +
+                                     "], closing queue and clearing connection cache.", mq.Path);
                     }
 
                     lock (messageQueueMonitor)
@@ -445,7 +445,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
             {
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
-                    LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
+                    LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
                 }
 
                 status.SetRollbackOnly();
@@ -456,7 +456,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
             {
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
+                    LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
                 }
 
                 MessageReceived(message);
@@ -479,7 +479,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
-                    LOG.LogTrace("Committed MessageQueueTransaction for queue [" + mq.Path + "]");
+                    LOG.LogTrace("Committed MessageQueueTransaction for queue [{Path}]", mq.Path);
                 }
             }
             catch (Exception ex)
@@ -493,7 +493,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                     if (LOG.IsEnabled(LogLevel.Debug))
                     {
                         LOG.LogDebug("Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
-                                     mq.Path + "]");
+                                     "{Path}]", mq.Path);
                     }
                 }
                 else
@@ -504,7 +504,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                     if (LOG.IsEnabled(LogLevel.Debug))
                     {
                         LOG.LogDebug("Exception handler's TransactionAction has committed MessageQueueTransaction for queue [" +
-                                     mq.Path + "]");
+                                     "{Path}]", mq.Path);
                     }
                 }
 

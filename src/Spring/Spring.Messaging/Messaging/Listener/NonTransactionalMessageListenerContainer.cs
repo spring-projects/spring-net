@@ -77,7 +77,7 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
         {
             if (LOG.IsEnabled(LogLevel.Trace))
             {
-                LOG.LogTrace("Receiving message with zero timeout for queue = [" + mq.Path + "]");
+                LOG.LogTrace("Receiving message with zero timeout for queue = [{Path}]", mq.Path);
             }
 
             BeforeMessageReceived(mq);
@@ -102,8 +102,8 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
 
                 if (LOG.IsEnabled(LogLevel.Error))
                 {
-                    LOG.LogError("Error receiving message from MessageQueue [" + mq.Path +
-                                 "], closing queue and clearing connection cache.");
+                    LOG.LogError("Error receiving message from MessageQueue [{Path}" +
+                                 "], closing queue and clearing connection cache.", mq.Path);
                 }
 
                 lock (messageQueueMonitor)
@@ -120,7 +120,7 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
         {
             if (LOG.IsEnabled(LogLevel.Trace))
             {
-                LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
+                LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
             }
 
             return false; // no more peeking unless this is the last listener thread
@@ -130,7 +130,7 @@ public class NonTransactionalMessageListenerContainer : AbstractPeekingMessageLi
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
+                LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
             }
 
             MessageReceived(message);

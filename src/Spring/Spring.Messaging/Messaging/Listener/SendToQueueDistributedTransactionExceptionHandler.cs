@@ -59,7 +59,7 @@ public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQ
                 messageStats = (MessageStats) messageMap[messageId];
                 if (messageStats.Count > MaxRetry)
                 {
-                    LOG.LogWarning("Message with id = [" + message.Id + "] detected as poison message.");
+                    LOG.LogWarning("Message with id = [{MessageId}] detected as poison message.", message.Id);
                     return true;
                 }
             }
@@ -99,8 +99,8 @@ public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQ
             }
 
             messageStats.Count++;
-            LOG.LogWarning("Message Error Count = [" + messageStats.Count + "] for message id = [" + messageId +
-                           "]");
+            LOG.LogWarning("Message Error Count = [{MessageErrorCount}] for message id = [{MessageId}" +
+                           "]", messageStats.Count, messageId);
         }
     }
 
@@ -115,7 +115,7 @@ public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQ
         {
             if (LOG.IsEnabled(LogLevel.Information))
             {
-                LOG.LogInformation("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
+                LOG.LogInformation("Sending message with id = [{MessageId}] to queue [{Path}].", message.Id, mq.Path);
             }
 
             mq.Send(message, MessageQueueTransactionType.Automatic);
@@ -125,7 +125,7 @@ public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQ
             if (LOG.IsEnabled(LogLevel.Error))
             {
                 LOG.LogError(e, "Could not send message with id = [{MessageId}] to queue [{Path}].", message.Id, mq.Path);
-                LOG.LogError("Message will not be processed.  Message Body = " + message.Body);
+                LOG.LogError("Message will not be processed.  Message Body = {MessageBody}", message.Body);
             }
         }
     }

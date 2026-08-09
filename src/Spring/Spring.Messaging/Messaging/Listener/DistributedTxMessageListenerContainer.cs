@@ -137,7 +137,7 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
         {
             if (LOG.IsEnabled(LogLevel.Trace))
             {
-                LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
+                LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
             }
 
             status.SetRollbackOnly();
@@ -148,7 +148,7 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
+                LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
             }
 
             MessageReceived(message);

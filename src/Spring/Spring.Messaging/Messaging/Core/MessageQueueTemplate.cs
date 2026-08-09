@@ -564,7 +564,7 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Sending messsage using externally managed MessageQueueTransction to transactional queue with path [" + mq.Path + "].");
+                LOG.LogDebug("Sending messsage using externally managed MessageQueueTransction to transactional queue with path [{Path}].", mq.Path);
             }
 
             mq.Send(msg, transactionToUse);
@@ -578,7 +578,7 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
              * using a direct format name. In this situation, if you do not specify a
              * transaction context when sending a message, one is not created for you
              * and the message will be sent to the dead-letter queue.*/
-            LOG.LogWarning("Sending message using implicit single-message transaction to transactional queue queue with path [" + mq.Path + "].");
+            LOG.LogWarning("Sending message using implicit single-message transaction to transactional queue queue with path [{Path}].", mq.Path);
             mq.Send(msg, MessageQueueTransactionType.Single);
         }
     }
@@ -593,14 +593,14 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
     {
         if (transactionToUse != null)
         {
-            LOG.LogWarning("Thread local message transaction ignored for sending to non-transactional queue with path [" + mq.Path + "].");
+            LOG.LogWarning("Thread local message transaction ignored for sending to non-transactional queue with path [{Path}].", mq.Path);
             mq.Send(msg);
         }
         else
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.LogDebug("Sending messsage without MSMQ transaction to non-transactional queue with path [" + mq.Path + "].");
+                LOG.LogDebug("Sending messsage without MSMQ transaction to non-transactional queue with path [{Path}].", mq.Path);
             }
 
             //Typical case, non TLS transaction, non-tx queue.

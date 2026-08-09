@@ -93,7 +93,7 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
             else
             {
                 LOG.LogInformation("Ignoring resetting of MaxConcurrentListeners.  Using previous value of " +
-                                   maxConcurrentListeners);
+                                   "{MaxConcurrentListeners}", maxConcurrentListeners);
             }
         }
     }
@@ -219,7 +219,7 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
                 numberOfListenersToSchedule = maxConcurrentListeners -
                                               (activeListenerCount + scheduledListenerCount);
 
-                LOG.LogDebug("Submitting " + numberOfListenersToSchedule + " listener work items");
+                LOG.LogDebug("Submitting {NumberOfListenersToSchedule} listener work items", numberOfListenersToSchedule);
 
                 for (int i = 1; i <= numberOfListenersToSchedule; i++)
                 {
@@ -228,11 +228,11 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
                     {
                         scheduledListenerCount++;
                         listenerThreadWillCallStartPeek = true;
-                        LOG.LogDebug("Queued ReceiveAndExecute listener # " + i);
+                        LOG.LogDebug("Queued ReceiveAndExecute listener # {ListenerNumber}", i);
                     }
                     else
                     {
-                        LOG.LogError("Could not submit ReceiveAndExecute work item for listener # " + i);
+                        LOG.LogError("Could not submit ReceiveAndExecute work item for listener # {ListenerNumber}", i);
                     }
                 }
 
@@ -260,7 +260,7 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
             if (listenerThreadWillCallStartPeek == false && Running)
             {
                 LOG.LogWarning("Could not queue any listeners onto the thread pool.  Calling BeginPeek again after delay of " +
-                               RecoveryTimeSpan);
+                               "{RecoveryTimeSpan}", RecoveryTimeSpan);
                 Thread.Sleep(RecoveryTimeSpan);
                 StartPeeking();
             }
@@ -292,8 +292,8 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
             {
                 activeListenerCount++;
                 scheduledListenerCount--;
-                LOG.LogDebug("ActiveListenerCount = " + activeListenerCount);
-                LOG.LogDebug("ScheduledListenerCount = " + scheduledListenerCount);
+                LOG.LogDebug("ActiveListenerCount = {ActiveListenerCount}", activeListenerCount);
+                LOG.LogDebug("ScheduledListenerCount = {ScheduledListenerCount}", scheduledListenerCount);
                 Monitor.PulseAll(activeListenerMonitor);
             }
 
@@ -331,8 +331,8 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
             lock (activeListenerMonitor)
             {
                 activeListenerCount--;
-                LOG.LogDebug("ActiveListenerCount = " + activeListenerCount);
-                LOG.LogTrace("ListenerTimeout = " + listenerTimeOut + ", MessageRecieved = " + messageReceived);
+                LOG.LogDebug("ActiveListenerCount = {ActiveListenerCount}", activeListenerCount);
+                LOG.LogTrace("ListenerTimeout = {ListenerTimeOut}, MessageRecieved = {MessageReceived}", listenerTimeOut, messageReceived);
                 if (activeListenerCount == 0)
                 {
                     LOG.LogDebug("All processing threads ended - calling StartPeek again.");
@@ -371,7 +371,7 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
                 {
                     while (activeListenerCount > 0)
                     {
-                        LOG.LogDebug("Waiting for termination of " + activeListenerCount + " listener threads.");
+                        LOG.LogDebug("Waiting for termination of {ActiveListenerCount} listener threads.", activeListenerCount);
                         Monitor.Wait(activeListenerMonitor);
                     }
                 }

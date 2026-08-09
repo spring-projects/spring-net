@@ -146,7 +146,7 @@ public class DefaultMessageQueueFactory : IMessageQueueFactory, IApplicationCont
                 applicationContext.GetObject(messageConverterObjectName, typeof(IMessageConverter));
             if (applicationContext.ObjectFactory.GetObjectDefinition(messageConverterObjectName).IsSingleton)
             {
-                log.LogWarning("MessageConverter with name = [" + messageConverterObjectName + "] should be declared with singleton=false.  Using Clone() to create independent instance for thread local storage");
+                log.LogWarning("MessageConverter with name = [{MessageConverterObjectName}] should be declared with singleton=false.  Using Clone() to create independent instance for thread local storage", messageConverterObjectName);
                 converters.Add(messageConverterObjectName, mc.Clone());
             }
             else

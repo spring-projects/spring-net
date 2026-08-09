@@ -482,8 +482,8 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
     {
         if (logger.IsEnabled(LogLevel.Debug))
         {
-            logger.LogDebug("Listener method returned result [" + result +
-                            "] - generating response message for it");
+            logger.LogDebug("Listener method returned result [{Result}" +
+                            "] - generating response message for it", result);
         }
 
         Message response = BuildMessage(result);
@@ -502,7 +502,7 @@ public class MessageListenerAdapter : IMessageListener, IApplicationContextAware
         //Will send with appropriate transaction semantics
         if (logger.IsEnabled(LogLevel.Debug))
         {
-            logger.LogDebug("Sending response message to path = [" + destination.Path + "]");
+            logger.LogDebug("Sending response message to path = [{Path}]", destination.Path);
         }
 
         messageQueueTemplate.Send(destination, response);

@@ -175,7 +175,7 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
             if (LOG.IsEnabled(LogLevel.Warning))
             {
                 LOG.LogWarning("Not processing recieved message because of the listener container " +
-                               "having been stopped in the meantime: " + message);
+                               "having been stopped in the meantime: {ReceivedMessage}", message);
             }
         }
 
