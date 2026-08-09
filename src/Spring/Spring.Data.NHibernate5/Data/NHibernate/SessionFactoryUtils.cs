@@ -392,7 +392,7 @@ public abstract class SessionFactoryUtils
         catch (Exception e)
         {
             log.LogError(e, "Exception thrown during exception translation. Message = [{ErrorMessage}]", e.Message);
-            log.LogError((Exception) ex, "Exception that was attempted to be translated was [{AdoExceptionMessage}]", ex.Message);
+            log.LogError(ex, "Exception that was attempted to be translated was [{AdoExceptionMessage}]", ex.Message);
             if (ex.InnerException != null)
             {
                 log.LogError(ex.InnerException, "  Inner Exception was [{InnerExceptionMessage}]", ex.InnerException.Message);

@@ -182,7 +182,7 @@ public class EmsConnection : IConnection
         }
         else
         {
-            logger.LogError((Exception) arg.Exception, "No exception handler registered with EmsConnection wrapper class.");
+            logger.LogError(arg.Exception, "No exception handler registered with EmsConnection wrapper class.");
         }
     }
 }

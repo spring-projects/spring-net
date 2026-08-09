@@ -124,7 +124,7 @@ public class JndiLookupFactoryObject : JndiObjectLocator, IConfigurableFactoryOb
             {
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.LogDebug((Exception) ex, "JNDI lookup failed - returning specified default object instead");
+                    logger.LogDebug(ex, "JNDI lookup failed - returning specified default object instead");
                 }
                 else if (logger.IsEnabled(LogLevel.Information))
                 {

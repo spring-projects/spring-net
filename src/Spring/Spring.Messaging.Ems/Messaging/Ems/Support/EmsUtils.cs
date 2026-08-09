@@ -69,7 +69,7 @@ public abstract class EmsUtils
             }
             catch (EMSException ex)
             {
-                logger.LogDebug((Exception) ex, "Could not close EMS Connection");
+                logger.LogDebug(ex, "Could not close EMS Connection");
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@ public abstract class EmsUtils
             }
             catch (EMSException ex)
             {
-                logger.LogDebug((Exception) ex, "Could not close EMS Session");
+                logger.LogDebug(ex, "Could not close EMS Session");
             }
             catch (Exception ex)
             {
@@ -119,7 +119,7 @@ public abstract class EmsUtils
             }
             catch (EMSException ex)
             {
-                logger.LogDebug((Exception) ex, "Could not close EMS MessageProducer");
+                logger.LogDebug(ex, "Could not close EMS MessageProducer");
             }
             catch (Exception ex)
             {
@@ -144,7 +144,7 @@ public abstract class EmsUtils
             }
             catch (EMSException ex)
             {
-                logger.LogDebug((Exception) ex, "Could not close EMS MessageConsumer");
+                logger.LogDebug(ex, "Could not close EMS MessageConsumer");
             }
             catch (Exception ex)
             {
@@ -244,7 +244,7 @@ public abstract class EmsUtils
             }
             catch (EMSException ex)
             {
-                logger.LogDebug((Exception) ex, "Could not close EMS QueueBrowser");
+                logger.LogDebug(ex, "Could not close EMS QueueBrowser");
             }
             catch (Exception ex)
             {

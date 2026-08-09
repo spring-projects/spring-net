@@ -200,8 +200,8 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
         }
         catch (EMSException recoverEx)
         {
-            logger.LogDebug((Exception) recoverEx, "Failed to recover EMS Connection");
-            logger.LogError((Exception) exception, "Encountered non-recoverable EMSException");
+            logger.LogDebug(recoverEx, "Failed to recover EMS Connection");
+            logger.LogError(exception, "Encountered non-recoverable EMSException");
         }
     }
 
