@@ -70,7 +70,8 @@ public abstract class ConnectionUtils
 
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug("Disposing of IDbConnection with connection string = [" + dbProvider.ConnectionString + "]");
+            // Connection string deliberately not logged: it can contain credentials.
+            LOG.LogDebug("Disposing of IDbConnection [{Connection}]", conn);
         }
 
         conn.Dispose();

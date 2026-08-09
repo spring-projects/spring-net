@@ -129,7 +129,8 @@ public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager,
                 IDbConnection newCon = DbProvider.CreateConnection();
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug("Acquired Connection [" + newCon + ", " + newCon.ConnectionString + "] for ADO.NET transaction");
+                    // Connection string deliberately not logged: it can contain credentials.
+                    log.LogDebug("Acquired Connection [{Connection}] for ADO.NET transaction", newCon);
                 }
 
                 newCon.Open();
@@ -239,7 +240,8 @@ public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager,
         if (status.Debug)
         {
             IDbConnection conn = txMgrStateObject.ConnectionHolder.Connection;
-            log.LogDebug("Committing ADO.NET transaction on Connection [" + conn + ", " + conn.ConnectionString + "]");
+            // Connection string deliberately not logged: it can contain credentials.
+            log.LogDebug("Committing ADO.NET transaction on Connection [{Connection}]", conn);
         }
 
         try
@@ -270,7 +272,8 @@ public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager,
         IDbTransaction trans = txMgrStateObject.ConnectionHolder.Transaction;
         if (status.Debug)
         {
-            log.LogDebug("Rolling back ADO.NET transaction on Connection [" + conn + ", " + conn.ConnectionString + "]");
+            // Connection string deliberately not logged: it can contain credentials.
+            log.LogDebug("Rolling back ADO.NET transaction on Connection [{Connection}]", conn);
         }
 
         try
@@ -298,7 +301,8 @@ public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager,
         if (status.Debug)
         {
             IDbConnection conn = txMgrStateObject.ConnectionHolder.Connection;
-            log.LogDebug("Setting ADO.NET transaction [" + conn + ", " + conn.ConnectionString + "] rollback-only.");
+            // Connection string deliberately not logged: it can contain credentials.
+            log.LogDebug("Setting ADO.NET transaction [{Connection}] rollback-only.", conn);
         }
 
         txMgrStateObject.SetRollbackOnly();
@@ -317,7 +321,8 @@ public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager,
 
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Releasing ADO.NET Connection [" + con + ", " + con.ConnectionString + "] after transaction");
+            // Connection string deliberately not logged: it can contain credentials.
+            log.LogDebug("Releasing ADO.NET Connection [{Connection}] after transaction", con);
         }
 
         ConnectionUtils.DisposeConnection(con, DbProvider);
