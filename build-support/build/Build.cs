@@ -155,6 +155,7 @@ partial class Build : FalloutBuild
                 MSBuild(s => s
                     .SetTargets("Restore", "Rebuild")
                     .SetConfiguration(Configuration)
+                    .Apply(ExampleVersionSettings)
                     .SetTargetPath(solutionFile)
                     .SetNodeReuse(false)
                     .SetVerbosity(MSBuildVerbosity.Minimal)
@@ -229,6 +230,17 @@ partial class Build : FalloutBuild
         .SetFileVersion(VersionPrefix)
         .SetVersionPrefix(VersionPrefix)
         .SetVersionSuffix(VersionSuffix);
+
+    // Several example solutions include the src/Spring projects directly (Spring.Core.csproj and
+    // friends), so this MSBuild call rebuilds them straight back into build/$(Configuration)/.
+    // Without the same versions, that rebuild stamps the SDK default 1.0.0.0 over what
+    // CompileSolution produced, and the next example to reference two Spring assemblies fails
+    // CS1705 on the mismatch. MSBuildSettings has no VersionPrefix/Suffix setter, hence SetProperty.
+    Configure<MSBuildSettings> ExampleVersionSettings => _ => _
+        .SetAssemblyVersion(AssemblyVersion)
+        .SetFileVersion(VersionPrefix)
+        .SetProperty("VersionPrefix", VersionPrefix)
+        .SetProperty("VersionSuffix", VersionSuffix ?? string.Empty);
 
     IEnumerable<Project> GetActiveProjects()
     {
