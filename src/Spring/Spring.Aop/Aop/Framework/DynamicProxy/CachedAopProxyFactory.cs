@@ -93,10 +93,7 @@ public class CachedAopProxyFactory : DefaultAopProxyFactory
             }
             else
             {
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug("AOP proxy type found in cache for {CacheKey}", cacheKey);
-                }
+                logger.LogDebug("AOP proxy type found in cache for {CacheKey}", cacheKey);
             }
         }
 

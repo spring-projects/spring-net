@@ -157,12 +157,9 @@ public class SdkRegularExpressionMethodPointcut : AbstractRegularExpressionMetho
         Match match = _compiledPatterns[patternIndex].Match(pattern);
         bool matched = match.Success;
 
-        if (_logger.IsEnabled(LogLevel.Debug))
-        {
-            _logger.LogDebug("Candidate is: '{Candidate}'; pattern is '" +
-                             "{Pattern}'; matched={Matched}",
-                             pattern, _compiledPatterns[patternIndex], matched);
-        }
+        _logger.LogDebug("Candidate is: '{Candidate}'; pattern is '" +
+                         "{Pattern}'; matched={Matched}",
+                         pattern, _compiledPatterns[patternIndex], matched);
 
         return matched;
     }

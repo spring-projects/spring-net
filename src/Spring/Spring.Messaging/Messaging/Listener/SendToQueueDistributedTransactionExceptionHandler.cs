@@ -113,10 +113,7 @@ public class SendToQueueDistributedTransactionExceptionHandler : AbstractSendToQ
         MessageQueue mq = MessageQueueFactory.CreateMessageQueue(MessageQueueObjectName);
         try
         {
-            if (LOG.IsEnabled(LogLevel.Information))
-            {
-                LOG.LogInformation("Sending message with id = [{MessageId}] to queue [{Path}].", message.Id, mq.Path);
-            }
+            LOG.LogInformation("Sending message with id = [{MessageId}] to queue [{Path}].", message.Id, mq.Path);
 
             mq.Send(message, MessageQueueTransactionType.Automatic);
         }

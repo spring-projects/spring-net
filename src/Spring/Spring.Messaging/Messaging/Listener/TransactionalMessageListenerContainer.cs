@@ -273,10 +273,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
     protected virtual bool DoRecieveAndExecuteUsingMessageQueueTransactionManager(MessageQueue mq,
         ITransactionStatus status)
     {
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Executing DoRecieveAndExecuteUsingMessageQueueTransactionManager");
-        }
+        LOG.LogDebug("Executing DoRecieveAndExecuteUsingMessageQueueTransactionManager");
 
         Message message;
 
@@ -289,10 +286,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
             if (ex.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
             {
                 //expected to occur occasionally
-                if (LOG.IsEnabled(LogLevel.Trace))
-                {
-                    LOG.LogTrace("IOTimeout: Message to receive was already processed by another thread.");
-                }
+                LOG.LogTrace("IOTimeout: Message to receive was already processed by another thread.");
 
                 status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
@@ -301,11 +295,8 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
             {
                 // A real issue in receiving the message
 
-                if (LOG.IsEnabled(LogLevel.Error))
-                {
-                    LOG.LogError("Error receiving message from DefaultMessageQueue [{Path}" +
-                                 "], closing queue and clearing connection cache.", mq.Path);
-                }
+                LOG.LogError("Error receiving message from DefaultMessageQueue [{Path}" +
+                             "], closing queue and clearing connection cache.", mq.Path);
 
                 lock (messageQueueMonitor)
                 {
@@ -319,10 +310,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
         if (message == null)
         {
-            if (LOG.IsEnabled(LogLevel.Trace))
-            {
-                LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
-            }
+            LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
 
             status.SetRollbackOnly();
             return false; // no more peeking unless this is the last listener thread
@@ -330,18 +318,12 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
         try
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
-            }
+            LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
 
             MessageReceived(message);
             DoExecuteListener(message);
 
-            if (LOG.IsEnabled(LogLevel.Trace))
-            {
-                LOG.LogTrace("MessageListener executed");
-            }
+            LOG.LogTrace("MessageListener executed");
         }
         catch (Exception ex)
         {
@@ -351,11 +333,8 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 HandleTransactionalListenerException(ex, message, QueueUtils.GetMessageQueueTransaction(null));
             if (action == TransactionAction.Rollback)
             {
-                if (LOG.IsEnabled(LogLevel.Debug))
-                {
-                    LOG.LogDebug("Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
-                                 "{Path}]", mq.Path);
-                }
+                LOG.LogDebug("Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
+                             "{Path}]", mq.Path);
 
                 status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
@@ -382,28 +361,19 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
     protected virtual bool DoRecieveAndExecuteUsingResourceTransactionManagerWithTxQueue(MessageQueue mq,
         ITransactionStatus status)
     {
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Executing DoRecieveAndExecuteUsingResourceTransactionManagerWithTxQueue");
-        }
+        LOG.LogDebug("Executing DoRecieveAndExecuteUsingResourceTransactionManagerWithTxQueue");
 
         using (MessageQueueTransaction messageQueueTransaction = new MessageQueueTransaction())
         {
             messageQueueTransaction.Begin();
 
-            if (LOG.IsEnabled(LogLevel.Trace))
-            {
-                LOG.LogTrace("Started MessageQueueTransaction for queue = [{Path}]", mq.Path);
-            }
+            LOG.LogTrace("Started MessageQueueTransaction for queue = [{Path}]", mq.Path);
 
             Message message;
 
             try
             {
-                if (LOG.IsEnabled(LogLevel.Trace))
-                {
-                    LOG.LogTrace("Receiving message with zero timeout for queue = [{Path}]", mq.Path);
-                }
+                LOG.LogTrace("Receiving message with zero timeout for queue = [{Path}]", mq.Path);
 
                 message = mq.Receive(TimeSpan.Zero, messageQueueTransaction);
             }
@@ -413,10 +383,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 {
                     //expected to occur occasionally
 
-                    if (LOG.IsEnabled(LogLevel.Trace))
-                    {
-                        LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
-                    }
+                    LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
 
                     status.SetRollbackOnly();
                     return false; // no more peeking unless this is the last listener thread
@@ -425,11 +392,8 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 {
                     // A real issue in receiving the message
 
-                    if (LOG.IsEnabled(LogLevel.Error))
-                    {
-                        LOG.LogError("Error receiving message from DefaultMessageQueue [{Path}" +
-                                     "], closing queue and clearing connection cache.", mq.Path);
-                    }
+                    LOG.LogError("Error receiving message from DefaultMessageQueue [{Path}" +
+                                 "], closing queue and clearing connection cache.", mq.Path);
 
                     lock (messageQueueMonitor)
                     {
@@ -443,10 +407,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
             if (message == null)
             {
-                if (LOG.IsEnabled(LogLevel.Trace))
-                {
-                    LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
-                }
+                LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
 
                 status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
@@ -454,10 +415,7 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
             try
             {
-                if (LOG.IsEnabled(LogLevel.Debug))
-                {
-                    LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
-                }
+                LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
 
                 MessageReceived(message);
 
@@ -470,17 +428,11 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
 
                 DoExecuteListener(message);
 
-                if (LOG.IsEnabled(LogLevel.Trace))
-                {
-                    LOG.LogTrace("MessageListener executed");
-                }
+                LOG.LogTrace("MessageListener executed");
 
                 messageQueueTransaction.Commit();
 
-                if (LOG.IsEnabled(LogLevel.Trace))
-                {
-                    LOG.LogTrace("Committed MessageQueueTransaction for queue [{Path}]", mq.Path);
-                }
+                LOG.LogTrace("Committed MessageQueueTransaction for queue [{Path}]", mq.Path);
             }
             catch (Exception ex)
             {
@@ -490,22 +442,16 @@ public class TransactionalMessageListenerContainer : AbstractTransactionalMessag
                 {
                     messageQueueTransaction.Abort();
 
-                    if (LOG.IsEnabled(LogLevel.Debug))
-                    {
-                        LOG.LogDebug("Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
-                                     "{Path}]", mq.Path);
-                    }
+                    LOG.LogDebug("Exception handler's TransactionAction has rolled back MessageQueueTransaction for queue [" +
+                                 "{Path}]", mq.Path);
                 }
                 else
                 {
                     // Will remove from the message queue
                     messageQueueTransaction.Commit();
 
-                    if (LOG.IsEnabled(LogLevel.Debug))
-                    {
-                        LOG.LogDebug("Exception handler's TransactionAction has committed MessageQueueTransaction for queue [" +
-                                     "{Path}]", mq.Path);
-                    }
+                    LOG.LogDebug("Exception handler's TransactionAction has committed MessageQueueTransaction for queue [" +
+                                 "{Path}]", mq.Path);
                 }
 
                 //Outer db-tx will rollback

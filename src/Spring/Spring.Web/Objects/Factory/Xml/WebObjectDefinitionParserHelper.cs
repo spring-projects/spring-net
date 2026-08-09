@@ -142,11 +142,8 @@ internal class WebObjectDefinitionParserHelper : ObjectDefinitionParserHelper
             }
             catch (ArgumentException ex)
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug(ex, "Error while parsing object scope : '{Value}' is an invalid value.",
-                        value);
-                }
+                log.LogDebug(ex, "Error while parsing object scope : '{Value}' is an invalid value.",
+                    value);
             }
         }
 

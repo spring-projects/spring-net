@@ -151,10 +151,7 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
 
         springServiceHost.Open();
 
-        if (LOG.IsEnabled(LogLevel.Information))
-        {
-            LOG.LogInformation("The service '{TargetName}' is ready and can now be accessed.", TargetName);
-        }
+        LOG.LogInformation("The service '{TargetName}' is ready and can now be accessed.", TargetName);
     }
 
     /// <summary>

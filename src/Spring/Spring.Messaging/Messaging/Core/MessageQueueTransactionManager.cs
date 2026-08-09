@@ -177,10 +177,7 @@ public class MessageQueueTransactionManager : AbstractPlatformTransactionManager
         MessageQueueTransaction transaction = txObject.ResourceHolder.MessageQueueTransaction;
         try
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Committing MessageQueueTransaction");
-            }
+            LOG.LogDebug("Committing MessageQueueTransaction");
 
             transaction.Commit();
         }
@@ -203,10 +200,7 @@ public class MessageQueueTransactionManager : AbstractPlatformTransactionManager
         MessageQueueTransaction transaction = txObject.ResourceHolder.MessageQueueTransaction;
         try
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Committing MessageQueueTransaction");
-            }
+            LOG.LogDebug("Committing MessageQueueTransaction");
 
             transaction.Abort();
         }

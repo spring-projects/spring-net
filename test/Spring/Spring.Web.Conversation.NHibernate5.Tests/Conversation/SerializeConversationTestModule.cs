@@ -137,8 +137,7 @@ public class MyBinder : SerializationBinder
 
     public override Type BindToType(string assemblyName, string typeName)
     {
-        if (LOG.IsEnabled(LogLevel.Debug))
-            LOG.LogDebug("MyBinder.BindToType: {TypeName}, {AssemblyName}", typeName, assemblyName);
+        LOG.LogDebug("MyBinder.BindToType: {TypeName}, {AssemblyName}", typeName, assemblyName);
         return Type.GetType(typeName + ", " + assemblyName);
     }
 }

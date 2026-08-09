@@ -84,10 +84,7 @@ public class ObjectFactoryAdvisorRetrievalHelper : IAdvisorRetrievalHelper
                         ObjectCurrentlyInCreationException oce = (ObjectCurrentlyInCreationException) rootEx;
                         if (_objectFactory.IsCurrentlyInCreation(oce.ObjectName))
                         {
-                            if (_log.IsEnabled(LogLevel.Debug))
-                            {
-                                _log.LogDebug(ex, "Ignoring currently created advisor '{AdvisorName}'", name);
-                            }
+                            _log.LogDebug(ex, "Ignoring currently created advisor '{AdvisorName}'", name);
 
                             continue;
                         }

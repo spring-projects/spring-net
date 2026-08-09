@@ -90,10 +90,7 @@ public class ConstructorResolver
         wrapper.WrappedInstance = instantiationStrategy.Instantiate(rod, objectName, objectFactory,
             constructorInstantiationInfo.ConstructorInfo, constructorInstantiationInfo.ArgInstances);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Object '{ObjectName}' instantiated via constructor [{ConstructorInfo}].", objectName, constructorInstantiationInfo.ConstructorInfo);
-        }
+        log.LogDebug("Object '{ObjectName}' instantiated via constructor [{ConstructorInfo}].", objectName, constructorInstantiationInfo.ConstructorInfo);
 
         return wrapper;
     }
@@ -349,10 +346,7 @@ public class ConstructorResolver
             object objectInstance = instantiationStrategy.Instantiate(definition, name, objectFactory, factoryMethodCandidate, arguments);
             wrapper.WrappedInstance = objectInstance;
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Object '{ObjectName}' instantiated via factory method [{FactoryMethod}].", name, factoryMethodCandidate);
-            }
+            log.LogDebug("Object '{ObjectName}' instantiated via factory method [{FactoryMethod}].", name, factoryMethodCandidate);
 
             return wrapper;
         }

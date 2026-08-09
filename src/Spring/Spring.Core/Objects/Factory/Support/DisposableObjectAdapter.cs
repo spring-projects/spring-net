@@ -136,10 +136,7 @@ public class DisposableObjectAdapter : IDisposable
 
         if (this.invokeDisposableObject)
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Invoking Dispose() on object with name '{ObjectName}'", this.objectName);
-            }
+            logger.LogDebug("Invoking Dispose() on object with name '{ObjectName}'", this.objectName);
 
             try
             {
@@ -209,11 +206,8 @@ public class DisposableObjectAdapter : IDisposable
             args[0] = true;
         }
 
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Invoking destroy method '{DestroyMethodName}" +
-                            "' on object with name '{ObjectName}'", this.destroyMethodName, this.objectName);
-        }
+        logger.LogDebug("Invoking destroy method '{DestroyMethodName}" +
+                        "' on object with name '{ObjectName}'", this.destroyMethodName, this.objectName);
 
         try
         {

@@ -140,12 +140,9 @@ public abstract class AbstractXmlApplicationContext : AbstractApplicationContext
 
             _objectFactory = objectFactory;
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug(
-                    "Refreshed ObjectFactory for application context '{ContextName}'.",
-                    Name);
-            }
+            log.LogDebug(
+                "Refreshed ObjectFactory for application context '{ContextName}'.",
+                Name);
         }
         catch (IOException ex)
         {

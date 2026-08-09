@@ -225,10 +225,7 @@ public sealed class TransactionSynchronizationManager
             throw new InvalidOperationException("Cannot activate transaction synchronization - already active");
         }
 
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Initializing transaction synchronization");
-        }
+        LOG.LogDebug("Initializing transaction synchronization");
 
         ArrayList syncs = new ArrayList();
         LogicalThreadContext.SetData(syncsDataSlotName, syncs);
@@ -250,10 +247,7 @@ public sealed class TransactionSynchronizationManager
             throw new InvalidOperationException("Cannot deactivate transaction synchronization - not active");
         }
 
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Clearing transaction synchronization");
-        }
+        LOG.LogDebug("Clearing transaction synchronization");
 
         LogicalThreadContext.FreeNamedDataSlot(syncsDataSlotName);
     }

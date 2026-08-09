@@ -68,11 +68,8 @@ public abstract class ConnectionUtils
             }
         }
 
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            // Connection string deliberately not logged: it can contain credentials.
-            LOG.LogDebug("Disposing of IDbConnection [{Connection}]", conn);
-        }
+        // Connection string deliberately not logged: it can contain credentials.
+        LOG.LogDebug("Disposing of IDbConnection [{Connection}]", conn);
 
         conn.Dispose();
     }
@@ -123,10 +120,7 @@ public abstract class ConnectionUtils
             conHolder.Requested();
             if (!conHolder.HasConnection)
             {
-                if (LOG.IsEnabled(LogLevel.Debug))
-                {
-                    LOG.LogDebug("Fetching resumed ADO.NET connection from DbProvider");
-                }
+                LOG.LogDebug("Fetching resumed ADO.NET connection from DbProvider");
 
                 conHolder.Connection = provider.CreateConnection();
             }
@@ -135,10 +129,7 @@ public abstract class ConnectionUtils
         }
 
         // Else we either got no holder or an empty thread-bound holder here.
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Fetching Connection from DbProvider");
-        }
+        LOG.LogDebug("Fetching Connection from DbProvider");
 
         IDbConnection conn = provider.CreateConnection();
         conn.Open();

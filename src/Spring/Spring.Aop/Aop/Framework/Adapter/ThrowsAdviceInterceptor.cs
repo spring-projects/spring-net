@@ -153,10 +153,7 @@ public sealed class ThrowsAdviceInterceptor : IMethodInterceptor
                 Type lastParametersType = method.GetParameters()[numParams - 1].ParameterType;
                 if (typeof(Exception).IsAssignableFrom(lastParametersType))
                 {
-                    if (log.IsEnabled(LogLevel.Debug))
-                    {
-                        log.LogDebug("Found exception handler method: {Method}", method);
-                    }
+                    log.LogDebug("Found exception handler method: {Method}", method);
 
                     if (this.exceptionHandlers.Contains(lastParametersType))
                     {

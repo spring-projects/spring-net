@@ -195,10 +195,7 @@ public class WebApplicationContext : AbstractXmlApplicationContext
         lock (s_webContextCache)
         {
             ILogger<WebApplicationContext> s_weblog = LogManager.GetLogger<WebApplicationContext>();
-            if (s_weblog.IsEnabled(LogLevel.Debug))
-            {
-                s_weblog.LogDebug("received ContextRegistry.Cleared event - clearing webContextCache");
-            }
+            s_weblog.LogDebug("received ContextRegistry.Cleared event - clearing webContextCache");
 
             s_webContextCache.Clear();
         }

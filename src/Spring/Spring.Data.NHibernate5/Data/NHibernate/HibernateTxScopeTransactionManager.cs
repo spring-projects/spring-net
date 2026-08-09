@@ -283,11 +283,8 @@ public class HibernateTxScopeTransactionManager : AbstractPlatformTransactionMan
         {
             SessionHolder sessionHolder =
                 (SessionHolder) TransactionSynchronizationManager.GetResource(SessionFactory);
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Found thread-bound Session [{Session}" +
-                             "] for Hibernate transaction", sessionHolder.Session);
-            }
+            log.LogDebug("Found thread-bound Session [{Session}" +
+                         "] for Hibernate transaction", sessionHolder.Session);
 
             txObject.SetSessionHolder(sessionHolder, false);
             if (DbProvider != null)
@@ -376,10 +373,7 @@ public class HibernateTxScopeTransactionManager : AbstractPlatformTransactionMan
                 IInterceptor interceptor = EntityInterceptor;
                 ISession newSession = (interceptor != null ? SessionFactory.OpenSession(interceptor) : SessionFactory.OpenSession());
 
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug("Opened new Session [{Session}] for Hibernate transaction", newSession);
-                }
+                log.LogDebug("Opened new Session [{Session}] for Hibernate transaction", newSession);
 
                 txObject.SetSessionHolder(new SessionHolder(newSession), true);
             }
@@ -433,10 +427,7 @@ public class HibernateTxScopeTransactionManager : AbstractPlatformTransactionMan
                     conHolder.TimeoutInSeconds = timeout;
                 }
 
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug("Exposing Hibernate transaction as ADO transaction [{Connection}]", con);
-                }
+                log.LogDebug("Exposing Hibernate transaction as ADO transaction [{Connection}]", con);
 
                 TransactionSynchronizationManager.BindResource(DbProvider, conHolder);
                 txObject.ConnectionHolder = conHolder;
@@ -930,19 +921,13 @@ public class HibernateTxScopeTransactionManager : AbstractPlatformTransactionMan
 
         if (txObject.NewSessionHolder)
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Closing Hibernate Session [{Session}] after transaction", session);
-            }
+            log.LogDebug("Closing Hibernate Session [{Session}] after transaction", session);
 
             SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, SessionFactory);
         }
         else
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Not closing pre-bound Hibernate Session [{Session}] after transaction", session);
-            }
+            log.LogDebug("Not closing pre-bound Hibernate Session [{Session}] after transaction", session);
 
             if (txObject.SessionHolder.AssignedPreviousFlushMode)
             {
@@ -1096,12 +1081,9 @@ public class HibernateTxScopeTransactionManager : AbstractPlatformTransactionMan
             if (sfDbProvider != null)
             {
                 // Use the SessionFactory's DataSource for exposing transactions to ADO.NET code.
-                if (log.IsEnabled(LogLevel.Information))
-                {
-                    log.LogInformation("Derived DbProvider [{ProductName}" +
-                                       "] of Hibernate SessionFactory for HibernateTransactionManager",
-                                       sfDbProvider.DbMetadata.ProductName);
-                }
+                log.LogInformation("Derived DbProvider [{ProductName}" +
+                                   "] of Hibernate SessionFactory for HibernateTransactionManager",
+                                   sfDbProvider.DbMetadata.ProductName);
 
                 DbProvider = sfDbProvider;
             }

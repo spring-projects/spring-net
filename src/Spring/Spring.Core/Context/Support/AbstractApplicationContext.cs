@@ -239,10 +239,7 @@ public abstract class AbstractApplicationContext
 
         GC.SuppressFinalize(this);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Closing application context [{ContextName}].", Name);
-        }
+        log.LogDebug("Closing application context [{ContextName}].", Name);
 
         // Closed event is raised before destroying objectfactory to enable registered IApplicationEventListeners
         // to handle the event before they get disposed.
@@ -585,10 +582,7 @@ public abstract class AbstractApplicationContext
             InvokeObjectFactoryPostProcessors(nonOrderedPostProcessors, SafeGetObjectFactory());
         }
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("processed {FactoryProcessorCount} IFactoryObjectPostProcessors defined in application context [{ContextName}].", factoryProcessorNames.Count, Name);
-        }
+        log.LogDebug("processed {FactoryProcessorCount} IFactoryObjectPostProcessors defined in application context [{ContextName}].", factoryProcessorNames.Count, Name);
     }
 
     protected virtual void InvokePriorityOrderedObjectFactoryPostProcessors(
@@ -648,10 +642,7 @@ public abstract class AbstractApplicationContext
             SafeGetObjectFactory().AddObjectPostProcessor(objectPostProcessor);
         }
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("processed {ObjectProcessorCount} IObjectPostProcessors defined in application context [{ContextName}].", objectProcessors.Count, Name);
-        }
+        log.LogDebug("processed {ObjectProcessorCount} IObjectPostProcessors defined in application context [{ContextName}].", objectProcessors.Count, Name);
     }
 
     /// <summary>
@@ -686,24 +677,18 @@ public abstract class AbstractApplicationContext
             {
                 _eventRegistry = new EventRegistry();
 
-                if (log.IsEnabled(LogLevel.Warning))
-                {
-                    log.LogWarning(
-                        "Found object in context named '{EventRegistryObjectName}' : this name " +
-                        "is typically reserved for IEventRegistry objects. " +
-                        "Falling back to default '{EventRegistry}'.",
-                        EventRegistryObjectName, EventRegistry);
-                }
+                log.LogWarning(
+                    "Found object in context named '{EventRegistryObjectName}' : this name " +
+                    "is typically reserved for IEventRegistry objects. " +
+                    "Falling back to default '{EventRegistry}'.",
+                    EventRegistryObjectName, EventRegistry);
             }
         }
         else
         {
             _eventRegistry = new EventRegistry();
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("No IEventRegistry found with name '{EventRegistryObjectName}' : using default '{EventRegistry}'.", EventRegistryObjectName, EventRegistry);
-            }
+            log.LogDebug("No IEventRegistry found with name '{EventRegistryObjectName}' : using default '{EventRegistry}'.", EventRegistryObjectName, EventRegistry);
         }
 
         var interestedParties = GetObjects<IEventRegistryAware>(true, false).Values;
@@ -764,24 +749,18 @@ public abstract class AbstractApplicationContext
                     }
                 }
 
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug("Using MessageSource [{MessageSource}]", MessageSource);
-                }
+                log.LogDebug("Using MessageSource [{MessageSource}]", MessageSource);
             }
             else
             {
                 _messageSource = new DelegatingMessageSource(
                     GetInternalParentMessageSource());
 
-                if (log.IsEnabled(LogLevel.Warning))
-                {
-                    log.LogWarning(
-                        "Found object in context named '{MessageSourceObjectName}' : this name " +
-                        "is typically reserved for IMessageSource objects. " +
-                        "Falling back to default '{MessageSource}'.",
-                        MessageSourceObjectName, MessageSource);
-                }
+                log.LogWarning(
+                    "Found object in context named '{MessageSourceObjectName}' : this name " +
+                    "is typically reserved for IMessageSource objects. " +
+                    "Falling back to default '{MessageSource}'.",
+                    MessageSourceObjectName, MessageSource);
             }
         }
         else if (ParentContext != null)
@@ -790,24 +769,18 @@ public abstract class AbstractApplicationContext
                 GetInternalParentMessageSource());
             SafeGetObjectFactory().RegisterSingleton(MessageSourceObjectName, _messageSource);
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug(
-                    "No message source found in the current context: using parent context's message source '{MessageSource}'.",
-                    MessageSource);
-            }
+            log.LogDebug(
+                "No message source found in the current context: using parent context's message source '{MessageSource}'.",
+                MessageSource);
         }
         else
         {
             _messageSource = new StaticMessageSource();
             SafeGetObjectFactory().RegisterSingleton(MessageSourceObjectName, _messageSource);
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug(
-                    "No IMessageSource found with name '{MessageSourceObjectName}' : using default '{MessageSource}'.",
-                    MessageSourceObjectName, MessageSource);
-            }
+            log.LogDebug(
+                "No IMessageSource found with name '{MessageSourceObjectName}' : using default '{MessageSource}'.",
+                MessageSourceObjectName, MessageSource);
         }
     }
 
@@ -857,33 +830,21 @@ public abstract class AbstractApplicationContext
 
             OnPreRefresh();
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("ApplicationContext Refresh: Refreshing object factory ");
-            }
+            log.LogDebug("ApplicationContext Refresh: Refreshing object factory ");
 
             RefreshObjectFactory();
 
             IConfigurableListableObjectFactory objectFactory = ObjectFactory;
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("ApplicationContext Refresh: Registering well-known processors and objects");
-            }
+            log.LogDebug("ApplicationContext Refresh: Registering well-known processors and objects");
 
             PrepareObjectFactory(objectFactory);
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("ApplicationContext Refresh: Custom post processing object factory");
-            }
+            log.LogDebug("ApplicationContext Refresh: Custom post processing object factory");
 
             PostProcessObjectFactory(objectFactory);
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("ApplicationContext Refresh: Post processing object factory using pre-registered processors");
-            }
+            log.LogDebug("ApplicationContext Refresh: Post processing object factory using pre-registered processors");
 
             if (log.IsEnabled(LogLevel.Debug))
             {
@@ -893,10 +854,7 @@ public abstract class AbstractApplicationContext
                     Name);
             }
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("ApplicationContext Refresh: Post processing object factory using defined processors");
-            }
+            log.LogDebug("ApplicationContext Refresh: Post processing object factory using defined processors");
 
             InvokeObjectFactoryPostProcessors(objectFactory);
 
@@ -908,19 +866,13 @@ public abstract class AbstractApplicationContext
 
             OnRefresh();
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("ApplicationContext Refresh: Preinstantiating singletons");
-            }
+            log.LogDebug("ApplicationContext Refresh: Preinstantiating singletons");
 
             objectFactory.PreInstantiateSingletons();
 
             OnPostRefresh();
 
-            if (log.IsEnabled(LogLevel.Information))
-            {
-                log.LogInformation("ApplicationContext Refresh: Completed");
-            }
+            log.LogInformation("ApplicationContext Refresh: Completed");
         }
     }
 
@@ -2333,10 +2285,7 @@ public abstract class AbstractApplicationContext
     /// <seealso cref="Spring.Context.IApplicationEventPublisher.PublishEvent"/>
     public void PublishEvent(object sender, ApplicationEventArgs e)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Publishing event in context [{ContextName}] : {Event}", Name, e);
-        }
+        log.LogDebug("Publishing event in context [{ContextName}] : {Event}", Name, e);
 
         OnContextEvent(sender, e);
 
@@ -2367,12 +2316,9 @@ public abstract class AbstractApplicationContext
         {
             if (_objectFactory.ObjectPostProcessorCount < _objectPostProcessorTargetCount)
             {
-                if (log.IsEnabled(LogLevel.Information))
-                {
-                    log.LogInformation(
-                        "Object '{ObjectName}' is not eligible for being processed by all " +
-                        "IObjectPostProcessors (for example: not eligible for auto-proxying).", objectName);
-                }
+                log.LogInformation(
+                    "Object '{ObjectName}' is not eligible for being processed by all " +
+                    "IObjectPostProcessors (for example: not eligible for auto-proxying).", objectName);
             }
 
             return obj;

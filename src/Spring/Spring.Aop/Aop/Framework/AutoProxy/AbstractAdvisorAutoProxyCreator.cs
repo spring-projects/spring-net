@@ -172,10 +172,7 @@ public abstract class AbstractAdvisorAutoProxyCreator : AbstractAutoProxyCreator
         {
             if (candidate is IIntroductionAdvisor && AopUtils.CanApply(candidate, targetType, null))
             {
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Candidate advisor [{Advisor}] accepted for targetType [{TargetType}]", candidate, targetType);
-                }
+                logger.LogInformation("Candidate advisor [{Advisor}] accepted for targetType [{TargetType}]", candidate, targetType);
 
                 eligibleAdvisors.Add(candidate);
             }
@@ -188,19 +185,13 @@ public abstract class AbstractAdvisorAutoProxyCreator : AbstractAutoProxyCreator
 
             if (AopUtils.CanApply(candidate, targetType, null, hasIntroductions))
             {
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Candidate advisor [{Advisor}] accepted for targetType [{TargetType}]", candidate, targetType);
-                }
+                logger.LogInformation("Candidate advisor [{Advisor}] accepted for targetType [{TargetType}]", candidate, targetType);
 
                 eligibleAdvisors.Add(candidate);
             }
             else
             {
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Candidate advisor [{Advisor}] rejected for targetType [{TargetType}]", candidate, targetType);
-                }
+                logger.LogInformation("Candidate advisor [{Advisor}] rejected for targetType [{TargetType}]", candidate, targetType);
             }
         }
 

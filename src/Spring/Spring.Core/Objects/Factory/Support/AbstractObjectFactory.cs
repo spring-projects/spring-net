@@ -874,10 +874,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
         // it's a normal object ?
         if (!ObjectUtils.IsAssignable(typeof(IFactoryObject), instance))
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Calling code asked for normal instance for name '{CanonicalName}'.", canonicalName);
-            }
+            log.LogDebug("Calling code asked for normal instance for name '{CanonicalName}'.", canonicalName);
 
             return instance;
         }
@@ -894,10 +891,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
             return instance;
         }
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Object with name '{CanonicalName}' is a factory object.", canonicalName);
-        }
+        log.LogDebug("Object with name '{CanonicalName}' is a factory object.", canonicalName);
 
         object resultInstance = null;
 
@@ -908,10 +902,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
 
         if (resultInstance == null)
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Dereferencing Object with name '{CanonicalName}'", canonicalName);
-            }
+            log.LogDebug("Dereferencing Object with name '{CanonicalName}'", canonicalName);
 
             // return object instance from factory...
             IFactoryObject factory = (IFactoryObject) instance;
@@ -950,10 +941,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
         }
         else
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Returning factory product from cache for Object with name '{CanonicalName}'", canonicalName);
-            }
+            log.LogDebug("Returning factory product from cache for Object with name '{CanonicalName}'", canonicalName);
         }
 
         return resultInstance;
@@ -2329,10 +2317,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
             object sharedInstance = singletonCache[objectName];
             if (sharedInstance == null)
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug("Creating shared instance of singleton object '{ObjectName}'", objectName);
-                }
+                log.LogDebug("Creating shared instance of singleton object '{ObjectName}'", objectName);
 
                 BeforeSingletonCreation(objectName);
                 try
@@ -2346,10 +2331,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
 
                 AddSingleton(objectName, sharedInstance);
 
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug("Cached shared instance of singleton object '{ObjectName}'", objectName);
-                }
+                log.LogDebug("Cached shared instance of singleton object '{ObjectName}'", objectName);
             }
 
             return sharedInstance;
@@ -2375,10 +2357,7 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
     /// </summary>
     public virtual void Dispose()
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Destroying singletons in factory [{Factory}].", this);
-        }
+        log.LogDebug("Destroying singletons in factory [{Factory}].", this);
 
         prototypesInCreation.Dispose();
 
@@ -2532,18 +2511,12 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
 
         if (name == alias)
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Ignoring attempt to Register alias '{Alias}' for object with name '{ObjectName}' because name and alias would be the same value.", alias, name);
-            }
+            log.LogDebug("Ignoring attempt to Register alias '{Alias}' for object with name '{ObjectName}' because name and alias would be the same value.", alias, name);
 
             return;
         }
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Registering alias '{Alias}' for object with name '{ObjectName}'.", alias, name);
-        }
+        log.LogDebug("Registering alias '{Alias}' for object with name '{ObjectName}'.", alias, name);
 
         object registeredName = aliasMap[alias];
         if (registeredName != null)

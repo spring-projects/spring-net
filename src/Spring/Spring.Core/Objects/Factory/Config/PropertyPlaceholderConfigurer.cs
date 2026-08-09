@@ -291,11 +291,8 @@ public class PropertyPlaceholderConfigurer : PropertyResourceConfigurer
                 {
                     resolvedValue = ParseString(properties, resolvedValue, visitedPlaceholders);
 
-                    if (logger.IsEnabled(LogLevel.Debug))
-                    {
-                        logger.LogDebug(
-                            "Resolving placeholder '{Placeholder}' to '{ResolvedValue}'.", placeholder, resolvedValue);
-                    }
+                    logger.LogDebug(
+                        "Resolving placeholder '{Placeholder}' to '{ResolvedValue}'.", placeholder, resolvedValue);
 
                     strVal = strVal.Substring(0, startIndex) + resolvedValue + strVal.Substring(endIndex + 1);
                     startIndex = strVal.IndexOf(placeholderPrefix, startIndex + resolvedValue.Length);

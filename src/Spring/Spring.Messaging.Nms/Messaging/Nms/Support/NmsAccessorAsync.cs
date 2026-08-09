@@ -112,10 +112,7 @@ public class NmsAccessorAsync : IInitializingObject
 
         if (Tracer.Trace == null)
         {
-            if (logger.IsEnabled(LogLevel.Trace))
-            {
-                logger.LogTrace("Setting Apache.NMS.Tracer.Trace to default implementation that directs output to Common.Logging");
-            }
+            logger.LogTrace("Setting Apache.NMS.Tracer.Trace to default implementation that directs output to Common.Logging");
 
             Tracer.Trace = new NmsTrace();
         }

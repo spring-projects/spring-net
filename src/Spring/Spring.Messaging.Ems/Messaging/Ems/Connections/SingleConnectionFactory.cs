@@ -494,10 +494,7 @@ public class SingleConnectionFactory : IConnectionFactory, IExceptionListener, I
     /// <param name="con">The connection.</param>
     protected virtual void CloseConnection(IConnection con)
     {
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Closing shared EMS Connection: {Connection}", this.target);
-        }
+        LOG.LogDebug("Closing shared EMS Connection: {Connection}", this.target);
 
         try
         {

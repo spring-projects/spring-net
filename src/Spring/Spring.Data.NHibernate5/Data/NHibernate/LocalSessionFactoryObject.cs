@@ -639,10 +639,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
     {
         if (sessionFactory != null)
         {
-            if (log.IsEnabled(LogLevel.Information))
-            {
-                log.LogInformation("Closing Hibernate SessionFactory");
-            }
+            log.LogInformation("Closing Hibernate SessionFactory");
 
             sessionFactory.Close();
         }
@@ -831,10 +828,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
     /// <param name="sql"></param>
     protected virtual void ExecuteSchemaStatement(IDbCommand cmd, string sql)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Executing schema statement: {Sql}", sql);
-        }
+        log.LogDebug("Executing schema statement: {Sql}", sql);
 
         try
         {
@@ -843,10 +837,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
         }
         catch (ADOException ex)
         {
-            if (log.IsEnabled(LogLevel.Warning))
-            {
-                log.LogWarning(ex, "Unsuccessful schema statement: {Sql}", sql);
-            }
+            log.LogWarning(ex, "Unsuccessful schema statement: {Sql}", sql);
         }
     }
 

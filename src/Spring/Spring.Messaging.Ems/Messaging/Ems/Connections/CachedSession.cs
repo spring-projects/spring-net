@@ -82,19 +82,13 @@ public class CachedSession : IDecoratorSession
             IMessageProducer producer = (IMessageProducer) cachedProducers[destination];
             if (producer != null)
             {
-                if (LOG.IsEnabled(LogLevel.Debug))
-                {
-                    LOG.LogDebug("Found cached MessageProducer for destination [{Destination}]", destination);
-                }
+                LOG.LogDebug("Found cached MessageProducer for destination [{Destination}]", destination);
             }
             else
             {
                 producer = target.CreateProducer(destination);
 
-                if (LOG.IsEnabled(LogLevel.Debug))
-                {
-                    LOG.LogDebug("Creating cached MessageProducer for destination [{Destination}]", destination);
-                }
+                LOG.LogDebug("Creating cached MessageProducer for destination [{Destination}]", destination);
 
                 cachedProducers.Add(destination, producer);
             }
@@ -161,10 +155,7 @@ public class CachedSession : IDecoratorSession
         // Allow for multiple close calls...
         if (!sessionList.Contains(this))
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Returning cached Session: {TargetSession}", target);
-            }
+            LOG.LogDebug("Returning cached Session: {TargetSession}", target);
 
             sessionList.Add(this); //add to end of linked list.
         }
@@ -172,10 +163,7 @@ public class CachedSession : IDecoratorSession
 
     private void PhysicalClose()
     {
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Closing cached Session: {TargetSession}", this.target);
-        }
+        LOG.LogDebug("Closing cached Session: {TargetSession}", this.target);
 
         // Explicitly close all MessageProducers and MessageConsumers that
         // this Session happens to cache...
@@ -290,10 +278,7 @@ public class CachedSession : IDecoratorSession
         IMessageConsumer consumer = (IMessageConsumer) cachedConsumers[cacheKey];
         if (consumer != null)
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Found cached EMS MessageConsumer for destination [{Destination}]: {Consumer}", destination, consumer);
-            }
+            LOG.LogDebug("Found cached EMS MessageConsumer for destination [{Destination}]: {Consumer}", destination, consumer);
         }
         else
         {
@@ -308,10 +293,7 @@ public class CachedSession : IDecoratorSession
                 consumer = target.CreateConsumer(destination, selector);
             }
 
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Creating cached EMS MessageConsumer for destination [{Destination}]: {Consumer}", destination, consumer);
-            }
+            LOG.LogDebug("Creating cached EMS MessageConsumer for destination [{Destination}]: {Consumer}", destination, consumer);
 
             cachedConsumers[cacheKey] = consumer;
         }

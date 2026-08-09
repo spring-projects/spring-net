@@ -235,10 +235,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
 
         if (IsInfrastructureType(objectType, objectName))
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Did not attempt to autoproxy infrastructure type [{ObjectType}]", objectType);
-            }
+            logger.LogDebug("Did not attempt to autoproxy infrastructure type [{ObjectType}]", objectType);
 
             nonAdvisedObjects.Add(cacheKey);
             return obj;
@@ -246,10 +243,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
 
         if (ShouldSkip(objectType, objectName))
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Skipping  type [{ObjectType}]", objectType);
-            }
+            logger.LogDebug("Skipping  type [{ObjectType}]", objectType);
 
             nonAdvisedObjects.Add(cacheKey);
             return obj;
@@ -386,10 +380,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
                 if (ts != null)
                 {
                     // found a match
-                    if (logger.IsEnabled(LogLevel.Information))
-                    {
-                        logger.LogInformation("TargetSourceCreator [{TargetSourceCreator} found custom TargetSource for object with objectName '{ObjectName}'", tsc, name);
-                    }
+                    logger.LogInformation("TargetSourceCreator [{TargetSourceCreator} found custom TargetSource for object with objectName '{ObjectName}'", tsc, name);
 
                     return ts;
                 }
@@ -573,10 +564,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
 
             if (IsInfrastructureType(objectType, objectName))
             {
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug("Did not attempt to autoproxy infrastructure type [{ObjectType}]", objectType);
-                }
+                logger.LogDebug("Did not attempt to autoproxy infrastructure type [{ObjectType}]", objectType);
 
                 nonAdvisedObjects.Add(cacheKey);
                 return null;
@@ -584,10 +572,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
 
             if (ShouldSkip(objectType, objectName))
             {
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug("Skipping  type [{ObjectType}]", objectType);
-                }
+                logger.LogDebug("Skipping  type [{ObjectType}]", objectType);
 
                 nonAdvisedObjects.Add(cacheKey);
                 return null;

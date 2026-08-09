@@ -363,10 +363,7 @@ public class DefaultListableObjectFactory :
                     $"Cannot register object definition [{objectDefinition}] for object '{name}': there's already [{existingDefinition}] bound.");
             }
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Overriding object definition for object '{ObjectName}': replacing [{ExistingDefinition}] with [{ObjectDefinition}].", name, existingDefinition, objectDefinition);
-            }
+            log.LogDebug("Overriding object definition for object '{ObjectName}': replacing [{ExistingDefinition}] with [{ObjectDefinition}].", name, existingDefinition, objectDefinition);
 
             objectDefinitionMap[name] = objectDefinition;
         }
@@ -463,10 +460,7 @@ public class DefaultListableObjectFactory :
     /// <seealso cref="Spring.Objects.Factory.Config.IConfigurableListableObjectFactory.PreInstantiateSingletons"/>
     public void PreInstantiateSingletons()
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Pre-instantiating singletons in factory [{Factory}]", this);
-        }
+        log.LogDebug("Pre-instantiating singletons in factory [{Factory}]", this);
 
         try
         {
@@ -990,10 +984,7 @@ public class DefaultListableObjectFactory :
                     // ignoring this is ok... it indicates a circular reference when autowiring
                     // constructors; we want to find matches other than the currently
                     // created object itself...
-                    if (log.IsEnabled(LogLevel.Debug))
-                    {
-                        log.LogDebug(ex, "Ignoring match to currently created object '{ObjectName}'.", objectName);
-                    }
+                    log.LogDebug(ex, "Ignoring match to currently created object '{ObjectName}'.", objectName);
                 }
                 else
                 {
@@ -1173,10 +1164,7 @@ public class DefaultListableObjectFactory :
                     }
 
                     // Probably contains a placeholder; lets ignore it for type matching purposes.
-                    if (log.IsEnabled(LogLevel.Debug))
-                    {
-                        log.LogDebug(ex, "Ignoring object class loading failure for object '{ObjectName}'", objectName);
-                    }
+                    log.LogDebug(ex, "Ignoring object class loading failure for object '{ObjectName}'", objectName);
                 }
                 catch (ObjectDefinitionStoreException ex)
                 {
@@ -1186,10 +1174,7 @@ public class DefaultListableObjectFactory :
                     }
 
                     // Probably contains a placeholder; lets ignore it for type matching purposes.
-                    if (log.IsEnabled(LogLevel.Debug))
-                    {
-                        log.LogDebug(ex, "Ignoring unresolvable metadata in object definition '{ObjectName}'", objectName);
-                    }
+                    log.LogDebug(ex, "Ignoring unresolvable metadata in object definition '{ObjectName}'", objectName);
                 }
             }
         }

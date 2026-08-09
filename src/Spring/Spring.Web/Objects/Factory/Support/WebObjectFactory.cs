@@ -73,7 +73,7 @@ public class WebObjectFactory : DefaultListableObjectFactory
             {
                 if (s_eventHandlersRegistered) return;
 
-                if (log.IsEnabled(LogLevel.Debug)) log.LogDebug("hooking up event handlers");
+                log.LogDebug("hooking up event handlers");
                 VirtualEnvironment.EndRequest += OnEndRequest;
                 VirtualEnvironment.EndSession += OnEndSession;
 

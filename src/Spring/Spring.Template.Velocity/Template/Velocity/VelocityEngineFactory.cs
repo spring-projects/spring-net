@@ -206,10 +206,7 @@ public class VelocityEngineFactory
         // Load config file if set.
         if (configLocation != null)
         {
-            if (log.IsEnabled(LogLevel.Information))
-            {
-                log.LogInformation("Loading Velocity config from [{ConfigLocation}]", configLocation);
-            }
+            log.LogInformation("Loading Velocity config from [{ConfigLocation}]", configLocation);
 
             FillProperties(extendedProperties, configLocation, false);
         }
@@ -333,10 +330,7 @@ public class VelocityEngineFactory
         else
         {
             // Always load via SpringResourceLoader (without hot detection of template changes).
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("File system access not preferred: using SpringResourceLoader");
-            }
+            log.LogDebug("File system access not preferred: using SpringResourceLoader");
 
             InitSpringResourceLoader(velocityEngine, extendedProperties, StringUtils.CollectionToCommaDelimitedString(paths));
         }

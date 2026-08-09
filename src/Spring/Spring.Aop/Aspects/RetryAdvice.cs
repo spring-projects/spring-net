@@ -159,10 +159,7 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
                     }
                     else
                     {
-                        if (log.IsEnabled(LogLevel.Trace))
-                        {
-                            log.LogTrace("Retrying {MethodName}", invocation.Method.Name);
-                        }
+                        log.LogTrace("Retrying {MethodName}", invocation.Method.Name);
 
                         callContextDictionary["n"] = numAttempts;
                         Sleep(retryExceptionHandler, callContextDictionary, sleepHandler);

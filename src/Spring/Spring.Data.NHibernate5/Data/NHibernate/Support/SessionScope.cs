@@ -422,7 +422,7 @@ public class SessionScope : IDisposable
         /// </summary>
         public LazySessionHolder(SessionScope owner)
         {
-            if (log.IsEnabled(LogLevel.Debug)) log.LogDebug("Created LazySessionHolder");
+            log.LogDebug("Created LazySessionHolder");
             this.owner = owner;
         }
 
@@ -433,7 +433,7 @@ public class SessionScope : IDisposable
         {
             if (session == null)
             {
-                if (log.IsEnabled(LogLevel.Debug)) log.LogDebug("session instance requested - opening new session");
+                log.LogDebug("session instance requested - opening new session");
                 session = owner.DoOpenSession();
                 AddSession(session);
             }
@@ -452,7 +452,7 @@ public class SessionScope : IDisposable
                 SessionFactoryUtils.CloseSession(tmpSession);
             }
 
-            if (log.IsEnabled(LogLevel.Debug)) log.LogDebug("Closed LazySessionHolder");
+            log.LogDebug("Closed LazySessionHolder");
         }
     }
 }

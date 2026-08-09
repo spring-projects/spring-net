@@ -133,10 +133,7 @@ public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, 
         MessageQueue mq = MessageQueueFactory.CreateMessageQueue(MessageQueueObjectName);
         try
         {
-            if (LOG.IsEnabled(LogLevel.Information))
-            {
-                LOG.LogInformation("Sending message with id = [{MessageId}] to queue [{Path}].", message.Id, mq.Path);
-            }
+            LOG.LogInformation("Sending message with id = [{MessageId}] to queue [{Path}].", message.Id, mq.Path);
 
             ProcessExceptionalMessage(message);
             mq.Send(message, messageQueueTransaction);

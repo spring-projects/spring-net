@@ -92,10 +92,7 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
     protected override bool DoReceiveAndExecuteUsingPlatformTransactionManager(MessageQueue mq,
         ITransactionStatus status)
     {
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Executing DoReceiveAndExecuteUsingTxScopeTransactionManager");
-        }
+        LOG.LogDebug("Executing DoReceiveAndExecuteUsingTxScopeTransactionManager");
 
         //We are sure to be talking to a second resource manager, so avoid going through
         //the promotable transaction and force a distributed transaction right from the start.
@@ -112,10 +109,7 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
             {
                 //expected to occur occasionally
 
-                if (LOG.IsEnabled(LogLevel.Trace))
-                {
-                    LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
-                }
+                LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
 
                 status.SetRollbackOnly();
                 return false; // no more peeking unless this is the last listener thread
@@ -135,10 +129,7 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
 
         if (message == null)
         {
-            if (LOG.IsEnabled(LogLevel.Trace))
-            {
-                LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
-            }
+            LOG.LogTrace("Message recieved is null from Queue = [{Path}]", mq.Path);
 
             status.SetRollbackOnly();
             return false; // no more peeking unless this is the last listener thread
@@ -146,10 +137,7 @@ public class DistributedTxMessageListenerContainer : AbstractTransactionalMessag
 
         try
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
-            }
+            LOG.LogDebug("Received message [{MessageId}] on queue [{Path}]", message.Id, mq.Path);
 
             MessageReceived(message);
             if (DistributedTransactionExceptionHandler != null)

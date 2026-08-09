@@ -207,7 +207,7 @@ public sealed class ObjectUtils
     {
         AssertUtils.ArgumentNotNull(constructor, "constructor");
 
-        if (log.IsEnabled(LogLevel.Trace)) log.LogTrace("instantiating type [{DeclaringType}] using constructor [{Constructor}]", constructor.DeclaringType, constructor);
+        log.LogTrace("instantiating type [{DeclaringType}] using constructor [{Constructor}]", constructor.DeclaringType, constructor);
 
         if (constructor.DeclaringType.IsInterface)
         {

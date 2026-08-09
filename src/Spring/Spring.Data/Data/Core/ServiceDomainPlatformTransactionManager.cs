@@ -138,12 +138,9 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
         SimpleServiceConfig serviceConfig = CreateServiceConfig(definition);
         //The context is created when we call Enter.
         serviceDomainTxObject.ServiceDomainAdapter.Enter(serviceConfig);
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Context created. TransactionId = {TransactionId}"
-                                                             + ", ActivityId = {ActivityId}",
-                                                             ContextUtil.TransactionId, ContextUtil.ActivityId);
-        }
+        log.LogDebug("Context created. TransactionId = {TransactionId}"
+                                                     + ", ActivityId = {ActivityId}",
+                                                     ContextUtil.TransactionId, ContextUtil.ActivityId);
     }
 
     protected override object DoSuspend(object transaction)
@@ -188,10 +185,7 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
         switch (definition.TransactionIsolationLevel)
         {
             case System.Data.IsolationLevel.Chaos:
-                if (log.IsEnabled(LogLevel.Information))
-                {
-                    log.LogInformation("IsolationLevel Chaos does not have a direct counterpart in EnterpriseServices, using Any");
-                }
+                log.LogInformation("IsolationLevel Chaos does not have a direct counterpart in EnterpriseServices, using Any");
 
                 serviceConfig.IsolationLevel = TransactionIsolationLevel.Any;
                 break;
@@ -208,10 +202,7 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
                 serviceConfig.IsolationLevel = TransactionIsolationLevel.Serializable;
                 break;
             case System.Data.IsolationLevel.Snapshot:
-                if (log.IsEnabled(LogLevel.Information))
-                {
-                    log.LogInformation("IsolationLevel Snapshot does not have a direct counterpart in EnterpriseServices, using ReadCommitted.  Introduced in SqlServer 2005.  Consider using System.Transactions for transaction management instead.");
-                }
+                log.LogInformation("IsolationLevel Snapshot does not have a direct counterpart in EnterpriseServices, using ReadCommitted.  Introduced in SqlServer 2005.  Consider using System.Transactions for transaction management instead.");
 
                 serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted; //err on the side of consistency
                 break;
@@ -272,10 +263,7 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
             }
 
             TransactionStatus serviceDomainTxstatus = txObject.ServiceDomainAdapter.Leave();
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("ServiceDomain Transaction Status upon leaving ServiceDomain = {TransactionStatus}", serviceDomainTxstatus);
-            }
+            log.LogDebug("ServiceDomain Transaction Status upon leaving ServiceDomain = {TransactionStatus}", serviceDomainTxstatus);
 
             txObject.TransactionStatus = serviceDomainTxstatus;
             if (!globalRollbackOnly && serviceDomainTxstatus == TransactionStatus.Aborted)

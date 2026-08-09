@@ -64,11 +64,8 @@ public class MessageQueueMetadataCache : IApplicationContextAware, IInitializing
                     }
                     else
                     {
-                        if (LOG.IsEnabled(LogLevel.Warning))
-                        {
-                            LOG.LogWarning("Path for MessageQueueFactoryObject named [{ObjectName}" +
-                                           "] is null, so can't cache its metadata.", mqfo.ObjectName);
-                        }
+                        LOG.LogWarning("Path for MessageQueueFactoryObject named [{ObjectName}" +
+                                       "] is null, so can't cache its metadata.", mqfo.ObjectName);
                     }
                 }
                 else

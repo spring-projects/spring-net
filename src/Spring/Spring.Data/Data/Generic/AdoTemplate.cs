@@ -789,10 +789,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
         IResultSetExtractor<T> resultSetExtractor)
     {
         AssertUtils.ArgumentNotNull(cmdText, "cmdText", "CommandText must not be null");
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Executing CommandText [{CommandText}]", cmdText);
-        }
+        LOG.LogDebug("Executing CommandText [{CommandText}]", cmdText);
 
         return Execute<T>(new QueryCallback<T>(this, cmdType, cmdText, resultSetExtractor, null));
     }
@@ -839,10 +836,7 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
     {
         AssertUtils.ArgumentNotNull(cmdText, "cmdText", "CommandText must not be null");
         AssertUtils.ArgumentNotNull(resultSetExtractorDelegate, "resultSetExtractorDelegate", "Result set extractor delegate must not be null");
-        if (LOG.IsEnabled(LogLevel.Debug))
-        {
-            LOG.LogDebug("Executing CommandText [{CommandText}]", cmdText);
-        }
+        LOG.LogDebug("Executing CommandText [{CommandText}]", cmdText);
 
         return Execute<T>(new QueryCallback<T>(this, cmdType, cmdText, resultSetExtractorDelegate, null));
     }

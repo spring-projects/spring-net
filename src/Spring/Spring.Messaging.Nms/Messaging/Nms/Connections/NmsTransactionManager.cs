@@ -176,10 +176,7 @@ public class NmsTransactionManager : AbstractPlatformTransactionManager,
         {
             con = CreateConnection();
             session = CreateSession(con);
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Created NMS transaction on Session [{Session}] from Connection [{Connection}]", session, con);
-            }
+            log.LogDebug("Created NMS transaction on Session [{Session}] from Connection [{Connection}]", session, con);
 
             txObject.ResourceHolder = new NmsResourceHolder(ConnectionFactory, con, session);
             txObject.ResourceHolder.SynchronizedWithTransaction = true;

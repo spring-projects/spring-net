@@ -110,10 +110,7 @@ public class DbProviderFactory
 
                         if (loader.GetResource(DBPROVIDER_ADDITIONAL_RESOURCE_NAME).Exists)
                         {
-                            if (log.IsEnabled(LogLevel.Debug))
-                            {
-                                log.LogDebug("Loading additional DbProviders from {AdditionalResourceName}", DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
-                            }
+                            log.LogDebug("Loading additional DbProviders from {AdditionalResourceName}", DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
 
                             ctx = new XmlApplicationContext(DBPROVIDER_CONTEXTNAME, true, new string[] { DBPROVIDER_DEFAULT_RESOURCE_NAME, DBPROVIDER_ADDITIONAL_RESOURCE_NAME });
                         }

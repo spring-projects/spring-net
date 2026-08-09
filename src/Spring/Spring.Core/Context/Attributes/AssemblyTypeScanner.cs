@@ -171,10 +171,7 @@ public abstract class AssemblyTypeScanner : IAssemblyTypeScanner
             {
                 if (IsCompoundPredicateSatisfiedBy(type))
                 {
-                    if (Logger.IsEnabled(LogLevel.Debug))
-                    {
-                        Logger.LogDebug("Satisfied Type: {FullName}", type.FullName);
-                    }
+                    Logger.LogDebug("Satisfied Type: {FullName}", type.FullName);
 
                     types.Add(type);
                 }
@@ -360,10 +357,7 @@ public abstract class AssemblyTypeScanner : IAssemblyTypeScanner
         {
             if (include(assembly))
             {
-                if (Logger.IsEnabled(LogLevel.Debug))
-                {
-                    Logger.LogDebug("Include Assembly: {FullName}", assembly.FullName);
-                }
+                Logger.LogDebug("Include Assembly: {FullName}", assembly.FullName);
 
                 return true;
             }

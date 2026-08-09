@@ -386,11 +386,8 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
     {
         if (session != null)
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Listener method returned result [{Result}" +
-                                "] - generating response message for it", result);
-            }
+            logger.LogDebug("Listener method returned result [{Result}" +
+                            "] - generating response message for it", result);
 
             IMessage response = BuildMessage(session, result);
             PostProcessResponse(request, response);
@@ -399,11 +396,8 @@ public class MessageListenerAdapter : IMessageListener, ISessionAwareMessageList
         }
         else
         {
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Listener method returned result [{Result}" +
-                                "]: not generating response message for it because of no NMS ISession given", result);
-            }
+            logger.LogDebug("Listener method returned result [{Result}" +
+                            "]: not generating response message for it because of no NMS ISession given", result);
         }
     }
 

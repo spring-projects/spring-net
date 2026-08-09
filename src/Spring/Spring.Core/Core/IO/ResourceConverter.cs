@@ -171,12 +171,9 @@ public class ResourceConverter : TypeConverter
             }
             else
             {
-                if (_log.IsEnabled(LogLevel.Warning))
-                {
-                    _log.LogWarning(
-                        "Could not resolve placeholder '{Expression}' in resource path " +
-                        "'{Path}' as an environment variable.", expression, path);
-                }
+                _log.LogWarning(
+                    "Could not resolve placeholder '{Expression}' in resource path " +
+                    "'{Path}' as an environment variable.", expression, path);
             }
         }
 

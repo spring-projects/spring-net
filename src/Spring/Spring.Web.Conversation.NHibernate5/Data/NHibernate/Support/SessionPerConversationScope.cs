@@ -324,17 +324,11 @@ public class SessionPerConversationScope : IDisposable
                 //reconnect existing one.
                 if (conversation.DbProvider != null)
                 {
-                    if (log.IsEnabled(LogLevel.Debug))
-                    {
-                        log.LogDebug("DoOpenSession: Conversation has a DbProvider: Id='{ConversationId}'", conversation.Id);
-                    }
+                    log.LogDebug("DoOpenSession: Conversation has a DbProvider: Id='{ConversationId}'", conversation.Id);
 
                     if (!conversation.RootSessionPerConversation.IsConnected)
                     {
-                        if (log.IsEnabled(LogLevel.Debug))
-                        {
-                            log.LogDebug("DoOpenSession: Conversation is not Connected: Id='{ConversationId}'", conversation.Id);
-                        }
+                        log.LogDebug("DoOpenSession: Conversation is not Connected: Id='{ConversationId}'", conversation.Id);
 
                         DbConnection connection = (DbConnection) conversation.DbProvider.CreateConnection();
                         connection.Open();
@@ -343,18 +337,12 @@ public class SessionPerConversationScope : IDisposable
                     }
                     else
                     {
-                        if (log.IsEnabled(LogLevel.Debug))
-                        {
-                            log.LogDebug("DoOpenSession: Conversation is already Connected: Id='{ConversationId}'", conversation.Id);
-                        }
+                        log.LogDebug("DoOpenSession: Conversation is already Connected: Id='{ConversationId}'", conversation.Id);
                     }
                 }
                 else
                 {
-                    if (log.IsEnabled(LogLevel.Debug))
-                    {
-                        log.LogDebug("DoOpenSession: Conversation has NO DbProvider: Id='{ConversationId}'", conversation.Id);
-                    }
+                    log.LogDebug("DoOpenSession: Conversation has NO DbProvider: Id='{ConversationId}'", conversation.Id);
 
                     conversation.RootSessionPerConversation.Reconnect();
                 }
@@ -387,10 +375,7 @@ public class SessionPerConversationScope : IDisposable
         /// </summary>
         public LazySessionPerConversationHolder(SessionPerConversationScope owner, IConversationState activeConversation, ICollection<IConversationState> allManagedConversation)
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Created LazyReconnectableSessionHolder");
-            }
+            log.LogDebug("Created LazyReconnectableSessionHolder");
 
             this.owner = owner;
             this.activeConversation = activeConversation;
@@ -407,10 +392,7 @@ public class SessionPerConversationScope : IDisposable
             if (activeConversation.RootSessionPerConversation == null
                 || !activeConversation.RootSessionPerConversation.IsConnected)
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug("EnsureInitialized: 'session-per-conversation' instance requested - opening new session");
-                }
+                log.LogDebug("EnsureInitialized: 'session-per-conversation' instance requested - opening new session");
 
                 owner.DoOpenSession(activeConversation);
                 AddSession(activeConversation.RootSessionPerConversation);
@@ -428,18 +410,12 @@ public class SessionPerConversationScope : IDisposable
             activeConversation = null;
             allManagedConversation = null;
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("CloseAll LazySessionPerConversationHolder");
-            }
+            log.LogDebug("CloseAll LazySessionPerConversationHolder");
         }
 
         private void CloseConversation(IConversationState conversation)
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("CloseConversation: Id='{ConversationId}'", conversation.Id);
-            }
+            log.LogDebug("CloseConversation: Id='{ConversationId}'", conversation.Id);
 
             if (conversation.RootSessionPerConversation != null)
             {
@@ -462,10 +438,7 @@ public class SessionPerConversationScope : IDisposable
                 RemoveSession(tmpSession);
             }
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Closed LazySessionPerConversationHolder");
-            }
+            log.LogDebug("Closed LazySessionPerConversationHolder");
         }
     }
 }

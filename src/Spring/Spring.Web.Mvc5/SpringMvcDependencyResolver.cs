@@ -116,10 +116,7 @@ public class SpringMvcDependencyResolver : IDependencyResolver
             {
                 _nonResolvableTypes.Add(serviceType);
 
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug("Could not find service from Spring container with type: {ServiceType}", serviceType);
-                }
+                logger.LogDebug("Could not find service from Spring container with type: {ServiceType}", serviceType);
             }
         }
 

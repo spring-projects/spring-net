@@ -261,10 +261,7 @@ public class MultiDelegatingDbProvider : IDbProvider, IInitializingObject
         //Fall back to default if available
         if (defaultDbProvider != null)
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("No DbProvider defined in thread local storage, falling back to use DefaultDbProvider.");
-            }
+            LOG.LogDebug("No DbProvider defined in thread local storage, falling back to use DefaultDbProvider.");
 
             return defaultDbProvider;
         }

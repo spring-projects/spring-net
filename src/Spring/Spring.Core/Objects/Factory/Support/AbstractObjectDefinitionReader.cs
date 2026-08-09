@@ -210,10 +210,7 @@ public abstract class AbstractObjectDefinitionReader : IObjectDefinitionReader
 
         int loadCount = LoadObjectDefinitions(resource);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Loaded {LoadCount} object definitions from location [{Location}]", loadCount, location);
-        }
+        log.LogDebug("Loaded {LoadCount} object definitions from location [{Location}]", loadCount, location);
 
         return loadCount;
     }

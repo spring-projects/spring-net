@@ -155,10 +155,7 @@ public sealed class ContextRegistry
             instance.contextMap[context.Name] = context;
             context.ContextEvent += OnContextEvent;
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Registering context '{Context}' under name '{ContextName}'.", context, context.Name);
-            }
+            log.LogDebug("Registering context '{Context}' under name '{ContextName}'.", context, context.Name);
 
             if (rootContextName == null)
             {
@@ -268,11 +265,8 @@ public sealed class ContextRegistry
                         name));
                 }
 
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug(
-                        "Returning context '{Context}' registered under name '{ContextName}'.", ctx, name);
-                }
+                log.LogDebug(
+                    "Returning context '{Context}' registered under name '{ContextName}'.", ctx, name);
 
                 return ctx;
             }

@@ -301,11 +301,8 @@ public abstract class AbstractTransactionalSpringContextTests : AbstractDependen
         ++this.transactionsStarted;
         this.complete = !this.defaultRollback;
 
-        if (logger.IsEnabled(LogLevel.Information))
-        {
-            logger.LogInformation("Began transaction ({TransactionsStarted}): transaction manager [" +
-                                  "{TransactionManager}]; default rollback = {DefaultRollback}",
-                                  this.transactionsStarted, this.transactionManager, this.defaultRollback);
-        }
+        logger.LogInformation("Began transaction ({TransactionsStarted}): transaction manager [" +
+                              "{TransactionManager}]; default rollback = {DefaultRollback}",
+                              this.transactionsStarted, this.transactionManager, this.defaultRollback);
     }
 }

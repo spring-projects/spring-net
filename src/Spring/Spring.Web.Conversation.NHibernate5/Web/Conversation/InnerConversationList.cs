@@ -57,7 +57,7 @@ public class InnerConversationList : IList<IConversationState>, IList
     /// <param name="itemAdded"></param>
     private void PreAddProcessor(IConversationState itemAdded)
     {
-        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("PreAddProcessor: added={AddedConversation} into {OwnerConversation}", itemAdded, this.conversationOwner);
+        LOG.LogDebug("PreAddProcessor: added={AddedConversation} into {OwnerConversation}", itemAdded, this.conversationOwner);
         this.ValidateCircularDependency(itemAdded);
         if (itemAdded.ParentConversation != null && itemAdded.ParentConversation != this.conversationOwner)
         {
@@ -71,7 +71,7 @@ public class InnerConversationList : IList<IConversationState>, IList
     /// </summary>
     private void PostAddProcessor(IConversationState itemAdded)
     {
-        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("PostAddProcessor: added={AddedConversation} into {OwnerConversation}", itemAdded, this.conversationOwner);
+        LOG.LogDebug("PostAddProcessor: added={AddedConversation} into {OwnerConversation}", itemAdded, this.conversationOwner);
         if (itemAdded.ParentConversation == null)
         {
             itemAdded.ParentConversation = this.conversationOwner;
@@ -80,7 +80,7 @@ public class InnerConversationList : IList<IConversationState>, IList
 
     private void ValidateCircularDependency(IConversationState itemAdded)
     {
-        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("Validating Circular Dependency: added={AddedConversation} into {OwnerConversation}", itemAdded, this.conversationOwner);
+        LOG.LogDebug("Validating Circular Dependency: added={AddedConversation} into {OwnerConversation}", itemAdded, this.conversationOwner);
 
         ICollection<IConversationState> visitedColl = new HashedSet<IConversationState>();
         visitedColl.Add(conversationOwner);

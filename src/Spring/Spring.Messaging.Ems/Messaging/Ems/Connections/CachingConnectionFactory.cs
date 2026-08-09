@@ -233,10 +233,7 @@ public class CachingConnectionFactory : SingleConnectionFactory
         else
         {
             ISession targetSession = CreateSession(con, mode);
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Creating cached Session for mode {Mode}: {TargetSession}", mode, targetSession);
-            }
+            LOG.LogDebug("Creating cached Session for mode {Mode}: {TargetSession}", mode, targetSession);
 
             session = GetCachedSessionWrapper(targetSession, sessionList);
         }

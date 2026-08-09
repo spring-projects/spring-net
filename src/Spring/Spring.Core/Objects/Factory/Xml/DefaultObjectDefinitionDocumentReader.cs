@@ -80,10 +80,7 @@ public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentRe
 
         this.readerContext = readerContext;
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Loading object definitions.");
-        }
+        log.LogDebug("Loading object definitions.");
 
         XmlElement root = doc.DocumentElement;
 
@@ -95,10 +92,7 @@ public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentRe
 
         PostProcessXml(root);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Found {ObjectDefinitionCount} <" + ObjectDefinitionConstants.ObjectElement + "> elements defining objects.", readerContext.Registry.ObjectDefinitionCount);
-        }
+        log.LogDebug("Found {ObjectDefinitionCount} <" + ObjectDefinitionConstants.ObjectElement + "> elements defining objects.", readerContext.Registry.ObjectDefinitionCount);
     }
 
     /// <summary>
@@ -186,10 +180,7 @@ public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentRe
 
             bdHolder = helper.DecorateObjectDefinitionIfRequired(element, bdHolder);
 
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Registering object definition with id '{ObjectName}'.", bdHolder.ObjectName);
-            }
+            log.LogDebug("Registering object definition with id '{ObjectName}'.", bdHolder.ObjectName);
 
             ObjectDefinitionReaderUtils.RegisterObjectDefinition(bdHolder, ReaderContext.Registry);
             // TODO: Send registration event.
@@ -219,11 +210,8 @@ public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentRe
         string location = resource.GetAttribute(ObjectDefinitionConstants.ImportResourceAttribute);
         try
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug(
-                    "Attempting to import object definitions from '{Location}'.", location);
-            }
+            log.LogDebug(
+                "Attempting to import object definitions from '{Location}'.", location);
 
             IResource importResource = ReaderContext.Resource.CreateRelative(location);
             ReaderContext.Reader.LoadObjectDefinitions(importResource);

@@ -303,11 +303,8 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
     {
         if (!AcceptMessagesWhileStopping && !IsRunning)
         {
-            if (logger.IsEnabled(LogLevel.Warning))
-            {
-                logger.LogWarning("Rejecting received message because of the listener container " +
-                                  "having been stopped in the meantime: {EmsMessage}", message);
-            }
+            logger.LogWarning("Rejecting received message because of the listener container " +
+                              "having been stopped in the meantime: {EmsMessage}", message);
 
             RollbackIfNecessary(session);
             throw new MessageRejectedWhileStoppingException();
@@ -494,10 +491,7 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
             if (session.Transacted && IsSessionLocallyTransacted(session))
             {
                 // Transacted session created by this container -> rollback
-                if (logger.IsEnabled(LogLevel.Debug))
-                {
-                    logger.LogDebug("Initiating transaction rollback on application exception");
-                }
+                logger.LogDebug("Initiating transaction rollback on application exception");
 
                 EmsUtils.RollbackIfNecessary(session);
             }

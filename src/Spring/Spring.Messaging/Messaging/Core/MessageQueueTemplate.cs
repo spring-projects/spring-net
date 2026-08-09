@@ -295,12 +295,9 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
                 }
                 else
                 {
-                    if (LOG.IsEnabled(LogLevel.Warning))
-                    {
-                        LOG.LogWarning("The ApplicationContext property has not been set, so the MessageQueueMetadataCache can not be automatically generated.  " +
-                                       "Please explictly set the MessageQueueMetadataCache using the property MetadataCache or set the ApplicationContext property.  " +
-                                       "This will only effect the use of MessageQueueTemplate when publishing to remote queues.");
-                    }
+                    LOG.LogWarning("The ApplicationContext property has not been set, so the MessageQueueMetadataCache can not be automatically generated.  " +
+                                   "Please explictly set the MessageQueueMetadataCache using the property MetadataCache or set the ApplicationContext property.  " +
+                                   "This will only effect the use of MessageQueueTemplate when publishing to remote queues.");
                 }
             }
         }
@@ -532,12 +529,9 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
         }
         else
         {
-            if (LOG.IsEnabled(LogLevel.Warning))
-            {
-                LOG.LogWarning("MetadataCache has not been initialized.  Set the MetadataCache explicitly in standalone usage and/or " +
-                               "configure the MessageQueueTemplate in an ApplicationContext.  If deployed in an ApplicationContext by default " +
-                               "the MetadataCache will automaticaly populated.");
-            }
+            LOG.LogWarning("MetadataCache has not been initialized.  Set the MetadataCache explicitly in standalone usage and/or " +
+                           "configure the MessageQueueTemplate in an ApplicationContext.  If deployed in an ApplicationContext by default " +
+                           "the MetadataCache will automaticaly populated.");
         }
         // Handle assuming these are local queues.
 
@@ -562,10 +556,7 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
     {
         if (transactionToUse != null)
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Sending messsage using externally managed MessageQueueTransction to transactional queue with path [{Path}].", mq.Path);
-            }
+            LOG.LogDebug("Sending messsage using externally managed MessageQueueTransction to transactional queue with path [{Path}].", mq.Path);
 
             mq.Send(msg, transactionToUse);
         }
@@ -598,10 +589,7 @@ public class MessageQueueTemplate : IMessageQueueOperations, IInitializingObject
         }
         else
         {
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                LOG.LogDebug("Sending messsage without MSMQ transaction to non-transactional queue with path [{Path}].", mq.Path);
-            }
+            LOG.LogDebug("Sending messsage without MSMQ transaction to non-transactional queue with path [{Path}].", mq.Path);
 
             //Typical case, non TLS transaction, non-tx queue.
             mq.Send(msg);

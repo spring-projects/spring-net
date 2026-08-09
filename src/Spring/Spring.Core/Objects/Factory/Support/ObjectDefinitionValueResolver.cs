@@ -346,11 +346,8 @@ public class ObjectDefinitionValueResolver
     /// <returns>A reference to another object in the factory.</returns>
     protected virtual object ResolveReference(IObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Resolving reference from property '{ArgumentName}' in object '{ObjectName}' to object '{TargetObjectName}'.",
-                argumentName, name, reference.ObjectName);
-        }
+        log.LogDebug("Resolving reference from property '{ArgumentName}' in object '{ObjectName}' to object '{TargetObjectName}'.",
+            argumentName, name, reference.ObjectName);
 
         try
         {

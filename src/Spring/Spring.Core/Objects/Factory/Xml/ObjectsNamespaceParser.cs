@@ -186,11 +186,8 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
         string location = GetAttributeValue(resource, ObjectDefinitionConstants.ImportResourceAttribute);
         try
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug(
-                    "Attempting to import object definitions from '{Location}'.", location);
-            }
+            log.LogDebug(
+                "Attempting to import object definitions from '{Location}'.", location);
 
             IResource importResource = parserContext.ReaderContext.Resource.CreateRelative(location);
             parserContext.ReaderContext.Reader.LoadObjectDefinitions(importResource);
@@ -287,11 +284,8 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
 
         holder = parserContext.ParserHelper.DecorateObjectDefinitionIfRequired(element, holder);
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug(
-                "Registering object definition with id '{ObjectName}'.", holder.ObjectName);
-        }
+        log.LogDebug(
+            "Registering object definition with id '{ObjectName}'.", holder.ObjectName);
 
         return holder;
     }
@@ -832,10 +826,7 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
         {
             if (StringUtils.HasText(typeAttr))
             {
-                if (log.IsEnabled(LogLevel.Warning))
-                {
-                    log.LogWarning("The 'type' attribute is redundant when the 'name' attribute has been used on a constructor argument element.");
-                }
+                log.LogWarning("The 'type' attribute is redundant when the 'name' attribute has been used on a constructor argument element.");
             }
 
             arguments.AddNamedArgumentValue(nameAttr, val);
@@ -1473,10 +1464,7 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
             }
             catch (ArgumentException ex)
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug(ex, "Error while parsing dependency checking mode : '{Value}' is an invalid value.", value);
-                }
+                log.LogDebug(ex, "Error while parsing dependency checking mode : '{Value}' is an invalid value.", value);
             }
         }
 
@@ -1510,10 +1498,7 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
             }
             catch (ArgumentException ex)
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug(ex, "Error while parsing autowire mode : '{Value}' is an invalid value.", value);
-                }
+                log.LogDebug(ex, "Error while parsing autowire mode : '{Value}' is an invalid value.", value);
             }
         }
 

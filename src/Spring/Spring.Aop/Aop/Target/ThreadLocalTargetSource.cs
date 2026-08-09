@@ -162,10 +162,7 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
     /// <seealso cref="System.IDisposable.Dispose"/>
     public void Dispose()
     {
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Destroying ThreadLocal bindings");
-        }
+        logger.LogDebug("Destroying ThreadLocal bindings");
 
         foreach (object target in _targetSet)
         {

@@ -292,11 +292,8 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     /// </exception>
     protected object ApplyObjectPostProcessorsBeforeInstantiation(Type objectType, string objectName)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Invoking IInstantiationAwareObjectPostProcessors before " +
-                         "the instantiation of '{ObjectName}'.", objectName);
-        }
+        log.LogDebug("Invoking IInstantiationAwareObjectPostProcessors before " +
+                     "the instantiation of '{ObjectName}'.", objectName);
 
         for (var i = 0; i < objectPostProcessors.Count; i++)
         {
@@ -663,20 +660,14 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
                 object o = GetObject(propertyName);
                 properties.Add(propertyName, o);
 
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug(
-                        "Added autowiring by name from object name '{ObjectName}' via property '{PropertyName}' to object named '{AutowiredObjectName}'.",
-                        name, propertyName, propertyName);
-                }
+                log.LogDebug(
+                    "Added autowiring by name from object name '{ObjectName}' via property '{PropertyName}' to object named '{AutowiredObjectName}'.",
+                    name, propertyName, propertyName);
             }
             else
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug(
-                        "Not autowiring property '{PropertyName}' of object '{ObjectName}' by name: no matching object found.", propertyName, name);
-                }
+                log.LogDebug(
+                    "Not autowiring property '{PropertyName}' of object '{ObjectName}' by name: no matching object found.", propertyName, name);
             }
         }
     }
@@ -735,11 +726,8 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
             }
             else
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug("Not autowiring property '{PropertyName}' of object '{ObjectName}': no matching object found.",
-                        propertyName, name);
-                }
+                log.LogDebug("Not autowiring property '{PropertyName}' of object '{ObjectName}': no matching object found.",
+                    propertyName, name);
             }
         }
     }
@@ -1263,21 +1251,15 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     {
         if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IInitializingObject), target))
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Calling AfterPropertiesSet() on object with name '{ObjectName}'.", name);
-            }
+            log.LogDebug("Calling AfterPropertiesSet() on object with name '{ObjectName}'.", name);
 
             ((IInitializingObject) target).AfterPropertiesSet();
         }
 
         if (StringUtils.HasText(definition.InitMethodName))
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Calling custom init method '{InitMethodName}' on object with name '{ObjectName}'.",
-                    definition.InitMethodName, name);
-            }
+            log.LogDebug("Calling custom init method '{InitMethodName}' on object with name '{ObjectName}'.",
+                definition.InitMethodName, name);
 
             try
             {
@@ -1635,11 +1617,8 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     /// <returns>A reference to another object in the factory.</returns>
     protected object ResolveReference(IConfigurableObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Resolving reference from property '{ArgumentName}' in object '{ObjectName}' to object '{ReferencedObjectName}'.",
-                argumentName, name, reference.ObjectName);
-        }
+        log.LogDebug("Resolving reference from property '{ArgumentName}' in object '{ObjectName}' to object '{ReferencedObjectName}'.",
+            argumentName, name, reference.ObjectName);
 
         try
         {
@@ -1764,30 +1743,21 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     {
         object instance = wrapper.WrappedInstance;
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Configuring object using definition '{ObjectName}'", name);
-        }
+        log.LogDebug("Configuring object using definition '{ObjectName}'", name);
 
         PopulateObject(name, definition, wrapper);
         WireEvents(name, definition, wrapper);
 
         if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IObjectNameAware), instance))
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Setting the name property on the IObjectNameAware object '{ObjectName}'.", name);
-            }
+            log.LogDebug("Setting the name property on the IObjectNameAware object '{ObjectName}'.", name);
 
             ((IObjectNameAware) instance).ObjectName = name;
         }
 
         if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IObjectFactoryAware), instance))
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Setting the ObjectFactory property on the IObjectFactoryAware object '{ObjectName}'.", name);
-            }
+            log.LogDebug("Setting the ObjectFactory property on the IObjectFactoryAware object '{ObjectName}'.", name);
 
             ((IObjectFactoryAware) instance).ObjectFactory = this;
         }
@@ -1900,10 +1870,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     /// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor.PostProcessBeforeInitialization"/>
     public virtual object ApplyObjectPostProcessorsBeforeInitialization(object instance, string name)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Invoking IObjectPostProcessors before initialization of object '{ObjectName}'", name);
-        }
+        log.LogDebug("Invoking IObjectPostProcessors before initialization of object '{ObjectName}'", name);
 
         object result = instance;
         for (var i = 0; i < objectPostProcessors.Count; i++)
@@ -1942,10 +1909,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
     /// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor.PostProcessAfterInitialization"/>
     public virtual object ApplyObjectPostProcessorsAfterInitialization(object instance, string name)
     {
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            log.LogDebug("Invoking IObjectPostProcessors after initialization of object '{ObjectName}'", name);
-        }
+        log.LogDebug("Invoking IObjectPostProcessors after initialization of object '{ObjectName}'", name);
 
         object result = instance;
         for (var i = 0; i < objectPostProcessors.Count; i++)

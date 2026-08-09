@@ -97,8 +97,7 @@ public class ComponentScanObjectDefinitionParser : IObjectDefinitionParser
 
         foreach (var baseAssembly in baseAssemblies.Split(','))
         {
-            if (Logger.IsEnabled(LogLevel.Debug))
-                Logger.LogDebug("Start With Assembly Filter: {BaseAssembly}", baseAssembly);
+            Logger.LogDebug("Start With Assembly Filter: {BaseAssembly}", baseAssembly);
 
             scanner.WithAssemblyFilter(assy => assy.FullName.StartsWith(baseAssembly));
         }

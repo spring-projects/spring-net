@@ -25,10 +25,7 @@ public abstract class JndiLocatorSupport : JndiAccessor
     protected virtual object Lookup(string jndiName)
     {
         object jndiObject = Lookup(jndiName, null);
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Located object with JNDI name [{JndiName}]", jndiName);
-        }
+        logger.LogDebug("Located object with JNDI name [{JndiName}]", jndiName);
 
         return jndiObject;
     }
@@ -45,10 +42,7 @@ public abstract class JndiLocatorSupport : JndiAccessor
                 jndiName, requiredType, (jndiObject != null ? jndiObject.GetType() : null));
         }
 
-        if (logger.IsEnabled(LogLevel.Debug))
-        {
-            logger.LogDebug("Located object with JNDI name [{JndiName}]", jndiName);
-        }
+        logger.LogDebug("Located object with JNDI name [{JndiName}]", jndiName);
 
         return jndiObject;
     }

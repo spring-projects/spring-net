@@ -159,10 +159,7 @@ public class EmsTransactionManager : AbstractPlatformTransactionManager,
         {
             con = CreateConnection();
             session = CreateSession(con);
-            if (LOG.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Created EMS transaction on Session [{Session}] from Connection [{Connection}]", session, con);
-            }
+            log.LogDebug("Created EMS transaction on Session [{Session}] from Connection [{Connection}]", session, con);
 
             txObject.ResourceHolder = new EmsResourceHolder(ConnectionFactory, con, session);
             txObject.ResourceHolder.SynchronizedWithTransaction = true;

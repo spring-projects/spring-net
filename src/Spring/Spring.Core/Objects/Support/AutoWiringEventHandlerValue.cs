@@ -173,13 +173,10 @@ public class AutoWiringEventHandlerValue : AbstractEventHandlerValue
             // and for each method that satisfied the criteria...
             foreach (MethodInfo method in methods)
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug(
-                        "Wiring up this method '{MethodName}' to this event '{EventName}'",
-                        method.Name,
-                        theEvent.Name);
-                }
+                log.LogDebug(
+                    "Wiring up this method '{MethodName}' to this event '{EventName}'",
+                    method.Name,
+                    theEvent.Name);
 
                 IEventHandlerValue myHandler = method.IsStatic ? new StaticEventHandlerValue() : (IEventHandlerValue) new InstanceEventHandlerValue();
                 myHandler.EventName = theEvent.Name;

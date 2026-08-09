@@ -677,10 +677,7 @@ private void Initialize(DiscoveryClientDocumentCollection wsDocuments, string bi
                 {
                     foreach (Binding binding in description.Bindings)
                     {
-                        if (LOG.IsEnabled(LogLevel.Information))
-                        {
-                            LOG.LogInformation("The binding '{BindingName}', found in the WSDL document located at '{Description}', will be use.", binding.Name, this.serviceUri.Description);
-                        }
+                        LOG.LogInformation("The binding '{BindingName}', found in the WSDL document located at '{Description}', will be use.", binding.Name, this.serviceUri.Description);
 
                         return binding;
                     }

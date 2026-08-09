@@ -353,10 +353,7 @@ public class PropertiesObjectDefinitionReader : AbstractObjectDefinitionReader
                 {
                     string name = nameAndProperty.Substring(0, sepIndx);
 
-                    if (log.IsEnabled(LogLevel.Debug))
-                    {
-                        log.LogDebug("Found object name '{ObjectName}'", name);
-                    }
+                    log.LogDebug("Found object name '{ObjectName}'", name);
 
                     if (!Registry.ContainsObjectDefinition(name))
                     {
@@ -370,10 +367,7 @@ public class PropertiesObjectDefinitionReader : AbstractObjectDefinitionReader
                     // Ignore it: it wasn't a valid object name and property,
                     // although it did start with the required prefix
 
-                    if (log.IsEnabled(LogLevel.Debug))
-                    {
-                        log.LogDebug("Invalid object name and property [{NameAndProperty}]", nameAndProperty);
-                    }
+                    log.LogDebug("Invalid object name and property [{NameAndProperty}]", nameAndProperty);
                 }
             } // if the key started with the prefix we're looking for
         } // while there are more keys

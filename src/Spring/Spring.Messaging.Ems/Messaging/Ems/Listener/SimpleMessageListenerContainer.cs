@@ -177,10 +177,7 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
         // First invoke the user-specific ExceptionListener, if any.
         InvokeExceptionListener(exception);
         // now try to recover the shared Connection and all consumers...
-        if (logger.IsEnabled(LogLevel.Information))
-        {
-            logger.LogInformation(exception, "Trying to recover from EMS Connection exception");
-        }
+        logger.LogInformation(exception, "Trying to recover from EMS Connection exception");
 
         try
         {
@@ -228,10 +225,7 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
             }
             catch (Exception ex)
             {
-                if (logger.IsEnabled(LogLevel.Information))
-                {
-                    logger.LogInformation("Could not refresh Connection - retrying in {RecoveryInterval}", recoveryInterval);
-                }
+                logger.LogInformation("Could not refresh Connection - retrying in {RecoveryInterval}", recoveryInterval);
             }
 
             if (totalTryTime > maxRecoveryTime)

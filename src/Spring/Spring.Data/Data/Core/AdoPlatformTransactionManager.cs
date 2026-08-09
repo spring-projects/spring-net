@@ -127,11 +127,8 @@ public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager,
             if (txMgrStateObject.ConnectionHolder == null || txMgrStateObject.ConnectionHolder.SynchronizedWithTransaction)
             {
                 IDbConnection newCon = DbProvider.CreateConnection();
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    // Connection string deliberately not logged: it can contain credentials.
-                    log.LogDebug("Acquired Connection [{Connection}] for ADO.NET transaction", newCon);
-                }
+                // Connection string deliberately not logged: it can contain credentials.
+                log.LogDebug("Acquired Connection [{Connection}] for ADO.NET transaction", newCon);
 
                 newCon.Open();
 
@@ -319,11 +316,8 @@ public class AdoPlatformTransactionManager : AbstractPlatformTransactionManager,
 
         IDbConnection con = txMgrStateObject.ConnectionHolder.Connection;
 
-        if (log.IsEnabled(LogLevel.Debug))
-        {
-            // Connection string deliberately not logged: it can contain credentials.
-            log.LogDebug("Releasing ADO.NET Connection [{Connection}] after transaction", con);
-        }
+        // Connection string deliberately not logged: it can contain credentials.
+        log.LogDebug("Releasing ADO.NET Connection [{Connection}] after transaction", con);
 
         ConnectionUtils.DisposeConnection(con, DbProvider);
         //TODO clear out IDbTransaction object?

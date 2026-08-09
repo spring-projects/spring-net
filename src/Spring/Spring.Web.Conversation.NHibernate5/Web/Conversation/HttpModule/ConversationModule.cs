@@ -68,10 +68,10 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
 
             if (HttpContext.Current.Session != null)
             {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: Processing HttpContext.Current.Session");
+                LOG.LogDebug("context_PreRequestHandlerExecute: Processing HttpContext.Current.Session");
                 foreach (String convMngName in this.ConversationManagerNameList)
                 {
-                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: Processing ConversationManager: {ConversationManagerName}", convMngName);
+                    LOG.LogDebug("context_PreRequestHandlerExecute: Processing ConversationManager: {ConversationManagerName}", convMngName);
                     IConversationManager convMng = (IConversationManager) this.applicationContext.GetObject(convMngName);
                     convMng.EndOnTimeOut();
                     convMng.FreeEnded();
@@ -79,7 +79,7 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
             }
             else
             {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: no HttpContext.Current.Session found.");
+                LOG.LogDebug("context_PreRequestHandlerExecute: no HttpContext.Current.Session found.");
             }
         }
     }
@@ -97,7 +97,7 @@ public class ConversationModule : IHttpModule, IApplicationContextAware
         if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("page_Unload HttpContext.Current.Session is null: {SessionIsNull}", HttpContext.Current.Session == null);
         foreach (String convMngName in this.ConversationManagerNameList)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("page_Unload: Processing ConversationManager: {ConversationManagerName}", convMngName);
+            LOG.LogDebug("page_Unload: Processing ConversationManager: {ConversationManagerName}", convMngName);
             IConversationManager convMng = (IConversationManager) this.applicationContext.GetObject(convMngName);
             convMng.EndOnTimeOut();
             convMng.FreeEnded();

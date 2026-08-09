@@ -854,10 +854,7 @@ public class HibernateTemplate : HibernateAccessor, IHibernateOperations
         bool existingTransaction = SessionFactoryUtils.IsSessionTransactional(session, SessionFactory);
         if (existingTransaction)
         {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug("Found thread-bound Session for HibernateTemplate");
-            }
+            log.LogDebug("Found thread-bound Session for HibernateTemplate");
         }
 
         FlushModeHolder previousFlushModeHolder = new FlushModeHolder();
@@ -902,10 +899,7 @@ public class HibernateTemplate : HibernateAccessor, IHibernateOperations
         {
             if (existingTransaction)
             {
-                if (log.IsEnabled(LogLevel.Debug))
-                {
-                    log.LogDebug("Not closing pre-bound Hibernate Session after HibernateTemplate");
-                }
+                log.LogDebug("Not closing pre-bound Hibernate Session after HibernateTemplate");
 
                 if (previousFlushModeHolder.ModeWasSet)
                 {
