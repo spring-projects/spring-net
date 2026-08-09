@@ -138,9 +138,15 @@ public class ServiceDomainPlatformTransactionManager : AbstractPlatformTransacti
         SimpleServiceConfig serviceConfig = CreateServiceConfig(definition);
         //The context is created when we call Enter.
         serviceDomainTxObject.ServiceDomainAdapter.Enter(serviceConfig);
-        log.LogDebug("Context created. TransactionId = {TransactionId}"
-                                                     + ", ActivityId = {ActivityId}",
-                                                     ContextUtil.TransactionId, ContextUtil.ActivityId);
+        // The guard is load-bearing: ContextUtil throws when no COM+ context is active
+        // (e.g. with a non-COM+ IServiceDomainAdapter), so the arguments must not be
+        // evaluated unless debug logging is actually enabled.
+        if (log.IsEnabled(LogLevel.Debug))
+        {
+            log.LogDebug("Context created. TransactionId = {TransactionId}"
+                         + ", ActivityId = {ActivityId}",
+                         ContextUtil.TransactionId, ContextUtil.ActivityId);
+        }
     }
 
     protected override object DoSuspend(object transaction)
