@@ -521,8 +521,7 @@ public class WebObjectFactory : DefaultListableObjectFactory
             }
             catch (Exception ex)
             {
-                string message = string.Format("error during disposing session item with key '{0}'", key);
-                log.LogCritical(ex, message);
+                log.LogCritical(ex, "error during disposing session item with key '{Key}'", key);
             }
         }
     }

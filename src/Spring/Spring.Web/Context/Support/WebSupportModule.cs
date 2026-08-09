@@ -96,7 +96,7 @@ public class WebSupportModule : IHttpModule
         }
         catch (SecurityException sec)
         {
-            s_log.LogWarning(string.Format("failed reflecting field HttpContext.HideRequestResponse due to security restrictions {0}", sec));
+            s_log.LogWarning(sec, "failed reflecting field HttpContext.HideRequestResponse due to security restrictions");
         }
 
         // register additional resource handler
@@ -296,16 +296,15 @@ public class WebSupportModule : IHttpModule
         }
         catch (Exception ex)
         {
-            string msg = "Failure during EndSession event handling";
             // are we on a current request?
             if (HttpContext.Current != null)
             {
-                s_log.LogError(ex, msg);
+                s_log.LogError(ex, "Failure during EndSession event handling");
             }
             else
             {
                 // this is an async session timeout - log as fatal since this is the thread's exit point!
-                s_log.LogCritical(ex, msg);
+                s_log.LogCritical(ex, "Failure during EndSession event handling");
             }
         }
         finally

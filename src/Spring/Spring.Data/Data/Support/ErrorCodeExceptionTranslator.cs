@@ -295,10 +295,8 @@ public class ErrorCodeExceptionTranslator : IAdoExceptionTranslator
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            String intro = "Translating";
-            log.LogDebug(intro + " ADO exception with error code '" + errorCode
-                         + "', message [" + exception.Message +
-                         "]; SQL was [" + sql + "] for task [" + task + "]");
+            log.LogDebug("Translating ADO exception with error code '{ErrorCode}', message [{ExceptionMessage}]; SQL was [{Sql}] for task [{Task}]",
+                errorCode, exception.Message, sql, task);
         }
     }
 

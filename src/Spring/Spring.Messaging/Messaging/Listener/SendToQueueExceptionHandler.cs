@@ -145,8 +145,7 @@ public class SendToQueueExceptionHandler : AbstractSendToQueueExceptionHandler, 
         {
             if (LOG.IsEnabled(LogLevel.Error))
             {
-                string message1 = "Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].";
-                LOG.LogError(e, message1);
+                LOG.LogError(e, "Could not send message with id = [{MessageId}] to queue [{Path}].", message.Id, mq.Path);
                 LOG.LogError("Message will not be processed.  Message Body = " + message.Body);
             }
         }

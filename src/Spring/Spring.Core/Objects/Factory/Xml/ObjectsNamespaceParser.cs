@@ -1477,9 +1477,7 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    string message = string.Format("Error while parsing dependency checking mode : '{0}' is an invalid value.",
-                        value);
-                    log.LogDebug(ex, message);
+                    log.LogDebug(ex, "Error while parsing dependency checking mode : '{Value}' is an invalid value.", value);
                 }
             }
         }
@@ -1516,9 +1514,7 @@ public class ObjectsNamespaceParser : AbstractObjectDefinitionParser, INamespace
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    string message = string.Format("Error while parsing autowire mode : '{0}' is an invalid value.",
-                        value);
-                    log.LogDebug(ex, message);
+                    log.LogDebug(ex, "Error while parsing autowire mode : '{Value}' is an invalid value.", value);
                 }
             }
         }

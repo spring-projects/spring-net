@@ -1347,8 +1347,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
             }
             catch (TargetInvocationException ex)
             {
-                string message = "Couldn't invoke destroy method '" + destroyMethodName + "' of object with name '" + name + "'";
-                log.LogError(ex.GetBaseException(), message);
+                log.LogError(ex.GetBaseException(), "Couldn't invoke destroy method '{DestroyMethodName}' of object with name '{ObjectName}'", destroyMethodName, name);
             }
             catch (Exception ex)
             {
@@ -1359,8 +1358,7 @@ public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFacto
 
     private void LogExceptionRaisedByCustomDestroyMethodInvocation(string destroyMethodName, string name, Exception ex)
     {
-        string message = string.Format(CultureInfo.InvariantCulture, "Couldn't invoke destroy method '{0}' of object with name '{1}'.", destroyMethodName, name);
-        log.LogError(ex, message);
+        log.LogError(ex, "Couldn't invoke destroy method '{DestroyMethodName}' of object with name '{ObjectName}'.", destroyMethodName, name);
     }
 
     /// <summary>

@@ -196,7 +196,7 @@ public class SimpleInstantiationStrategy : IInstantiationStrategy
 
             if (log.IsEnabled(LogLevel.Warning))
             {
-                log.LogWarning(ex.InnerException, msg);
+                log.LogWarning(ex.InnerException, "{Message}", msg);
             }
 
             throw new ObjectDefinitionStoreException(msg, ex.InnerException);

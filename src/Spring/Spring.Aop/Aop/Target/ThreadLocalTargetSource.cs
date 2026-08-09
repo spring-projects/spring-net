@@ -179,11 +179,11 @@ public sealed class ThreadLocalTargetSource : AbstractPrototypeTargetSource,
                 {
                     if (logger.IsEnabled(LogLevel.Warning))
                     {
-                        string message = string.Format(
-                            "Thread-bound target of class '{0}' " +
+                        logger.LogWarning(
+                            ex,
+                            "Thread-bound target of class '{TargetType}' " +
                             "threw exception from it's IDisposable.Dispose() method.",
                             target.GetType());
-                        logger.LogWarning(ex, message);
                     }
                 }
             }

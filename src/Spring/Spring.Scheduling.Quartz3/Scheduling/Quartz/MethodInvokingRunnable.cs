@@ -104,12 +104,12 @@ public class MethodInvokingRunnable : ArgumentConvertingMethodInvoker, IInitiali
         }
         catch (TargetInvocationException ex)
         {
-            logger.LogError(ex, InvocationFailureMessage);
+            logger.LogError(ex, "{Message}", InvocationFailureMessage);
             // Do not throw exception, else the main loop of the Timer will stop!
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, InvocationFailureMessage);
+            logger.LogError(ex, "{Message}", InvocationFailureMessage);
             // Do not throw exception, else the main loop of the Timer will stop!
         }
 

@@ -16,7 +16,6 @@
 
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Spring.Collections.Generic;
 using Spring.Core;
@@ -993,11 +992,7 @@ public class DefaultListableObjectFactory :
                     // created object itself...
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        string message = string.Format(
-                            CultureInfo.InvariantCulture,
-                            "Ignoring match to currently created object '{0}'.",
-                            objectName);
-                        log.LogDebug(ex, message);
+                        log.LogDebug(ex, "Ignoring match to currently created object '{ObjectName}'.", objectName);
                     }
                 }
                 else
@@ -1180,8 +1175,7 @@ public class DefaultListableObjectFactory :
                     // Probably contains a placeholder; lets ignore it for type matching purposes.
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        string message = "Ignoring object class loading failure for object '" + objectName + "'";
-                        log.LogDebug(ex, message);
+                        log.LogDebug(ex, "Ignoring object class loading failure for object '{ObjectName}'", objectName);
                     }
                 }
                 catch (ObjectDefinitionStoreException ex)
@@ -1194,8 +1188,7 @@ public class DefaultListableObjectFactory :
                     // Probably contains a placeholder; lets ignore it for type matching purposes.
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        string message = "Ignoring unresolvable metadata in object definition '" + objectName + "'";
-                        log.LogDebug(ex, message);
+                        log.LogDebug(ex, "Ignoring unresolvable metadata in object definition '{ObjectName}'", objectName);
                     }
                 }
             }

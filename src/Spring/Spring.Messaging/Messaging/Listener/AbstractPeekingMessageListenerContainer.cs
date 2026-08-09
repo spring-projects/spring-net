@@ -187,9 +187,7 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
             }
             catch (Exception ex)
             {
-                string message = "Exception executing DefaultMessageQueue.BeginPeek.  Reinvoking after recovery interval [" +
-                                 RecoveryTimeSpan + "]";
-                LOG.LogError(ex, message);
+                LOG.LogError(ex, "Exception executing DefaultMessageQueue.BeginPeek.  Reinvoking after recovery interval [{RecoveryTimeSpan}]", RecoveryTimeSpan);
                 Thread.Sleep(RecoveryTimeSpan);
                 StartPeeking();
             }
@@ -324,8 +322,7 @@ public abstract class AbstractPeekingMessageListenerContainer : AbstractMessageL
         catch (Exception ex)
         {
             messageReceived = false;
-            string message = "Error receiving message from DefaultMessageQueue = [" + mq.Path + "]";
-            LOG.LogError(ex, message);
+            LOG.LogError(ex, "Error receiving message from DefaultMessageQueue = [{Path}]", mq.Path);
         }
         finally
         {

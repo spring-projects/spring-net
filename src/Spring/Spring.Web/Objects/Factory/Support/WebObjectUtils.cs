@@ -76,7 +76,7 @@ public sealed class WebObjectUtils
                 throw new FileNotFoundException(msg);
             }
 
-            s_log.LogError(httpEx, msg);
+            s_log.LogError(httpEx, "{Message}", msg);
             throw new ObjectCreationException(msg, httpEx);
         }
         catch (Exception ex)
@@ -90,7 +90,7 @@ public sealed class WebObjectUtils
             }
 
             string msg = String.Format("Unable to instantiate page [{0}]", pageUrl);
-            s_log.LogError(ex, msg);
+            s_log.LogError(ex, "{Message}", msg);
             throw new ObjectCreationException(msg, ex);
         }
 
@@ -155,7 +155,7 @@ public sealed class WebObjectUtils
         catch (Exception ex)
         {
             string msg = String.Format("Unable to get page type for url [{0}]", pageUrl);
-            s_log.LogError(ex, msg);
+            s_log.LogError(ex, "{Message}", msg);
             throw new ObjectCreationException(msg, ex);
         }
     }

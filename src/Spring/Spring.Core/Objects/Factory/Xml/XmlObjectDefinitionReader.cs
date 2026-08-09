@@ -339,8 +339,7 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
         {
             if (log.IsEnabled(LogLevel.Warning))
             {
-                string message = "Ignored XML validation warning: " + args.Message;
-                log.LogWarning(args.Exception, message);
+                log.LogWarning(args.Exception, "Ignored XML validation warning: {ValidationMessage}", args.Message);
             }
         }
     }

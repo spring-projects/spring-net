@@ -323,9 +323,8 @@ public class VelocityEngineFactory
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    string message = string.Format("Cannot resolve resource loader path [{0}] to [File]: using SpringResourceLoader",
+                    log.LogError(ex, "Cannot resolve resource loader path [{ResolvedPaths}] to [File]: using SpringResourceLoader",
                         StringUtils.CollectionToCommaDelimitedString(resolvedPaths));
-                    log.LogError(ex, message);
                 }
 
                 InitSpringResourceLoader(velocityEngine, extendedProperties, StringUtils.CollectionToCommaDelimitedString(paths));

@@ -226,9 +226,8 @@ public class DisposableObjectAdapter : IDisposable
         }
         catch (Exception ex)
         {
-            string message = "Couldn't invoke destroy method '" + this.destroyMethodName +
-                             "' on object with name '" + this.objectName + "'";
-            logger.LogError(ex, message);
+            logger.LogError(ex, "Couldn't invoke destroy method '{DestroyMethodName}' on object with name '{ObjectName}'",
+                this.destroyMethodName, this.objectName);
         }
     }
 }

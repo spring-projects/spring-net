@@ -139,14 +139,12 @@ public abstract class AbstractExceptionHandler : IExceptionHandler
             }
             catch (InvalidCastException e)
             {
-                string message = "Was not able to unbox constraint expression to boolean [" + ConstraintExpressionText + "]";
-                log.LogWarning(e, message);
+                log.LogWarning(e, "Was not able to unbox constraint expression to boolean [{ConstraintExpression}]", ConstraintExpressionText);
                 return false;
             }
             catch (Exception e)
             {
-                string message = "Was not able to evaluate constraint expression [" + ConstraintExpressionText + "]";
-                log.LogWarning(e, message);
+                log.LogWarning(e, "Was not able to evaluate constraint expression [{ConstraintExpression}]", ConstraintExpressionText);
                 return false;
             }
 

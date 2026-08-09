@@ -138,8 +138,7 @@ public class SpringResourceLoader : ResourceLoader
             {
                 if (log.IsEnabled(LogLevel.Error))
                 {
-                    string message = string.Format("Could not find Velocity resource: {0}", resource);
-                    log.LogError(ex, message);
+                    log.LogError(ex, "Could not find Velocity resource: {Resource}", resource);
                 }
             }
         }

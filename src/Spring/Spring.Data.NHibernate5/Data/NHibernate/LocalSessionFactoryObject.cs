@@ -845,8 +845,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
         {
             if (log.IsEnabled(LogLevel.Warning))
             {
-                string message = "Unsuccessful schema statement: " + sql;
-                log.LogWarning((Exception) ex, message);
+                log.LogWarning((Exception) ex, "Unsuccessful schema statement: {Sql}", sql);
             }
         }
     }

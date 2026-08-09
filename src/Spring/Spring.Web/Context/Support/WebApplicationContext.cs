@@ -310,8 +310,7 @@ public class WebApplicationContext : AbstractXmlApplicationContext
                     {
                         if (s_weblog.IsEnabled(LogLevel.Error))
                         {
-                            string message = string.Format("failed creating context '{0}', Stacktrace:\n{1}", contextName, new StackTrace());
-                            s_weblog.LogError(ex, message);
+                            s_weblog.LogError(ex, "failed creating context '{ContextName}', Stacktrace:\n{StackTrace}", contextName, new StackTrace());
                         }
 
                         throw;

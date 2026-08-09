@@ -130,8 +130,7 @@ public class DbProviderFactory
                     }
                     catch (Exception e)
                     {
-                        string message = "Error processing " + DBPROVIDER_DEFAULT_RESOURCE_NAME;
-                        log.LogError(e, message);
+                        log.LogError(e, "Error processing {DefaultResourceName}", DBPROVIDER_DEFAULT_RESOURCE_NAME);
                         throw;
                     }
                 }

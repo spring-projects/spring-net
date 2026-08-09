@@ -198,14 +198,12 @@ public class RetryAdvice : AbstractExceptionHandlerAdvice
             }
             catch (InvalidCastException e)
             {
-                string message = "Was not able to cast expression to decimal [" + handler.DelayRateExpression + "]. Sleeping for 1 second";
-                log.LogWarning(e, message);
+                log.LogWarning(e, "Was not able to cast expression to decimal [{DelayRateExpression}]. Sleeping for 1 second", handler.DelayRateExpression);
                 sleepHandler(new TimeSpan(0, 0, 1));
             }
             catch (Exception e)
             {
-                string message = "Was not able to evaluate rate expression [" + handler.DelayRateExpression + "]. Sleeping for 1 second";
-                log.LogWarning(e, message);
+                log.LogWarning(e, "Was not able to evaluate rate expression [{DelayRateExpression}]. Sleeping for 1 second", handler.DelayRateExpression);
                 sleepHandler(new TimeSpan(0, 0, 1));
             }
         }

@@ -391,14 +391,11 @@ public abstract class SessionFactoryUtils
         }
         catch (Exception e)
         {
-            string message = "Exception thrown during exception translation. Message = [" + e.Message + "]";
-            log.LogError(e, message);
-            string message1 = "Exception that was attempted to be translated was [" + ex.Message + "]";
-            log.LogError((Exception) ex, message1);
+            log.LogError(e, "Exception thrown during exception translation. Message = [{ErrorMessage}]", e.Message);
+            log.LogError((Exception) ex, "Exception that was attempted to be translated was [{AdoExceptionMessage}]", ex.Message);
             if (ex.InnerException != null)
             {
-                string message2 = "  Inner Exception was [" + ex.InnerException.Message + "]";
-                log.LogError(ex.InnerException, message2);
+                log.LogError(ex.InnerException, "  Inner Exception was [{InnerExceptionMessage}]", ex.InnerException.Message);
             }
 
             throw new UncategorizedAdoException(e.Message, "", "", e);

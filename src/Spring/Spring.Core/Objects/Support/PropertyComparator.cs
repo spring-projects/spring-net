@@ -115,8 +115,7 @@ public class PropertyComparator : IComparer
         {
             if (logger.IsEnabled(LogLevel.Warning))
             {
-                string message = "Could not sort objects [" + o1 + "] and [" + o2 + "]";
-                logger.LogWarning(ex, message);
+                logger.LogWarning(ex, "Could not sort objects [{FirstObject}] and [{SecondObject}]", o1, o2);
             }
 
             return 0;

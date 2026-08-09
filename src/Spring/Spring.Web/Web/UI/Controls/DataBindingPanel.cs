@@ -136,7 +136,7 @@ public class DataBindingPanel : Panel
                     string msg =
                         string.Format("Error executing action on control '{0}' of type '{1}'", wc.UniqueID,
                             wc.GetType().FullName);
-                    Log.LogError(ex, msg);
+                    Log.LogError(ex, "{Message}", msg);
                     throw new HttpException(msg, ex);
                 }
             }

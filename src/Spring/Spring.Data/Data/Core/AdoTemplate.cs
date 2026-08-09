@@ -2365,14 +2365,12 @@ public class AdoTemplate : AdoAccessor, IAdoOperations
                     }
                     catch (IndexOutOfRangeException e)
                     {
-                        string message = "No NamedResultSetProcessor associated with result set index " + resultSetIndex;
-                        LOG.LogError(e, message);
+                        LOG.LogError(e, "No NamedResultSetProcessor associated with result set index {ResultSetIndex}", resultSetIndex);
                         continue;
                     }
                     catch (ArgumentOutOfRangeException e)
                     {
-                        string message = "No NamedResultSetProcessor associated with result set index " + resultSetIndex;
-                        LOG.LogError(e, message);
+                        LOG.LogError(e, "No NamedResultSetProcessor associated with result set index {ResultSetIndex}", resultSetIndex);
                         continue;
                     }
 
