@@ -56,6 +56,11 @@ public class Expression : BaseNode
         /// variable name of the currently processed object factory, if any
         /// </summary>
         internal static readonly string CurrentObjectFactory = RESERVEDPREFIX + "CurrentObjectFactory";
+
+        /// <summary>
+        /// variable name of the registry holding user-registered extension methods and properties
+        /// </summary>
+        internal static readonly string ExpressionExtensions = RESERVEDPREFIX + "ExpressionExtensions";
     }
 
     private class ASTNodeCreator : Parser.antlr.ASTNodeCreator
@@ -169,6 +174,234 @@ public class Expression : BaseNode
         AssertUtils.ArgumentHasText(functionName, "functionName");
         AssertUtils.ArgumentHasText(lambdaExpression, "lambdaExpression");
 
+        variables[functionName] = ParseLambda(lambdaExpression);
+    }
+
+    /// <summary>
+    /// Registers an extension method for type <typeparamref name="T"/>, implemented by the
+    /// specified lambda expression. The lambda's first argument receives the target instance;
+    /// remaining arguments receive the invocation arguments.
+    /// </summary>
+    /// <typeparam name="T">Type to extend.</typeparam>
+    /// <param name="methodName">Method name to register the extension under.</param>
+    /// <param name="lambdaExpression">Lambda expression implementing the extension.</param>
+    /// <param name="variables">Variables dictionary that the extension will be registered in.</param>
+    public static void RegisterExtensionMethod<T>(string methodName, string lambdaExpression, IDictionary<string, object> variables)
+    {
+        RegisterExtensionMethod(typeof(T), methodName, lambdaExpression, variables);
+    }
+
+    /// <summary>
+    /// Registers an extension method for <paramref name="targetType"/>, implemented by the
+    /// specified lambda expression. The lambda's first argument receives the target instance;
+    /// remaining arguments receive the invocation arguments.
+    /// </summary>
+    /// <param name="targetType">Type to extend.</param>
+    /// <param name="methodName">Method name to register the extension under.</param>
+    /// <param name="lambdaExpression">Lambda expression implementing the extension.</param>
+    /// <param name="variables">Variables dictionary that the extension will be registered in.</param>
+    public static void RegisterExtensionMethod(Type targetType, string methodName, string lambdaExpression, IDictionary<string, object> variables)
+    {
+        AssertUtils.ArgumentNotNull(targetType, "targetType");
+        AssertUtils.ArgumentHasText(methodName, "methodName");
+        AssertUtils.ArgumentHasText(lambdaExpression, "lambdaExpression");
+        AssertUtils.ArgumentNotNull(variables, "variables");
+
+        LambdaExpressionNode lambda = ParseLambda(lambdaExpression);
+        if (lambda.ArgumentNames.Length == 0)
+        {
+            throw new ArgumentException(
+                "An extension method lambda expression must declare at least one argument to receive the target instance.",
+                "lambdaExpression");
+        }
+
+        ExpressionExtensionRegistry.Register(variables, new ExpressionExtension(targetType, methodName, lambda), false);
+    }
+
+    /// <summary>
+    /// Registers an extension method for type <typeparamref name="T"/>, implemented by the
+    /// specified delegate. The delegate's first parameter receives the target instance;
+    /// remaining parameters receive the invocation arguments.
+    /// </summary>
+    /// <typeparam name="T">Type to extend.</typeparam>
+    /// <param name="methodName">Method name to register the extension under.</param>
+    /// <param name="implementation">Delegate implementing the extension.</param>
+    /// <param name="variables">Variables dictionary that the extension will be registered in.</param>
+    public static void RegisterExtensionMethod<T>(string methodName, Delegate implementation, IDictionary<string, object> variables)
+    {
+        RegisterExtensionMethod(typeof(T), methodName, implementation, variables);
+    }
+
+    /// <summary>
+    /// Registers an extension method for <paramref name="targetType"/>, implemented by the
+    /// specified delegate. The delegate's first parameter receives the target instance;
+    /// remaining parameters receive the invocation arguments.
+    /// </summary>
+    /// <param name="targetType">Type to extend.</param>
+    /// <param name="methodName">Method name to register the extension under.</param>
+    /// <param name="implementation">Delegate implementing the extension.</param>
+    /// <param name="variables">Variables dictionary that the extension will be registered in.</param>
+    public static void RegisterExtensionMethod(Type targetType, string methodName, Delegate implementation, IDictionary<string, object> variables)
+    {
+        AssertUtils.ArgumentNotNull(targetType, "targetType");
+        AssertUtils.ArgumentHasText(methodName, "methodName");
+        AssertUtils.ArgumentNotNull(implementation, "implementation");
+        AssertUtils.ArgumentNotNull(variables, "variables");
+
+        AssertReceiverParameter(targetType, implementation, 0);
+
+        ExpressionExtensionRegistry.Register(variables, new ExpressionExtension(targetType, methodName, implementation), false);
+    }
+
+    /// <summary>
+    /// Registers an extension method for type <typeparamref name="T"/> that takes no arguments
+    /// beyond the target instance.
+    /// </summary>
+    public static void RegisterExtensionMethod<T, TResult>(string methodName, Func<T, TResult> implementation, IDictionary<string, object> variables)
+    {
+        RegisterExtensionMethod(typeof(T), methodName, (Delegate) implementation, variables);
+    }
+
+    /// <summary>
+    /// Registers an extension method for type <typeparamref name="T"/> that takes one argument
+    /// beyond the target instance.
+    /// </summary>
+    public static void RegisterExtensionMethod<T, TArg1, TResult>(string methodName, Func<T, TArg1, TResult> implementation, IDictionary<string, object> variables)
+    {
+        RegisterExtensionMethod(typeof(T), methodName, (Delegate) implementation, variables);
+    }
+
+    /// <summary>
+    /// Registers an extension method for type <typeparamref name="T"/> that takes two arguments
+    /// beyond the target instance.
+    /// </summary>
+    public static void RegisterExtensionMethod<T, TArg1, TArg2, TResult>(string methodName, Func<T, TArg1, TArg2, TResult> implementation, IDictionary<string, object> variables)
+    {
+        RegisterExtensionMethod(typeof(T), methodName, (Delegate) implementation, variables);
+    }
+
+    /// <summary>
+    /// Registers an extension method for type <typeparamref name="T"/> that takes three arguments
+    /// beyond the target instance.
+    /// </summary>
+    public static void RegisterExtensionMethod<T, TArg1, TArg2, TArg3, TResult>(string methodName, Func<T, TArg1, TArg2, TArg3, TResult> implementation, IDictionary<string, object> variables)
+    {
+        RegisterExtensionMethod(typeof(T), methodName, (Delegate) implementation, variables);
+    }
+
+    /// <summary>
+    /// Registers a read-only extension property for type <typeparamref name="T"/>, implemented
+    /// by the specified lambda expression. The lambda must declare exactly one argument, which
+    /// receives the target instance.
+    /// </summary>
+    /// <typeparam name="T">Type to extend.</typeparam>
+    /// <param name="propertyName">Property name to register the extension under.</param>
+    /// <param name="lambdaExpression">Lambda expression implementing the extension.</param>
+    /// <param name="variables">Variables dictionary that the extension will be registered in.</param>
+    public static void RegisterExtensionProperty<T>(string propertyName, string lambdaExpression, IDictionary<string, object> variables)
+    {
+        RegisterExtensionProperty(typeof(T), propertyName, lambdaExpression, variables);
+    }
+
+    /// <summary>
+    /// Registers a read-only extension property for <paramref name="targetType"/>, implemented
+    /// by the specified lambda expression. The lambda must declare exactly one argument, which
+    /// receives the target instance.
+    /// </summary>
+    /// <param name="targetType">Type to extend.</param>
+    /// <param name="propertyName">Property name to register the extension under.</param>
+    /// <param name="lambdaExpression">Lambda expression implementing the extension.</param>
+    /// <param name="variables">Variables dictionary that the extension will be registered in.</param>
+    public static void RegisterExtensionProperty(Type targetType, string propertyName, string lambdaExpression, IDictionary<string, object> variables)
+    {
+        AssertUtils.ArgumentNotNull(targetType, "targetType");
+        AssertUtils.ArgumentHasText(propertyName, "propertyName");
+        AssertUtils.ArgumentHasText(lambdaExpression, "lambdaExpression");
+        AssertUtils.ArgumentNotNull(variables, "variables");
+
+        LambdaExpressionNode lambda = ParseLambda(lambdaExpression);
+        if (lambda.ArgumentNames.Length != 1)
+        {
+            throw new ArgumentException(
+                "An extension property lambda expression must declare exactly one argument to receive the target instance.",
+                "lambdaExpression");
+        }
+
+        ExpressionExtensionRegistry.Register(variables, new ExpressionExtension(targetType, propertyName, lambda), true);
+    }
+
+    /// <summary>
+    /// Registers a read-only extension property for type <typeparamref name="T"/>, implemented
+    /// by the specified delegate. The delegate must declare exactly one parameter, which
+    /// receives the target instance.
+    /// </summary>
+    /// <typeparam name="T">Type to extend.</typeparam>
+    /// <param name="propertyName">Property name to register the extension under.</param>
+    /// <param name="implementation">Delegate implementing the extension.</param>
+    /// <param name="variables">Variables dictionary that the extension will be registered in.</param>
+    public static void RegisterExtensionProperty<T>(string propertyName, Delegate implementation, IDictionary<string, object> variables)
+    {
+        RegisterExtensionProperty(typeof(T), propertyName, implementation, variables);
+    }
+
+    /// <summary>
+    /// Registers a read-only extension property for <paramref name="targetType"/>, implemented
+    /// by the specified delegate. The delegate must declare exactly one parameter, which
+    /// receives the target instance.
+    /// </summary>
+    /// <param name="targetType">Type to extend.</param>
+    /// <param name="propertyName">Property name to register the extension under.</param>
+    /// <param name="implementation">Delegate implementing the extension.</param>
+    /// <param name="variables">Variables dictionary that the extension will be registered in.</param>
+    public static void RegisterExtensionProperty(Type targetType, string propertyName, Delegate implementation, IDictionary<string, object> variables)
+    {
+        AssertUtils.ArgumentNotNull(targetType, "targetType");
+        AssertUtils.ArgumentHasText(propertyName, "propertyName");
+        AssertUtils.ArgumentNotNull(implementation, "implementation");
+        AssertUtils.ArgumentNotNull(variables, "variables");
+
+        AssertReceiverParameter(targetType, implementation, 1);
+
+        ExpressionExtensionRegistry.Register(variables, new ExpressionExtension(targetType, propertyName, implementation), true);
+    }
+
+    /// <summary>
+    /// Registers a read-only extension property for type <typeparamref name="T"/>, implemented
+    /// by the specified function.
+    /// </summary>
+    public static void RegisterExtensionProperty<T, TResult>(string propertyName, Func<T, TResult> implementation, IDictionary<string, object> variables)
+    {
+        RegisterExtensionProperty(typeof(T), propertyName, (Delegate) implementation, variables);
+    }
+
+    private static void AssertReceiverParameter(Type targetType, Delegate implementation, int requiredParameterCount)
+    {
+        ParameterInfo[] parameters = implementation.Method.GetParameters();
+
+        if (parameters.Length == 0)
+        {
+            throw new ArgumentException(
+                "An extension delegate must declare at least one parameter to receive the target instance.",
+                "implementation");
+        }
+
+        if (requiredParameterCount > 0 && parameters.Length != requiredParameterCount)
+        {
+            throw new ArgumentException(string.Format(
+                "An extension property delegate must declare exactly {0} parameter(s), but declares {1}.",
+                requiredParameterCount, parameters.Length), "implementation");
+        }
+
+        if (!parameters[0].ParameterType.IsAssignableFrom(targetType))
+        {
+            throw new ArgumentException(string.Format(
+                "The first parameter of an extension delegate must be assignable from the extended type '{0}', but was '{1}'.",
+                targetType.FullName, parameters[0].ParameterType.FullName), "implementation");
+        }
+    }
+
+    private static LambdaExpressionNode ParseLambda(string lambdaExpression)
+    {
         ExpressionLexer lexer = new ExpressionLexer(new StringReader(lambdaExpression));
         ExpressionParser parser = new SpringExpressionParser(lexer);
 
@@ -181,7 +414,7 @@ public class Expression : BaseNode
             throw new SyntaxErrorException(ex.recog.Message, ex.recog.getLine(), ex.recog.getColumn(), lambdaExpression);
         }
 
-        variables[functionName] = parser.getAST();
+        return (LambdaExpressionNode) parser.getAST();
     }
 
     /// <summary>

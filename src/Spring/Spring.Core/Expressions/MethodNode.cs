@@ -129,7 +129,7 @@ public class MethodNode : NodeWithArguments
                 // calculate checksum, if the cached method matches the current context
                 if (initialized)
                 {
-                    int calculatedHash = CalculateMethodHash(context.GetType(), argValues);
+                    int calculatedHash = CalculateMethodHash(GetContextType(context), argValues);
                     initialized = (calculatedHash == cachedInstanceMethodHash);
                 }
 
@@ -158,6 +158,26 @@ public class MethodNode : NodeWithArguments
         }
         else
         {
+            // as a last resort, try a user-registered extension method; this is deliberately
+            // consulted only when no CLR method matches, so an extension can never shadow a
+            // real method
+            ExpressionExtension extension = ExpressionExtensionRegistry.FindMethod(evalContext.Variables, context, methodName);
+            if (extension != null)
+            {
+                object[] extensionArgs = new object[argValues.Length + 1];
+                extensionArgs[0] = context;
+                Array.Copy(argValues, 0, extensionArgs, 1, argValues.Length);
+
+                extension.AssertArgumentCount(extensionArgs.Length);
+
+                if (extension.LambdaExpression != null)
+                {
+                    return GetValueWithArguments(extension.LambdaExpression, context, evalContext, extensionArgs);
+                }
+
+                return extension.InvokeCallback(extensionArgs);
+            }
+
             throw new ArgumentException(string.Format("Method '{0}' with the specified number and types of arguments does not exist.", methodName));
         }
     }
@@ -179,9 +199,14 @@ public class MethodNode : NodeWithArguments
         return hash.ToHashCode();
     }
 
+    private static Type GetContextType(object context)
+    {
+        return context is Type ? (Type) context : context.GetType();
+    }
+
     private void Initialize(string methodName, object[] argValues, object context)
     {
-        Type contextType = (context is Type ? context as Type : context.GetType());
+        Type contextType = GetContextType(context);
 
         // check the context type first
         MethodInfo mi = GetBestMethod(contextType, methodName, BINDING_FLAGS, argValues);
@@ -194,6 +219,14 @@ public class MethodNode : NodeWithArguments
 
         if (mi == null)
         {
+            // make sure a method cached for a previously seen context type is not reused,
+            // and remember the negative result so the reflection probe is not repeated for
+            // the same context and argument types
+            cachedInstanceMethod = null;
+            cachedIsParamArray = false;
+            paramArrayType = null;
+            argumentCount = 0;
+            cachedInstanceMethodHash = CalculateMethodHash(contextType, argValues);
             return;
         }
         else

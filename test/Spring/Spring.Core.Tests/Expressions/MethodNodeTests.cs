@@ -49,6 +49,31 @@ public class MethodNodeTests
         Assert.AreSame(input, exp.GetValue(input, vars));
     }
 
+    private class HasCompute
+    {
+        public int Compute()
+        {
+            return 1;
+        }
+    }
+
+    private class NoCompute
+    {
+    }
+
+    [Test]
+    public void DoesNotReuseMethodCachedForDifferentContextType()
+    {
+        IExpression exp = Expression.Parse("Compute()");
+
+        Assert.AreEqual(1, exp.GetValue(new HasCompute()));
+
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => exp.GetValue(new NoCompute()));
+        Assert.AreEqual("Method 'Compute' with the specified number and types of arguments does not exist.", ex.Message);
+
+        Assert.AreEqual(1, exp.GetValue(new HasCompute()));
+    }
+
     [Test, Explicit]
     public void PerformanceOfMethodEvaluationOnDifferentContextTypes()
     {

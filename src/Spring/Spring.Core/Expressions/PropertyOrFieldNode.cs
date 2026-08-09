@@ -61,7 +61,11 @@ public class PropertyOrFieldNode : BaseNode
     /// Initializes the node.
     /// </summary>
     /// <param name="context">The parent.</param>
-    private void InitializeNode(object context)
+    /// <param name="evalContext">
+    /// Current expression evaluation context, or <c>null</c> when the caller cannot provide
+    /// one, in which case extension properties are not considered.
+    /// </param>
+    private void InitializeNode(object context, EvaluationContext evalContext)
     {
         Type contextType = (context == null || context is Type ? context as Type : context.GetType());
 
@@ -114,6 +118,17 @@ public class PropertyOrFieldNode : BaseNode
                     {
                         accessor = GetPropertyOrFieldAccessor(typeof(Type), memberName, BINDING_FLAGS);
                     }
+                }
+            }
+
+            // then try a user-registered extension property; this takes precedence over the
+            // type accessor below, but never over a real property or field
+            if (accessor == null && evalContext != null)
+            {
+                ExpressionExtension extension = ExpressionExtensionRegistry.FindProperty(evalContext.Variables, context, memberName);
+                if (extension != null)
+                {
+                    accessor = new ExtensionPropertyValueAccessor(extension);
                 }
             }
 
@@ -216,13 +231,19 @@ public class PropertyOrFieldNode : BaseNode
     {
         lock (this)
         {
-            InitializeNode(context);
+            InitializeNode(context, evalContext);
 
             if (context == null && accessor.RequiresContext)
             {
                 throw new NullValueInNestedPathException(
                     "Cannot retrieve the value of a field or property '" + this.memberName
                                                                          + "', because context for its resolution is null.");
+            }
+
+            ExtensionPropertyValueAccessor extensionAccessor = accessor as ExtensionPropertyValueAccessor;
+            if (extensionAccessor != null)
+            {
+                return GetExtensionPropertyValue(extensionAccessor.Extension, context, evalContext);
             }
 
             if (IsProperty || IsField)
@@ -246,7 +267,7 @@ public class PropertyOrFieldNode : BaseNode
     {
         lock (this)
         {
-            InitializeNode(context);
+            InitializeNode(context, evalContext);
 
             if (context == null && accessor.RequiresContext)
             {
@@ -316,6 +337,27 @@ public class PropertyOrFieldNode : BaseNode
                 "Illegal attempt to get value for the property '" + this.memberName +
                 "'.", e);
         }
+    }
+
+    /// <summary>
+    /// Retrieves the value of an extension property by invoking its registered
+    /// implementation with the current context as the single argument.
+    /// </summary>
+    /// <param name="extension">Extension to evaluate.</param>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Extension property value.</returns>
+    private object GetExtensionPropertyValue(ExpressionExtension extension, object context, EvaluationContext evalContext)
+    {
+        object[] arguments = new object[] { context };
+        extension.AssertArgumentCount(arguments.Length);
+
+        if (extension.LambdaExpression != null)
+        {
+            return GetValueWithArguments(extension.LambdaExpression, context, evalContext, arguments);
+        }
+
+        return extension.InvokeCallback(arguments);
     }
 
     /// <summary>
@@ -478,7 +520,9 @@ public class PropertyOrFieldNode : BaseNode
     {
         lock (this)
         {
-            InitializeNode(context);
+            // no evaluation context is available here, so extension properties are never
+            // resolved through this path - callers expect a real PropertyInfo
+            InitializeNode(context, null);
         }
 
         return accessor.MemberInfo;
@@ -773,6 +817,46 @@ public class PropertyOrFieldNode : BaseNode
         public override void Set(object context, object value)
         {
             throw new NotSupportedException("Cannot set the value of a type.");
+        }
+    }
+
+    private class ExtensionPropertyValueAccessor : BaseValueAccessor
+    {
+        private readonly ExpressionExtension extension;
+
+        public ExtensionPropertyValueAccessor(ExpressionExtension extension)
+        {
+            this.extension = extension;
+        }
+
+        public ExpressionExtension Extension
+        {
+            get { return extension; }
+        }
+
+        public override object Get(object context)
+        {
+            // extension properties need the current evaluation context and are therefore
+            // evaluated by PropertyOrFieldNode itself
+            throw new NotSupportedException("Extension properties cannot be evaluated without an evaluation context.");
+        }
+
+        public override void Set(object context, object value)
+        {
+            throw new NotWritablePropertyException(
+                "Can't change the value of the read-only extension property '" + extension.Name + "'.");
+        }
+
+        public override bool RequiresContext
+        {
+            get { return true; }
+        }
+
+        public override bool RequiresRefresh(Type contextType)
+        {
+            // whether an extension property applies depends on the variables dictionary of
+            // the current evaluation, which is not visible here, so never cache the resolution
+            return true;
         }
     }
 }
