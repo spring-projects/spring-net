@@ -351,6 +351,25 @@ public class WebObjectFactory : DefaultListableObjectFactory
     }
 
     /// <summary>
+    /// Suppresses factory-lifetime disposal tracking of inner objects created for
+    /// 'request'- and 'session'-scoped owners: such owners are instantiated anew for every
+    /// request/session, so keeping a reference to each created inner instance until factory
+    /// shutdown would grow without bound (GH-239).
+    /// </summary>
+    /// <param name="ownerName">
+    /// The name of the object whose definition contains the inner object definition.
+    /// </param>
+    /// <param name="instance">The inner object instance that requires disposal.</param>
+    protected override void RegisterDisposableInnerObject(string ownerName, object instance)
+    {
+        RootObjectDefinition ownerDefinition = GetMergedObjectDefinition(ownerName, true);
+        if (ownerDefinition == null || !IsWebScopedSingleton(ownerDefinition))
+        {
+            base.RegisterDisposableInnerObject(ownerName, instance);
+        }
+    }
+
+    /// <summary>
     /// Add the created, but yet unpopulated singleton to the singleton cache
     /// to be able to resolve circular references
     /// </summary>

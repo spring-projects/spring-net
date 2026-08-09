@@ -1661,6 +1661,27 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
     protected internal ISet DisposableInnerObjects => disposableInnerObjects;
 
     /// <summary>
+    /// Registers an <see cref="System.IDisposable"/> instance that was created from an inner
+    /// object definition of the object identified by <paramref name="ownerName"/>, so that it
+    /// is destroyed when this factory is disposed.
+    /// </summary>
+    /// <remarks>
+    /// Registration keeps a strong reference to <paramref name="instance"/> until the factory
+    /// is disposed. Subclasses may override this method to suppress registration for owner
+    /// scopes whose instances are created repeatedly (for example per-request web scopes),
+    /// where tracking every created inner instance until factory shutdown would grow without
+    /// bound (GH-239).
+    /// </remarks>
+    /// <param name="ownerName">
+    /// The name of the object whose definition contains the inner object definition.
+    /// </param>
+    /// <param name="instance">The inner object instance that requires disposal.</param>
+    protected internal virtual void RegisterDisposableInnerObject(string ownerName, object instance)
+    {
+        DisposableInnerObjects.Add(instance);
+    }
+
+    /// <summary>
     /// The parent object factory, or <see langword="null"/> if there is none.
     /// </summary>
     /// <value>
