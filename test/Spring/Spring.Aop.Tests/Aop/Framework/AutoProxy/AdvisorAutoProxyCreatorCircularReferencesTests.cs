@@ -110,7 +110,7 @@ public class CountingAfterReturningAdvisor : StaticMethodMatcherPointcutAdvisor
 
     public CountingAfterReturningAdvisor()
     {
-        LogManager.GetLogger(this.GetType()).LogTrace("Created instance #" + this.GetHashCode());
+        LogManager.GetLogger(this.GetType()).LogTrace("Created instance #{HashCode}", this.GetHashCode());
         base.Advice = new CountingAfterReturningAdvice();
     }
 
@@ -124,7 +124,7 @@ public class SomeOtherObject : ICloneable
 {
     public SomeOtherObject()
     {
-        LogManager.GetLogger(this.GetType()).LogTrace("Created instance #" + this.GetHashCode());
+        LogManager.GetLogger(this.GetType()).LogTrace("Created instance #{HashCode}", this.GetHashCode());
     }
 
     public object Clone()
@@ -137,7 +137,7 @@ public class IndependentObject : ICloneable
 {
     public IndependentObject()
     {
-        LogManager.GetLogger(this.GetType()).LogTrace("Created instance #" + this.GetHashCode());
+        LogManager.GetLogger(this.GetType()).LogTrace("Created instance #{HashCode}", this.GetHashCode());
     }
 
     public object Clone()

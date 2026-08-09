@@ -24,6 +24,6 @@ public class SimpleMessageListener : IMessageListener
     {
         lastReceivedMessage = message;
         messageCount++;
-        LOG.LogDebug("Message listener count = " + messageCount);
+        LOG.LogDebug("Message listener count = {MessageCount}", messageCount);
     }
 }

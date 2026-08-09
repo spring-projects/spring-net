@@ -138,7 +138,7 @@ public class MyBinder : SerializationBinder
     public override Type BindToType(string assemblyName, string typeName)
     {
         if (LOG.IsEnabled(LogLevel.Debug))
-            LOG.LogDebug(String.Format("MyBinder.BindToType: {0}, {1}", typeName, assemblyName));
+            LOG.LogDebug("MyBinder.BindToType: {TypeName}, {AssemblyName}", typeName, assemblyName);
         return Type.GetType(typeName + ", " + assemblyName);
     }
 }
@@ -190,7 +190,7 @@ public class MySerializationSurrogate : ISerializationSurrogate
     public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
     {
         if (LOG.IsEnabled(LogLevel.Debug))
-            LOG.LogDebug(String.Format("MySerializationSurrogateWrapper.GetObjectData({0},...", obj.GetType()));
+            LOG.LogDebug("MySerializationSurrogateWrapper.GetObjectData({ObjectType},...", obj.GetType());
 
         FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
         if (obj is ISerializable)
@@ -212,7 +212,7 @@ public class MySerializationSurrogate : ISerializationSurrogate
     public object SetObjectData(object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
     {
         if (LOG.IsEnabled(LogLevel.Debug))
-            LOG.LogDebug(String.Format("MySerializationSurrogateWrapper.SetObjectData({0},...", obj.GetType()));
+            LOG.LogDebug("MySerializationSurrogateWrapper.SetObjectData({ObjectType},...", obj.GetType());
 
         FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 

@@ -33,15 +33,15 @@ public class SimpleMessageListener : IMessageListener
     public void OnMessage(IMessage message)
     {
         messageCount++;
-        LOG.LogDebug("Message listener count = " + messageCount);
+        LOG.LogDebug("Message listener count = {MessageCount}", messageCount);
         ITextMessage textMessage = message as ITextMessage;
         if (textMessage != null)
         {
-            LOG.LogInformation("Message Text = " + textMessage.Text);
+            LOG.LogInformation("Message Text = {Text}", textMessage.Text);
         }
         else
         {
-            LOG.LogWarning("Can not process message of type " + message.GetType());
+            LOG.LogWarning("Can not process message of type {MessageType}", message.GetType());
         }
     }
 }

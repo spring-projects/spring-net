@@ -28,13 +28,13 @@ public class WaitingHandler
 
     public string HandleMessage(string msgTxt)
     {
-        LOG.LogDebug(String.Format("Received text = [{0}]", msgTxt));
-        LOG.LogDebug("constructor set state string  = " + stateVariable);
+        LOG.LogDebug("Received text = [{MsgTxt}]", msgTxt);
+        LOG.LogDebug("constructor set state string  = {StateVariable}", stateVariable);
 
         Thread.Sleep(10000);
 
         messageCount++;
-        LOG.LogDebug("Message listener count = " + messageCount);
+        LOG.LogDebug("Message listener count = {MessageCount}", messageCount);
         return msgTxt + " - processed!";
     }
 }

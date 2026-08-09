@@ -23,7 +23,7 @@ namespace Spring.MsmqQuickStart.Client.Handlers
 
         public void Handle(string data)
         {
-            log.LogInformation("Received market data. " + data);
+            log.LogInformation("Received market data. {Data}", data);
 
             // forward to controller to update view
             stockController.UpdateMarketData(data);
