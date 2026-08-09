@@ -310,7 +310,7 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
             if (logger.IsEnabled(LogLevel.Warning))
             {
                 logger.LogWarning("Rejecting received message because of the listener container " +
-                                  "having been stopped in the meantime: " + message);
+                                  "having been stopped in the meantime: {NmsMessage}", message);
             }
 
             RollbackIfNecessary(session);
@@ -388,8 +388,8 @@ public abstract class AbstractMessageListenerContainer : AbstractListenerContain
             // Actually invoke the message listener
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Invoking listener with message of type [" + message.GetType() +
-                                "] and session [" + sessionToUse + "]");
+                logger.LogDebug("Invoking listener with message of type [{MessageType}" +
+                                "] and session [{Session}]", message.GetType(), sessionToUse);
             }
 
             listener.OnMessage(message, sessionToUse);

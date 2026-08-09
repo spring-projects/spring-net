@@ -178,7 +178,7 @@ public class NmsTransactionManager : AbstractPlatformTransactionManager,
             session = CreateSession(con);
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("Created NMS transaction on Session [" + session + "] from Connection [" + con + "]");
+                log.LogDebug("Created NMS transaction on Session [{Session}] from Connection [{Connection}]", session, con);
             }
 
             txObject.ResourceHolder = new NmsResourceHolder(ConnectionFactory, con, session);
@@ -272,7 +272,7 @@ public class NmsTransactionManager : AbstractPlatformTransactionManager,
         {
             if (status.Debug)
             {
-                LOG.LogDebug("Committing NMS transaction on Session [" + session + "]");
+                LOG.LogDebug("Committing NMS transaction on Session [{Session}]", session);
             }
 
             session.Commit();
@@ -300,7 +300,7 @@ public class NmsTransactionManager : AbstractPlatformTransactionManager,
         {
             if (status.Debug)
             {
-                LOG.LogDebug("Rolling back NMS transaction on Session [" + session + "]");
+                LOG.LogDebug("Rolling back NMS transaction on Session [{Session}]", session);
             }
 
             session.Rollback();

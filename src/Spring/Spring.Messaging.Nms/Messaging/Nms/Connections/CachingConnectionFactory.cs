@@ -227,7 +227,7 @@ public class CachingConnectionFactory : SingleConnectionFactory
             ISession targetSession = await con.CreateSessionAsync(mode).Awaiter();
             if (Log.IsEnabled(LogLevel.Debug))
             {
-                Log.LogDebug("Creating cached Session for mode " + mode + ": " + targetSession);
+                Log.LogDebug("Creating cached Session for mode {Mode}: {TargetSession}", mode, targetSession);
             }
 
             session = GetCachedSessionWrapper(targetSession, sessionList);

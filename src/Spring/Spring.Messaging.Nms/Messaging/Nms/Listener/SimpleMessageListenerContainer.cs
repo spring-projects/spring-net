@@ -233,7 +233,7 @@ public class SimpleMessageListenerContainer : AbstractMessageListenerContainer, 
 
             if (totalTryTime > maxRecoveryTime)
             {
-                logger.LogInformation("Could not refresh Connection after " + totalTryTime + ".  Stopping reconnection attempts.");
+                logger.LogInformation("Could not refresh Connection after {TotalTryTime}.  Stopping reconnection attempts.", totalTryTime);
                 throw new RecoveryTimeExceededException("Could not recover after " + totalTryTime);
             }
 

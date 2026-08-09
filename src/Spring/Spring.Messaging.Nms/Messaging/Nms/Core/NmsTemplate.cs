@@ -167,7 +167,7 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Executing callback on NMS ISession [" + sessionToUse + "]");
+                logger.LogDebug("Executing callback on NMS ISession [{Session}]", sessionToUse);
             }
 
             return action.DoInNms(sessionToUse);
@@ -537,7 +537,7 @@ public class NmsTemplate : NmsDestinationAccessor, INmsOperations
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.LogDebug("Sending created message [" + message + "]");
+                logger.LogDebug("Sending created message [{NmsMessage}]", message);
             }
 
             DoSend(producer, message);
