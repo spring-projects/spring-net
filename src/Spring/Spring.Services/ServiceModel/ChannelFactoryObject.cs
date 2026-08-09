@@ -65,9 +65,9 @@ public class ChannelFactoryObject<T> : ChannelFactory<T>, IFactoryObject
     {
         if (Log.IsEnabled(LogLevel.Debug))
         {
-            Log.LogDebug(String.Format(
-                "Creating channel of type '{0}' for the specified endpoint '{1}'...",
-                typeof(T).FullName, this._endpointConfigurationName));
+            Log.LogDebug(
+                "Creating channel of type '{ChannelType}' for the specified endpoint '{EndpointConfigurationName}'...",
+                typeof(T).FullName, this._endpointConfigurationName);
         }
 
         return this.CreateChannel();

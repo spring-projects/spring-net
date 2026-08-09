@@ -145,7 +145,7 @@ public class CaoExporter : ConfigurableLifetime, IApplicationContextAware, IObje
 
         if (LOG.IsEnabled(LogLevel.Debug))
         {
-            LOG.LogDebug(String.Format("Target '{0}' registered.", targetName));
+            LOG.LogDebug("Target '{TargetName}' registered.", targetName);
         }
     }
 

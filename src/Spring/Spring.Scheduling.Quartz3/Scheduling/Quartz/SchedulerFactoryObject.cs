@@ -631,7 +631,7 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
         {
             if (Logger.IsEnabled(LogLevel.Information))
             {
-                Logger.LogInformation("Loading Quartz config from [" + configLocation + "]");
+                Logger.LogInformation("Loading Quartz config from [{ConfigLocation}]", configLocation);
             }
 
             using (StreamReader sr = new StreamReader(configLocation.InputStream))

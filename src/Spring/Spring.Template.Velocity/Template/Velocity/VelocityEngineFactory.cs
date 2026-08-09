@@ -208,7 +208,7 @@ public class VelocityEngineFactory
         {
             if (log.IsEnabled(LogLevel.Information))
             {
-                log.LogInformation(string.Format("Loading Velocity config from [{0}]", configLocation));
+                log.LogInformation("Loading Velocity config from [{ConfigLocation}]", configLocation);
             }
 
             FillProperties(extendedProperties, configLocation, false);

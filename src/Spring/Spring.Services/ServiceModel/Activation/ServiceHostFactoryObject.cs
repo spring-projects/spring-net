@@ -153,7 +153,7 @@ public class ServiceHostFactoryObject : IFactoryObject, IInitializingObject, IOb
 
         if (LOG.IsEnabled(LogLevel.Information))
         {
-            LOG.LogInformation(String.Format("The service '{0}' is ready and can now be accessed.", TargetName));
+            LOG.LogInformation("The service '{TargetName}' is ready and can now be accessed.", TargetName);
         }
     }
 

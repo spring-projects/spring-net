@@ -111,7 +111,7 @@ public class SpringResourceLoader : ResourceLoader
 
         if (log.IsEnabled(LogLevel.Information))
         {
-            log.LogInformation(string.Format("SpringResourceLoader for Velocity: using resource loader [{0}] and resource loader paths {1}", resourceLoader, resourceLoaderPaths));
+            log.LogInformation("SpringResourceLoader for Velocity: using resource loader [{ResourceLoader}] and resource loader paths {ResourceLoaderPaths}", resourceLoader, resourceLoaderPaths);
         }
     }
 
@@ -124,7 +124,7 @@ public class SpringResourceLoader : ResourceLoader
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug(string.Format("Looking for Velocity resource with name [{0}]", source));
+            log.LogDebug("Looking for Velocity resource with name [{Source}]", source);
         }
 
         foreach (string resourceLoaderPath in resourceLoaderPaths)

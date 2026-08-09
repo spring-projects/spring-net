@@ -299,13 +299,13 @@ public class WebServiceProxyFactory : IConfigurableFactoryObject, IInitializingO
         {
             if (ServiceUri != null)
             {
-                LOG.LogDebug(String.Format("Generated client proxy type [{0}] for web service [{1}]", wrapper.FullName,
-                    ServiceUri.Description));
+                LOG.LogDebug("Generated client proxy type [{ProxyType}] for web service [{Description}]", wrapper.FullName,
+                    ServiceUri.Description);
             }
             else if (ProxyType != null)
             {
-                LOG.LogDebug(String.Format("Generated client proxy type [{0}] for web service based on provided proxy type [{1}]", wrapper.FullName,
-                    ProxyType.FullName));
+                LOG.LogDebug("Generated client proxy type [{ProxyType}] for web service based on provided proxy type [{ProvidedProxyType}]", wrapper.FullName,
+                    ProxyType.FullName);
             }
         }
     }
@@ -679,7 +679,7 @@ private void Initialize(DiscoveryClientDocumentCollection wsDocuments, string bi
                     {
                         if (LOG.IsEnabled(LogLevel.Information))
                         {
-                            LOG.LogInformation(String.Format("The binding '{0}', found in the WSDL document located at '{1}', will be use.", binding.Name, this.serviceUri.Description));
+                            LOG.LogInformation("The binding '{BindingName}', found in the WSDL document located at '{Description}', will be use.", binding.Name, this.serviceUri.Description);
                         }
 
                         return binding;

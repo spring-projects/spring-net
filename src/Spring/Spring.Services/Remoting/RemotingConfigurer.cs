@@ -109,7 +109,7 @@ public class RemotingConfigurer : IObjectFactoryPostProcessor, IOrdered
             }
             else
             {
-                log.LogDebug(String.Format("Remoting infrastructure configured using file '{0}'.", filename));
+                log.LogDebug("Remoting infrastructure configured using file '{Filename}'.", filename);
             }
         }
     }
