@@ -82,7 +82,7 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
                 {
                     if (DateTime.Now.Subtract(conversationItem.LastAccess).TotalMilliseconds > conversationItem.TimeOut)
                     {
-                        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("Timeout for conversation '{0}'", conversationItem.Id));
+                        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("Timeout for conversation '{ConversationId}'", conversationItem.Id);
                         conversationItem.EndConversation();
                     }
                 }
@@ -122,7 +122,7 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
                 IConversationState conversationItem = this.conversations[keyItem];
                 if (conversationItem.Ended)
                 {
-                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("FreeEnded: Release conversation '{0}'", conversationItem.Id));
+                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("FreeEnded: Release conversation '{ConversationId}'", conversationItem.Id);
                     removeList.Add(conversationItem);
                 }
             }
@@ -134,7 +134,7 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
 
             foreach (IConversationState conversationItem in removeList)
             {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("FreeEnded: Remove conversation '{0}'", conversationItem.Id));
+                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("FreeEnded: Remove conversation '{ConversationId}'", conversationItem.Id);
                 conversationItem.EndConversation();
                 this.RemoveConversation(conversationItem);
             }
@@ -178,7 +178,7 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
     /// <param name="conversation"></param>
     public void SetActiveConversation(IConversationState conversation)
     {
-        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("SetActiveConversation('{0}')", conversation.Id));
+        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("SetActiveConversation('{ConversationId}')", conversation.Id);
 
         //Close connection for the last conversation, if it is open.
         if (this.activeConversation != null && this.activeConversation != conversation)
@@ -263,7 +263,7 @@ public class WebConversationManager : SessionPerConversationScope, IConversation
         if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("Dispose. End all Conversations");
         foreach (String conversationId in this.conversations.Keys)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("Ending Conversation for Conversation Id: {0}", conversationId));
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("Ending Conversation for Conversation Id: {ConversationId}", conversationId);
             this.conversations[conversationId].EndConversation();
         }
 

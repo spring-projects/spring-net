@@ -185,7 +185,7 @@ public class SessionPerConversationScope : IDisposable
             {
                 if (isDebugEnabled)
                 {
-                    log.LogDebug($"SessionPerConversationScope is already open for this conversation: Id:'{activeConversation.Id}'.");
+                    log.LogDebug("SessionPerConversationScope is already open for this conversation: Id:'{ConversationId}'.", activeConversation.Id);
                 }
             }
         }
@@ -195,7 +195,7 @@ public class SessionPerConversationScope : IDisposable
             {
                 if (isDebugEnabled)
                 {
-                    log.LogDebug($"activeConversation with 'session-per-conversation': Id:'{activeConversation.Id}'.");
+                    log.LogDebug("activeConversation with 'session-per-conversation': Id:'{ConversationId}'.", activeConversation.Id);
                 }
 
                 // single session mode
@@ -226,7 +226,7 @@ public class SessionPerConversationScope : IDisposable
             {
                 if (isDebugEnabled)
                 {
-                    log.LogDebug($"activeConversation with NO 'session-per-conversation': Id:'{activeConversation.Id}'.");
+                    log.LogDebug("activeConversation with NO 'session-per-conversation': Id:'{ConversationId}'.", activeConversation.Id);
                 }
             }
         }
@@ -326,14 +326,14 @@ public class SessionPerConversationScope : IDisposable
                 {
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.LogDebug($"DoOpenSession: Conversation has a DbProvider: Id='{conversation.Id}'");
+                        log.LogDebug("DoOpenSession: Conversation has a DbProvider: Id='{ConversationId}'", conversation.Id);
                     }
 
                     if (!conversation.RootSessionPerConversation.IsConnected)
                     {
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.LogDebug($"DoOpenSession: Conversation is not Connected: Id='{conversation.Id}'");
+                            log.LogDebug("DoOpenSession: Conversation is not Connected: Id='{ConversationId}'", conversation.Id);
                         }
 
                         DbConnection connection = (DbConnection) conversation.DbProvider.CreateConnection();
@@ -345,7 +345,7 @@ public class SessionPerConversationScope : IDisposable
                     {
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.LogDebug($"DoOpenSession: Conversation is already Connected: Id='{conversation.Id}'");
+                            log.LogDebug("DoOpenSession: Conversation is already Connected: Id='{ConversationId}'", conversation.Id);
                         }
                     }
                 }
@@ -353,7 +353,7 @@ public class SessionPerConversationScope : IDisposable
                 {
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.LogDebug($"DoOpenSession: Conversation has NO DbProvider: Id='{conversation.Id}'");
+                        log.LogDebug("DoOpenSession: Conversation has NO DbProvider: Id='{ConversationId}'", conversation.Id);
                     }
 
                     conversation.RootSessionPerConversation.Reconnect();
@@ -438,7 +438,7 @@ public class SessionPerConversationScope : IDisposable
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug($"CloseConversation: Id='{conversation.Id}'");
+                log.LogDebug("CloseConversation: Id='{ConversationId}'", conversation.Id);
             }
 
             if (conversation.RootSessionPerConversation != null)
