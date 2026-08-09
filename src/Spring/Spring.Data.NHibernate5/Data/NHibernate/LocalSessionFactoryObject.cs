@@ -489,7 +489,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
                 if (log.IsEnabled(LogLevel.Information))
                 {
                     log.LogInformation("Overriding use of Spring's Hibernate Connection Provider with [" +
-                                       hibernateProperties[Environment.ConnectionProvider] + "]");
+                                       "{ConnectionProvider}]", hibernateProperties[Environment.ConnectionProvider]);
                 }
 
                 config.Properties.Remove(Environment.ConnectionProvider);
@@ -833,7 +833,7 @@ public class LocalSessionFactoryObject : IFactoryObject, IInitializingObject, IP
     {
         if (log.IsEnabled(LogLevel.Debug))
         {
-            log.LogDebug("Executing schema statement: " + sql);
+            log.LogDebug("Executing schema statement: {Sql}", sql);
         }
 
         try

@@ -281,8 +281,8 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
                 (SessionHolder) TransactionSynchronizationManager.GetResource(SessionFactory);
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("Found thread-bound Session [" + sessionHolder.Session +
-                             "] for Hibernate transaction");
+                log.LogDebug("Found thread-bound Session [{Session}" +
+                             "] for Hibernate transaction", sessionHolder.Session);
             }
 
             txObject.SetSessionHolder(sessionHolder, false);
@@ -358,7 +358,7 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug("Opened new Session [" + newSession + "] for Hibernate transaction");
+                    log.LogDebug("Opened new Session [{Session}] for Hibernate transaction", newSession);
                 }
 
                 txObject.SetSessionHolder(new SessionHolder(newSession), true);
@@ -415,7 +415,7 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.LogDebug("Exposing Hibernate transaction as ADO transaction [" + con + "]");
+                    log.LogDebug("Exposing Hibernate transaction as ADO transaction [{Connection}]", con);
                 }
 
                 TransactionSynchronizationManager.BindResource(DbProvider, conHolder);
@@ -525,7 +525,7 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
         if (status.Debug)
         {
             log.LogDebug("Committing Hibernate transaction on Session [" +
-                         txObject.SessionHolder.Session + "]");
+                         "{Session}]", txObject.SessionHolder.Session);
         }
 
         try
@@ -571,7 +571,7 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
         if (status.Debug)
         {
             log.LogDebug("Rolling back Hibernate transaction on Session [" +
-                         txObject.SessionHolder.Session + "]");
+                         "{Session}]", txObject.SessionHolder.Session);
         }
 
         try
@@ -617,7 +617,7 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
         if (status.Debug)
         {
             log.LogDebug("Setting Hibernate transaction on Session [" +
-                         txObject.SessionHolder.Session + "] rollback-only");
+                         "{Session}] rollback-only", txObject.SessionHolder.Session);
         }
 
         txObject.SetRollbackOnly();
@@ -731,7 +731,7 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("Closing Hibernate Session [" + session + "] after transaction");
+                log.LogDebug("Closing Hibernate Session [{Session}] after transaction", session);
             }
 
             SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, SessionFactory);
@@ -740,7 +740,7 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("Not closing pre-bound Hibernate Session [" + session + "] after transaction");
+                log.LogDebug("Not closing pre-bound Hibernate Session [{Session}] after transaction", session);
             }
 
             if (txObject.SessionHolder.AssignedPreviousFlushMode)
@@ -932,8 +932,9 @@ public class HibernateTransactionManager : AbstractPlatformTransactionManager, I
                 // Use the SessionFactory's DataSource for exposing transactions to ADO.NET code.
                 if (log.IsEnabled(LogLevel.Information))
                 {
-                    log.LogInformation("Derived DbProvider [" + sfDbProvider.DbMetadata.ProductName +
-                                       "] of Hibernate SessionFactory for HibernateTransactionManager");
+                    log.LogInformation("Derived DbProvider [{ProductName}" +
+                                       "] of Hibernate SessionFactory for HibernateTransactionManager",
+                                       sfDbProvider.DbMetadata.ProductName);
                 }
 
                 DbProvider = sfDbProvider;
