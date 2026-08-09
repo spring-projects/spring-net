@@ -9,6 +9,7 @@ using Fallout.Common.CI.AppVeyor;
 using Fallout.Common.CI.GitHubActions;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
+using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.MSBuild;
 using Fallout.Common.Utilities.Collections;
@@ -46,25 +47,61 @@ partial class Build : FalloutBuild
 
     bool IsTaggedBuild => !string.IsNullOrWhiteSpace(TagVersion);
 
+    /// <summary>Numeric part of the version, e.g. <c>3.1.0</c>. Also the file version.</summary>
+    string VersionPrefix;
+
+    /// <summary>Prerelease part, e.g. <c>rc.1</c> or <c>preview-20260809-1231</c>; empty for releases.</summary>
     string VersionSuffix;
+
+    /// <summary>Binding identity of the strong-named assemblies, e.g. <c>3.1.0.0</c>.</summary>
+    string AssemblyVersion;
+
+    string FullVersion => string.IsNullOrWhiteSpace(VersionSuffix) ? VersionPrefix : $"{VersionPrefix}-{VersionSuffix}";
 
     static bool IsRunningOnWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
     protected override void OnBuildInitialized()
     {
-        VersionSuffix = !IsTaggedBuild
-            ? $"preview-{DateTime.UtcNow:yyyyMMdd-HHmm}"
-            : "";
+        DetermineVersion();
+
+        Log.Information("BUILD SETUP");
+        Log.Information("Configuration:\t{Configuration}", Configuration);
+        Log.Information("Version:\t{FullVersion}", FullVersion);
+        Log.Information("Assembly version:\t{AssemblyVersion}", AssemblyVersion);
+        Log.Information("Tagged build:\t{IsTaggedBuild}", IsTaggedBuild);
+    }
+
+    /// <summary>
+    /// The git tag is the version authority; untagged builds carry the <see cref="ProjectVersion"/>
+    /// placeholder plus a preview/dev suffix so they can never be mistaken for a release.
+    /// </summary>
+    void DetermineVersion()
+    {
+        var tagVersion = TagVersion;
+        if (!string.IsNullOrWhiteSpace(tagVersion))
+        {
+            // A prerelease tag (v3.1.0-rc.1) has to be split - only the numeric part is a valid
+            // AssemblyVersion, and the remainder belongs in the package version suffix.
+            var separator = tagVersion.IndexOf('-');
+            VersionPrefix = separator < 0 ? tagVersion : tagVersion[..separator];
+            VersionSuffix = separator < 0 ? null : tagVersion[(separator + 1)..];
+        }
+        else
+        {
+            VersionPrefix = ProjectVersion;
+            VersionSuffix = $"preview-{DateTime.UtcNow:yyyyMMdd-HHmm}";
+        }
 
         if (IsLocalBuild)
         {
             VersionSuffix = $"dev-{DateTime.UtcNow:yyyyMMdd-HHmm}";
         }
 
-        Log.Information("BUILD SETUP");
-        Log.Information("Configuration:\t{Configuration}", Configuration);
-        Log.Information("Version suffix:\t{VersionSuffix}", VersionSuffix);
-        Log.Information("Tagged build:\t{IsTaggedBuild}", IsTaggedBuild);
+        // The assemblies are strong-named, so AssemblyVersion is part of their binding identity and
+        // every change to it forces consumers to update binding redirects. Pin it to major.minor so
+        // patch releases stay drop-in replacements; FileVersion carries the exact version instead.
+        var numericVersion = Version.Parse(VersionPrefix);
+        AssemblyVersion = $"{numericVersion.Major}.{numericVersion.Minor}.0.0";
     }
 
     Target Clean => _ => _
@@ -94,6 +131,7 @@ partial class Build : FalloutBuild
             DotNetBuild(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
+                .Apply(CompileVersionSettings)
                 .EnableNoRestore()
             );
         });
@@ -145,18 +183,11 @@ partial class Build : FalloutBuild
             var packTargets = GetActiveProjects()
                 .Where(x => !x.Name.EndsWith(".Tests"));
 
-            var version = TagVersion;
-            if (string.IsNullOrWhiteSpace(version))
-            {
-                version = ProjectVersion;
-            }
-
             foreach (var project in packTargets)
             {
                 DotNetPack(s => s
                     .SetProject(project.Path)
-                    .SetVersion(version)
-                    .SetVersionSuffix(VersionSuffix)
+                    .Apply(PackVersionSettings)
                     .SetConfiguration(Configuration.Release)
                     .EnableNoRestore()
                     .SetOutputDirectory(ArtifactsDirectory)
@@ -182,6 +213,22 @@ partial class Build : FalloutBuild
                 file.CopyToDirectory(binDirectory / "net", ExistsPolicy.FileOverwriteIfNewer);
             }
         });
+
+    // Compile and Pack have to agree: the packaged assemblies and the ones copied into bin/ by
+    // PackBinaries come from different targets, and only Pack used to set any version at all.
+    // DotNet*Settings share no base that carries these extensions, hence the two near-identical
+    // configurations.
+    Configure<DotNetBuildSettings> CompileVersionSettings => _ => _
+        .SetAssemblyVersion(AssemblyVersion)
+        .SetFileVersion(VersionPrefix)
+        .SetVersionPrefix(VersionPrefix)
+        .SetVersionSuffix(VersionSuffix);
+
+    Configure<DotNetPackSettings> PackVersionSettings => _ => _
+        .SetAssemblyVersion(AssemblyVersion)
+        .SetFileVersion(VersionPrefix)
+        .SetVersionPrefix(VersionPrefix)
+        .SetVersionSuffix(VersionSuffix);
 
     IEnumerable<Project> GetActiveProjects()
     {
