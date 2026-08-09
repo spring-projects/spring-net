@@ -5,10 +5,17 @@ on:
     tags:
       - 'v*.*.*'
 
+# Packages are pushed with NuGet trusted publishing: the job's OIDC token is exchanged for a
+# short-lived nuget.org API key inside the build, so no long-lived key is stored anywhere.
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
 
   publish:
     runs-on: windows-latest
+    environment: nuget
     steps:
       - uses: actions/setup-dotnet@v5
         with:
@@ -16,5 +23,3 @@ jobs:
       - uses: actions/checkout@v5
       - name: Publish
         run: ./build.cmd test publish
-        env:
-          NuGetApiKey: ${{ secrets.NUGET_API_KEY }}

@@ -4,7 +4,7 @@ Guidance for AI coding agents working in this repository. Human-facing documenta
 
 ## Project overview
 
-Spring.NET is a port and extension of the Java Spring Framework for .NET: IoC container, AOP, expression language, declarative transaction management, ADO.NET framework, ASP.NET (WebForms/MVC5/WebAPI) integration, NHibernate 5, Quartz.NET, messaging (MSMQ, NMS, TIBCO EMS), NVelocity templating, and NUnit/MSTest testing support. Apache 2.0 licensed. Packages are published to NuGet from git tags (`v*.*.*`).
+Spring.NET is a port and extension of the Java Spring Framework for .NET: IoC container, AOP, expression language, declarative transaction management, ADO.NET framework, ASP.NET (WebForms/MVC5/WebAPI) integration, NHibernate 5, Quartz.NET, messaging (MSMQ, NMS, TIBCO EMS), NVelocity templating, and NUnit/MSTest testing support. Apache 2.0 licensed. Packages are published to NuGet from git tags (`v*.*.*`) via NuGet Trusted Publishing (GitHub OIDC), not a stored API key.
 
 ## Build and test commands
 
@@ -63,6 +63,7 @@ Key mechanics (defined in `src/Directory.Build.props` and `test/Directory.Build.
 - **Central package management**: versions live in `Directory.Packages.props`; csproj `PackageReference`s are versionless.
 - **ANTLR expression parser**: the grammar is `src/Spring/Spring.Core/Expressions/Expression.g`. The generated lexer/parser under `Expressions/Parser/` and a vendored, hand-patched ANTLR 2.7.7 runtime under `Expressions/Parser/antlr/` are **committed — never hand-edit generated files**; regenerate with `./build.cmd Antlr` (see `src/Spring/Spring.Core/README_ANTLR.txt`).
 - **Versioning**: the git tag is the version authority (`v3.1.0` → 3.1.0); untagged builds get a `dev-`/`preview-` suffix. Publishing runs from the tag workflow only.
+- **Trusted publishing**: `.github/workflows/publish.yml` is the only workflow allowed to push to nuget.org. It needs `permissions: id-token: write` and `environment: nuget`; the `Publish` target exchanges that OIDC token for a short-lived API key in `build-support/build/Build.Publish.cs`. The nuget.org policy is keyed to the **workflow filename** `publish.yml` plus the `nuget` environment, so renaming, moving or splitting that workflow breaks publishing until the policy is updated. Do not reintroduce a `NUGET_API_KEY` secret — the `NuGetApiKey` parameter stays only as a manual override.
 - In test projects, `ILog` is a global using alias for `Microsoft.Extensions.Logging.ILogger`.
 
 ## Code style

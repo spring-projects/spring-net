@@ -133,6 +133,7 @@
         },
         "NuGetApiKey": {
           "type": "string",
+          "description": "Explicit nuget.org API key - when omitted, a short-lived key is minted from GitHub OIDC",
           "default": "Secrets must be entered via 'fallout :secrets [profile]'"
         },
         "NuGetSource": {
