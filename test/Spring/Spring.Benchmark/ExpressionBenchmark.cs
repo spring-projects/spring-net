@@ -41,7 +41,6 @@ public class ExpressionBenchmark
     };
 
     private readonly Dictionary<string, object> variables = new();
-    private ObjectWrapper wrapper;
     private string expression;
     private IExpression prepared;
 
@@ -59,7 +58,6 @@ public class ExpressionBenchmark
         };
 
         prepared = Expression.Parse(expression);
-        wrapper = new ObjectWrapper(root);
     }
 
     /// <summary>Parsing alone.</summary>
@@ -87,14 +85,27 @@ public class ExpressionBenchmark
     /// <summary>The evaluation alone, which doesn't depend on the parser.</summary>
     [Benchmark]
     public object GetValuePrepared() => prepared.GetValue(root, variables);
+}
 
-    /// <summary>Takes the property parsing path of <see cref="ObjectWrapper"/>, which parses on each call.</summary>
-    [Benchmark]
-    public object WrapperSimpleProperty() => wrapper.GetPropertyValue("Name");
+/// <summary>
+/// <see cref="ObjectWrapper"/> parses the name of a property each time it is asked for it.
+/// </summary>
+[MemoryDiagnoser]
+public class ObjectWrapperBenchmark
+{
+    private readonly ObjectWrapper wrapper = new(new Person
+    {
+        Name = "Alice",
+        Friends = new ArrayList { new Person(), new Person { Address = new Address { City = "Nice" } } },
+    });
 
-    /// <summary>Takes the primary expression parsing path of <see cref="ObjectWrapper"/>.</summary>
+    /// <summary>Only reads a name, without the parser.</summary>
     [Benchmark]
-    public object WrapperPropertyPath() => wrapper.GetPropertyValue("Friends[1].Address.City");
+    public object SimpleProperty() => wrapper.GetPropertyValue("Name");
+
+    /// <summary>Takes the primary expression parsing path.</summary>
+    [Benchmark]
+    public object PropertyPath() => wrapper.GetPropertyValue("Friends[1].Address.City");
 }
 
 public class Person
