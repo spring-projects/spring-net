@@ -154,6 +154,8 @@ Changes (3.0.x to 3.1)
      form of a parsed expression.
    - A nested expression too deep for the stack of the thread, or 2,000 levels of parentheses or prefix
      operators, is a SyntaxErrorException instead of a stack overflow.
+   - Evaluating a tree too deep for the stack of the thread throws InsufficientExecutionStackException
+     instead of overflowing it.
    - On .NET Framework, Spring.Core depends on System.ValueTuple, on all targets on System.Memory explicitly.
 
 Changes (2.0 to 3.0)

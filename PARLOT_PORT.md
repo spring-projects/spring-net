@@ -32,9 +32,10 @@ embedded (101 files), the generated lexer and parser, the `Antlr` build target a
   | `((((1))))` | over 22 is impractical, see above | 200 levels work, 400 are a `SyntaxErrorException` |
   | `----1` | 3,000 work, 5,000 crash the process | 1,500 work, 2,500 are a `SyntaxErrorException`, whatever the length |
 
-  Not changed: a long chain such as `1+1+1+...` parses without recursion in both, and then overflows the stack when
-  *evaluated*, at 3,000 terms in a 1 MB thread, because `BaseNode.GetValue` has no stack check. A
-  `RuntimeHelpers.EnsureSufficientExecutionStack()` there would fix it, but is outside the scope of this change.
+  **Evaluation checks the stack too, which is new.** A long chain such as `1+1+1+...` parses without recursion in both,
+  and then overflowed the stack when *evaluated*, at 3,000 terms in a 1 MB thread, and 1,900 prefix operators can do the
+  same on a smaller stack. `BaseNode` now calls `RuntimeHelpers.EnsureSufficientExecutionStack()` for each node it evaluates, so
+  this is an `InsufficientExecutionStackException`. It costs time on prepared expressions, see [Benchmarks](#benchmarks).
 - **No Windows-only tool to change the grammar.** The grammar is C#, compiled by the normal build.
 - **Dependencies.** No package is added at run time for Parlot: `Parlot.SourceGenerator` is a build-only analyzer
   (`PrivateAssets="all"`), which emits the parser into `Spring.Core`. The generated code needs `System.Memory` (now an
@@ -78,7 +79,7 @@ of both with a vocabulary of the tokens and their near misses.
 - An early run of 3.9 million parses found 21 differences, all from one lexer rule (`.` followed by a digit always starts a number,
   even an invalid one), now fixed. Before that, smaller runs found the other lexer and follow-set quirks listed below.
 - The final run: **1,571,952 parses, 615,238 accepted with identical trees, 956,714 rejected by both, no other result.**
-- The grammar hasn't changed since, other than adding the recursion limit.
+- Run again on the final grammar, with the recursion limit left out and the fixes for named arguments and long paths, it gives the same counts.
 - The rejected ones have the same column in 91% of the cases, and the same column and message in 81%.
 
 `ExpressionGrammarTests` stays, with the trees and errors ANTLR gave for 216 expressions, chosen for the quirks of the
@@ -100,7 +101,8 @@ Differences, all deliberate:
   invalid char.
 - **`QualifiedIdentifier` has no children.** ANTLR kept one child per token of the name, which only served to rebuild its
   text; the text is now whole. `getText()` returns the same value.
-- **The nesting limits above.**
+- **The nesting limits above.** The parser doesn't return why it failed, so at 32 or more open brackets or prefix operators an error reads
+  `unexpected token or expression nested too deeply: "("`, which can also be a plain syntax error at that depth.
 
 ## Design
 
@@ -122,6 +124,9 @@ to `SpringAST`, so that the 60 node classes are almost untouched. The evaluation
 - `Parse` needs the end of the input, so a failed alternative can't be accepted. `ParsePrimary` doesn't, and checks what follows it with
   the follow sets of the ANTLR grammar (`CanFollowPrimary`).
 
+**Named arguments.** ANTLR commits to a named argument when it sees a name and `=`. Without that, a failed one was read again as an assignment, which
+took exponential time on nested `new a(b=` (1.6 s at 177 chars), so the other alternative starts with `Not(id.AndSkip(assign))`.
+
 **Operator tables.** `Operators()` handles the unary and the left-associative levels. The relational and the power levels
 don't chain, and the third operand of `?:` is a whole expression, which a table can't express, so these remain sequences. There
 are three tables and three sequences rather than one table, on which one expression spends a little more than it could.
@@ -140,11 +145,11 @@ Green reference and result of `Spring.Core.Tests`, whose `ExpressionEvaluatorTes
 
 | | Before | After |
 |---|---|---|
-| `net462`, Windows | 2,741 passed, 0 failed, 23 skipped | 2,758 passed, 0 failed, 23 skipped |
-| `net8.0`, macOS | 2,458 passed, 5 failed, 20 skipped | 2,475 passed, 5 failed, 20 skipped |
+| `net462`, Windows | 2,741 passed, 0 failed, 23 skipped | 2,773 passed, 0 failed, 23 skipped |
+| `net8.0`, macOS | 2,458 passed, 5 failed, 20 skipped | 2,490 passed, 5 failed, 20 skipped |
 
 The 5 failures are the same before and after, and don't touch expressions: currency and percent formatters that depend on the culture of the
-machine. The 17 new tests are `ExpressionGrammarTests`.
+machine. The 32 new tests are `ExpressionGrammarTests`.
 
 ## Benchmarks
 
@@ -219,7 +224,14 @@ what remains is the first evaluation, so the gain shrinks as expected:
 | | x64, .NET 8 | 1,976 µs | 1,527 µs | 1.3x |
 | | x64, .NET Framework | 3,005 µs | 2,459 µs | 1.2x |
 
-A prepared `GetValue` doesn't depend on the parser, as expected: Arm64, .NET 8, Small 49 ns and 50 ns, Medium 816 ns and 749 ns, Large 2,042 ns and 1,972 ns, with the same allocations.
+A prepared `GetValue` doesn't depend on the parser, but it pays for the stack check `BaseNode` now does. Arm64, .NET 8, ANTLR then Parlot without
+the check then with it, one short run of each: Small 49 ns, 50 ns, 56 ns; Medium 816 ns, 749 ns, 806 ns; Large 2,042 ns, 1,972 ns, 2,382 ns, with the
+same allocations. So about 8% to 21%, within the noise of this machine only for the smallest gaps. An application that evaluates prepared expressions in a
+hot loop gives back that much, for not crashing on a deep tree.
+
+The tables above were measured before the last fixes, which added the check, a field in `Expression` and the guard on named arguments. A new run on
+Arm64 shows no change in parsing beyond the noise (Small 221 ns, Medium 1,161 ns, Large 7,872 ns), and 16 to 520 more bytes per parse, 8 for each primary
+expression (552 B, 2,112 B, 12,608 B). x64 wasn't measured again.
 
 `ObjectWrapper.GetPropertyValue` parses the name on each call. `Name` takes the path that only reads a name (`ParseProperty`), `Friends[1].Address.City` the one
 that parses a primary expression (`ParsePrimary`):
@@ -235,7 +247,6 @@ that parses a primary expression (`ParsePrimary`):
 
 ## Follow-ups, not in this change
 
-- `BaseNode.GetValue` has no stack check, see the chains above.
 - `IntLiteralNode` can't evaluate the suffixes the grammar accepts: `5L` parses and then throws a `FormatException`.
 - The line of a syntax error is always 1, whatever the input, because the ANTLR lexer never counted lines. Kept for compatibility.
 
