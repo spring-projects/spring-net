@@ -143,19 +143,7 @@ public class Expression : BaseNode
     {
         if (StringUtils.HasText(expression))
         {
-            ExpressionLexer lexer = new ExpressionLexer(new StringReader(expression));
-            ExpressionParser parser = new SpringExpressionParser(lexer);
-
-            try
-            {
-                parser.expr();
-            }
-            catch (TokenStreamRecognitionException ex)
-            {
-                throw new SyntaxErrorException(ex.recog.Message, ex.recog.getLine(), ex.recog.getColumn(), expression);
-            }
-
-            return (IExpression) parser.getAST();
+            return ExpressionGrammar.ParseExpression(expression);
         }
         else
         {
@@ -402,19 +390,7 @@ public class Expression : BaseNode
 
     private static LambdaExpressionNode ParseLambda(string lambdaExpression)
     {
-        ExpressionLexer lexer = new ExpressionLexer(new StringReader(lambdaExpression));
-        ExpressionParser parser = new SpringExpressionParser(lexer);
-
-        try
-        {
-            parser.lambda();
-        }
-        catch (TokenStreamRecognitionException ex)
-        {
-            throw new SyntaxErrorException(ex.recog.Message, ex.recog.getLine(), ex.recog.getColumn(), lambdaExpression);
-        }
-
-        return (LambdaExpressionNode) parser.getAST();
+        return ExpressionGrammar.ParseLambda(lambdaExpression);
     }
 
     /// <summary>
@@ -426,19 +402,7 @@ public class Expression : BaseNode
     {
         if (StringUtils.HasText(expression))
         {
-            ExpressionLexer lexer = new ExpressionLexer(new StringReader(expression));
-            ExpressionParser parser = new SpringExpressionParser(lexer);
-
-            try
-            {
-                parser.primaryExpression();
-            }
-            catch (TokenStreamRecognitionException ex)
-            {
-                throw new SyntaxErrorException(ex.recog.Message, ex.recog.getLine(), ex.recog.getColumn(), expression);
-            }
-
-            return (IExpression) parser.getAST();
+            return ExpressionGrammar.ParsePrimary(expression);
         }
         else
         {
@@ -455,19 +419,7 @@ public class Expression : BaseNode
     {
         if (StringUtils.HasText(expression))
         {
-            ExpressionLexer lexer = new ExpressionLexer(new StringReader(expression));
-            ExpressionParser parser = new SpringExpressionParser(lexer);
-
-            try
-            {
-                parser.property();
-            }
-            catch (TokenStreamRecognitionException ex)
-            {
-                throw new SyntaxErrorException(ex.recog.Message, ex.recog.getLine(), ex.recog.getColumn(), expression);
-            }
-
-            return (IExpression) parser.getAST();
+            return ExpressionGrammar.ParseProperty(expression);
         }
         else
         {

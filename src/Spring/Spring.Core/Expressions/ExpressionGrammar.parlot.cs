@@ -16,7 +16,7 @@ namespace Spring.Expressions;
 /// </remarks>
 internal static partial class ExpressionGrammar
 {
-    [GenerateParser(nameof(TryParse))]
+    [GenerateParser(nameof(TryParse), MaxRecursionDepth = 2000)]
     private static Parser<BaseNode> Build(Rule rule)
     {
         var expression = Deferred<BaseNode>();
