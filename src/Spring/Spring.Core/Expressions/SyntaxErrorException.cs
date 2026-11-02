@@ -24,7 +24,7 @@ namespace Spring.Expressions;
 /// </summary>
 /// <author>Erich Eichinger</author>
 [Serializable]
-internal class SyntaxErrorException : RecognitionException, ISerializable
+public class SyntaxErrorException : RecognitionException, ISerializable
 {
     private readonly string _expression;
 
