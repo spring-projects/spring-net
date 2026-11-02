@@ -25,7 +25,10 @@ internal static partial class ExpressionGrammar
     private const string IdPart = IdStart + "0123456789";
     private const string NumberStart = "0123456789.";
 
-    private const char EndOfText = '￿';
+    private const char EndOfText = '\uFFFF';
+
+    // The parser fails at the limit on nesting, or when the stack of the thread ends. A small stack can end at this depth
+    private const int SuspiciousDepth = 32;
 
     private static partial bool TryParse(string input, Rule rule, out BaseNode value, out int failure);
 
@@ -48,10 +51,10 @@ internal static partial class ExpressionGrammar
         var length = ScanId(input.AsSpan(start));
         if (length == 0)
         {
-            throw CreateSyntaxError(input, start, "ID");
+            throw CreateSyntaxError(input, start, "ID", mayBeTooDeep: false);
         }
 
-        return Leaf(new PropertyOrFieldNode(), ID, input.Substring(start, length));
+        return WithType(new PropertyOrFieldNode(), ID, input.Substring(start, length));
     }
 
     private static BaseNode Parse(string input, Rule rule)
@@ -61,12 +64,15 @@ internal static partial class ExpressionGrammar
             return node;
         }
 
-        // A prefix that is a whole expression is one that only the end of the input could have followed
-        var expected = rule == Rule.Lambda && SkipSpaces(input.AsSpan(), 0) == SkipSpaces(input.AsSpan(), failure) ? "LAMBDA"
-            : rule == Rule.Expression && failure > 0 && TryParse(input.Substring(0, failure), rule, out _, out _) ? "EOF"
+        var offset = SkipSpaces(input.AsSpan(), failure);
+        ReadTokensBefore(input, offset, out var depth, out var afterOperand);
+
+        // The parser doesn't return why it failed: at this depth it can be the limit on nesting
+        var expected = rule == Rule.Lambda && offset == SkipSpaces(input.AsSpan(), 0) ? "LAMBDA"
+            : rule == Rule.Expression && depth == 0 && afterOperand ? "EOF"
             : null;
 
-        throw CreateSyntaxError(input, failure, expected);
+        throw CreateSyntaxError(input, offset, expected, depth >= SuspiciousDepth);
     }
 
     // Tokens
@@ -492,11 +498,19 @@ internal static partial class ExpressionGrammar
 
     private static bool Contains(long tokens, int type) => type < 64 && (tokens & (1L << type)) != 0;
 
-    // The tokens a node of a primary expression starts with, and those that can follow a name, and a primary expression
-    // without any further node, in the grammar
-    private const long NodeStarts = 16091095105536L;
-    private const long TokensAfterName = 1134924607015288578L;
-    private const long TokensAfterStartNode = 1134908515920183042L;
+    // The tokens a node of a primary expression starts with
+    private const long NodeStarts =
+        (1L << LPAREN) | (1L << DOT) | (1L << ID) | (1L << LBRACKET) | (1L << PROJECT) | (1L << SELECT) | (1L << SELECT_FIRST) | (1L << SELECT_LAST);
+
+    // The tokens that can follow a primary expression without any further node, in the grammar
+    private const long TokensAfterStartNode =
+        (1L << EOF) | (1L << AND) | (1L << OR) | (1L << XOR) | (1L << IN) | (1L << IS) | (1L << BETWEEN) | (1L << LIKE) | (1L << MATCHES)
+        | (1L << SEMI) | (1L << RPAREN) | (1L << ASSIGN) | (1L << DEFAULT) | (1L << QMARK) | (1L << COLON) | (1L << PLUS) | (1L << MINUS)
+        | (1L << STAR) | (1L << DIV) | (1L << MOD) | (1L << POWER) | (1L << COMMA) | (1L << RBRACKET) | (1L << RCURLY) | (1L << EQUAL)
+        | (1L << NOT_EQUAL) | (1L << LESS_THAN) | (1L << LESS_THAN_OR_EQUAL) | (1L << GREATER_THAN) | (1L << GREATER_THAN_OR_EQUAL);
+
+    // The tokens that can follow a name, in the grammar
+    private const long TokensAfterName = TokensAfterStartNode | NodeStarts;
 
     // The tree
 
@@ -507,7 +521,13 @@ internal static partial class ExpressionGrammar
         return node;
     }
 
-    private static BaseNode Leaf(BaseNode node, int type, string text) => WithType(node, type, text);
+    private static SpringAST TokenNode(int type, string text)
+    {
+        var node = new SpringAST();
+        node.Type = type;
+        node.setText(text);
+        return node;
+    }
 
     private static BaseNode WithText(BaseNode node, string text)
     {
@@ -544,20 +564,22 @@ internal static partial class ExpressionGrammar
         return WithType(node, type, text);
     }
 
-    private static BaseNode Operator(BaseNode node, int type, string text, BaseNode first, BaseNode second)
+    private static BaseNode Operator(BaseNode node, int type, string text, BaseNode first, BaseNode second) =>
+        WithChildren(WithType(node, type, text), first, second);
+
+    private static BaseNode WithChildren(BaseNode node, BaseNode first, BaseNode second)
     {
         first.setNextSibling(second);
-        return Operator(node, type, text, first);
+        node.setFirstChild(first);
+        return node;
     }
 
     private static BaseNode NumberLiteral(string text)
     {
         var type = NumberType(text.AsSpan());
         BaseNode node = type == HEXADECIMAL_INTEGER_LITERAL ? new HexLiteralNode() : type == REAL_LITERAL ? new RealLiteralNode() : new IntLiteralNode();
-        return Leaf(node, type, text);
+        return WithType(node, type, text);
     }
-
-    private static BaseNode Relational(BaseNode node, string text) => WithType(node, EXPR, text);
 
     /// <summary>Makes <paramref name="child"/> the first child of <paramref name="node"/>, before those it has.</summary>
     private static BaseNode PrependChild(BaseNode node, BaseNode child)
@@ -567,26 +589,26 @@ internal static partial class ExpressionGrammar
         return node;
     }
 
-    private static BaseNode AppendChild(BaseNode node, BaseNode child)
+    private static BaseNode AppendToPrimary(BaseNode primary, BaseNode child)
     {
-        node.addChild(child);
-        return node;
+        ((Expression) primary).AppendParsedChild(child);
+        return primary;
     }
 
-    private static BaseNode Primary(BaseNode startNode) => Operator(new Expression(), EXPR, "expression", startNode);
+    private static BaseNode Primary(BaseNode startNode) => AppendToPrimary(WithType(new Expression(), EXPR, "expression"), startNode);
 
     private static BaseNode MethodOrProperty(string name, IReadOnlyList<BaseNode> arguments) =>
-        arguments == null ? Leaf(new PropertyOrFieldNode(), ID, name) : Node(new MethodNode(), ID, name, arguments);
+        arguments == null ? WithType(new PropertyOrFieldNode(), ID, name) : Node(new MethodNode(), ID, name, arguments);
 
     private static BaseNode FunctionOrVariable(string name, IReadOnlyList<BaseNode> arguments) =>
-        arguments == null ? Leaf(new VariableNode(), ID, name) : Node(new FunctionNode(), ID, name, arguments);
+        arguments == null ? WithType(new VariableNode(), ID, name) : Node(new FunctionNode(), ID, name, arguments);
 
     private static BaseNode LocalFunctionOrVariable(string name, IReadOnlyList<BaseNode> arguments) =>
-        arguments == null ? Leaf(new LocalVariableNode(), ID, name) : Node(new LocalFunctionNode(), ID, name, arguments);
+        arguments == null ? WithType(new LocalVariableNode(), ID, name) : Node(new LocalFunctionNode(), ID, name, arguments);
 
     private static BaseNode MapEntry(BaseNode key, BaseNode value) => Operator(new MapEntryNode(), EXPR, "entry", key, value);
 
-    private static BaseNode QuotableName(string name, int type) => Leaf(new QualifiedIdentifier(), type, name);
+    private static BaseNode QuotableName(string name, int type) => WithType(new QualifiedIdentifier(), type, name);
 
     private static BaseNode Reference(BaseNode first, BaseNode second) =>
         second == null ? Operator(new ReferenceNode(), EXPR, "ref", first) : Operator(new ReferenceNode(), EXPR, "ref", first, second);
@@ -607,13 +629,10 @@ internal static partial class ExpressionGrammar
 
     private static BaseNode ArrayConstructor(IReadOnlyList<BaseNode> rank, BaseNode initializer)
     {
-        var rankNode = new SpringAST();
-        rankNode.Type = LBRACKET;
-        rankNode.setText("[");
+        var rankNode = TokenNode(LBRACKET, "[");
         SetChildren(rankNode, rank);
 
-        var node = new ArrayConstructorNode();
-        node.Type = EXPR;
+        var node = WithType(new ArrayConstructorNode(), EXPR, null);
         node.setFirstChild(rankNode);
         rankNode.setNextSibling(initializer);
         return node;
@@ -621,8 +640,7 @@ internal static partial class ExpressionGrammar
 
     private static BaseNode Lambda(IReadOnlyList<string> arguments, BaseNode body)
     {
-        var node = new LambdaExpressionNode();
-        WithType(node, EXPR, "lambda");
+        var node = WithType(new LambdaExpressionNode(), EXPR, "lambda");
 
         if (arguments.Count == 0)
         {
@@ -630,16 +648,12 @@ internal static partial class ExpressionGrammar
             return node;
         }
 
-        var args = new SpringAST();
-        args.Type = EXPR;
-        args.setText("args");
+        var args = TokenNode(EXPR, "args");
 
         SpringAST previous = null;
         foreach (var name in arguments)
         {
-            var argument = new SpringAST();
-            argument.Type = ID;
-            argument.setText(name);
+            var argument = TokenNode(ID, name);
             if (previous == null)
             {
                 args.setFirstChild(argument);
@@ -674,9 +688,51 @@ internal static partial class ExpressionGrammar
         return column;
     }
 
-    private static SyntaxErrorException CreateSyntaxError(string input, int failure, string expected)
+    /// <summary>
+    /// Reads the tokens before <paramref name="offset"/> to tell how many brackets are open and prefix operators are
+    /// pending there, and whether the last one ends an operand.
+    /// </summary>
+    private static void ReadTokensBefore(string input, int offset, out int depth, out bool afterOperand)
     {
-        var offset = SkipSpaces(input.AsSpan(), failure);
+        var open = 0;
+        var prefixes = 0;
+        afterOperand = false;
+
+        for (var position = SkipSpaces(input.AsSpan(), 0); position < offset; position = SkipSpaces(input.AsSpan(), position))
+        {
+            var length = NextToken(input.AsSpan(position), out var type);
+            if (length == 0)
+            {
+                break;
+            }
+
+            position += length;
+            switch (type)
+            {
+                case LPAREN or LBRACKET or LCURLY or LAMBDA or PROJECT or SELECT or SELECT_FIRST or SELECT_LAST or TYPE:
+                    open++;
+                    afterOperand = false;
+                    break;
+                case RPAREN or RBRACKET or RCURLY:
+                    open--;
+                    afterOperand = true;
+                    break;
+                case ID or STRING_LITERAL or INTEGER_LITERAL or HEXADECIMAL_INTEGER_LITERAL or REAL_LITERAL or TRUE or FALSE or NULL_LITERAL or DOT:
+                    afterOperand = true;
+                    break;
+                default:
+                    afterOperand = false;
+                    break;
+            }
+
+            prefixes = !afterOperand && type is PLUS or MINUS or BANG ? prefixes + 1 : 0;
+        }
+
+        depth = open + prefixes;
+    }
+
+    private static SyntaxErrorException CreateSyntaxError(string input, int offset, string expected, bool mayBeTooDeep)
+    {
         if (offset >= input.Length)
         {
             return SyntaxError(input, input.Length, expected != null ? $"expecting \"{expected}\", found '<EOF>'" : "unexpected end of expression");
@@ -690,6 +746,11 @@ internal static partial class ExpressionGrammar
         }
 
         var text = type == STRING_LITERAL ? StringText(input.Substring(offset, length)) : input.Substring(offset, length);
+        if (mayBeTooDeep)
+        {
+            return SyntaxError(input, offset, $"unexpected token or expression nested too deeply: \"{text}\"");
+        }
+
         return SyntaxError(input, offset, expected != null
             ? $"expecting \"{expected}\", found '{text}'"
             : $"unexpected token: [\"{text}\",<{type}>,line=1,col={ColumnOf(input, offset)}]");

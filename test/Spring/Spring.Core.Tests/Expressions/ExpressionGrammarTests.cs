@@ -1,3 +1,5 @@
+using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -24,6 +26,21 @@ public class ExpressionGrammarTests
         }
 
         builder.Append(')');
+    }
+
+    private static T Internal<T>(string method, string input)
+    {
+        try
+        {
+            return (T) typeof(Expression)
+                .GetMethod(method, BindingFlags.Static | BindingFlags.NonPublic, null, new[] { typeof(string) }, null)
+                .Invoke(null, new object[] { input });
+        }
+        catch (TargetInvocationException e) when (e.InnerException is SyntaxErrorException)
+        {
+            ExceptionDispatchInfo.Capture(e.InnerException).Throw();
+            throw;
+        }
     }
 
     private static string Describe(Func<IExpression> parse)
@@ -61,6 +78,12 @@ public class ExpressionGrammarTests
             {
                 failures.AppendLine($"{input}{Environment.NewLine}  expected {entry[1]}{Environment.NewLine}  actual   {expression}");
             }
+
+            var primary = Describe(() => Internal<IExpression>("ParsePrimary", input));
+            if (primary != entry[2] && (!primary.StartsWith("ERROR") || !entry[2].StartsWith("ERROR")))
+            {
+                failures.AppendLine($"primary {input}{Environment.NewLine}  expected {entry[2]}{Environment.NewLine}  actual   {primary}");
+            }
         }
 
         Assert.That(failures.ToString(), Is.Empty);
@@ -79,6 +102,27 @@ public class ExpressionGrammarTests
         Assert.That(e.Column, Is.EqualTo(column));
         Assert.That(e.Message, Does.StartWith($"Syntax Error on line 1, column {column}: {message} in expression"));
         Assert.That(e.Expression, Is.EqualTo(input));
+    }
+
+    [TestCase("foo", "(PropertyOrFieldNode|33|foo)")]
+    [TestCase("  foo  bar", "(PropertyOrFieldNode|33|foo)")]
+    [TestCase("foo-bar", "(PropertyOrFieldNode|33|foo)")]
+    [TestCase("foo~", "(PropertyOrFieldNode|33|foo)")]
+    [TestCase("in", "ERROR 1 Syntax Error on line 1, column 1: expecting \"ID\", found 'in'")]
+    [TestCase("T(a", "ERROR 1 Syntax Error on line 1, column 1: expecting \"ID\", found 'T('")]
+    [TestCase("1a", "ERROR 1 Syntax Error on line 1, column 1: expecting \"ID\", found '1'")]
+    public void PropertyRuleReadsOneName(string input, string expected)
+    {
+        Assert.That(Describe(() => Internal<IExpression>("ParseProperty", input)), Is.EqualTo(expected));
+    }
+
+    [TestCase("{|a|$a}", "(LambdaExpressionNode|4|lambda (SpringAST|4|args (SpringAST|33|a)) (Expression|4|expression (LocalVariableNode|33|a)))")]
+    [TestCase("{||1} ~", "(LambdaExpressionNode|4|lambda (Expression|4|expression (IntLiteralNode|51|1)))")]
+    [TestCase("x", "ERROR 1 Syntax Error on line 1, column 1: expecting \"LAMBDA\", found 'x'")]
+    [TestCase("{|a", "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression")]
+    public void LambdaRuleStopsAtItsBrace(string input, string expected)
+    {
+        Assert.That(Describe(() => Internal<SpringAST>("ParseLambda", input) as IExpression), Is.EqualTo(expected));
     }
 
     [TestCase(" ")]
@@ -105,12 +149,56 @@ public class ExpressionGrammarTests
     public void DeepNestingIsASyntaxError(string open, string close)
     {
         var input = string.Concat(Enumerable.Repeat(open, 500_000)) + "1" + string.Concat(Enumerable.Repeat(close, 500_000));
-        Assert.Throws<SyntaxErrorException>(() => Expression.Parse(input));
+        var e = Assert.Throws<SyntaxErrorException>(() => Expression.Parse(input));
+        Assert.That(e.Message, Does.Contain("nested too deeply"));
     }
 
     [Test]
     public void DeepNestingOfUnaryOperatorsIsASyntaxError()
     {
-        Assert.Throws<SyntaxErrorException>(() => Expression.Parse(new string('-', 500_000) + "1"));
+        var e = Assert.Throws<SyntaxErrorException>(() => Expression.Parse(new string('-', 500_000) + "1"));
+        Assert.That(e.Message, Does.Contain("nested too deeply"));
+    }
+
+    [Test]
+    public void FailedNamedArgumentsAreNotReadAgain()
+    {
+        // Reading each one again as an assignment took 1.6 s at depth 22, and multiplied by 1.5 with each level
+        var input = string.Concat(Enumerable.Repeat("new a(b=", 60)) + "1";
+        Assert.Throws<SyntaxErrorException>(() => Expression.Parse(input));
+    }
+
+    [Test]
+    public void LongPathsTakeLinearTime()
+    {
+        // Appending a node walked the others, which took 11 s for this path
+        var input = "a" + string.Concat(Enumerable.Repeat(".a", 160_000));
+        Assert.That(Expression.Parse(input), Is.TypeOf<Expression>());
+    }
+
+    [TestCase(1_900, "-")]
+    [TestCase(100_000, "1+")]
+    public void EvaluatingTooDeepATreeThrows(int count, string repeated)
+    {
+        var input = string.Concat(Enumerable.Repeat(repeated, count)) + "1";
+        Exception exception = null;
+
+        // On a small stack, where the tree is too deep for the evaluation although the parser read it
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                Expression.Parse(input).GetValue();
+            }
+            catch (Exception e)
+            {
+                exception = e;
+            }
+        }, 128 * 1024);
+
+        thread.Start();
+        thread.Join();
+
+        Assert.That(exception, Is.TypeOf<InsufficientExecutionStackException>());
     }
 }

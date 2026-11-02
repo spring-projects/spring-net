@@ -353,6 +353,26 @@ public class Expression : BaseNode
         }
     }
 
+    // The last child while parsing, so that a long path doesn't walk its nodes for each one
+    private SpringAST lastParsedChild;
+
+    /// <summary>
+    /// Adds a node to the end of the children of this expression, which only the parser builds this way.
+    /// </summary>
+    internal void AppendParsedChild(SpringAST child)
+    {
+        if (lastParsedChild == null)
+        {
+            setFirstChild(child);
+        }
+        else
+        {
+            lastParsedChild.setNextSibling(child);
+        }
+
+        lastParsedChild = child;
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Expression"/> class.
     /// </summary>

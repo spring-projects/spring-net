@@ -39,7 +39,7 @@ public abstract class ExceptionsTest : StandardsComplianceTest
     // sorry folks, but this is really a special case - default ctor policy doesn't apply here
     private bool ExcludeFromConstructorPolicyCheck(Type t)
     {
-        //TODO: uncomment when making SyntaxErrorException public:
+        // Only the parser creates it, always with a position and an expression, which the standard constructors don't have:
         if (t.FullName == "Spring.Expressions.SyntaxErrorException") return true;
         return false;
     }

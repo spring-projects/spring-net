@@ -61,9 +61,10 @@ internal static partial class ExpressionGrammar
         var reference = lparen.SkipAnd(quotableName).And(colon.SkipAnd(quotableName).Optional()).AndSkip(rparen)
             .Then(static x => Reference(x.Item1, x.Item2.TryGetValue(out var second) ? second : null));
 
-        // A named argument and the assignment that starts the same way can't both parse: its right side is an expression
+        // An argument that starts with a name and '=' is a named one: it isn't read again as an assignment when it fails
         var namedArgument = id.AndSkip(assign).And(expression).Then(static x => NamedArgument(x.Item1.ToString(), x.Item2));
-        var constructorArguments = lparen.SkipAnd(Separated(comma, namedArgument.Or(expression), min: 0)).AndSkip(rparen);
+        var positionalArgument = Not(id.AndSkip(assign)).SkipAnd(expression);
+        var constructorArguments = lparen.SkipAnd(Separated(comma, namedArgument.Or(positionalArgument), min: 0)).AndSkip(rparen);
         var attribute = lbracket.SkipAnd(qualifiedId).And(constructorArguments.Optional()).AndSkip(rbracket)
             .Then(static x => Node(new AttributeNode(), EXPR, x.Item1, x.Item2.TryGetValue(out var args) ? args : null));
         var at = Terms.Char('@').SkipAnd(reference.Or(attribute));
@@ -75,7 +76,7 @@ internal static partial class ExpressionGrammar
                 .Or(arrayRank.And(listInitializer.Optional()).Then(static x => ArrayConstructor(x.Item1, x.Item2.TryGetValue(out var list) ? list : null))))
             .Then(static x => WithText(x.Item2, x.Item1));
 
-        var type = Terms.Text("T(").SkipAnd(name).AndSkip(rparen).Then(static x => Leaf(new TypeNode(), EXPR, x));
+        var type = Terms.Text("T(").SkipAnd(name).AndSkip(rparen).Then(static x => WithType(new TypeNode(), EXPR, x));
 
         var lambda = Terms.Text("{|").SkipAnd(Separated(comma, id.Then(static x => x.ToString()), min: 0)).AndSkip(Terms.Char('|'))
             .And(expression).AndSkip(rcurly).Then(static x => Lambda(x.Item1, x.Item2));
@@ -88,10 +89,10 @@ internal static partial class ExpressionGrammar
 
         var literal = OneOf(
             Terms.Scan(ScanNumber, NumberStart).Then(static x => NumberLiteral(x.ToString())),
-            stringLiteral.Then(static x => Leaf(new StringLiteralNode(), STRING_LITERAL, x)),
-            Terms.Keyword("null", IdPart).Then(static _ => Leaf(new NullLiteralNode(), NULL_LITERAL, "null")),
-            Terms.Keyword("true", IdPart).Then(static _ => Leaf(new BooleanLiteralNode(), TRUE, "true")),
-            Terms.Keyword("false", IdPart).Then(static _ => Leaf(new BooleanLiteralNode(), FALSE, "false")));
+            stringLiteral.Then(static x => WithType(new StringLiteralNode(), STRING_LITERAL, x)),
+            Terms.Keyword("null", IdPart).Then(static _ => WithType(new NullLiteralNode(), NULL_LITERAL, "null")),
+            Terms.Keyword("true", IdPart).Then(static _ => WithType(new BooleanLiteralNode(), TRUE, "true")),
+            Terms.Keyword("false", IdPart).Then(static _ => WithType(new BooleanLiteralNode(), FALSE, "false")));
 
         var startNode = OneOf(
             methodOrProperty,
@@ -122,7 +123,7 @@ internal static partial class ExpressionGrammar
         // The nodes of a primary expression are its children, the dots between them being optional
         var primary = startNode.Then(static x => Primary(x)).Operators()
             .Postfix(
-                (node, static (x, child) => AppendChild(x, child)),
+                (node, static (x, child) => AppendToPrimary(x, child)),
                 (Terms.Scan(ScanDot, "."), static (x, _) => x));
 
         var unary = primary
@@ -145,20 +146,20 @@ internal static partial class ExpressionGrammar
                 (Terms.Char('-'), static (a, b) => Operator(new OpSUBTRACT(), MINUS, "-", a, b)));
 
         var relationalOperator = OneOf(
-            Terms.Text("==").Then(static _ => Relational(new OpEqual(), "==")),
-            Terms.Text("!=").Then(static _ => Relational(new OpNotEqual(), "!=")),
-            Terms.Text("<=").Then(static _ => Relational(new OpLessOrEqual(), "<=")),
-            Terms.Text("<").Then(static _ => Relational(new OpLess(), "<")),
-            Terms.Text(">=").Then(static _ => Relational(new OpGreaterOrEqual(), ">=")),
-            Terms.Text(">").Then(static _ => Relational(new OpGreater(), ">")),
-            Terms.Keyword("in", IdPart).Then(static _ => Relational(new OpIn(), "in")),
-            Terms.Keyword("is", IdPart).Then(static _ => Relational(new OpIs(), "is")),
-            Terms.Keyword("between", IdPart).Then(static _ => Relational(new OpBetween(), "between")),
-            Terms.Keyword("like", IdPart).Then(static _ => Relational(new OpLike(), "like")),
-            Terms.Keyword("matches", IdPart).Then(static _ => Relational(new OpMatches(), "matches")));
+            Terms.Text("==").Then(static _ => WithType(new OpEqual(), EXPR, "==")),
+            Terms.Text("!=").Then(static _ => WithType(new OpNotEqual(), EXPR, "!=")),
+            Terms.Text("<=").Then(static _ => WithType(new OpLessOrEqual(), EXPR, "<=")),
+            Terms.Text("<").Then(static _ => WithType(new OpLess(), EXPR, "<")),
+            Terms.Text(">=").Then(static _ => WithType(new OpGreaterOrEqual(), EXPR, ">=")),
+            Terms.Text(">").Then(static _ => WithType(new OpGreater(), EXPR, ">")),
+            Terms.Keyword("in", IdPart).Then(static _ => WithType(new OpIn(), EXPR, "in")),
+            Terms.Keyword("is", IdPart).Then(static _ => WithType(new OpIs(), EXPR, "is")),
+            Terms.Keyword("between", IdPart).Then(static _ => WithType(new OpBetween(), EXPR, "between")),
+            Terms.Keyword("like", IdPart).Then(static _ => WithType(new OpLike(), EXPR, "like")),
+            Terms.Keyword("matches", IdPart).Then(static _ => WithType(new OpMatches(), EXPR, "matches")));
 
         var relational = sum.And(relationalOperator.And(sum).Optional())
-            .Then(static x => x.Item2.TryGetValue(out var rest) ? PrependChild(AppendChild(rest.Item1, rest.Item2), x.Item1) : x.Item1);
+            .Then(static x => x.Item2.TryGetValue(out var rest) ? WithChildren(rest.Item1, x.Item1, rest.Item2) : x.Item1);
 
         var logical = relational.Operators()
             .LeftAssociative((Terms.Keyword("and", IdPart), static (a, b) => Operator(new OpAND(), AND, "and", a, b)))

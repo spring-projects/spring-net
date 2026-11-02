@@ -19,7 +19,8 @@ using System.Runtime.Serialization;
 namespace Spring.Expressions;
 
 /// <summary>
-/// Exception thrown when detecting invalid SpEL syntax
+/// Exception thrown by <see cref="Spring.Expressions.Expression.Parse"/> when detecting invalid SpEL syntax, including
+/// an expression nested too deeply to be parsed.
 /// </summary>
 /// <author>Erich Eichinger</author>
 [Serializable]
@@ -30,6 +31,7 @@ public class SyntaxErrorException : Exception, ISerializable
     private readonly int column;
 
     ///<summary>
+    /// The line of the error, which is always 1: the columns are those of the whole expression
     ///</summary>
     public int Line
     {
@@ -37,6 +39,7 @@ public class SyntaxErrorException : Exception, ISerializable
     }
 
     ///<summary>
+    /// The column of the error in the expression, from 1, a tab moving it to the next multiple of 8 plus 1
     ///</summary>
     public int Column
     {
@@ -63,8 +66,12 @@ public class SyntaxErrorException : Exception, ISerializable
     }
 
     /// <summary>
-    /// TODO
+    /// Creates a new instance.
     /// </summary>
+    /// <param name="message">The text of the error, without its position.</param>
+    /// <param name="line">The line of the error.</param>
+    /// <param name="column">The column of the error.</param>
+    /// <param name="expression">The expression that caused the error.</param>
     public SyntaxErrorException(string message, int line, int column, string expression)
         : base(message)
     {
@@ -74,7 +81,7 @@ public class SyntaxErrorException : Exception, ISerializable
     }
 
     /// <summary>
-    /// TODO
+    /// Creates a new instance from SerializationInfo.
     /// </summary>
 #if NET
     [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
@@ -87,10 +94,10 @@ public class SyntaxErrorException : Exception, ISerializable
     }
 
     /// <summary>
-    ///
+    /// Populates SerializationInfo from this instance.
     /// </summary>
-    /// <param name="info"></param>
-    /// <param name="context"></param>
+    /// <param name="info">The object to populate.</param>
+    /// <param name="context">The destination of this serialization.</param>
 #if NET
     [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
 #endif

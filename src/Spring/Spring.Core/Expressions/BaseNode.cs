@@ -249,6 +249,8 @@ public abstract class BaseNode : SpringAST, IExpression
 
     protected object GetValue(BaseNode node, object context, EvaluationContext evalContext)
     {
+        // An overflow would end the process, and the depth of a tree depends on the input
+        System.Runtime.CompilerServices.RuntimeHelpers.EnsureSufficientExecutionStack();
         return node.Get(context, evalContext);
     }
 
