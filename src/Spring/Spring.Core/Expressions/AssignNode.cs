@@ -15,7 +15,6 @@
  */
 
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions;
 
@@ -52,8 +51,8 @@ public class AssignNode : BaseNode
     /// <returns>Node's value.</returns>
     protected override object Get(object context, EvaluationContext evalContext)
     {
-        AST left = getFirstChild();
-        AST right = left.getNextSibling();
+        SpringAST left = getFirstChild();
+        SpringAST right = left.getNextSibling();
 
         object result;
 

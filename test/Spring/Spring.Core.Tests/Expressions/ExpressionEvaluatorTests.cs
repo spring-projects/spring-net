@@ -31,8 +31,6 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core;
 using Spring.Core.TypeResolution;
-using Spring.Expressions.Parser.antlr;
-using Spring.Expressions.Parser.antlr.collections;
 using Spring.Expressions.Processors;
 using Spring.Objects;
 using Spring.Objects.Factory;
@@ -186,8 +184,6 @@ public sealed class ExpressionEvaluatorTests
     /// </summary>
     /// <remarks>
     /// date() is parsed into DateLiteralNode( down:&lt;default node type&gt; ).
-    /// Normally antlr.CommonAST is the default node used by antlr. To enable serialization, Spring
-    /// uses a custom ASTFactory in <see cref="Expression.Parse"/>
     /// </remarks>
     [Test]
     public void ExpressionDateLiteralNodeMaintainsStateAfterSerialization()
@@ -326,7 +322,7 @@ public sealed class ExpressionEvaluatorTests
             ExpressionEvaluator.GetValue(null, "'date"); // unclose string literal
             Assert.Fail();
         }
-        catch (RecognitionException ex)
+        catch (SyntaxErrorException ex)
         {
             Assert.That(ex.Message, Is.EqualTo("Syntax Error on line 1, column 6: expecting ''', found '<EOF>' in expression" + Environment.NewLine + "''date'"));
         }
@@ -2842,14 +2838,14 @@ public sealed class ExpressionEvaluatorTests
         Assert.That(ExpressionEvaluator.GetValue(null, string.Format("T({0}).ShadowedStaticMethod()", typeof(DerivedSingleMethodTestClass).FullName)), Is.EqualTo("DerivedSingleMethodTestClass.ShadowedStaticMethod"));
     }
 
-    private static void DumpNode(AST rootNode, int level)
+    private static void DumpNode(SpringAST rootNode, int level)
     {
         Trace.WriteLine(new string(' ', level) + rootNode.ToString());
 
         int numberOfChildren = rootNode.getNumberOfChildren();
         if (numberOfChildren > 0)
         {
-            AST node = rootNode.getFirstChild();
+            SpringAST node = rootNode.getFirstChild();
             while (node != null)
             {
                 DumpNode(node, level + 2);

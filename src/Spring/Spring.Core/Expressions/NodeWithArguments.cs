@@ -16,7 +16,6 @@
 
 using System.Collections;
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions;
 
@@ -77,7 +76,7 @@ public abstract class NodeWithArguments : BaseNode
                 List<BaseNode> argList = new List<BaseNode>();
                 namedArgs = new Hashtable();
 
-                AST node = this.getFirstChild();
+                SpringAST node = this.getFirstChild();
 
                 while (node != null)
                 {

@@ -15,7 +15,6 @@
  */
 
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions;
 
@@ -83,7 +82,7 @@ public class QualifiedIdentifier : BaseNode
 //            {
 //                tmp = tmp.Replace(ESCAPE_CHAR, ""); // remove all occurrences of escape char
 //            }
-        AST node = this.getFirstChild();
+        SpringAST node = this.getFirstChild();
         while (node != null)
         {
             tmp = string.Concat(tmp, node.getText());

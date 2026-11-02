@@ -16,7 +16,6 @@
 
 using System.Collections;
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions;
 
@@ -54,7 +53,7 @@ public class MapInitializerNode : BaseNode
     protected override object Get(object context, EvaluationContext evalContext)
     {
         IDictionary entries = new Hashtable();
-        AST entryNode = this.getFirstChild();
+        SpringAST entryNode = this.getFirstChild();
         while (entryNode != null)
         {
             DictionaryEntry entry = (DictionaryEntry) GetValue(((MapEntryNode) entryNode), evalContext.RootContext, evalContext);

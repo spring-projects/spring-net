@@ -15,7 +15,6 @@
  */
 
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser.antlr;
 
 namespace Spring.Expressions;
 
@@ -24,9 +23,11 @@ namespace Spring.Expressions;
 /// </summary>
 /// <author>Erich Eichinger</author>
 [Serializable]
-public class SyntaxErrorException : RecognitionException, ISerializable
+public class SyntaxErrorException : Exception, ISerializable
 {
     private readonly string _expression;
+    private readonly int line;
+    private readonly int column;
 
     ///<summary>
     ///</summary>
@@ -65,8 +66,10 @@ public class SyntaxErrorException : RecognitionException, ISerializable
     /// TODO
     /// </summary>
     public SyntaxErrorException(string message, int line, int column, string expression)
-        : base(message, null, line, column)
+        : base(message)
     {
+        this.line = line;
+        this.column = column;
         _expression = expression;
     }
 
@@ -78,8 +81,8 @@ public class SyntaxErrorException : RecognitionException, ISerializable
 #endif
     protected SyntaxErrorException(SerializationInfo info, StreamingContext context) : base(info.GetString("Message"))
     {
-        base.line = info.GetInt32("Line");
-        base.column = info.GetInt32("Column");
+        this.line = info.GetInt32("Line");
+        this.column = info.GetInt32("Column");
         this._expression = info.GetString("Expression");
     }
 
@@ -93,11 +96,9 @@ public class SyntaxErrorException : RecognitionException, ISerializable
 #endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
-        // since RecognitionException does not implement .ctor(SerializationInfo info, StreamingContext context)
-        // we need to do the serialization on our own... #�$%
-        //base.GetObjectData( info, context );
-        info.AddValue("Line", base.line);
-        info.AddValue("Column", base.column);
+        // Message is the text without the position, which the constructor gets again
+        info.AddValue("Line", this.line);
+        info.AddValue("Column", this.column);
         info.AddValue("Message", base.Message);
         info.AddValue("Expression", this._expression);
     }

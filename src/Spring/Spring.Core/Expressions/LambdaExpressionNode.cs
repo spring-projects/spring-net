@@ -16,7 +16,6 @@
 
 using System.Collections;
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions;
 
@@ -127,9 +126,9 @@ public class LambdaExpressionNode : BaseNode
                 }
                 else
                 {
-                    AST argsNode = this.getFirstChild();
+                    SpringAST argsNode = this.getFirstChild();
                     argumentNames = new string[argsNode.getNumberOfChildren()];
-                    AST argNode = argsNode.getFirstChild();
+                    SpringAST argNode = argsNode.getFirstChild();
                     int i = 0;
                     while (argNode != null)
                     {

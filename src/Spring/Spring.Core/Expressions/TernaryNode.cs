@@ -15,7 +15,6 @@
  */
 
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions;
 
@@ -63,7 +62,7 @@ public class TernaryNode : BaseNode
             {
                 if (!initialized)
                 {
-                    AST node = this.getFirstChild();
+                    SpringAST node = this.getFirstChild();
                     condition = (BaseNode) node;
                     node = node.getNextSibling();
                     trueExp = (BaseNode) node;

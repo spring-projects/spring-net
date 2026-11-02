@@ -1,7 +1,9 @@
-// $ANTLR 2.7.6 (2005-12-22): "Expression.g" -> "ExpressionLexer.cs"$
-
 namespace Spring.Expressions.Parser;
 
+/// <summary>
+/// The values of <see cref="SpringAST.Type"/>: the token a node comes from, or <see cref="EXPR"/> when it comes from
+/// a whole grammar rule. Part of the serialized form of a parsed expression.
+/// </summary>
 public class ExpressionParserTokenTypes
 {
     public const int EOF = 1;
