@@ -15,12 +15,13 @@
 //  */
 
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
 using Spring.Collections;
 using Spring.Objects.Factory.Support;
 
 namespace Spring.Benchmark;
 
-[ClrJob, CoreJob]
+[SimpleJob(RuntimeMoniker.Net472), SimpleJob(RuntimeMoniker.Net80)]
 [MemoryDiagnoser]
 public class HybridSetBenchmark
 {
