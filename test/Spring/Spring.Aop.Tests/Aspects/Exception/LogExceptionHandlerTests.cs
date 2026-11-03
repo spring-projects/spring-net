@@ -202,6 +202,82 @@ public class LogExceptionHandlerTests
     }
 
     [Test]
+    public void LegacyLogCallFormLogsSpecificWarningAndDoesNotThrow()
+    {
+        var handler = new LogExceptionHandler
+        {
+            LogName = "my.category",
+            ActionExpressionText = "#log.Fatal('msg', #e)"
+        };
+
+        object result = null;
+        Assert.DoesNotThrow(() => result = handler.HandleException(CreateCallContext(new ArithmeticException())));
+
+        Assert.That(result, Is.EqualTo("logged"));
+        LogEntry warning = loggerFactory.Entries.Single();
+        Assert.That(warning.Level, Is.EqualTo(LogLevel.Warning));
+        Assert.That(warning.Category, Does.Contain(nameof(LogExceptionHandler)));
+        Assert.That(warning.Message, Does.Contain("The '#log.<Level>(...)' form is no longer supported"));
+        Assert.That(warning.Message, Does.Contain("[#log.Fatal('msg', #e)]"));
+        Assert.That(warning.Exception, Is.Not.Null);
+    }
+
+    [Test]
+    public void MessageExpressionEvaluatingToNullLogsWithoutThrowing()
+    {
+        var thrown = new ArithmeticException();
+        var handler = new LogExceptionHandler
+        {
+            LogName = "my.category",
+            LogLevel = LogLevel.Error,
+            ActionExpressionText = "null"
+        };
+
+        object result = null;
+        Assert.DoesNotThrow(() => result = handler.HandleException(CreateCallContext(thrown)));
+
+        Assert.That(result, Is.EqualTo("logged"));
+        LogEntry entry = loggerFactory.Entries.Single();
+        Assert.That(entry.Category, Is.EqualTo("my.category"));
+        Assert.That(entry.Level, Is.EqualTo(LogLevel.Error));
+        Assert.That(entry.Exception, Is.SameAs(thrown));
+    }
+
+    [Test]
+    public void FailureOfTheLoggingProviderIsNotReportedAsAnExpressionFailure()
+    {
+        LogManager.LoggerFactory = new ThrowingLoggerFactory();
+        var handler = new LogExceptionHandler { LogName = "my.category", ActionExpressionText = "'msg'" };
+
+        Assert.Throws<InvalidOperationException>(() => handler.HandleException(CreateCallContext(new ArithmeticException())));
+    }
+
+    private sealed class ThrowingLoggerFactory : ILoggerFactory
+    {
+        public ILogger CreateLogger(string categoryName) => new ThrowingLogger();
+
+        public void AddProvider(ILoggerProvider provider)
+        {
+        }
+
+        public void Dispose()
+        {
+        }
+
+        private sealed class ThrowingLogger : ILogger
+        {
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+            {
+                throw new InvalidOperationException("provider failure");
+            }
+
+            public bool IsEnabled(LogLevel logLevel) => true;
+
+            public IDisposable BeginScope<TState>(TState state) => null;
+        }
+    }
+
+    [Test]
     public void SeveralLogHandlersCanShareACallContext()
     {
         var context = CreateCallContext(new ArithmeticException());

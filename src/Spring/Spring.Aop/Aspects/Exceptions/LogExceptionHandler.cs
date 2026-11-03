@@ -31,10 +31,11 @@ namespace Spring.Aspects.Exceptions;
 /// The exception is attached to the entry unless <see cref="LogMessageOnly"/> is set.
 /// </para>
 /// <para>
-/// Earlier versions required the expression to be a call on <c>#log</c>, for example
-/// <c>#log.Fatal('message', #e)</c>. That form no longer works, because Microsoft.Extensions.Logging's
-/// <see cref="Microsoft.Extensions.Logging.ILogger"/> has no such instance methods. Give the message expression only,
-/// for example <c>'message'</c>.
+/// Before 3.0.3 an expression such as <c>#log.Fatal('message', #e)</c> also worked, by accident of nesting;
+/// it has not since the switch to Microsoft.Extensions.Logging, whose
+/// <see cref="Microsoft.Extensions.Logging.ILogger"/> has no such instance methods. Give the message expression
+/// only, for example <c>'message'</c>. A failing expression that starts with <c>#log.</c> is reported with a
+/// warning that names this form.
 /// </para>
 /// </remarks>
 /// <author>Mark Pollack</author>
@@ -125,24 +126,36 @@ public class LogExceptionHandler : AbstractExceptionHandler
         // Stays available to user expressions that reference #log; the handler itself does not call it.
         // Assigned rather than added, because several log handlers can run against the same call context.
         callContextDictionary["log"] = adviceLogger;
+        object message;
         try
         {
             IExpression expression = Expression.Parse(ActionExpressionText);
-            object message = expression.GetValue(null, callContextDictionary);
-
-            Exception exception = null;
-            if (!logMessageOnly && callContextDictionary.TryGetValue("e", out object thrown))
-            {
-                exception = thrown as Exception;
-            }
-
-            adviceLogger.Log(logLevel, exception, "{Message}", message?.ToString());
+            message = expression.GetValue(null, callContextDictionary);
         }
         catch (Exception e)
         {
-            log.LogWarning(e, "Was not able to evaluate action expression [{ActionExpression}]", ActionExpressionText);
+            if (ActionExpressionText != null && ActionExpressionText.StartsWith("#log.", StringComparison.Ordinal))
+            {
+                log.LogWarning(
+                    e,
+                    "The '#log.<Level>(...)' form is no longer supported; set ActionExpressionText to the message expression and LogLevel to the level. Was not able to evaluate action expression [{ActionExpression}]",
+                    ActionExpressionText);
+            }
+            else
+            {
+                log.LogWarning(e, "Was not able to evaluate action expression [{ActionExpression}]", ActionExpressionText);
+            }
+
+            return "logged";
         }
 
+        Exception exception = null;
+        if (!logMessageOnly && callContextDictionary.TryGetValue("e", out object thrown))
+        {
+            exception = thrown as Exception;
+        }
+
+        adviceLogger.Log(logLevel, exception, "{Message}", message?.ToString());
         return "logged";
     }
 }
