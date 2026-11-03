@@ -66,6 +66,8 @@ Changes (3.1 to 4.0)
    Spring.Data.NHibernate5, Spring.Messaging, Spring.Messaging.Nms and Spring.Scheduling.Quartz3
    target netstandard2.0, net472 and net10.0). NuGet picks lib/net10.0 on .NET 10, where
    .NET 10 applications used the netstandard2.0 build before.
+   - Partial-trust (medium-trust) hosting is no longer supported. Code runs with the caller's
+     trust only: the ExecutePrivileged wrappers and the permission demands are gone.
    - Code access security is gone. SecurityPermission demands, the SecurityCritical and
      SecurityTreatAsSafe helpers, PermissionSet asserts, and the AspNetHostingPermission,
      DirectoryServicesPermission and PermissionSet attributes were removed from Spring.Core,
