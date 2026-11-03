@@ -1,7 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion);$(TargetModernFrameworkVersion)</TargetFrameworks>
-    <Description>Interfaces and classes that provide MSMQ 3.0 support in Spring.Net</Description>
+    <Description>Interfaces and classes that provide MSMQ support in Spring.Net</Description>
+    <PackageTags>$(PackageTags);msmq;messaging</PackageTags>
+    <!-- Package validation is off for this package. The netstandard2.0 build exposes Experimental.System.Messaging types and the
+         net472 build System.Messaging types, so every IMessageQueueOperations and IMessageQueueFactory member differs between
+         the two TFMs (CP0002, CP0005, CP0006). That predates 4.0 and cannot be fixed without an API break. Re-enable once
+         the two builds share one message type. -->
+    <EnablePackageValidation>false</EnablePackageValidation>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' != '.NETFramework' ">
     <PackageReference Include="Experimental.System.Messaging.Signed" />

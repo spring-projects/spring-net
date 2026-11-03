@@ -71,11 +71,11 @@ Changes (3.1 to 4.0)
 7. Spring.Aop no longer depends on Antlr3.Runtime.
 
 8. The libraries now include a net10.0 build (Spring.Core, Spring.Aop, Spring.Data,
-   Spring.Data.NHibernate5, Spring.Messaging, Spring.Messaging.Nms and Spring.Scheduling.Quartz3
-   target netstandard2.0, net472 and net10.0). NuGet picks lib/net10.0 on .NET 10, where
-   .NET 10 applications used the netstandard2.0 build before. Applications on .NET 8 and .NET 9
-   keep getting the netstandard2.0 build. Spring.Testing.Microsoft stays netstandard2.0 and
-   net472. Spring.Testing.NUnit targets net10.0 and net472 (see item 9).
+   Spring.Data.NHibernate5, Spring.Messaging, Spring.Messaging.Nms, Spring.Scheduling.Quartz3 and
+   Spring.Testing.Microsoft target netstandard2.0, net472 and net10.0). NuGet picks lib/net10.0
+   on .NET 10, where .NET 10 applications used the netstandard2.0 build before. Applications on
+   .NET 8 and .NET 9 keep getting the netstandard2.0 build. Spring.Testing.NUnit targets net10.0
+   and net472 (see item 9).
    - Partial-trust (medium-trust) hosting is no longer supported. Code runs with the caller's
      trust only: the ExecutePrivileged wrappers and the permission demands are gone.
    - Code access security is gone. SecurityPermission demands, the SecurityCritical and
@@ -108,7 +108,7 @@ Changes (3.1 to 4.0)
      C# versions use NUnit.Framework.Legacy.ClassicAssert or Assert.That. StringAssert,
      CollectionAssert, FileAssert and DirectoryAssert remain in NUnit.Framework.
    - Spring.Testing.Microsoft requires MSTest.TestFramework 4.5.2 or later (was 3.4.3). The base classes
-     are source compatible with it, and still build for netstandard2.0 and net472.
+     are source compatible with it, and build for netstandard2.0, net472 and net10.0.
 
 Changes (3.0.x to 3.1)
 ========================

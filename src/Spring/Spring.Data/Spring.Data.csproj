@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion);$(TargetModernFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide Data access support in Spring.Net</Description>
+    <PackageTags>$(PackageTags);ado.net;adonet;transactions;data-access</PackageTags>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
 
