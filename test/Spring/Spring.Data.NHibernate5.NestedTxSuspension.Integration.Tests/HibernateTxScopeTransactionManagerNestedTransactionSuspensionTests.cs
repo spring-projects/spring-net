@@ -30,6 +30,7 @@ public class HibernateTxScopeTransactionManagerNestedTransactionSuspensionTests 
     }
 
     [Test]
+    [Explicit("Requires MSDTC: the transaction opened under the suspended NotSupported scopes is promoted to a distributed transaction")]
     public void CanSuspendTransactionOnNotSupportedWithNestedRequired()
     {
         Service1.ServiceMethodWithNotSupported3();

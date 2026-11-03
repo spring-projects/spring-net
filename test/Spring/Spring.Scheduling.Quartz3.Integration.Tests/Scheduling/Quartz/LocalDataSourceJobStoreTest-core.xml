@@ -8,12 +8,11 @@
   <!-- Property placeholder configurer for database settings -->
 
   <object type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
-    <property name="ConfigSections" value="appSettings" />
-  </object>
+    <property name="ConfigSections" value="appSettings" />  </object>
 
   <!-- DB -->
 
-  <db:provider id="dbProvider" provider="SqlServer" connectionString="Server=(local);initial catalog=quartz;Integrated Security=true" />
+  <db:provider id="dbProvider" provider="SqlServer" connectionString="${ConnectionString}" />
 
   <object id="transactionManager" type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data">
 

@@ -21,6 +21,7 @@ using System.Data.OracleClient;
 using NUnit.Framework;
 using Spring.Data.Common;
 using Spring.Data.Generic;
+using Spring.IntegrationTests;
 using Spring.Data.Objects;
 
 namespace Spring.Data;
@@ -61,7 +62,7 @@ public class SQLiteTests
 
         IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
         dbProvider.ConnectionString =
-            @"Data Source=SPRINGQA;Initial Catalog=Spring;Persist Security Info=True;User ID=springqa;Password=springqa";
+            SqlServerTestEnvironment.GetConnectionString("Spring");
         AdoTemplate adoTemplate = new AdoTemplate(dbProvider);
         try
         {

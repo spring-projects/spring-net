@@ -3,6 +3,14 @@
          xmlns:db="http://www.springframework.net/database"
          xmlns:tx="http://www.springframework.net/tx">
 
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
+            </list>
+        </property>
+    </object>
+
 
     <!--<db:provider   id="DbProvider"
                    provider="SqlServer-2.0"
@@ -10,7 +18,7 @@
 
     <db:provider id="DbProvider"
                  provider="SqlServer-2.0"
-                 connectionString="Data Source=(local)\sql2005;Initial Catalog=rewards;user id=sa;password=password" />
+                 connectionString="${SPRING_TEST_SQLSERVER_CS_SPRING}" />
 
     <!--<db:provider   id="DbProvider"
                    provider="SqlServer-2.0"

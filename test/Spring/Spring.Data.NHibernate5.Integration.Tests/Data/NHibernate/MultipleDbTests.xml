@@ -2,13 +2,21 @@
 <objects xmlns='http://www.springframework.net'
          xmlns:db="http://www.springframework.net/database">
 
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
+            </list>
+        </property>
+    </object>
+
     <db:provider id="DbProvider1"
                  provider="System.Data.SqlClient"
-                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False" />
+                 connectionString="${SPRING_TEST_SQLSERVER_CS_SPRING}" />
 
     <db:provider id="DbProvider2"
                  provider="System.Data.SqlClient"
-                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False" />
+                 connectionString="${SPRING_TEST_SQLSERVER_CS_SPRING}" />
 
     <object id="SessionFactory1" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate5">
 

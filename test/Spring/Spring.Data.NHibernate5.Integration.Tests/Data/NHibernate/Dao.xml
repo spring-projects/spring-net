@@ -3,6 +3,14 @@
          xmlns:db="http://www.springframework.net/database"
          xmlns:tx="http://www.springframework.net/tx">
 
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
+            </list>
+        </property>
+    </object>
+
     <object id="transactionManager"
             type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate5">
         <!--  Comment out DbProvider if you want to have the tx mgr infer the DbProvider from
@@ -18,7 +26,7 @@
 
     <db:provider id="DbProvider"
                  provider="System.Data.SqlClient"
-                 connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False" />
+                 connectionString="${SPRING_TEST_SQLSERVER_CS_SPRING}" />
 
 
     <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate5">

@@ -19,6 +19,7 @@ using System.Data.SqlClient;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
+using Spring.IntegrationTests;
 
 namespace Spring.Data;
 
@@ -40,7 +41,7 @@ public class NativeAdoTests
     public void Helloworld()
     {
         string connString =
-            @"Data Source=SPRINGQA;Initial Catalog=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False";
+            SqlServerTestEnvironment.GetConnectionString("Spring");
 
         SqlConnection conn = new SqlConnection(connString);
         conn.Open();

@@ -33,6 +33,7 @@
         "Docs",
         "DocsReference",
         "DocsSdk",
+        "IntegrationTest",
         "Pack",
         "PackBinaries",
         "Publish",

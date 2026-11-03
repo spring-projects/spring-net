@@ -3,22 +3,17 @@
          xmlns:db="http://www.springframework.net/database">
 
 
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
+            </list>
+        </property>
+    </object>
+
     <db:provider id="DbProvider"
                  provider="System.Data.SqlClient"
-                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False" />
-    <!--
-                     connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Spring;User ID=springqa; Password=springqa"/>
-                     -->
-    <!--
-      <db:provider id="DbProvider"
-                     provider="OracleODP-2.0"
-                     connectionString="Data Source=AGORA; User Id=agora_user; Password=welcome_bad"/>
-     -->
-    <!--
-    <db:provider id="DbProvider"
-               provider="System.Data.SqlClient"
-               connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Spring;User ID=springqa; Password=springqa"/>
-               -->
+                 connectionString="${SPRING_TEST_SQLSERVER_CS_SPRING}" />
 
     <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate5">
         <!-- TODO Provide dedicated NHibernate Schema -->

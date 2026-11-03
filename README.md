@@ -158,17 +158,50 @@ suffice.
 
 ### Running tests
 
-- To run tests that require a database connection, you need:
-    - SqlServer running in (local)
-      - Check in `SQL Server Configuration Manager` that `Named Pipes` and `TCP/IP` protocols are enabled
-    - From `build-support` execute 
-	    - `create-integration-test-databases-and-users.sql` 
-    - From `\test\Spring\Spring.Data.Integration.Tests\Data` execute 
-	    - `Spring.Data.Integration.Tests_Spring_database.sql`
-	    - `Spring.Data.Integration.Tests_Credits_database.sql`
-	    - `Spring.Data.Integration.Tests_Debits_database.sql`
-	    - `Spring.Data.Integration.Tests_CreditsAndDebits_database.sql`
-    - Create a database named `quartz` and execute `tables_sqlServer_Below2016.sql` from [Quartz.NET](https://github.com/quartznet/quartznet/blob/main/database/tables/tables_sqlServer_Below2016.sql)
+- `./build.cmd Test` (`./build.sh Test`) runs the unit tests. They need nothing but the .NET SDK.
+- The SQL Server backed integration tests (`Spring.Data.Integration.Tests`, `Spring.Data.NHibernate5.Integration.Tests`,
+  `Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests` and `Spring.Scheduling.Quartz3.Integration.Tests`) provision their
+  own database with [Testcontainers for .NET](https://dotnet.testcontainers.org/). All you need is a running Docker daemon
+  (Linux containers):
+
+  ```
+  ./build.cmd IntegrationTest
+  ```
+
+  Each test assembly starts a pinned SQL Server 2022 container, creates the `springqa` login and the databases from
+  `build-support/create-integration-test-databases-and-users.sql` and the project's own `*_database.sql` script (the `quartz`
+  database gets the Quartz.NET tables), runs, and removes the container. There is no database to install, no hosts entry and no
+  script to run by hand. CI runs the same target on Linux (the `integration-linux` job).
+- To run against a SQL Server you already have, for example on a Windows machine without a Linux container engine, set
+  `SPRING_TEST_SQLSERVER` to an administrator's connection string. No container is started and the same scripts run against that
+  server (they drop and recreate the test databases and the `springqa` login, so do not point it at a server you care about).
+  The server must allow SQL Server (mixed-mode) authentication, because the tests log in as `springqa`. In PowerShell:
+
+  ```
+  $env:SPRING_TEST_SQLSERVER = "Server=localhost;Integrated Security=true;TrustServerCertificate=true"
+  ./build.cmd IntegrationTest
+  ```
+
+  `./build.cmd IntegrationTest` runs the net10.0 and net472 builds of a project one after the other when the variable is set.
+  When you call `dotnet test` yourself, pass `--max-parallel-test-modules 1`, because Microsoft.Testing.Platform otherwise runs
+  both builds at once and they would drop and recreate the same databases under each other:
+
+  ```
+  dotnet test --project test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.csproj --max-parallel-test-modules 1
+  ```
+- The tests learn where the server is from these environment variables, which the test assembly sets once the scripts have run
+  (the XML contexts use them as `${...}` placeholders):
+
+  | Variable | Value |
+  |---|---|
+  | `SPRING_TEST_SQLSERVER_HOST` | `host,port` of the server |
+  | `SPRING_TEST_SQLSERVER_USER`, `SPRING_TEST_SQLSERVER_PASSWORD` | the `springqa` login (`springqa` / `springqa`) |
+  | `SPRING_TEST_SQLSERVER_CS_<DATABASE>` | a complete connection string, as `springqa`, for each database the scripts created, with the name upper-cased: `..._CS_SPRING`, `..._CS_CREDITS`, `..._CS_DEBITS`, `..._CS_CREDITSANDDEBITS`, `..._CS_QUARTZ` |
+
+- Tests that need a distributed transaction (MSDTC) are `[Explicit]`: a SQL Server container cannot take part in one. Run them
+  by name against a Windows server with MSDTC enabled if you work on that code.
+- `./build.cmd Test --test-integration-data` also runs the four SQL Server projects as part of the `Test` target, and
+  `--test-full` runs every integration project, including the ones that need ActiveMQ, MSMQ or a SQLite file.
 
 
 ## Acknowledgements

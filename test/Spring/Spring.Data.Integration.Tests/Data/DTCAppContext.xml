@@ -4,6 +4,14 @@
          xmlns:tx="http://www.springframework.net/tx"
          xmlns:aop="http://www.springframework.net/aop">
 
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
+            </list>
+        </property>
+    </object>
+
 
     <!-- Available Catalogs: CreditsAndDebits, Credits, Debits -->
 
@@ -11,17 +19,11 @@
 
     <d:provider id="DebitDbProvider"
                 provider="SqlServer-2.0"
-                connectionString="Data Source=SPRINGQA;Initial Catalog=Debits;Persist Security Info=True;User ID=springqa;Password=springqa" />
-    <!--
-                 connectionString="Data Source=SPRINGQA\SQLEXPRESS;Initial Catalog=Debits;Integrated Security=True;Pooling=False"/>
-             -->
+                connectionString="${SPRING_TEST_SQLSERVER_CS_DEBITS}" />
 
     <d:provider id="DbProvider"
                 provider="SqlServer-2.0"
-                connectionString="Data Source=SPRINGQA;Initial Catalog=Credits;Persist Security Info=True;User ID=springqa;Password=springqa" />
-    <!--
-                    connectionString="Data Source=SPRINGQA\SQLEXPRESS;Initial Catalog=Credits;Integrated Security=True;Pooling=False"/>
-                    -->
+                connectionString="${SPRING_TEST_SQLSERVER_CS_CREDITS}" />
 
 
     <!-- Transaction Manager -->

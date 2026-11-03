@@ -3,10 +3,18 @@
          xmlns:db="http://www.springframework.net/database"
          xmlns:tx="http://www.springframework.net/tx">
 
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
+            </list>
+        </property>
+    </object>
+
     <!-- NOTE: Critical that the Max Pool Size parameter is present in the connection string to limit conn pool size for these tests-->
     <db:provider id="DbProvider"
                  provider="SqlServer-2.0"
-                 connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False;Max Pool Size=10;" />
+                 connectionString="${SPRING_TEST_SQLSERVER_CS_SPRING};Max Pool Size=10;" />
 
     <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
         <property name="DbProvider" ref="DbProvider" />

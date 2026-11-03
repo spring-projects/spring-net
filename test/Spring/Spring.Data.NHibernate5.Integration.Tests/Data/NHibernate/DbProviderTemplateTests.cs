@@ -49,7 +49,6 @@ namespace Spring.Data.NHibernate
         }
 
         [Test]
-        [Ignore("Trouble running on Appveyor")]
         public void UserCredentialsDbProvider()
         {
             ITestObjectDao dao = (ITestObjectDao) ctx["testObjectDaoTransProxy"];
