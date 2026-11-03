@@ -10,6 +10,7 @@
 
     <object type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
         <property name="ConfigSections" value="appSettings" />
+        <property name="EnvironmentVariableMode" value="Fallback" />
     </object>
 
     <!-- DB -->

@@ -9,11 +9,12 @@
 
   <object type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
     <property name="ConfigSections" value="appSettings" />
+    <property name="EnvironmentVariableMode" value="Fallback" />
   </object>
 
   <!-- DB -->
 
-  <db:provider id="dbProvider" provider="SqlServer" connectionString="Server=(local);initial catalog=quartz;Integrated Security=true" />
+  <db:provider id="dbProvider" provider="SqlServer" connectionString="${ConnectionString}" />
 
   <object id="transactionManager" type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data">
 

@@ -44,10 +44,9 @@ public class LocalDataSourceJobStoreTest
     }
 
     [Test]
-    [Explicit("Appveyor problems")]
     public void TestLocalDataSourceJobStore()
     {
-        // sleep 20 seconds
-        Thread.Sleep(20000);
+        // The scheduler starts after 5 seconds and fires the trigger 2 seconds after that, against the ADO job store.
+        Assert.That(TestJob.Executed.Wait(TimeSpan.FromSeconds(30)), Is.True, "the job was not executed by the scheduler");
     }
 }
