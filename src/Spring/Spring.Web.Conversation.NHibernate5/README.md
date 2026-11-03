@@ -9,16 +9,33 @@ dotnet add package Spring.Web.Conversation.NHibernate5
 ```
 
 Target framework: net472 (ASP.NET on .NET Framework). Depends on Spring.Core, Spring.Data, Spring.Data.NHibernate5 and
-NHibernate 5.7.1 or later.
+NHibernate 5.7.1 or later. Install Spring.Web as well: it is not a package dependency, but session-scoped objects
+(`scope="session"`) and `HttpApplicationConfigurer` come from it.
 
 ## Usage
 
-Declare the manager as a session-scoped object, and register the HTTP module in `web.config`:
+Declare the manager as a session-scoped object, register the HTTP module in `web.config`, and give the module the manager
+names through `HttpApplicationConfigurer`. The template key must equal the module name; without `ConversationManagerNameList`
+the module fails on the first request.
 
 ```xml
 <object name="conversationManager" type="Spring.Web.Conversation.WebConversationManager, Spring.Web.Conversation.NHibernate5" scope="session">
   <property name="SessionFactoryName" value="NHibernateSessionFactory" />
   <property name="EndPaused" value="true" />
+</object>
+
+<object name="HttpApplicationConfigurer" type="Spring.Context.Support.HttpApplicationConfigurer, Spring.Web">
+  <property name="ModuleTemplates">
+    <dictionary>
+      <entry key="ConversationModule">
+        <object>
+          <property name="ConversationManagerNameList">
+            <list element-type="string"><value>conversationManager</value></list>
+          </property>
+        </object>
+      </entry>
+    </dictionary>
+  </property>
 </object>
 ```
 
@@ -29,8 +46,6 @@ Declare the manager as a session-scoped object, and register the HTTP module in 
   </modules>
 </system.webServer>
 ```
-
-The module learns the manager names through `HttpApplicationConfigurer` from Spring.Web (`ConversationManagerNameList`).
 
 ## Links
 

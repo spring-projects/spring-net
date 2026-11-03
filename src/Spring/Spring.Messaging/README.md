@@ -24,6 +24,8 @@ framework's System.Messaging; the other targets use Experimental.System.Messagin
 ```
 
 ```csharp
+using Spring.Messaging.Core;
+
 var queue = context.GetObject<MessageQueueTemplate>("queue");
 queue.ConvertAndSend("Hello World");
 ```

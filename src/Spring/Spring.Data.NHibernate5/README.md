@@ -26,7 +26,7 @@ Target frameworks: netstandard2.0, net472, net10.0. Depends on Spring.Core, Spri
     </property>
     <property name="HibernateProperties">
       <dictionary>
-        <entry key="hibernate.dialect" value="NHibernate.Dialect.MsSql2000Dialect" />
+        <entry key="hibernate.dialect" value="NHibernate.Dialect.MsSql2012Dialect" />
       </dictionary>
     </property>
   </object>
@@ -34,6 +34,9 @@ Target frameworks: netstandard2.0, net472, net10.0. Depends on Spring.Core, Spri
 ```
 
 ```csharp
+using System.Collections;
+using Spring.Data.NHibernate;
+
 var template = new HibernateTemplate(sessionFactory);
 IList customers = template.Find("from Customer");
 ```
