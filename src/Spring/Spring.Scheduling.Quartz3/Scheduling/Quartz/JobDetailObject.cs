@@ -88,7 +88,7 @@ public class JobDetailObject : JobDetailImpl, IObjectNameAware, IApplicationCont
 
             foreach (DictionaryEntry entry in value)
             {
-                JobDataMap.Put((string) entry.Key, entry.Value);
+                JobDataMap[(string) entry.Key] = entry.Value;
             }
         }
     }
@@ -216,7 +216,7 @@ public class JobDetailObject : JobDetailImpl, IObjectNameAware, IApplicationCont
                                             "to be able to handle an 'applicationContextJobDataKey'");
             }
 
-            JobDataMap.Put(applicationContextJobDataKey, applicationContext);
+            JobDataMap[applicationContextJobDataKey] = applicationContext;
         }
     }
 }

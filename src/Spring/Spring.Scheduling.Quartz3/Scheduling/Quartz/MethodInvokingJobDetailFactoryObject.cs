@@ -256,7 +256,7 @@ public class MethodInvokingJobDetailFactoryObject : ArgumentConvertingMethodInvo
 
         // Build JobDetail instance.
         jobDetail = new JobDetailImpl(jobDetailName, group, jobType);
-        jobDetail.JobDataMap.Put("methodInvoker", this);
+        jobDetail.JobDataMap["methodInvoker"] = this;
         jobDetail.Durable = true;
 
         // job listeners through configuration are no longer supported

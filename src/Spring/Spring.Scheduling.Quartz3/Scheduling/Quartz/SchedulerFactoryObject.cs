@@ -730,9 +730,10 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
         // Put specified objects into Scheduler context.
         if (schedulerContextMap != null)
         {
-            var dictionary = schedulerContextMap.Cast<DictionaryEntry>()
-                .ToDictionary(entry => entry.Key.ToString(), entry => entry.Value);
-            scheduler.Context.PutAll(dictionary);
+            foreach (DictionaryEntry entry in schedulerContextMap)
+            {
+                scheduler.Context[entry.Key.ToString()] = entry.Value;
+            }
         }
 
         // Register IApplicationContext in Scheduler context.
@@ -744,7 +745,7 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
                                           "to be able to handle an 'applicationContextSchedulerContextKey'");
             }
 
-            scheduler.Context.Put(applicationContextSchedulerContextKey, applicationContext);
+            scheduler.Context[applicationContextSchedulerContextKey] = applicationContext;
         }
     }
 

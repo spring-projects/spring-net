@@ -73,7 +73,7 @@ public class CronTriggerObject : CronTriggerImpl, IJobDetailAwareTrigger, IObjec
         {
             foreach (DictionaryEntry entry in value)
             {
-                JobDataMap.Put((string) entry.Key, entry.Value);
+                JobDataMap[(string) entry.Key] = entry.Value;
             }
         }
     }

@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Antlr3.Runtime" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
   </ItemGroup>
 
