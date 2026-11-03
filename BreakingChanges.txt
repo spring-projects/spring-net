@@ -31,11 +31,13 @@ Changes (3.1 to 4.0)
    Web.Extensions.Example) were removed too.
 
    Spring.Web's ASMX web service exporter (Spring.Web.Services.WebServiceExporter and
-   WebServiceHandlerFactory) was removed too, with no replacement. Remove any *.asmx handler
+   WebServiceHandlerFactory) is also gone, with no replacement. Remove any *.asmx handler
    registration that points at Spring.Web.Services.WebServiceHandlerFactory from web.config,
-   together with the WebServiceExporter object definitions. To keep a service, write the .asmx
-   class by hand and resolve the object from the application context, or move to WCF/CoreWCF
-   or ASP.NET Core.
+   together with the WebServiceExporter object definitions. Object definitions named after an
+   .asmx path (which the factory used to configure [WebService] classes) are no longer
+   consulted: ASP.NET compiles and instantiates the .asmx itself. To keep a service, write the
+   .asmx class by hand and resolve the object from the application context, or move to
+   WCF/CoreWCF or ASP.NET Core.
 
 5. Dependency floors were raised: Microsoft.Extensions.Logging.Abstractions 8.0.3,
    Microsoft.Bcl.HashCode 6.0.0, Microsoft.Win32.Registry 5.0.0, System.CodeDom 8.0.0,
