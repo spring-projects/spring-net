@@ -31,10 +31,10 @@ public class HasTextFilteringFormatterTests
         string defaultValue = "theDefaultValue";
         HasTextFilteringFormatter fmt = new HasTextFilteringFormatter(defaultValue, null);
 
-        Assert.AreEqual(defaultValue, fmt.Parse(null));
-        Assert.AreEqual(defaultValue, fmt.Parse(string.Empty));
-        Assert.AreEqual(defaultValue, fmt.Parse("\t \n\r"));
-        Assert.AreEqual(" text \n", fmt.Parse(" text \n"));
+        Assert.That(fmt.Parse(null), Is.EqualTo(defaultValue));
+        Assert.That(fmt.Parse(string.Empty), Is.EqualTo(defaultValue));
+        Assert.That(fmt.Parse("\t \n\r"), Is.EqualTo(defaultValue));
+        Assert.That(fmt.Parse(" text \n"), Is.EqualTo(" text \n"));
     }
 
     [Test]
@@ -43,10 +43,10 @@ public class HasTextFilteringFormatterTests
         string defaultValue = "theDefaultValue";
         HasTextFilteringFormatter fmt = new HasTextFilteringFormatter(defaultValue, null);
 
-        Assert.AreEqual(null, fmt.Format(null));
-        Assert.AreEqual(string.Empty, fmt.Format(string.Empty));
-        Assert.AreEqual("\t \n\r", fmt.Format("\t \n\r"));
+        Assert.That(fmt.Format(null), Is.EqualTo(null));
+        Assert.That(fmt.Format(string.Empty), Is.Empty);
+        Assert.That(fmt.Format("\t \n\r"), Is.EqualTo("\t \n\r"));
         object o = new object();
-        Assert.AreEqual(o.ToString(), fmt.Format(o));
+        Assert.That(fmt.Format(o), Is.EqualTo(o.ToString()));
     }
 }

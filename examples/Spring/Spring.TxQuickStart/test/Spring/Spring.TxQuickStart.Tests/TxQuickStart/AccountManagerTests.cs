@@ -72,8 +72,8 @@ namespace Spring.TxQuickStart
 
             int numCreditRecords = (int)adoTemplateCredit.ExecuteScalar(CommandType.Text, "select count(*) from Credits");
             int numDebitRecords =  (int)adoTemplateDebit.ExecuteScalar(CommandType.Text, "select count(*) from Debits");
-            Assert.AreEqual(1, numCreditRecords);
-            Assert.AreEqual(1, numDebitRecords);
+            Assert.That(numCreditRecords, Is.EqualTo(1));
+            Assert.That(numDebitRecords, Is.EqualTo(1));
         }
 
         [Test]
@@ -87,8 +87,8 @@ namespace Spring.TxQuickStart
             {
                 int numCreditRecords = (int)adoTemplateCredit.ExecuteScalar(CommandType.Text, "select count(*) from Credits");
                 int numDebitRecords = (int)adoTemplateDebit.ExecuteScalar(CommandType.Text, "select count(*) from Debits");
-                Assert.AreEqual(0, numCreditRecords);
-                Assert.AreEqual(0, numDebitRecords);
+                Assert.That(numCreditRecords, Is.EqualTo(0));
+                Assert.That(numDebitRecords, Is.EqualTo(0));
             }
             
         }
@@ -107,8 +107,8 @@ namespace Spring.TxQuickStart
             } catch (ArithmeticException) {
                 int numCreditRecords = (int)adoTemplateCredit.ExecuteScalar(CommandType.Text, "select count(*) from Credits");
                 int numDebitRecords = (int)adoTemplateDebit.ExecuteScalar(CommandType.Text, "select count(*) from Debits");
-                Assert.AreEqual(1, numCreditRecords);
-                Assert.AreEqual(0, numDebitRecords);
+                Assert.That(numCreditRecords, Is.EqualTo(1));
+                Assert.That(numDebitRecords, Is.EqualTo(0));
             }
         }
 

@@ -28,7 +28,7 @@ public sealed class NullMessageSourceTests
     [Test]
     public void CanonicalInstanceIsNotNull()
     {
-        Assert.IsNotNull(NullMessageSource.Null);
+        Assert.That(NullMessageSource.Null, Is.Not.Null);
     }
 
     [Test]
@@ -36,14 +36,14 @@ public sealed class NullMessageSourceTests
     {
         const string expected = "foo";
         string message = NullMessageSource.Null.GetMessage(expected);
-        Assert.AreEqual(expected, message);
+        Assert.That(message, Is.EqualTo(expected));
     }
 
     [Test]
     public void ResolveObjectReturnsNull()
     {
         object anObject = NullMessageSource.Null.GetResourceObject("");
-        Assert.IsNull(anObject);
+        Assert.That(anObject, Is.Null);
     }
 
     [Test]

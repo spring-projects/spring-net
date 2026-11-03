@@ -69,13 +69,13 @@ public class LogicalThreadContextTest
         object value = new object();
 
         LogicalThreadContext.SetData("key", value);
-        Assert.AreSame(value, storage.data["key"]);
+        Assert.That(storage.data["key"], Is.SameAs(value));
 
         object data = LogicalThreadContext.GetData("key");
-        Assert.AreSame(value, data);
+        Assert.That(data, Is.SameAs(value));
 
         LogicalThreadContext.FreeNamedDataSlot("key");
 
-        Assert.IsFalse(storage.data.ContainsKey("key"));
+        Assert.That(storage.data.ContainsKey("key"), Is.False);
     }
 }

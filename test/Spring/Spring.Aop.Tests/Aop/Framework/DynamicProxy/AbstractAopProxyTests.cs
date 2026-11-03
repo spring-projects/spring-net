@@ -177,9 +177,9 @@ public abstract class AbstractAopProxyTests
         to = (ISerializableTestObject) SerializeAndDeserialize(to);
 
         // new instance was created
-        Assert.AreEqual(instanceCount + 1, SerializableTestObject.InstanceCount);
+        Assert.That(SerializableTestObject.InstanceCount, Is.EqualTo(instanceCount + 1));
         // values were (de-)serialized
-        Assert.AreEqual(target.TestData, to.TestData);
+        Assert.That(to.TestData, Is.EqualTo(target.TestData));
     }
 
     [Test]
@@ -199,9 +199,9 @@ public abstract class AbstractAopProxyTests
         to = (ISerializableTestObject) SerializeAndDeserialize(to);
 
         // new instance was created
-        Assert.AreEqual(instanceCount + 1, CustomSerializableTestObject.InstanceCount);
+        Assert.That(CustomSerializableTestObject.InstanceCount, Is.EqualTo(instanceCount + 1));
         // values were (de-)serialized
-        Assert.AreEqual(target.TestData, to.TestData);
+        Assert.That(to.TestData, Is.EqualTo(target.TestData));
     }
 
     [Test(Description = "Simple test that if we set values we can get them out again.")]
@@ -218,12 +218,12 @@ public abstract class AbstractAopProxyTests
         pf1.AddAdvisor(new DefaultPointcutAdvisor(new TimestampIntroductionInterceptor()));
         ITestObject to = target;
 
-        Assert.AreEqual(age1, to.Age);
+        Assert.That(to.Age, Is.EqualTo(age1));
         to.Age = age2;
-        Assert.AreEqual(age2, to.Age);
-        Assert.IsNull(to.Name);
+        Assert.That(to.Age, Is.EqualTo(age2));
+        Assert.That(to.Name, Is.Null);
         to.Name = name;
-        Assert.AreEqual(name, to.Name);
+        Assert.That(to.Name, Is.EqualTo(name));
     }
 
     public interface ITestPerson
@@ -276,10 +276,10 @@ public abstract class AbstractAopProxyTests
         advised.Interfaces = new[] { typeof(ITestCustomer) };
 
         ITestCustomer to = CreateProxy(advised) as ITestCustomer;
-        Assert.IsNotNull(to);
-        Assert.AreEqual((long) 5, to.Id, "Incorrect Id");
-        Assert.AreEqual("Customer Name", to.Name, "Incorrect Name");
-        Assert.AreEqual("Customer Company", to.Company, "Incorrect Company");
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Id, Is.EqualTo((long) 5), "Incorrect Id");
+        Assert.That(to.Name, Is.EqualTo("Customer Name"), "Incorrect Name");
+        Assert.That(to.Company, Is.EqualTo("Customer Company"), "Incorrect Company");
     }
 
     //[Test] - to be called from derived fixtures
@@ -292,10 +292,11 @@ public abstract class AbstractAopProxyTests
         advised.Interfaces = new Type[] { typeof(ITestCustomer) };
 
         ITestCustomer to = CreateProxy(advised) as ITestCustomer;
-        Assert.IsNotNull(to);
-        Assert.IsTrue(to.Equals(to), "identity must be equal");
-        Assert.AreEqual(to, to);
-        Assert.AreEqual(to, ((IAdvised) to).TargetSource.GetTarget());
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Equals(to), Is.True, "identity must be equal");
+        var sameProxy = to;
+        Assert.That(to, Is.EqualTo(sameProxy));
+        Assert.That(((IAdvised) to).TargetSource.GetTarget(), Is.EqualTo(to));
     }
 
     [Test]
@@ -306,7 +307,7 @@ public abstract class AbstractAopProxyTests
         advised.Interfaces = new Type[] { typeof(ITestObject) };
 
         ITestObject proxy = CreateProxy(advised) as ITestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         Assert.Throws<NotSupportedException>(() => proxy.GetDescription(), "Target 'target' is null.");
     }
@@ -322,13 +323,13 @@ public abstract class AbstractAopProxyTests
         advised.Interfaces = new Type[] { typeof(ITestObject) };
         advised.AddAdvice(invocationInterceptor);
         ITestObject proxy = CreateProxy(advised) as ITestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         // target null, call handled by interceptor
         targetSource.Target = null;
         invocationInterceptor.CallProceed = false;
         proxy.GetDescription();
-        Assert.AreEqual("GetDescription", invocationInterceptor.LastMethodInvocation.Method.Name);
+        Assert.That(invocationInterceptor.LastMethodInvocation.Method.Name, Is.EqualTo("GetDescription"));
     }
 
     [Test]
@@ -342,7 +343,7 @@ public abstract class AbstractAopProxyTests
         advised.Interfaces = new Type[] { typeof(ITestObject) };
         advised.AddAdvice(invocationInterceptor);
         ITestObject proxy = CreateProxy(advised) as ITestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         // target null, call not handled by interceptor
         targetSource.Target = null;
@@ -362,7 +363,7 @@ public abstract class AbstractAopProxyTests
         advised.Interfaces = new Type[] { typeof(ITestObject) };
         advised.AddAdvice(invocationInterceptor);
         ITestObject proxy = CreateProxy(advised) as ITestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         // target incompatible, call not handled by interceptor
         targetSource.Target = new object();
@@ -392,8 +393,8 @@ public abstract class AbstractAopProxyTests
         advised.Interfaces = new Type[] { typeof(ITestObject) };
 
         ITestObject to = CreateProxy(advised) as ITestObject;
-        Assert.IsNotNull(to);
-        Assert.IsTrue(to.Age == age, "Incorrect age");
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Age == age, Is.True, "Incorrect age");
     }
 
     [Test]
@@ -404,7 +405,7 @@ public abstract class AbstractAopProxyTests
         advised.Interfaces = new Type[] { typeof(ITestObject) };
 
         ITestObject to = CreateProxy(advised) as ITestObject;
-        Assert.IsNotNull(to);
+        Assert.That(to, Is.Not.Null);
         Assert.Throws<NotSupportedException>(() => to.GetDescription(), "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.");
     }
 
@@ -418,13 +419,13 @@ public abstract class AbstractAopProxyTests
         advised.AddAdvice(new NopInterceptor());
         IAopProxy aop = CreateAopProxy(advised);
         ITestObject proxy1 = (ITestObject) aop.GetProxy();
-        Assert.AreEqual(target.Age, proxy1.Age, "Incorrect age");
+        Assert.That(proxy1.Age, Is.EqualTo(target.Age), "Incorrect age");
 
         advised = new AdvisedSupport(proxy1);
         advised.AddAdvice(new NopInterceptor());
         aop = CreateAopProxy(advised);
         ITestObject proxy2 = (ITestObject) aop.GetProxy();
-        Assert.AreEqual(target.Age, proxy2.Age, "Incorrect age");
+        Assert.That(proxy2.Age, Is.EqualTo(target.Age), "Incorrect age");
     }
 
     // SPRNET-655
@@ -444,15 +445,15 @@ public abstract class AbstractAopProxyTests
         proxy = CreateAopProxy(advised);
 
         IServiceCommand serviceCommand = proxy as IServiceCommand;
-        Assert.IsNotNull(serviceCommand);
+        Assert.That(serviceCommand, Is.Not.Null);
         serviceCommand.Execute();
 
         IBusinessCommand businessCommand = proxy as IBusinessCommand;
-        Assert.IsNotNull(businessCommand);
+        Assert.That(businessCommand, Is.Not.Null);
         businessCommand.Execute();
 
-        Assert.AreEqual(1, serviceCommand.ServiceCount);
-        Assert.AreEqual(1, businessCommand.BusinessCount);
+        Assert.That(serviceCommand.ServiceCount, Is.EqualTo(1));
+        Assert.That(businessCommand.BusinessCount, Is.EqualTo(1));
     }
 
     public interface IServiceCommand
@@ -506,8 +507,8 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
         object proxy = aopProxy.GetProxy();
 
-        Assert.IsNotNull(proxy);
-        Assert.AreEqual(target, proxy, "Equals() returned false");
+        Assert.That(proxy, Is.Not.Null);
+        Assert.That(proxy, Is.EqualTo(target), "Equals() returned false");
     }
 
     [Test]
@@ -520,8 +521,8 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
         object proxy = aopProxy.GetProxy();
 
-        Assert.IsNotNull(proxy);
-        Assert.AreEqual(target.GetHashCode(), proxy.GetHashCode(), "GetHashCode() not equal");
+        Assert.That(proxy, Is.Not.Null);
+        Assert.That(proxy.GetHashCode(), Is.EqualTo(target.GetHashCode()), "GetHashCode() not equal");
     }
 
     [Test]
@@ -535,7 +536,7 @@ public abstract class AbstractAopProxyTests
 
         IAopProxy aopProxy = CreateAopProxy(advised);
         IRefOutTestObject proxy = aopProxy.GetProxy() as IRefOutTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         TestsProxyMethodWithRefOutParameters(proxy);
     }
@@ -553,11 +554,11 @@ public abstract class AbstractAopProxyTests
 
         IAopProxy aopProxy = CreateAopProxy(advised);
         IRefOutTestObject proxy = aopProxy.GetProxy() as IRefOutTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         TestsProxyMethodWithRefOutParameters(proxy);
 
-        Assert.AreEqual(1, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -573,11 +574,11 @@ public abstract class AbstractAopProxyTests
 
         IAopProxy aopProxy = CreateAopProxy(advised);
         IRefOutTestObject proxy = aopProxy.GetProxy() as IRefOutTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         TestsProxyMethodWithRefOutParameters(proxy);
 
-        Assert.AreEqual(1, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(1));
     }
 
     private void TestsProxyMethodWithRefOutParameters(IRefOutTestObject instance)
@@ -596,18 +597,18 @@ public abstract class AbstractAopProxyTests
 
         instance.DoIt(valueType, obj, enumValue, ref refValueType, out outValueType, ref refObj, out outObj, ref refEnum, out outEnum, ref refGuid, out outGuid);
 
-        Assert.AreEqual(0, valueType);
-        Assert.AreEqual(null, obj);
-        Assert.AreEqual(EnumValue.Initial, enumValue);
-        Assert.AreEqual(true, refValueType);
-        Assert.AreEqual(1, outValueType);
-        Assert.AreEqual("RefObj", refObj);
-        Assert.IsNotNull(outObj);
-        Assert.AreEqual("OutObj", outObj.Name);
-        Assert.AreEqual(EnumValue.Ref, refEnum);
-        Assert.AreEqual(EnumValue.Out, outEnum);
-        Assert.AreEqual(Guid.Empty, refGuid);
-        Assert.AreEqual(Guid.Empty, outGuid);
+        Assert.That(valueType, Is.EqualTo(0));
+        Assert.That(obj, Is.EqualTo(null));
+        Assert.That(enumValue, Is.EqualTo(EnumValue.Initial));
+        Assert.That(refValueType, Is.EqualTo(true));
+        Assert.That(outValueType, Is.EqualTo(1));
+        Assert.That(refObj, Is.EqualTo("RefObj"));
+        Assert.That(outObj, Is.Not.Null);
+        Assert.That(outObj.Name, Is.EqualTo("OutObj"));
+        Assert.That(refEnum, Is.EqualTo(EnumValue.Ref));
+        Assert.That(outEnum, Is.EqualTo(EnumValue.Out));
+        Assert.That(refGuid, Is.Empty);
+        Assert.That(outGuid, Is.Empty);
     }
 
     public enum EnumValue
@@ -666,7 +667,7 @@ public abstract class AbstractAopProxyTests
 
         IAopProxy aopProxy = CreateAopProxy(advised);
         IRefOutGenericTestObject proxy = aopProxy.GetProxy() as IRefOutGenericTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         TestsProxyGenericMethodWithRefOutParameters(proxy);
     }
@@ -684,11 +685,11 @@ public abstract class AbstractAopProxyTests
 
         IAopProxy aopProxy = CreateAopProxy(advised);
         IRefOutGenericTestObject proxy = aopProxy.GetProxy() as IRefOutGenericTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         TestsProxyGenericMethodWithRefOutParameters(proxy);
 
-        Assert.AreEqual(3, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -704,11 +705,11 @@ public abstract class AbstractAopProxyTests
 
         IAopProxy aopProxy = CreateAopProxy(advised);
         IRefOutGenericTestObject proxy = aopProxy.GetProxy() as IRefOutGenericTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         TestsProxyGenericMethodWithRefOutParameters(proxy);
 
-        Assert.AreEqual(3, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(3));
     }
 
     private void TestsProxyGenericMethodWithRefOutParameters(IRefOutGenericTestObject instance)
@@ -717,25 +718,25 @@ public abstract class AbstractAopProxyTests
         EnumValue refEnum = EnumValue.Ref;
         EnumValue outEnum = EnumValue.Out;
         EnumValue enumResult = instance.DoIt<EnumValue>(enumValue, ref refEnum, out outEnum);
-        Assert.AreEqual(EnumValue.Another, refEnum);
-        Assert.AreEqual(EnumValue.Another, outEnum);
-        Assert.AreEqual(EnumValue.Another, enumResult);
+        Assert.That(refEnum, Is.EqualTo(EnumValue.Another));
+        Assert.That(outEnum, Is.EqualTo(EnumValue.Another));
+        Assert.That(enumResult, Is.EqualTo(EnumValue.Another));
 
         TestObject objectValue = new TestObject("Value", 28);
         TestObject refObject = new TestObject("Ref", 28);
         TestObject outObject = new TestObject("Out", 28);
         TestObject objectResult = instance.DoIt<TestObject>(objectValue, ref refObject, out outObject);
-        Assert.AreEqual("Value", refObject.Name);
-        Assert.AreEqual("Value", outObject.Name);
-        Assert.AreEqual("Value", objectResult.Name);
+        Assert.That(refObject.Name, Is.EqualTo("Value"));
+        Assert.That(outObject.Name, Is.EqualTo("Value"));
+        Assert.That(objectResult.Name, Is.EqualTo("Value"));
 
         int intValue = 1;
         int refInt = 2;
         int outInt = 3;
         int intResult = instance.DoIt<int>(intValue, ref refInt, out outInt);
-        Assert.AreEqual(1, refInt);
-        Assert.AreEqual(1, outInt);
-        Assert.AreEqual(1, intResult);
+        Assert.That(refInt, Is.EqualTo(1));
+        Assert.That(outInt, Is.EqualTo(1));
+        Assert.That(intResult, Is.EqualTo(1));
     }
 
     public interface IRefOutGenericTestObject
@@ -768,8 +769,8 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
         object proxy = aopProxy.GetProxy();
 
-        Assert.IsNotNull(proxy);
-        Assert.AreEqual(target.ToString(), proxy.ToString(), "ToString() not equal");
+        Assert.That(proxy, Is.Not.Null);
+        Assert.That(proxy.ToString(), Is.EqualTo(target.ToString()), "ToString() not equal");
     }
 
     [Test]
@@ -786,20 +787,20 @@ public abstract class AbstractAopProxyTests
 
         AbstractProxyTypeBuilderTests.InterfaceWithGenericMethod proxy =
             CreateProxy(advised) as AbstractProxyTypeBuilderTests.InterfaceWithGenericMethod;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         proxy.PolymorphicMethod<int>();
         proxy.PolymorphicMethod<string>();
 
         string result1 = proxy.PolymorphicMethod("coucou");
-        Assert.AreEqual("coucou", result1);
+        Assert.That(result1, Is.EqualTo("coucou"));
 
         proxy.WithGenericParameter<string>();
 
         proxy.WithGenericParameterAndGenericArgument<string>("ola");
 
         string result2 = proxy.WithGenericParameterAndGenericArgumentAndGenericReturnType<string>("ola");
-        Assert.AreEqual("ola", result2);
+        Assert.That(result2, Is.EqualTo("ola"));
 
         proxy.WithInterfaceConstraint<bool>();
 
@@ -808,7 +809,7 @@ public abstract class AbstractAopProxyTests
         proxy.WithBaseTypeAndInterfaceConstraints<DerivedTestObject>();
 
         proxy.WithMixedConstraint<bool, DerivedTestObject>();
-        Assert.AreEqual(10, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(10));
 
         //if (this is DecoratorAopProxyTests)
         //{
@@ -830,16 +831,16 @@ public abstract class AbstractAopProxyTests
 
         AbstractProxyTypeBuilderTests.GenericInterface<TestObject> proxy =
             CreateProxy(advised) as AbstractProxyTypeBuilderTests.GenericInterface<TestObject>;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         TestObject to1 = proxy.Create();
-        Assert.IsNotNull(to1);
+        Assert.That(to1, Is.Not.Null);
 
         TestObject to2 = proxy.Populate(new TestObject());
-        Assert.IsNotNull(to2);
-        Assert.AreEqual("Populated", to2.Name);
+        Assert.That(to2, Is.Not.Null);
+        Assert.That(to2.Name, Is.EqualTo("Populated"));
 
-        Assert.AreEqual(2, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(2));
     }
 
     [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-340")]
@@ -869,8 +870,8 @@ public abstract class AbstractAopProxyTests
         advised.AddAdvice(new NopInterceptor());
 
         ITestObject proxy = CreateProxy(advised) as ITestObject;
-        Assert.IsNotNull(proxy);
-        Assert.AreEqual(target.Age, proxy.Age, "Incorrect age");
+        Assert.That(proxy, Is.Not.Null);
+        Assert.That(proxy.Age, Is.EqualTo(target.Age), "Incorrect age");
     }
 
     [Test]
@@ -883,12 +884,12 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         object[] attrs = proxy.GetType().GetCustomAttributes(false);
-        Assert.IsNotNull(attrs, "Should have had 1 attribute applied to the target type.");
-        Assert.AreEqual(1, attrs.Length, "Should have had 1 attribute applied to the target type.");
-        Assert.AreEqual(typeof(MarkerAttribute), attrs[0].GetType(), "Wrong System.Type of Attribute applied to the target type.");
+        Assert.That(attrs, Is.Not.Null, "Should have had 1 attribute applied to the target type.");
+        Assert.That(attrs.Length, Is.EqualTo(1), "Should have had 1 attribute applied to the target type.");
+        Assert.That(attrs[0].GetType(), Is.EqualTo(typeof(MarkerAttribute)), "Wrong System.Type of Attribute applied to the target type.");
     }
 
     [Test]
@@ -902,11 +903,11 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         object[] attrs = proxy.GetType().GetCustomAttributes(false);
-        Assert.IsNotNull(attrs);
-        Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the target type.");
+        Assert.That(attrs, Is.Not.Null);
+        Assert.That(attrs.Length, Is.EqualTo(0), "Should not have attribute applied to the target type.");
     }
 
     [Test]
@@ -919,7 +920,7 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+IMarkerInterface.MarkerMethod", BindingFlags.NonPublic | BindingFlags.Instance);
         if (method == null)
@@ -927,12 +928,12 @@ public abstract class AbstractAopProxyTests
             method = proxy.GetType().GetMethod("MarkerMethod");
         }
 
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetCustomAttributes(false);
-        Assert.IsNotNull(attrs, "Should have 1 attribute applied to the target method.");
-        Assert.AreEqual(1, attrs.Length, "Should have 1 attribute applied to the target method.");
-        Assert.AreEqual(typeof(MarkerAttribute), attrs[0].GetType(), "Wrong System.Type of Attribute applied to the target method.");
+        Assert.That(attrs, Is.Not.Null, "Should have 1 attribute applied to the target method.");
+        Assert.That(attrs.Length, Is.EqualTo(1), "Should have 1 attribute applied to the target method.");
+        Assert.That(attrs[0].GetType(), Is.EqualTo(typeof(MarkerAttribute)), "Wrong System.Type of Attribute applied to the target method.");
     }
 
     [Test]
@@ -946,7 +947,7 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+IMarkerInterface.MarkerMethod", BindingFlags.NonPublic | BindingFlags.Instance);
         if (method == null)
@@ -954,11 +955,11 @@ public abstract class AbstractAopProxyTests
             method = proxy.GetType().GetMethod("MarkerMethod");
         }
 
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetCustomAttributes(false);
-        Assert.IsNotNull(attrs);
-        Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the target method.");
+        Assert.That(attrs, Is.Not.Null);
+        Assert.That(attrs.Length, Is.EqualTo(0), "Should not have attribute applied to the target method.");
     }
 
     [Test]
@@ -971,7 +972,7 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+IMarkerInterface.MarkerMethod", BindingFlags.NonPublic | BindingFlags.Instance);
         if (method == null)
@@ -979,12 +980,12 @@ public abstract class AbstractAopProxyTests
             method = proxy.GetType().GetMethod("MarkerMethod");
         }
 
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetParameters()[1].GetCustomAttributes(false);
-        Assert.IsNotNull(attrs, "Should have had 1 attribute applied to the method's parameter.");
-        Assert.AreEqual(1, attrs.Length, "Should have had 1 attribute applied to the method's parameter.");
-        Assert.AreEqual(typeof(MarkerAttribute), attrs[0].GetType(), "Wrong System.Type of Attribute applied to the method's parameter.");
+        Assert.That(attrs, Is.Not.Null, "Should have had 1 attribute applied to the method's parameter.");
+        Assert.That(attrs.Length, Is.EqualTo(1), "Should have had 1 attribute applied to the method's parameter.");
+        Assert.That(attrs[0].GetType(), Is.EqualTo(typeof(MarkerAttribute)), "Wrong System.Type of Attribute applied to the method's parameter.");
     }
 
     [Test]
@@ -998,7 +999,7 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+IMarkerInterface.MarkerMethod", BindingFlags.NonPublic | BindingFlags.Instance);
         if (method == null)
@@ -1006,11 +1007,11 @@ public abstract class AbstractAopProxyTests
             method = proxy.GetType().GetMethod("MarkerMethod");
         }
 
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetParameters()[1].GetCustomAttributes(false);
-        Assert.IsNotNull(attrs);
-        Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's parameter.");
+        Assert.That(attrs, Is.Not.Null);
+        Assert.That(attrs.Length, Is.EqualTo(0), "Should not have attribute applied to the method's parameter.");
     }
 
     [Test]
@@ -1023,7 +1024,7 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+IMarkerInterface.MarkerMethod", BindingFlags.NonPublic | BindingFlags.Instance);
         if (method == null)
@@ -1031,12 +1032,12 @@ public abstract class AbstractAopProxyTests
             method = proxy.GetType().GetMethod("MarkerMethod");
         }
 
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.ReturnTypeCustomAttributes.GetCustomAttributes(false);
-        Assert.IsNotNull(attrs, "Should have had 1 attribute applied to the method's return value.");
-        Assert.AreEqual(1, attrs.Length, "Should have had 1 attribute applied to the method's return value.");
-        Assert.AreEqual(typeof(MarkerAttribute), attrs[0].GetType(), "Wrong System.Type of Attribute applied to the method's return value.");
+        Assert.That(attrs, Is.Not.Null, "Should have had 1 attribute applied to the method's return value.");
+        Assert.That(attrs.Length, Is.EqualTo(1), "Should have had 1 attribute applied to the method's return value.");
+        Assert.That(attrs[0].GetType(), Is.EqualTo(typeof(MarkerAttribute)), "Wrong System.Type of Attribute applied to the method's return value.");
     }
 
     [Test]
@@ -1050,7 +1051,7 @@ public abstract class AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+IMarkerInterface.MarkerMethod", BindingFlags.NonPublic | BindingFlags.Instance);
         if (method == null)
@@ -1058,11 +1059,11 @@ public abstract class AbstractAopProxyTests
             method = proxy.GetType().GetMethod("MarkerMethod");
         }
 
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.ReturnTypeCustomAttributes.GetCustomAttributes(false);
-        Assert.IsNotNull(attrs);
-        Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's return value.");
+        Assert.That(attrs, Is.Not.Null);
+        Assert.That(attrs.Length, Is.EqualTo(0), "Should not have attribute applied to the method's return value.");
     }
 
     public sealed class MarkerAttribute : Attribute
@@ -1100,41 +1101,41 @@ public abstract class AbstractAopProxyTests
         ITestObject proxy = (ITestObject) CreateProxy(pf);
 
         proxy.Age.ToString();
-        Assert.AreEqual(0, cba.GetCalls());
+        Assert.That(cba.GetCalls(), Is.EqualTo(0));
         ((IAdvised) proxy).AddAdvice(cba);
         proxy.Age.ToString();
-        Assert.AreEqual(1, cba.GetCalls());
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
     }
 
     [Test]
     public void SerializationAdviceAndTargetNotSerializable()
     {
         TestObject to = new TestObject();
-        Assert.IsFalse(SerializationTestUtils.IsSerializable(to));
+        Assert.That(SerializationTestUtils.IsSerializable(to), Is.False);
 
         ProxyFactory pf = new ProxyFactory(to);
 
         pf.AddAdvice(new NopInterceptor());
         ITestObject proxy = (ITestObject) CreateAopProxy(pf).GetProxy();
 
-        Assert.IsFalse(SerializationTestUtils.IsSerializable(proxy));
+        Assert.That(SerializationTestUtils.IsSerializable(proxy), Is.False);
     }
 
     [Test]
     public void SerializationAdviceNotSerializable()
     {
         SerializablePerson sp = new SerializablePerson();
-        Assert.IsTrue(SerializationTestUtils.IsSerializable(sp));
+        Assert.That(SerializationTestUtils.IsSerializable(sp), Is.True);
 
         ProxyFactory pf = new ProxyFactory(sp);
 
         // This isn't serializable
         IAdvice i = new NopInterceptor();
         pf.AddAdvice(i);
-        Assert.IsFalse(SerializationTestUtils.IsSerializable(i));
+        Assert.That(SerializationTestUtils.IsSerializable(i), Is.False);
         Object proxy = CreateAopProxy(pf).GetProxy();
 
-        Assert.IsFalse(SerializationTestUtils.IsSerializable(proxy));
+        Assert.That(SerializationTestUtils.IsSerializable(proxy), Is.False);
     }
 
     [Test]
@@ -1144,7 +1145,7 @@ public abstract class AbstractAopProxyTests
         personTarget.Name = "jim";
         personTarget.Age = 26;
 
-        Assert.IsTrue(SerializationTestUtils.IsSerializable(personTarget));
+        Assert.That(SerializationTestUtils.IsSerializable(personTarget), Is.True);
 
         ProxyFactory pf = new ProxyFactory(personTarget);
 
@@ -1158,7 +1159,7 @@ public abstract class AbstractAopProxyTests
         IPerson p = (IPerson) CreateAopProxy(pf).GetProxy();
 
         p.Echo(null);
-        Assert.AreEqual(0, cta.GetCalls());
+        Assert.That(cta.GetCalls(), Is.EqualTo(0));
         try
         {
             p.Echo(new Exception());
@@ -1167,34 +1168,34 @@ public abstract class AbstractAopProxyTests
         {
         }
 
-        Assert.AreEqual(1, cta.GetCalls());
+        Assert.That(cta.GetCalls(), Is.EqualTo(1));
 
         // Will throw exception if it fails
         IPerson p2 = (IPerson) SerializationTestUtils.SerializeAndDeserialize(p);
-        Assert.AreNotSame(p, p2);
-        Assert.AreEqual(p.GetName(), p2.GetName());
-        Assert.AreEqual(p.GetAge(), p2.GetAge());
-        Assert.IsTrue(AopUtils.IsAopProxy(p2), "Deserialized object is an AOP proxy");
+        Assert.That(p2, Is.Not.SameAs(p));
+        Assert.That(p2.GetName(), Is.EqualTo(p.GetName()));
+        Assert.That(p2.GetAge(), Is.EqualTo(p.GetAge()));
+        Assert.That(AopUtils.IsAopProxy(p2), Is.True, "Deserialized object is an AOP proxy");
 
         IAdvised a1 = (IAdvised) p;
         IAdvised a2 = (IAdvised) p2;
         // Check we can manipulate state of p2
-        Assert.AreEqual(a1.Advisors.Count, a2.Advisors.Count);
+        Assert.That(a2.Advisors.Count, Is.EqualTo(a1.Advisors.Count));
 
         // This should work as SerializablePerson is equal
-        Assert.AreEqual(p, p2, "Proxies should be equal, even after one was serialized");
+        Assert.That(p2, Is.EqualTo(p), "Proxies should be equal, even after one was serialized");
 
         // Check we can add a new advisor to the target
         NopInterceptor ni = new NopInterceptor();
         p2.GetAge();
-        Assert.AreEqual(0, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(0));
         a2.AddAdvice(ni);
         p2.GetAge();
-        Assert.AreEqual(1, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(1));
 
         cta = (CountingThrowsAdvice) a2.Advisors[3].Advice;
         p2.Echo(null);
-        Assert.AreEqual(1, cta.GetCalls());
+        Assert.That(cta.GetCalls(), Is.EqualTo(1));
         try
         {
             p2.Echo(new Exception());
@@ -1203,7 +1204,7 @@ public abstract class AbstractAopProxyTests
         {
         }
 
-        Assert.AreEqual(2, cta.GetCalls());
+        Assert.That(cta.GetCalls(), Is.EqualTo(2));
     }
 
     /// <summary>
@@ -1238,13 +1239,13 @@ public abstract class AbstractAopProxyTests
         advised2.Age = age2;
         advised1.Spouse = advised2; // = 2 invocations
 
-        Assert.AreEqual(age1, advised1.Age, "Advised one has correct age"); // = 3 invocations
-        Assert.AreEqual(age2, advised2.Age, "Advised two has correct age");
+        Assert.That(advised1.Age, Is.EqualTo(age1), "Advised one has correct age"); // = 3 invocations
+        Assert.That(advised2.Age, Is.EqualTo(age2), "Advised two has correct age");
         // Means extra call on advised 2
-        Assert.AreEqual(age2, advised1.Spouse.Age, "Advised one spouse has correct age"); // = 4 invocations on 1 and another one on 2
-        Assert.AreEqual(4, di1.Count, "one was invoked correct number of times");
+        Assert.That(advised1.Spouse.Age, Is.EqualTo(age2), "Advised one spouse has correct age"); // = 4 invocations on 1 and another one on 2
+        Assert.That(di1.Count, Is.EqualTo(4), "one was invoked correct number of times");
         // Got hit by call to advised1.getSpouse().Age
-        Assert.AreEqual(3, di2.Count, "one was invoked correct number of times");
+        Assert.That(di2.Count, Is.EqualTo(3), "one was invoked correct number of times");
     }
 
     private class MethodInvocationMatcherInterceptor : IMethodInterceptor
@@ -1253,7 +1254,7 @@ public abstract class AbstractAopProxyTests
         {
             MethodInfo m = invocation.Method;
             Object retval = invocation.Proceed();
-            Assert.AreEqual(m, invocation.Method, "Method invocation should have same method on way back");
+            Assert.That(invocation.Method, Is.EqualTo(m), "Method invocation should have same method on way back");
             return retval;
         }
     }
@@ -1264,7 +1265,7 @@ public abstract class AbstractAopProxyTests
         {
             Object proxy = AopContext.CurrentProxy;
             Object ret = invocation.Proceed();
-            Assert.IsTrue(proxy == AopContext.CurrentProxy, "Proxy should be the same on way back");
+            Assert.That(proxy == AopContext.CurrentProxy, Is.True, "Proxy should be the same on way back");
             return ret;
         }
     }
@@ -1283,15 +1284,15 @@ public abstract class AbstractAopProxyTests
         advised1.Age = age1; // = 1 invocation
         advised1.Spouse = advised1; // = 2 invocations
 
-        Assert.AreEqual(2, di1.Count, "one was invoked correct number of times");
+        Assert.That(di1.Count, Is.EqualTo(2), "one was invoked correct number of times");
 
-        Assert.AreEqual(age1, advised1.Age, "Advised one has correct age"); // = 3 invocations
-        Assert.AreEqual(3, di1.Count, "one was invoked correct number of times");
+        Assert.That(advised1.Age, Is.EqualTo(age1), "Advised one has correct age"); // = 3 invocations
+        Assert.That(di1.Count, Is.EqualTo(3), "one was invoked correct number of times");
 
         // = 5 invocations, as reentrant call to spouse is advised also
-        Assert.AreEqual(age1, advised1.Spouse.Age, "Advised spouse has correct age");
+        Assert.That(advised1.Spouse.Age, Is.EqualTo(age1), "Advised spouse has correct age");
 
-        Assert.AreEqual(5, di1.Count, "one was invoked correct number of times");
+        Assert.That(di1.Count, Is.EqualTo(5), "one was invoked correct number of times");
     }
 
     [Test]
@@ -1301,22 +1302,22 @@ public abstract class AbstractAopProxyTests
         INeedsToSeeProxy target = new TargetChecker();
         ProxyFactory proxyFactory = new ProxyFactory(target);
         proxyFactory.ExposeProxy = true;
-        Assert.IsTrue(proxyFactory.ExposeProxy);
+        Assert.That(proxyFactory.ExposeProxy, Is.True);
 
         proxyFactory.AddAdvice(0, di);
         INeedsToSeeProxy proxied = (INeedsToSeeProxy) CreateProxy(proxyFactory);
 
-        Assert.AreEqual(0, di.Count);
-        Assert.AreEqual(0, target.Count);
+        Assert.That(di.Count, Is.EqualTo(0));
+        Assert.That(target.Count, Is.EqualTo(0));
         proxied.IncrementViaThis();
-        Assert.AreEqual(1, target.Count, "Increment happened");
+        Assert.That(target.Count, Is.EqualTo(1), "Increment happened");
 
-        Assert.AreEqual(1, di.Count, "Only one invocation via AOP as use of this wasn't proxied");
+        Assert.That(di.Count, Is.EqualTo(1), "Only one invocation via AOP as use of this wasn't proxied");
         // 1 invocation
-        Assert.AreEqual(1, proxied.Count, "Increment happened");
+        Assert.That(proxied.Count, Is.EqualTo(1), "Increment happened");
         proxied.IncrementViaProxy(); // 2 invoocations
-        Assert.AreEqual(2, target.Count, "Increment happened");
-        Assert.AreEqual(4, di.Count, "3 more invocations via AOP as the first call was reentrant through the proxy");
+        Assert.That(target.Count, Is.EqualTo(2), "Increment happened");
+        Assert.That(di.Count, Is.EqualTo(4), "3 more invocations via AOP as the first call was reentrant through the proxy");
     }
 
     /// <summary>
@@ -1345,7 +1346,7 @@ public abstract class AbstractAopProxyTests
     {
         NeedsToSeeProxy et = new NeedsToSeeProxy();
         ProxyFactory pf1 = new ProxyFactory(et);
-        Assert.IsFalse(pf1.ExposeProxy);
+        Assert.That(pf1.ExposeProxy, Is.False);
         INeedsToSeeProxy proxied = (INeedsToSeeProxy) CreateProxy(pf1);
         Assert.Throws<AopConfigException>(() => proxied.IncrementViaProxy());
     }
@@ -1360,7 +1361,7 @@ public abstract class AbstractAopProxyTests
         advised.Target = raw;
 
         ITestObject to = (ITestObject) CreateProxy(advised);
-        Assert.IsTrue(to.Spouse == to, "this return is wrapped in proxy");
+        Assert.That(to.Spouse == to, Is.True, "this return is wrapped in proxy");
     }
 
     public class OwnSpouse : TestObject
@@ -1389,7 +1390,7 @@ public abstract class AbstractAopProxyTests
         }
         catch (Exception ex)
         {
-            Assert.AreEqual(expectedException, ex, "exception matches");
+            Assert.That(ex, Is.EqualTo(expectedException), "exception matches");
         }
     }
 
@@ -1413,7 +1414,7 @@ public abstract class AbstractAopProxyTests
         }
         catch (Exception ex)
         {
-            Assert.AreEqual(expectedException, ex, "exception matches");
+            Assert.That(ex, Is.EqualTo(expectedException), "exception matches");
         }
     }
 
@@ -1462,13 +1463,13 @@ public abstract class AbstractAopProxyTests
 
                 ITestObject ito = (ITestObject) CreateProxy(advised);
                 ito.Age = newAge;
-                Assert.IsTrue(ito.Age == newAge);
+                Assert.That(ito.Age == newAge, Is.True);
 
                 ILockable lockable = (ILockable) ito;
-                Assert.IsFalse(lockable.Locked());
+                Assert.That(lockable.Locked(), Is.False);
                 lockable.DoLock();
 
-                Assert.IsTrue(ito.Age == newAge);
+                Assert.That(ito.Age == newAge, Is.True);
                 try
                 {
                     ito.Age = 1;
@@ -1478,13 +1479,13 @@ public abstract class AbstractAopProxyTests
                 {
                     // ok
                 }
-                Assert.IsTrue(ito.Age == newAge);
+                Assert.That(ito.Age == newAge, Is.True);
 
                 // Unlock
-                Assert.IsTrue(lockable.Locked());
+                Assert.That(lockable.Locked(), Is.True);
                 lockable.Unlock();
                 ito.Age = 1;
-                Assert.IsTrue(ito.Age == 1);
+                Assert.That(ito.Age == 1, Is.True);
             }
     */
 
@@ -1501,7 +1502,7 @@ public abstract class AbstractAopProxyTests
         ITestObject ito = (ITestObject) CreateProxy(advised);
         ito.Age = 27;
 
-        Assert.AreEqual(2, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(2));
     }
 
     public class RetryAdvice : IMethodInterceptor
@@ -1524,15 +1525,15 @@ public abstract class AbstractAopProxyTests
         ITestObject ito = (ITestObject) CreateProxy(advised);
         int newAge = 5;
         ito.Age = newAge;
-        Assert.IsTrue(ito.Age == newAge);
+        Assert.That(ito.Age == newAge, Is.True);
         String newName = "greg";
         ito.Name = newName;
-        Assert.AreEqual(newName, ito.Name);
+        Assert.That(ito.Name, Is.EqualTo(newName));
 
         ito.Name = null;
 
         // Null replacement magic should work
-        Assert.IsTrue(ito.Name.Equals(""));
+        Assert.That(ito.Name.Equals(""), Is.True);
     }
 
     [Test]
@@ -1548,18 +1549,18 @@ public abstract class AbstractAopProxyTests
         ITestObject ito = (ITestObject) CreateProxy(advised);
         int newAge = 5;
         ito.Age = newAge;
-        Assert.IsTrue(ito.Age == newAge);
+        Assert.That(ito.Age == newAge, Is.True);
         String newName = "greg";
         ito.Name = newName;
-        Assert.AreEqual(newName, ito.Name);
+        Assert.That(ito.Name, Is.EqualTo(newName));
 
         ito.Name = null;
 
         // Null replacement magic should work
-        Assert.IsTrue(ito.Name.Equals(""));
+        Assert.That(ito.Name.Equals(""), Is.True);
 
         // StringSetterNullReplacementAdvisor should not be fire twice
-        Assert.AreEqual(0, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -1618,7 +1619,7 @@ public abstract class AbstractAopProxyTests
             object returnValue = invocation.Proceed();
 
             // Null replacement magic should work
-            Assert.IsNotNull(invocation.Arguments[0]);
+            Assert.That(invocation.Arguments[0], Is.Not.Null);
 
             return returnValue;
         }
@@ -1636,32 +1637,32 @@ public abstract class AbstractAopProxyTests
         advisedSupport.AddAdvice(0, ni);
 
         ITestObject ito = (ITestObject) CreateProxy(advisedSupport);
-        Assert.AreEqual(0, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(0));
         ito.Age = 23;
-        Assert.AreEqual(23, ito.Age);
-        Assert.AreEqual(2, ni.Count);
+        Assert.That(ito.Age, Is.EqualTo(23));
+        Assert.That(ni.Count, Is.EqualTo(2));
 
         IAdvised advised = (IAdvised) ito;
-        Assert.AreEqual(1, advised.Advisors.Count, "Have 1 advisor");
-        Assert.AreEqual(ni, advised.Advisors[0].Advice);
+        Assert.That(advised.Advisors.Count, Is.EqualTo(1), "Have 1 advisor");
+        Assert.That(advised.Advisors[0].Advice, Is.EqualTo(ni));
         NopInterceptor ni2 = new NopInterceptor();
         advised.AddAdvice(1, ni2);
         ito.Name = "Bruno";
-        Assert.AreEqual(3, ni.Count);
-        Assert.AreEqual(1, ni2.Count);
+        Assert.That(ni.Count, Is.EqualTo(3));
+        Assert.That(ni2.Count, Is.EqualTo(1));
         // will remove ni
         advised.RemoveAdvisor(0);
-        Assert.IsNotNull(ito.Age);
+        Assert.That((object) ito.Age, Is.Not.Null);
         // Unchanged
-        Assert.AreEqual(3, ni.Count);
-        Assert.AreEqual(2, ni2.Count);
+        Assert.That(ni.Count, Is.EqualTo(3));
+        Assert.That(ni2.Count, Is.EqualTo(2));
 
         CountingBeforeAdvice cba = new CountingBeforeAdvice();
-        Assert.AreEqual(0, cba.GetCalls());
+        Assert.That(cba.GetCalls(), Is.EqualTo(0));
         advised.AddAdvice(cba);
         ito.Age = 16;
-        Assert.AreEqual(16, ito.Age);
-        Assert.AreEqual(2, cba.GetCalls());
+        Assert.That(ito.Age, Is.EqualTo(16));
+        Assert.That(cba.GetCalls(), Is.EqualTo(2));
     }
 
     [Test]
@@ -1670,7 +1671,7 @@ public abstract class AbstractAopProxyTests
         TestObject target = new TestObject();
         target.Age = 21;
         ProxyFactory pf = new ProxyFactory(target);
-        Assert.IsFalse(pf.IsFrozen);
+        Assert.That(pf.IsFrozen, Is.False);
         pf.AddAdvice(new NopInterceptor());
         ITestObject proxied = (ITestObject) CreateProxy(pf);
         pf.IsFrozen = true;
@@ -1681,12 +1682,12 @@ public abstract class AbstractAopProxyTests
         }
         catch (AopConfigException ex)
         {
-            Assert.IsTrue(ex.Message.IndexOf("frozen") > -1);
+            Assert.That(ex.Message.IndexOf("frozen") > -1, Is.True);
         }
 
         // Check it still works: proxy factory state shouldn't have been corrupted
-        Assert.AreEqual(target.Age, proxied.Age);
-        Assert.AreEqual(1, ((IAdvised) proxied).Advisors.Count);
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
+        Assert.That(((IAdvised) proxied).Advisors.Count, Is.EqualTo(1));
     }
 
     [Test(Description = "Check that casting to Advised can't get around advice freeze.")]
@@ -1695,13 +1696,13 @@ public abstract class AbstractAopProxyTests
         TestObject target = new TestObject();
         target.Age = 21;
         ProxyFactory pf = new ProxyFactory(target);
-        Assert.IsFalse(pf.IsFrozen);
+        Assert.That(pf.IsFrozen, Is.False);
         pf.AddAdvice(new NopInterceptor());
         ITestObject proxied = (ITestObject) CreateProxy(pf);
         pf.IsFrozen = true;
         IAdvised advised = (IAdvised) proxied;
 
-        Assert.IsTrue(pf.IsFrozen);
+        Assert.That(pf.IsFrozen, Is.True);
         try
         {
             advised.AddAdvisor(new DefaultPointcutAdvisor(new NopInterceptor()));
@@ -1709,12 +1710,12 @@ public abstract class AbstractAopProxyTests
         }
         catch (AopConfigException ex)
         {
-            Assert.IsTrue(ex.Message.IndexOf("frozen") > -1);
+            Assert.That(ex.Message.IndexOf("frozen") > -1, Is.True);
         }
 
         // Check it still works: proxy factory state shouldn't have been corrupted
-        Assert.AreEqual(target.Age, proxied.Age);
-        Assert.AreEqual(1, advised.Advisors.Count);
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
+        Assert.That(advised.Advisors.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -1723,13 +1724,13 @@ public abstract class AbstractAopProxyTests
         TestObject target = new TestObject();
         target.Age = 21;
         ProxyFactory pf = new ProxyFactory(target);
-        Assert.IsFalse(pf.IsFrozen);
+        Assert.That(pf.IsFrozen, Is.False);
         pf.AddAdvice(new NopInterceptor());
         ITestObject proxied = (ITestObject) CreateProxy(pf);
         pf.IsFrozen = true;
         IAdvised advised = (IAdvised) proxied;
 
-        Assert.IsTrue(pf.IsFrozen);
+        Assert.That(pf.IsFrozen, Is.True);
         try
         {
             advised.RemoveAdvisor(0);
@@ -1737,17 +1738,17 @@ public abstract class AbstractAopProxyTests
         }
         catch (AopConfigException ex)
         {
-            Assert.IsTrue(ex.Message.IndexOf("frozen") > -1);
+            Assert.That(ex.Message.IndexOf("frozen") > -1, Is.True);
         }
 
         // Didn't get removed
-        Assert.AreEqual(1, advised.Advisors.Count);
+        Assert.That(advised.Advisors.Count, Is.EqualTo(1));
         pf.IsFrozen = false;
         // Can now remove it
         advised.RemoveAdvisor(0);
         // Check it still works: proxy factory state shouldn't have been corrupted
-        Assert.AreEqual(target.Age, proxied.Age);
-        Assert.AreEqual(0, advised.Advisors.Count);
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
+        Assert.That(advised.Advisors.Count, Is.EqualTo(0));
     }
 
     [Test(Description = "Check that the string is informative.")]
@@ -1763,8 +1764,8 @@ public abstract class AbstractAopProxyTests
         ITestObject proxied = (ITestObject) CreateProxy(pf);
 
         String proxyConfigString = ((IAdvised) proxied).ToProxyConfigString();
-        Assert.IsTrue(proxyConfigString.IndexOf(advisor.ToString()) != -1);
-        Assert.IsTrue(proxyConfigString.IndexOf("1 interface") != -1);
+        Assert.That(proxyConfigString.IndexOf(advisor.ToString()) != -1, Is.True);
+        Assert.That(proxyConfigString.IndexOf("1 interface") != -1, Is.True);
     }
 
     // TODO : Opaque can be implemented if really usefull (To increase performance)
@@ -1780,15 +1781,15 @@ public abstract class AbstractAopProxyTests
                 nmmp.MappedName = "set_Age";
                 IAdvisor advisor = new DefaultPointcutAdvisor(nmmp, mba);
                 pf.AddAdvisor(advisor);
-                Assert.IsFalse(pf.Opaque, "Opaque defaults to false");
+                Assert.That(pf.Opaque, Is.False, "Opaque defaults to false");
                 pf.Opaque = true;
-                Assert.IsTrue(pf.Opaque, "Opaque now true for this config");
+                Assert.That(pf.Opaque, Is.True, "Opaque now true for this config");
                 ITestObject proxied = (ITestObject) CreateProxy(pf);
                 proxied.Age = 10;
-                Assert.AreEqual(10, proxied.Age);
-                Assert.AreEqual(1, mba.GetCalls());
+                Assert.That(proxied.Age, Is.EqualTo(10));
+                Assert.That(mba.GetCalls(), Is.EqualTo(1));
 
-                Assert.IsFalse(proxied is IAdvised, "Cannot be cast to Advised", );
+                Assert.That(proxied is IAdvised, Is.False, "Cannot be cast to Advised");
             }
      */
 
@@ -1806,32 +1807,32 @@ public abstract class AbstractAopProxyTests
         RefreshCountingAdvisorChainFactory acf = new RefreshCountingAdvisorChainFactory();
         // Should be automatically added as a listener
         pf.AdvisorChainFactory(acf);
-        Assert.IsFalse(pf.isActive());
-        Assert.AreEqual(0, l.activates);
-        Assert.AreEqual(0, acf.refreshes);
+        Assert.That(pf.isActive(), Is.False);
+        Assert.That(l.activates, Is.EqualTo(0));
+        Assert.That(acf.refreshes, Is.EqualTo(0));
         ITestObject proxied = (ITestObject)CreateProxy(pf);
-        Assert.AreEqual(1, acf.refreshes);
-        Assert.AreEqual(1, l.activates);
-        Assert.IsTrue(pc.isActive());
-        Assert.AreEqual(target.Age, proxied.Age);
-        Assert.AreEqual(0, l.adviceChanges);
+        Assert.That(acf.refreshes, Is.EqualTo(1));
+        Assert.That(l.activates, Is.EqualTo(1));
+        Assert.That(pc.isActive(), Is.True);
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
+        Assert.That(l.adviceChanges, Is.EqualTo(0));
         NopInterceptor ni = new NopInterceptor();
         pf.addAdvice(0, ni);
-        Assert.AreEqual(1, l.adviceChanges);
-        Assert.AreEqual(2, acf.refreshes);
-        Assert.AreEqual(target.Age, proxied.Age);
+        Assert.That(l.adviceChanges, Is.EqualTo(1));
+        Assert.That(acf.refreshes, Is.EqualTo(2));
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
         pf.removeAdvice(ni);
-        Assert.AreEqual(2, l.adviceChanges);
-        Assert.AreEqual(3, acf.refreshes);
-        Assert.AreEqual(target.Age, proxied.Age);
+        Assert.That(l.adviceChanges, Is.EqualTo(2));
+        Assert.That(acf.refreshes, Is.EqualTo(3));
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
         pf.getProxy();
-        Assert.AreEqual(1, l.activates);
+        Assert.That(l.activates, Is.EqualTo(1));
 
         pf.RemoveListener(l);
-        Assert.AreEqual(2, l.adviceChanges);
+        Assert.That(l.adviceChanges, Is.EqualTo(2));
         pf.AddAdvisor(new DefaultPointcutAdvisor(new NopInterceptor()));
         // No longer counting
-        Assert.AreEqual(2, l.adviceChanges);
+        Assert.That(l.adviceChanges, Is.EqualTo(2));
     }
 
     public class CountingAdvisorListener : IAdvisedSupportListener
@@ -1847,13 +1848,13 @@ public abstract class AbstractAopProxyTests
 
         public void AdviceChanged(AdvisedSupport source)
         {
-            Assert.AreEqual(expectedSource, source);
+            Assert.That(source, Is.EqualTo(expectedSource));
             ++adviceChanges;
         }
 
         public void Activated(AdvisedSupport source)
         {
-            Assert.AreEqual(expectedSource,source);
+            Assert.That(source, Is.EqualTo(expectedSource));
             ++activates;
         }
     }
@@ -1888,13 +1889,13 @@ public abstract class AbstractAopProxyTests
         pf.AddAdvisor(dp);
         pf.Target = to;
         ITestObject it = (ITestObject) CreateProxy(pf);
-        Assert.AreEqual(dp.count, 0);
+        Assert.That(dp.count, Is.EqualTo(0));
         int age = it.Age;
-        Assert.IsNotNull(age); // avoid mono mcs CS0218
-        Assert.AreEqual(dp.count, 1);
+        Assert.That((object) age, Is.Not.Null); // avoid mono mcs CS0218
+        Assert.That(dp.count, Is.EqualTo(1));
         it.Age = 11;
-        Assert.AreEqual(it.Age, 11);
-        Assert.AreEqual(dp.count, 2);
+        Assert.That(it.Age, Is.EqualTo(11));
+        Assert.That(dp.count, Is.EqualTo(2));
     }
 
     [Test]
@@ -1908,17 +1909,17 @@ public abstract class AbstractAopProxyTests
         this.mockTargetSource.SetTarget(to);
         pf.TargetSource = mockTargetSource;
         ITestObject it = (ITestObject) CreateProxy(pf);
-        Assert.AreEqual(dp.count, 0);
+        Assert.That(dp.count, Is.EqualTo(0));
         int age = it.Age;
-        Assert.IsNotNull(age); // avoid mono mcs error CS0219
+        Assert.That((object) age, Is.Not.Null); // avoid mono mcs error CS0219
         // Statically vetoed
-        Assert.AreEqual(0, dp.count);
+        Assert.That(dp.count, Is.EqualTo(0));
         it.Age = 11;
-        Assert.AreEqual(it.Age, 11);
-        Assert.AreEqual(dp.count, 1);
+        Assert.That(it.Age, Is.EqualTo(11));
+        Assert.That(dp.count, Is.EqualTo(1));
         // Applies statically but not dynamically
         it.Name = "joe";
-        Assert.AreEqual(dp.count, 1);
+        Assert.That(dp.count, Is.EqualTo(1));
     }
 
     private class TestDynamicPointcutAdvisor : DynamicMethodMatcherPointcutAdvisor
@@ -1965,13 +1966,13 @@ public abstract class AbstractAopProxyTests
         pf.AddAdvisor(sp);
         pf.Target = to;
         ITestObject it = (ITestObject) CreateProxy(pf);
-        Assert.AreEqual(ni.Count, 0);
+        Assert.That(ni.Count, Is.EqualTo(0));
         int age = it.Age;
-        Assert.IsNotNull(age); // avoid mono mcs error CS0219
-        Assert.AreEqual(ni.Count, 1);
+        Assert.That((object) age, Is.Not.Null); // avoid mono mcs error CS0219
+        Assert.That(ni.Count, Is.EqualTo(1));
         it.Age = 11;
-        Assert.AreEqual(it.Age, 11);
-        Assert.AreEqual(ni.Count, 2);
+        Assert.That(it.Age, Is.EqualTo(11));
+        Assert.That(ni.Count, Is.EqualTo(2));
     }
 
     private class TestStaticPointcutAdvisor : StaticMethodMatcherPointcutAdvisor
@@ -2013,11 +2014,11 @@ public abstract class AbstractAopProxyTests
 
                 int age = 20;
                 ito.Age = age;
-                Assert.AreEqual(age, ito.Age);
+                Assert.That(ito.Age, Is.EqualTo(age));
                 // Should return the age before the third, AOP-induced birthday
-                Assert.AreEqual(age + 2, ito.haveBirthday());
+                Assert.That(ito.haveBirthday(), Is.EqualTo(age + 2));
                 // Return the final age produced by 3 birthdays
-                Assert.AreEqual(age + 3, ito.Age);
+                Assert.That(ito.Age, Is.EqualTo(age + 3));
             }
 
             private class TwoBirthdayPointcutAdvisor : StaticMethodMatcherPointcutAdvisor
@@ -2085,14 +2086,14 @@ public abstract class AbstractAopProxyTests
     //        String name2 = "gordon";
 
     //        to.setName(name1);
-    //        Assert.AreEqual(name1, to.Name);
+    //        Assert.That(to.Name, Is.EqualTo(name1));
 
     //        it.setName(name2);
     //        // NameReverter saved it back
-    //        Assert.AreEqual(name1, it.Name);
-    //        Assert.AreEqual(2, saver.names.size());
-    //        Assert.AreEqual(name2, saver.names.get(0));
-    //        Assert.AreEqual(name1, saver.names.get(1));
+    //        Assert.That(it.Name, Is.EqualTo(name1));
+    //        Assert.That(saver.names.size(), Is.EqualTo(2));
+    //        Assert.That(saver.names.get(0), Is.EqualTo(name2));
+    //        Assert.That(saver.names.get(1), Is.EqualTo(name1));
     //    }
     */
 
@@ -2108,17 +2109,17 @@ public abstract class AbstractAopProxyTests
 
         IOverloads proxy = (IOverloads) CreateProxy(pf);
 
-        Assert.AreEqual(0, overloadInt.Count);
-        Assert.AreEqual(0, overloadVoid.Count);
+        Assert.That(overloadInt.Count, Is.EqualTo(0));
+        Assert.That(overloadVoid.Count, Is.EqualTo(0));
         proxy.Overload();
-        Assert.AreEqual(0, overloadInt.Count);
-        Assert.AreEqual(1, overloadVoid.Count);
-        Assert.AreEqual(25, proxy.Overload(25));
-        Assert.AreEqual(1, overloadInt.Count);
-        Assert.AreEqual(1, overloadVoid.Count);
+        Assert.That(overloadInt.Count, Is.EqualTo(0));
+        Assert.That(overloadVoid.Count, Is.EqualTo(1));
+        Assert.That(proxy.Overload(25), Is.EqualTo(25));
+        Assert.That(overloadInt.Count, Is.EqualTo(1));
+        Assert.That(overloadVoid.Count, Is.EqualTo(1));
         proxy.NoAdvice();
-        Assert.AreEqual(1, overloadInt.Count);
-        Assert.AreEqual(1, overloadVoid.Count);
+        Assert.That(overloadInt.Count, Is.EqualTo(1));
+        Assert.That(overloadVoid.Count, Is.EqualTo(1));
     }
 
     public interface IOverloads
@@ -2194,33 +2195,33 @@ public abstract class AbstractAopProxyTests
                 NopInterceptor nop = new NopInterceptor();
                 pf.AddAdvice(nop);
                 ITestObject proxy = (ITestObject)CreateProxy(pf);
-                Assert.AreEqual(nop.Count, 0);
-                Assert.AreEqual(to1.Age, proxy.Age);
-                Assert.AreEqual(nop.Count, 1);
+                Assert.That(0, Is.EqualTo(nop.Count));
+                Assert.That(proxy.Age, Is.EqualTo(to1.Age));
+                Assert.That(1, Is.EqualTo(nop.Count));
                 // Change to a new static target
                 pf.Target = to2;
-                Assert.AreEqual(to2.Age, proxy.Age);
-                Assert.AreEqual(nop.Count, 2);
+                Assert.That(proxy.Age, Is.EqualTo(to2.Age));
+                Assert.That(2, Is.EqualTo(nop.Count));
 
                 // Change to a new dynamic target
                 HotSwappableTargetSource hts = new HotSwappableTargetSource(to3);
                 pf.TargetSource = hts;
-                Assert.AreEqual(to3.Age, proxy.Age);
-                Assert.AreEqual(nop.Count, 3);
+                Assert.That(proxy.Age, Is.EqualTo(to3.Age));
+                Assert.That(3, Is.EqualTo(nop.Count));
                 hts.Swap(to1);
-                Assert.AreEqual(to1.Age, proxy.Age);
+                Assert.That(proxy.Age, Is.EqualTo(to1.Age));
                 to1.Name = "Colin";
-                Assert.AreEqual(to1.Name, proxy.Name);
-                Assert.AreEqual(nop.Count, 5);
+                Assert.That(proxy.Name, Is.EqualTo(to1.Name));
+                Assert.That(5, Is.EqualTo(nop.Count));
 
                 // Change back, relying on casting to Advised
                 IAdvised advised = (IAdvised)proxy;
-                Assert.AreSame(hts, advised.TargetSource);
+                Assert.That(advised.TargetSource, Is.SameAs(hts));
                 SingletonTargetSource sts = new SingletonTargetSource(to2);
                 advised.TargetSource = sts;
-                Assert.AreEqual(to2.Name, proxy.Name);
-                Assert.AreSame(sts, advised.TargetSource);
-                Assert.AreEqual(to2.Age, proxy.Age);
+                Assert.That(proxy.Name, Is.EqualTo(to2.Name));
+                Assert.That(advised.TargetSource, Is.SameAs(sts));
+                Assert.That(proxy.Age, Is.EqualTo(to2.Age));
             }
 
             [Test]
@@ -2243,7 +2244,7 @@ public abstract class AbstractAopProxyTests
                     }
 
                     public Object getTarget() throws Exception {
-                        Assert.AreEqual(proxy, AopContext.currentProxy());
+                        Assert.That(AopContext.currentProxy(), Is.EqualTo(proxy));
                         return target;
                     }
 
@@ -2252,7 +2253,7 @@ public abstract class AbstractAopProxyTests
                 });
 
                 // Just test anything: it will fail if context wasn't found
-                Assert.AreEqual(0, proxy.Age);
+                Assert.That(proxy.Age, Is.EqualTo(0));
             }
     */
 
@@ -2266,18 +2267,18 @@ public abstract class AbstractAopProxyTests
         ProxyFactory pf = new ProxyFactory(target);
         pf.AddAdvice(new NopInterceptor());
         pf.AddAdvisor(matchesNoArgsAdvisor);
-        Assert.AreEqual(matchesNoArgsAdvisor, pf.Advisors[1], "Advisor was added");
+        Assert.That(pf.Advisors[1], Is.EqualTo(matchesNoArgsAdvisor), "Advisor was added");
         ITestObject proxied = (ITestObject) CreateProxy(pf);
-        Assert.AreEqual(0, cba.GetCalls());
-        Assert.AreEqual(0, cba.GetCalls("get_Age"));
-        Assert.AreEqual(target.Age, proxied.Age);
-        Assert.AreEqual(1, cba.GetCalls());
-        Assert.AreEqual(1, cba.GetCalls("get_Age"));
-        Assert.AreEqual(0, cba.GetCalls("set_Age"));
+        Assert.That(cba.GetCalls(), Is.EqualTo(0));
+        Assert.That(cba.GetCalls("get_Age"), Is.EqualTo(0));
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
+        Assert.That(cba.GetCalls("get_Age"), Is.EqualTo(1));
+        Assert.That(cba.GetCalls("set_Age"), Is.EqualTo(0));
         // Won't be advised
         proxied.Age = 26;
-        Assert.AreEqual(1, cba.GetCalls());
-        Assert.AreEqual(26, proxied.Age);
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
+        Assert.That(proxied.Age, Is.EqualTo(26));
     }
 
     private class NoArgsMethodPointcutAdvisor : StaticMethodMatcherPointcutAdvisor
@@ -2306,20 +2307,20 @@ public abstract class AbstractAopProxyTests
         ProxyFactory pf = new ProxyFactory(target);
         pf.AddAdvice(new NopInterceptor());
         pf.AddAdvisor(matchesNoArgsAdvisor);
-        Assert.AreEqual(matchesNoArgsAdvisor, pf.Advisors[1], "Advisor was added");
+        Assert.That(pf.Advisors[1], Is.EqualTo(matchesNoArgsAdvisor), "Advisor was added");
         ITestObject proxied = (ITestObject) CreateProxy(pf);
 
-        Assert.AreEqual(0, cma.GetCalls());
-        Assert.AreEqual(0, cma.GetCalls("get_Age"));
-        Assert.AreEqual(target.Age, proxied.Age);
-        Assert.AreEqual(2, cma.GetCalls());
-        Assert.AreEqual(2, cma.GetCalls("get_Age"));
-        Assert.AreEqual(0, cma.GetCalls("set_Age"));
+        Assert.That(cma.GetCalls(), Is.EqualTo(0));
+        Assert.That(cma.GetCalls("get_Age"), Is.EqualTo(0));
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
+        Assert.That(cma.GetCalls(), Is.EqualTo(2));
+        Assert.That(cma.GetCalls("get_Age"), Is.EqualTo(2));
+        Assert.That(cma.GetCalls("set_Age"), Is.EqualTo(0));
         // Won't be advised
         proxied.Age = 26;
-        Assert.AreEqual(2, cma.GetCalls());
-        Assert.AreEqual(26, proxied.Age);
-        Assert.AreEqual(4, cma.GetCalls());
+        Assert.That(cma.GetCalls(), Is.EqualTo(2));
+        Assert.That(proxied.Age, Is.EqualTo(26));
+        Assert.That(cma.GetCalls(), Is.EqualTo(4));
         try
         {
             proxied.Exceptional(new ApplicationException("foo"));
@@ -2330,7 +2331,7 @@ public abstract class AbstractAopProxyTests
             // expected
         }
 
-        Assert.AreEqual(6, cma.GetCalls());
+        Assert.That(cma.GetCalls(), Is.EqualTo(6));
     }
 
     private class NoArgsOrNotExceptionalMethodPointcutAdvisor : StaticMethodMatcherPointcutAdvisor
@@ -2362,11 +2363,11 @@ public abstract class AbstractAopProxyTests
         pf.AddAdvice(nop2);
         ITestObject proxied = (ITestObject) CreateProxy(pf);
         // Won't throw an exception
-        Assert.AreEqual(target.Age, proxied.Age);
-        Assert.AreEqual(1, ba.GetCalls());
-        Assert.AreEqual(1, ba.GetCalls("get_Age"));
-        Assert.AreEqual(1, nop1.Count);
-        Assert.AreEqual(1, nop2.Count);
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
+        Assert.That(ba.GetCalls(), Is.EqualTo(1));
+        Assert.That(ba.GetCalls("get_Age"), Is.EqualTo(1));
+        Assert.That(nop1.Count, Is.EqualTo(1));
+        Assert.That(nop2.Count, Is.EqualTo(1));
         // Will fail, after invoking Nop1
         try
         {
@@ -2375,15 +2376,15 @@ public abstract class AbstractAopProxyTests
         }
         catch (ApplicationException ex)
         {
-            Assert.AreEqual(aex, ex);
+            Assert.That(ex, Is.EqualTo(aex));
         }
 
-        Assert.AreEqual(2, ba.GetCalls());
-        Assert.AreEqual(2, nop1.Count);
+        Assert.That(ba.GetCalls(), Is.EqualTo(2));
+        Assert.That(nop1.Count, Is.EqualTo(2));
         // Nop2 didn't get invoked when the exception was thrown
-        Assert.AreEqual(1, nop2.Count);
+        Assert.That(nop2.Count, Is.EqualTo(1));
         // Shouldn't have changed value in joinpoint
-        Assert.AreEqual(target.Age, proxied.Age);
+        Assert.That(proxied.Age, Is.EqualTo(target.Age));
     }
 
     private class CountingBeforeNonSetterAdvice : CountingBeforeAdvice
@@ -2413,20 +2414,20 @@ public abstract class AbstractAopProxyTests
         ProxyFactory pf = new ProxyFactory(target);
         pf.AddAdvice(new NopInterceptor());
         pf.AddAdvisor(matchesIntAdvisor);
-        Assert.AreEqual(matchesIntAdvisor, pf.Advisors[1], "Advisor was added");
+        Assert.That(pf.Advisors[1], Is.EqualTo(matchesIntAdvisor), "Advisor was added");
         ITestObject proxied = (ITestObject) CreateProxy(pf);
-        Assert.AreEqual(0, aa.sum);
+        Assert.That(aa.sum, Is.EqualTo(0));
         int i1 = 12;
         int i2 = 13;
 
         // Won't be advised
         proxied.Age = i1;
-        Assert.AreEqual(i1, proxied.Age);
-        Assert.AreEqual(i1, aa.sum);
+        Assert.That(proxied.Age, Is.EqualTo(i1));
+        Assert.That(aa.sum, Is.EqualTo(i1));
         proxied.Age = i2;
-        Assert.AreEqual(i2, proxied.Age);
-        Assert.AreEqual(i1 + i2, aa.sum);
-        Assert.AreEqual(i2, proxied.Age);
+        Assert.That(proxied.Age, Is.EqualTo(i2));
+        Assert.That(aa.sum, Is.EqualTo(i1 + i2));
+        Assert.That(proxied.Age, Is.EqualTo(i2));
     }
 
     private class SummingAfterAdvice : IAfterReturningAdvice
@@ -2460,13 +2461,13 @@ public abstract class AbstractAopProxyTests
         ProxyFactory pf = new ProxyFactory(target);
         pf.AddAdvice(new NopInterceptor());
         pf.AddAdvice(car);
-        Assert.AreEqual(car, pf.Advisors[1].Advice, "Advice was wrapped in Advisor and added");
+        Assert.That(pf.Advisors[1].Advice, Is.EqualTo(car), "Advice was wrapped in Advisor and added");
         ITestObject proxied = (ITestObject) CreateProxy(pf);
-        Assert.AreEqual(0, car.GetCalls());
+        Assert.That(car.GetCalls(), Is.EqualTo(0));
         int age = 10;
         proxied.Age = age;
-        Assert.AreEqual(age, proxied.Age);
-        Assert.AreEqual(2, car.GetCalls());
+        Assert.That(proxied.Age, Is.EqualTo(age));
+        Assert.That(car.GetCalls(), Is.EqualTo(2));
         Exception ex = new Exception();
         // On exception it won't be invoked
         try
@@ -2476,10 +2477,10 @@ public abstract class AbstractAopProxyTests
         }
         catch (Exception caught)
         {
-            Assert.AreSame(ex, caught);
+            Assert.That(caught, Is.SameAs(ex));
         }
 
-        Assert.AreEqual(2, car.GetCalls());
+        Assert.That(car.GetCalls(), Is.EqualTo(2));
     }
 
 #if !NETCOREAPP
@@ -2494,11 +2495,11 @@ public abstract class AbstractAopProxyTests
         ProxyFactory pf = new ProxyFactory(target);
         pf.AddAdvice(new NopInterceptor());
         pf.AddAdvisor(matchesEchoAdvisor);
-        Assert.AreEqual(matchesEchoAdvisor, pf.Advisors[1], "Advisor was added");
+        Assert.That(pf.Advisors[1], Is.EqualTo(matchesEchoAdvisor), "Advisor was added");
         var proxied = (Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.IEcho) CreateProxy(pf);
-        Assert.AreEqual(0, th.GetCalls());
-        Assert.AreEqual(target.A, proxied.A);
-        Assert.AreEqual(0, th.GetCalls());
+        Assert.That(th.GetCalls(), Is.EqualTo(0));
+        Assert.That(proxied.A, Is.EqualTo(target.A));
+        Assert.That(th.GetCalls(), Is.EqualTo(0));
         Exception ex = new Exception();
         // Will be advised but doesn't match
         try
@@ -2508,7 +2509,7 @@ public abstract class AbstractAopProxyTests
         }
         catch (Exception caught)
         {
-            Assert.AreEqual(ex, caught);
+            Assert.That(caught, Is.EqualTo(ex));
         }
 
         ex = new System.Web.HttpException();
@@ -2519,10 +2520,10 @@ public abstract class AbstractAopProxyTests
         }
         catch (System.Web.HttpException caught)
         {
-            Assert.AreEqual(ex, caught);
+            Assert.That(caught, Is.EqualTo(ex));
         }
 
-        Assert.AreEqual(1, th.GetCalls("HttpException"));
+        Assert.That(th.GetCalls("HttpException"), Is.EqualTo(1));
     }
 #endif
 
@@ -2552,9 +2553,9 @@ public abstract class AbstractAopProxyTests
         pf.AddAdvice(new NopInterceptor());
         pf.AddAdvice(th);
         var proxied = (Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.IEcho) CreateProxy(pf);
-        Assert.AreEqual(0, th.GetCalls());
-        Assert.AreEqual(target.A, proxied.A);
-        Assert.AreEqual(0, th.GetCalls());
+        Assert.That(th.GetCalls(), Is.EqualTo(0));
+        Assert.That(proxied.A, Is.EqualTo(target.A));
+        Assert.That(th.GetCalls(), Is.EqualTo(0));
         Exception ex = new Exception();
         // Will be advised but doesn't match
         try
@@ -2564,7 +2565,7 @@ public abstract class AbstractAopProxyTests
         }
         catch (Exception caught)
         {
-            Assert.AreEqual(ex, caught);
+            Assert.That(caught, Is.EqualTo(ex));
         }
 
         // Subclass of RemoteException
@@ -2576,10 +2577,10 @@ public abstract class AbstractAopProxyTests
         }
         catch (System.Runtime.Remoting.RemotingTimeoutException caught)
         {
-            Assert.AreEqual(ex, caught);
+            Assert.That(caught, Is.EqualTo(ex));
         }
 
-        Assert.AreEqual(1, th.GetCalls("RemotingException"));
+        Assert.That(th.GetCalls("RemotingException"), Is.EqualTo(1));
     }
 #endif
 
@@ -2674,7 +2675,7 @@ public abstract class AbstractAopProxyTests
         protected override void CheckAdvised(IAdvised advised)
         {
             // TODO replace this check: no longer possible
-            //Assert.AreEqual(advised.getTarget(), this);
+            //Assert.That(this, Is.EqualTo(advised.getTarget()));
         }
     }
 

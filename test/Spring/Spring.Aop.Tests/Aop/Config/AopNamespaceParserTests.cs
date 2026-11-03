@@ -44,35 +44,35 @@ public class AopNamespaceParserTests
     [Test]
     public void Registered()
     {
-        Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/aop"));
+        Assert.That(NamespaceParserRegistry.GetParser("http://www.springframework.net/aop"), Is.Not.Null);
 
         IPointcut pointcut = ctx["getDescriptionCalls"] as IPointcut;
-        Assert.IsNotNull(pointcut);
-        Assert.IsFalse(AopUtils.IsAopProxy(pointcut));
+        Assert.That(pointcut, Is.Not.Null);
+        Assert.That(AopUtils.IsAopProxy(pointcut), Is.False);
 
         ITestObject testObject = ctx["testObject"] as ITestObject;
-        Assert.IsNotNull(testObject);
-        Assert.IsTrue(AopUtils.IsAopProxy(testObject), "Object should be an AOP proxy");
+        Assert.That(testObject, Is.Not.Null);
+        Assert.That(AopUtils.IsAopProxy(testObject), Is.True, "Object should be an AOP proxy");
 
         IAdvised advised = testObject as IAdvised;
-        Assert.IsNotNull(advised);
+        Assert.That(advised, Is.Not.Null);
         IList<IAdvisor> advisors = advised.Advisors;
-        Assert.IsTrue(advisors.Count > 0, "Advisors should not be empty");
+        Assert.That(advisors.Count > 0, Is.True, "Advisors should not be empty");
     }
 
     [Test]
     public void AdviceInvokedCorrectly()
     {
         CountingBeforeAdvice getDescriptionCounter = ctx.GetObject("getDescriptionCounter") as CountingBeforeAdvice;
-        Assert.IsNotNull(getDescriptionCounter);
+        Assert.That(getDescriptionCounter, Is.Not.Null);
 
         ITestObject testObject = GetTestObject();
 
-        Assert.AreEqual(0, getDescriptionCounter.GetCalls("GetDescription"), "Incorrect initial getDescription count");
+        Assert.That(getDescriptionCounter.GetCalls("GetDescription"), Is.EqualTo(0), "Incorrect initial getDescription count");
 
         testObject.GetDescription();
 
-        Assert.AreEqual(1, getDescriptionCounter.GetCalls("GetDescription"), "Incorrect getDescription count");
+        Assert.That(getDescriptionCounter.GetCalls("GetDescription"), Is.EqualTo(1), "Incorrect getDescription count");
     }
 
     private ITestObject GetTestObject()

@@ -44,11 +44,11 @@ public class LocaleTests
             IResource resource = new ReadOnlyXmlTestResource("locale.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
             TestObject to = xof.GetObject("jenny") as TestObject;
-            Assert.IsNotNull(to);
+            Assert.That(to, Is.Not.Null);
             DateTime d = new DateTime(2007, 10, 30);
-            Assert.AreEqual(d, to.Date);
-            Assert.AreEqual(30, to.Size.Height);
-            Assert.AreEqual(30, to.Size.Width);
+            Assert.That(to.Date, Is.EqualTo(d));
+            Assert.That(to.Size.Height, Is.EqualTo(30));
+            Assert.That(to.Size.Width, Is.EqualTo(30));
         }
         finally
         {

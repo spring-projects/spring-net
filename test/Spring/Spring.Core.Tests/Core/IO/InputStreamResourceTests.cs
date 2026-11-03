@@ -35,9 +35,9 @@ public sealed class InputStreamResourceTests
             file = new FileInfo("Instantiation");
             stream = file.Create();
             InputStreamResource res = new InputStreamResource(stream, "A temporary resource.");
-            Assert.IsTrue(res.IsOpen);
-            Assert.IsTrue(res.Exists);
-            Assert.IsNotNull(res.InputStream);
+            Assert.That(res.IsOpen, Is.True);
+            Assert.That(res.Exists, Is.True);
+            Assert.That(res.InputStream, Is.Not.Null);
         }
         finally
         {

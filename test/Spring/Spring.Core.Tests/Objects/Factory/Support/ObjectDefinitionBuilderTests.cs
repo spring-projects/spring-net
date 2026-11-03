@@ -42,9 +42,9 @@ public class ObjectDefinitionBuilderTests
         ObjectDefinitionBuilder odb =
             ObjectDefinitionBuilder.RootObjectDefinition(odf, typeof(TestObject).FullName);
         RootObjectDefinition rod = odb.ObjectDefinition as RootObjectDefinition;
-        Assert.IsNotNull(rod);
-        Assert.IsFalse(rod.HasObjectType);
-        Assert.AreEqual(typeof(TestObject).FullName, rod.ObjectTypeName);
+        Assert.That(rod, Is.Not.Null);
+        Assert.That(rod.HasObjectType, Is.False);
+        Assert.That(rod.ObjectTypeName, Is.EqualTo(typeof(TestObject).FullName));
     }
 
     [Test]
@@ -53,10 +53,10 @@ public class ObjectDefinitionBuilderTests
         ObjectDefinitionBuilder odb =
             ObjectDefinitionBuilder.RootObjectDefinition(odf, typeof(TestObject).FullName, "Create");
         RootObjectDefinition rod = odb.ObjectDefinition as RootObjectDefinition;
-        Assert.IsNotNull(rod);
-        Assert.IsFalse(rod.HasObjectType);
-        Assert.AreEqual(typeof(TestObject).FullName, rod.ObjectTypeName);
-        Assert.AreEqual("Create", rod.FactoryMethodName);
+        Assert.That(rod, Is.Not.Null);
+        Assert.That(rod.HasObjectType, Is.False);
+        Assert.That(rod.ObjectTypeName, Is.EqualTo(typeof(TestObject).FullName));
+        Assert.That(rod.FactoryMethodName, Is.EqualTo("Create"));
     }
 
     [Test]
@@ -64,9 +64,9 @@ public class ObjectDefinitionBuilderTests
     {
         ObjectDefinitionBuilder odb = ObjectDefinitionBuilder.ChildObjectDefinition(odf, typeof(TestObject).FullName);
         ChildObjectDefinition rod = odb.ObjectDefinition as ChildObjectDefinition;
-        Assert.IsNotNull(rod);
-        Assert.IsFalse(rod.HasObjectType);
-        Assert.AreEqual(typeof(TestObject).FullName, rod.ParentName);
+        Assert.That(rod, Is.Not.Null);
+        Assert.That(rod.HasObjectType, Is.False);
+        Assert.That(rod.ParentName, Is.EqualTo(typeof(TestObject).FullName));
     }
 
     [Test]
@@ -74,9 +74,9 @@ public class ObjectDefinitionBuilderTests
     {
         ObjectDefinitionBuilder odb = ObjectDefinitionBuilder.RootObjectDefinition(odf, typeof(TestObject));
         RootObjectDefinition rod = odb.ObjectDefinition as RootObjectDefinition;
-        Assert.IsNotNull(rod);
-        Assert.IsTrue(rod.HasObjectType);
-        Assert.AreEqual(typeof(TestObject), rod.ObjectType);
+        Assert.That(rod, Is.Not.Null);
+        Assert.That(rod.HasObjectType, Is.True);
+        Assert.That(rod.ObjectType, Is.EqualTo(typeof(TestObject)));
     }
 
     [Test]
@@ -85,10 +85,10 @@ public class ObjectDefinitionBuilderTests
         ObjectDefinitionBuilder odb =
             ObjectDefinitionBuilder.RootObjectDefinition(odf, typeof(TestObject), "Create");
         RootObjectDefinition rod = odb.ObjectDefinition as RootObjectDefinition;
-        Assert.IsNotNull(rod);
-        Assert.IsTrue(rod.HasObjectType);
-        Assert.AreEqual(typeof(TestObject), rod.ObjectType);
-        Assert.AreEqual("Create", rod.FactoryMethodName);
+        Assert.That(rod, Is.Not.Null);
+        Assert.That(rod.HasObjectType, Is.True);
+        Assert.That(rod.ObjectType, Is.EqualTo(typeof(TestObject)));
+        Assert.That(rod.FactoryMethodName, Is.EqualTo("Create"));
     }
 
     [Test]
@@ -104,11 +104,11 @@ public class ObjectDefinitionBuilderTests
         }
 
         RootObjectDefinition rod = odb.ObjectDefinition as RootObjectDefinition;
-        Assert.IsNotNull(rod);
-        Assert.IsFalse(rod.IsSingleton);
-        Assert.AreEqual(typeof(TestObject), rod.ObjectType);
-        Assert.AreEqual(dependsOn, rod.DependsOn, "DependsOn not as expected");
-        Assert.IsTrue(rod.PropertyValues.Contains("Age"));
+        Assert.That(rod, Is.Not.Null);
+        Assert.That(rod.IsSingleton, Is.False);
+        Assert.That(rod.ObjectType, Is.EqualTo(typeof(TestObject)));
+        Assert.That(rod.DependsOn, Is.EqualTo(dependsOn), "DependsOn not as expected");
+        Assert.That(rod.PropertyValues.Contains("Age"), Is.True);
     }
 
     [Test]
@@ -141,12 +141,12 @@ public class ObjectDefinitionBuilderTests
 
         TestObject to = ctx.GetObject("TestObject") as TestObject;
 
-        Assert.IsNotNull(to);
+        Assert.That(to, Is.Not.Null);
 
-        Assert.AreEqual("Joe", to.Name);
-        Assert.AreEqual(22, to.Age);
-        Assert.AreEqual(2, to.Spouse.Friends.Count);
-        Assert.AreEqual(23, to.Spouse.Age);
+        Assert.That(to.Name, Is.EqualTo("Joe"));
+        Assert.That(to.Age, Is.EqualTo(22));
+        Assert.That(to.Spouse.Friends.Count, Is.EqualTo(2));
+        Assert.That(to.Spouse.Age, Is.EqualTo(23));
 
         /*
         AbstractApplicationContext ctx = ContextRegistry.GetContext() as AbstractApplicationContext;

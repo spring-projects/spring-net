@@ -58,10 +58,10 @@ public class TransactionSynchronizationManagerTests
     {
         TransactionSynchronizationManager.InitSynchronization();
         IList syncs = TransactionSynchronizationManager.Synchronizations;
-        Assert.AreEqual(0, syncs.Count);
+        Assert.That(syncs.Count, Is.EqualTo(0));
         TransactionSynchronizationManager.RegisterSynchronization(A.Fake<ITransactionSynchronization>());
         syncs = TransactionSynchronizationManager.Synchronizations;
-        Assert.AreEqual(1, syncs.Count);
+        Assert.That(syncs.Count, Is.EqualTo(1));
         TransactionSynchronizationManager.ClearSynchronization();
     }
 
@@ -81,11 +81,11 @@ public class TransactionSynchronizationManagerTests
 
             // simulate what APTM does
             Sync[] syncs = (Sync[]) CollectionUtils.ToArray(TransactionSynchronizationManager.Synchronizations, typeof(Sync));
-            Assert.AreEqual("A", syncs[0].Name);
-            Assert.AreEqual("B", syncs[1].Name);
-            Assert.AreEqual("C", syncs[2].Name);
-            Assert.AreEqual("D", syncs[3].Name);
-            Assert.AreEqual("E", syncs[4].Name);
+            Assert.That(syncs[0].Name, Is.EqualTo("A"));
+            Assert.That(syncs[1].Name, Is.EqualTo("B"));
+            Assert.That(syncs[2].Name, Is.EqualTo("C"));
+            Assert.That(syncs[3].Name, Is.EqualTo("D"));
+            Assert.That(syncs[4].Name, Is.EqualTo("E"));
         }
         finally
         {

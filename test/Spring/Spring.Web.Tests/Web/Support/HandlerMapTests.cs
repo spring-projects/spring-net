@@ -13,8 +13,8 @@ public class HandlerMapTests
 
         HandlerMapEntry handler = map.MapPath("/test1/test2/default.aspx");
 
-        Assert.NotNull(handler);
-        Assert.AreEqual("theHandlerIWant", handler.HandlerObjectName);
+        Assert.That(handler, Is.Not.Null);
+        Assert.That(handler.HandlerObjectName, Is.EqualTo("theHandlerIWant"));
     }
 
     [Test]
@@ -25,8 +25,8 @@ public class HandlerMapTests
 
         HandlerMapEntry handler = map.MapPath("/test1/test2/default.aspx");
 
-        Assert.NotNull(handler);
-        Assert.AreEqual("theHandlerIWant", handler.HandlerObjectName);
+        Assert.That(handler, Is.Not.Null);
+        Assert.That(handler.HandlerObjectName, Is.EqualTo("theHandlerIWant"));
     }
 
     [Test]
@@ -37,7 +37,7 @@ public class HandlerMapTests
 
         HandlerMapEntry handler = map.MapPath("/test1/test2/default.aspx");
 
-        Assert.NotNull(handler);
-        Assert.AreEqual("theHandlerIWant", handler.HandlerObjectName);
+        Assert.That(handler, Is.Not.Null);
+        Assert.That(handler.HandlerObjectName, Is.EqualTo("theHandlerIWant"));
     }
 }

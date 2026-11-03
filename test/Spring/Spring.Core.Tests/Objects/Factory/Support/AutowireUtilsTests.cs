@@ -33,7 +33,7 @@ public sealed class AutowireUtilsTests
         int expectedWeight = 0;
         int actualWeight = AutowireUtils.GetTypeDifferenceWeight(
             ReflectionUtils.GetParameterTypes(typeof(Fable).GetConstructor(Type.EmptyTypes).GetParameters()), new object[] { });
-        Assert.AreEqual(expectedWeight, actualWeight, "AutowireUtils.GetTypeDifferenceWeight() was wrong, evidently.");
+        Assert.That(actualWeight, Is.EqualTo(expectedWeight), "AutowireUtils.GetTypeDifferenceWeight() was wrong, evidently.");
     }
 
     [Test]
@@ -44,7 +44,7 @@ public sealed class AutowireUtilsTests
             ReflectionUtils.GetParameterTypes(typeof(Fable).GetConstructor(
                 new Type[] { typeof(NurseryRhymeCharacter) }).GetParameters()),
             new object[] { new EnglishCharacter() });
-        Assert.AreEqual(expectedWeight, actualWeight, "AutowireUtils.GetTypeDifferenceWeight() was wrong, evidently.");
+        Assert.That(actualWeight, Is.EqualTo(expectedWeight), "AutowireUtils.GetTypeDifferenceWeight() was wrong, evidently.");
     }
 
     [Test]
@@ -55,7 +55,7 @@ public sealed class AutowireUtilsTests
             ReflectionUtils.GetParameterTypes(typeof(Fable).GetConstructor(
                 new Type[] { typeof(EnglishCharacter) }).GetParameters()),
             new object[] { new EnglishCharacter() });
-        Assert.AreEqual(expectedWeight, actualWeight, "AutowireUtils.GetTypeDifferenceWeight() was wrong, evidently.");
+        Assert.That(actualWeight, Is.EqualTo(expectedWeight), "AutowireUtils.GetTypeDifferenceWeight() was wrong, evidently.");
     }
 
     /// <summary>
@@ -72,8 +72,8 @@ public sealed class AutowireUtilsTests
         ConstructorInfo expectedCtor
             = typeof(Fable).GetConstructor(new Type[] { typeof(EnglishCharacter) });
         ConstructorInfo pickedCtor = AssertTypeWeightingPicksCorrectCtor(arguments, typeof(Fable));
-        Assert.IsNotNull(pickedCtor);
-        Assert.AreEqual(expectedCtor, pickedCtor);
+        Assert.That(pickedCtor, Is.Not.Null);
+        Assert.That(pickedCtor, Is.EqualTo(expectedCtor));
     }
 
     [Test]
@@ -81,7 +81,7 @@ public sealed class AutowireUtilsTests
     {
         object[] arguments = new object[] { "This argument is incompatible with any of the Fable ctors." };
         ConstructorInfo pickedCtor = AssertTypeWeightingPicksCorrectCtor(arguments, typeof(Fable));
-        Assert.IsNull(pickedCtor);
+        Assert.That(pickedCtor, Is.Null);
     }
 
     [Test]
@@ -93,8 +93,8 @@ public sealed class AutowireUtilsTests
         ConstructorInfo expectedCtor
             = typeof(Fable).GetConstructor(new Type[] { typeof(FableCharacter) });
         ConstructorInfo pickedCtor = AssertTypeWeightingPicksCorrectCtor(arguments, typeof(Fable));
-        Assert.IsNotNull(pickedCtor);
-        Assert.AreEqual(expectedCtor, pickedCtor);
+        Assert.That(pickedCtor, Is.Not.Null);
+        Assert.That(pickedCtor, Is.EqualTo(expectedCtor));
     }
 
     private static ConstructorInfo AssertTypeWeightingPicksCorrectCtor(object[] arguments, Type ctorType)
@@ -153,7 +153,7 @@ public sealed class AutowireUtilsTests
         int actualWeight = AutowireUtils.GetTypeDifferenceWeight(
             ReflectionUtils.GetParameterTypes(typeof(Fool).GetConstructor(new Type[] { typeof(string) }).GetParameters()),
             new object[] { "Noob" });
-        Assert.AreEqual(expectedWeight, actualWeight, "AutowireUtils.GetTypeDifferenceWeight() was wrong, evidently.");
+        Assert.That(actualWeight, Is.EqualTo(expectedWeight), "AutowireUtils.GetTypeDifferenceWeight() was wrong, evidently.");
     }
 
     [Test]
@@ -164,7 +164,7 @@ public sealed class AutowireUtilsTests
         ConstructorInfo[] ctors = foolType.GetConstructors(flags);
         AutowireUtils.SortConstructors(ctors);
         ConstructorInfo[] expected = new ConstructorInfo[] { foolType.GetConstructor(new Type[] { typeof(string), typeof(int), typeof(Double), typeof(Fool) }), foolType.GetConstructor(new Type[] { typeof(string), typeof(int) }), foolType.GetConstructor(new Type[] { typeof(string) }), foolType.GetConstructor(Type.EmptyTypes), };
-        Assert.IsTrue(ArrayUtils.AreEqual(expected, ctors), "AutowireUtils.SortConstructors() did not put the greedy public ctors first.");
+        Assert.That(ArrayUtils.AreEqual(expected, ctors), Is.True, "AutowireUtils.SortConstructors() did not put the greedy public ctors first.");
     }
 
     [Test]
@@ -175,7 +175,7 @@ public sealed class AutowireUtilsTests
         ConstructorInfo[] ctors = foolType.GetConstructors(flags);
         AutowireUtils.SortConstructors(ctors);
         ConstructorInfo[] expected = new ConstructorInfo[] { foolType.GetConstructor(new Type[] { typeof(string), typeof(int), typeof(Double), typeof(Fool) }), foolType.GetConstructor(new Type[] { typeof(string), typeof(int) }), foolType.GetConstructor(new Type[] { typeof(string) }), foolType.GetConstructor(Type.EmptyTypes), foolType.GetConstructor(flags, null, new Type[] { typeof(string), typeof(int), typeof(Double) }, null), foolType.GetConstructor(flags, null, new Type[] { typeof(string), typeof(Fool) }, null), };
-        Assert.IsTrue(ArrayUtils.AreEqual(expected, ctors), "AutowireUtils.SortConstructors() did not put the greedy public ctors first.");
+        Assert.That(ArrayUtils.AreEqual(expected, ctors), Is.True, "AutowireUtils.SortConstructors() did not put the greedy public ctors first.");
     }
 
     [Test]

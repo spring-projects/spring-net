@@ -51,7 +51,7 @@ public class DelegatingIntroductionInterceptorTests
     public void TestIntroductionInterceptorWithDelegation()
     {
         TestObject raw = new TestObject();
-        Assert.IsTrue(!(raw is ITimeStamped));
+        Assert.That(!(raw is ITimeStamped), Is.True);
         ProxyFactory factory = new ProxyFactory(raw);
 
         ITimeStampedIntroduction ts = A.Fake<ITimeStampedIntroduction>();
@@ -61,7 +61,7 @@ public class DelegatingIntroductionInterceptorTests
         factory.AddIntroduction(advisor);
 
         ITimeStamped tsp = (ITimeStamped) factory.GetProxy();
-        Assert.IsTrue(tsp.TimeStamp == EXPECTED_TIMESTAMP);
+        Assert.That(tsp.TimeStamp == EXPECTED_TIMESTAMP, Is.True);
     }
 
     // we have to mark the ISubTimeStamped interface with the IAdvice marker
@@ -74,7 +74,7 @@ public class DelegatingIntroductionInterceptorTests
     public void TestIntroductionInterceptorWithInterfaceHierarchy()
     {
         TestObject raw = new TestObject();
-        Assert.IsTrue(!(raw is ISubTimeStamped));
+        Assert.That(!(raw is ISubTimeStamped), Is.True);
         ProxyFactory factory = new ProxyFactory(raw);
 
         ISubTimeStampedIntroduction ts = A.Fake<ISubTimeStampedIntroduction>();
@@ -86,14 +86,14 @@ public class DelegatingIntroductionInterceptorTests
 
         object proxy = factory.GetProxy();
         ISubTimeStamped tsp = (ISubTimeStamped) proxy;
-        Assert.IsTrue(tsp.TimeStamp == EXPECTED_TIMESTAMP);
+        Assert.That(tsp.TimeStamp == EXPECTED_TIMESTAMP, Is.True);
     }
 
     [Test]
     public void TestIntroductionInterceptorWithSuperInterface()
     {
         TestObject raw = new TestObject();
-        Assert.IsTrue(!(raw is ITimeStamped));
+        Assert.That(!(raw is ITimeStamped), Is.True);
         ProxyFactory factory = new ProxyFactory(raw);
 
         ISubTimeStampedIntroduction ts = A.Fake<ISubTimeStampedIntroduction>();
@@ -105,8 +105,8 @@ public class DelegatingIntroductionInterceptorTests
         );
 
         ITimeStamped tsp = (ITimeStamped) factory.GetProxy();
-        Assert.IsTrue(!(tsp is ISubTimeStamped));
-        Assert.IsTrue(tsp.TimeStamp == EXPECTED_TIMESTAMP);
+        Assert.That(!(tsp is ISubTimeStamped), Is.True);
+        Assert.That(tsp.TimeStamp == EXPECTED_TIMESTAMP, Is.True);
     }
 
     /// <summary>
@@ -146,7 +146,7 @@ public class DelegatingIntroductionInterceptorTests
 
         ITimeStamped ts = (ITimeStamped) pf.GetProxy();
 
-        Assert.IsTrue(ts.TimeStamp == EXPECTED_TIMESTAMP);
+        Assert.That(ts.TimeStamp == EXPECTED_TIMESTAMP, Is.True);
         ((ITest) ts).Foo();
 
         int age = ((ITestObject) ts).Age;

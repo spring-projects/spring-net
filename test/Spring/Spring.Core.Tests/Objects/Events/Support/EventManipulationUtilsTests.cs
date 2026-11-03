@@ -35,7 +35,7 @@ public sealed class EventManipulationUtilsTests
         {
             Type eventHandlerType = currentEvent.EventHandlerType;
             MethodInfo invoke = eventHandlerType.GetMethod("Invoke");
-            Assert.IsNotNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(SimpleEventSubscriber)));
+            Assert.That(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(SimpleEventSubscriber)), Is.Not.Null);
         }
     }
 
@@ -50,11 +50,11 @@ public sealed class EventManipulationUtilsTests
             MethodInfo invoke = eventHandlerType.GetMethod("Invoke");
             if (currentEvent.Name == "MyFirstEvent" || currentEvent.Name == "MySecondEvent")
             {
-                Assert.IsNotNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(SomeEventSubscriber)));
+                Assert.That(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(SomeEventSubscriber)), Is.Not.Null);
             }
             else
             {
-                Assert.IsNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(SomeEventSubscriber)));
+                Assert.That(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(SomeEventSubscriber)), Is.Null);
             }
         }
     }
@@ -69,7 +69,7 @@ public sealed class EventManipulationUtilsTests
         {
             Type eventHandlerType = currentEvent.EventHandlerType;
             MethodInfo invoke = eventHandlerType.GetMethod("Invoke");
-            Assert.IsNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(NoEventSubscriber)));
+            Assert.That(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(NoEventSubscriber)), Is.Null);
         }
     }
 

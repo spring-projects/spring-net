@@ -34,24 +34,24 @@ public sealed class TypeFiltersTests
     [Test]
     public void Union()
     {
-        Assert.IsTrue(exceptionFilter.Matches(typeof(SystemException)));
-        Assert.IsFalse(exceptionFilter.Matches(typeof(TestObject)));
-        Assert.IsFalse(itoFilter.Matches(typeof(Exception)));
-        Assert.IsTrue(itoFilter.Matches(typeof(TestObject)));
+        Assert.That(exceptionFilter.Matches(typeof(SystemException)), Is.True);
+        Assert.That(exceptionFilter.Matches(typeof(TestObject)), Is.False);
+        Assert.That(itoFilter.Matches(typeof(Exception)), Is.False);
+        Assert.That(itoFilter.Matches(typeof(TestObject)), Is.True);
         ITypeFilter union = TypeFilters.Union(exceptionFilter, itoFilter);
-        Assert.IsTrue(union.Matches(typeof(SystemException)));
-        Assert.IsTrue(union.Matches(typeof(TestObject)));
+        Assert.That(union.Matches(typeof(SystemException)), Is.True);
+        Assert.That(union.Matches(typeof(TestObject)), Is.True);
     }
 
     [Test]
     public void Intersection()
     {
-        Assert.IsTrue(exceptionFilter.Matches(typeof(SystemException)));
-        Assert.IsTrue(hasRootCauseFilter.Matches(typeof(StackOverflowException)));
+        Assert.That(exceptionFilter.Matches(typeof(SystemException)), Is.True);
+        Assert.That(hasRootCauseFilter.Matches(typeof(StackOverflowException)), Is.True);
 
         ITypeFilter intersection = TypeFilters.Intersection(exceptionFilter, hasRootCauseFilter);
-        Assert.IsFalse(intersection.Matches(typeof(SystemException)));
-        Assert.IsFalse(intersection.Matches(typeof(TestObject)));
-        Assert.IsTrue(intersection.Matches(typeof(StackOverflowException)));
+        Assert.That(intersection.Matches(typeof(SystemException)), Is.False);
+        Assert.That(intersection.Matches(typeof(TestObject)), Is.False);
+        Assert.That(intersection.Matches(typeof(StackOverflowException)), Is.True);
     }
 }

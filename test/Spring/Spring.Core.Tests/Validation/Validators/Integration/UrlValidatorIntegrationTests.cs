@@ -42,8 +42,8 @@ public class UrlValidatorIntegrationTests
         XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
         object obj = objectFactory.GetObject("urlValidator");
 
-        Assert.IsTrue(obj is IValidator);
+        Assert.That(obj is IValidator, Is.True);
         IValidator validator = obj as IValidator;
-        Assert.IsTrue(validator.Validate("http://www.springframework.net", new ValidationErrors()));
+        Assert.That(validator.Validate("http://www.springframework.net", new ValidationErrors()), Is.True);
     }
 }

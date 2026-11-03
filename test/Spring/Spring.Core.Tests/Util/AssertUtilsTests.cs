@@ -181,12 +181,12 @@ public sealed class AssertUtilsTests
         {
             if (ex.GetType() != exceptionType)
             {
-                Assert.Fail("Expected Exception of type {0}, but was {1}", exceptionType, ex.GetType());
+                Assert.Fail($"Expected Exception of type {exceptionType}, but was {ex.GetType()}");
             }
 
             if (-1 == ex.Message.IndexOf(partialMessage))
             {
-                Assert.Fail("Expected Message '{0}', but got '{1}'", partialMessage, ex.Message);
+                Assert.Fail($"Expected Message '{partialMessage}', but got '{ex.Message}'");
             }
         }
     }
@@ -225,12 +225,12 @@ public sealed class AssertUtilsTests
             {
                 if (ex.GetType() != exceptionType)
                 {
-                    Assert.Fail("Expected Exception of type {0}, but was {1}", exceptionType, ex.GetType());
+                    Assert.Fail($"Expected Exception of type {exceptionType}, but was {ex.GetType()}");
                 }
 
                 if (-1 == ex.Message.IndexOf(partialMessage))
                 {
-                    Assert.Fail("Expected Message '{0}', but got '{1}'", partialMessage, ex.Message);
+                    Assert.Fail($"Expected Message '{partialMessage}', but got '{ex.Message}'");
                 }
             }
         }

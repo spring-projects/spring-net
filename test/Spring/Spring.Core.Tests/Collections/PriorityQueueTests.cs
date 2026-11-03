@@ -43,20 +43,20 @@ public class PriorityQueueTests
     private PriorityQueue populatedQueue(int n)
     {
         PriorityQueue q = new PriorityQueue(n);
-        Assert.IsTrue((q.Count == 0));
+        Assert.That((q.Count == 0), Is.True);
         for (int i = n - 1; i >= 0; i -= 2)
-            Assert.IsTrue(q.Offer(i));
+            Assert.That(q.Offer(i), Is.True);
         for (int i = (n & 1); i < n; i += 2)
-            Assert.IsTrue(q.Offer(i));
-        Assert.IsFalse((q.Count == 0));
-        Assert.AreEqual(n, q.Count);
+            Assert.That(q.Offer(i), Is.True);
+        Assert.That((q.Count == 0), Is.False);
+        Assert.That(q.Count, Is.EqualTo(n));
         return q;
     }
 
     [Test]
     public void CreateUnboundedQueue()
     {
-        Assert.AreEqual(0, new PriorityQueue(SIZE).Count);
+        Assert.That(new PriorityQueue(SIZE).Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -95,8 +95,8 @@ public class PriorityQueueTests
             ints[i] = i;
         PriorityQueue q = new PriorityQueue(new ArrayList(ints));
         for (int i = 0; i < SIZE; ++i)
-            Assert.AreEqual(ints[i], q.Poll());
-        Assert.IsTrue(q.IsEmpty);
+            Assert.That(q.Poll(), Is.EqualTo(ints[i]));
+        Assert.That(q.IsEmpty, Is.True);
     }
 
     [Test]
@@ -104,27 +104,27 @@ public class PriorityQueueTests
     {
         MyReverseComparator cmp = new MyReverseComparator();
         PriorityQueue q = new PriorityQueue(SIZE, cmp);
-        Assert.AreEqual(cmp, q.Comparator());
+        Assert.That(q.Comparator(), Is.EqualTo(cmp));
         Int32[] ints = new Int32[SIZE];
         for (int i = 0; i < SIZE; ++i)
             ints[i] = i;
         q.AddAll(new ArrayList(ints));
         for (int i = SIZE - 1; i >= 0; --i)
-            Assert.AreEqual(ints[i], q.Poll());
-        Assert.IsTrue(q.IsEmpty);
+            Assert.That(q.Poll(), Is.EqualTo(ints[i]));
+        Assert.That(q.IsEmpty, Is.True);
     }
 
     [Test]
     public void IsEmpty()
     {
         PriorityQueue q = new PriorityQueue(2);
-        Assert.IsTrue(q.IsEmpty);
+        Assert.That(q.IsEmpty, Is.True);
         q.Add(1);
-        Assert.IsFalse(q.IsEmpty);
+        Assert.That(q.IsEmpty, Is.False);
         q.Add(2);
         q.Remove();
         q.Remove();
-        Assert.IsTrue(q.IsEmpty);
+        Assert.That(q.IsEmpty, Is.True);
     }
 
     [Test]
@@ -133,13 +133,13 @@ public class PriorityQueueTests
         PriorityQueue q = populatedQueue(SIZE);
         for (int i = 0; i < SIZE; ++i)
         {
-            Assert.AreEqual(SIZE - i, q.Count);
+            Assert.That(q.Count, Is.EqualTo(SIZE - i));
             q.Remove();
         }
 
         for (int i = 0; i < SIZE; ++i)
         {
-            Assert.AreEqual(i, q.Count);
+            Assert.That(q.Count, Is.EqualTo(i));
             q.Add(i);
         }
     }
@@ -162,8 +162,8 @@ public class PriorityQueueTests
     public void OfferWithComparableElements()
     {
         PriorityQueue q = new PriorityQueue(1);
-        Assert.IsTrue(q.Offer(zero));
-        Assert.IsTrue(q.Offer(one));
+        Assert.That(q.Offer(zero), Is.True);
+        Assert.That(q.Offer(one), Is.True);
     }
 
     [Test]
@@ -180,8 +180,8 @@ public class PriorityQueueTests
         PriorityQueue q = new PriorityQueue(SIZE);
         for (int i = 0; i < SIZE; ++i)
         {
-            Assert.AreEqual(i, q.Count);
-            Assert.IsTrue(q.Add(i));
+            Assert.That(q.Count, Is.EqualTo(i));
+            Assert.That(q.Add(i), Is.True);
         }
     }
 
@@ -218,10 +218,10 @@ public class PriorityQueueTests
         for (int i = 0; i < SIZE; ++i)
             ints[i] = (SIZE - 1 - i);
         PriorityQueue q = new PriorityQueue(SIZE);
-        Assert.IsFalse(q.AddAll(new ArrayList(empty)));
-        Assert.IsTrue(q.AddAll(new ArrayList(ints)));
+        Assert.That(q.AddAll(new ArrayList(empty)), Is.False);
+        Assert.That(q.AddAll(new ArrayList(ints)), Is.True);
         for (int i = 0; i < SIZE; ++i)
-            Assert.AreEqual(i, q.Poll());
+            Assert.That(q.Poll(), Is.EqualTo(i));
     }
 
     [Test]
@@ -230,10 +230,10 @@ public class PriorityQueueTests
         PriorityQueue q = populatedQueue(SIZE);
         for (int i = 0; i < SIZE; ++i)
         {
-            Assert.AreEqual(i, (q.Poll()));
+            Assert.That((q.Poll()), Is.EqualTo(i));
         }
 
-        Assert.IsNull(q.Poll());
+        Assert.That(q.Poll(), Is.Null);
     }
 
     [Test]
@@ -242,12 +242,12 @@ public class PriorityQueueTests
         PriorityQueue q = populatedQueue(SIZE);
         for (int i = 0; i < SIZE; ++i)
         {
-            Assert.AreEqual(i, (q.Peek()));
+            Assert.That((q.Peek()), Is.EqualTo(i));
             q.Poll();
-            Assert.IsTrue(q.Peek() == null || i != (int) (q.Peek()));
+            Assert.That(q.Peek() == null || i != (int) (q.Peek()), Is.True);
         }
 
-        Assert.IsNull(q.Peek());
+        Assert.That(q.Peek(), Is.Null);
     }
 
     [Test]
@@ -256,7 +256,7 @@ public class PriorityQueueTests
         PriorityQueue q = populatedQueue(SIZE);
         for (int i = 0; i < SIZE; ++i)
         {
-            Assert.AreEqual(i, (q.Element()));
+            Assert.That((q.Element()), Is.EqualTo(i));
             q.Poll();
         }
 
@@ -269,7 +269,7 @@ public class PriorityQueueTests
         PriorityQueue q = populatedQueue(SIZE);
         for (int i = 0; i < SIZE; ++i)
         {
-            Assert.AreEqual(i, (q.Remove()));
+            Assert.That((q.Remove()), Is.EqualTo(i));
         }
 
         Assert.Throws<NoElementsException>(() => q.Remove());
@@ -281,16 +281,16 @@ public class PriorityQueueTests
         PriorityQueue q = populatedQueue(SIZE);
         for (int i = 1; i < SIZE; i += 2)
         {
-            Assert.IsTrue(q.Remove(i));
+            Assert.That(q.Remove(i), Is.True);
         }
 
         for (int i = 0; i < SIZE; i += 2)
         {
-            Assert.IsTrue(q.Remove(i));
-            Assert.IsFalse(q.Remove((i + 1)));
+            Assert.That(q.Remove(i), Is.True);
+            Assert.That(q.Remove((i + 1)), Is.False);
         }
 
-        Assert.IsTrue((q.Count == 0));
+        Assert.That((q.Count == 0), Is.True);
     }
 
     [Test]
@@ -299,9 +299,9 @@ public class PriorityQueueTests
         PriorityQueue q = populatedQueue(SIZE);
         for (int i = 0; i < SIZE; ++i)
         {
-            Assert.IsTrue(CollectionUtils.Contains(q, i));
+            Assert.That(CollectionUtils.Contains(q, i), Is.True);
             q.Poll();
-            Assert.IsFalse(CollectionUtils.Contains(q, i));
+            Assert.That(CollectionUtils.Contains(q, i), Is.False);
         }
     }
 
@@ -310,12 +310,12 @@ public class PriorityQueueTests
     {
         PriorityQueue q = populatedQueue(SIZE);
         q.Clear();
-        Assert.IsTrue((q.Count == 0));
-        Assert.AreEqual(0, q.Count);
+        Assert.That((q.Count == 0), Is.True);
+        Assert.That(q.Count, Is.EqualTo(0));
         q.Add(1);
-        Assert.IsFalse((q.Count == 0));
+        Assert.That((q.Count == 0), Is.False);
         q.Clear();
-        Assert.IsTrue((q.Count == 0));
+        Assert.That((q.Count == 0), Is.True);
     }
 
     [Test]
@@ -325,12 +325,12 @@ public class PriorityQueueTests
         PriorityQueue p = new PriorityQueue(SIZE);
         for (int i = 0; i < SIZE; ++i)
         {
-            Assert.IsTrue(CollectionUtils.ContainsAll(q, p));
-            Assert.IsFalse(CollectionUtils.ContainsAll(p, q));
+            Assert.That(CollectionUtils.ContainsAll(q, p), Is.True);
+            Assert.That(CollectionUtils.ContainsAll(p, q), Is.False);
             p.Add(i);
         }
 
-        Assert.IsTrue(CollectionUtils.ContainsAll(p, q));
+        Assert.That(CollectionUtils.ContainsAll(p, q), Is.True);
     }
 
     [Test]
@@ -341,11 +341,11 @@ public class PriorityQueueTests
             PriorityQueue q = populatedQueue(SIZE);
             PriorityQueue p = populatedQueue(i);
             CollectionUtils.RemoveAll(q, p);
-            Assert.AreEqual(SIZE - i, q.Count);
+            Assert.That(q.Count, Is.EqualTo(SIZE - i));
             for (int j = 0; j < i; ++j)
             {
                 Int32 I = (int) p.Remove();
-                Assert.IsFalse(CollectionUtils.Contains(q, I));
+                Assert.That(CollectionUtils.Contains(q, I), Is.False);
             }
         }
     }
@@ -357,7 +357,7 @@ public class PriorityQueueTests
         Object[] o = (Object[]) CollectionUtils.ToArrayList(q).ToArray(typeof(object));
         Array.Sort(o);
         for (int i = 0; i < o.Length; i++)
-            Assert.AreEqual(o[i], q.Poll());
+            Assert.That(q.Poll(), Is.EqualTo(o[i]));
     }
 
     [Test]
@@ -367,7 +367,7 @@ public class PriorityQueueTests
         Int32[] ints = (Int32[]) CollectionUtils.ToArrayList(q).ToArray(typeof(int));
         Array.Sort(ints);
         for (int i = 0; i < ints.Length; i++)
-            Assert.AreEqual(ints[i], q.Poll());
+            Assert.That(q.Poll(), Is.EqualTo(ints[i]));
     }
 
     [Test]
@@ -378,11 +378,11 @@ public class PriorityQueueTests
         IEnumerator it = q.GetEnumerator();
         while (it.MoveNext())
         {
-            Assert.IsTrue(CollectionUtils.Contains(q, it.Current));
+            Assert.That(CollectionUtils.Contains(q, it.Current), Is.True);
             ++i;
         }
 
-        Assert.AreEqual(i, SIZE);
+        Assert.That(SIZE, Is.EqualTo(i));
     }
 
     [Test]
@@ -399,9 +399,9 @@ public class PriorityQueueTests
 
         PriorityQueue r = (PriorityQueue) formatter2.Deserialize(bin);
 
-        Assert.AreEqual(q.Count, r.Count);
+        Assert.That(r.Count, Is.EqualTo(q.Count));
         while (!(q.Count == 0))
-            Assert.AreEqual(q.Remove(), r.Remove());
+            Assert.That(r.Remove(), Is.EqualTo(q.Remove()));
     }
 
     [Test]
@@ -436,7 +436,7 @@ public class PriorityQueueTests
         source.CopyTo(dest);
         for (int i = 0; i < SIZE; i++)
         {
-            Assert.AreEqual(source.Poll(), dest[i]);
+            Assert.That(dest[i], Is.EqualTo(source.Poll()));
         }
     }
 
@@ -448,12 +448,12 @@ public class PriorityQueueTests
         source.CopyTo(dest, SIZE / 2);
         for (int i = 0; i < SIZE; i++)
         {
-            Assert.IsNull(dest[i]);
+            Assert.That(dest[i], Is.Null);
         }
 
         for (int i = SIZE; i < SIZE / 2; i++)
         {
-            Assert.AreEqual(dest[i], i - SIZE / 2);
+            Assert.That(i - SIZE / 2, Is.EqualTo(dest[i]));
         }
     }
 }

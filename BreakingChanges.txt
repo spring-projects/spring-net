@@ -66,8 +66,8 @@ Changes (3.1 to 4.0)
    Spring.Data.NHibernate5, Spring.Messaging, Spring.Messaging.Nms and Spring.Scheduling.Quartz3
    target netstandard2.0, net472 and net10.0). NuGet picks lib/net10.0 on .NET 10, where
    .NET 10 applications used the netstandard2.0 build before. Applications on .NET 8 and .NET 9
-   keep getting the netstandard2.0 build. Spring.Testing.NUnit and Spring.Testing.Microsoft stay
-   netstandard2.0 and net472 for now.
+   keep getting the netstandard2.0 build. Spring.Testing.Microsoft stays netstandard2.0 and
+   net472. Spring.Testing.NUnit targets net10.0 and net472 (see item 9).
    - Partial-trust (medium-trust) hosting is no longer supported. Code runs with the caller's
      trust only: the ExecutePrivileged wrappers and the permission demands are gone.
    - Code access security is gone. SecurityPermission demands, the SecurityCritical and
@@ -87,6 +87,20 @@ Changes (3.1 to 4.0)
    - ReflectionUtils.GetCustomAttributes still returns live attribute instances for declarative
      security attributes. It now recognises them by the name of their base type instead of
      typeof(SecurityAttribute).
+
+9. The test-framework packages moved up a major version:
+   - Spring.Testing.NUnit requires NUnit 5.0.0 or later (was NUnit 3.14). Its netstandard2.0 build is
+     gone, because NUnit 5 has none: the package now targets net10.0 and net472, so test projects on
+     .NET 8 or .NET 9 can no longer reference it (NU1202). The base classes
+     (AbstractSpringContextTests, AbstractDependencyInjectionSpringContextTests,
+     AbstractTransactionalSpringContextTests and AbstractTransactionalDbProviderSpringContextTests)
+     are source compatible: no member, signature or attribute changed, and they still use [SetUp]
+     and [TearDown]. A test project built on them has to move to NUnit 5. Under NUnit 5 the classic
+     Assert.AreEqual family compiles only on C# 14, through NUnit's ClassicAssertExtensions. On older
+     C# versions use NUnit.Framework.Legacy.ClassicAssert or Assert.That. StringAssert,
+     CollectionAssert, FileAssert and DirectoryAssert remain in NUnit.Framework.
+   - Spring.Testing.Microsoft requires MSTest.TestFramework 4.5.2 or later (was 3.4.3). The base classes
+     are source compatible with it, and still build for netstandard2.0 and net472.
 
 Changes (3.0.x to 3.1)
 ========================

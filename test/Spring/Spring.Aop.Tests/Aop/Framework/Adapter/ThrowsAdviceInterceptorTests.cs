@@ -55,8 +55,8 @@ public sealed partial class ThrowsAdviceInterceptorTests
 
         A.CallTo(() => mi.Proceed()).Returns(ret);
 
-        Assert.AreEqual(ret, ti.Invoke(mi));
-        Assert.AreEqual(0, th.GetCalls());
+        Assert.That(ti.Invoke(mi), Is.EqualTo(ret));
+        Assert.That(th.GetCalls(), Is.EqualTo(0));
     }
 
     [Test]
@@ -64,7 +64,7 @@ public sealed partial class ThrowsAdviceInterceptorTests
     {
         MyThrowsHandler th = new MyThrowsHandler();
         ThrowsAdviceInterceptor ti = new ThrowsAdviceInterceptor(th);
-        Assert.AreEqual(2, ti.HandlerMethodCount);
+        Assert.That(ti.HandlerMethodCount, Is.EqualTo(2));
         Exception ex = new Exception();
 
         IMethodInvocation mi = A.Fake<IMethodInvocation>();
@@ -77,10 +77,10 @@ public sealed partial class ThrowsAdviceInterceptorTests
         }
         catch (Exception caught)
         {
-            Assert.AreEqual(ex, caught);
+            Assert.That(caught, Is.EqualTo(ex));
         }
 
-        Assert.AreEqual(0, th.GetCalls());
+        Assert.That(th.GetCalls(), Is.EqualTo(0));
     }
 
     [Test]
@@ -104,11 +104,11 @@ public sealed partial class ThrowsAdviceInterceptorTests
         }
         catch (Exception caught)
         {
-            Assert.AreEqual(ex, caught);
+            Assert.That(caught, Is.EqualTo(ex));
         }
 
-        Assert.AreEqual(1, th.GetCalls());
-        Assert.AreEqual(1, th.GetCalls("HttpException"));
+        Assert.That(th.GetCalls(), Is.EqualTo(1));
+        Assert.That(th.GetCalls("HttpException"), Is.EqualTo(1));
     }
 
     [Test]
@@ -129,13 +129,13 @@ public sealed partial class ThrowsAdviceInterceptorTests
         }
         catch (Exception caught)
         {
-            Assert.AreEqual(exception, caught);
+            Assert.That(caught, Is.EqualTo(exception));
         }
 
-        Assert.AreEqual(0, throwsHandler.GetCalls(),
+        Assert.That(throwsHandler.GetCalls(), Is.EqualTo(0),
             "Must NOT have been handled, 'cos the HttpException was wrapped by " +
             "another Exception that did not have a handler.");
-        Assert.AreEqual(0, throwsHandler.GetCalls("HttpException"),
+        Assert.That(throwsHandler.GetCalls("HttpException"), Is.EqualTo(0),
             "Similarly, must NOT have been handled, 'cos the HttpException was wrapped by " +
             "another Exception that did not have a handler.");
     }
@@ -165,11 +165,11 @@ public sealed partial class ThrowsAdviceInterceptorTests
         }
         catch (Exception caught)
         {
-            Assert.AreEqual(ex, caught);
+            Assert.That(caught, Is.EqualTo(ex));
         }
 
-        Assert.AreEqual(1, th.GetCalls());
-        Assert.AreEqual(1, th.GetCalls("RemotingException"));
+        Assert.That(th.GetCalls(), Is.EqualTo(1));
+        Assert.That(th.GetCalls("RemotingException"), Is.EqualTo(1));
     }
 
     [Test]
@@ -189,11 +189,11 @@ public sealed partial class ThrowsAdviceInterceptorTests
         }
         catch (Exception caught)
         {
-            Assert.AreEqual(exception, caught);
+            Assert.That(caught, Is.EqualTo(exception));
         }
 
-        Assert.AreEqual(1, handler.GetCalls());
-        Assert.AreEqual(1, handler.GetCalls("RemotingException"));
+        Assert.That(handler.GetCalls(), Is.EqualTo(1));
+        Assert.That(handler.GetCalls("RemotingException"), Is.EqualTo(1));
     }
 
     private sealed class MultipleMethodsAreApplicableThrowsHandler

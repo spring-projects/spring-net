@@ -58,8 +58,8 @@ public class ConstructorNodeTests
         ctorNode.AddArgument(sNode);
 
         PublicTestClass instance = (PublicTestClass) ((IExpression) ctorNode).GetValue();
-        Assert.AreEqual(sNode.Text, instance._s);
-        Assert.AreEqual(-1, instance._i);
+        Assert.That(instance._s, Is.EqualTo(sNode.Text));
+        Assert.That(instance._i, Is.EqualTo(-1));
     }
 
     [Test]
@@ -75,8 +75,8 @@ public class ConstructorNodeTests
         ctorNode.addChild(iNode);
 
         PublicTestClass instance = (PublicTestClass) ((IExpression) ctorNode).GetValue();
-        Assert.AreEqual(sNode.Text, instance._s);
-        Assert.AreEqual(2, instance._i);
+        Assert.That(instance._s, Is.EqualTo(sNode.Text));
+        Assert.That(instance._i, Is.EqualTo(2));
     }
 
     [Test]
@@ -92,7 +92,7 @@ public class ConstructorNodeTests
         ctorNode.addChild(iNode);
 
         PublicTestClass instance = (PublicTestClass) ((IExpression) ctorNode).GetValue();
-        Assert.AreEqual(sNode.Text, instance._s);
-        Assert.AreEqual(3, instance._i);
+        Assert.That(instance._s, Is.EqualTo(sNode.Text));
+        Assert.That(instance._i, Is.EqualTo(3));
     }
 }

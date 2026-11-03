@@ -30,28 +30,28 @@ public sealed class ArrayUtilsTests
     {
         object[] one = new string[] { "Foo", "Bar", "Baz" };
         object[] two = new string[] { "Foo", "Bar", "Baz" };
-        Assert.IsTrue(ArrayUtils.AreEqual(one, two));
+        Assert.That(ArrayUtils.AreEqual(one, two), Is.True);
         object[] three = new string[] { "Foo", "Ben", "Baz" };
-        Assert.IsFalse(ArrayUtils.AreEqual(one, three));
+        Assert.That(ArrayUtils.AreEqual(one, three), Is.False);
     }
 
     [Test]
     public void AreEqualWithBadArguments()
     {
-        Assert.IsTrue(ArrayUtils.AreEqual(null, null));
+        Assert.That(ArrayUtils.AreEqual(null, null), Is.True);
         object[] one = new string[] { "Foo", "Bar", "Baz" };
         object[] two = null;
-        Assert.IsFalse(ArrayUtils.AreEqual(one, two));
+        Assert.That(ArrayUtils.AreEqual(one, two), Is.False);
         object[] three = new string[] { "Foo", "Bar" };
-        Assert.IsFalse(ArrayUtils.AreEqual(one, three));
+        Assert.That(ArrayUtils.AreEqual(one, three), Is.False);
     }
 
     [Test]
     public void HasLengthTests()
     {
-        Assert.IsFalse(ArrayUtils.HasLength(null));
-        Assert.IsFalse(ArrayUtils.HasLength(new byte[0]));
-        Assert.IsTrue(ArrayUtils.HasLength(new byte[1]));
+        Assert.That(ArrayUtils.HasLength(null), Is.False);
+        Assert.That(ArrayUtils.HasLength(new byte[0]), Is.False);
+        Assert.That(ArrayUtils.HasLength(new byte[1]), Is.True);
     }
 
     [Test]
@@ -60,14 +60,14 @@ public sealed class ArrayUtilsTests
         byte[] array1 = new byte[] { 0, 1, 2, 3 };
         byte[] array2 = new byte[] { 4, 5, 6, 7 };
         byte[] result = (byte[]) ArrayUtils.Concat(array1, array2);
-        Assert.AreEqual(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 }, result);
+        Assert.That(result, Is.EqualTo(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 }));
     }
 
     [Test]
     public void ConcatsNullArrays()
     {
         byte[] array = new byte[] { 0, 1, 2, 3 };
-        Assert.AreEqual(new byte[] { 0, 1, 2, 3 }, ArrayUtils.Concat(array, null));
-        Assert.AreEqual(new byte[] { 0, 1, 2, 3 }, ArrayUtils.Concat(null, array));
+        Assert.That(ArrayUtils.Concat(array, null), Is.EqualTo(new byte[] { 0, 1, 2, 3 }));
+        Assert.That(ArrayUtils.Concat(null, array), Is.EqualTo(new byte[] { 0, 1, 2, 3 }));
     }
 }

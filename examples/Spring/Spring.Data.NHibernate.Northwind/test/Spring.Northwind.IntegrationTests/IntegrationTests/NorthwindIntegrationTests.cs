@@ -66,50 +66,50 @@ namespace Spring.Northwind.IntegrationTests
         public void SanityCheck()
         {
 
-            Assert.IsNotNull(customerDao, "customer dao is null");
+            Assert.That(customerDao, Is.Not.Null, "customer dao is null");
 
         }
 
         [Test]
         public void CustomerDaoTests()
         {
-            Assert.AreEqual(91, customerDao.GetAll().Count);
+            Assert.That(customerDao.GetAll().Count, Is.EqualTo(91));
 
             Customer c = new Customer(new DefaultCustomerClassificationCalculator());
             c.Id = "MPOLL";           
             c.CompanyName = "Interface21";
             customerDao.Save(c);
             c = customerDao.Get("MPOLL");
-            Assert.AreEqual(c.Id, "MPOLL");
-            Assert.AreEqual(c.CompanyName, "Interface21");
+            Assert.That("MPOLL", Is.EqualTo(c.Id));
+            Assert.That("Interface21", Is.EqualTo(c.CompanyName));
 
             //Without flushing, nothing changes in the database:
-            int customerCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers");           
-            Assert.AreEqual(91, customerCount);
+            int customerCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers");
+            Assert.That(customerCount, Is.EqualTo(91));
 
             //Flush the session to execute sql in the db.
             SessionFactoryUtils.GetSession(sessionFactory, true).Flush();
            
             //Now changes are visible outside the session but within the same database transaction
             customerCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers");
-            Assert.AreEqual(92, customerCount);
-            
-            Assert.AreEqual(92, customerDao.GetAll().Count);
+            Assert.That(customerCount, Is.EqualTo(92));
+
+            Assert.That(customerDao.GetAll().Count, Is.EqualTo(92));
 
             c.CompanyName = "SpringSource";
 
             customerDao.Update(c);
 
             c = customerDao.Get("MPOLL");
-            Assert.AreEqual(c.Id, "MPOLL");
-            Assert.AreEqual(c.CompanyName, "SpringSource");
+            Assert.That("MPOLL", Is.EqualTo(c.Id));
+            Assert.That("SpringSource", Is.EqualTo(c.CompanyName));
 
             customerDao.Delete(c);
 
 
             SessionFactoryUtils.GetSession(sessionFactory, true).Flush();
             customerCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers");
-            Assert.AreEqual(92, customerCount);
+            Assert.That(customerCount, Is.EqualTo(92));
 
             try
             {
@@ -118,7 +118,7 @@ namespace Spring.Northwind.IntegrationTests
             }
             catch (HibernateObjectRetrievalFailureException e)
             {
-                Assert.AreEqual("Customer", e.PersistentClassName);
+                Assert.That(e.PersistentClassName, Is.EqualTo("Customer"));
             }
 
         }
@@ -126,7 +126,7 @@ namespace Spring.Northwind.IntegrationTests
         [Test]
         public void ProductDaoTests()
         {
-            Assert.AreEqual(830, orderDao.GetAll().Count);
+            Assert.That(orderDao.GetAll().Count, Is.EqualTo(830));
 
             Order order = new Order();
             Customer customer = customerDao.Get("PICCO");
@@ -136,23 +136,23 @@ namespace Spring.Northwind.IntegrationTests
             orderDao.Save(order);
             int orderId = order.Id;
             order = orderDao.Get(orderId);
-            Assert.AreEqual("PICCO", order.Customer.Id);
-            Assert.AreEqual("New York", order.ShipCity);
+            Assert.That(order.Customer.Id, Is.EqualTo("PICCO"));
+            Assert.That(order.ShipCity, Is.EqualTo("New York"));
 
             //SessionFactoryUtils.GetSession(sessionFactory, true).Flush();
             // Required trip to db to get idendity column, so data is visible
 
             int ordersCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Orders");
-            Assert.AreEqual(831, ordersCount);
+            Assert.That(ordersCount, Is.EqualTo(831));
 
-            Assert.AreEqual(831, orderDao.GetAll().Count);
+            Assert.That(orderDao.GetAll().Count, Is.EqualTo(831));
 
             order.ShipCity = "Sao Paulo";
             orderDao.Update(order);
 
             order = orderDao.Get(orderId);
-            Assert.AreEqual("PICCO", order.Customer.Id);
-            Assert.AreEqual("Sao Paulo", order.ShipCity);
+            Assert.That(order.Customer.Id, Is.EqualTo("PICCO"));
+            Assert.That(order.ShipCity, Is.EqualTo("Sao Paulo"));
 
 
             orderDao.Delete(order);
@@ -161,7 +161,7 @@ namespace Spring.Northwind.IntegrationTests
             SessionFactoryUtils.GetSession(sessionFactory, true).Flush();
 
             ordersCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Orders");
-            Assert.AreEqual(830, ordersCount);
+            Assert.That(ordersCount, Is.EqualTo(830));
 
             try
             {
@@ -170,7 +170,7 @@ namespace Spring.Northwind.IntegrationTests
             }
             catch (HibernateObjectRetrievalFailureException e)
             {
-                Assert.AreEqual("Order", e.PersistentClassName);
+                Assert.That(e.PersistentClassName, Is.EqualTo("Order"));
             }
 
         }

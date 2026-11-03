@@ -30,6 +30,6 @@ public class ContextNamespaceParserTests
     [Test]
     public void RegisteredAsWellKnownParser()
     {
-        Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/context"));
+        Assert.That(NamespaceParserRegistry.GetParser("http://www.springframework.net/context"), Is.Not.Null);
     }
 }

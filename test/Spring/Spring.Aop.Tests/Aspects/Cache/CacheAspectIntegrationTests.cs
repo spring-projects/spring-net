@@ -54,23 +54,23 @@ public sealed class CacheAspectIntegrationTests
 
         IInventorStore store = (IInventorStore) pf.GetProxy();
 
-        Assert.AreEqual(0, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(0));
 
         IList inventors = store.GetAll();
-        Assert.AreEqual(2, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(2));
 
         store.Delete((Inventor) inventors[0]);
-        Assert.AreEqual(1, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(1));
 
         Inventor tesla = store.Load("Nikola Tesla");
-        Assert.AreEqual(2, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(2));
 
         store.Save(tesla);
-        Assert.AreEqual(2, cache.Count);
-        Assert.AreEqual("Serbian", ((Inventor) cache.Get("Nikola Tesla")).Nationality);
+        Assert.That(cache.Count, Is.EqualTo(2));
+        Assert.That(((Inventor) cache.Get("Nikola Tesla")).Nationality, Is.EqualTo("Serbian"));
 
         store.DeleteAll();
-        Assert.AreEqual(0, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -143,14 +143,14 @@ public sealed class CacheAspectIntegrationTests
 
         IGenericDao<string, int> dao = (IGenericDao<string, int>) pf.GetProxy();
 
-        Assert.AreEqual(0, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(0));
 
         dao.Load(1);
-        Assert.AreEqual(1, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(1));
 
         // actually, it should be null, because default(string) = null
         // but it returns the NullValue marker created by the CacheResultAttribute
-        Assert.IsNotNull(cache.Get("String_1"));
+        Assert.That(cache.Get("String_1"), Is.Not.Null);
     }
 }
 

@@ -28,9 +28,9 @@ public sealed class ApplicationContextAwareProcessorTests
         MockApplicationContext ctx = new MockApplicationContext("MockApplicationContext");
         ApplicationContextAwareProcessor processor = new ApplicationContextAwareProcessor(ctx);
         MockContextAwareObject obj = new MockContextAwareObject();
-        Assert.IsNull(obj.ResourceLoader, "ResourceLoader Does Not Equal");
+        Assert.That(obj.ResourceLoader, Is.Null, "ResourceLoader Does Not Equal");
         MockContextAwareObject obj2 = (MockContextAwareObject) processor.PostProcessBeforeInitialization(obj, "MyContextAwareObject");
-        Assert.AreEqual(ctx, obj2.ResourceLoader, "ResourceLoader Does Not Equal");
+        Assert.That(obj2.ResourceLoader, Is.EqualTo(ctx), "ResourceLoader Does Not Equal");
     }
 
     [Test]
@@ -40,7 +40,7 @@ public sealed class ApplicationContextAwareProcessorTests
         ApplicationContextAwareProcessor processor = new ApplicationContextAwareProcessor(ctx);
         object obj = new object();
         object obj1 = processor.PostProcessBeforeInitialization(obj, "MyContextAwareObject");
-        Assert.AreEqual(obj, obj1, "Objects don't equal");
+        Assert.That(obj1, Is.EqualTo(obj), "Objects don't equal");
     }
 
     [Test]
@@ -49,9 +49,9 @@ public sealed class ApplicationContextAwareProcessorTests
         MockApplicationContext ctx = new MockApplicationContext();
         ApplicationContextAwareProcessor processor = new ApplicationContextAwareProcessor(ctx);
         MockContextAwareObject obj = new MockContextAwareObject();
-        Assert.IsNull(obj.GetApplicationContext(), "Context Does Not Equal");
+        Assert.That(obj.GetApplicationContext(), Is.Null, "Context Does Not Equal");
         MockContextAwareObject obj2 = (MockContextAwareObject) processor.PostProcessBeforeInitialization(obj, "MyContextAwareObject");
-        Assert.AreEqual(ctx, obj2.GetApplicationContext(), "Context Does Not Equal");
+        Assert.That(obj2.GetApplicationContext(), Is.EqualTo(ctx), "Context Does Not Equal");
     }
 
     [Test]
@@ -61,7 +61,7 @@ public sealed class ApplicationContextAwareProcessorTests
         ApplicationContextAwareProcessor processor = new ApplicationContextAwareProcessor(ctx);
         object obj = new object();
         object obj1 = processor.PostProcessBeforeInitialization(obj, "MyContextAwareObject");
-        Assert.AreEqual(obj, obj1, "Objects don't equal");
+        Assert.That(obj1, Is.EqualTo(obj), "Objects don't equal");
     }
 
     [Test]
@@ -71,7 +71,7 @@ public sealed class ApplicationContextAwareProcessorTests
         ApplicationContextAwareProcessor processor = new ApplicationContextAwareProcessor(ctx);
         object obj = new object();
         object obj1 = processor.PostProcessAfterInitialization(obj, "MyContextAwareObject");
-        Assert.AreEqual(obj, obj1, "Objects don't equal");
+        Assert.That(obj1, Is.EqualTo(obj), "Objects don't equal");
     }
 
     [Test]
@@ -83,7 +83,8 @@ public sealed class ApplicationContextAwareProcessorTests
 
     private void _AlwaysIgnoresProxiedMessageSourceAwareObjects(MockContextAwareObject obj)
     {
-        Assert.IsNull(obj.MessageSource,
+        Assert.That(obj.MessageSource,
+            Is.Null,
             "Transparent proxy IMessageSourceAware object was not ignored (must be).");
     }
 
@@ -96,7 +97,8 @@ public sealed class ApplicationContextAwareProcessorTests
 
     private void _AlwaysIgnoresProxiedResourceLoaderAwareObjects(MockContextAwareObject obj)
     {
-        Assert.IsNull(obj.ResourceLoader,
+        Assert.That(obj.ResourceLoader,
+            Is.Null,
             "Transparent proxy IResourceLoaderAware object was not ignored (must be).");
     }
 
@@ -109,7 +111,8 @@ public sealed class ApplicationContextAwareProcessorTests
 
     private void _AlwaysIgnoresProxiedApplicationContextAwareAwareObjects(MockContextAwareObject obj)
     {
-        Assert.IsNull(obj.ApplicationContext,
+        Assert.That(obj.ApplicationContext,
+            Is.Null,
             "Transparent proxy IApplicationContextAwareAware object was not ignored (must be).");
     }
 

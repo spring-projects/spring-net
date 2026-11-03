@@ -33,13 +33,13 @@ public sealed class ResultTests
     public void DoesItDefaultToTheDefaultResultMode()
     {
         Result result = new Result();
-        Assert.AreEqual(Result.DefaultResultMode, result.Mode, "Not defaulting to the default ResultMode.");
+        Assert.That(result.Mode, Is.EqualTo(Result.DefaultResultMode), "Not defaulting to the default ResultMode.");
     }
 
     [Test]
     public void DefaultsToTransferMode()
     {
-        Assert.AreEqual(ResultMode.Transfer, Result.DefaultResultMode,
+        Assert.That(Result.DefaultResultMode, Is.EqualTo(ResultMode.Transfer),
             "Hey! Be sure to change the documentation since you've " +
             "obviously gone and changed the default transfer mode.");
     }
@@ -66,10 +66,11 @@ public sealed class ResultTests
     public void WithNoResultModeAndNoParameters()
     {
         Result result = new Result(ExpectedTargetPageName);
-        Assert.AreEqual(Result.DefaultResultMode, result.Mode, "Not defaulting to the default ResultMode.");
-        Assert.IsNull(result.Parameters,
+        Assert.That(result.Mode, Is.EqualTo(Result.DefaultResultMode), "Not defaulting to the default ResultMode.");
+        Assert.That(result.Parameters,
+            Is.Null,
             "No parameters were passed but the Parameters property appears to be set to a non-null value anyway.");
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -78,10 +79,11 @@ public sealed class ResultTests
     public void WithWhitespacePageAndNoResultModeAndNoParameters()
     {
         Result result = new Result("   " + ExpectedTargetPageName + "\n");
-        Assert.AreEqual(Result.DefaultResultMode, result.Mode, "Not defaulting to the default ResultMode.");
-        Assert.IsNull(result.Parameters,
+        Assert.That(result.Mode, Is.EqualTo(Result.DefaultResultMode), "Not defaulting to the default ResultMode.");
+        Assert.That(result.Parameters,
+            Is.Null,
             "No parameters were passed but the Parameters property appears to be set to a non-null value anyway.");
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -90,12 +92,13 @@ public sealed class ResultTests
     public void WithTransferResultModeButNoParameters()
     {
         Result result = new Result("transfer:" + ExpectedTargetPageName);
-        Assert.AreEqual(ResultMode.Transfer, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.Transfer), "Not extracting the correct ResultMode " +
                                                           "from the result string passed into the ctor.");
-        Assert.AreEqual(true, result.PreserveForm, "ResultMode.Transfer must result in PreserveForm being 'true'");
-        Assert.IsNull(result.Parameters,
+        Assert.That(result.PreserveForm, Is.EqualTo(true), "ResultMode.Transfer must result in PreserveForm being 'true'");
+        Assert.That(result.Parameters,
+            Is.Null,
             "No parameters were passed but the Parameters property appears to be set to a non-null value anyway.");
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -104,20 +107,21 @@ public sealed class ResultTests
     public void WithTransferNoPreserveResultMode()
     {
         Result result = new Result("transfernopreserve:" + ExpectedTargetPageName);
-        Assert.AreEqual(ResultMode.TransferNoPreserve, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.TransferNoPreserve), "Not extracting the correct ResultMode " +
                                                                     "from the result string passed into the ctor.");
-        Assert.AreEqual(false, result.PreserveForm, "ResultMode.TransferNoPreserver must result in PreserveForm being 'false'");
+        Assert.That(result.PreserveForm, Is.EqualTo(false), "ResultMode.TransferNoPreserver must result in PreserveForm being 'false'");
     }
 
     [Test]
     public void WithWhitespacedRedirectResultMode()
     {
         Result result = new Result("    redirect:" + ExpectedTargetPageName);
-        Assert.AreEqual(ResultMode.Redirect, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.Redirect), "Not extracting the correct ResultMode " +
                                                           "from the result string passed into the ctor.");
-        Assert.IsNull(result.Parameters,
+        Assert.That(result.Parameters,
+            Is.Null,
             "No parameters were passed but the Parameters property appears to be set to a non-null value anyway.");
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -126,12 +130,13 @@ public sealed class ResultTests
     public void WithRedirectResultMode()
     {
         Result result = new Result("redirect:" + ExpectedTargetPageName);
-        Assert.AreEqual(ResultMode.Redirect, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.Redirect), "Not extracting the correct ResultMode " +
                                                           "from the result string passed into the ctor.");
-        Assert.IsTrue(result.EndResponse);
-        Assert.IsNull(result.Parameters,
+        Assert.That(result.EndResponse, Is.True);
+        Assert.That(result.Parameters,
+            Is.Null,
             "No parameters were passed but the Parameters property appears to be set to a non-null value anyway.");
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -140,12 +145,13 @@ public sealed class ResultTests
     public void WithRedirectNoAbortResultMode()
     {
         Result result = new Result("redirectnoabort:" + ExpectedTargetPageName);
-        Assert.AreEqual(ResultMode.RedirectNoAbort, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.RedirectNoAbort), "Not extracting the correct ResultMode " +
                                                                  "from the result string passed into the ctor.");
-        Assert.IsFalse(result.EndResponse);
-        Assert.IsNull(result.Parameters,
+        Assert.That(result.EndResponse, Is.False);
+        Assert.That(result.Parameters,
+            Is.Null,
             "No parameters were passed but the Parameters property appears to be set to a non-null value anyway.");
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -161,12 +167,13 @@ public sealed class ResultTests
     public void WithResultModeAndEmptyParameterDelimiterOnly()
     {
         Result result = new Result("transfer:" + ExpectedTargetPageName + "?");
-        Assert.AreEqual(ResultMode.Transfer, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.Transfer), "Not extracting the correct ResultMode " +
                                                           "from the result string passed into the ctor.");
-        Assert.IsNull(result.Parameters,
+        Assert.That(result.Parameters,
+            Is.Null,
             "No parameters were passed (just the parameter delimiter) but the " +
             "Parameters property appears to be set to a non-null value anyway.");
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -175,12 +182,13 @@ public sealed class ResultTests
     public void WithResultModeAndWhitespaceParameterDelimiterOnly()
     {
         Result result = new Result("redirect:" + ExpectedTargetPageName + "?     ");
-        Assert.AreEqual(ResultMode.Redirect, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.Redirect), "Not extracting the correct ResultMode " +
                                                           "from the result string passed into the ctor.");
-        Assert.IsNull(result.Parameters,
+        Assert.That(result.Parameters,
+            Is.Null,
             "No parameters were passed (just the parameter delimiter) but the " +
             "Parameters property appears to be set to a non-null value anyway.");
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -189,11 +197,12 @@ public sealed class ResultTests
     public void WithNoResultModeAndWhitespaceParameterDelimiterOnly()
     {
         Result result = new Result(ExpectedTargetPageName + "?     ");
-        Assert.AreEqual(Result.DefaultResultMode, result.Mode, "Not defaulting to the default ResultMode.");
-        Assert.IsNull(result.Parameters,
+        Assert.That(result.Mode, Is.EqualTo(Result.DefaultResultMode), "Not defaulting to the default ResultMode.");
+        Assert.That(result.Parameters,
+            Is.Null,
             "No parameters were passed (just the parameter delimiter) but the " +
             "Parameters property appears to be set to a non-null value anyway.");
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -204,15 +213,16 @@ public sealed class ResultTests
         const string key = "id";
         const string value = "Nina Persson";
         Result result = new Result(ExpectedTargetPageName + "?" + key + "=" + value);
-        Assert.AreEqual(Result.DefaultResultMode, result.Mode, "Not defaulting to the default ResultMode.");
-        Assert.IsNotNull(result.Parameters,
+        Assert.That(result.Mode, Is.EqualTo(Result.DefaultResultMode), "Not defaulting to the default ResultMode.");
+        Assert.That(result.Parameters,
+            Is.Not.Null,
             "Parameters were passed but the Parameters property appears to be null (incorrectly).");
-        Assert.AreEqual(1, result.Parameters.Count,
+        Assert.That(result.Parameters.Count, Is.EqualTo(1),
             "Wrong number of query parameters parsed (only supplied one key-value pair).");
-        Assert.IsTrue(result.Parameters.Contains(key), "The 'id' parameter is not being correctly extracted " +
+        Assert.That(result.Parameters.Contains(key), Is.True, "The 'id' parameter is not being correctly extracted " +
                                                        "from the result string passed into the ctor.");
-        Assert.AreEqual(value, result.Parameters[key]);
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.Parameters[key], Is.EqualTo(value));
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -223,16 +233,17 @@ public sealed class ResultTests
         const string key = "id";
         const string value = "Nina Persson";
         Result result = new Result("transfer:" + ExpectedTargetPageName + "?" + key + "=" + value);
-        Assert.AreEqual(ResultMode.Transfer, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.Transfer), "Not extracting the correct ResultMode " +
                                                           "from the result string passed into the ctor.");
-        Assert.IsNotNull(result.Parameters,
+        Assert.That(result.Parameters,
+            Is.Not.Null,
             "Parameters were passed but the Parameters property appears to be null (incorrectly).");
-        Assert.AreEqual(1, result.Parameters.Count,
+        Assert.That(result.Parameters.Count, Is.EqualTo(1),
             "Wrong number of query parameters parsed (only supplied one key-value pair).");
-        Assert.IsTrue(result.Parameters.Contains(key), "The 'id' parameter is not being correctly extracted " +
+        Assert.That(result.Parameters.Contains(key), Is.True, "The 'id' parameter is not being correctly extracted " +
                                                        "from the result string passed into the ctor.");
-        Assert.AreEqual(value, result.Parameters[key]);
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.Parameters[key], Is.EqualTo(value));
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -244,16 +255,15 @@ public sealed class ResultTests
         const string key = "id";
         const string value = "Nina Persson & The Cardigans"; // notice the use of the embedded '&'...
         Result result = new Result(ExpectedTargetPageName + "?" + key + "=" + value);
-        Assert.AreEqual(Result.DefaultResultMode, result.Mode, "Not defaulting to the default ResultMode.");
-        Assert.IsNotNull(result.Parameters,
+        Assert.That(result.Mode, Is.EqualTo(Result.DefaultResultMode), "Not defaulting to the default ResultMode.");
+        Assert.That(result.Parameters,
+            Is.Not.Null,
             "Parameters were passed but the Parameters property appears to be null (incorrectly).");
-//            Assert.AreEqual(1, result.Parameters.Count,
-//                            "Wrong number of query parameters parsed (only supplied one key-value pair).");
-//            Assert.IsTrue(result.Parameters.Contains(key), "The 'id' parameter is not being correctly extracted " +
+//            Assert.That(result.Parameters.Count, Is.EqualTo(1), //                            "Wrong number of query parameters parsed (only supplied one key-value pair).");
+//            Assert.That(result.Parameters.Contains(key), Is.True, "The 'id' parameter is not being correctly extracted " +
 //                                                           "from the result string passed into the ctor.");
-//            Assert.AreEqual(value, result.Parameters[key]);
-//            Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
-//                            "The TargetPage property is not being correctly extracted " +
+//            Assert.That(result.Parameters[key], Is.EqualTo(value));
+//            Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName), //                            "The TargetPage property is not being correctly extracted " +
 //                            "from the result string passed into the ctor.");
     }
 
@@ -266,20 +276,22 @@ public sealed class ResultTests
         const string pValue2 = "schwing";
         Result result =
             new Result(ExpectedTargetPageName + "?" + pKey1 + "=" + pValue1 + "&" + pKey2 + "=" + pValue2);
-        Assert.AreEqual(ResultMode.Transfer, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.Transfer), "Not extracting the correct ResultMode " +
                                                           "from the result string passed into the ctor.");
-        Assert.IsNotNull(result.Parameters,
+        Assert.That(result.Parameters,
+            Is.Not.Null,
             "Parameters were passed but the Parameters property appears to be null (incorrectly).");
-        Assert.AreEqual(2, result.Parameters.Count,
+        Assert.That(result.Parameters.Count, Is.EqualTo(2),
             "Wrong number of query parameters parsed (supplied two key-value pairs).");
-        Assert.IsTrue(result.Parameters.Contains(pKey1), "The 'id' parameter is not being correctly extracted " +
+        Assert.That(result.Parameters.Contains(pKey1), Is.True, "The 'id' parameter is not being correctly extracted " +
                                                          "from the result string passed into the ctor.");
-        Assert.AreEqual(pValue1, result.Parameters[pKey1]);
-        Assert.IsTrue(result.Parameters.Contains(pKey2),
+        Assert.That(result.Parameters[pKey1], Is.EqualTo(pValue1));
+        Assert.That(result.Parameters.Contains(pKey2),
+            Is.True,
             "The 'verdict' parameter is not being correctly extracted " +
             "from the result string passed into the ctor.");
-        Assert.AreEqual(pValue2, result.Parameters[pKey2]);
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.Parameters[pKey2], Is.EqualTo(pValue2));
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -293,20 +305,22 @@ public sealed class ResultTests
         const string pValue2 = "schwing";
         Result result =
             new Result("\n" + ExpectedTargetPageName + "   ?" + pKey1 + "=" + pValue1 + "&" + pKey2 + "=" + pValue2);
-        Assert.AreEqual(ResultMode.Transfer, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.Transfer), "Not extracting the correct ResultMode " +
                                                           "from the result string passed into the ctor.");
-        Assert.IsNotNull(result.Parameters,
+        Assert.That(result.Parameters,
+            Is.Not.Null,
             "Parameters were passed but the Parameters property appears to be null (incorrectly).");
-        Assert.AreEqual(2, result.Parameters.Count,
+        Assert.That(result.Parameters.Count, Is.EqualTo(2),
             "Wrong number of query parameters parsed (supplied two key-value pairs).");
-        Assert.IsTrue(result.Parameters.Contains(pKey1), "The 'id' parameter is not being correctly extracted " +
+        Assert.That(result.Parameters.Contains(pKey1), Is.True, "The 'id' parameter is not being correctly extracted " +
                                                          "from the result string passed into the ctor.");
-        Assert.AreEqual(pValue1, result.Parameters[pKey1]);
-        Assert.IsTrue(result.Parameters.Contains(pKey2),
+        Assert.That(result.Parameters[pKey1], Is.EqualTo(pValue1));
+        Assert.That(result.Parameters.Contains(pKey2),
+            Is.True,
             "The 'verdict' parameter is not being correctly extracted " +
             "from the result string passed into the ctor.");
-        Assert.AreEqual(pValue2, result.Parameters[pKey2]);
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.Parameters[pKey2], Is.EqualTo(pValue2));
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -320,20 +334,22 @@ public sealed class ResultTests
         const string pValue2 = "schwing";
         Result result =
             new Result("\n" + ExpectedTargetPageName + "   ?" + pKey1 + "=" + pValue1 + "," + pKey2 + "=" + pValue2);
-        Assert.AreEqual(ResultMode.Transfer, result.Mode, "Not extracting the correct ResultMode " +
+        Assert.That(result.Mode, Is.EqualTo(ResultMode.Transfer), "Not extracting the correct ResultMode " +
                                                           "from the result string passed into the ctor.");
-        Assert.IsNotNull(result.Parameters,
+        Assert.That(result.Parameters,
+            Is.Not.Null,
             "Parameters were passed but the Parameters property appears to be null (incorrectly).");
-        Assert.AreEqual(2, result.Parameters.Count,
+        Assert.That(result.Parameters.Count, Is.EqualTo(2),
             "Wrong number of query parameters parsed (supplied two key-value pairs).");
-        Assert.IsTrue(result.Parameters.Contains(pKey1), "The 'id' parameter is not being correctly extracted " +
+        Assert.That(result.Parameters.Contains(pKey1), Is.True, "The 'id' parameter is not being correctly extracted " +
                                                          "from the result string passed into the ctor.");
-        Assert.AreEqual(pValue1, result.Parameters[pKey1]);
-        Assert.IsTrue(result.Parameters.Contains(pKey2),
+        Assert.That(result.Parameters[pKey1], Is.EqualTo(pValue1));
+        Assert.That(result.Parameters.Contains(pKey2),
+            Is.True,
             "The 'verdict' parameter is not being correctly extracted " +
             "from the result string passed into the ctor.");
-        Assert.AreEqual(pValue2, result.Parameters[pKey2]);
-        Assert.AreEqual(ExpectedTargetPageName, result.TargetPage,
+        Assert.That(result.Parameters[pKey2], Is.EqualTo(pValue2));
+        Assert.That(result.TargetPage, Is.EqualTo(ExpectedTargetPageName),
             "The TargetPage property is not being correctly extracted " +
             "from the result string passed into the ctor.");
     }
@@ -343,7 +359,7 @@ public sealed class ResultTests
     {
         Result result = new Result("%{['var1']}");
         string resultUri = result.GetRedirectUri(MakeDictionary("var1", "val1"));
-        Assert.AreEqual("val1", resultUri);
+        Assert.That(resultUri, Is.EqualTo("val1"));
     }
 
     [Test]
@@ -351,7 +367,7 @@ public sealed class ResultTests
     {
         Result result = new Result("redirect:%{['var1']}?%{['var2']}=%{['var3']}");
         string resultUri = result.GetRedirectUri(MakeDictionary("var1", "val1", "var2", "val2", "var3", "val3"));
-        Assert.AreEqual("val1?val2=val3", resultUri);
+        Assert.That(resultUri, Is.EqualTo("val1?val2=val3"));
     }
 
     private IDictionary MakeDictionary(params object[] args)

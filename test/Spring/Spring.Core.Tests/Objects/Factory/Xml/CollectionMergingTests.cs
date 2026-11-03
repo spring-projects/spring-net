@@ -46,10 +46,10 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithList");
         IList list = to.SomeList;
-        Assert.That(3, Is.EqualTo(list.Count));
-        Assert.That("Rob Harrop", Is.EqualTo(list[0]));
-        Assert.That("Rod Johnson", Is.EqualTo(list[1]));
-        Assert.That("Juergen Hoeller", Is.EqualTo(list[2]));
+        Assert.That(list.Count, Is.EqualTo(3));
+        Assert.That(list[0], Is.EqualTo("Rob Harrop"));
+        Assert.That(list[1], Is.EqualTo("Rod Johnson"));
+        Assert.That(list[2], Is.EqualTo("Juergen Hoeller"));
     }
 
     [Test]
@@ -57,9 +57,9 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithListOfRefs");
         IList list = to.SomeList;
-        Assert.IsNotNull(list);
-        Assert.AreEqual(3, list.Count);
-        Assert.IsNotNull(list[2]);
+        Assert.That(list, Is.Not.Null);
+        Assert.That(list.Count, Is.EqualTo(3));
+        Assert.That(list[2], Is.Not.Null);
         Assert.That(list[2], Is.InstanceOf(typeof(TestObject)));
     }
 
@@ -68,9 +68,9 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithSet");
         ISet set = to.SomeSet;
-        Assert.AreEqual(2, set.Count);
-        Assert.IsTrue(set.Contains("Rob Harrop"));
-        Assert.IsTrue(set.Contains("Sally Greenwood"));
+        Assert.That(set.Count, Is.EqualTo(2));
+        Assert.That(set.Contains("Rob Harrop"), Is.True);
+        Assert.That(set.Contains("Sally Greenwood"), Is.True);
     }
 
     [Test]
@@ -78,15 +78,15 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithSetOfRefs");
         ISet set = to.SomeSet;
-        Assert.IsNotNull(set);
-        Assert.AreEqual(2, set.Count);
+        Assert.That(set, Is.Not.Null);
+        Assert.That(set.Count, Is.EqualTo(2));
         IEnumerator enumerator = set.GetEnumerator();
         enumerator.MoveNext();
         enumerator.MoveNext();
         object o = enumerator.Current;
-        Assert.IsNotNull(o);
+        Assert.That(o, Is.Not.Null);
         Assert.That(o, Is.InstanceOf(typeof(TestObject)));
-        Assert.AreEqual("Sally", ((TestObject) o).Name);
+        Assert.That(((TestObject) o).Name, Is.EqualTo("Sally"));
     }
 
     [Test]
@@ -94,10 +94,10 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithMap");
         IDictionary map = to.SomeMap;
-        Assert.AreEqual(3, map.Count);
-        Assert.AreEqual("Sally", map["Rob"]);
-        Assert.AreEqual("Kerry", map["Rod"]);
-        Assert.AreEqual("Eva", map["Juergen"]);
+        Assert.That(map.Count, Is.EqualTo(3));
+        Assert.That(map["Rob"], Is.EqualTo("Sally"));
+        Assert.That(map["Rod"], Is.EqualTo("Kerry"));
+        Assert.That(map["Juergen"], Is.EqualTo("Eva"));
     }
 
     [Test]
@@ -105,11 +105,11 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithMapOfRefs");
         IDictionary map = to.SomeMap;
-        Assert.NotNull(map);
-        Assert.AreEqual(2, map.Count);
-        Assert.NotNull(map["Rob"]);
+        Assert.That(map, Is.Not.Null);
+        Assert.That(map.Count, Is.EqualTo(2));
+        Assert.That(map["Rob"], Is.Not.Null);
         Assert.That(map["Rob"], Is.InstanceOf(typeof(TestObject)));
-        Assert.AreEqual("Sally", ((TestObject) map["Rob"]).Name);
+        Assert.That(((TestObject) map["Rob"]).Name, Is.EqualTo("Sally"));
     }
 
     [Test]
@@ -117,10 +117,10 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithNameValues");
         NameValueCollection map = to.SomeNameValueCollection;
-        Assert.AreEqual(3, map.Count);
-        Assert.AreEqual("Sally", map["Rob"]);
-        Assert.AreEqual("Kerry", map["Rod"]);
-        Assert.AreEqual("Eva", map["Juergen"]);
+        Assert.That(map.Count, Is.EqualTo(3));
+        Assert.That(map["Rob"], Is.EqualTo("Sally"));
+        Assert.That(map["Rod"], Is.EqualTo("Kerry"));
+        Assert.That(map["Juergen"], Is.EqualTo("Eva"));
     }
 
     [Test]
@@ -128,10 +128,10 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithListInConstructor");
         IList list = to.SomeList;
-        Assert.AreEqual(3, list.Count);
-        Assert.AreEqual("Rob Harrop", list[0]);
-        Assert.AreEqual("Rod Johnson", list[1]);
-        Assert.AreEqual("Juergen Hoeller", list[2]);
+        Assert.That(list.Count, Is.EqualTo(3));
+        Assert.That(list[0], Is.EqualTo("Rob Harrop"));
+        Assert.That(list[1], Is.EqualTo("Rod Johnson"));
+        Assert.That(list[2], Is.EqualTo("Juergen Hoeller"));
     }
 
     [Test]
@@ -139,9 +139,9 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithListOfRefsInConstructor");
         IList list = to.SomeList;
-        Assert.IsNotNull(list);
-        Assert.AreEqual(3, list.Count);
-        Assert.IsNotNull(list[2]);
+        Assert.That(list, Is.Not.Null);
+        Assert.That(list.Count, Is.EqualTo(3));
+        Assert.That(list[2], Is.Not.Null);
         Assert.That(list[2], Is.InstanceOf(typeof(TestObject)));
     }
 
@@ -150,9 +150,9 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithSetInConstructor");
         ISet set = to.SomeSet;
-        Assert.AreEqual(2, set.Count);
-        Assert.IsTrue(set.Contains("Rob Harrop"));
-        Assert.IsTrue(set.Contains("Sally Greenwood"));
+        Assert.That(set.Count, Is.EqualTo(2));
+        Assert.That(set.Contains("Rob Harrop"), Is.True);
+        Assert.That(set.Contains("Sally Greenwood"), Is.True);
     }
 
     [Test]
@@ -160,15 +160,15 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithSetOfRefsInConstructor");
         ISet set = to.SomeSet;
-        Assert.IsNotNull(set);
-        Assert.AreEqual(2, set.Count);
+        Assert.That(set, Is.Not.Null);
+        Assert.That(set.Count, Is.EqualTo(2));
         IEnumerator enumerator = set.GetEnumerator();
         enumerator.MoveNext();
         enumerator.MoveNext();
         object o = enumerator.Current;
-        Assert.IsNotNull(o);
+        Assert.That(o, Is.Not.Null);
         Assert.That(o, Is.InstanceOf(typeof(TestObject)));
-        Assert.AreEqual("Sally", ((TestObject) o).Name);
+        Assert.That(((TestObject) o).Name, Is.EqualTo("Sally"));
     }
 
     [Test]
@@ -176,10 +176,10 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithMapInConstructor");
         IDictionary map = to.SomeMap;
-        Assert.AreEqual(3, map.Count);
-        Assert.AreEqual("Sally", map["Rob"]);
-        Assert.AreEqual("Kerry", map["Rod"]);
-        Assert.AreEqual("Eva", map["Juergen"]);
+        Assert.That(map.Count, Is.EqualTo(3));
+        Assert.That(map["Rob"], Is.EqualTo("Sally"));
+        Assert.That(map["Rod"], Is.EqualTo("Kerry"));
+        Assert.That(map["Juergen"], Is.EqualTo("Eva"));
     }
 
     [Test]
@@ -187,11 +187,11 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithMapOfRefsInConstructor");
         IDictionary map = to.SomeMap;
-        Assert.IsNotNull(map);
-        Assert.AreEqual(2, map.Count);
-        Assert.IsNotNull(map["Rob"]);
+        Assert.That(map, Is.Not.Null);
+        Assert.That(map.Count, Is.EqualTo(2));
+        Assert.That(map["Rob"], Is.Not.Null);
         Assert.That(map["Rob"], Is.InstanceOf(typeof(TestObject)));
-        Assert.AreEqual("Sally", ((TestObject) map["Rob"]).Name);
+        Assert.That(((TestObject) map["Rob"]).Name, Is.EqualTo("Sally"));
     }
 
     [Test]
@@ -199,9 +199,9 @@ public class CollectionMergingTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithPropsInConstructor");
         NameValueCollection props = to.SomeNameValueCollection;
-        Assert.AreEqual(3, props.Count);
-        Assert.AreEqual("Sally", props["Rob"]);
-        Assert.AreEqual("Kerry", props["Rod"]);
-        Assert.AreEqual("Eva", props["Juergen"]);
+        Assert.That(props.Count, Is.EqualTo(3));
+        Assert.That(props["Rob"], Is.EqualTo("Sally"));
+        Assert.That(props["Rod"], Is.EqualTo("Kerry"));
+        Assert.That(props["Juergen"], Is.EqualTo("Eva"));
     }
 }

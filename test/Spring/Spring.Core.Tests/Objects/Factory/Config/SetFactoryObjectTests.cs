@@ -74,6 +74,6 @@ public sealed class SetFactoryObjectTests
     [Test]
     public void ObjectTypeReallyIsISet()
     {
-        Assert.AreEqual(typeof(ISet), new SetFactoryObject().ObjectType);
+        Assert.That(new SetFactoryObject().ObjectType, Is.EqualTo(typeof(ISet)));
     }
 }

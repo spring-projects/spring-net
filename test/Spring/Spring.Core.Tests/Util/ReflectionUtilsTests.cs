@@ -134,7 +134,7 @@ public sealed class ReflectionUtilsTests
     {
         if (source.IndexOf(toSearch) == -1)
         {
-            Assert.Fail("Expected '{0}' contained in source, but not found. Source was {1}", toSearch, source);
+            Assert.Fail($"Expected '{toSearch}' contained in source, but not found. Source was {source}");
         }
     }
 
@@ -151,7 +151,7 @@ public sealed class ReflectionUtilsTests
         }
         catch (ArgumentNullException ex)
         {
-            Assert.AreEqual("methodInfo", ex.ParamName);
+            Assert.That(ex.ParamName, Is.EqualTo("methodInfo"));
         }
 
         try
@@ -161,7 +161,7 @@ public sealed class ReflectionUtilsTests
         }
         catch (ArgumentNullException ex)
         {
-            Assert.AreEqual("implementingType", ex.ParamName);
+            Assert.That(ex.ParamName, Is.EqualTo("implementingType"));
         }
 
         try
@@ -172,17 +172,17 @@ public sealed class ReflectionUtilsTests
         }
         catch (ArgumentException ex)
         {
-            Assert.AreEqual("methodInfo and implementingType are unrelated", ex.Message);
+            Assert.That(ex.Message, Is.EqualTo("methodInfo and implementingType are unrelated"));
         }
 
         method = ReflectionUtils.MapInterfaceMethodToImplementationIfNecessary(typeof(MapsInterfaceMethodClass).GetMethod("SomeMethodA"), typeof(MapsInterfaceMethodClass));
-        Assert.AreSame(instance.MethodAInfo, method);
+        Assert.That(method, Is.SameAs(instance.MethodAInfo));
         method = ReflectionUtils.MapInterfaceMethodToImplementationIfNecessary(typeof(IMapsInterfaceMethodInterface).GetMethod("SomeMethodA"), typeof(MapsInterfaceMethodClass));
-        Assert.AreSame(instance.MethodAInfo, method);
+        Assert.That(method, Is.SameAs(instance.MethodAInfo));
         method = ReflectionUtils.MapInterfaceMethodToImplementationIfNecessary(typeof(IMapsInterfaceMethodInterface).GetMethod("SomeMethodB"), typeof(MapsInterfaceMethodClass));
-        Assert.AreSame(instance.MethodBInfo, method);
+        Assert.That(method, Is.SameAs(instance.MethodBInfo));
         method = ReflectionUtils.MapInterfaceMethodToImplementationIfNecessary(typeof(IMapsInterfaceMethodInterface).GetProperty("SomeProperty").GetGetMethod(), typeof(MapsInterfaceMethodClass));
-        Assert.AreSame(instance.PropGetterInfo, method);
+        Assert.That(method, Is.SameAs(instance.PropGetterInfo));
     }
 
     public class Foo
@@ -219,9 +219,9 @@ public sealed class ReflectionUtilsTests
         ConstructorInfo best = ReflectionUtils.GetConstructorByArgumentValues(typeof(Foo).GetConstructors(), null);
         Foo foo = (Foo) best.Invoke(args);
 
-        Assert.AreEqual("", foo.a);
-        Assert.AreEqual(-1, foo.b);
-        Assert.AreEqual('0', foo.c);
+        Assert.That(foo.a, Is.Empty);
+        Assert.That(foo.b, Is.EqualTo(-1));
+        Assert.That(foo.c, Is.EqualTo('0'));
     }
 
     [Test(Description = "http://jira.springframework.org/browse/SPRNET-992")]
@@ -231,9 +231,9 @@ public sealed class ReflectionUtilsTests
         ConstructorInfo best = ReflectionUtils.GetConstructorByArgumentValues(typeof(Foo).GetConstructors(), args);
         Foo foo = (Foo) best.Invoke(args);
 
-        Assert.AreEqual("", foo.a);
-        Assert.AreEqual(-1, foo.b);
-        Assert.AreEqual('0', foo.c);
+        Assert.That(foo.a, Is.Empty);
+        Assert.That(foo.b, Is.EqualTo(-1));
+        Assert.That(foo.c, Is.EqualTo('0'));
     }
 
     [Test(Description = "http://jira.springframework.org/browse/SPRNET-992")]
@@ -243,9 +243,9 @@ public sealed class ReflectionUtilsTests
         ConstructorInfo best = ReflectionUtils.GetConstructorByArgumentValues(typeof(Foo).GetConstructors(), args);
         Foo foo = (Foo) best.Invoke(args);
 
-        Assert.AreEqual("b", foo.a);
-        Assert.AreEqual(-1, foo.b);
-        Assert.AreEqual('0', foo.c);
+        Assert.That(foo.a, Is.EqualTo("b"));
+        Assert.That(foo.b, Is.EqualTo(-1));
+        Assert.That(foo.c, Is.EqualTo('0'));
     }
 
     [Test]
@@ -254,7 +254,7 @@ public sealed class ReflectionUtilsTests
         Type[] expectedParameterTypes = new Type[] { typeof(string) };
         MethodInfo method = typeof(ReflectionUtilsObject).GetMethod("BadSpanglish");
         Type[] parameterTypes = ReflectionUtils.GetParameterTypes(method);
-        Assert.IsTrue(ArrayUtils.AreEqual(expectedParameterTypes, parameterTypes));
+        Assert.That(ArrayUtils.AreEqual(expectedParameterTypes, parameterTypes), Is.True);
     }
 
     [Test]
@@ -286,7 +286,7 @@ public sealed class ReflectionUtilsTests
     {
         MethodInfo[] clonesMethods = typeof(ReflectionUtilsObjectClone).GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
         MethodInfo[] foundMethods = ReflectionUtils.GetMatchingMethods(typeof(ReflectionUtilsObject), clonesMethods, true);
-        Assert.AreEqual(clonesMethods.Length, foundMethods.Length);
+        Assert.That(foundMethods.Length, Is.EqualTo(clonesMethods.Length));
     }
 
     [Test]
@@ -304,7 +304,7 @@ public sealed class ReflectionUtilsTests
         MethodInfo[] clonesMethods = typeof(ReflectionUtilsObjectClone).GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Instance);
         MethodInfo[] foundMethods = ReflectionUtils.GetMatchingMethods(typeof(ReflectionUtilsObject), clonesMethods, false);
         // obviously is not strict, 'cos we got here without throwing an exception...
-        Assert.AreEqual(clonesMethods.Length, foundMethods.Length);
+        Assert.That(foundMethods.Length, Is.EqualTo(clonesMethods.Length));
     }
 
     [Test]
@@ -322,7 +322,7 @@ public sealed class ReflectionUtilsTests
         MethodInfo[] clonesMethods = typeof(ReflectionUtilsObjectBadClone).GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
         MethodInfo[] foundMethods = ReflectionUtils.GetMatchingMethods(typeof(ReflectionUtilsObject), clonesMethods, false);
         // obviously is not strict, 'cos we got here without throwing an exception...
-        Assert.AreEqual(clonesMethods.Length, foundMethods.Length);
+        Assert.That(foundMethods.Length, Is.EqualTo(clonesMethods.Length));
     }
 
     [Test]
@@ -330,7 +330,7 @@ public sealed class ReflectionUtilsTests
     {
         MethodInfo method = typeof(ReflectionUtilsObject).GetMethod("Spanglish");
         Type[] types = new Type[] { typeof(string), typeof(object[]) };
-        Assert.IsTrue(ReflectionUtils.ParameterTypesMatch(method, types));
+        Assert.That(ReflectionUtils.ParameterTypesMatch(method, types), Is.True);
     }
 
     [Test]
@@ -339,38 +339,38 @@ public sealed class ReflectionUtilsTests
         Type[] types = new Type[] { typeof(string), typeof(object[]) };
 
         MethodInfo method = typeof(ReflectionUtilsObject).GetMethod("BadSpanglish");
-        Assert.IsFalse(ReflectionUtils.ParameterTypesMatch(method, types));
+        Assert.That(ReflectionUtils.ParameterTypesMatch(method, types), Is.False);
         method = typeof(ReflectionUtilsObject).GetMethod("WickedSpanglish");
-        Assert.IsFalse(ReflectionUtils.ParameterTypesMatch(method, types));
+        Assert.That(ReflectionUtils.ParameterTypesMatch(method, types), Is.False);
     }
 
     [Test]
     public void GetDefaultValue()
     {
-        Assert.IsNull(ReflectionUtils.GetDefaultValue(GetType()));
-        Assert.AreEqual(Cuts.Superficial, ReflectionUtils.GetDefaultValue(typeof(Cuts)));
-        Assert.AreEqual(false, ReflectionUtils.GetDefaultValue(typeof(bool)));
-        Assert.AreEqual(DateTime.MinValue, ReflectionUtils.GetDefaultValue(typeof(DateTime)));
-        Assert.AreEqual(Char.MinValue, ReflectionUtils.GetDefaultValue(typeof(char)));
-        Assert.AreEqual(0, ReflectionUtils.GetDefaultValue(typeof(long)));
-        Assert.AreEqual(0, ReflectionUtils.GetDefaultValue(typeof(int)));
-        Assert.AreEqual(0, ReflectionUtils.GetDefaultValue(typeof(short)));
+        Assert.That(ReflectionUtils.GetDefaultValue(GetType()), Is.Null);
+        Assert.That(ReflectionUtils.GetDefaultValue(typeof(Cuts)), Is.EqualTo(Cuts.Superficial));
+        Assert.That(ReflectionUtils.GetDefaultValue(typeof(bool)), Is.EqualTo(false));
+        Assert.That(ReflectionUtils.GetDefaultValue(typeof(DateTime)), Is.EqualTo(DateTime.MinValue));
+        Assert.That(ReflectionUtils.GetDefaultValue(typeof(char)), Is.EqualTo(Char.MinValue));
+        Assert.That(ReflectionUtils.GetDefaultValue(typeof(long)), Is.EqualTo(0));
+        Assert.That(ReflectionUtils.GetDefaultValue(typeof(int)), Is.EqualTo(0));
+        Assert.That(ReflectionUtils.GetDefaultValue(typeof(short)), Is.EqualTo(0));
     }
 
     [Test]
     public void PropertyIsIndexer()
     {
-        Assert.IsTrue(ReflectionUtils.PropertyIsIndexer("Item", typeof(TestObject)));
-        Assert.IsFalse(ReflectionUtils.PropertyIsIndexer("Item", typeof(SideEffectObject)));
-        Assert.IsFalse(ReflectionUtils.PropertyIsIndexer("Count", typeof(SideEffectObject)));
-        Assert.IsTrue(ReflectionUtils.PropertyIsIndexer("MyItem", typeof(ObjectWithNonDefaultIndexerName)));
+        Assert.That(ReflectionUtils.PropertyIsIndexer("Item", typeof(TestObject)), Is.True);
+        Assert.That(ReflectionUtils.PropertyIsIndexer("Item", typeof(SideEffectObject)), Is.False);
+        Assert.That(ReflectionUtils.PropertyIsIndexer("Count", typeof(SideEffectObject)), Is.False);
+        Assert.That(ReflectionUtils.PropertyIsIndexer("MyItem", typeof(ObjectWithNonDefaultIndexerName)), Is.True);
     }
 
     [Test]
     public void MethodIsOnOneOfTheseInterfaces()
     {
         MethodInfo method = typeof(ReflectionUtilsObject).GetMethod("Spanglish");
-        Assert.IsTrue(ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, new Type[] { typeof(IFoo) }));
+        Assert.That(ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, new Type[] { typeof(IFoo) }), Is.True);
     }
 
     [Test]
@@ -391,15 +391,15 @@ public sealed class ReflectionUtilsTests
     public void MethodIsOnOneOfTheseInterfacesWithNullTypes()
     {
         MethodInfo method = typeof(ReflectionUtilsObject).GetMethod("Spanglish");
-        Assert.IsFalse(ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, null));
+        Assert.That(ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, null), Is.False);
     }
 
     [Test]
     public void MethodIsOnOneOfTheseInterfacesMultiple()
     {
         MethodInfo method = typeof(RequiredTestObject).GetMethod("set_ObjectFactory");
-        Assert.IsNotNull(method, "Could not get setter property for ObjectFactory");
-        Assert.IsTrue(ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, new Type[] { typeof(IObjectNameAware), typeof(IObjectFactoryAware) }));
+        Assert.That(method, Is.Not.Null, "Could not get setter property for ObjectFactory");
+        Assert.That(ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, new Type[] { typeof(IObjectNameAware), typeof(IObjectFactoryAware) }), Is.True);
     }
 
     [Test]
@@ -421,7 +421,7 @@ public sealed class ReflectionUtilsTests
         string expected = "Spring.Util.ReflectionUtilsObject::Spanglish(System.String,System.Object[])";
         Type[] pTypes = (Type[]) list.ToArray(typeof(Type));
         string actual = ReflectionUtils.GetSignature(method.DeclaringType, method.Name, pTypes);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [Test]
@@ -429,9 +429,9 @@ public sealed class ReflectionUtilsTests
     {
         Type[] expected = new Type[] { typeof(IFoo), typeof(IBar) };
         IList<Type> actual = ReflectionUtils.ToInterfaceArray(typeof(IBar));
-        Assert.AreEqual(expected.Length, actual.Count);
-        Assert.AreEqual(expected[0], actual[0]);
-        Assert.AreEqual(expected[1], actual[1]);
+        Assert.That(actual.Count, Is.EqualTo(expected.Length));
+        Assert.That(actual[0], Is.EqualTo(expected[0]));
+        Assert.That(actual[1], Is.EqualTo(expected[1]));
     }
 
     [Test]
@@ -447,7 +447,7 @@ public sealed class ReflectionUtilsTests
             typeof(ReflectionUtilsObject),
             "Spanglish",
             new Type[] { typeof(string), typeof(object[]) });
-        Assert.IsNotNull(actual);
+        Assert.That(actual, Is.Not.Null);
     }
 
     [Test]
@@ -457,7 +457,7 @@ public sealed class ReflectionUtilsTests
             typeof(ExplicitFoo),
             "Spring.Util.IFoo.Spanglish",
             new Type[] { typeof(string), typeof(object[]) });
-        Assert.IsNotNull(actual);
+        Assert.That(actual, Is.Not.Null);
     }
 
     [Test]
@@ -467,7 +467,7 @@ public sealed class ReflectionUtilsTests
             typeof(ReflectionUtilsObject),
             "spAngLISh",
             new Type[] { typeof(string), typeof(object[]) });
-        Assert.IsNotNull(actual, "ReflectionUtils.GetMethod would appear to be case sensitive.");
+        Assert.That(actual, Is.Not.Null, "ReflectionUtils.GetMethod would appear to be case sensitive.");
     }
 
     [Test]
@@ -488,22 +488,22 @@ public sealed class ReflectionUtilsTests
         CustomAttributeBuilder builder = null;
 
         builder = ReflectionUtils.CreateCustomAttribute(typeof(MyCustomAttribute));
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         builder = ReflectionUtils.CreateCustomAttribute(typeof(MyCustomAttribute), "Rick");
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         builder = ReflectionUtils.CreateCustomAttribute(typeof(MyCustomAttribute), "Rick");
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         builder = ReflectionUtils.CreateCustomAttribute(new MyCustomAttribute("Rick"));
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         builder = ReflectionUtils.CreateCustomAttribute(typeof(MyCustomAttribute), new MyCustomAttribute("Rick"));
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         builder = ReflectionUtils.CreateCustomAttribute(typeof(MyCustomAttribute), new object[] { "Rick" }, new MyCustomAttribute("Evans"));
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         // TODO : actually emit the attribute and check it...
     }
@@ -519,7 +519,7 @@ public sealed class ReflectionUtilsTests
         foreach (CustomAttributeData customAttributeData in attributes)
         {
             builder = ReflectionUtils.CreateCustomAttribute(customAttributeData);
-            Assert.IsNotNull(builder);
+            Assert.That(builder, Is.Not.Null);
         }
     }
 #endif
@@ -533,7 +533,7 @@ public sealed class ReflectionUtilsTests
         foreach (CustomAttributeData customAttributeData in attributes)
         {
             builder = ReflectionUtils.CreateCustomAttribute(customAttributeData);
-            Assert.IsNotNull(builder);
+            Assert.That(builder, Is.Not.Null);
         }
     }
 
@@ -546,7 +546,7 @@ public sealed class ReflectionUtilsTests
         foreach (CustomAttributeData customAttributeData in attributes)
         {
             builder = ReflectionUtils.CreateCustomAttribute(customAttributeData);
-            Assert.IsNotNull(builder);
+            Assert.That(builder, Is.Not.Null);
         }
     }
 
@@ -559,7 +559,7 @@ public sealed class ReflectionUtilsTests
         foreach (CustomAttributeData customAttributeData in attributes)
         {
             builder = ReflectionUtils.CreateCustomAttribute(customAttributeData);
-            Assert.IsNotNull(builder);
+            Assert.That(builder, Is.Not.Null);
         }
     }
 
@@ -572,7 +572,7 @@ public sealed class ReflectionUtilsTests
         foreach (CustomAttributeData customAttributeData in attributes)
         {
             builder = ReflectionUtils.CreateCustomAttribute(customAttributeData);
-            Assert.IsNotNull(builder);
+            Assert.That(builder, Is.Not.Null);
         }
     }
 
@@ -585,7 +585,7 @@ public sealed class ReflectionUtilsTests
         foreach (CustomAttributeData customAttributeData in attributes)
         {
             builder = ReflectionUtils.CreateCustomAttribute(customAttributeData);
-            Assert.IsNotNull(builder);
+            Assert.That(builder, Is.Not.Null);
         }
     }
 
@@ -690,13 +690,13 @@ public sealed class ReflectionUtilsTests
     {
         CustomAttributeBuilder builder = null;
         builder = ReflectionUtils.CreateCustomAttribute(typeof(AnotherCustomAttribute));
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         AnotherCustomAttribute att
             = (AnotherCustomAttribute)CheckForPresenceOfCustomAttribute(builder, typeof(AnotherCustomAttribute));
-        Assert.IsNull(att.Name);
-        Assert.AreEqual(0, att.Age);
-        Assert.IsFalse(att.HasSwallowedExplosives);
+        Assert.That(att.Name, Is.Null);
+        Assert.That(att.Age, Is.EqualTo(0));
+        Assert.That(att.HasSwallowedExplosives, Is.False);
     }
 
     [Test]
@@ -705,13 +705,13 @@ public sealed class ReflectionUtilsTests
         CustomAttributeBuilder builder = null;
         AnotherCustomAttribute source = new AnotherCustomAttribute("Rick", 30, true);
         builder = ReflectionUtils.CreateCustomAttribute(source);
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         AnotherCustomAttribute att
             = (AnotherCustomAttribute)CheckForPresenceOfCustomAttribute(builder, typeof(AnotherCustomAttribute));
-        Assert.AreEqual(source.Name, att.Name);
-        Assert.AreEqual(source.Age, att.Age);
-        Assert.AreEqual(source.HasSwallowedExplosives, att.HasSwallowedExplosives);
+        Assert.That(att.Name, Is.EqualTo(source.Name));
+        Assert.That(att.Age, Is.EqualTo(source.Age));
+        Assert.That(att.HasSwallowedExplosives, Is.EqualTo(source.HasSwallowedExplosives));
     }
 
     [Test]
@@ -724,13 +724,13 @@ public sealed class ReflectionUtilsTests
         {
             expectedName, expectedAge, true
         });
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         AnotherCustomAttribute att
             = (AnotherCustomAttribute)CheckForPresenceOfCustomAttribute(builder, typeof(AnotherCustomAttribute));
-        Assert.AreEqual(expectedName, att.Name);
-        Assert.AreEqual(expectedAge, att.Age);
-        Assert.IsTrue(att.HasSwallowedExplosives);
+        Assert.That(att.Name, Is.EqualTo(expectedName));
+        Assert.That(att.Age, Is.EqualTo(expectedAge));
+        Assert.That(att.HasSwallowedExplosives, Is.True);
     }
 
     [Test]
@@ -744,13 +744,13 @@ public sealed class ReflectionUtilsTests
         {
             "Hoop", 2, true
         }, source);
-        Assert.IsNotNull(builder);
+        Assert.That(builder, Is.Not.Null);
 
         AnotherCustomAttribute att
             = (AnotherCustomAttribute)CheckForPresenceOfCustomAttribute(builder, typeof(AnotherCustomAttribute));
-        Assert.AreEqual(expectedName, att.Name);
-        Assert.AreEqual(expectedAge, att.Age);
-        Assert.IsFalse(att.HasSwallowedExplosives);
+        Assert.That(att.Name, Is.EqualTo(expectedName));
+        Assert.That(att.Age, Is.EqualTo(expectedAge));
+        Assert.That(att.HasSwallowedExplosives, Is.False);
     }
 #endif
 
@@ -759,25 +759,25 @@ public sealed class ReflectionUtilsTests
     {
         Type testType = typeof(ExtendedReflectionUtilsObject);
         // declared method...
-        Assert.IsTrue(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Declared"));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Declared"), Is.True);
         // case insensitive method...
-        Assert.IsTrue(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "deCLAReD"));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "deCLAReD"), Is.True);
         // superclass method...
-        Assert.IsTrue(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Spanglish"));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Spanglish"), Is.True);
         // static method...
-        Assert.IsTrue(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Static"));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Static"), Is.True);
         // protected method...
-        Assert.IsTrue(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Protected"));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Protected"), Is.True);
         // non existent method...
-        Assert.IsFalse(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Sponglish"));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(testType, "Sponglish"), Is.False);
         // null type...
-        Assert.IsFalse(ReflectionUtils.HasAtLeastOneMethodWithName(null, "Spanglish"));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(null, "Spanglish"), Is.False);
         // null method name...
-        Assert.IsFalse(ReflectionUtils.HasAtLeastOneMethodWithName(testType, null));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(testType, null), Is.False);
         // empty method name...
-        Assert.IsFalse(ReflectionUtils.HasAtLeastOneMethodWithName(testType, ""));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(testType, ""), Is.False);
         // all nulls...
-        Assert.IsFalse(ReflectionUtils.HasAtLeastOneMethodWithName(null, null));
+        Assert.That(ReflectionUtils.HasAtLeastOneMethodWithName(null, null), Is.False);
     }
 
     [Test]
@@ -789,13 +789,13 @@ public sealed class ReflectionUtilsTests
     [Test]
     public void GetTypeOfOrType()
     {
-        Assert.AreEqual(typeof(string), ReflectionUtils.TypeOfOrType(typeof(string)));
+        Assert.That(ReflectionUtils.TypeOfOrType(typeof(string)), Is.EqualTo(typeof(string)));
     }
 
     [Test]
     public void GetTypeOfOrTypeWithNonNullType()
     {
-        Assert.AreEqual(typeof(string), ReflectionUtils.TypeOfOrType(string.Empty));
+        Assert.That(ReflectionUtils.TypeOfOrType(string.Empty), Is.EqualTo(typeof(string)));
     }
 
     [Test]
@@ -804,23 +804,23 @@ public sealed class ReflectionUtilsTests
         Type[] actual = ReflectionUtils.GetTypes(
             new object[] { 1, "I've never been to Taco Bell (sighs).", new ReflectionUtilsObject() });
         Type[] expected = new Type[] { typeof(int), typeof(string), typeof(ReflectionUtilsObject), };
-        Assert.IsTrue(ArrayUtils.AreEqual(expected, actual), "The ReflectionUtils.GetTypes method did not return a correct Type [] array. Yep, that's as helpful as it gets.");
+        Assert.That(ArrayUtils.AreEqual(expected, actual), Is.True, "The ReflectionUtils.GetTypes method did not return a correct Type [] array. Yep, that's as helpful as it gets.");
     }
 
     [Test]
     public void GetTypesWithEmptyArrayArgument()
     {
         Type[] actual = ReflectionUtils.GetTypes(new object[] { });
-        Assert.IsNotNull(actual, "The ReflectionUtils.GetTypes method returned null when given an empty array. Must return an empty Type [] array.");
-        Assert.IsTrue(actual.Length == 0, "The ReflectionUtils.GetTypes method returned a Type [] that had some elements in it when given an empty array. Must return an empty Type [] array.");
+        Assert.That(actual, Is.Not.Null, "The ReflectionUtils.GetTypes method returned null when given an empty array. Must return an empty Type [] array.");
+        Assert.That(actual.Length == 0, Is.True, "The ReflectionUtils.GetTypes method returned a Type [] that had some elements in it when given an empty array. Must return an empty Type [] array.");
     }
 
     [Test]
     public void GetTypesWithNullArrayArgument()
     {
         Type[] actual = ReflectionUtils.GetTypes(null);
-        Assert.IsNotNull(actual, "The ReflectionUtils.GetTypes method returned null when given null. Must return an empty Type [] array.");
-        Assert.IsTrue(actual.Length == 0, "The ReflectionUtils.GetTypes method returned a Type [] that had some elements in it when given null. Must return an empty Type [] array.");
+        Assert.That(actual, Is.Not.Null, "The ReflectionUtils.GetTypes method returned null when given null. Must return an empty Type [] array.");
+        Assert.That(actual.Length == 0, Is.True, "The ReflectionUtils.GetTypes method returned a Type [] that had some elements in it when given null. Must return an empty Type [] array.");
     }
 
     [Test]
@@ -834,11 +834,11 @@ public sealed class ReflectionUtilsTests
     {
         MethodInfo method = GetType().GetMethod("Add");
         Type[] types = ReflectionUtils.GetParameterTypes(method);
-        Assert.IsNotNull(types);
-        Assert.AreEqual(2, types.Length);
+        Assert.That(types, Is.Not.Null);
+        Assert.That(types.Length, Is.EqualTo(2));
         // first method parameter is byRef, so type name must end in '&'
-        Assert.AreEqual("System.Int32&", types[0].FullName);
-        Assert.AreEqual("System.Int32", types[1].FullName);
+        Assert.That(types[0].FullName, Is.EqualTo("System.Int32&"));
+        Assert.That(types[1].FullName, Is.EqualTo("System.Int32"));
     }
 
     [Test]
@@ -851,15 +851,15 @@ public sealed class ReflectionUtilsTests
         MethodInfo[] candidateMethods = new MethodInfo[] { type.GetMethod("ParamOverloadedMethod", new Type[] { typeof(string), typeof(string), typeof(string) }), type.GetMethod("ParamOverloadedMethod", new Type[] { typeof(string), typeof(string), typeof(bool) }), type.GetMethod("ParamOverloadedMethod", new Type[] { typeof(string), typeof(string), typeof(string), typeof(string), typeof(object[]) }) };
 
         // ensure no one changed our test class
-        Assert.IsNotNull(candidateMethods[0]);
-        Assert.IsNotNull(candidateMethods[1]);
-        Assert.IsNotNull(candidateMethods[2]);
-        Assert.AreEqual("ThreeStringsOverload", foo.ParamOverloadedMethod(string.Empty, string.Empty, string.Empty));
-        Assert.AreEqual("TwoStringsAndABoolOverload", foo.ParamOverloadedMethod(string.Empty, string.Empty, default(bool)));
-        Assert.AreEqual("FourStringsAndAParamsCollectionOverload", foo.ParamOverloadedMethod(string.Empty, string.Empty, string.Empty, string.Empty, typedArg));
+        Assert.That(candidateMethods[0], Is.Not.Null);
+        Assert.That(candidateMethods[1], Is.Not.Null);
+        Assert.That(candidateMethods[2], Is.Not.Null);
+        Assert.That(foo.ParamOverloadedMethod(string.Empty, string.Empty, string.Empty), Is.EqualTo("ThreeStringsOverload"));
+        Assert.That(foo.ParamOverloadedMethod(string.Empty, string.Empty, default(bool)), Is.EqualTo("TwoStringsAndABoolOverload"));
+        Assert.That(foo.ParamOverloadedMethod(string.Empty, string.Empty, string.Empty, string.Empty, typedArg), Is.EqualTo("FourStringsAndAParamsCollectionOverload"));
 
         MethodInfo resolvedMethod = ReflectionUtils.GetMethodByArgumentValues(candidateMethods, new object[] { string.Empty, string.Empty, string.Empty, string.Empty, typedArg });
-        Assert.AreSame(candidateMethods[2], resolvedMethod);
+        Assert.That(resolvedMethod, Is.SameAs(candidateMethods[2]));
     }
 
     [Test]
@@ -872,15 +872,15 @@ public sealed class ReflectionUtilsTests
         MethodInfo[] candidateMethods = new MethodInfo[] { type.GetMethod("MethodWithSimilarArguments", new Type[] { typeof(int), typeof(ICollection) }), type.GetMethod("MethodWithSimilarArguments", new Type[] { typeof(int), typeof(GetMethodByArgumentValuesTarget.DummyArgumentType[]) }), type.GetMethod("MethodWithSimilarArguments", new Type[] { typeof(int), typeof(object[]) }) };
 
         // ensure no one changed our test class
-        Assert.IsNotNull(candidateMethods[0]);
-        Assert.IsNotNull(candidateMethods[1]);
-        Assert.IsNotNull(candidateMethods[2]);
-        Assert.AreEqual("ParamArrayMatch", foo.MethodWithSimilarArguments(1, new object()));
-        Assert.AreEqual("ExactMatch", foo.MethodWithSimilarArguments(1, typedArg));
-        Assert.AreEqual("AssignableMatch", foo.MethodWithSimilarArguments(1, (ICollection) typedArg));
+        Assert.That(candidateMethods[0], Is.Not.Null);
+        Assert.That(candidateMethods[1], Is.Not.Null);
+        Assert.That(candidateMethods[2], Is.Not.Null);
+        Assert.That(foo.MethodWithSimilarArguments(1, new object()), Is.EqualTo("ParamArrayMatch"));
+        Assert.That(foo.MethodWithSimilarArguments(1, typedArg), Is.EqualTo("ExactMatch"));
+        Assert.That(foo.MethodWithSimilarArguments(1, (ICollection) typedArg), Is.EqualTo("AssignableMatch"));
 
         MethodInfo resolvedMethod = ReflectionUtils.GetMethodByArgumentValues(candidateMethods, new object[] { 1, typedArg });
-        Assert.AreSame(candidateMethods[1], resolvedMethod);
+        Assert.That(resolvedMethod, Is.SameAs(candidateMethods[1]));
     }
 
     [Test]
@@ -893,17 +893,17 @@ public sealed class ReflectionUtilsTests
         MethodInfo[] candidateMethods = new MethodInfo[] { type.GetMethod("MethodWithSimilarArguments", new Type[] { typeof(int), typeof(ICollection) }), type.GetMethod("MethodWithSimilarArguments", new Type[] { typeof(int), typeof(GetMethodByArgumentValuesTarget.DummyArgumentType[]) }), type.GetMethod("MethodWithSimilarArguments", new Type[] { typeof(int), typeof(object[]) }), type.GetMethod("MethodWithNullableArgument", new Type[] { typeof(int?) }) };
 
         // ensure no one changed our test class
-        Assert.IsNotNull(candidateMethods[0]);
-        Assert.IsNotNull(candidateMethods[1]);
-        Assert.IsNotNull(candidateMethods[2]);
-        Assert.IsNotNull(candidateMethods[3]);
-        Assert.AreEqual("ParamArrayMatch", foo.MethodWithSimilarArguments(1, new object()));
-        Assert.AreEqual("ExactMatch", foo.MethodWithSimilarArguments(1, typedArg));
-        Assert.AreEqual("AssignableMatch", foo.MethodWithSimilarArguments(1, (ICollection) typedArg));
-        Assert.AreEqual("NullableArgumentMatch", foo.MethodWithNullableArgument(null));
+        Assert.That(candidateMethods[0], Is.Not.Null);
+        Assert.That(candidateMethods[1], Is.Not.Null);
+        Assert.That(candidateMethods[2], Is.Not.Null);
+        Assert.That(candidateMethods[3], Is.Not.Null);
+        Assert.That(foo.MethodWithSimilarArguments(1, new object()), Is.EqualTo("ParamArrayMatch"));
+        Assert.That(foo.MethodWithSimilarArguments(1, typedArg), Is.EqualTo("ExactMatch"));
+        Assert.That(foo.MethodWithSimilarArguments(1, (ICollection) typedArg), Is.EqualTo("AssignableMatch"));
+        Assert.That(foo.MethodWithNullableArgument(null), Is.EqualTo("NullableArgumentMatch"));
 
         MethodInfo resolvedMethod = ReflectionUtils.GetMethodByArgumentValues(candidateMethods, new object[] { null });
-        Assert.AreSame(candidateMethods[3], resolvedMethod);
+        Assert.That(resolvedMethod, Is.SameAs(candidateMethods[3]));
     }
 
     [Test]
@@ -914,26 +914,26 @@ public sealed class ReflectionUtilsTests
         ConstructorInfo[] candidateConstructors = new ConstructorInfo[] { type.GetConstructor(new Type[] { typeof(int), typeof(ICollection) }), type.GetConstructor(new Type[] { typeof(int), typeof(GetMethodByArgumentValuesTarget.DummyArgumentType[]) }), type.GetConstructor(new Type[] { typeof(int), typeof(object[]) }) };
 
         // ensure noone changed our test class
-        Assert.IsNotNull(candidateConstructors[0]);
-        Assert.IsNotNull(candidateConstructors[1]);
-        Assert.IsNotNull(candidateConstructors[2]);
-        Assert.AreEqual("ParamArrayMatch", new GetMethodByArgumentValuesTarget(1, new object()).SelectedConstructor);
-        Assert.AreEqual("ExactMatch", new GetMethodByArgumentValuesTarget(1, typedArg).SelectedConstructor);
-        Assert.AreEqual("AssignableMatch", new GetMethodByArgumentValuesTarget(1, (ICollection) typedArg).SelectedConstructor);
+        Assert.That(candidateConstructors[0], Is.Not.Null);
+        Assert.That(candidateConstructors[1], Is.Not.Null);
+        Assert.That(candidateConstructors[2], Is.Not.Null);
+        Assert.That(new GetMethodByArgumentValuesTarget(1, new object()).SelectedConstructor, Is.EqualTo("ParamArrayMatch"));
+        Assert.That(new GetMethodByArgumentValuesTarget(1, typedArg).SelectedConstructor, Is.EqualTo("ExactMatch"));
+        Assert.That(new GetMethodByArgumentValuesTarget(1, (ICollection) typedArg).SelectedConstructor, Is.EqualTo("AssignableMatch"));
 
         ConstructorInfo resolvedConstructor = ReflectionUtils.GetConstructorByArgumentValues(candidateConstructors, new object[] { 1, typedArg });
-        Assert.AreSame(candidateConstructors[1], resolvedConstructor);
+        Assert.That(resolvedConstructor, Is.SameAs(candidateConstructors[1]));
     }
 
     [Test]
     public void GetInterfaces()
     {
-        Assert.AreEqual(
-            typeof(TestObject).GetInterfaces().Length,
-            ReflectionUtils.GetInterfaces(typeof(TestObject)).Length);
+        Assert.That(
+            ReflectionUtils.GetInterfaces(typeof(TestObject)).Length,
+            Is.EqualTo(typeof(TestObject).GetInterfaces().Length));
 
-        Assert.AreEqual(1, ReflectionUtils.GetInterfaces(typeof(IInterface1)).Length);
-        Assert.AreEqual(4, ReflectionUtils.GetInterfaces(typeof(IInterface2)).Length);
+        Assert.That(ReflectionUtils.GetInterfaces(typeof(IInterface1)).Length, Is.EqualTo(1));
+        Assert.That(ReflectionUtils.GetInterfaces(typeof(IInterface2)).Length, Is.EqualTo(4));
     }
 
     public interface IInterface1
@@ -960,84 +960,84 @@ public sealed class ReflectionUtilsTests
     public void IsTypeVisibleWithInternalType()
     {
         Type type = typeof(InternalType);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleWithPublicNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType.PublicNestedType);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleWithInternalNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType.InternalNestedType);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleWithProtectedInternalNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType.ProtectedInternalNestedType);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleWithProtectedNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType).GetNestedType("ProtectedNestedType", BindingFlags.NonPublic);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleWithPrivateNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType).GetNestedType("PrivateNestedType", BindingFlags.NonPublic);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleWithPublicType()
     {
         Type type = typeof(PublicType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleWithPublicNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType.PublicNestedType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleWithInternalNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType.InternalNestedType);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleWithProtectedInternalNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType.ProtectedInternalNestedType);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleWithProtectedNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType).GetNestedType("ProtectedNestedType", BindingFlags.NonPublic);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleWithPrivateNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType).GetNestedType("PrivateNestedType", BindingFlags.NonPublic);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
+        Assert.That(ReflectionUtils.IsTypeVisible(type), Is.False);
     }
 
     private static readonly string FRIENDLY_ASSEMBLY_NAME = "ReflectionUtils.IsTypeVisible.AssemblyTestName";
@@ -1046,84 +1046,84 @@ public sealed class ReflectionUtilsTests
     public void IsTypeVisibleFromFriendlyAssemblyWithInternalType()
     {
         Type type = typeof(InternalType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithPublicNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType.PublicNestedType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithInternalNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType.InternalNestedType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithProtectedInternalNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType.ProtectedInternalNestedType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithProtectedNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType).GetNestedType("ProtectedNestedType", BindingFlags.NonPublic);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithPrivateNestedTypeOnInternalType()
     {
         Type type = typeof(InternalType).GetNestedType("PrivateNestedType", BindingFlags.NonPublic);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithPublicType()
     {
         Type type = typeof(PublicType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithPublicNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType.PublicNestedType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithInternalNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType.InternalNestedType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithProtectedInternalNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType.ProtectedInternalNestedType);
-        Assert.IsTrue(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.True);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithProtectedNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType).GetNestedType("ProtectedNestedType", BindingFlags.NonPublic);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.False);
     }
 
     [Test]
     public void IsTypeVisibleFromFriendlyAssemblyWithPrivateNestedTypeOnPublicType()
     {
         Type type = typeof(PublicType).GetNestedType("PrivateNestedType", BindingFlags.NonPublic);
-        Assert.IsFalse(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
+        Assert.That(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME), Is.False);
     }
 
     [Test]
@@ -1146,9 +1146,9 @@ public sealed class ReflectionUtilsTests
         IList attrs = ReflectionUtils.GetCustomAttributes(typeof(ClassWithAttributes));
 
 #if NETCOREAPP
-            Assert.AreEqual(1, attrs.Count);
+        Assert.That(attrs.Count, Is.EqualTo(1));
 #else
-        Assert.AreEqual(2, attrs.Count);
+        Assert.That(attrs.Count, Is.EqualTo(2));
 #endif
     }
 
@@ -1158,9 +1158,9 @@ public sealed class ReflectionUtilsTests
         IList attrs = ReflectionUtils.GetCustomAttributes(typeof(ClassWithAttributes).GetMethod("MethodWithAttributes"));
 
 #if NETCOREAPP
-            Assert.AreEqual(1, attrs.Count);
+        Assert.That(attrs.Count, Is.EqualTo(1));
 #else
-        Assert.AreEqual(2, attrs.Count);
+        Assert.That(attrs.Count, Is.EqualTo(2));
 #endif
     }
 
@@ -1170,7 +1170,7 @@ public sealed class ReflectionUtilsTests
         Exception appEx = new ApplicationException();
         Exception ex = ReflectionUtils.GetExplicitBaseException(appEx);
 
-        Assert.AreEqual(ex, appEx);
+        Assert.That(appEx, Is.EqualTo(ex));
     }
 
     [Test]
@@ -1180,7 +1180,7 @@ public sealed class ReflectionUtilsTests
         Exception appEx = new ApplicationException("Test message", dbzEx);
         Exception ex = ReflectionUtils.GetExplicitBaseException(appEx);
 
-        Assert.AreEqual(ex, dbzEx);
+        Assert.That(dbzEx, Is.EqualTo(ex));
     }
 
     [Test]
@@ -1191,7 +1191,7 @@ public sealed class ReflectionUtilsTests
         Exception appEx = new ApplicationException("Test message", sEx);
         Exception ex = ReflectionUtils.GetExplicitBaseException(appEx);
 
-        Assert.AreEqual(ex, dbzEx);
+        Assert.That(dbzEx, Is.EqualTo(ex));
     }
 
     [Test]
@@ -1201,7 +1201,7 @@ public sealed class ReflectionUtilsTests
         Exception appEx = new ApplicationException("Test message", nrEx);
         Exception ex = ReflectionUtils.GetExplicitBaseException(appEx);
 
-        Assert.AreEqual(ex, appEx);
+        Assert.That(appEx, Is.EqualTo(ex));
     }
 
     [Test]
@@ -1209,7 +1209,7 @@ public sealed class ReflectionUtilsTests
     {
         Type t = typeof(System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, int>>);
 
-        Assert.AreEqual("System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, int>>", ReflectionUtils.GetTypeFriendlyName(t));
+        Assert.That(ReflectionUtils.GetTypeFriendlyName(t), Is.EqualTo("System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, int>>"));
     }
 
     public int Add(ref int one, int two)
@@ -1222,11 +1222,11 @@ public sealed class ReflectionUtilsTests
         CustomAttributeBuilder attBuilder, Type attType)
     {
         Attribute[] atts = ApplyAndGetCustomAttributes(attBuilder);
-        Assert.IsNotNull(atts);
-        Assert.IsTrue(atts.Length == 1);
+        Assert.That(atts, Is.Not.Null);
+        Assert.That(atts.Length == 1, Is.True);
         Attribute att = atts[0];
-        Assert.IsNotNull(att);
-        Assert.AreEqual(attType, att.GetType(), "Wrong Attribute applied to the class.");
+        Assert.That(att, Is.Not.Null);
+        Assert.That(att.GetType(), Is.EqualTo(attType), "Wrong Attribute applied to the class.");
         return att;
     }
 
@@ -1565,4 +1565,4 @@ public sealed class ClassWithAttributes
     public void MethodWithAttributes()
     {
     }
-}
+}

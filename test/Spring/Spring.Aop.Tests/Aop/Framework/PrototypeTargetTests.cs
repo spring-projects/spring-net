@@ -43,8 +43,8 @@ public class PrototypeTargetTests
         }
 
         TestInterceptor interceptor = (TestInterceptor) iof.GetObject("testInterceptor");
-        Assert.AreEqual(10, TestObjectImpl.constructionCount);
-        Assert.AreEqual(10, interceptor.invocationCount);
+        Assert.That(TestObjectImpl.constructionCount, Is.EqualTo(10));
+        Assert.That(interceptor.invocationCount, Is.EqualTo(10));
     }
 
     [Test]
@@ -59,8 +59,8 @@ public class PrototypeTargetTests
         }
 
         TestInterceptor interceptor = (TestInterceptor) iof.GetObject("testInterceptor");
-        Assert.AreEqual(1, TestObjectImpl.constructionCount);
-        Assert.AreEqual(10, interceptor.invocationCount);
+        Assert.That(TestObjectImpl.constructionCount, Is.EqualTo(1));
+        Assert.That(interceptor.invocationCount, Is.EqualTo(10));
     }
 
     public interface TestObject

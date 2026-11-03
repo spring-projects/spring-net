@@ -46,11 +46,11 @@ public sealed class RegistryKeyConverterTests
     public void ConvertFrom()
     {
         RegistryKeyConverter rkc = new RegistryKeyConverter();
-        Assert.AreEqual(Registry.CurrentUser, rkc.ConvertFrom("HKEY_CURRENT_USER"));
-        Assert.AreEqual(Registry.CurrentUser.OpenSubKey("Software").Name,
-            ((RegistryKey) rkc.ConvertFrom(@"HKEY_CURRENT_USER\Software")).Name);
-        Assert.AreEqual(Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("Microsoft").Name,
-            ((RegistryKey) rkc.ConvertFrom(@"HKEY_CURRENT_USER\Software\Microsoft")).Name);
+        Assert.That(rkc.ConvertFrom("HKEY_CURRENT_USER"), Is.EqualTo(Registry.CurrentUser));
+        Assert.That(((RegistryKey) rkc.ConvertFrom(@"HKEY_CURRENT_USER\Software")).Name,
+            Is.EqualTo(Registry.CurrentUser.OpenSubKey("Software").Name));
+        Assert.That(((RegistryKey) rkc.ConvertFrom(@"HKEY_CURRENT_USER\Software\Microsoft")).Name,
+            Is.EqualTo(Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("Microsoft").Name));
     }
 
     [Test]

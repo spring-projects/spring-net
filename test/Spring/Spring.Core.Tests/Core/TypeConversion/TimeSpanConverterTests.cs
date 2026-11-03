@@ -51,9 +51,9 @@ public sealed class TimeSpanConverterTests
     {
         TimeSpanConverter tsc = new TimeSpanConverter();
         object timeSpan = tsc.ConvertFrom("00:00:10");
-        Assert.IsNotNull(timeSpan);
-        Assert.IsTrue(timeSpan is TimeSpan);
-        Assert.AreEqual(TimeSpan.FromSeconds(10), (TimeSpan) timeSpan);
+        Assert.That(timeSpan, Is.Not.Null);
+        Assert.That(timeSpan is TimeSpan, Is.True);
+        Assert.That((TimeSpan) timeSpan, Is.EqualTo(TimeSpan.FromSeconds(10)));
     }
 
     [Test]
@@ -61,9 +61,9 @@ public sealed class TimeSpanConverterTests
     {
         TimeSpanConverter tsc = new TimeSpanConverter();
         object timeSpan = tsc.ConvertFrom("1000");
-        Assert.IsNotNull(timeSpan);
-        Assert.IsTrue(timeSpan is TimeSpan);
-        Assert.AreEqual(TimeSpan.Parse("1000"), (TimeSpan) timeSpan);
+        Assert.That(timeSpan, Is.Not.Null);
+        Assert.That(timeSpan is TimeSpan, Is.True);
+        Assert.That((TimeSpan) timeSpan, Is.EqualTo(TimeSpan.Parse("1000")));
     }
 
     [Test]
@@ -71,9 +71,9 @@ public sealed class TimeSpanConverterTests
     {
         TimeSpanConverter tsc = new TimeSpanConverter();
         object timeSpan = tsc.ConvertFrom("100ms");
-        Assert.IsNotNull(timeSpan);
-        Assert.IsTrue(timeSpan is TimeSpan);
-        Assert.AreEqual(TimeSpan.FromMilliseconds(100), (TimeSpan) timeSpan);
+        Assert.That(timeSpan, Is.Not.Null);
+        Assert.That(timeSpan is TimeSpan, Is.True);
+        Assert.That((TimeSpan) timeSpan, Is.EqualTo(TimeSpan.FromMilliseconds(100)));
     }
 
     [Test]
@@ -81,9 +81,9 @@ public sealed class TimeSpanConverterTests
     {
         TimeSpanConverter tsc = new TimeSpanConverter();
         object timeSpan = tsc.ConvertFrom("10s");
-        Assert.IsNotNull(timeSpan);
-        Assert.IsTrue(timeSpan is TimeSpan);
-        Assert.AreEqual(TimeSpan.FromSeconds(10), (TimeSpan) timeSpan);
+        Assert.That(timeSpan, Is.Not.Null);
+        Assert.That(timeSpan is TimeSpan, Is.True);
+        Assert.That((TimeSpan) timeSpan, Is.EqualTo(TimeSpan.FromSeconds(10)));
     }
 
     [Test]
@@ -91,9 +91,9 @@ public sealed class TimeSpanConverterTests
     {
         TimeSpanConverter tsc = new TimeSpanConverter();
         object timeSpan = tsc.ConvertFrom("2m");
-        Assert.IsNotNull(timeSpan);
-        Assert.IsTrue(timeSpan is TimeSpan);
-        Assert.AreEqual(TimeSpan.FromMinutes(2), (TimeSpan) timeSpan);
+        Assert.That(timeSpan, Is.Not.Null);
+        Assert.That(timeSpan is TimeSpan, Is.True);
+        Assert.That((TimeSpan) timeSpan, Is.EqualTo(TimeSpan.FromMinutes(2)));
     }
 
     [Test]
@@ -102,14 +102,14 @@ public sealed class TimeSpanConverterTests
         TimeSpanConverter tsc = new TimeSpanConverter();
 
         object timeSpan = tsc.ConvertFrom("1H");
-        Assert.IsNotNull(timeSpan);
-        Assert.IsTrue(timeSpan is TimeSpan);
-        Assert.AreEqual(TimeSpan.FromHours(1), (TimeSpan) timeSpan);
+        Assert.That(timeSpan, Is.Not.Null);
+        Assert.That(timeSpan is TimeSpan, Is.True);
+        Assert.That((TimeSpan) timeSpan, Is.EqualTo(TimeSpan.FromHours(1)));
 
         tsc.ConvertFrom("1h");
-        Assert.IsNotNull(timeSpan);
-        Assert.IsTrue(timeSpan is TimeSpan);
-        Assert.AreEqual(TimeSpan.FromHours(1), (TimeSpan) timeSpan);
+        Assert.That(timeSpan, Is.Not.Null);
+        Assert.That(timeSpan is TimeSpan, Is.True);
+        Assert.That((TimeSpan) timeSpan, Is.EqualTo(TimeSpan.FromHours(1)));
     }
 
     [Test]
@@ -117,8 +117,8 @@ public sealed class TimeSpanConverterTests
     {
         TimeSpanConverter tsc = new TimeSpanConverter();
         object timeSpan = tsc.ConvertFrom("1d");
-        Assert.IsNotNull(timeSpan);
-        Assert.IsTrue(timeSpan is TimeSpan);
-        Assert.AreEqual(TimeSpan.FromDays(1), (TimeSpan) timeSpan);
+        Assert.That(timeSpan, Is.Not.Null);
+        Assert.That(timeSpan is TimeSpan, Is.True);
+        Assert.That((TimeSpan) timeSpan, Is.EqualTo(TimeSpan.FromDays(1)));
     }
 }

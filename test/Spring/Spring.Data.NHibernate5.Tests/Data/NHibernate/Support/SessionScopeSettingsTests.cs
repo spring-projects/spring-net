@@ -63,8 +63,8 @@ namespace Spring.Data.NHibernate.Support
         [Test]
         public void CheckDefaults()
         {
-            Assert.IsTrue(SessionScopeSettings.SINGLESESSION_DEFAULT);
-            Assert.AreEqual(FlushMode.Never, SessionScopeSettings.FLUSHMODE_DEFAULT);
+            Assert.That(SessionScopeSettings.SINGLESESSION_DEFAULT, Is.True);
+            Assert.That(SessionScopeSettings.FLUSHMODE_DEFAULT, Is.EqualTo(FlushMode.Never));
         }
 
         [Test]
@@ -72,13 +72,13 @@ namespace Spring.Data.NHibernate.Support
         {
             ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
             IInterceptor entityInterceptor = A.Fake<IInterceptor>();
-            Assert.AreNotEqual(FlushMode.Auto, SessionScopeSettings.FLUSHMODE_DEFAULT); // ensure noone changed our assumptions
+            Assert.That(SessionScopeSettings.FLUSHMODE_DEFAULT, Is.Not.EqualTo(FlushMode.Auto)); // ensure noone changed our assumptions
             SessionScopeSettings sss = new SessionScopeSettings(sessionFactory, entityInterceptor, !SessionScopeSettings.SINGLESESSION_DEFAULT, FlushMode.Auto);
 
-            Assert.AreEqual(sessionFactory, sss.SessionFactory);
-            Assert.AreEqual(entityInterceptor, sss.EntityInterceptor);
-            Assert.AreEqual(!SessionScopeSettings.SINGLESESSION_DEFAULT, sss.SingleSession);
-            Assert.AreEqual(FlushMode.Auto, sss.DefaultFlushMode);
+            Assert.That(sss.SessionFactory, Is.EqualTo(sessionFactory));
+            Assert.That(sss.EntityInterceptor, Is.EqualTo(entityInterceptor));
+            Assert.That(sss.SingleSession, Is.EqualTo(!SessionScopeSettings.SINGLESESSION_DEFAULT));
+            Assert.That(sss.DefaultFlushMode, Is.EqualTo(FlushMode.Auto));
         }
 
         [Test]
@@ -86,11 +86,11 @@ namespace Spring.Data.NHibernate.Support
         {
             DerivedSessionScopeSettings sss = new DerivedSessionScopeSettings();
             // config values are set to their defaults
-            Assert.AreEqual(SessionScopeSettings.SINGLESESSION_DEFAULT, sss.SingleSession);
-            Assert.AreEqual(SessionScopeSettings.FLUSHMODE_DEFAULT, sss.DefaultFlushMode);
+            Assert.That(sss.SingleSession, Is.EqualTo(SessionScopeSettings.SINGLESESSION_DEFAULT));
+            Assert.That(sss.DefaultFlushMode, Is.EqualTo(SessionScopeSettings.FLUSHMODE_DEFAULT));
 
             IInterceptor interceptor = sss.EntityInterceptor;
-            Assert.IsNull(interceptor);
+            Assert.That(interceptor, Is.Null);
 
             try
             {
@@ -111,11 +111,11 @@ namespace Spring.Data.NHibernate.Support
             SessionScopeSettings sss = new LazyResolvingSessionScopeSettings(expectedSessionFactory, expectedEntityInterceptor);
 
             // config values are set to their defaults
-            Assert.AreEqual(SessionScopeSettings.SINGLESESSION_DEFAULT, sss.SingleSession);
-            Assert.AreEqual(SessionScopeSettings.FLUSHMODE_DEFAULT, sss.DefaultFlushMode);
+            Assert.That(sss.SingleSession, Is.EqualTo(SessionScopeSettings.SINGLESESSION_DEFAULT));
+            Assert.That(sss.DefaultFlushMode, Is.EqualTo(SessionScopeSettings.FLUSHMODE_DEFAULT));
 
-            Assert.AreSame(expectedSessionFactory, sss.SessionFactory);
-            Assert.AreSame(expectedEntityInterceptor, sss.EntityInterceptor);
+            Assert.That(sss.SessionFactory, Is.SameAs(expectedSessionFactory));
+            Assert.That(sss.EntityInterceptor, Is.SameAs(expectedEntityInterceptor));
         }
 
         [Test]
@@ -124,8 +124,8 @@ namespace Spring.Data.NHibernate.Support
             SessionScopeSettings sss = new LazyResolvingSessionScopeSettings(null, null);
 
             // config values are set to their defaults
-            Assert.AreEqual(SessionScopeSettings.SINGLESESSION_DEFAULT, sss.SingleSession);
-            Assert.AreEqual(SessionScopeSettings.FLUSHMODE_DEFAULT, sss.DefaultFlushMode);
+            Assert.That(sss.SingleSession, Is.EqualTo(SessionScopeSettings.SINGLESESSION_DEFAULT));
+            Assert.That(sss.DefaultFlushMode, Is.EqualTo(SessionScopeSettings.FLUSHMODE_DEFAULT));
 
             ISessionFactory temp;
             Assert.Throws<ArgumentException>(() => temp = sss.SessionFactory);
@@ -139,11 +139,11 @@ namespace Spring.Data.NHibernate.Support
             SessionScopeSettings sss = new LazyResolvingSessionScopeSettings(expectedSessionFactory, null);
 
             // config values are set to their defaults
-            Assert.AreEqual(SessionScopeSettings.SINGLESESSION_DEFAULT, sss.SingleSession);
-            Assert.AreEqual(SessionScopeSettings.FLUSHMODE_DEFAULT, sss.DefaultFlushMode);
+            Assert.That(sss.SingleSession, Is.EqualTo(SessionScopeSettings.SINGLESESSION_DEFAULT));
+            Assert.That(sss.DefaultFlushMode, Is.EqualTo(SessionScopeSettings.FLUSHMODE_DEFAULT));
 
-            Assert.AreSame(expectedSessionFactory, sss.SessionFactory);
-            Assert.AreSame(null, sss.EntityInterceptor);
+            Assert.That(sss.SessionFactory, Is.SameAs(expectedSessionFactory));
+            Assert.That(sss.EntityInterceptor, Is.Null);
         }
     }
 }

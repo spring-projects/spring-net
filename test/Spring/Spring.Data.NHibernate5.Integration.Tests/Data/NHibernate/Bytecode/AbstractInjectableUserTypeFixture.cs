@@ -76,7 +76,7 @@ namespace Spring.Data.NHibernate.Bytecode
             {
                 Foo upperFoo = s.Get<Foo>(savedId);
 
-                Assert.AreEqual("[something]", upperFoo.Description);
+                Assert.That(upperFoo.Description, Is.EqualTo("[something]"));
             }
         }
 
@@ -98,7 +98,7 @@ namespace Spring.Data.NHibernate.Bytecode
             {
                 Foo upperFoo = s.Get<Foo>(savedId);
 
-                Assert.IsNull(upperFoo.Description);
+                Assert.That(upperFoo.Description, Is.Null);
             }
         }
     }

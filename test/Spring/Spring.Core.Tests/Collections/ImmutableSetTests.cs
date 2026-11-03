@@ -83,23 +83,23 @@ public class ImmutableSetTests
     [Test]
     public void IsEmpty()
     {
-        Assert.IsFalse(Set.IsEmpty);
+        Assert.That(Set.IsEmpty, Is.False);
         ISet mySet = new ImmutableSet(new HybridSet());
-        Assert.IsTrue(mySet.IsEmpty);
+        Assert.That(mySet.IsEmpty, Is.True);
     }
 
     [Test]
     public void Contains()
     {
-        Assert.IsFalse(Set.Contains("Funk"));
-        Assert.IsTrue(Set.Contains(1));
+        Assert.That(Set.Contains("Funk"), Is.False);
+        Assert.That(Set.Contains(1), Is.True);
     }
 
     [Test]
     public void ContainsAll()
     {
-        Assert.IsFalse(Set.ContainsAll(new object[] { "Funk", 1, 2, 3 }));
-        Assert.IsTrue(Set.ContainsAll(new object[] { 1, 3, 2 }));
+        Assert.That(Set.ContainsAll(new object[] { "Funk", 1, 2, 3 }), Is.False);
+        Assert.That(Set.ContainsAll(new object[] { 1, 3, 2 }), Is.True);
     }
 
     [Test]
@@ -108,10 +108,10 @@ public class ImmutableSetTests
         int[] expected = new int[] { 1, 2, 3 };
         int[] actual = new int [Set.Count];
         Set.CopyTo(actual, 0);
-        Assert.AreEqual(expected.Length, actual.Length);
+        Assert.That(actual.Length, Is.EqualTo(expected.Length));
         for (int i = 0; i < expected.Length; ++i)
         {
-            Assert.AreEqual(expected[i], actual[i]);
+            Assert.That(actual[i], Is.EqualTo(expected[i]));
         }
     }
 
@@ -122,7 +122,7 @@ public class ImmutableSetTests
         int i = 0;
         foreach (int actual in Set)
         {
-            Assert.AreEqual(expected[i++], actual);
+            Assert.That(actual, Is.EqualTo(expected[i++]));
         }
     }
 
@@ -138,8 +138,8 @@ public class ImmutableSetTests
     {
         ISet mySet = new ListSet(new int[] { 1, 2 });
         ISet clone = Set.Minus(mySet);
-        Assert.IsNotNull(clone);
-        Assert.AreEqual(1, clone.Count);
+        Assert.That(clone, Is.Not.Null);
+        Assert.That(clone.Count, Is.EqualTo(1));
         Assert.Throws<NotSupportedException>(() => clone.Add("bad chair, bad chair"));
     }
 
@@ -148,8 +148,8 @@ public class ImmutableSetTests
     {
         ISet mySet = new ListSet(new int[] { 1, 4 });
         ISet clone = Set.Union(mySet);
-        Assert.IsNotNull(clone);
-        Assert.AreEqual(4, clone.Count);
+        Assert.That(clone, Is.Not.Null);
+        Assert.That(clone.Count, Is.EqualTo(4));
         Assert.Throws<NotSupportedException>(() => clone.Add("bad chair, bad chair"));
     }
 
@@ -158,8 +158,8 @@ public class ImmutableSetTests
     {
         ISet mySet = new ListSet(new int[] { 1, 4 });
         ISet clone = Set.Intersect(mySet);
-        Assert.IsNotNull(clone);
-        Assert.AreEqual(1, clone.Count);
+        Assert.That(clone, Is.Not.Null);
+        Assert.That(clone.Count, Is.EqualTo(1));
         Assert.Throws<NotSupportedException>(() => clone.Add("bad chair, bad chair"));
     }
 
@@ -168,8 +168,8 @@ public class ImmutableSetTests
     {
         ISet mySet = new ListSet(new int[] { 1, 4 });
         ISet clone = Set.ExclusiveOr(mySet);
-        Assert.IsNotNull(clone);
-        Assert.AreEqual(3, clone.Count);
+        Assert.That(clone, Is.Not.Null);
+        Assert.That(clone.Count, Is.EqualTo(3));
         Assert.Throws<NotSupportedException>(() => clone.Add("bad chair, bad chair"));
     }
 

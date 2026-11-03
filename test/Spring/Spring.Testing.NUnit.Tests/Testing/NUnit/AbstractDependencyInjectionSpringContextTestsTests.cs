@@ -74,35 +74,35 @@ public class AbstractDependencyInjectionSpringContextTestsTests
     public void RegistersWithContextRegistryByDefault()
     {
         fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests();
-        Assert.IsTrue(fixtureInstance.RegisterContextWithContextRegistry);
+        Assert.That(fixtureInstance.RegisterContextWithContextRegistry, Is.True);
     }
 
     [Test]
     public void UnregistersFromContextRegistryWhenDirty()
     {
         fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests();
-        Assert.IsTrue(fixtureInstance.RegisterContextWithContextRegistry);
+        Assert.That(fixtureInstance.RegisterContextWithContextRegistry, Is.True);
         fixtureInstance.SetUp();
-        Assert.IsTrue(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
+        Assert.That(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name), Is.True);
         fixtureInstance.TearDown();
-        Assert.IsTrue(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
+        Assert.That(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name), Is.True);
         fixtureInstance.SetUp();
-        Assert.IsTrue(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
+        Assert.That(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name), Is.True);
         fixtureInstance.SetDirty();
         fixtureInstance.TearDown();
-        Assert.IsFalse(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
+        Assert.That(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name), Is.False);
     }
 
     [Test]
     public void DoesNotRegisterContextWithContextRegistry()
     {
         fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests();
-        Assert.IsTrue(fixtureInstance.RegisterContextWithContextRegistry);
+        Assert.That(fixtureInstance.RegisterContextWithContextRegistry, Is.True);
         fixtureInstance.RegisterContextWithContextRegistry = false;
         fixtureInstance.SetUp();
-        Assert.IsFalse(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
+        Assert.That(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name), Is.False);
         fixtureInstance.TearDown();
-        Assert.IsFalse(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name));
+        Assert.That(ContextRegistry.IsContextRegistered(fixtureInstance.ApplicationContext.Name), Is.False);
     }
 
     [Test]
@@ -110,25 +110,25 @@ public class AbstractDependencyInjectionSpringContextTestsTests
     {
         fixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
         fixtureInstance.SetUp();
-        Assert.IsNotNull(fixtureInstance.ApplicationContext);
-        Assert.AreEqual(1, fixtureInstance.LoadCount); // context has been loaded
-        Assert.IsTrue(fixtureInstance.HasCachedContext(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
+        Assert.That(fixtureInstance.ApplicationContext, Is.Not.Null);
+        Assert.That(fixtureInstance.LoadCount, Is.EqualTo(1)); // context has been loaded
+        Assert.That(fixtureInstance.HasCachedContext(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS), Is.True);
         fixtureInstance.TearDown();
 
         TestAbstractDependencyInjectionSpringContextTests otherFixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
         otherFixtureInstance.SetUp();
-        Assert.IsNotNull(otherFixtureInstance.ApplicationContext);
-        Assert.AreEqual(0, otherFixtureInstance.LoadCount); // context was obtained from cache
-        Assert.AreSame(fixtureInstance.ApplicationContext, otherFixtureInstance.ApplicationContext);
+        Assert.That(otherFixtureInstance.ApplicationContext, Is.Not.Null);
+        Assert.That(otherFixtureInstance.LoadCount, Is.EqualTo(0)); // context was obtained from cache
+        Assert.That(otherFixtureInstance.ApplicationContext, Is.SameAs(fixtureInstance.ApplicationContext));
         otherFixtureInstance.SetDirty(); // purge cache and dispose cached instances
-        Assert.IsFalse(fixtureInstance.HasCachedContext(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS));
+        Assert.That(fixtureInstance.HasCachedContext(TestAbstractDependencyInjectionSpringContextTests.CONFIGLOCATIONS), Is.False);
         otherFixtureInstance.TearDown();
 
         otherFixtureInstance = new TestAbstractDependencyInjectionSpringContextTests(false);
         otherFixtureInstance.SetUp();
-        Assert.IsNotNull(otherFixtureInstance.ApplicationContext);
-        Assert.AreEqual(1, otherFixtureInstance.LoadCount); // context was reloaded because of SetDirty() above
-        Assert.AreNotSame(fixtureInstance.ApplicationContext, otherFixtureInstance.ApplicationContext);
+        Assert.That(otherFixtureInstance.ApplicationContext, Is.Not.Null);
+        Assert.That(otherFixtureInstance.LoadCount, Is.EqualTo(1)); // context was reloaded because of SetDirty() above
+        Assert.That(otherFixtureInstance.ApplicationContext, Is.Not.SameAs(fixtureInstance.ApplicationContext));
         otherFixtureInstance.TearDown();
     }
 

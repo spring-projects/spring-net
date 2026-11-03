@@ -62,7 +62,7 @@ public class ObjectDefinitionVisitorTests
         ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
         odv.VisitObjectDefinition(od);
 
-        Assert.AreEqual("Value", od.ObjectTypeName);
+        Assert.That(od.ObjectTypeName, Is.EqualTo("Value"));
     }
 
     [Test]
@@ -74,7 +74,7 @@ public class ObjectDefinitionVisitorTests
         ObjectDefinitionVisitor odv = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(ParseAndResolveVariables));
         odv.VisitObjectDefinition(od);
 
-        Assert.AreEqual("Value", od.PropertyValues.GetPropertyValue("PropertyName").Value);
+        Assert.That(od.PropertyValues.GetPropertyValue("PropertyName").Value, Is.EqualTo("Value"));
     }
 
     [Test]
@@ -91,10 +91,10 @@ public class ObjectDefinitionVisitorTests
 
         ManagedList list = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedList;
 
-        Assert.IsNotNull(list, "Property value is not of type ManagedList.  Type = [" +
+        Assert.That(list, Is.Not.Null, "Property value is not of type ManagedList.  Type = [" +
                                od.PropertyValues.GetPropertyValue("PropertyName").Value.GetType() + "]");
-        Assert.AreEqual("Value", list.ElementTypeName);
-        Assert.AreEqual("Value", list[0]);
+        Assert.That(list.ElementTypeName, Is.EqualTo("Value"));
+        Assert.That(list[0], Is.EqualTo("Value"));
     }
 
     [Test]
@@ -111,10 +111,10 @@ public class ObjectDefinitionVisitorTests
 
         ManagedSet set = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedSet;
 
-        Assert.AreEqual("Value", set.ElementTypeName);
+        Assert.That(set.ElementTypeName, Is.EqualTo("Value"));
         IEnumerator enumerator = set.GetEnumerator();
         enumerator.MoveNext();
-        Assert.AreEqual("Value", enumerator.Current);
+        Assert.That(enumerator.Current, Is.EqualTo("Value"));
     }
 
     [Test]
@@ -132,9 +132,9 @@ public class ObjectDefinitionVisitorTests
 
         ManagedDictionary dictionary = od.PropertyValues.GetPropertyValue("PropertyName").Value as ManagedDictionary;
 
-        Assert.AreEqual("Value", dictionary.KeyTypeName);
-        Assert.AreEqual("Value", dictionary.ValueTypeName);
-        Assert.AreEqual("Value", dictionary["Key"]);
+        Assert.That(dictionary.KeyTypeName, Is.EqualTo("Value"));
+        Assert.That(dictionary.ValueTypeName, Is.EqualTo("Value"));
+        Assert.That(dictionary["Key"], Is.EqualTo("Value"));
     }
 
     [Test]
@@ -151,6 +151,6 @@ public class ObjectDefinitionVisitorTests
         NameValueCollection visitedNvc =
             od.PropertyValues.GetPropertyValue("PropertyName").Value as NameValueCollection;
 
-        Assert.AreEqual("Value", visitedNvc["Key"]);
+        Assert.That(visitedNvc["Key"], Is.EqualTo("Value"));
     }
 }

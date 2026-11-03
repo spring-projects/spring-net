@@ -50,15 +50,15 @@ public class SimplePoolTargetSourceTests
     private void Functionality(System.String name)
     {
         ISideEffectObject pooled = (ISideEffectObject) objectFactory.GetObject(name);
-        Assert.AreEqual(INITIAL_COUNT, pooled.Count);
+        Assert.That(pooled.Count, Is.EqualTo(INITIAL_COUNT));
         pooled.doWork();
-        Assert.AreEqual(INITIAL_COUNT + 1, pooled.Count);
+        Assert.That(pooled.Count, Is.EqualTo(INITIAL_COUNT + 1));
 
         pooled = (ISideEffectObject) objectFactory.GetObject(name);
         // Just check that it works--we can't make assumptions
         // about the count
         pooled.doWork();
-        //Assert.AreEqual(INITIAL_COUNT + 1, pooled.Count );
+        //Assert.That(pooled.Count, Is.EqualTo(INITIAL_COUNT + 1));
     }
 
     [Test]
@@ -77,15 +77,15 @@ public class SimplePoolTargetSourceTests
     public virtual void ConfigMixin()
     {
         ISideEffectObject pooled = (ISideEffectObject) objectFactory.GetObject("pooledWithMixin");
-        Assert.AreEqual(INITIAL_COUNT, pooled.Count);
+        Assert.That(pooled.Count, Is.EqualTo(INITIAL_COUNT));
         PoolingConfig conf = (PoolingConfig) objectFactory.GetObject("pooledWithMixin");
         // TODO one invocation from setup
         // assertEquals(1, conf.getInvocations());
         pooled.doWork();
         //	assertEquals("No objects active", 0, conf.getActive());
-        Assert.AreEqual(25, conf.MaxSize, "Correct target source");
+        Assert.That(conf.MaxSize, Is.EqualTo(25), "Correct target source");
         //		assertTrue("Some free", conf.getFree() > 0);
         //assertEquals(2, conf.getInvocations());
-        Assert.AreEqual(25, conf.MaxSize);
+        Assert.That(conf.MaxSize, Is.EqualTo(25));
     }
 }

@@ -41,9 +41,9 @@ public class OracleAdoTemplateTests
         IApplicationContext ctx =
             new XmlApplicationContext(
                 "assembly://Spring.Data.Integration.Tests/Spring.Data/oracleAdoTemplateTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         dbProvider = ctx["DbProvider"] as IDbProvider;
-        Assert.IsNotNull(dbProvider);
+        Assert.That(dbProvider, Is.Not.Null);
         adoOperations = new AdoTemplate(dbProvider);
     }
 
@@ -79,13 +79,13 @@ public class OracleAdoTemplateTests
         String sql = "select USER_ID, USER_NAME from USER_TABLE";
         DataSet dataSet = new DataSet();
         adoOperations.DataSetFill(dataSet, CommandType.Text, sql);
-        Assert.AreEqual(1, dataSet.Tables.Count);
-        Assert.AreEqual(18, dataSet.Tables["Table"].Rows.Count);
+        Assert.That(dataSet.Tables.Count, Is.EqualTo(1));
+        Assert.That(dataSet.Tables["Table"].Rows.Count, Is.EqualTo(18));
 
         dataSet = new DataSet();
         adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] { "TestObjects" });
-        Assert.AreEqual(1, dataSet.Tables.Count);
-        Assert.AreEqual(18, dataSet.Tables["TestObjects"].Rows.Count);
+        Assert.That(dataSet.Tables.Count, Is.EqualTo(1));
+        Assert.That(dataSet.Tables["TestObjects"].Rows.Count, Is.EqualTo(18));
 
         dataSet = new DataSet();
         DataTableMappingCollection mappingCollection =
@@ -94,12 +94,12 @@ public class OracleAdoTemplateTests
         testObjectsMapping.ColumnMappings.Add("USER_ID", "UserID");
         testObjectsMapping.ColumnMappings.Add("USER_NAME", "UserName");
         adoOperations.DataSetFill(dataSet, CommandType.Text, sql, mappingCollection);
-        Assert.AreEqual(1, dataSet.Tables.Count);
-        Assert.AreEqual(18, dataSet.Tables["TestObjects"].Rows.Count);
+        Assert.That(dataSet.Tables.Count, Is.EqualTo(1));
+        Assert.That(dataSet.Tables["TestObjects"].Rows.Count, Is.EqualTo(18));
         foreach (DataRow testObjectRow in dataSet.Tables["TestObjects"].Rows)
         {
-            Assert.IsNotNull(testObjectRow["UserID"]);
-            Assert.IsNotNull(testObjectRow["UserName"]);
+            Assert.That(testObjectRow["UserID"], Is.Not.Null);
+            Assert.That(testObjectRow["UserName"], Is.Not.Null);
         }
     }
 
@@ -113,8 +113,8 @@ public class OracleAdoTemplateTests
         adoOperations.DataSetFillWithParameters(dataSet, CommandType.Text, sql,
             parameters,
             new string[] { "TestObjects" });
-        Assert.AreEqual(1, dataSet.Tables.Count);
-        Assert.AreEqual(6, dataSet.Tables["TestObjects"].Rows.Count);
+        Assert.That(dataSet.Tables.Count, Is.EqualTo(1));
+        Assert.That(dataSet.Tables["TestObjects"].Rows.Count, Is.EqualTo(6));
     }
 
     [Test]
@@ -227,7 +227,7 @@ public class OracleAdoTemplateTests
         IResultSetExtractor rse = new TestObjectExtractor();
         String sql = "select USER_ID, USER_NAME from USER_TABLE";
         IList testObjectList = (IList) adoOperations.QueryWithResultSetExtractor(CommandType.Text, sql, rse);
-        Assert.AreEqual(18, testObjectList.Count);
+        Assert.That(testObjectList.Count, Is.EqualTo(18));
     }
 
     [Test]

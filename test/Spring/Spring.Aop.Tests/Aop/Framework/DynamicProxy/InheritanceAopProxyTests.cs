@@ -47,15 +47,15 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
         proxiedClass.Name = "DirectCall";
-        Assert.AreEqual("DirectCall", proxiedClass.Name);
+        Assert.That(proxiedClass.Name, Is.EqualTo("DirectCall"));
 
-        Assert.IsTrue(proxy is IIncrementable);
+        Assert.That(proxy is IIncrementable, Is.True);
         IIncrementable proxiedIntf = proxy as IIncrementable;
         proxiedIntf.Increment();
-        Assert.AreEqual(1, proxiedIntf.Value);
+        Assert.That(proxiedIntf.Value, Is.EqualTo(1));
     }
 
     [Test]
@@ -67,9 +67,9 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
-        Assert.AreNotEqual("ProxyTargetTypeOnly", proxiedClass.Name);
+        Assert.That(proxiedClass.Name, Is.Not.EqualTo("ProxyTargetTypeOnly"));
     }
 
     [Test]
@@ -81,9 +81,9 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
-        Assert.AreEqual("InheritanceTestObject", proxiedClass.Name);
+        Assert.That(proxiedClass.Name, Is.EqualTo("InheritanceTestObject"));
     }
 
     [Test]
@@ -98,11 +98,11 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
         proxiedClass.Name = "InterceptVirtualMethod";
-        Assert.AreEqual("InterceptVirtualMethod", proxiedClass.Name);
-        Assert.AreEqual(2, ni.Count);
+        Assert.That(proxiedClass.Name, Is.EqualTo("InterceptVirtualMethod"));
+        Assert.That(ni.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -118,10 +118,10 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is AmbiguousMatchesTestObject);
+        Assert.That(proxy is AmbiguousMatchesTestObject, Is.True);
         AmbiguousMatchesTestObject proxiedClass = proxy as AmbiguousMatchesTestObject;
         proxiedClass.DoIt(new TestObject());
-        Assert.AreEqual(1, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(1));
     }
 
     public class AmbiguousMatchesTestObject
@@ -147,10 +147,10 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is AnotherTestObject);
+        Assert.That(proxy is AnotherTestObject, Is.True);
         AnotherTestObject proxiedClass = proxy as AnotherTestObject;
-        Assert.AreEqual(typeof(int), proxiedClass.GenericMethod<int>());
-        Assert.AreEqual(1, ni.Count);
+        Assert.That(proxiedClass.GenericMethod<int>(), Is.EqualTo(typeof(int)));
+        Assert.That(ni.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -166,10 +166,10 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is AnotherTestObject);
+        Assert.That(proxy is AnotherTestObject, Is.True);
         AnotherTestObject proxiedClass = proxy as AnotherTestObject;
-        Assert.AreEqual("Hello", proxiedClass.AnotherGenericMethod<string>("Hello"));
-        Assert.AreEqual(1, ni.Count);
+        Assert.That(proxiedClass.AnotherGenericMethod<string>("Hello"), Is.EqualTo("Hello"));
+        Assert.That(ni.Count, Is.EqualTo(1));
     }
 
     public class AnotherTestObject
@@ -203,16 +203,16 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
         proxiedClass.Name = "DoesNotInterceptFinalMethod";
-        Assert.AreEqual("DoesNotInterceptFinalMethod", proxiedClass.Name);
-        Assert.AreEqual(2, ni.Count);
+        Assert.That(proxiedClass.Name, Is.EqualTo("DoesNotInterceptFinalMethod"));
+        Assert.That(ni.Count, Is.EqualTo(2));
 
         proxiedClass.Reset();
-        Assert.AreEqual(2, ni.Count);
-        Assert.AreEqual("InheritanceTestObject", proxiedClass.Name);
-        Assert.AreEqual(3, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(2));
+        Assert.That(proxiedClass.Name, Is.EqualTo("InheritanceTestObject"));
+        Assert.That(ni.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -227,10 +227,10 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
         proxiedClass.InternalToDo();
-        Assert.AreEqual(0, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -244,15 +244,15 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
         proxiedClass.Increment();
-        Assert.AreEqual(1, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(1));
 
-        Assert.IsTrue(proxy is IIncrementable);
+        Assert.That(proxy is IIncrementable, Is.True);
         IIncrementable proxiedInterface = proxy as IIncrementable;
         proxiedInterface.Increment();
-        Assert.AreEqual(2, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -266,16 +266,16 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
-        Assert.AreEqual(0, proxiedClass.Value);
-        Assert.AreEqual(0, ni.Count);
+        Assert.That(proxiedClass.Value, Is.EqualTo(0));
+        Assert.That(ni.Count, Is.EqualTo(0));
 
-        Assert.IsTrue(proxy is IIncrementable);
+        Assert.That(proxy is IIncrementable, Is.True);
         IIncrementable proxiedInterface = proxy as IIncrementable;
         proxiedInterface.Increment();
-        Assert.AreEqual(1, proxiedInterface.Value);
-        Assert.AreEqual(2, ni.Count);
+        Assert.That(proxiedInterface.Value, Is.EqualTo(1));
+        Assert.That(ni.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -289,11 +289,11 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
         proxiedClass.IncrementTwice();
-        Assert.AreEqual(2, ni.Count);
-        Assert.AreEqual(2, proxiedClass.Value);
+        Assert.That(ni.Count, Is.EqualTo(2));
+        Assert.That(proxiedClass.Value, Is.EqualTo(2));
     }
 
     [Test]
@@ -307,10 +307,10 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
         proxiedClass.Todo();
-        Assert.AreEqual(1, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -324,12 +324,12 @@ public class InheritanceAopProxyTests
         object proxy = CreateProxy(advised);
         //DynamicProxyManager.SaveAssembly();
 
-        Assert.IsTrue(proxy is InheritanceTestObject);
+        Assert.That(proxy is InheritanceTestObject, Is.True);
         InheritanceTestObject proxiedClass = proxy as InheritanceTestObject;
         proxiedClass.Todo();
         proxiedClass.Name = "Erich";
-        Assert.AreEqual("Erich", proxiedClass.Name);
-        Assert.AreEqual(3, ni.Count);
+        Assert.That(proxiedClass.Name, Is.EqualTo("Erich"));
+        Assert.That(ni.Count, Is.EqualTo(3));
     }
 }
 

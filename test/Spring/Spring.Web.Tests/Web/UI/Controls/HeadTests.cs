@@ -47,7 +47,7 @@ public class HeadTests
             page.InitRecursive(null);
             string result = page.Render(string.Empty);
             string expect = @"<head>literal child<title></title></head>";
-            Assert.AreEqual(expect, result);
+            Assert.That(result, Is.EqualTo(expect));
         }
     }
 
@@ -62,7 +62,7 @@ public class HeadTests
 
         string result = page.Render(string.Empty);
         string expect = @"<head><style type=""text/css"">stylename { stylevalue }</style></head>";
-        Assert.AreEqual(expect, result);
+        Assert.That(result, Is.EqualTo(expect));
     }
 
     [Test]
@@ -81,7 +81,7 @@ public class HeadTests
 
             string result = page.Render(string.Empty);
             string expect = string.Format(@"<head><link rel=""stylesheet"" type=""text/css"" href=""/testcssroot/{0}"" /></head>", STYLESHEETPATH);
-            Assert.AreEqual(expect, result);
+            Assert.That(result, Is.EqualTo(expect));
         }
     }
 
@@ -96,7 +96,7 @@ public class HeadTests
 
         string result = page.Render(string.Empty);
         string expect = @"<head><script type=""text/javascript"">scriptcode</script></head>";
-        Assert.AreEqual(expect, result);
+        Assert.That(result, Is.EqualTo(expect));
     }
 
     [Test]
@@ -110,7 +110,7 @@ public class HeadTests
 
         string result = page.Render(string.Empty);
         string expect = @"<head><script type=""text/javascript"" for=""elementname"" event=""eventname"">scriptcode</script></head>";
-        Assert.AreEqual(expect, result);
+        Assert.That(result, Is.EqualTo(expect));
     }
 
     [Test]
@@ -129,7 +129,7 @@ public class HeadTests
 
             string result = page.Render(string.Empty);
             string expect = string.Format(@"<head><script type=""text/javascript"" src=""/testscriptroot/{0}""></script></head>", SCRIPTFILEPATH);
-            Assert.AreEqual(expect, result);
+            Assert.That(result, Is.EqualTo(expect));
         }
     }
 
@@ -145,6 +145,6 @@ public class HeadTests
 
         string result = page.Render(string.Empty);
         string expect = @"<head>literal child<style type=""text/css"">stylename { stylevalue }</style></head>";
-        Assert.AreEqual(expect, result);
+        Assert.That(result, Is.EqualTo(expect));
     }
 }

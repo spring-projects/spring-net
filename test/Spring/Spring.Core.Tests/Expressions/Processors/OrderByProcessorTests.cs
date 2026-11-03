@@ -31,7 +31,7 @@ public class OrderByProcessorTests
         IExpression exp = Expression.Parse("orderBy('ToString()')");
         object[] input = new object[] { 'b', 1, 2.0, "a" };
 
-        Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input));
+        Assert.That(exp.GetValue(input), Is.EqualTo(new object[] { 1, 2.0, "a", 'b' }));
     }
 
     [Test]
@@ -40,12 +40,12 @@ public class OrderByProcessorTests
         IExpression exp = Expression.Parse("orderBy({|a,b| $a.ToString().CompareTo($b.ToString())})");
         object[] input = new object[] { 'b', 1, 2.0, "a" };
 
-        Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input));
+        Assert.That(exp.GetValue(input), Is.EqualTo(new object[] { 1, 2.0, "a", 'b' }));
 
         Dictionary<string, object> vars = new Dictionary<string, object>();
         Expression.RegisterFunction("compare", "{|a,b| $a.ToString().CompareTo($b.ToString())}", vars);
         exp = Expression.Parse("orderBy(#compare)");
-        Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input, vars));
+        Assert.That(exp.GetValue(input, vars), Is.EqualTo(new object[] { 1, 2.0, "a", 'b' }));
     }
 
     [Test]
@@ -57,7 +57,7 @@ public class OrderByProcessorTests
         IExpression exp = Expression.Parse("orderBy(#compare)");
         object[] input = new object[] { 'b', 1, 2.0, "a" };
 
-        Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input, vars));
+        Assert.That(exp.GetValue(input, vars), Is.EqualTo(new object[] { 1, 2.0, "a", 'b' }));
     }
 
     private delegate int CompareCallback(object x, object y);

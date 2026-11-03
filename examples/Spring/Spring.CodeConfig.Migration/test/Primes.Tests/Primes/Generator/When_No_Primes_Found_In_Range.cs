@@ -11,7 +11,7 @@ namespace Tests.Generator
         {
             var primeGenerator = new PrimeGenerator(new PrimeEvaluationEngine());
 
-            Assert.AreEqual(string.Empty, primeGenerator.GeneratePrimesUpTo(0));
+            Assert.That(primeGenerator.GeneratePrimesUpTo(0), Is.Empty);
         }
     }
 }

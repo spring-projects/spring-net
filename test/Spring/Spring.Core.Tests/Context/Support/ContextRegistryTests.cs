@@ -81,8 +81,8 @@ public sealed class ContextRegistryTests
             catch (ConfigurationException ex)
             {
                 InvalidOperationException rootCause = ex.GetBaseException() as InvalidOperationException;
-                Assert.IsNotNull(rootCause);
-                Assert.AreEqual("root context is currently in creation.", rootCause.Message.Substring(0, 38));
+                Assert.That(rootCause, Is.Not.Null);
+                Assert.That(rootCause.Message.Substring(0, 38), Is.EqualTo("root context is currently in creation."));
             }
         }
     }
@@ -93,9 +93,11 @@ public sealed class ContextRegistryTests
         MockApplicationContext ctx = new MockApplicationContext();
         ContextRegistry.RegisterContext(ctx);
         IApplicationContext context = ContextRegistry.GetContext();
-        Assert.IsNotNull(context,
+        Assert.That(context,
+            Is.Not.Null,
             "Root context is null even though a context has been registered.");
-        Assert.IsTrue(Object.ReferenceEquals(ctx, context),
+        Assert.That(Object.ReferenceEquals(ctx, context),
+            Is.True,
             "Root context was not the same as the first context registered (it must be).");
     }
 
@@ -106,9 +108,10 @@ public sealed class ContextRegistryTests
         MockApplicationContext ctx = new MockApplicationContext(ctxName);
         ContextRegistry.RegisterContext(ctx);
         IApplicationContext rootContext = ContextRegistry.GetContext();
-        Assert.IsNotNull(rootContext,
+        Assert.That(rootContext,
+            Is.Not.Null,
             "Root context is null even though a context has been registered.");
-        Assert.AreEqual(ctxName, rootContext.Name,
+        Assert.That(rootContext.Name, Is.EqualTo(ctxName),
             "Root context name is different even though the root context has been registered under the lookup name.");
     }
 
@@ -119,9 +122,11 @@ public sealed class ContextRegistryTests
         MockApplicationContext ctx = new MockApplicationContext(ctxName);
         ContextRegistry.RegisterContext(ctx);
         IApplicationContext context = ContextRegistry.GetContext(ctxName);
-        Assert.IsNotNull(context,
+        Assert.That(context,
+            Is.Not.Null,
             "Named context is null even though a context has been registered under the lookup name.");
-        Assert.IsTrue(Object.ReferenceEquals(ctx, context),
+        Assert.That(Object.ReferenceEquals(ctx, context),
+            Is.True,
             "Named context was not the same as the registered context (it must be).");
     }
 
@@ -181,8 +186,8 @@ public sealed class ContextRegistryTests
         ContextRegistry.RegisterContext(ctx1);
 
         ITestObject to1 = ContextRegistry.GetContext().GetObject("testObject") as ITestObject;
-        Assert.IsNotNull(to1);
-        Assert.AreEqual("Bruno", to1.Name);
+        Assert.That(to1, Is.Not.Null);
+        Assert.That(to1.Name, Is.EqualTo("Bruno"));
 
         DefaultListableObjectFactory of2 = new DefaultListableObjectFactory();
         RootObjectDefinition od2 = new RootObjectDefinition(proxyType, false);
@@ -193,8 +198,8 @@ public sealed class ContextRegistryTests
         ContextRegistry.Clear();
 
         ITestObject to2 = ctx2.GetObject("testObject") as ITestObject;
-        Assert.IsNotNull(to2);
-        Assert.AreEqual("Baia", to2.Name);
+        Assert.That(to2, Is.Not.Null);
+        Assert.That(to2.Name, Is.EqualTo("Baia"));
     }
 
     // TODO : Add support for .NET 1.x
@@ -205,7 +210,7 @@ public sealed class ContextRegistryTests
         ContextRegistry.Clear();
         IApplicationContext ctx2 = ContextRegistry.GetContext();
 
-        Assert.AreNotSame(ctx1, ctx2);
+        Assert.That(ctx2, Is.Not.SameAs(ctx1));
     }
 
     [Test(Description = "SPRNET-105")]
@@ -223,9 +228,9 @@ public sealed class ContextRegistryTests
         StaticApplicationContext appCtx = new StaticApplicationContext();
         appCtx.Name = "myCtx";
         ContextRegistry.RegisterContext(appCtx);
-        Assert.IsTrue(ContextRegistry.IsContextRegistered(appCtx.Name));
+        Assert.That(ContextRegistry.IsContextRegistered(appCtx.Name), Is.True);
         appCtx.Dispose();
-        Assert.IsFalse(ContextRegistry.IsContextRegistered(appCtx.Name));
+        Assert.That(ContextRegistry.IsContextRegistered(appCtx.Name), Is.False);
     }
 
     [TestFixture]
@@ -280,10 +285,10 @@ public sealed class ContextRegistryTests
             ContextRegistry.RegisterContext(_grandChildContext);
             ContextRegistry.RegisterContext(_greatGrandChildContext);
 
-            Assert.AreEqual(_expectedParentName, ContextRegistry.GetContext().Name);
-            Assert.AreEqual(_expectedChildName, ContextRegistry.GetContext(_expectedChildName).Name);
-            Assert.AreEqual(_expectedGrandChildName, ContextRegistry.GetContext(_expectedGrandChildName).Name);
-            Assert.AreEqual(_expectedGreatGrandChildName, ContextRegistry.GetContext(_expectedGreatGrandChildName).Name);
+            Assert.That(ContextRegistry.GetContext().Name, Is.EqualTo(_expectedParentName));
+            Assert.That(ContextRegistry.GetContext(_expectedChildName).Name, Is.EqualTo(_expectedChildName));
+            Assert.That(ContextRegistry.GetContext(_expectedGrandChildName).Name, Is.EqualTo(_expectedGrandChildName));
+            Assert.That(ContextRegistry.GetContext(_expectedGreatGrandChildName).Name, Is.EqualTo(_expectedGreatGrandChildName));
         }
 
         [Test]
@@ -307,10 +312,10 @@ public sealed class ContextRegistryTests
             ContextRegistry.RegisterContext(_grandChildContext);
             ContextRegistry.RegisterContext(_greatGrandChildContext);
 
-            Assert.AreEqual(_expectedParentName, ContextRegistry.GetContext(_expectedParentName).Name);
-            Assert.AreEqual(_expectedChildName, ContextRegistry.GetContext(_expectedChildName).Name);
-            Assert.AreEqual(_expectedGrandChildName, ContextRegistry.GetContext(_expectedGrandChildName).Name);
-            Assert.AreEqual(_expectedGreatGrandChildName, ContextRegistry.GetContext(_expectedGreatGrandChildName).Name);
+            Assert.That(ContextRegistry.GetContext(_expectedParentName).Name, Is.EqualTo(_expectedParentName));
+            Assert.That(ContextRegistry.GetContext(_expectedChildName).Name, Is.EqualTo(_expectedChildName));
+            Assert.That(ContextRegistry.GetContext(_expectedGrandChildName).Name, Is.EqualTo(_expectedGrandChildName));
+            Assert.That(ContextRegistry.GetContext(_expectedGreatGrandChildName).Name, Is.EqualTo(_expectedGreatGrandChildName));
         }
     }
 }

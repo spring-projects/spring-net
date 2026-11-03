@@ -39,8 +39,8 @@ public class ValidatorReferenceTests
 
         IValidationErrors errors = new ValidationErrors();
 
-        Assert.IsTrue(v.Validate(null, null, errors));
-        Assert.IsTrue(v.Validate(null, errors));
+        Assert.That(v.Validate(null, null, errors), Is.True);
+        Assert.That(v.Validate(null, errors), Is.True);
     }
 
     [Test]
@@ -54,8 +54,8 @@ public class ValidatorReferenceTests
         v.Name = "validator";
 
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(v.Validate(null, null, errors));
-        Assert.IsFalse(v.Validate(null, errors));
+        Assert.That(v.Validate(null, null, errors), Is.False);
+        Assert.That(v.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -69,8 +69,8 @@ public class ValidatorReferenceTests
         v.Name = "validator";
 
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsTrue(v.Validate(null, null, errors));
-        Assert.IsTrue(v.Validate(null, errors));
+        Assert.That(v.Validate(null, null, errors), Is.True);
+        Assert.That(v.Validate(null, errors), Is.True);
     }
 
     [Test]
@@ -91,22 +91,22 @@ public class ValidatorReferenceTests
 
         IValidationErrors errors = new ValidationErrors();
 
-        Assert.IsTrue(v1.Validate(context, null, errors));
-        Assert.IsTrue(v1.Validate(context, errors));
+        Assert.That(v1.Validate(context, null, errors), Is.True);
+        Assert.That(v1.Validate(context, errors), Is.True);
 
         ValidatorReference v2 = new ValidatorReference();
         v2.ObjectFactory = factory;
         v2.Name = "cv2";
         v2.Context = Expression.Parse("DOB");
 
-        Assert.IsTrue(v2.Validate(context, null, errors));
-        Assert.IsTrue(v2.Validate(context, errors));
+        Assert.That(v2.Validate(context, null, errors), Is.True);
+        Assert.That(v2.Validate(context, errors), Is.True);
 
         ValidatorReference v3 = new ValidatorReference("false");
         v3.ObjectFactory = factory;
         v3.Name = "cv2";
         v3.Context = Expression.Parse("DOB");
 
-        Assert.IsTrue(v3.Validate(null, errors));
+        Assert.That(v3.Validate(null, errors), Is.True);
     }
 }

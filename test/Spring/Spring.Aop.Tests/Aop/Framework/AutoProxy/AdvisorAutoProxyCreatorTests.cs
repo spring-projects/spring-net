@@ -46,8 +46,8 @@ public class AdvisorAutoProxyCreatorTests
     public void DefaultExclusionPrefix()
     {
         DefaultAdvisorAutoProxyCreator aapc = (DefaultAdvisorAutoProxyCreator) ObjectFactory.GetObject(ADVISOR_APC_OBJECT_NAME);
-        Assert.AreEqual(ADVISOR_APC_OBJECT_NAME + DefaultAdvisorAutoProxyCreator.Separator, aapc.AdvisorObjectNamePrefix);
-        Assert.IsFalse(aapc.UsePrefix);
+        Assert.That(aapc.AdvisorObjectNamePrefix, Is.EqualTo(ADVISOR_APC_OBJECT_NAME + DefaultAdvisorAutoProxyCreator.Separator));
+        Assert.That(aapc.UsePrefix, Is.False);
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public class AdvisorAutoProxyCreatorTests
     {
         IObjectFactory of = ObjectFactory;
         object o = of.GetObject("noSetterPropertiesObject");
-        Assert.IsFalse(AopUtils.IsAopProxy(o));
+        Assert.That(AopUtils.IsAopProxy(o), Is.False);
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class AdvisorAutoProxyCreatorTests
     {
         IObjectFactory of = ObjectFactory;
         object o = of.GetObject("testObject");
-        Assert.IsTrue(AopUtils.IsAopProxy(o), "Expected TestObject to be proxied");
+        Assert.That(AopUtils.IsAopProxy(o), Is.True, "Expected TestObject to be proxied");
     }
 
     [Test]
@@ -80,11 +80,11 @@ public class AdvisorAutoProxyCreatorTests
         IObjectFactory of = ObjectFactory;
         ITestObject testObject = (ITestObject) of.GetObject("testObject");
         MethodCounter counter = (MethodCounter) of.GetObject("CountingAdvice");
-        Assert.AreEqual(0, counter.GetCalls());
+        Assert.That(counter.GetCalls(), Is.EqualTo(0));
         testObject.Spouse = new TestObject("Daniela", 23);
-        Assert.AreEqual(0, counter.GetCalls());
+        Assert.That(counter.GetCalls(), Is.EqualTo(0));
         testObject.Name = "foo";
-        Assert.AreEqual(1, counter.GetCalls());
+        Assert.That(counter.GetCalls(), Is.EqualTo(1));
     }
 
     [Test]
@@ -94,15 +94,15 @@ public class AdvisorAutoProxyCreatorTests
         ITestObject testObject = (ITestObject) of.GetObject("testObject");
         OrderedLogicalThreadContextCheckAdvisor orderedBeforeLTCSet =
             (OrderedLogicalThreadContextCheckAdvisor) of.GetObject("orderedBeforeLTCSet");
-        Assert.AreEqual(0, orderedBeforeLTCSet.CountingBeforeAdvice.GetCalls());
+        Assert.That(orderedBeforeLTCSet.CountingBeforeAdvice.GetCalls(), Is.EqualTo(0));
 
-        Assert.IsNull(LogicalThreadContext.GetData(LogicalThreadContextAdvice.ORDERING_SLOT));
-        Assert.AreEqual(4, testObject.Age, "Initial value of age for test object is not correct.");
+        Assert.That(LogicalThreadContext.GetData(LogicalThreadContextAdvice.ORDERING_SLOT), Is.Null);
+        Assert.That(testObject.Age, Is.EqualTo(4), "Initial value of age for test object is not correct.");
         int newAge = 5;
         testObject.Age = newAge;
-        Assert.AreEqual(1, orderedBeforeLTCSet.CountingBeforeAdvice.GetCalls());
+        Assert.That(orderedBeforeLTCSet.CountingBeforeAdvice.GetCalls(), Is.EqualTo(1));
 
-        Assert.AreEqual(newAge, testObject.Age, "Assigned value of age for test object is not correct.");
-        Assert.IsNotNull(LogicalThreadContext.GetData(LogicalThreadContextAdvice.ORDERING_SLOT));
+        Assert.That(testObject.Age, Is.EqualTo(newAge), "Assigned value of age for test object is not correct.");
+        Assert.That(LogicalThreadContext.GetData(LogicalThreadContextAdvice.ORDERING_SLOT), Is.Not.Null);
     }
 }

@@ -11,7 +11,7 @@ namespace Tests.Generator
         {
             var generator = new PrimeGenerator(new PrimeEvaluationEngine());
 
-            Assert.IsNotNull(generator);
+            Assert.That(generator, Is.Not.Null);
         }
     }
 }

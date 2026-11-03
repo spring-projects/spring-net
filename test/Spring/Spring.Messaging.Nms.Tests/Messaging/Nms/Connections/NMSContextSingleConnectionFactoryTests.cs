@@ -115,8 +115,8 @@ public class NMSContextSingleConnectionFactoryTests
         con2.Start();
         scf.Dispose();
 
-        Assert.AreEqual(2, con.StartCount);
-        Assert.AreEqual(2, con.CloseCount);
+        Assert.That(con.StartCount, Is.EqualTo(2));
+        Assert.That(con.CloseCount, Is.EqualTo(2));
     }
 
     [Test]
@@ -139,8 +139,8 @@ public class NMSContextSingleConnectionFactoryTests
         con2.Start();
         scf.Dispose();
 
-        Assert.AreEqual(2, con.StartCount);
-        Assert.AreEqual(2, con.CloseCount);
-        Assert.AreEqual(1, listener.Count);
+        Assert.That(con.StartCount, Is.EqualTo(2));
+        Assert.That(con.CloseCount, Is.EqualTo(2));
+        Assert.That(listener.Count, Is.EqualTo(1));
     }
 }

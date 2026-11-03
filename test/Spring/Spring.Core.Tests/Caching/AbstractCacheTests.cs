@@ -60,8 +60,8 @@ public class AbstractCacheTests
     public void TestDefaults()
     {
         ExposingAbstractCache localCache = A.Fake<ExposingAbstractCache>();
-        Assert.AreEqual(TimeSpan.Zero, localCache.TimeToLive);
-        Assert.AreEqual(false, localCache.EnforceTimeToLive);
+        Assert.That(localCache.TimeToLive, Is.EqualTo(TimeSpan.Zero));
+        Assert.That(localCache.EnforceTimeToLive, Is.EqualTo(false));
     }
 
     [Test]
@@ -140,6 +140,6 @@ public class AbstractCacheTests
         // set expectations
         A.CallTo(() => cache.Keys).Returns(this.KEYS);
 
-        Assert.AreEqual(this.KEYS.Length, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(this.KEYS.Length));
     }
 }

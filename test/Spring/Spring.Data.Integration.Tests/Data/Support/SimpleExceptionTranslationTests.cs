@@ -40,9 +40,9 @@ public class SimpleExceptionTranslationTests
     {
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/adoTemplateTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         dbProvider = ctx["DbProvider"] as IDbProvider;
-        Assert.IsNotNull(dbProvider);
+        Assert.That(dbProvider, Is.Not.Null);
         adoOperations = new AdoTemplate(dbProvider);
     }
 

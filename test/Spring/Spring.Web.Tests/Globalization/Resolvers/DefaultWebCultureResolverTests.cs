@@ -66,7 +66,7 @@ public class DefaultWebCultureResolverTests
     public void DefaultCultureDefaultsToNull()
     {
         TestDefaultWebCultureResolver r = new TestDefaultWebCultureResolver();
-        Assert.IsNull(r.DefaultCulture);
+        Assert.That(r.DefaultCulture, Is.Null);
     }
 
     [Test]
@@ -76,10 +76,10 @@ public class DefaultWebCultureResolverTests
         r.DefaultCulture = EXPECTED_NEUTRALCULTURE;
 
         r.SetRequestLanguage(null);
-        Assert.AreEqual(EXPECTED_NEUTRALCULTURE, r.ResolveCulture());
+        Assert.That(r.ResolveCulture(), Is.EqualTo(EXPECTED_NEUTRALCULTURE));
 
         r.SetRequestLanguage("de");
-        Assert.AreEqual(EXPECTED_NEUTRALCULTURE, r.ResolveCulture());
+        Assert.That(r.ResolveCulture(), Is.EqualTo(EXPECTED_NEUTRALCULTURE));
     }
 
     [Test]
@@ -88,7 +88,7 @@ public class DefaultWebCultureResolverTests
         TestDefaultWebCultureResolver r = new TestDefaultWebCultureResolver();
 
         r.SetRequestLanguage(EXPECTED_NEUTRALCULTURE.Name);
-        Assert.AreEqual(EXPECTED_NEUTRALCULTURE, r.ResolveCulture());
+        Assert.That(r.ResolveCulture(), Is.EqualTo(EXPECTED_NEUTRALCULTURE));
     }
 
     [Test]
@@ -97,9 +97,9 @@ public class DefaultWebCultureResolverTests
         TestDefaultWebCultureResolver r = new TestDefaultWebCultureResolver();
 
         r.SetRequestLanguage(null);
-        Assert.AreEqual(CultureInfo.CurrentUICulture, r.ResolveCulture());
+        Assert.That(r.ResolveCulture(), Is.EqualTo(CultureInfo.CurrentUICulture));
 
         r.SetRequestLanguage("invalid culture name");
-        Assert.AreEqual(CultureInfo.CurrentUICulture, r.ResolveCulture());
+        Assert.That(r.ResolveCulture(), Is.EqualTo(CultureInfo.CurrentUICulture));
     }
 }

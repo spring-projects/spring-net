@@ -40,22 +40,22 @@ public class AbstractHandlerFactoryTests
             NamedObjectDefinition nod;
 
             nod = Find("/path/o1.ext", "/path/o1.ext");
-            Assert.AreEqual(typeof(Type1), nod.ObjectDefinition.ObjectType);
-            Assert.AreEqual("/path/o1.ext", nod.Name);
+            Assert.That(nod.ObjectDefinition.ObjectType, Is.EqualTo(typeof(Type1)));
+            Assert.That(nod.Name, Is.EqualTo("/path/o1.ext"));
 
             nod = Find("/path/o1.ext", "/o1.ext");
-            Assert.IsNull(nod);
+            Assert.That(nod, Is.Null);
 
             nod = Find("/path/o1.ext", "/path/o1");
-            Assert.IsNull(nod);
+            Assert.That(nod, Is.Null);
 
             nod = Find("/path/o1.ext", "o1.ext");
-            Assert.AreEqual(typeof(Type1), nod.ObjectDefinition.ObjectType);
-            Assert.AreEqual("o1.ext", nod.Name);
+            Assert.That(nod.ObjectDefinition.ObjectType, Is.EqualTo(typeof(Type1)));
+            Assert.That(nod.Name, Is.EqualTo("o1.ext"));
 
             nod = Find("/path/o1.ext", "o1");
-            Assert.AreEqual(typeof(Type1), nod.ObjectDefinition.ObjectType);
-            Assert.AreEqual("o1", nod.Name);
+            Assert.That(nod.ObjectDefinition.ObjectType, Is.EqualTo(typeof(Type1)));
+            Assert.That(nod.Name, Is.EqualTo("o1"));
         }
 
         private static NamedObjectDefinition Find(string url, string objectName)
@@ -134,7 +134,7 @@ public class AbstractHandlerFactoryTests
         }
 
         // (context is IConfigurableApplicationContext) -> OK
-        Assert.AreSame(allowedAppContext, f.GetCheckedApplicationContext("/AllowedContext"));
+        Assert.That(f.GetCheckedApplicationContext("/AllowedContext"), Is.SameAs(allowedAppContext));
     }
 
     [Test]
@@ -150,8 +150,8 @@ public class AbstractHandlerFactoryTests
         A.CallTo(() => f.GetContextStub("reusable")).Returns(appCtx);
         A.CallTo(() => f.CreateHandlerInstanceStub(appCtx, null, null, "reusable", null)).Returns(reusableHandler);
 
-        Assert.AreSame(reusableHandler, f.GetHandler(null, null, "reusable", null));
-        Assert.AreSame(reusableHandler, f.GetHandler(null, null, "reusable", null));
+        Assert.That(f.GetHandler(null, null, "reusable", null), Is.SameAs(reusableHandler));
+        Assert.That(f.GetHandler(null, null, "reusable", null), Is.SameAs(reusableHandler));
     }
 
     [Test]
@@ -172,7 +172,7 @@ public class AbstractHandlerFactoryTests
             .Returns(nonReusableHandler).Once()
             .Then.Returns(nonReusableHandler2).Once();
 
-        Assert.AreSame(nonReusableHandler, f.GetHandler(null, null, "notreusable", null));
-        Assert.AreSame(nonReusableHandler2, f.GetHandler(null, null, "notreusable", null));
+        Assert.That(f.GetHandler(null, null, "notreusable", null), Is.SameAs(nonReusableHandler));
+        Assert.That(f.GetHandler(null, null, "notreusable", null), Is.SameAs(nonReusableHandler2));
     }
 }

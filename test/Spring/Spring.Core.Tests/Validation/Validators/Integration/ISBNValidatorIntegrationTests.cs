@@ -44,8 +44,8 @@ public class ISBNValidatorIntegrationTests
         XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
         object obj = objectFactory.GetObject("isbnValidator");
 
-        Assert.IsTrue(obj is IValidator);
+        Assert.That(obj is IValidator, Is.True);
         IValidator validator = obj as IValidator;
-        Assert.IsTrue(validator.Validate("978-1-905158-79-9", new ValidationErrors()));
+        Assert.That(validator.Validate("978-1-905158-79-9", new ValidationErrors()), Is.True);
     }
 }

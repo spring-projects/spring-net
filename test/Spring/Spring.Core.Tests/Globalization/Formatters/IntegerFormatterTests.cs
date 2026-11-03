@@ -36,8 +36,8 @@ public class IntegerFormatterTests
     public void ParseNullOrEmptyValue()
     {
         IntegerFormatter fmt = new IntegerFormatter();
-        Assert.AreEqual(0, fmt.Parse(null));
-        Assert.AreEqual(0, fmt.Parse(string.Empty));
+        Assert.That(fmt.Parse(null), Is.EqualTo(0));
+        Assert.That(fmt.Parse(string.Empty), Is.EqualTo(0));
     }
 
     [Test]
@@ -51,32 +51,32 @@ public class IntegerFormatterTests
     public void FormatUsingDefaults()
     {
         IntegerFormatter fmt = new IntegerFormatter();
-        Assert.AreEqual("1234", fmt.Format(1234));
-        Assert.AreEqual("-1234", fmt.Format(-1234));
+        Assert.That(fmt.Format(1234), Is.EqualTo("1234"));
+        Assert.That(fmt.Format(-1234), Is.EqualTo("-1234"));
     }
 
     [Test]
     public void ParseUsingDefaults()
     {
         IntegerFormatter fmt = new IntegerFormatter();
-        Assert.AreEqual(1234, fmt.Parse("1234"));
-        Assert.AreEqual(-1234, fmt.Parse("-1234"));
+        Assert.That(fmt.Parse("1234"), Is.EqualTo(1234));
+        Assert.That(fmt.Parse("-1234"), Is.EqualTo(-1234));
     }
 
     [Test]
     public void FormatUsingCustomSettings()
     {
         IntegerFormatter fmt = new IntegerFormatter("{0:00000}");
-        Assert.AreEqual("01234", fmt.Format(1234));
-        Assert.AreEqual("-01234", fmt.Format(-1234));
+        Assert.That(fmt.Format(1234), Is.EqualTo("01234"));
+        Assert.That(fmt.Format(-1234), Is.EqualTo("-01234"));
 
         fmt = new IntegerFormatter("{0,10}");
-        Assert.AreEqual("      1234", fmt.Format(1234));
+        Assert.That(fmt.Format(1234), Is.EqualTo("      1234"));
 
         fmt = new IntegerFormatter("{0,-10}");
-        Assert.AreEqual("1234      ", fmt.Format(1234));
+        Assert.That(fmt.Format(1234), Is.EqualTo("1234      "));
 
         fmt = new IntegerFormatter("{0:(###) ###-####}");
-        Assert.AreEqual("(813) 555-4034", fmt.Format(8135554034));
+        Assert.That(fmt.Format(8135554034), Is.EqualTo("(813) 555-4034"));
     }
 }

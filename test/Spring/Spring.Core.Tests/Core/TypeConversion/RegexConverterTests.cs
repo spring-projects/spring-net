@@ -45,8 +45,8 @@ public sealed class RegexConverterTests
     {
         RegexConverter rc = new RegexConverter();
         object regex = rc.ConvertFrom("[a-z]");
-        Assert.IsNotNull(regex);
-        Assert.IsTrue(regex is Regex);
-        Assert.IsFalse(((Regex) regex).IsMatch("2"));
+        Assert.That(regex, Is.Not.Null);
+        Assert.That(regex is Regex, Is.True);
+        Assert.That(((Regex) regex).IsMatch("2"), Is.False);
     }
 }

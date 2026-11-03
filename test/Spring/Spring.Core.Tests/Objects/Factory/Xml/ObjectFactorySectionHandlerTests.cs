@@ -56,6 +56,6 @@ public class ObjectFactorySectionHandlerTests
     {
         ObjectFactorySectionHandler objHandler = new ObjectFactorySectionHandler();
         IListableObjectFactory factory = (IListableObjectFactory) objHandler.Create(null, null, _xmlElement);
-        Assert.AreEqual(1, factory.ObjectDefinitionCount);
+        Assert.That(factory.ObjectDefinitionCount, Is.EqualTo(1));
     }
 }

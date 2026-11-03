@@ -99,10 +99,11 @@ public class ResourceHandlerConfigurerTests
         resourceHandlerConfiguer.PostProcessObjectFactory(A.Fake<IConfigurableListableObjectFactory>());
 
         //todo investigate mocking the typeregistry, for now ask the actual one for information.
-        Assert.IsTrue(ResourceHandlerRegistry.IsHandlerRegistered("httpsss"),
+        Assert.That(ResourceHandlerRegistry.IsHandlerRegistered("httpsss"),
+            Is.True,
             "ResourceHandlerConfigurer did not register a protocol handler with the ResourceHandlerRegistry");
 
-        Assert.IsTrue(ResourceHandlerRegistry.IsHandlerRegistered("httpsss"), "Custom IResource not registered.");
-        Assert.AreEqual(1, resourceHandlerConfiguer.Order);
+        Assert.That(ResourceHandlerRegistry.IsHandlerRegistered("httpsss"), Is.True, "Custom IResource not registered.");
+        Assert.That(resourceHandlerConfiguer.Order, Is.EqualTo(1));
     }
 }

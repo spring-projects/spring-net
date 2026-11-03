@@ -68,13 +68,13 @@ public class NonTransactionalMessageListenerContainerTests : AbstractDependencyI
     public void SendAndAsyncReceiveWithExceptionHandling()
     {
         MessageQueueTemplate q = applicationContext["testQueueTemplate"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
         q.ConvertAndSend("Goodbye World 1");
-        Assert.AreEqual(0, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(0));
         container.Start();
         Thread.Sleep(waitInMillis);
-        Assert.AreEqual(0, listener.MessageCount);
-        Assert.AreEqual(1, exceptionHandler.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(0));
+        Assert.That(exceptionHandler.MessageCount, Is.EqualTo(1));
         container.Stop();
         container.Shutdown();
         Thread.Sleep(2500);
@@ -87,7 +87,7 @@ public class NonTransactionalMessageListenerContainerTests : AbstractDependencyI
         //MessageQueueTemplate q = applicationContext["testQueueTemplate"] as MessageQueueTemplate;
 
         MessageQueueTemplate q = applicationContext["testRemoteTemplate"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
 
         q.ConvertAndSend("Hello World 1");
         q.ConvertAndSend("Hello World 2");
@@ -98,13 +98,13 @@ public class NonTransactionalMessageListenerContainerTests : AbstractDependencyI
         //Reset the state so that running all tests together will succeed.
         exceptionHandler.MessageCount = 0;
 
-        Assert.AreEqual(0, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(0));
 
         container.Start();
 
         Thread.Sleep(waitInMillis);
-        Assert.AreEqual(5, listener.MessageCount);
-        Assert.AreEqual(0, exceptionHandler.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(5));
+        Assert.That(exceptionHandler.MessageCount, Is.EqualTo(0));
 
         container.Stop();
         container.Shutdown();

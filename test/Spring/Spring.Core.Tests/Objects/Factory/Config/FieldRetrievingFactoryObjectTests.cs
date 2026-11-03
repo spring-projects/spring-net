@@ -33,9 +33,9 @@ public sealed class FieldRetrievingFactoryObjectTests
         fac.StaticField = "Spring.Objects.Factory.Config.FinalFielder.Name, Spring.Core.Tests";
         fac.ObjectName = "foo";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(string), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(string)));
         object actual = fac.GetObject();
-        Assert.AreEqual(FinalFielder.Name, actual);
+        Assert.That(actual, Is.EqualTo(FinalFielder.Name));
     }
 
     [Test]
@@ -45,9 +45,9 @@ public sealed class FieldRetrievingFactoryObjectTests
         fac.StaticField = "\tSpring.Objects.Factory.Config.FinalFielder.Name, Spring.Core.Tests        ";
         fac.ObjectName = "foo";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(string), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(string)));
         object actual = fac.GetObject();
-        Assert.AreEqual(FinalFielder.Name, actual);
+        Assert.That(actual, Is.EqualTo(FinalFielder.Name));
     }
 
     [Test]
@@ -57,9 +57,9 @@ public sealed class FieldRetrievingFactoryObjectTests
         fac.StaticField = "Spring.Objects.Factory.Config.FinalFielder.Name";
         fac.ObjectName = "foo";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(string), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(string)));
         object actual = fac.GetObject();
-        Assert.AreEqual(FinalFielder.Name, actual);
+        Assert.That(actual, Is.EqualTo(FinalFielder.Name));
     }
 
     [Test]
@@ -69,9 +69,9 @@ public sealed class FieldRetrievingFactoryObjectTests
         fac.StaticField = "System.DBNull.Value";
         fac.ObjectName = "foo";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(DBNull), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(DBNull)));
         object actual = fac.GetObject();
-        Assert.AreEqual(DBNull.Value, actual);
+        Assert.That(actual, Is.EqualTo(DBNull.Value));
     }
 
     [Test]
@@ -80,9 +80,9 @@ public sealed class FieldRetrievingFactoryObjectTests
         FieldRetrievingFactoryObject fac = new FieldRetrievingFactoryObject();
         fac.ObjectName = "System.Type.Delimiter";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(char), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(char)));
         object actual = fac.GetObject();
-        Assert.AreEqual(Type.Delimiter, actual);
+        Assert.That(actual, Is.EqualTo(Type.Delimiter));
     }
 
     [Test]
@@ -92,9 +92,9 @@ public sealed class FieldRetrievingFactoryObjectTests
         fac.ObjectName = "System.DBNull.Value";
         fac.StaticField = "Spring.Objects.Factory.Config.FinalFielder.Name";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(string), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(string)));
         object actual = fac.GetObject();
-        Assert.AreEqual(FinalFielder.Name, actual);
+        Assert.That(actual, Is.EqualTo(FinalFielder.Name));
     }
 
     [Test]
@@ -106,14 +106,14 @@ public sealed class FieldRetrievingFactoryObjectTests
         fac.ObjectName = "foo";
         fac.AfterPropertiesSet();
         object actual = fac.GetObject();
-        Assert.AreEqual(FinalFielder.Name, actual);
+        Assert.That(actual, Is.EqualTo(FinalFielder.Name));
     }
 
     [Test]
     public void IsSingleton()
     {
         FieldRetrievingFactoryObject fac = new FieldRetrievingFactoryObject();
-        Assert.IsTrue(fac.IsSingleton);
+        Assert.That(fac.IsSingleton, Is.True);
     }
 
     [Test]
@@ -127,7 +127,7 @@ public sealed class FieldRetrievingFactoryObjectTests
         fac.ObjectName = "foo";
         fac.AfterPropertiesSet();
         object actual = fac.GetObject();
-        Assert.AreEqual(expected.Age, actual);
+        Assert.That(actual, Is.EqualTo(expected.Age));
     }
 
     [Test]
@@ -181,10 +181,10 @@ public sealed class FieldRetrievingFactoryObjectTests
         fac.StaticField = "System.Type.emptytyPES, Mscorlib";
         fac.ObjectName = "foo";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(Type[]), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(Type[])));
         Type[] actual = fac.GetObject() as Type[];
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(Type.EmptyTypes.Length, actual.Length);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.Length, Is.EqualTo(Type.EmptyTypes.Length));
     }
 
     [Test]

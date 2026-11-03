@@ -40,8 +40,8 @@ public sealed class ResourceConverterTests
     public void CanConvertFrom()
     {
         ResourceConverter vrt = new ResourceConverter();
-        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
-        Assert.IsFalse(vrt.CanConvertFrom(typeof(int)));
+        Assert.That(vrt.CanConvertFrom(typeof(string)), Is.True, "Conversion from a string instance must be supported.");
+        Assert.That(vrt.CanConvertFrom(typeof(int)), Is.False);
     }
 
     [Test]
@@ -49,10 +49,10 @@ public sealed class ResourceConverterTests
     {
         ResourceConverter vrt = new ResourceConverter();
         object actual = vrt.ConvertFrom("file://localhost/");
-        Assert.IsNotNull(actual);
+        Assert.That(actual, Is.Not.Null);
         IResource res = actual as IResource;
-        Assert.IsNotNull(res);
-        Assert.IsFalse(res.Exists);
+        Assert.That(res, Is.Not.Null);
+        Assert.That(res.Exists, Is.False);
     }
 
     [Test]
@@ -82,10 +82,12 @@ public sealed class ResourceConverterTests
 
         string userprofile = Environment.GetEnvironmentVariable("userprofile");
 
-        Assert.IsFalse(resource.Exists,
+        Assert.That(resource.Exists,
+            Is.False,
             string.Format("Darn. Should be supplying a rubbish non-existant resource. " +
                           "You don't actually have a file called '{0}.txt' in your user directory do you?", filename));
-        Assert.IsTrue(resource.Description.IndexOf(userprofile) > -1,
+        Assert.That(resource.Description.IndexOf(userprofile) > -1,
+            Is.True,
             "Environment variable not expanded.");
     }
 
@@ -99,10 +101,12 @@ public sealed class ResourceConverterTests
         string path = string.Format(@"${{{0}}}\{1}.txt", foldername, filename);
         IResource resource = (IResource) vrt.ConvertFrom(path);
 
-        Assert.IsFalse(resource.Exists,
+        Assert.That(resource.Exists,
+            Is.False,
             string.Format("Darn. Should be supplying a rubbish non-existant resource. " +
                           "You don't actually have a file called '{0}.txt' in your user directory do you?", filename));
-        Assert.IsTrue(resource.Description.IndexOf(foldername) > -1,
+        Assert.That(resource.Description.IndexOf(foldername) > -1,
+            Is.True,
             "Rubbish environment variable not preserved as-is.");
     }
 }

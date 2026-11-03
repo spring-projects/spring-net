@@ -33,9 +33,9 @@ public sealed class LinkedListTests
         ll.Add("item1");
         ll.Add("item2");
         ll.Add("item3");
-        Assert.IsTrue(ll.Count == 3, "Expected 3 items not " + ll.Count);
-        Assert.IsTrue(ll[0].Equals("item1"), "Expected first element to be \"item1\" not " + ll[0]);
-        Assert.IsTrue(ll[1].Equals("item2"), "Expected second element to be \"item2\" not " + ll[1]);
+        Assert.That(ll.Count == 3, Is.True, "Expected 3 items not " + ll.Count);
+        Assert.That(ll[0].Equals("item1"), Is.True, "Expected first element to be \"item1\" not " + ll[0]);
+        Assert.That(ll[1].Equals("item2"), Is.True, "Expected second element to be \"item2\" not " + ll[1]);
     }
 
     [Test]
@@ -45,10 +45,10 @@ public sealed class LinkedListTests
         ll.Add("item1");
         ll.Add("item2");
         ll.Insert(1, "item1andahalf");
-        Assert.IsTrue(ll.Count == 3, "Expected 3 items not " + ll.Count);
-        Assert.IsTrue(ll[0].Equals("item1"), "Expected first element to be \"item1\" not " + ll[0]);
-        Assert.IsTrue(ll[1].Equals("item1andahalf"), "Expected second element to be \"item1andahalf\" not " + ll[1]);
-        Assert.IsTrue(ll[2].Equals("item2"), "Expected third element to be \"item2\" not " + ll[0]);
+        Assert.That(ll.Count == 3, Is.True, "Expected 3 items not " + ll.Count);
+        Assert.That(ll[0].Equals("item1"), Is.True, "Expected first element to be \"item1\" not " + ll[0]);
+        Assert.That(ll[1].Equals("item1andahalf"), Is.True, "Expected second element to be \"item1andahalf\" not " + ll[1]);
+        Assert.That(ll[2].Equals("item2"), Is.True, "Expected third element to be \"item2\" not " + ll[0]);
     }
 
     [Test]
@@ -59,9 +59,9 @@ public sealed class LinkedListTests
         ll.Add("item2");
         ll.Add("item3");
         ll.RemoveAt(1);
-        Assert.IsTrue(ll.Count == 2, "Expected 2 items not " + ll.Count);
-        Assert.IsTrue(ll[0].Equals("item1"), "Expected first element to be \"item1\" not " + ll[0]);
-        Assert.IsTrue(ll[1].Equals("item3"), "Expected second element to be \"item3\" not " + ll[1]);
+        Assert.That(ll.Count == 2, Is.True, "Expected 2 items not " + ll.Count);
+        Assert.That(ll[0].Equals("item1"), Is.True, "Expected first element to be \"item1\" not " + ll[0]);
+        Assert.That(ll[1].Equals("item3"), Is.True, "Expected second element to be \"item3\" not " + ll[1]);
     }
 
     [Test]
@@ -75,9 +75,9 @@ public sealed class LinkedListTests
         ll.Add(item2);
         ll.Add(item3);
         ll.Remove(item2);
-        Assert.IsTrue(ll.Count == 2, "Expected 2 items not " + ll.Count);
-        Assert.IsTrue(ll[0].Equals("item1"), "Expected first element to be \"item1\" not " + ll[0]);
-        Assert.IsTrue(ll[1].Equals("item3"), "Expected second element to be \"item3\" not " + ll[1]);
+        Assert.That(ll.Count == 2, Is.True, "Expected 2 items not " + ll.Count);
+        Assert.That(ll[0].Equals("item1"), Is.True, "Expected first element to be \"item1\" not " + ll[0]);
+        Assert.That(ll[1].Equals("item3"), Is.True, "Expected second element to be \"item3\" not " + ll[1]);
     }
 
     [Test]
@@ -95,10 +95,10 @@ public sealed class LinkedListTests
         ll.Add("item2");
         ll.Add("item3");
         IEnumerator ienum = ll.GetEnumerator();
-        Assert.IsTrue(ienum.MoveNext());
-        Assert.IsTrue(ienum.Current.Equals("item1"), "Expected first element to be \"item1\" not " + ienum.Current);
-        Assert.IsTrue(ienum.MoveNext());
-        Assert.IsTrue(ienum.Current.Equals("item2"), "Expected second element to be \"item2\" not " + ienum.Current);
+        Assert.That(ienum.MoveNext(), Is.True);
+        Assert.That(ienum.Current.Equals("item1"), Is.True, "Expected first element to be \"item1\" not " + ienum.Current);
+        Assert.That(ienum.MoveNext(), Is.True);
+        Assert.That(ienum.Current.Equals("item2"), Is.True, "Expected second element to be \"item2\" not " + ienum.Current);
     }
 
     [Test]
@@ -109,7 +109,7 @@ public sealed class LinkedListTests
         ll.Add("item2");
         ll.Add("item3");
         IEnumerator ienum = ll.GetEnumerator();
-        Assert.IsTrue(ienum.MoveNext());
+        Assert.That(ienum.MoveNext(), Is.True);
         ll.RemoveAt(0);
         Assert.Throws<InvalidOperationException>(() => ienum.MoveNext());
     }
@@ -122,9 +122,9 @@ public sealed class LinkedListTests
         al.Add("al2");
         al.Add("al3");
         LinkedList ll = new LinkedList(al);
-        Assert.IsTrue(ll.Count == 3, "Expected 3 items not " + ll.Count);
-        Assert.IsTrue(ll[0].Equals("al1"), "Expected first element to be \"al1\" not " + ll[0]);
-        Assert.IsTrue(ll[1].Equals("al2"), "Expected second element to be \"al2\" not " + ll[1]);
+        Assert.That(ll.Count == 3, Is.True, "Expected 3 items not " + ll.Count);
+        Assert.That(ll[0].Equals("al1"), Is.True, "Expected first element to be \"al1\" not " + ll[0]);
+        Assert.That(ll[1].Equals("al2"), Is.True, "Expected second element to be \"al2\" not " + ll[1]);
     }
 
     [Test]
@@ -138,7 +138,7 @@ public sealed class LinkedListTests
         ll.Add(item2);
         ll.Add(item3);
         int index = ll.IndexOf(item2);
-        Assert.IsTrue(index == 1, "Expected index of 1 not " + index);
+        Assert.That(index == 1, Is.True, "Expected index of 1 not " + index);
     }
 
     [Test]
@@ -150,9 +150,9 @@ public sealed class LinkedListTests
         ll.Add("item3");
         string[] strings = new string[3];
         ll.CopyTo(strings, 0);
-        Assert.IsTrue(strings[0].Equals("item1"), "Expected first element to be \"item1\" not " + strings[0]);
-        Assert.IsTrue(strings[1].Equals("item2"), "Expected second element to be \"item2\" not " + strings[1]);
-        Assert.IsTrue(strings[2].Equals("item3"), "Expected third element to be \"item3\" not " + strings[2]);
+        Assert.That(strings[0].Equals("item1"), Is.True, "Expected first element to be \"item1\" not " + strings[0]);
+        Assert.That(strings[1].Equals("item2"), Is.True, "Expected second element to be \"item2\" not " + strings[1]);
+        Assert.That(strings[2].Equals("item3"), Is.True, "Expected third element to be \"item3\" not " + strings[2]);
     }
 
     [Test]
@@ -166,11 +166,11 @@ public sealed class LinkedListTests
         strings[0] = "string1";
         strings[1] = "string2";
         ll.CopyTo(strings, 2);
-        Assert.IsTrue(strings[0].Equals("string1"), "Expected first element to be \"string1\" not " + strings[0]);
-        Assert.IsTrue(strings[1].Equals("string2"), "Expected second element to be \"string2\" not " + strings[1]);
-        Assert.IsTrue(strings[2].Equals("item1"), "Expected third element to be \"item1\" not " + strings[2]);
-        Assert.IsTrue(strings[3].Equals("item2"), "Expected fourth element to be \"item2\" not " + strings[3]);
-        Assert.IsTrue(strings[4].Equals("item3"), "Expected fifth element to be \"item3\" not " + strings[4]);
+        Assert.That(strings[0].Equals("string1"), Is.True, "Expected first element to be \"string1\" not " + strings[0]);
+        Assert.That(strings[1].Equals("string2"), Is.True, "Expected second element to be \"string2\" not " + strings[1]);
+        Assert.That(strings[2].Equals("item1"), Is.True, "Expected third element to be \"item1\" not " + strings[2]);
+        Assert.That(strings[3].Equals("item2"), Is.True, "Expected fourth element to be \"item2\" not " + strings[3]);
+        Assert.That(strings[4].Equals("item3"), Is.True, "Expected fifth element to be \"item3\" not " + strings[4]);
     }
 
     [Test]
@@ -213,20 +213,20 @@ public sealed class LinkedListTests
     public void Contains()
     {
         LinkedList ll = new LinkedList();
-        Assert.IsFalse(ll.Contains("Foo"));
+        Assert.That(ll.Contains("Foo"), Is.False);
 
         ll = new LinkedList();
-        Assert.IsFalse(ll.Contains(null));
+        Assert.That(ll.Contains(null), Is.False);
         ll.Add("Foo");
         ll.Add(null);
         ll.Add("Bar");
-        Assert.IsTrue(ll.Contains(null));
-        Assert.IsTrue(ll.Contains("Bar"));
-        Assert.IsTrue(ll.Contains("Foo"));
+        Assert.That(ll.Contains(null), Is.True);
+        Assert.That(ll.Contains("Bar"), Is.True);
+        Assert.That(ll.Contains("Foo"), Is.True);
 
         ll = new LinkedList();
         ll.Add("Foo");
         ll.Add("Bar");
-        Assert.IsFalse(ll.Contains(null));
+        Assert.That(ll.Contains(null), Is.False);
     }
 }

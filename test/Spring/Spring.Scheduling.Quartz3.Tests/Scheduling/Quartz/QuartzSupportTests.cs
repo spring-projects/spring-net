@@ -74,7 +74,7 @@ public class QuartzSupportTests
         jobData.Add("testObject", tb);
         jobDetail0.JobDataAsMap = jobData;
         jobDetail0.AfterPropertiesSet();
-        Assert.AreEqual(tb, jobDetail0.JobDataMap.Get("testObject"));
+        Assert.That(jobDetail0.JobDataMap.Get("testObject"), Is.EqualTo(tb));
 
         CronTriggerObject trigger0 = new CronTriggerObject();
         trigger0.ObjectName = "myTrigger0";
@@ -173,7 +173,7 @@ public class QuartzSupportTests
         jobData.Add("testObject", tb);
         jobDetail0.JobDataAsMap = jobData;
         jobDetail0.AfterPropertiesSet();
-        Assert.AreEqual(tb, jobDetail0.JobDataMap.Get("testObject"));
+        Assert.That(jobDetail0.JobDataMap.Get("testObject"), Is.EqualTo(tb));
 
         CronTriggerObject trigger0 = new CronTriggerObject();
         trigger0.ObjectName = "myTrigger0";
@@ -262,7 +262,7 @@ public class QuartzSupportTests
         jobData.Add("testObject", tb);
         jobDetail0.JobDataAsMap = jobData;
         jobDetail0.AfterPropertiesSet();
-        Assert.AreEqual(tb, jobDetail0.JobDataMap.Get("testObject"));
+        Assert.That(jobDetail0.JobDataMap.Get("testObject"), Is.EqualTo(tb));
 
         CronTriggerObject trigger0 = new CronTriggerObject();
         trigger0.ObjectName = "myTrigger0";
@@ -381,14 +381,14 @@ public class QuartzSupportTests
 
         if (concurrent)
         {
-            Assert.AreEqual(2, task1.counter);
+            Assert.That(task1.counter, Is.EqualTo(2));
             task1.Stop();
             // we're done, both jobs have ran, let's call it a day
             return;
         }
         else
         {
-            Assert.AreEqual(1, task1.counter);
+            Assert.That(task1.counter, Is.EqualTo(1));
             task1.Stop();
             // we need to check whether or not the test succeed with non-concurrent jobs
         }
@@ -403,7 +403,7 @@ public class QuartzSupportTests
         }
 
         task1.Stop();
-        Assert.AreEqual(2, task1.counter);
+        Assert.That(task1.counter, Is.EqualTo(2));
 
         // Although we're destroying the scheduler, it does seem to keep things in memory:
         // When executing both tests (concurrent and non-concurrent), the second test always
@@ -424,7 +424,7 @@ public class QuartzSupportTests
         jobDetail0.Name = "myJob0";
         jobDetail0.Group = SchedulerConstants.DefaultGroup;
         jobDetail0.JobDataMap.Add("testObject", tb);
-        Assert.AreEqual(tb, jobDetail0.JobDataMap.Get("testObject"));
+        Assert.That(jobDetail0.JobDataMap.Get("testObject"), Is.EqualTo(tb));
 
         CronTriggerImpl trigger0 = new CronTriggerImpl();
         trigger0.Name = "myTrigger0";
@@ -508,8 +508,8 @@ public class QuartzSupportTests
             schedulerFactoryObject.AfterPropertiesSet();
             await schedulerFactoryObject.Start();
             IScheduler returnedScheduler = (IScheduler) schedulerFactoryObject.GetObject();
-            Assert.AreEqual(tb, returnedScheduler.Context["testObject"]);
-            Assert.AreEqual(ac, returnedScheduler.Context["appCtx"]);
+            Assert.That(returnedScheduler.Context["testObject"], Is.EqualTo(tb));
+            Assert.That(returnedScheduler.Context["appCtx"], Is.EqualTo(ac));
         }
         finally
         {
@@ -535,8 +535,8 @@ public class QuartzSupportTests
         jobDetail.ApplicationContextJobDataKey = "appCtx";
         jobDetail.AfterPropertiesSet();
 
-        Assert.AreEqual(tb, jobDetail.JobDataMap.Get("testObject"));
-        Assert.AreEqual(ac, jobDetail.JobDataMap.Get("appCtx"));
+        Assert.That(jobDetail.JobDataMap.Get("testObject"), Is.EqualTo(tb));
+        Assert.That(jobDetail.JobDataMap.Get("appCtx"), Is.EqualTo(ac));
     }
 
     /// <summary>
@@ -567,8 +567,8 @@ public class QuartzSupportTests
         await factoryObject.Start();
 
         await Task.Delay(TimeSpan.FromSeconds(1));
-        Assert.IsTrue(DummyJob.count > 0);
-        Assert.AreEqual(DummyJob.count, taskExecutor.count);
+        Assert.That(DummyJob.count > 0, Is.True);
+        Assert.That(taskExecutor.count, Is.EqualTo(DummyJob.count));
 
         factoryObject.Dispose();
     }
@@ -599,7 +599,7 @@ public class QuartzSupportTests
         await factoryObject.Start();
 
         DummyRunnable.runEvent.WaitOne(TimeSpan.FromSeconds(5));
-        Assert.IsTrue(DummyRunnable.count > 0);
+        Assert.That(DummyRunnable.count > 0, Is.True);
 
         factoryObject.Dispose();
     }
@@ -632,8 +632,8 @@ public class QuartzSupportTests
         await factoryObject.Start();
 
         await Task.Delay(TimeSpan.FromSeconds(1));
-        Assert.AreEqual(10, DummyJobObject.param);
-        Assert.IsTrue(DummyJobObject.count > 0);
+        Assert.That(DummyJobObject.param, Is.EqualTo(10));
+        Assert.That(DummyJobObject.count > 0, Is.True);
 
         factoryObject.Dispose();
     }
@@ -668,8 +668,8 @@ public class QuartzSupportTests
         await factoryObject.Start();
 
         await Task.Delay(TimeSpan.FromSeconds(1));
-        Assert.AreEqual(10, DummyJob.param);
-        Assert.IsTrue(DummyJob.count > 0);
+        Assert.That(DummyJob.param, Is.EqualTo(10));
+        Assert.That(DummyJob.count > 0, Is.True);
 
         factoryObject.Dispose();
     }
@@ -705,8 +705,8 @@ public class QuartzSupportTests
         bean.AfterPropertiesSet();
 
         await Task.Delay(TimeSpan.FromSeconds(1));
-        Assert.AreEqual(0, DummyJob.param);
-        Assert.IsTrue(DummyJob.count == 0);
+        Assert.That(DummyJob.param, Is.EqualTo(0));
+        Assert.That(DummyJob.count == 0, Is.True);
 
         bean.Dispose();
     }
@@ -740,8 +740,8 @@ public class QuartzSupportTests
         await factoryObject.Start();
 
         await Task.Delay(TimeSpan.FromSeconds(1));
-        Assert.AreEqual(10, DummyRunnable.param);
-        Assert.IsTrue(DummyRunnable.count > 0);
+        Assert.That(DummyRunnable.param, Is.EqualTo(10));
+        Assert.That(DummyRunnable.count > 0, Is.True);
 
         factoryObject.Dispose();
     }
@@ -775,8 +775,8 @@ public class QuartzSupportTests
         await factoryObject.Start();
 
         await Task.Delay(TimeSpan.FromSeconds(1));
-        Assert.AreEqual(10, DummyJobObject.param);
-        Assert.IsTrue(DummyJobObject.count > 0);
+        Assert.That(DummyJobObject.param, Is.EqualTo(10));
+        Assert.That(DummyJobObject.count > 0, Is.True);
 
         factoryObject.Dispose();
     }
@@ -798,8 +798,8 @@ public class QuartzSupportTests
         await factoryObject.Start();
 
         await Task.Delay(TimeSpan.FromSeconds(1));
-        Assert.AreEqual(10, DummyJob.param);
-        Assert.IsTrue(DummyJob.count > 0);
+        Assert.That(DummyJob.param, Is.EqualTo(10));
+        Assert.That(DummyJob.count > 0, Is.True);
 
         factoryObject.Dispose();
     }
@@ -815,20 +815,20 @@ public class QuartzSupportTests
         {
             IScheduler scheduler1 = (IScheduler) ctx.GetObject("scheduler1");
             IScheduler scheduler2 = (IScheduler) ctx.GetObject("scheduler2");
-            Assert.AreNotSame(scheduler1, scheduler2);
-            Assert.AreEqual("quartz1", scheduler1.SchedulerName);
-            Assert.AreEqual("quartz2", scheduler2.SchedulerName);
+            Assert.That(scheduler2, Is.Not.SameAs(scheduler1));
+            Assert.That(scheduler1.SchedulerName, Is.EqualTo("quartz1"));
+            Assert.That(scheduler2.SchedulerName, Is.EqualTo("quartz2"));
 
             XmlApplicationContext ctx2 = new XmlApplicationContext("multipleSchedulers.xml");
             try
             {
                 IScheduler scheduler1a = (IScheduler) ctx2.GetObject("scheduler1");
                 IScheduler scheduler2a = (IScheduler) ctx2.GetObject("scheduler2");
-                Assert.AreNotSame(scheduler1a, scheduler2a);
-                Assert.AreNotSame(scheduler1a, scheduler1);
-                Assert.AreNotSame(scheduler2a, scheduler2);
-                Assert.AreEqual("quartz1", scheduler1a.SchedulerName);
-                Assert.AreEqual("quartz2", scheduler2a.SchedulerName);
+                Assert.That(scheduler2a, Is.Not.SameAs(scheduler1a));
+                Assert.That(scheduler1, Is.Not.SameAs(scheduler1a));
+                Assert.That(scheduler2, Is.Not.SameAs(scheduler2a));
+                Assert.That(scheduler1a.SchedulerName, Is.EqualTo("quartz1"));
+                Assert.That(scheduler2a.SchedulerName, Is.EqualTo("quartz2"));
             }
             finally
             {
@@ -854,10 +854,10 @@ public class QuartzSupportTests
             QuartzTestObject exportService = (QuartzTestObject) ctx.GetObject("exportService");
             QuartzTestObject importService = (QuartzTestObject) ctx.GetObject("importService");
 
-            Assert.AreEqual(0, exportService.ImportCount, "doImport called exportService");
-            Assert.AreEqual(2, exportService.ExportCount, "doExport not called on exportService");
-            Assert.AreEqual(2, importService.ImportCount, "doImport not called on importService");
-            Assert.AreEqual(0, importService.ExportCount, "doExport called on importService");
+            Assert.That(exportService.ImportCount, Is.EqualTo(0), "doImport called exportService");
+            Assert.That(exportService.ExportCount, Is.EqualTo(2), "doExport not called on exportService");
+            Assert.That(importService.ImportCount, Is.EqualTo(2), "doImport not called on importService");
+            Assert.That(importService.ExportCount, Is.EqualTo(0), "doExport called on importService");
         }
         finally
         {
@@ -878,10 +878,10 @@ public class QuartzSupportTests
             QuartzTestObject exportService = (QuartzTestObject) ctx.GetObject("exportService");
             QuartzTestObject importService = (QuartzTestObject) ctx.GetObject("importService");
 
-            Assert.AreEqual(0, exportService.ImportCount, "doImport called exportService");
-            Assert.AreEqual(2, exportService.ExportCount, "doExport not called on exportService");
-            Assert.AreEqual(2, importService.ImportCount, "doImport not called on importService");
-            Assert.AreEqual(0, importService.ExportCount, "doExport called on importService");
+            Assert.That(exportService.ImportCount, Is.EqualTo(0), "doImport called exportService");
+            Assert.That(exportService.ExportCount, Is.EqualTo(2), "doExport not called on exportService");
+            Assert.That(importService.ImportCount, Is.EqualTo(2), "doImport not called on importService");
+            Assert.That(importService.ExportCount, Is.EqualTo(0), "doExport called on importService");
         }
         finally
         {
@@ -895,9 +895,9 @@ public class QuartzSupportTests
         StaticApplicationContext context = new StaticApplicationContext();
         context.RegisterObjectDefinition("scheduler", new RootObjectDefinition(typeof(SchedulerFactoryObject)));
         IScheduler scheduler = (IScheduler) context.GetObject("scheduler", typeof(IScheduler));
-        Assert.IsFalse(scheduler.IsStarted);
+        Assert.That(scheduler.IsStarted, Is.False);
         context.Refresh();
-        Assert.IsTrue(scheduler.IsStarted);
+        Assert.That(scheduler.IsStarted, Is.True);
     }
 
     [Test]
@@ -911,9 +911,9 @@ public class QuartzSupportTests
         context.RegisterObjectDefinition("scheduler", beanDefinition.ObjectDefinition);
         IScheduler scheduler = (IScheduler) context.GetObject("scheduler", typeof(IScheduler));
 
-        Assert.IsFalse(scheduler.IsStarted);
+        Assert.That(scheduler.IsStarted, Is.False);
         context.Refresh();
-        Assert.IsFalse(scheduler.IsStarted);
+        Assert.That(scheduler.IsStarted, Is.False);
     }
 
     /// <summary>
@@ -924,7 +924,7 @@ public class QuartzSupportTests
     {
         XmlApplicationContext ctx = new XmlApplicationContext("schedulerRepositoryExposure.xml");
         var expected = SchedulerRepository.Instance.Lookup("myScheduler");
-        Assert.AreSame(expected, ctx.GetObject("scheduler"));
+        Assert.That(ctx.GetObject("scheduler"), Is.SameAs(expected));
         ctx.Dispose();
         await Task.CompletedTask;
     }

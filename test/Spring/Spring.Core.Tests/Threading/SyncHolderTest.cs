@@ -32,22 +32,22 @@ public class SyncHolderTest
         MySemaphore sync = new MySemaphore(1);
         using (new SyncHolder(sync, 100))
         {
-            Assert.AreEqual(0, sync.Permits);
+            Assert.That(sync.Permits, Is.EqualTo(0));
         }
 
-        Assert.AreEqual(1, sync.Permits);
+        Assert.That(sync.Permits, Is.EqualTo(1));
 
         sync = new MySemaphore(0);
         try
         {
             using (new SyncHolder(sync, 100))
             {
-                Assert.IsTrue(false, "wrongly entered sync block");
+                Assert.Fail("wrongly entered sync block");
             }
         }
         catch (TimeoutException)
         {
-            Assert.AreEqual(0, sync.Permits);
+            Assert.That(sync.Permits, Is.EqualTo(0));
         }
     }
 

@@ -42,7 +42,7 @@ public sealed class XmlApplicationContextTests
         public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
         {
             SPRNET1231FactoryObject testFactory = (SPRNET1231FactoryObject) factory.GetObject("testFactory");
-            Assert.AreEqual(0, testFactory.count);
+            Assert.That(testFactory.count, Is.EqualTo(0));
         }
     }
 
@@ -69,7 +69,7 @@ public sealed class XmlApplicationContextTests
         catch (ObjectCreationException e)
         {
             NoSuchObjectDefinitionException ex = e.InnerException as NoSuchObjectDefinitionException;
-            Assert.IsNotNull(ex);
+            Assert.That(ex, Is.Not.Null);
             //Pass
         }
     }
@@ -85,7 +85,7 @@ public sealed class XmlApplicationContextTests
     {
         XmlApplicationContext ctx =
             new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/simpleContext.xml");
-        Assert.IsTrue(ctx.ContainsObject("someMessageSource"));
+        Assert.That(ctx.ContainsObject("someMessageSource"), Is.True);
         ctx.Dispose();
     }
 
@@ -96,15 +96,15 @@ public sealed class XmlApplicationContextTests
             new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/contextB.xml",
                 "assembly://Spring.Core.Tests/Spring.Context.Support/contextC.xml",
                 "assembly://Spring.Core.Tests/Spring.Context.Support/contextA.xml");
-        Assert.IsTrue(ctx.ContainsObject("service"));
-        Assert.IsTrue(ctx.ContainsObject("logicOne"));
-        Assert.IsTrue(ctx.ContainsObject("logicTwo"));
+        Assert.That(ctx.ContainsObject("service"), Is.True);
+        Assert.That(ctx.ContainsObject("logicOne"), Is.True);
+        Assert.That(ctx.ContainsObject("logicTwo"), Is.True);
         Service service = (Service) ctx.GetObject("service");
         ctx.Refresh();
-        Assert.IsTrue(service.ProperlyDestroyed);
+        Assert.That(service.ProperlyDestroyed, Is.True);
         service = (Service) ctx.GetObject("service");
         ctx.Dispose();
-        Assert.IsTrue(service.ProperlyDestroyed);
+        Assert.That(service.ProperlyDestroyed, Is.True);
     }
 
     [Test]
@@ -115,12 +115,12 @@ public sealed class XmlApplicationContextTests
             XmlApplicationContext ctx =
                 new XmlApplicationContext(false,
                     "assembly://Spring.Core.Tests/Spring.Context.Support/invalidValueType.xml");
-            Assert.Fail("Should have thrown ObjectCreationException for context", ctx);
+            Assert.Fail("Should have thrown ObjectCreationException for context");
         }
         catch (ObjectCreationException ex)
         {
-            Assert.IsTrue(ex.Message.IndexOf((typeof(TypeMismatchException).Name)) != -1);
-            Assert.IsTrue(ex.Message.IndexOf(("UseCodeAsDefaultMessage")) != -1);
+            Assert.That(ex.Message.IndexOf((typeof(TypeMismatchException).Name)) != -1, Is.True);
+            Assert.That(ex.Message.IndexOf(("UseCodeAsDefaultMessage")) != -1, Is.True);
         }
     }
 
@@ -131,7 +131,7 @@ public sealed class XmlApplicationContextTests
         XmlApplicationContext ctx =
             new XmlApplicationContext(false,
                 "assembly://Spring.Core.Tests/Spring.Context.Support/invalidType.xml");
-        Assert.IsTrue(ctx.ContainsObject("someMessageSource"));
+        Assert.That(ctx.ContainsObject("someMessageSource"), Is.True);
         ctx.GetObject("someMessageSource");
     }
 
@@ -140,10 +140,10 @@ public sealed class XmlApplicationContextTests
     {
         XmlApplicationContext ctx =
             new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml");
-        Assert.IsTrue(ctx.ContainsObject("goran"));
-        Assert.IsTrue(ctx.ContainsObject("Goran"));
-        Assert.IsTrue(ctx.ContainsObject("GORAN"));
-        Assert.AreEqual(ctx.GetObject("goran"), ctx.GetObject("GORAN"));
+        Assert.That(ctx.ContainsObject("goran"), Is.True);
+        Assert.That(ctx.ContainsObject("Goran"), Is.True);
+        Assert.That(ctx.ContainsObject("GORAN"), Is.True);
+        Assert.That(ctx.GetObject("GORAN"), Is.EqualTo(ctx.GetObject("goran")));
     }
 
     [Test]
@@ -152,7 +152,7 @@ public sealed class XmlApplicationContextTests
         XmlApplicationContext ctx =
             new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml");
         string DOES_NOT_EXIST = "does_not_exist";
-        Assert.IsFalse(ctx.ContainsObject(DOES_NOT_EXIST));
+        Assert.That(ctx.ContainsObject(DOES_NOT_EXIST), Is.False);
         Assert.Throws<NoSuchObjectDefinitionException>(() => ctx.GetObject(DOES_NOT_EXIST));
     }
 
@@ -161,7 +161,7 @@ public sealed class XmlApplicationContextTests
     {
         XmlApplicationContext ctx = new XmlApplicationContext("Spring/Context/Support/SPRNET-192.xml");
         LogFactoryObject logFactory = (LogFactoryObject) ctx["&log"];
-        Assert.AreEqual("foo", logFactory.LogName);
+        Assert.That(logFactory.LogName, Is.EqualTo("foo"));
     }
 
     /// <summary>
@@ -177,11 +177,11 @@ public sealed class XmlApplicationContextTests
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml");
 
-        Assert.IsTrue(ctx.ContainsObject("abstractObjectProcessorPrototype"));
-        Assert.IsTrue(ctx.ContainsObject("abstractFactoryProcessorPrototype"));
+        Assert.That(ctx.ContainsObject("abstractObjectProcessorPrototype"), Is.True);
+        Assert.That(ctx.ContainsObject("abstractFactoryProcessorPrototype"), Is.True);
 
-        Assert.AreEqual(0, CountingObjectPostProcessor.Count);
-        Assert.AreEqual(0, CoutingObjectFactoryPostProcessor.Count);
+        Assert.That(CountingObjectPostProcessor.Count, Is.EqualTo(0));
+        Assert.That(CoutingObjectFactoryPostProcessor.Count, Is.EqualTo(0));
     }
 
     /// <summary>
@@ -197,18 +197,18 @@ public sealed class XmlApplicationContextTests
         XmlApplicationContext xmlContext = new XmlApplicationContext(new string[] { objDefLocation });
 
         object objGoran = xmlContext.GetObject("goran");
-        Assert.IsTrue(objGoran is TestObject);
+        Assert.That(objGoran is TestObject, Is.True);
         TestObject fooGet = objGoran as TestObject;
 
         TestObject fooConfigure = new TestObject();
         xmlContext.ConfigureObject(fooConfigure, "goran");
-        Assert.IsNotNull(fooGet);
-        Assert.AreEqual(fooGet.Name, fooConfigure.Name);
-        Assert.AreEqual(fooGet.Age, fooConfigure.Age);
-        Assert.AreEqual(fooGet.ObjectName, fooConfigure.ObjectName);
-        Assert.IsNotNull(fooGet.ObjectName);
-        Assert.AreEqual(xmlContext, fooGet.ApplicationContext);
-        Assert.AreEqual(xmlContext, fooConfigure.ApplicationContext);
+        Assert.That(fooGet, Is.Not.Null);
+        Assert.That(fooConfigure.Name, Is.EqualTo(fooGet.Name));
+        Assert.That(fooConfigure.Age, Is.EqualTo(fooGet.Age));
+        Assert.That(fooConfigure.ObjectName, Is.EqualTo(fooGet.ObjectName));
+        Assert.That(fooGet.ObjectName, Is.Not.Null);
+        Assert.That(fooGet.ApplicationContext, Is.EqualTo(xmlContext));
+        Assert.That(fooConfigure.ApplicationContext, Is.EqualTo(xmlContext));
     }
 
     [Test]
@@ -217,20 +217,22 @@ public sealed class XmlApplicationContextTests
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Core.Tests/Spring.Context/contextlifecycle.xml");
         IConfigurableApplicationContext configCtx = ctx as IConfigurableApplicationContext;
-        Assert.IsNotNull(configCtx);
+        Assert.That(configCtx, Is.Not.Null);
         ContextListenerObject clo;
         using (configCtx)
         {
             clo = configCtx["contextListenerObject"] as ContextListenerObject;
-            Assert.IsNotNull(clo);
-            Assert.IsTrue(clo.AppListenerContextRefreshed,
+            Assert.That(clo, Is.Not.Null);
+            Assert.That(clo.AppListenerContextRefreshed,
+                Is.True,
                 "Object did not receive context refreshed event via IApplicationListener");
-            Assert.IsTrue(clo.CtxRefreshed, "Object did not receive context refreshed event via direct wiring");
+            Assert.That(clo.CtxRefreshed, Is.True, "Object did not receive context refreshed event via direct wiring");
         }
 
-        Assert.IsTrue(clo.AppListenerContextClosed,
+        Assert.That(clo.AppListenerContextClosed,
+            Is.True,
             "Object did not receive context closed event via IApplicationContextListener");
-        Assert.IsTrue(clo.CtxClosed, "Object did not receive context closed event via direct wiring.");
+        Assert.That(clo.CtxClosed, Is.True, "Object did not receive context closed event via direct wiring.");
     }
 
     [Test]
@@ -244,13 +246,13 @@ public sealed class XmlApplicationContextTests
 
         DestroyTester destroyTester = (DestroyTester) ctx.GetObject("destroyTester");
         DisposeTester disposeTester = (DisposeTester) ctx.GetObject("disposeTester");
-        Assert.IsFalse(destroyTester.IsDestroyed);
-        Assert.IsFalse(disposeTester.IsDisposed);
+        Assert.That(destroyTester.IsDestroyed, Is.False);
+        Assert.That(disposeTester.IsDisposed, Is.False);
 
         ((IConfigurableApplicationContext) ctx).Refresh();
 
-        Assert.IsTrue(destroyTester.IsDestroyed);
-        Assert.IsTrue(disposeTester.IsDisposed);
+        Assert.That(destroyTester.IsDestroyed, Is.True);
+        Assert.That(disposeTester.IsDisposed, Is.True);
     }
 
     [Test]
@@ -263,9 +265,9 @@ public sealed class XmlApplicationContextTests
         reader.LoadObjectDefinitions("assembly://Spring.Core.Tests/Spring.Context.Support/contextA.xml");
         ctx.Refresh();
 
-        Assert.IsTrue(ctx.ContainsObject("service"));
-        Assert.IsTrue(ctx.ContainsObject("logicOne"));
-        Assert.IsTrue(ctx.ContainsObject("logicTwo"));
+        Assert.That(ctx.ContainsObject("service"), Is.True);
+        Assert.That(ctx.ContainsObject("logicOne"), Is.True);
+        Assert.That(ctx.ContainsObject("logicTwo"), Is.True);
         ctx.Dispose();
     }
 

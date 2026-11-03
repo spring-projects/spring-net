@@ -55,7 +55,7 @@ public class JobDetailObjectTest
     public void TestJobType_NonIJob()
     {
         jobDetail.JobType = typeof(object);
-        Assert.AreEqual(typeof(object), jobDetail.JobType, "JobDetail did not create same type as expected");
+        Assert.That(jobDetail.JobType, Is.EqualTo(typeof(object)), "JobDetail did not create same type as expected");
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class JobDetailObjectTest
     {
         Type CORRECT_IJOB = typeof(NoOpJob);
         jobDetail.JobType = CORRECT_IJOB;
-        Assert.AreEqual(jobDetail.JobType, CORRECT_IJOB, "JobDetail did not register correct job type");
+        Assert.That(CORRECT_IJOB, Is.EqualTo(jobDetail.JobType), "JobDetail did not register correct job type");
     }
 
     /// <summary>
@@ -89,8 +89,8 @@ public class JobDetailObjectTest
         values["foo"] = 123;
         values["bar"] = null;
         jobDetail.JobDataAsMap = values;
-        Assert.AreEqual(values.Count, jobDetail.JobDataMap.Count, "Data of inequal size");
-        CollectionAssert.AreEquivalent(values.Keys, jobDetail.JobDataMap.Keys, "JobDataMap values not equal");
+        Assert.That(jobDetail.JobDataMap.Count, Is.EqualTo(values.Count), "Data of inequal size");
+        Assert.That(jobDetail.JobDataMap.Keys, Is.EquivalentTo(values.Keys), "JobDataMap values not equal");
     }
 
     /// <summary>
@@ -103,8 +103,8 @@ public class JobDetailObjectTest
         jobDetail.ObjectName = objectName;
         jobDetail.Group = null;
         jobDetail.AfterPropertiesSet();
-        Assert.AreEqual(SchedulerConstants.DefaultGroup, jobDetail.Group, "Groups differ");
-        Assert.AreEqual(objectName, jobDetail.Name, "Names differ");
+        Assert.That(jobDetail.Group, Is.EqualTo(SchedulerConstants.DefaultGroup), "Groups differ");
+        Assert.That(jobDetail.Name, Is.EqualTo(objectName), "Names differ");
     }
 
     /// <summary>
@@ -120,8 +120,8 @@ public class JobDetailObjectTest
         jobDetail.Name = jobDetailName;
         jobDetail.Group = jobDetailGroup;
         jobDetail.AfterPropertiesSet();
-        Assert.AreEqual(jobDetailGroup, jobDetail.Group, "Groups differ");
-        Assert.AreEqual(jobDetailName, jobDetail.Name, "Names differ");
+        Assert.That(jobDetail.Group, Is.EqualTo(jobDetailGroup), "Groups differ");
+        Assert.That(jobDetail.Name, Is.EqualTo(jobDetailName), "Names differ");
     }
 
     /// <summary>
@@ -137,8 +137,8 @@ public class JobDetailObjectTest
         string key = "applicationContextJobDataKey";
         jobDetail.ApplicationContextJobDataKey = key;
         jobDetail.AfterPropertiesSet();
-        Assert.AreSame(ctx, jobDetail.ApplicationContext, "ApplicationContext was not set correctly");
-        Assert.AreSame(ctx, jobDetail.JobDataMap[key], "ApplicationContext was not set to job data map");
+        Assert.That(jobDetail.ApplicationContext, Is.SameAs(ctx), "ApplicationContext was not set correctly");
+        Assert.That(jobDetail.JobDataMap[key], Is.SameAs(ctx), "ApplicationContext was not set to job data map");
     }
 
     /// <summary>

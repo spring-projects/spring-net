@@ -30,11 +30,11 @@ public sealed class ConstructorArgumentValuesTests
     public void Instantiation()
     {
         ConstructorArgumentValues values = new ConstructorArgumentValues();
-        Assert.IsNotNull(values.GenericArgumentValues, "The 'GenericArgumentValues' property was not initialised.");
-        Assert.IsNotNull(values.IndexedArgumentValues, "The 'IndexedArgumentValues' property was not initialised.");
-        Assert.IsNotNull(values.NamedArgumentValues, "The 'NamedArgumentValues' property was not initialised.");
-        Assert.AreEqual(0, values.ArgumentCount, "There were some arguments in a newly initialised instance.");
-        Assert.IsTrue(values.Empty, "A newly initialised instance was not initially empty.");
+        Assert.That(values.GenericArgumentValues, Is.Not.Null, "The 'GenericArgumentValues' property was not initialised.");
+        Assert.That(values.IndexedArgumentValues, Is.Not.Null, "The 'IndexedArgumentValues' property was not initialised.");
+        Assert.That(values.NamedArgumentValues, Is.Not.Null, "The 'NamedArgumentValues' property was not initialised.");
+        Assert.That(values.ArgumentCount, Is.EqualTo(0), "There were some arguments in a newly initialised instance.");
+        Assert.That(values.Empty, Is.True, "A newly initialised instance was not initially empty.");
     }
 
     [Test]
@@ -49,16 +49,16 @@ public sealed class ConstructorArgumentValuesTests
 
         Type intType = typeof(int);
         ConstructorArgumentValues.ValueHolder one = values.GetGenericArgumentValue(intType, used);
-        Assert.AreEqual(1, one.Value);
+        Assert.That(one.Value, Is.EqualTo(1));
         used.Add(one);
         ConstructorArgumentValues.ValueHolder two = values.GetGenericArgumentValue(intType, used);
-        Assert.AreEqual(2, two.Value);
+        Assert.That(two.Value, Is.EqualTo(2));
         used.Add(two);
         ConstructorArgumentValues.ValueHolder three = values.GetGenericArgumentValue(intType, used);
-        Assert.AreEqual(3, three.Value);
+        Assert.That(three.Value, Is.EqualTo(3));
         used.Add(three);
         ConstructorArgumentValues.ValueHolder four = values.GetGenericArgumentValue(intType, used);
-        Assert.IsNull(four);
+        Assert.That(four, Is.Null);
     }
 
     [Test]
@@ -69,9 +69,10 @@ public sealed class ConstructorArgumentValuesTests
         values.AddGenericArgumentValue(expectedValue);
 
         ConstructorArgumentValues.ValueHolder name = values.GetGenericArgumentValue(null, null);
-        Assert.IsNotNull(name,
+        Assert.That(name,
+            Is.Not.Null,
             "Must get non-null valueholder back if no required type is specified.");
-        Assert.AreEqual(expectedValue, name.Value);
+        Assert.That(name.Value, Is.EqualTo(expectedValue));
     }
 
     [Test]
@@ -82,7 +83,8 @@ public sealed class ConstructorArgumentValuesTests
         values.AddGenericArgumentValue(expectedValue, typeof(string).FullName);
 
         ConstructorArgumentValues.ValueHolder name = values.GetGenericArgumentValue(null, null);
-        Assert.IsNull(name,
+        Assert.That(name,
+            Is.Null,
             "Must get null valueholder back if no required type is specified but only " +
             "strongly typed values are present in the ctor values list.");
     }
@@ -99,16 +101,16 @@ public sealed class ConstructorArgumentValuesTests
 
         Type intType = typeof(int);
         ConstructorArgumentValues.ValueHolder one = values.GetArgumentValue(10, string.Empty, intType, used);
-        Assert.AreEqual(1, one.Value);
+        Assert.That(one.Value, Is.EqualTo(1));
         used.Add(one);
         ConstructorArgumentValues.ValueHolder two = values.GetArgumentValue(10, "2", intType, used);
-        Assert.AreEqual(2, two.Value);
+        Assert.That(two.Value, Is.EqualTo(2));
         used.Add(two);
         ConstructorArgumentValues.ValueHolder three = values.GetArgumentValue(3, string.Empty, intType, used);
-        Assert.AreEqual(3, three.Value);
+        Assert.That(three.Value, Is.EqualTo(3));
         used.Add(three);
         ConstructorArgumentValues.ValueHolder four = values.GetArgumentValue(10, string.Empty, intType, used);
-        Assert.IsNull(four);
+        Assert.That(four, Is.Null);
     }
 
     [Test]
@@ -137,9 +139,9 @@ public sealed class ConstructorArgumentValuesTests
     {
         ConstructorArgumentValues values = new ConstructorArgumentValues();
         values.AddIndexedArgumentValue(1, DBNull.Value);
-        Assert.IsFalse(values.Empty, "Added one value, but the collection is sayin' it's empty.");
-        Assert.AreEqual(1, values.ArgumentCount, "Added one value, but the collection ain't sayin' that it's got a single element in it.");
-        Assert.AreEqual(1, values.IndexedArgumentValues.Count, "Added one indexed value, but the collection of indexed values ain't sayin' that it's got a single element in it.");
+        Assert.That(values.Empty, Is.False, "Added one value, but the collection is sayin' it's empty.");
+        Assert.That(values.ArgumentCount, Is.EqualTo(1), "Added one value, but the collection ain't sayin' that it's got a single element in it.");
+        Assert.That(values.IndexedArgumentValues.Count, Is.EqualTo(1), "Added one indexed value, but the collection of indexed values ain't sayin' that it's got a single element in it.");
     }
 
     [Test]
@@ -147,57 +149,57 @@ public sealed class ConstructorArgumentValuesTests
     {
         ConstructorArgumentValues values = new ConstructorArgumentValues();
         values.AddGenericArgumentValue(DBNull.Value);
-        Assert.IsFalse(values.Empty, "Added one value, but the collection is sayin' it's empty.");
-        Assert.AreEqual(1, values.ArgumentCount, "Added one value, but the collection ain't sayin' that it's got a single element in it.");
-        Assert.AreEqual(1, values.GenericArgumentValues.Count, "Added one generic value, but the collection of indexed values ain't sayin' that it's got a single element in it.");
+        Assert.That(values.Empty, Is.False, "Added one value, but the collection is sayin' it's empty.");
+        Assert.That(values.ArgumentCount, Is.EqualTo(1), "Added one value, but the collection ain't sayin' that it's got a single element in it.");
+        Assert.That(values.GenericArgumentValues.Count, Is.EqualTo(1), "Added one generic value, but the collection of indexed values ain't sayin' that it's got a single element in it.");
     }
 
     [Test]
     public void GetIndexedArgumentValue()
     {
         ConstructorArgumentValues values = new ConstructorArgumentValues();
-        Assert.IsNull(values.GetIndexedArgumentValue(0, typeof(object)), "Mmm... managed to get a non null instance back from an empty instance.");
+        Assert.That(values.GetIndexedArgumentValue(0, typeof(object)), Is.Null, "Mmm... managed to get a non null instance back from an empty instance.");
         values.AddIndexedArgumentValue(16, DBNull.Value, typeof(DBNull).FullName);
-        Assert.IsNull(values.GetIndexedArgumentValue(0, typeof(object)), "Mmm... managed to get a non null instance back from an instance that should have now't at the specified index.");
+        Assert.That(values.GetIndexedArgumentValue(0, typeof(object)), Is.Null, "Mmm... managed to get a non null instance back from an instance that should have now't at the specified index.");
         ConstructorArgumentValues.ValueHolder value =
             values.GetIndexedArgumentValue(16, typeof(DBNull));
-        Assert.IsNotNull(value, "Stored a value at a specified index, but got null when retrieving it.");
-        Assert.AreSame(DBNull.Value, value.Value, "The value stored at the specified index was not the exact same instance as was added.");
+        Assert.That(value, Is.Not.Null, "Stored a value at a specified index, but got null when retrieving it.");
+        Assert.That(value.Value, Is.SameAs(DBNull.Value), "The value stored at the specified index was not the exact same instance as was added.");
         ConstructorArgumentValues.ValueHolder wrongValue =
             values.GetIndexedArgumentValue(16, typeof(string));
-        Assert.IsNull(wrongValue, "Stored a value at a specified index, and got it (or rather something) back when retrieving it with the wrong Type specified.");
+        Assert.That(wrongValue, Is.Null, "Stored a value at a specified index, and got it (or rather something) back when retrieving it with the wrong Type specified.");
     }
 
     [Test]
     public void GetGenericArgumentValue()
     {
         ConstructorArgumentValues values = new ConstructorArgumentValues();
-        Assert.IsNull(values.GetGenericArgumentValue(typeof(object)), "Mmm... managed to get a non null instance back from an empty instance.");
+        Assert.That(values.GetGenericArgumentValue(typeof(object)), Is.Null, "Mmm... managed to get a non null instance back from an empty instance.");
         values.AddGenericArgumentValue(DBNull.Value, typeof(DBNull).FullName);
-        Assert.IsNull(values.GetGenericArgumentValue(typeof(string)), "Mmm... managed to get a non null instance back from an instance that should have now't with the specified Type.");
+        Assert.That(values.GetGenericArgumentValue(typeof(string)), Is.Null, "Mmm... managed to get a non null instance back from an instance that should have now't with the specified Type.");
         ConstructorArgumentValues.ValueHolder value =
             values.GetGenericArgumentValue(typeof(DBNull));
-        Assert.IsNotNull(value, "Stored a value of a specified Type, but got null when retrieving it using said Type.");
-        Assert.AreSame(DBNull.Value, value.Value, "The value stored at the specified index was not the exact same instance as was added.");
+        Assert.That(value, Is.Not.Null, "Stored a value of a specified Type, but got null when retrieving it using said Type.");
+        Assert.That(value.Value, Is.SameAs(DBNull.Value), "The value stored at the specified index was not the exact same instance as was added.");
     }
 
     [Test]
     public void GetArgumentValue()
     {
         ConstructorArgumentValues values = new ConstructorArgumentValues();
-        Assert.IsNull(values.GetArgumentValue(0, typeof(object)), "Mmm... managed to get a non null instance back from an empty instance.");
+        Assert.That(values.GetArgumentValue(0, typeof(object)), Is.Null, "Mmm... managed to get a non null instance back from an empty instance.");
         values.AddGenericArgumentValue(DBNull.Value, typeof(DBNull).FullName);
         values.AddNamedArgumentValue("foo", DBNull.Value);
         values.AddIndexedArgumentValue(16, DBNull.Value, typeof(DBNull).FullName);
-        Assert.IsNull(values.GetArgumentValue(100, typeof(string)), "Mmm... managed to get a non null instance back from an instance that should have now't with the specified Type.");
+        Assert.That(values.GetArgumentValue(100, typeof(string)), Is.Null, "Mmm... managed to get a non null instance back from an instance that should have now't with the specified Type.");
         ConstructorArgumentValues.ValueHolder value =
             values.GetArgumentValue(-3, typeof(DBNull));
-        Assert.IsNotNull(value, "Stored a value of a specified Type at a specified index, but got null when retrieving it using the wrong index but the correct Type.");
-        Assert.AreSame(DBNull.Value, value.Value, "The retrieved value was not the exact same instance as was added.");
+        Assert.That(value, Is.Not.Null, "Stored a value of a specified Type at a specified index, but got null when retrieving it using the wrong index but the correct Type.");
+        Assert.That(value.Value, Is.SameAs(DBNull.Value), "The retrieved value was not the exact same instance as was added.");
 
         value = values.GetArgumentValue("foo", typeof(DBNull));
-        Assert.IsNotNull(value, "Stored a value of a specified Type under a name, but got null when retrieving it using the wrong name but the correct Type.");
-        Assert.AreSame(DBNull.Value, value.Value, "The retrieved value was not the exact same instance as was added.");
+        Assert.That(value, Is.Not.Null, "Stored a value of a specified Type under a name, but got null when retrieving it using the wrong name but the correct Type.");
+        Assert.That(value.Value, Is.SameAs(DBNull.Value), "The retrieved value was not the exact same instance as was added.");
     }
 
     [Test]
@@ -217,7 +219,7 @@ public sealed class ConstructorArgumentValuesTests
 
         ConstructorArgumentValues values = new ConstructorArgumentValues();
         values.AddAll(other);
-        Assert.AreEqual(other.ArgumentCount, values.ArgumentCount,
+        Assert.That(values.ArgumentCount, Is.EqualTo(other.ArgumentCount),
             "Must have been the same since one was filled up with the values in the other.");
     }
 
@@ -229,9 +231,9 @@ public sealed class ConstructorArgumentValuesTests
         values.AddIndexedArgumentValue(2, "Foo");
         values.AddIndexedArgumentValue(3, 3);
         new ConstructorArgumentValues(values);
-        Assert.IsFalse(values.Empty, "Added three indexed values(as a range), but the collection is sayin' it's empty.");
-        Assert.AreEqual(3, values.ArgumentCount, "Added three indexed values(as a range), but the collection ain't sayin' that it's got 3 elements in it.");
-        Assert.AreEqual(3, values.IndexedArgumentValues.Count, "Added three indexed values(as a range), but the collection of indexed values ain't sayin' that it's got 3 elements in it.");
+        Assert.That(values.Empty, Is.False, "Added three indexed values(as a range), but the collection is sayin' it's empty.");
+        Assert.That(values.ArgumentCount, Is.EqualTo(3), "Added three indexed values(as a range), but the collection ain't sayin' that it's got 3 elements in it.");
+        Assert.That(values.IndexedArgumentValues.Count, Is.EqualTo(3), "Added three indexed values(as a range), but the collection of indexed values ain't sayin' that it's got 3 elements in it.");
     }
 
     [Test]
@@ -239,12 +241,12 @@ public sealed class ConstructorArgumentValuesTests
     {
         ConstructorArgumentValues values = new ConstructorArgumentValues();
         values.AddNamedArgumentValue("foo", "sball");
-        Assert.AreEqual(1, values.NamedArgumentValues.Count, "Added one named argument but it doesn't seem to have been added to the named arguments collection.");
-        Assert.AreEqual(1, values.ArgumentCount, "Added one named argument but it doesn't seem to be reflected in the overall argument count.");
-        Assert.IsTrue(values.ContainsNamedArgument("FOo"), "Mmm, the ContainsNamedArgument() method eveidently IS case sensitive (which is wrong).");
+        Assert.That(values.NamedArgumentValues.Count, Is.EqualTo(1), "Added one named argument but it doesn't seem to have been added to the named arguments collection.");
+        Assert.That(values.ArgumentCount, Is.EqualTo(1), "Added one named argument but it doesn't seem to be reflected in the overall argument count.");
+        Assert.That(values.ContainsNamedArgument("FOo"), Is.True, "Mmm, the ContainsNamedArgument() method eveidently IS case sensitive (which is wrong).");
         ConstructorArgumentValues.ValueHolder arg = values.GetNamedArgumentValue("fOo");
-        Assert.IsNotNull(arg, "The named argument previously added could not be pulled from the ctor arg collection.");
-        Assert.AreEqual("sball", arg.Value, "The value of the named argument passed in is not the same as the one that was pulled out.");
+        Assert.That(arg, Is.Not.Null, "The named argument previously added could not be pulled from the ctor arg collection.");
+        Assert.That(arg.Value, Is.EqualTo("sball"), "The value of the named argument passed in is not the same as the one that was pulled out.");
     }
 
     [Test]
@@ -252,11 +254,11 @@ public sealed class ConstructorArgumentValuesTests
     {
         ConstructorArgumentValues values = new ConstructorArgumentValues();
         values.AddNamedArgumentValue("foo", "sball");
-        Assert.AreEqual(1, values.NamedArgumentValues.Count, "Added one named argument but it doesn't seem to have been added to the named arguments collection.");
-        Assert.AreEqual(1, values.ArgumentCount, "Added one named argument but it doesn't seem to be reflected in the overall argument count.");
+        Assert.That(values.NamedArgumentValues.Count, Is.EqualTo(1), "Added one named argument but it doesn't seem to have been added to the named arguments collection.");
+        Assert.That(values.ArgumentCount, Is.EqualTo(1), "Added one named argument but it doesn't seem to be reflected in the overall argument count.");
         ConstructorArgumentValues.ValueHolder arg = values.GetNamedArgumentValue("foo");
-        Assert.IsNotNull(arg, "The named argument previously added could not be pulled from the ctor arg collection.");
-        Assert.AreEqual("sball", arg.Value, "The value of the named argument passed in is not the same as the one that was pulled out.");
+        Assert.That(arg, Is.Not.Null, "The named argument previously added could not be pulled from the ctor arg collection.");
+        Assert.That(arg.Value, Is.EqualTo("sball"), "The value of the named argument passed in is not the same as the one that was pulled out.");
     }
 
     [Test]
@@ -265,11 +267,11 @@ public sealed class ConstructorArgumentValuesTests
         ConstructorArgumentValues values = new ConstructorArgumentValues();
         values.AddNamedArgumentValue("foo", "sball");
         ConstructorArgumentValues copy = new ConstructorArgumentValues(values);
-        Assert.AreEqual(1, copy.NamedArgumentValues.Count, "Added one named argument but it doesn't seem to have been added to the named arguments collection.");
-        Assert.AreEqual(1, copy.ArgumentCount, "Added one named argument but it doesn't seem to be reflected in the overall argument count.");
+        Assert.That(copy.NamedArgumentValues.Count, Is.EqualTo(1), "Added one named argument but it doesn't seem to have been added to the named arguments collection.");
+        Assert.That(copy.ArgumentCount, Is.EqualTo(1), "Added one named argument but it doesn't seem to be reflected in the overall argument count.");
         ConstructorArgumentValues.ValueHolder arg = copy.GetNamedArgumentValue("foo");
-        Assert.IsNotNull(arg, "The named argument previously added could not be pulled from the ctor arg collection.");
-        Assert.AreEqual("sball", arg.Value, "The value of the named argument passed in is not the same as the one that was pulled out.");
+        Assert.That(arg, Is.Not.Null, "The named argument previously added could not be pulled from the ctor arg collection.");
+        Assert.That(arg.Value, Is.EqualTo("sball"), "The value of the named argument passed in is not the same as the one that was pulled out.");
     }
 
     [Test]
@@ -278,6 +280,6 @@ public sealed class ConstructorArgumentValuesTests
         ConstructorArgumentValues values = new ConstructorArgumentValues();
         values.AddGenericArgumentValue(1, typeof(int).FullName);
         ConstructorArgumentValues.ValueHolder vh = values.GetGenericArgumentValue(typeof(int));
-        Assert.AreEqual("'1' [System.Int32]", vh.ToString());
+        Assert.That(vh.ToString(), Is.EqualTo("'1' [System.Int32]"));
     }
 }

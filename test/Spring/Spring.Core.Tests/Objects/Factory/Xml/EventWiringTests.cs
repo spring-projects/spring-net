@@ -40,7 +40,8 @@ public class EventWiringTests
         ITestObject source = factory["source"] as ITestObject;
         // raise the event... handlers should be notified at this point (obviously)
         source.OnClick();
-        Assert.IsTrue(instanceHandler.EventWasHandled,
+        Assert.That(instanceHandler.EventWasHandled,
+            Is.True,
             "The instance handler did not get notified when the instance event was raised (and was probably not wired up in the first place).");
     }
 
@@ -54,7 +55,8 @@ public class EventWiringTests
         TestEventHandler prototypeEventHandler = factory["prototypeEventListener"] as TestEventHandler;
         // raise the event... handlers should be notified at this point (obviously)
         source.OnClick();
-        Assert.IsTrue(prototypeEventHandler.EventWasHandled,
+        Assert.That(prototypeEventHandler.EventWasHandled,
+            Is.True,
             "The prototype instance handler did not get notified when the instance event was raised (and was probably not wired up in the first place).");
     }
 
@@ -68,7 +70,8 @@ public class EventWiringTests
         TestEventHandler instanceHandler = factory["instanceEventListener"] as TestEventHandler;
         // raise the event... handlers should be notified at this point (obviously)
         source.OnClick();
-        Assert.IsTrue(instanceHandler.EventWasHandled,
+        Assert.That(instanceHandler.EventWasHandled,
+            Is.True,
             "The instance handler did not get notified when the instance event was raised (and was probably not wired up in the first place).");
     }
 
@@ -81,7 +84,8 @@ public class EventWiringTests
         TestEventHandler staticHandler = factory["staticEventListener"] as TestEventHandler;
         // raise the event... handlers should be notified at this point (obviously)
         TestObject.OnStaticClick();
-        Assert.IsTrue(staticHandler.EventWasHandled,
+        Assert.That(staticHandler.EventWasHandled,
+            Is.True,
             "The instance handler did not get notified when the static event was raised (and was probably not wired up in the first place).");
     }
 

@@ -33,7 +33,7 @@ public sealed class EventRaiserTests
         Soda bru = new Soda();
         bru.Pop += new PopHandler(dude.HandlePop);
         bru.OnPop("Iron Brew", new EventRaiser());
-        Assert.AreEqual("Iron Brew", dude.Soda);
+        Assert.That(dude.Soda, Is.EqualTo("Iron Brew"));
     }
 
     [Test]
@@ -52,7 +52,7 @@ public sealed class EventRaiserTests
         Soda bru = new Soda();
         bru.Pop += new PopHandler(dude.HandlePop);
         bru.OnPopWithNullEvent("Iron Brew", new EventRaiser());
-        Assert.AreEqual(string.Empty, dude.Soda);
+        Assert.That(dude.Soda, Is.Empty);
     }
 
     public void RaiseWithAnEventHandlerThatThrowsAnException()

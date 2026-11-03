@@ -65,9 +65,9 @@ public abstract class CommonThreadStorageTests
         storage.SetData("KEY", value2);
         storage.SetData("KeY", value3);
 
-        Assert.AreSame(value1, storage.GetData("key"));
-        Assert.AreSame(value2, storage.GetData("KEY"));
-        Assert.AreSame(value3, storage.GetData("KeY"));
+        Assert.That(storage.GetData("key"), Is.SameAs(value1));
+        Assert.That(storage.GetData("KEY"), Is.SameAs(value2));
+        Assert.That(storage.GetData("KeY"), Is.SameAs(value3));
     }
 
     [Test]
@@ -79,11 +79,11 @@ public abstract class CommonThreadStorageTests
         var value2 = new object();
 
         storage.SetData("key", value1);
-        Assert.AreSame(value1, storage.GetData("key"));
+        Assert.That(storage.GetData("key"), Is.SameAs(value1));
         storage.SetData("key", value2);
-        Assert.AreSame(value2, storage.GetData("key"));
+        Assert.That(storage.GetData("key"), Is.SameAs(value2));
         storage.SetData("key", null);
-        Assert.AreSame(null, storage.GetData("key"));
+        Assert.That(storage.GetData("key"), Is.Null);
     }
 
     [Test]
@@ -91,7 +91,7 @@ public abstract class CommonThreadStorageTests
     {
         var storage = CreateStorage();
 
-        Assert.AreSame(null, storage.GetData("key"));
+        Assert.That(storage.GetData("key"), Is.Null);
     }
 
     [Test]
@@ -101,9 +101,9 @@ public abstract class CommonThreadStorageTests
 
         var value1 = new object();
         storage.SetData("key", value1);
-        Assert.AreSame(value1, storage.GetData("key"));
+        Assert.That(storage.GetData("key"), Is.SameAs(value1));
         storage.FreeNamedDataSlot("key");
-        Assert.AreSame(null, storage.GetData("key"));
+        Assert.That(storage.GetData("key"), Is.Null);
     }
 
     [Test]
@@ -117,8 +117,8 @@ public abstract class CommonThreadStorageTests
         var helper = new ThreadTestHelper(this, storage);
         helper.Execute();
 
-        Assert.AreNotSame(value1, helper.value);
-        Assert.IsNull(helper.value);
+        Assert.That(helper.value, Is.Not.SameAs(value1));
+        Assert.That(helper.value, Is.Null);
     }
 
     private class ThreadTestHelper

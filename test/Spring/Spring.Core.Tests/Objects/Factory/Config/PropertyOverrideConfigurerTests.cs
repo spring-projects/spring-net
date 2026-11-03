@@ -62,10 +62,10 @@ public sealed class PropertyOverrideConfigurerTests
         ac.Refresh();
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
         TestObject tb2 = (TestObject) ac.GetObject("tb2");
-        Assert.AreEqual(99, tb1.Age);
-        Assert.AreEqual(99, tb2.Age);
-        Assert.AreEqual(null, tb1.Name);
-        Assert.AreEqual("test", tb2.Name);
+        Assert.That(tb1.Age, Is.EqualTo(99));
+        Assert.That(tb2.Age, Is.EqualTo(99));
+        Assert.That(tb1.Name, Is.EqualTo(null));
+        Assert.That(tb2.Name, Is.EqualTo("test"));
     }
 
     [Test]
@@ -84,8 +84,8 @@ public sealed class PropertyOverrideConfigurerTests
 
         ac.Refresh();
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
-        Assert.AreEqual(99, tb1.Age);
-        Assert.AreEqual("test", tb1.Name);
+        Assert.That(tb1.Age, Is.EqualTo(99));
+        Assert.That(tb1.Name, Is.EqualTo("test"));
     }
 
     [Test]
@@ -107,7 +107,7 @@ public sealed class PropertyOverrideConfigurerTests
         ac.Refresh();
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
         TestObject spouse2 = (TestObject) ac.GetObject("spouse2");
-        Assert.AreEqual(spouse2, tb1.Spouse);
+        Assert.That(tb1.Spouse, Is.EqualTo(spouse2));
     }
 
     [Test]
@@ -125,7 +125,7 @@ public sealed class PropertyOverrideConfigurerTests
 
         ac.Refresh();
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
-        Assert.AreEqual(25, tb1.Age);
+        Assert.That(tb1.Age, Is.EqualTo(25));
     }
 
     [Test]
@@ -157,7 +157,7 @@ public sealed class PropertyOverrideConfigurerTests
         cfg.Properties = defaultProperties;
 
         cfg.PostProcessObjectFactory(fac);
-        Assert.AreEqual(valueTo_NOT_BeOveridden, foo.Name, "Property value was overridden, but a rubbish objectName root was supplied.");
+        Assert.That(foo.Name, Is.EqualTo(valueTo_NOT_BeOveridden), "Property value was overridden, but a rubbish objectName root was supplied.");
     }
 
     [Test]
@@ -166,9 +166,9 @@ public sealed class PropertyOverrideConfigurerTests
         IResource resource = new ReadOnlyXmlTestResource("PropertyResourceConfigurerTests.xml", GetType());
         XmlObjectFactory xbf = new XmlObjectFactory(resource);
         PropertyOverrideConfigurer poc = (PropertyOverrideConfigurer) xbf.GetObject("OverrideConfigurer");
-        Assert.IsNotNull(poc);
+        Assert.That(poc, Is.Not.Null);
         poc.PostProcessObjectFactory(xbf);
         TestObject to = (TestObject) xbf.GetObject("Test2");
-        Assert.AreEqual("Overriden Name", to.Name);
+        Assert.That(to.Name, Is.EqualTo("Overriden Name"));
     }
 }

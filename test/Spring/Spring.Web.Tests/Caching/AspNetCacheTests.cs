@@ -78,7 +78,7 @@ public class AspNetCacheTests
     [Test]
     public void GetNullKeysReturnsNull()
     {
-        Assert.IsNull(thisCache.Get(null));
+        Assert.That(thisCache.Get(null), Is.Null);
     }
 
     [Test]
@@ -95,50 +95,50 @@ public class AspNetCacheTests
         A.CallTo(() => mockedRuntimeCache.GetEnumerator()).Returns(mockedRuntimeCacheEntries.GetEnumerator());
 
         ICollection keys = mockedCache.Keys;
-        CollectionAssert.AreEqual(new string[] { "keyA", "keyB" }, keys);
+        Assert.That(keys, Is.EqualTo(new string[] { "keyA", "keyB" }).AsCollection);
     }
 
     [Test]
     public void AddItemToCacheNoExpiration()
     {
         thisCache.Insert("key", "thisValue", TimeSpan.Zero, false);
-        Assert.AreEqual(1, thisCache.Count);
-        Assert.AreEqual("thisValue", aspCache.Get(thisCache.GenerateKey("key")));
+        Assert.That(thisCache.Count, Is.EqualTo(1));
+        Assert.That(aspCache.Get(thisCache.GenerateKey("key")), Is.EqualTo("thisValue"));
 
         otherCache.Insert("key", "otherValue", TimeSpan.Zero, false);
-        Assert.AreEqual(1, otherCache.Count);
-        Assert.AreEqual("otherValue", aspCache.Get(otherCache.GenerateKey("key")));
+        Assert.That(otherCache.Count, Is.EqualTo(1));
+        Assert.That(aspCache.Get(otherCache.GenerateKey("key")), Is.EqualTo("otherValue"));
     }
 
     [Test]
     public void AddItemToCacheAbsoluteExpiration()
     {
         thisCache.Insert("key", "thisValue", ttl10Seconds, false);
-        Assert.AreEqual(1, thisCache.Count);
-        Assert.AreEqual("thisValue", aspCache.Get(thisCache.GenerateKey("key")));
+        Assert.That(thisCache.Count, Is.EqualTo(1));
+        Assert.That(aspCache.Get(thisCache.GenerateKey("key")), Is.EqualTo("thisValue"));
 
         otherCache.Insert("key", "otherValue", ttl10Seconds, false);
-        Assert.AreEqual(1, otherCache.Count);
-        Assert.AreEqual("otherValue", aspCache.Get(otherCache.GenerateKey("key")));
+        Assert.That(otherCache.Count, Is.EqualTo(1));
+        Assert.That(aspCache.Get(otherCache.GenerateKey("key")), Is.EqualTo("otherValue"));
     }
 
     [Test]
     public void AddItemToCacheSlidingExpiration()
     {
         thisCache.Insert("key", "thisValue", ttl10Seconds, true);
-        Assert.AreEqual(1, thisCache.Count);
-        Assert.AreEqual("thisValue", aspCache.Get(thisCache.GenerateKey("key")));
+        Assert.That(thisCache.Count, Is.EqualTo(1));
+        Assert.That(aspCache.Get(thisCache.GenerateKey("key")), Is.EqualTo("thisValue"));
 
         otherCache.Insert("key", "otherValue", ttl10Seconds, true);
-        Assert.AreEqual(1, otherCache.Count);
-        Assert.AreEqual("otherValue", aspCache.Get(otherCache.GenerateKey("key")));
+        Assert.That(otherCache.Count, Is.EqualTo(1));
+        Assert.That(aspCache.Get(otherCache.GenerateKey("key")), Is.EqualTo("otherValue"));
     }
 
     [Test]
     public void DifferentCacheNamesCauseSameKeyToBeDifferent()
     {
-        Assert.AreNotEqual("key", thisCache.GenerateKey("key"));
-        Assert.AreNotEqual(thisCache.GenerateKey("key"), otherCache.GenerateKey("key"));
+        Assert.That(thisCache.GenerateKey("key"), Is.Not.EqualTo("key"));
+        Assert.That(otherCache.GenerateKey("key"), Is.Not.EqualTo(thisCache.GenerateKey("key")));
     }
 
     [Test]

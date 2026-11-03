@@ -51,7 +51,7 @@ public sealed class DelegatingMessageSourceTests
     public void Instantiation()
     {
         DelegatingMessageSource source = new DelegatingMessageSource();
-        Assert.IsNotNull(source.ParentMessageSource, "ParentMessageSource property must *never* be null.");
+        Assert.That(source.ParentMessageSource, Is.Not.Null, "ParentMessageSource property must *never* be null.");
     }
 
     [Test]
@@ -59,9 +59,10 @@ public sealed class DelegatingMessageSourceTests
     {
         DelegatingMessageSource source
             = new DelegatingMessageSource(MockMessageSource);
-        Assert.IsNotNull(source.ParentMessageSource,
+        Assert.That(source.ParentMessageSource,
+            Is.Not.Null,
             "ParentMessageSource property must *never* be null.");
-        Assert.IsTrue(Object.ReferenceEquals(source.ParentMessageSource, MockMessageSource));
+        Assert.That(Object.ReferenceEquals(source.ParentMessageSource, MockMessageSource), Is.True);
     }
 
     [Test]
@@ -71,7 +72,7 @@ public sealed class DelegatingMessageSourceTests
         A.CallTo(() => MockMessageSource.GetMessage(LookupKey)).Returns(expectedName);
         DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
         string name = source.GetMessage(LookupKey);
-        Assert.AreEqual(expectedName, name);
+        Assert.That(name, Is.EqualTo(expectedName));
     }
 
     [Test]
@@ -88,7 +89,7 @@ public sealed class DelegatingMessageSourceTests
         A.CallTo(() => MockMessageSource.GetMessage(LookupKey, CultureInfo.InvariantCulture)).Returns(expectedName);
         DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
         string name = source.GetMessage(LookupKey, CultureInfo.InvariantCulture);
-        Assert.AreEqual(expectedName, name);
+        Assert.That(name, Is.EqualTo(expectedName));
     }
 
     [Test]
@@ -105,7 +106,7 @@ public sealed class DelegatingMessageSourceTests
         A.CallTo(() => MockMessageSource.GetMessage(LookupKey, new string[] { "Rick", "Evans" })).Returns(expectedName);
         DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
         string name = source.GetMessage(LookupKey, "Rick", "Evans");
-        Assert.AreEqual(expectedName, name);
+        Assert.That(name, Is.EqualTo(expectedName));
     }
 
     [Test]
@@ -122,7 +123,7 @@ public sealed class DelegatingMessageSourceTests
         A.CallTo(() => MockMessageSource.GetMessage(LookupKey, CultureInfo.InvariantCulture, new string[] { "Rick", "Evans" })).Returns(expectedName);
         DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
         string name = source.GetMessage(LookupKey, CultureInfo.InvariantCulture, "Rick", "Evans");
-        Assert.AreEqual(expectedName, name);
+        Assert.That(name, Is.EqualTo(expectedName));
     }
 
     [Test]
@@ -140,7 +141,7 @@ public sealed class DelegatingMessageSourceTests
         A.CallTo(() => MockMessageSource.GetMessage((IMessageSourceResolvable) null, CultureInfo.InvariantCulture)).Returns(expectedName);
 
         string name = source.GetMessage((IMessageSourceResolvable) null, CultureInfo.InvariantCulture);
-        Assert.AreEqual(expectedName, name);
+        Assert.That(name, Is.EqualTo(expectedName));
     }
 
     [Test]
@@ -153,7 +154,7 @@ public sealed class DelegatingMessageSourceTests
 
         DelegatingMessageSource source = new DelegatingMessageSource();
         string name = source.GetMessage(resolvable, CultureInfo.InvariantCulture);
-        Assert.AreEqual(expectedName, name);
+        Assert.That(name, Is.EqualTo(expectedName));
     }
 
     [Test]
@@ -181,7 +182,7 @@ public sealed class DelegatingMessageSourceTests
         A.CallTo(() => MockMessageSource.GetResourceObject(LookupKey)).Returns(expectedName);
         DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
         string name = (string) source.GetResourceObject(LookupKey);
-        Assert.AreEqual(expectedName, name);
+        Assert.That(name, Is.EqualTo(expectedName));
     }
 
     [Test]
@@ -198,7 +199,7 @@ public sealed class DelegatingMessageSourceTests
         A.CallTo(() => MockMessageSource.GetResourceObject(LookupKey, CultureInfo.InvariantCulture)).Returns(expectedName);
         DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
         string name = (string) source.GetResourceObject(LookupKey, CultureInfo.InvariantCulture);
-        Assert.AreEqual(expectedName, name);
+        Assert.That(name, Is.EqualTo(expectedName));
     }
 
     [Test]

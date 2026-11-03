@@ -76,7 +76,7 @@ public sealed class ObjectReferenceFactoryObjectTests
         fac.TargetObjectName = "bojangles";
         fac.ObjectFactory = factory;
 
-        Assert.IsTrue(fac.IsSingleton);
+        Assert.That(fac.IsSingleton, Is.True);
     }
 
     [Test]
@@ -89,7 +89,7 @@ public sealed class ObjectReferenceFactoryObjectTests
         fac.TargetObjectName = "bojangles";
         fac.ObjectFactory = factory;
 
-        Assert.AreEqual("Rick", fac.GetObject());
+        Assert.That(fac.GetObject(), Is.EqualTo("Rick"));
     }
 
     [Test]
@@ -102,6 +102,6 @@ public sealed class ObjectReferenceFactoryObjectTests
         fac.TargetObjectName = "bojangles";
         fac.ObjectFactory = factory;
 
-        Assert.AreEqual(GetType(), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(GetType()));
     }
 }

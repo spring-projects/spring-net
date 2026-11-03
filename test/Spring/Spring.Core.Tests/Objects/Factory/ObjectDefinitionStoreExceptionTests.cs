@@ -95,9 +95,9 @@ public sealed class ObjectDefinitionStoreExceptionTests
     {
         ObjectDefinitionStoreException outex = (ObjectDefinitionStoreException)
             SerializationTestUtils.SerializeAndDeserialize(inex);
-        Assert.AreEqual(expectedName, outex.ObjectName,
+        Assert.That(outex.ObjectName, Is.EqualTo(expectedName),
             "The 'ObjectName' property was not serialized / deserialized correctly.");
-        Assert.AreEqual(expectedResourceDescription, outex.ResourceDescription,
+        Assert.That(outex.ResourceDescription, Is.EqualTo(expectedResourceDescription),
             "The 'ResourceDescription' property was not serialized / deserialized correctly.");
     }
 }

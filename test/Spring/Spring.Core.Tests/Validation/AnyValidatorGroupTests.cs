@@ -30,7 +30,7 @@ public sealed class AnyValidatorGroupTests
     public void DefaultsToFastValidate()
     {
         AnyValidatorGroup vg = new AnyValidatorGroup();
-        Assert.IsTrue(vg.FastValidate);
+        Assert.That(vg.FastValidate, Is.True);
     }
 
     [Test]
@@ -46,9 +46,9 @@ public sealed class AnyValidatorGroupTests
 
         bool valid = vg.Validate(new object(), errors);
 
-        Assert.IsFalse(valid, "Validation should fail when all inner validators return false.");
-        Assert.AreEqual(3, errors.GetErrors("errors").Count);
-        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        Assert.That(valid, Is.False, "Validation should fail when all inner validators return false.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(3));
+        Assert.That(errors.GetErrors("existingErrors").Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -64,9 +64,9 @@ public sealed class AnyValidatorGroupTests
 
         bool valid = vg.Validate(new object(), errors);
 
-        Assert.IsTrue(valid, "Validation should succeed when all inner validators return true.");
-        Assert.AreEqual(0, errors.GetErrors("errors").Count);
-        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        Assert.That(valid, Is.True, "Validation should succeed when all inner validators return true.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(0));
+        Assert.That(errors.GetErrors("existingErrors").Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -77,9 +77,9 @@ public sealed class AnyValidatorGroupTests
 
         WhenSingleValidatorReturnsTrue(vg);
         // validators are called only until validation result is known
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[0]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[1]).WasCalled);
-        Assert.IsFalse(((BaseTestValidator) vg.Validators[2]).WasCalled);
+        Assert.That(((BaseTestValidator) vg.Validators[0]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[1]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[2]).WasCalled, Is.False);
     }
 
     [Test]
@@ -90,9 +90,9 @@ public sealed class AnyValidatorGroupTests
 
         WhenSingleValidatorReturnsTrue(vg);
         // ALL validators are called
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[0]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[1]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[2]).WasCalled);
+        Assert.That(((BaseTestValidator) vg.Validators[0]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[1]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[2]).WasCalled, Is.True);
     }
 
     private static void WhenSingleValidatorReturnsTrue(AnyValidatorGroup vg)
@@ -106,9 +106,9 @@ public sealed class AnyValidatorGroupTests
 
         bool valid = vg.Validate(new object(), errors);
 
-        Assert.IsTrue(valid, "Validation should succeed when single inner validator returns true.");
-        Assert.AreEqual(0, errors.GetErrors("errors").Count);
-        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        Assert.That(valid, Is.True, "Validation should succeed when single inner validator returns true.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(0));
+        Assert.That(errors.GetErrors("existingErrors").Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -123,8 +123,8 @@ public sealed class AnyValidatorGroupTests
 
         bool valid = vg.Validate(new object(), errors);
 
-        Assert.IsTrue(valid, "Validation should succeed when group validator is not evaluated.");
-        Assert.AreEqual(0, errors.GetErrors("errors").Count);
-        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        Assert.That(valid, Is.True, "Validation should succeed when group validator is not evaluated.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(0));
+        Assert.That(errors.GetErrors("existingErrors").Count, Is.EqualTo(1));
     }
 }

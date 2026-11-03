@@ -45,7 +45,7 @@ public class MessageListenerAdapterTests
             adapter.OnMessage(message);
         }
 
-        Assert.AreEqual(numIterations, handler.HandledStringCount);
+        Assert.That(handler.HandledStringCount, Is.EqualTo(numIterations));
     }
 
     [Test]
@@ -64,7 +64,7 @@ public class MessageListenerAdapterTests
             adapter.OnMessage(message);
         }
 
-        Assert.AreEqual(numIterations, handler.HandledByteArrayCount);
+        Assert.That(handler.HandledByteArrayCount, Is.EqualTo(numIterations));
     }
 
     [Test]
@@ -88,7 +88,7 @@ public class MessageListenerAdapterTests
             adapter.OnMessage(bytesMessage);
         }
 
-        Assert.AreEqual(numIterations / 2, handler.HandledByteArrayCount);
-        Assert.AreEqual(numIterations / 2, handler.HandledStringCount);
+        Assert.That(handler.HandledByteArrayCount, Is.EqualTo(numIterations / 2));
+        Assert.That(handler.HandledStringCount, Is.EqualTo(numIterations / 2));
     }
 }

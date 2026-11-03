@@ -31,7 +31,7 @@ public class RegularExpressionMethodNameCriteriaTests
     {
         RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria("Click");
         MethodInfo method = typeof(TestObject).GetMethod("OnClick");
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
     }
 
     [Test]
@@ -39,14 +39,14 @@ public class RegularExpressionMethodNameCriteriaTests
     {
         RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria("BingoBango");
         MethodInfo method = typeof(TestObject).GetMethod("OnClick");
-        Assert.IsFalse(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.False);
     }
 
     [Test]
     public void IsNotSatisfiedWithNull()
     {
         RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria("OnClick");
-        Assert.IsFalse(criteria.IsSatisfied(null));
+        Assert.That(criteria.IsSatisfied(null), Is.False);
     }
 
     [Test]
@@ -54,6 +54,6 @@ public class RegularExpressionMethodNameCriteriaTests
     {
         RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria();
         MethodInfo method = typeof(TestObject).GetMethod("OnClick");
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
     }
 }

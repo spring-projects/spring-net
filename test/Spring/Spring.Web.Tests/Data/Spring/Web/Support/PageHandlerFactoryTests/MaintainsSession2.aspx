@@ -2,6 +2,6 @@
                                                                                    protected override void OnLoad(EventArgs e)
                                                                                    {
                                                                                        base.OnLoad(e);
-                                                                                       NUnit.Framework.Assert.AreEqual("somevalue", Session["maintainsSession"]);
+                                                                                       NUnit.Framework.Assert.That(Session["maintainsSession"], NUnit.Framework.Is.EqualTo("somevalue"));
                                                                                    }
                                                                                </script>OK

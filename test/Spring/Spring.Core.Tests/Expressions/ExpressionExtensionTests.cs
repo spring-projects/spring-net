@@ -37,7 +37,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionMethod<Foo>("SpelExtension", SpelExtensionLambda, vars);
 
-        Assert.AreEqual(42, ExpressionEvaluator.GetValue(null, "#foo.SpelExtension(1)", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.SpelExtension(1)", vars), Is.EqualTo(42));
     }
 
     [Test]
@@ -46,7 +46,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionMethod("SpelExtension", (Foo self, int arg) => self.InternalValue + arg, vars);
 
-        Assert.AreEqual(42, ExpressionEvaluator.GetValue(null, "#foo.SpelExtension(1)", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.SpelExtension(1)", vars), Is.EqualTo(42));
     }
 
     [Test]
@@ -55,7 +55,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionMethod<Foo>("Doubled", DoubledLambda, vars);
 
-        Assert.AreEqual(82, ExpressionEvaluator.GetValue(null, "#foo.Doubled()", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.Doubled()", vars), Is.EqualTo(82));
     }
 
     [Test]
@@ -67,7 +67,7 @@ public class ExpressionExtensionTests
         vars["holder"] = holder;
         Expression.RegisterExtensionMethod<Foo>("SpelExtension", SpelExtensionLambda, vars);
 
-        Assert.AreEqual(42, ExpressionEvaluator.GetValue(null, "#holder.Child.SpelExtension(1)", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#holder.Child.SpelExtension(1)", vars), Is.EqualTo(42));
     }
 
     [Test]
@@ -76,7 +76,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionProperty<Foo>("Doubled", DoubledLambda, vars);
 
-        Assert.AreEqual(82, ExpressionEvaluator.GetValue(null, "#foo.Doubled", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.Doubled", vars), Is.EqualTo(82));
     }
 
     [Test]
@@ -85,7 +85,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionProperty("Doubled", (Foo self) => self.InternalValue * 2, vars);
 
-        Assert.AreEqual(82, ExpressionEvaluator.GetValue(null, "#foo.Doubled", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.Doubled", vars), Is.EqualTo(82));
     }
 
     [Test]
@@ -94,7 +94,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionMethod<Foo>("ToString", "{|self| 'fake'}", vars);
 
-        Assert.AreEqual("real", ExpressionEvaluator.GetValue(null, "#foo.ToString()", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.ToString()", vars), Is.EqualTo("real"));
     }
 
     [Test]
@@ -103,7 +103,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionProperty<Foo>("InternalValue", "{|self| 999}", vars);
 
-        Assert.AreEqual(41, ExpressionEvaluator.GetValue(null, "#foo.InternalValue", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.InternalValue", vars), Is.EqualTo(41));
     }
 
     [Test]
@@ -113,7 +113,7 @@ public class ExpressionExtensionTests
         vars["Clash"] = new MyTestMethodCallProcessor();
         Expression.RegisterExtensionMethod<Foo>("Clash", "{|self| 'extension'}", vars);
 
-        Assert.AreEqual("processor", ExpressionEvaluator.GetValue(null, "#foo.Clash()", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.Clash()", vars), Is.EqualTo("processor"));
     }
 
     [Test]
@@ -123,7 +123,7 @@ public class ExpressionExtensionTests
         Expression.RegisterExtensionMethod<Foo>("SpelExtension", SpelExtensionLambda, vars);
 
         ArgumentException ex = Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "#foo.NoSuchMethod()", vars));
-        Assert.AreEqual(MissingMethodMessage("NoSuchMethod"), ex.Message);
+        Assert.That(ex.Message, Is.EqualTo(MissingMethodMessage("NoSuchMethod")));
     }
 
     [Test]
@@ -134,11 +134,11 @@ public class ExpressionExtensionTests
         vars["foo"] = foo;
 
         ArgumentException ex = Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "#foo.NoSuchMethod()", vars));
-        Assert.AreEqual(MissingMethodMessage("NoSuchMethod"), ex.Message);
+        Assert.That(ex.Message, Is.EqualTo(MissingMethodMessage("NoSuchMethod")));
 
         IExpression expression = Expression.Parse("NoSuchMethod()");
         ArgumentException nullVarsEx = Assert.Throws<ArgumentException>(() => expression.GetValue(foo, null));
-        Assert.AreEqual(MissingMethodMessage("NoSuchMethod"), nullVarsEx.Message);
+        Assert.That(nullVarsEx.Message, Is.EqualTo(MissingMethodMessage("NoSuchMethod")));
     }
 
     [Test]
@@ -148,8 +148,8 @@ public class ExpressionExtensionTests
         Expression.RegisterExtensionProperty<Foo>("Doubled", DoubledLambda, vars);
 
         InvalidPropertyException ex = Assert.Throws<InvalidPropertyException>(() => ExpressionEvaluator.GetValue(null, "#foo.NoSuchProp", vars));
-        Assert.IsNotNull(ex);
-        Assert.IsTrue(ex.Message.Contains("NoSuchProp"), ex.Message);
+        Assert.That(ex, Is.Not.Null);
+        Assert.That(ex.Message.Contains("NoSuchProp"), Is.True, ex.Message);
     }
 
     [Test]
@@ -165,9 +165,9 @@ public class ExpressionExtensionTests
         Dictionary<string, object> varsB = new Dictionary<string, object>();
         varsB["foo"] = foo;
 
-        Assert.AreEqual(42, expression.GetValue(null, varsA));
+        Assert.That(expression.GetValue(null, varsA), Is.EqualTo(42));
         Assert.Throws<ArgumentException>(() => expression.GetValue(null, varsB));
-        Assert.AreEqual(42, expression.GetValue(null, varsA));
+        Assert.That(expression.GetValue(null, varsA), Is.EqualTo(42));
     }
 
     [Test]
@@ -183,9 +183,9 @@ public class ExpressionExtensionTests
         Dictionary<string, object> varsB = new Dictionary<string, object>();
         varsB["foo"] = foo;
 
-        Assert.AreEqual(82, expression.GetValue(null, varsA));
+        Assert.That(expression.GetValue(null, varsA), Is.EqualTo(82));
         Assert.Throws<InvalidPropertyException>(() => expression.GetValue(null, varsB));
-        Assert.AreEqual(82, expression.GetValue(null, varsA));
+        Assert.That(expression.GetValue(null, varsA), Is.EqualTo(82));
     }
 
     [Test]
@@ -195,7 +195,7 @@ public class ExpressionExtensionTests
 
         IExpression methodExpression = Expression.Parse("SpelExtension(1)");
         ArgumentException ex = Assert.Throws<ArgumentException>(() => methodExpression.GetValue(foo, null));
-        Assert.AreEqual(MissingMethodMessage("SpelExtension"), ex.Message);
+        Assert.That(ex.Message, Is.EqualTo(MissingMethodMessage("SpelExtension")));
 
         IExpression propertyExpression = Expression.Parse("Doubled");
         Assert.Throws<InvalidPropertyException>(() => propertyExpression.GetValue(foo, null));
@@ -220,7 +220,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = new Dictionary<string, object>();
         Expression.RegisterExtensionMethod<Type>("Describe", "{|self| $self.Name}", vars);
 
-        Assert.AreEqual("Foo", ExpressionEvaluator.GetValue(null, "ExtensionTestFoo.Describe()", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "ExtensionTestFoo.Describe()", vars), Is.EqualTo("Foo"));
     }
 
     [Test]
@@ -232,7 +232,7 @@ public class ExpressionExtensionTests
         vars["bar"] = bar;
         Expression.RegisterExtensionMethod<Foo>("SpelExtension", SpelExtensionLambda, vars);
 
-        Assert.AreEqual(42, ExpressionEvaluator.GetValue(null, "#bar.SpelExtension(1)", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#bar.SpelExtension(1)", vars), Is.EqualTo(42));
     }
 
     [Test]
@@ -244,7 +244,7 @@ public class ExpressionExtensionTests
         vars["baz"] = baz;
         Expression.RegisterExtensionMethod(typeof(IHasValue), "SpelExtension", SpelExtensionLambda, vars);
 
-        Assert.AreEqual(42, ExpressionEvaluator.GetValue(null, "#baz.SpelExtension(1)", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#baz.SpelExtension(1)", vars), Is.EqualTo(42));
     }
 
     [Test]
@@ -257,7 +257,7 @@ public class ExpressionExtensionTests
         Expression.RegisterExtensionMethod<Foo>("Which", "{|self| 'base'}", vars);
         Expression.RegisterExtensionMethod<Bar>("Which", "{|self| 'derived'}", vars);
 
-        Assert.AreEqual("derived", ExpressionEvaluator.GetValue(null, "#bar.Which()", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#bar.Which()", vars), Is.EqualTo("derived"));
     }
 
     [Test]
@@ -266,7 +266,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionMethod<Foo>("SpelExtension", SpelExtensionLambda, vars);
 
-        Assert.AreEqual(42, ExpressionEvaluator.GetValue(null, "#foo.spelextension(1)", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.spelextension(1)", vars), Is.EqualTo(42));
     }
 
     [Test]
@@ -275,7 +275,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionMethod<Foo>("Bumped", "{|self| InternalValue + 1}", vars);
 
-        Assert.AreEqual(42, ExpressionEvaluator.GetValue(null, "#foo.Bumped()", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.Bumped()", vars), Is.EqualTo(42));
     }
 
     [Test]
@@ -286,7 +286,7 @@ public class ExpressionExtensionTests
         Expression.RegisterFunction("triple", "{|n| $n * 3}", vars);
         Expression.RegisterExtensionMethod<Foo>("Tripled", "{|self| #triple($self.InternalValue) + #offset}", vars);
 
-        Assert.AreEqual(124, ExpressionEvaluator.GetValue(null, "#foo.Tripled()", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.Tripled()", vars), Is.EqualTo(124));
     }
 
     [Test]
@@ -295,7 +295,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionMethod<Foo>("Apply", "{|self, f| $f($self.InternalValue)}", vars);
 
-        Assert.AreEqual(82, ExpressionEvaluator.GetValue(null, "#foo.Apply({|n| $n * 2})", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.Apply({|n| $n * 2})", vars), Is.EqualTo(82));
     }
 
     [Test]
@@ -305,7 +305,7 @@ public class ExpressionExtensionTests
         Expression.RegisterExtensionMethod<Foo>("SpelExtension", SpelExtensionLambda, vars);
 
         ArgumentException ex = Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "#foo.SpelExtension()", vars));
-        Assert.AreEqual(ArityMessage("SpelExtension", typeof(Foo), 2, 1), ex.Message);
+        Assert.That(ex.Message, Is.EqualTo(ArityMessage("SpelExtension", typeof(Foo), 2, 1)));
     }
 
     [Test]
@@ -315,7 +315,7 @@ public class ExpressionExtensionTests
         Expression.RegisterExtensionMethod("SpelExtension", (Foo self, int arg) => self.InternalValue + arg, vars);
 
         ArgumentException ex = Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "#foo.SpelExtension()", vars));
-        Assert.AreEqual(ArityMessage("SpelExtension", typeof(Foo), 2, 1), ex.Message);
+        Assert.That(ex.Message, Is.EqualTo(ArityMessage("SpelExtension", typeof(Foo), 2, 1)));
     }
 
     [Test]
@@ -362,7 +362,7 @@ public class ExpressionExtensionTests
         // Spring.Expressions.SyntaxErrorException is internal to Spring.Core, so it cannot be
         // named here - assert on the concrete runtime type instead.
         Exception ex = Assert.Catch(() => Expression.RegisterExtensionMethod<Foo>("X", "{|self ", vars));
-        Assert.AreEqual("Spring.Expressions.SyntaxErrorException", ex.GetType().FullName);
+        Assert.That(ex.GetType().FullName, Is.EqualTo("Spring.Expressions.SyntaxErrorException"));
     }
 
     [Test]
@@ -381,7 +381,7 @@ public class ExpressionExtensionTests
         Expression.RegisterExtensionMethod<Foo>("V", "{|self| 1}", vars);
         Expression.RegisterExtensionMethod<Foo>("V", "{|self| 2}", vars);
 
-        Assert.AreEqual(2, ExpressionEvaluator.GetValue(null, "#foo.V()", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.V()", vars), Is.EqualTo(2));
     }
 
     [Test]
@@ -390,7 +390,7 @@ public class ExpressionExtensionTests
         Dictionary<string, object> vars = CreateVariables();
         Expression.RegisterExtensionMethod<Foo>("SpelExtension", SpelExtensionLambda, vars);
 
-        Assert.AreEqual(2, vars.Count);
+        Assert.That(vars.Count, Is.EqualTo(2));
 
         int reservedKeys = 0;
         foreach (string key in vars.Keys)
@@ -401,8 +401,8 @@ public class ExpressionExtensionTests
             }
         }
 
-        Assert.AreEqual(1, reservedKeys);
-        Assert.AreEqual(41, ExpressionEvaluator.GetValue(null, "#foo.InternalValue", vars));
+        Assert.That(reservedKeys, Is.EqualTo(1));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#foo.InternalValue", vars), Is.EqualTo(41));
     }
 
     [Test]
@@ -423,7 +423,7 @@ public class ExpressionExtensionTests
             }
         });
 
-        Assert.AreEqual(0, failures[0]);
+        Assert.That(failures[0], Is.EqualTo(0));
     }
 
     private static Foo CreateFoo()

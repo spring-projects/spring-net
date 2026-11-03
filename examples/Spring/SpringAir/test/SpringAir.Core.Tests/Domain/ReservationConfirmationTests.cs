@@ -45,7 +45,7 @@ namespace SpringAir.Domain
                 reservationConfirmationNumber, new Reservation(null, new Itinerary(1, 1000.0m, null)));
             ReservationConfirmation rhs = new ReservationConfirmation(
                 reservationConfirmationNumber, new Reservation(null, new Itinerary(1, 1000.0m, null)));
-            Assert.IsTrue(lhs.Equals(rhs));
+            Assert.That(lhs.Equals(rhs), Is.True);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace SpringAir.Domain
         {
             ReservationConfirmation lhs = new ReservationConfirmation(
                 reservationConfirmationNumber, new Reservation(null, new Itinerary(1, 1000.0m, null)));
-            Assert.IsFalse(lhs.Equals(null));
+            Assert.That(lhs.Equals(null), Is.False);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace SpringAir.Domain
         {
             ReservationConfirmation lhs = new ReservationConfirmation(
                 reservationConfirmationNumber, new Reservation(null, new Itinerary(1, 1000.0m, null)));
-            Assert.IsFalse(lhs.Equals(12));
+            Assert.That(lhs.Equals(12), Is.False);
         }
     }
 }

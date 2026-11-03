@@ -53,9 +53,9 @@ public abstract class AbstractRegularExpressionMethodPointcutTests
 
     protected void NoPatternSuppliedTests(AbstractRegularExpressionMethodPointcut rpc)
     {
-        Assert.IsFalse(rpc.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)));
-        Assert.IsFalse(rpc.Matches(typeof(object).GetMethod("GetType"), typeof(Type)));
-        Assert.AreEqual(0, rpc.Patterns.Length);
+        Assert.That(rpc.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)), Is.False);
+        Assert.That(rpc.Matches(typeof(object).GetMethod("GetType"), typeof(Type)), Is.False);
+        Assert.That(rpc.Patterns.Length, Is.EqualTo(0));
     }
 
     [Test]
@@ -70,8 +70,8 @@ public abstract class AbstractRegularExpressionMethodPointcutTests
     protected void ExactMatchWithGenericTypeTests(AbstractRegularExpressionMethodPointcut rpc)
     {
         // assumes rpc.setPattern("System.Collections.Generic.List<string>");
-        Assert.IsTrue(rpc.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)));
-        Assert.IsFalse(rpc.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)));
+        Assert.That(rpc.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)), Is.True);
+        Assert.That(rpc.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)), Is.False);
     }
 
     [Test]
@@ -87,47 +87,47 @@ public abstract class AbstractRegularExpressionMethodPointcutTests
     public void WildcardWithGenericType()
     {
         pointcut.Pattern = ".*List<string>.Add";
-        Assert.IsTrue(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)));
-        Assert.IsFalse(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)));
+        Assert.That(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)), Is.True);
+        Assert.That(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)), Is.False);
     }
 
     [Test]
     public void WildcardForOneClassWithGenericType()
     {
         pointcut.Pattern = "System.Collections.*";
-        Assert.IsTrue(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)));
-        Assert.IsFalse(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)));
+        Assert.That(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)), Is.True);
+        Assert.That(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)), Is.False);
     }
 
     protected void ExactMatchTests(AbstractRegularExpressionMethodPointcut rpc)
     {
         // assumes rpc.setPattern("java.lang.Object.hashCode");
-        Assert.IsTrue(rpc.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)));
-        Assert.IsFalse(rpc.Matches(typeof(object).GetMethod("GetType"), typeof(Type)));
+        Assert.That(rpc.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)), Is.True);
+        Assert.That(rpc.Matches(typeof(object).GetMethod("GetType"), typeof(Type)), Is.False);
     }
 
     [Test]
     public void Wildcard()
     {
         pointcut.Pattern = ".*Object.GetHashCode";
-        Assert.IsTrue(pointcut.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)));
-        Assert.IsFalse(pointcut.Matches(typeof(object).GetMethod("GetType"), typeof(Type)));
+        Assert.That(pointcut.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)), Is.True);
+        Assert.That(pointcut.Matches(typeof(object).GetMethod("GetType"), typeof(Type)), Is.False);
     }
 
     [Test]
     public void WildcardForOneClass()
     {
         pointcut.Pattern = "System.Object.*";
-        Assert.IsTrue(pointcut.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)));
-        Assert.IsTrue(pointcut.Matches(typeof(object).GetMethod("GetType"), typeof(Type)));
+        Assert.That(pointcut.Matches(typeof(object).GetMethod("GetHashCode"), typeof(int)), Is.True);
+        Assert.That(pointcut.Matches(typeof(object).GetMethod("GetType"), typeof(Type)), Is.True);
     }
 
     [Test]
     public void MatchesObjectClass()
     {
         pointcut.Pattern = "Object.*";
-        Assert.IsTrue(pointcut.Matches(typeof(Exception).GetMethod("GetHashCode"), typeof(TargetException)));
+        Assert.That(pointcut.Matches(typeof(Exception).GetMethod("GetHashCode"), typeof(TargetException)), Is.True);
         // Doesn't match
-        Assert.IsFalse(pointcut.Matches(typeof(Exception).GetMethod("ToString"), typeof(Exception)));
+        Assert.That(pointcut.Matches(typeof(Exception).GetMethod("ToString"), typeof(Exception)), Is.False);
     }
 }

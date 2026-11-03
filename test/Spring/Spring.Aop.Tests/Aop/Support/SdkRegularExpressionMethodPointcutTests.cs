@@ -54,8 +54,8 @@ public sealed class SdkRegularExpressionMethodPointcutTests : AbstractRegularExp
         SdkRegularExpressionMethodPointcut initial = new SdkRegularExpressionMethodPointcut();
         initial.Pattern = "Foo";
         SdkRegularExpressionMethodPointcut pcut = (SdkRegularExpressionMethodPointcut) SerializationTestUtils.SerializeAndDeserialize(initial);
-        Assert.IsNotNull(pcut, "Deserialized instance must (obviously) not be null.");
-        Assert.AreEqual(initial.Pattern, pcut.Pattern, "Pattern property not deserialized correctly.");
+        Assert.That(pcut, Is.Not.Null, "Deserialized instance must (obviously) not be null.");
+        Assert.That(pcut.Pattern, Is.EqualTo(initial.Pattern), "Pattern property not deserialized correctly.");
     }
 
     /// <summary>
@@ -67,10 +67,10 @@ public sealed class SdkRegularExpressionMethodPointcutTests : AbstractRegularExp
         SdkRegularExpressionMethodPointcut initial = new SdkRegularExpressionMethodPointcut();
         initial.Pattern = "Foo";
         SdkRegularExpressionMethodPointcut pcut = (SdkRegularExpressionMethodPointcut) SerializationTestUtils.SerializeAndDeserialize(initial);
-        Assert.IsNotNull(pcut, "Deserialized instance must (obviously) not be null.");
+        Assert.That(pcut, Is.Not.Null, "Deserialized instance must (obviously) not be null.");
         Type type = GetType();
         bool isMatch = pcut.Matches(type.GetMethod("ForMatchingPurposesOnly"), type);
-        Assert.IsFalse(isMatch, "Whoops, should not be matching here at all.");
+        Assert.That(isMatch, Is.False, "Whoops, should not be matching here at all.");
     }
 
     public void ForMatchingPurposesOnly()
@@ -85,15 +85,15 @@ public sealed class SdkRegularExpressionMethodPointcutTests : AbstractRegularExp
 
         pcut.DefaultOptions = RegexOptions.None;
         pcut.Patterns = new object[] { "forMatching*", new Regex("xyz*", RegexOptions.Compiled) };
-        Assert.IsFalse(pcut.Matches(type.GetMethod("ForMatchingPurposesOnly"), type));
+        Assert.That(pcut.Matches(type.GetMethod("ForMatchingPurposesOnly"), type), Is.False);
 
         pcut.DefaultOptions = RegexOptions.IgnoreCase;
         pcut.Patterns = new object[] { "forMatching*", new Regex("xyz*", RegexOptions.Compiled) };
-        Assert.IsTrue(pcut.Matches(type.GetMethod("ForMatchingPurposesOnly"), type));
+        Assert.That(pcut.Matches(type.GetMethod("ForMatchingPurposesOnly"), type), Is.True);
 
         pcut.DefaultOptions = RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace;
         pcut.Patterns = new object[] { "for matc \nhing*", new Regex("xyz*", RegexOptions.Compiled) };
-        Assert.IsTrue(pcut.Matches(type.GetMethod("ForMatchingPurposesOnly"), type));
+        Assert.That(pcut.Matches(type.GetMethod("ForMatchingPurposesOnly"), type), Is.True);
     }
 
     [Test]
@@ -121,6 +121,6 @@ public sealed class SdkRegularExpressionMethodPointcutTests : AbstractRegularExp
     public void InstantiationWithSuppliedPattern()
     {
         SdkRegularExpressionMethodPointcut pcut = new SdkRegularExpressionMethodPointcut("Foo");
-        Assert.AreEqual("Foo", pcut.Pattern, "Pattern supplied via the ctor was not set.");
+        Assert.That(pcut.Pattern, Is.EqualTo("Foo"), "Pattern supplied via the ctor was not set.");
     }
 }

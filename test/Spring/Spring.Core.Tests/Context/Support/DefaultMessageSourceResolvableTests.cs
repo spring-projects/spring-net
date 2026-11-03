@@ -35,7 +35,7 @@ public sealed class DefaultMessageSourceResolvableTests
     public void InstantiationWithASingleCodeDefaultsToEmptyDefaultMessage()
     {
         DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable("foo");
-        Assert.AreEqual(string.Empty, dmr.DefaultMessage,
+        Assert.That(dmr.DefaultMessage, Is.Empty,
             "Not defaulting to non null empty string value (it must).");
     }
 
@@ -43,14 +43,14 @@ public sealed class DefaultMessageSourceResolvableTests
     public void NullLastCode()
     {
         DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(null, null);
-        Assert.IsNull(dmr.LastCode);
+        Assert.That(dmr.LastCode, Is.Null);
     }
 
     [Test]
     public void LastCode()
     {
         DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(new string[] { "code1" }, null);
-        Assert.AreEqual("code1", dmr.LastCode);
+        Assert.That(dmr.LastCode, Is.EqualTo("code1"));
     }
 
     [Test]
@@ -60,7 +60,7 @@ public sealed class DefaultMessageSourceResolvableTests
         object[] arguments = new object[] { "argument1", "argument2" };
         string defaultMessage = "defaultMessage";
         DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(codes, arguments, defaultMessage);
-        Assert.AreEqual(getResolvableString(), dmr.ToString(), "to string");
+        Assert.That(dmr.ToString(), Is.EqualTo(getResolvableString()), "to string");
     }
 
     [Test]
@@ -69,7 +69,7 @@ public sealed class DefaultMessageSourceResolvableTests
         string[] codes = new string[] { "code1", "code2" };
         string defaultMessage = "defaultMessage";
         DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(codes, null, defaultMessage);
-        Assert.AreEqual(getResolvableStringNull(), dmr.ToString(), "to string");
+        Assert.That(dmr.ToString(), Is.EqualTo(getResolvableStringNull()), "to string");
     }
 
     [Test]
@@ -81,9 +81,9 @@ public sealed class DefaultMessageSourceResolvableTests
         A.CallTo(() => res.GetArguments()).Returns(new object[] { "ArgumentFromMock" });
 
         DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(res);
-        Assert.AreEqual("defaultMessageFromMock", dmr.DefaultMessage, "default");
-        Assert.AreEqual("code1FromMock", dmr.LastCode, "codes");
-        Assert.AreEqual("ArgumentFromMock", (dmr.GetArguments())[0], "arguments");
+        Assert.That(dmr.DefaultMessage, Is.EqualTo("defaultMessageFromMock"), "default");
+        Assert.That(dmr.LastCode, Is.EqualTo("code1FromMock"), "codes");
+        Assert.That((dmr.GetArguments())[0], Is.EqualTo("ArgumentFromMock"), "arguments");
     }
 
     private string getResolvableString()

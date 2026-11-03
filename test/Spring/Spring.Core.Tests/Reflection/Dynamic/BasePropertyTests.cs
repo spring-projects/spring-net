@@ -51,16 +51,16 @@ public abstract class BasePropertyTests
     public void TestInstanceProperties()
     {
         IDynamicProperty placeOfBirth = Create(typeof(Inventor).GetProperty("PlaceOfBirth"));
-        Assert.AreEqual(tesla.PlaceOfBirth, placeOfBirth.GetValue(tesla));
+        Assert.That(placeOfBirth.GetValue(tesla), Is.EqualTo(tesla.PlaceOfBirth));
 
         IDynamicProperty dateOfBirth = Create(typeof(Inventor).GetProperty("DOB"));
-        Assert.AreEqual(tesla.DOB, dateOfBirth.GetValue(tesla));
+        Assert.That(dateOfBirth.GetValue(tesla), Is.EqualTo(tesla.DOB));
         dateOfBirth.SetValue(tesla, new DateTime(2004, 8, 14));
-        Assert.AreEqual(new DateTime(2004, 8, 14), dateOfBirth.GetValue(tesla));
+        Assert.That(dateOfBirth.GetValue(tesla), Is.EqualTo(new DateTime(2004, 8, 14)));
 
         DateTime mostImportantDayInTheWorldEver = new DateTime(2004, 8, 14);
         IDynamicProperty year = Create(typeof(DateTime).GetProperty("Year"));
-        Assert.AreEqual(mostImportantDayInTheWorldEver.Year, year.GetValue(mostImportantDayInTheWorldEver));
+        Assert.That(year.GetValue(mostImportantDayInTheWorldEver), Is.EqualTo(mostImportantDayInTheWorldEver.Year));
     }
 
     [Test]
@@ -69,7 +69,7 @@ public abstract class BasePropertyTests
         IDynamicProperty p = Create(typeof(ClassWithNonReadableProperty).GetProperty("MyBaseProperty"));
         BaseClass baseObject = new BaseClass();
         baseObject.MyBaseProperty = "testtext";
-        Assert.AreEqual("testtext", p.GetValue(baseObject));
+        Assert.That(p.GetValue(baseObject), Is.EqualTo("testtext"));
     }
 
     [Test]
@@ -78,7 +78,7 @@ public abstract class BasePropertyTests
         IDynamicProperty p = Create(typeof(BaseClass).GetProperty("MyBaseProperty"));
         ClassWithNonReadableProperty derivedObject = new ClassWithNonReadableProperty();
         derivedObject.MyBaseProperty = "testtext";
-        Assert.AreEqual("testtext", p.GetValue(derivedObject));
+        Assert.That(p.GetValue(derivedObject), Is.EqualTo("testtext"));
     }
 
     [Test]
@@ -87,29 +87,29 @@ public abstract class BasePropertyTests
         IDynamicProperty pVirt = Create(typeof(BaseClass).GetProperty("MyVirtualBaseProperty"));
         IDynamicProperty pOverridden = Create(typeof(ClassWithNonReadableProperty).GetProperty("MyVirtualBaseProperty"));
 
-        Assert.AreEqual("MyVirtualBasePropertyText", pVirt.GetValue(new BaseClass()));
+        Assert.That(pVirt.GetValue(new BaseClass()), Is.EqualTo("MyVirtualBasePropertyText"));
         try
         {
-            Assert.AreEqual("MyVirtualBasePropertyText", pOverridden.GetValue(new BaseClass()));
+            Assert.That(pOverridden.GetValue(new BaseClass()), Is.EqualTo("MyVirtualBasePropertyText"));
             Assert.Fail();
         }
         catch (InvalidCastException)
         {
         }
 
-        Assert.AreEqual("MyOverridenDerivedPropertyText", pVirt.GetValue(new ClassWithNonReadableProperty()));
-        Assert.AreEqual("MyOverridenDerivedPropertyText", pOverridden.GetValue(new ClassWithNonReadableProperty()));
+        Assert.That(pVirt.GetValue(new ClassWithNonReadableProperty()), Is.EqualTo("MyOverridenDerivedPropertyText"));
+        Assert.That(pOverridden.GetValue(new ClassWithNonReadableProperty()), Is.EqualTo("MyOverridenDerivedPropertyText"));
     }
 
     [Test]
     public void TestStaticProperties()
     {
         IDynamicProperty today = Create(typeof(DateTime).GetProperty("Today"));
-        Assert.AreEqual(DateTime.Today, today.GetValue(null));
+        Assert.That(today.GetValue(null), Is.EqualTo(DateTime.Today));
 
         IDynamicProperty myProperty = Create(typeof(MyStaticClass).GetProperty("MyProperty"));
         myProperty.SetValue(null, "here we go...");
-        Assert.AreEqual("here we go...", myProperty.GetValue(null));
+        Assert.That(myProperty.GetValue(null), Is.EqualTo("here we go..."));
     }
 
     [Test, Ignore("test N/A anymore due to System.Reflection.Emit.DynamicMethod")]
@@ -120,7 +120,7 @@ public abstract class BasePropertyTests
         IDynamicProperty third = Create(typeof(Something).GetProperty("Third"));
         //this should be ok, because both get and set of the "Third" property are public
         third.SetValue(something, 456);
-        Assert.AreEqual(456, third.GetValue(something));
+        Assert.That(third.GetValue(something), Is.EqualTo(456));
 
         IDynamicProperty first = Create(typeof(Something).GetProperty("First"));
         first.SetValue(something, 123);
@@ -136,10 +136,10 @@ public abstract class BasePropertyTests
         IDynamicProperty third = Create(typeof(Something).GetProperty("Third"));
         third.SetValue(something, 456);
         //this should be ok, because both get and set of the "Third" property are public
-        Assert.AreEqual(456, third.GetValue(something));
+        Assert.That(third.GetValue(something), Is.EqualTo(456));
 
         IDynamicProperty second = Create(typeof(Something).GetProperty("Second"));
-        Assert.AreEqual(2, second.GetValue(something));
+        Assert.That(second.GetValue(something), Is.EqualTo(2));
         //this should cause MethodAccessException, because set is private in "Second" property
         second.SetValue(something, 123);
 

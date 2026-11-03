@@ -43,9 +43,9 @@ public class AdoTemplatePerformanceTests
     {
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/adoTemplateTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         adoTemplate = ctx["adoTemplate"] as AdoTemplate;
-        Assert.IsNotNull(adoTemplate);
+        Assert.That(adoTemplate, Is.Not.Null);
         //CleanDb();
     }
 

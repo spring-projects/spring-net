@@ -39,8 +39,8 @@ public class MethodInvokingFactoryObjectTests
         mcfo.AfterPropertiesSet();
 
         object obj = mcfo.GetObject();
-        Assert.IsNotNull(obj);
-        Assert.IsTrue(obj is TestObject);
+        Assert.That(obj, Is.Not.Null);
+        Assert.That(obj is TestObject, Is.True);
     }
 
     [Test]
@@ -52,10 +52,10 @@ public class MethodInvokingFactoryObjectTests
         mcfo.TargetMethod = "Method1";
         mcfo.AfterPropertiesSet();
         int i = (int) mcfo.GetObject();
-        Assert.IsTrue(i == 1);
+        Assert.That(i == 1, Is.True);
         i = (int) mcfo.GetObject();
-        Assert.IsTrue(i == 1);
-        Assert.IsTrue(mcfo.IsSingleton);
+        Assert.That(i == 1, Is.True);
+        Assert.That(mcfo.IsSingleton, Is.True);
     }
 
     [Test]
@@ -68,10 +68,10 @@ public class MethodInvokingFactoryObjectTests
         mcfo.IsSingleton = false;
         mcfo.AfterPropertiesSet();
         int i = (int) mcfo.GetObject();
-        Assert.IsTrue(i == 1);
+        Assert.That(i == 1, Is.True);
         i = (int) mcfo.GetObject();
-        Assert.IsTrue(i == 2);
-        Assert.IsFalse(mcfo.IsSingleton);
+        Assert.That(i == 2, Is.True);
+        Assert.That(mcfo.IsSingleton, Is.False);
     }
 
     [Test]
@@ -83,10 +83,10 @@ public class MethodInvokingFactoryObjectTests
         mcfo.TargetMethod = "StaticMethod1";
         mcfo.AfterPropertiesSet();
         int i = (int) mcfo.GetObject();
-        Assert.IsTrue(i == 1);
+        Assert.That(i == 1, Is.True);
         i = (int) mcfo.GetObject();
-        Assert.IsTrue(i == 1);
-        Assert.IsTrue(mcfo.IsSingleton);
+        Assert.That(i == 1, Is.True);
+        Assert.That(mcfo.IsSingleton, Is.True);
     }
 
     [Test]
@@ -99,10 +99,10 @@ public class MethodInvokingFactoryObjectTests
         mcfo.IsSingleton = false;
         mcfo.AfterPropertiesSet();
         int i = (int) mcfo.GetObject();
-        Assert.IsTrue(i == 1);
+        Assert.That(i == 1, Is.True);
         i = (int) mcfo.GetObject();
-        Assert.IsTrue(i == 2);
-        Assert.IsFalse(mcfo.IsSingleton);
+        Assert.That(i == 2, Is.True);
+        Assert.That(mcfo.IsSingleton, Is.False);
     }
 
     [Test]
@@ -112,7 +112,7 @@ public class MethodInvokingFactoryObjectTests
         mcfo.TargetType = typeof(TestClass1);
         mcfo.TargetMethod = "VoidRetvalMethod";
         mcfo.AfterPropertiesSet();
-        Assert.AreEqual(MethodInvoker.Void, mcfo.GetObject());
+        Assert.That(mcfo.GetObject(), Is.EqualTo(MethodInvoker.Void));
     }
 
     [Test]
@@ -155,14 +155,14 @@ public class MethodInvokingFactoryObjectTests
         mcfo.TargetObject = tc1;
         mcfo.TargetMethod = "Method1";
         mcfo.AfterPropertiesSet();
-        Assert.IsTrue(typeof(int).Equals(mcfo.ObjectType));
+        Assert.That(typeof(int).Equals(mcfo.ObjectType), Is.True);
 
         mcfo = new MethodInvokingFactoryObject();
         mcfo.TargetType = typeof(TestClass1);
         mcfo.TargetMethod = "VoidRetvalMethod";
         mcfo.AfterPropertiesSet();
         Type objType = mcfo.ObjectType;
-        Assert.IsTrue(objType.Equals(MethodInvoker.Void.GetType()));
+        Assert.That(objType.Equals(MethodInvoker.Void.GetType()), Is.True);
 
         // verify that we can call a method with args that are subtypes of the
         // target method arg types
@@ -181,7 +181,8 @@ public class MethodInvokingFactoryObjectTests
         MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();
         mcfo.TargetType = typeof(TestClass1);
         mcfo.TargetMethod = "VoidRetvalMethod";
-        Assert.IsNull(mcfo.ObjectType,
+        Assert.That(mcfo.ObjectType,
+            Is.Null,
             "ObjectType property value must only be set to a non null value " +
             "AFTER the AfterPropertiesSet() method has been invoked.");
     }

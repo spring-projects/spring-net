@@ -33,9 +33,9 @@ public class ConfigXmlDocumentTests
         string xmlText = TestResourceLoader.GetText(this, "_SampleConfig.xml");
         xmlDoc.LoadXml("MYXML", xmlText);
         ITextPosition pos = ((ITextPosition) xmlDoc.SelectSingleNode("//property"));
-        Assert.AreEqual("MYXML", pos.Filename);
-        Assert.AreEqual(5, pos.LineNumber);
-        Assert.AreEqual(14, pos.LinePosition);
+        Assert.That(pos.Filename, Is.EqualTo("MYXML"));
+        Assert.That(pos.LineNumber, Is.EqualTo(5));
+        Assert.That(pos.LinePosition, Is.EqualTo(14));
     }
 
     [Test]
@@ -45,9 +45,9 @@ public class ConfigXmlDocumentTests
         Stream istm = TestResourceLoader.GetStream(this, "_SampleConfig.xml");
         xmlDoc.Load("MYXML", new XmlTextReader(istm));
         ITextPosition pos = ((ITextPosition) xmlDoc.SelectSingleNode("//property"));
-        Assert.AreEqual("MYXML", pos.Filename);
-        Assert.AreEqual(5, pos.LineNumber);
-        Assert.AreEqual(14, pos.LinePosition);
+        Assert.That(pos.Filename, Is.EqualTo("MYXML"));
+        Assert.That(pos.LineNumber, Is.EqualTo(5));
+        Assert.That(pos.LinePosition, Is.EqualTo(14));
     }
 
     [Test]
@@ -57,9 +57,9 @@ public class ConfigXmlDocumentTests
         Stream istm = TestResourceLoader.GetStream(this, "_SampleConfig.xml");
         xmlDoc.Load("MYXML", istm);
         ITextPosition pos = ((ITextPosition) xmlDoc.SelectSingleNode("//property"));
-        Assert.AreEqual("MYXML", pos.Filename);
-        Assert.AreEqual(5, pos.LineNumber);
-        Assert.AreEqual(14, pos.LinePosition);
+        Assert.That(pos.Filename, Is.EqualTo("MYXML"));
+        Assert.That(pos.LineNumber, Is.EqualTo(5));
+        Assert.That(pos.LinePosition, Is.EqualTo(14));
     }
 
     [Test]
@@ -69,9 +69,9 @@ public class ConfigXmlDocumentTests
         Stream istm = TestResourceLoader.GetStream(this, "_SampleConfig.xml");
         xmlDoc.Load("MYXML", new StreamReader(istm));
         ITextPosition pos = ((ITextPosition) xmlDoc.SelectSingleNode("//property"));
-        Assert.AreEqual("MYXML", pos.Filename);
-        Assert.AreEqual(5, pos.LineNumber);
-        Assert.AreEqual(14, pos.LinePosition);
+        Assert.That(pos.Filename, Is.EqualTo("MYXML"));
+        Assert.That(pos.LineNumber, Is.EqualTo(5));
+        Assert.That(pos.LinePosition, Is.EqualTo(14));
     }
 
     [Test]
@@ -81,8 +81,8 @@ public class ConfigXmlDocumentTests
         Stream istm = TestResourceLoader.GetStream(this, "_SampleConfig.xml");
         xmlDoc.Load("MYXML", new StreamReader(istm));
         XmlNode node = xmlDoc.SelectSingleNode("//property");
-        Assert.AreEqual("MYXML", ConfigurationUtils.GetFileName(node));
-        Assert.AreEqual(5, ConfigurationUtils.GetLineNumber(node));
-        //Assert.AreEqual(14, pos.LinePosition); <- IConfigErrorInfo/IConfigXmlNode do not support LinePosition
+        Assert.That(ConfigurationUtils.GetFileName(node), Is.EqualTo("MYXML"));
+        Assert.That(ConfigurationUtils.GetLineNumber(node), Is.EqualTo(5));
+        //Assert.That(pos.LinePosition, Is.EqualTo(14)); <- IConfigErrorInfo/IConfigXmlNode do not support LinePosition
     }
 }

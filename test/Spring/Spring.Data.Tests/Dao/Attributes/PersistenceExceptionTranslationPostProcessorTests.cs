@@ -70,10 +70,10 @@ public class PersistenceExceptionTranslationPostProcessorTests
         gac.Refresh();
 
         IRepositoryInterface shouldNotBeProxied = (IRepositoryInterface) gac.GetObject("notProxied");
-        Assert.IsFalse(AopUtils.IsAopProxy(shouldNotBeProxied));
+        Assert.That(AopUtils.IsAopProxy(shouldNotBeProxied), Is.False);
 
         IRepositoryInterface shouldBeProxied = (IRepositoryInterface) gac.GetObject("proxied");
-        Assert.IsTrue(AopUtils.IsAopProxy(shouldBeProxied));
+        Assert.That(AopUtils.IsAopProxy(shouldBeProxied), Is.True);
 
         CheckWillTranslateExceptions(shouldBeProxied);
     }
@@ -81,7 +81,7 @@ public class PersistenceExceptionTranslationPostProcessorTests
     private void CheckWillTranslateExceptions(object o)
     {
         IAdvised advised = o as IAdvised;
-        Assert.IsNotNull(advised);
+        Assert.That(advised, Is.Not.Null);
         foreach (IAdvisor advisor in advised.Advisors)
         {
             PersistenceExceptionTranslationAdvisor peta = advisor as PersistenceExceptionTranslationAdvisor;

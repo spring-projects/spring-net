@@ -23,33 +23,33 @@ public class AdoDaoTests : AbstractTransactionalSpringContextTests
     [Test]
     public void ExerciseDao()
     {
-        Assert.AreEqual(0, dao.GetCount());
+        Assert.That(dao.GetCount(), Is.EqualTo(0));
         dao.Create("John", 44);
-        Assert.AreEqual(1, dao.GetCountByDelegate());
+        Assert.That(dao.GetCountByDelegate(), Is.EqualTo(1));
         dao.Create("Mary", 44);
         dao.Create("Steve", 44);
         dao.Create("George", 33);
-        Assert.AreEqual(4, dao.GetCount(), "GetCount()");
-        Assert.AreEqual(3, dao.GetCount(33), "GetCount(33)");
-        Assert.AreEqual(3, dao.GetCountByAltMethod(33), "GetCountByAltMethod(33)");
-        Assert.AreEqual(3, dao.GetCountByCommandSetter(33), "GetCountByCommandSetter(33)");
-        Assert.AreEqual(1, dao.GetCount(32, "George"), "GetCount(32, 'George')");
+        Assert.That(dao.GetCount(), Is.EqualTo(4), "GetCount()");
+        Assert.That(dao.GetCount(33), Is.EqualTo(3), "GetCount(33)");
+        Assert.That(dao.GetCountByAltMethod(33), Is.EqualTo(3), "GetCountByAltMethod(33)");
+        Assert.That(dao.GetCountByCommandSetter(33), Is.EqualTo(3), "GetCountByCommandSetter(33)");
+        Assert.That(dao.GetCount(32, "George"), Is.EqualTo(1), "GetCount(32, 'George')");
 
         TestObject to = dao.FindByName("George");
-        Assert.IsNotNull(to);
-        Assert.AreEqual("George", to.Name);
-        Assert.AreEqual(33, to.Age);
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Name, Is.EqualTo("George"));
+        Assert.That(to.Age, Is.EqualTo(33));
 
         to.Age = 34;
         dao.Update(to);
 
         TestObject to2 = dao.FindByName("George");
-        Assert.AreEqual(34, to2.Age);
+        Assert.That(to2.Age, Is.EqualTo(34));
 
         dao.Delete("George");
 
         TestObject to3 = dao.FindByName("George");
-        Assert.IsNull(to3);
+        Assert.That(to3, Is.Null);
     }
 
     [Ignore("Sanity-Check tests intended for verification of base-class behavior only")]
@@ -58,9 +58,9 @@ public class AdoDaoTests : AbstractTransactionalSpringContextTests
     {
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/nativeAdoTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         ITestObjectDao dao = (ITestObjectDao) ctx["testObjectDao"];
-        Assert.IsNotNull(dao);
+        Assert.That(dao, Is.Not.Null);
         dao.Create("John", 44);
     }
 
@@ -70,15 +70,15 @@ public class AdoDaoTests : AbstractTransactionalSpringContextTests
     {
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/templateTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         TestObjectDao dao = (TestObjectDao) ctx["testObjectDao"];
-        Assert.IsNotNull(dao);
-        Assert.AreEqual(10, dao.GetCount());
+        Assert.That(dao, Is.Not.Null);
+        Assert.That(dao.GetCount(), Is.EqualTo(10));
 
-        Assert.AreEqual(3, dao.GetCount(33));
-        Assert.AreEqual(3, dao.GetCountByAltMethod(33));
-        Assert.AreEqual(3, dao.GetCountByCommandSetter(33));
-        Assert.AreEqual(2, dao.GetCount(33, "George"));
+        Assert.That(dao.GetCount(33), Is.EqualTo(3));
+        Assert.That(dao.GetCountByAltMethod(33), Is.EqualTo(3));
+        Assert.That(dao.GetCountByCommandSetter(33), Is.EqualTo(3));
+        Assert.That(dao.GetCount(33, "George"), Is.EqualTo(2));
     }
 
     [Ignore("Sanity-Check tests intended for verification of base-class behavior only")]
@@ -87,10 +87,10 @@ public class AdoDaoTests : AbstractTransactionalSpringContextTests
     {
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/templateTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         TestObjectDao dao = (TestObjectDao) ctx["testObjectDao"];
-        Assert.IsNotNull(dao);
-        Assert.AreEqual(1, dao.GetCountByDelegate());
+        Assert.That(dao, Is.Not.Null);
+        Assert.That(dao.GetCountByDelegate(), Is.EqualTo(1));
     }
 
     [Ignore("Sanity-Check tests intended for verification of base-class behavior only")]
@@ -99,24 +99,24 @@ public class AdoDaoTests : AbstractTransactionalSpringContextTests
     {
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/templateTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         TestObjectDao dao = (TestObjectDao) ctx["testObjectDao"];
         dao.Create("George", 33);
         TestObject to = dao.FindByName("George");
-        Assert.IsNotNull(to);
-        Assert.AreEqual("George", to.Name);
-        Assert.AreEqual(33, to.Age);
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Name, Is.EqualTo("George"));
+        Assert.That(to.Age, Is.EqualTo(33));
 
         to.Age = 34;
         dao.Update(to);
 
         TestObject to2 = dao.FindByName("George");
-        Assert.AreEqual(34, to2.Age);
+        Assert.That(to2.Age, Is.EqualTo(34));
 
         dao.Delete("George");
 
         TestObject to3 = dao.FindByName("George");
-        Assert.IsNull(to3);
+        Assert.That(to3, Is.Null);
     }
 
     /// <summary>

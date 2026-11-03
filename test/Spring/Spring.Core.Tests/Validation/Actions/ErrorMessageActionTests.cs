@@ -65,7 +65,7 @@ public class ErrorMessageActionTests
         ErrorMessageAction action = new ErrorMessageAction("error", "errors");
 
         action.Execute(true, context, null, errors);
-        Assert.IsTrue(errors.IsEmpty);
+        Assert.That(errors.IsEmpty, Is.True);
     }
 
     [Test]
@@ -78,9 +78,9 @@ public class ErrorMessageActionTests
         action.Parameters = new IExpression[] { Expression.Parse("Name"), Expression.Parse("Nationality") };
 
         action.Execute(false, context, null, errors);
-        Assert.IsFalse(errors.IsEmpty);
-        Assert.AreEqual(1, errors.GetErrors("errors").Count);
-        Assert.AreEqual(context.Name + ", " + context.Nationality, errors.GetResolvedErrors("errors", new NullMessageSource())[0]);
+        Assert.That(errors.IsEmpty, Is.False);
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(1));
+        Assert.That(errors.GetResolvedErrors("errors", new NullMessageSource())[0], Is.EqualTo(context.Name + ", " + context.Nationality));
     }
 
     [Test]
@@ -92,6 +92,6 @@ public class ErrorMessageActionTests
         ErrorMessageAction action = new ErrorMessageAction("{0}, {1}", "errors");
         action.When = Expression.Parse("false");
         action.Execute(false, context, null, errors);
-        Assert.IsTrue(errors.IsEmpty);
+        Assert.That(errors.IsEmpty, Is.True);
     }
 }

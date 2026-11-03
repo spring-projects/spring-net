@@ -64,7 +64,7 @@ public class TransactionalMessageListenerContainerTests : AbstractDependencyInje
         }
         catch (ArgumentException ex)
         {
-            Assert.AreEqual("Property 'MessageQueueObjectName' is required", ex.Message);
+            Assert.That(ex.Message, Is.EqualTo("Property 'MessageQueueObjectName' is required"));
         }
     }
 
@@ -72,8 +72,8 @@ public class TransactionalMessageListenerContainerTests : AbstractDependencyInje
     public void EnsureuseContainerManagedMessageQueueTransactionIsSetCorrectly()
     {
         TransactionalMessageListenerContainer container = applicationContext["transactionalMessageListenerContainer"] as TransactionalMessageListenerContainer;
-        Assert.IsNotNull(container);
-        Assert.AreEqual(true, container.UseContainerManagedMessageQueueTransaction);
+        Assert.That(container, Is.Not.Null);
+        Assert.That(container.UseContainerManagedMessageQueueTransaction, Is.EqualTo(true));
     }
 
     [Test]
@@ -82,14 +82,14 @@ public class TransactionalMessageListenerContainerTests : AbstractDependencyInje
         listener.MessageCount = 0;
 
         MessageQueueTemplate q = applicationContext["queueTemplate"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
 
         MessageQueueTemplate retryQ = applicationContext["retryQueueTemplate"] as MessageQueueTemplate;
-        Assert.IsNotNull(retryQ);
+        Assert.That(retryQ, Is.Not.Null);
 
         q.ConvertAndSend("Goodbye World 1");
 
-        Assert.AreEqual(0, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(0));
         transactionalMessageListenerContainer.Start();
 
         Thread.Sleep(waitInMillis);
@@ -99,10 +99,10 @@ public class TransactionalMessageListenerContainerTests : AbstractDependencyInje
         Thread.Sleep(2500);
 
         object msg = retryQ.ReceiveAndConvert();
-        Assert.IsNotNull(msg);
+        Assert.That(msg, Is.Not.Null);
         string textMsg = msg as string;
-        Assert.IsNotNull(textMsg);
-        Assert.AreEqual("Goodbye World 1", textMsg);
+        Assert.That(textMsg, Is.Not.Null);
+        Assert.That(textMsg, Is.EqualTo("Goodbye World 1"));
     }
 
     [Test]
@@ -111,7 +111,7 @@ public class TransactionalMessageListenerContainerTests : AbstractDependencyInje
         listener.MessageCount = 0;
 
         MessageQueueTemplate q = applicationContext["queueTemplate"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
 
         q.ConvertAndSend("Hello World 1");
         q.ConvertAndSend("Hello World 2");
@@ -119,12 +119,12 @@ public class TransactionalMessageListenerContainerTests : AbstractDependencyInje
         q.ConvertAndSend("Hello World 4");
         q.ConvertAndSend("Hello World 5");
 
-        Assert.AreEqual(0, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(0));
 
         transactionalMessageListenerContainer.Start();
 
         Thread.Sleep(waitInMillis * 2);
-        Assert.AreEqual(5, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(5));
 
         transactionalMessageListenerContainer.Stop();
         transactionalMessageListenerContainer.Shutdown();

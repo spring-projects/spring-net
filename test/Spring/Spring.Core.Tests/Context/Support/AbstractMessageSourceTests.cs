@@ -52,7 +52,7 @@ public sealed class AbstractMessageSourceTests : AbstractMessageSource
         A.CallTo(() => parentSource.GetMessage(MSGCODE, null, CultureInfo.CurrentCulture, A<object[]>._)).Returns("MockMessageSource");
         ParentMessageSource = parentSource;
 
-        Assert.AreEqual("MockMessageSource", GetMessage(res, CultureInfo.CurrentCulture), "My Message");
+        Assert.That(GetMessage(res, CultureInfo.CurrentCulture), Is.EqualTo("MockMessageSource"), "My Message");
     }
 
     [Test]
@@ -62,7 +62,7 @@ public sealed class AbstractMessageSourceTests : AbstractMessageSource
         IMessageSource parentSource = A.Fake<IMessageSource>();
         A.CallTo(() => parentSource.GetMessage("null", null, CultureInfo.CurrentCulture, A<object[]>._)).Returns("my parent message");
         ParentMessageSource = parentSource;
-        Assert.AreEqual("my parent message", GetMessage("null", "message", CultureInfo.CurrentCulture, args[0]));
+        Assert.That(GetMessage("null", "message", CultureInfo.CurrentCulture, args[0]), Is.EqualTo("my parent message"));
     }
 
     [Test]
@@ -73,7 +73,7 @@ public sealed class AbstractMessageSourceTests : AbstractMessageSource
         A.CallTo(() => res.GetCodes()).Returns(null);
         A.CallTo(() => res.GetArguments()).Returns(null);
 
-        Assert.AreEqual("MyDefaultMessage", GetMessage(res, CultureInfo.CurrentCulture), "Default");
+        Assert.That(GetMessage(res, CultureInfo.CurrentCulture), Is.EqualTo("MyDefaultMessage"), "Default");
     }
 
     [Test]
@@ -85,7 +85,7 @@ public sealed class AbstractMessageSourceTests : AbstractMessageSource
         A.CallTo(() => res.GetArguments()).Returns(null);
 
         UseCodeAsDefaultMessage = true;
-        Assert.AreEqual("null", GetMessage(res, CultureInfo.CurrentCulture), "Code");
+        Assert.That(GetMessage(res, CultureInfo.CurrentCulture), Is.EqualTo("null"), "Code");
     }
 
     [Test]
@@ -106,7 +106,7 @@ public sealed class AbstractMessageSourceTests : AbstractMessageSource
         A.CallTo(() => res.GetCodes()).Returns(new string[] { "code1" });
         A.CallTo(() => res.GetArguments()).Returns(new object[] { "my", "arguments" });
 
-        Assert.AreEqual("my arguments", GetMessage(res, CultureInfo.CurrentCulture), "Resolve");
+        Assert.That(GetMessage(res, CultureInfo.CurrentCulture), Is.EqualTo("my arguments"), "Resolve");
     }
 
     [Test]
@@ -116,7 +116,7 @@ public sealed class AbstractMessageSourceTests : AbstractMessageSource
         A.CallTo(() => res.GetCodes()).Returns(new string[] { "code1" });
         A.CallTo(() => res.GetArguments()).Returns(new object[] { "my", "arguments" });
 
-        Assert.AreEqual("my arguments", GetMessage(res, null), "Resolve");
+        Assert.That(GetMessage(res, null), Is.EqualTo("my arguments"), "Resolve");
     }
 
     [Test]
@@ -128,21 +128,21 @@ public sealed class AbstractMessageSourceTests : AbstractMessageSource
     [Test]
     public void GetMessageValidMessageAndCode()
     {
-        Assert.AreEqual("my arguments", GetMessage("code1", new object[] { "my", "arguments" }), "Resolve");
+        Assert.That(GetMessage("code1", new object[] { "my", "arguments" }), Is.EqualTo("my arguments"), "Resolve");
     }
 
     [Test]
     public void GetMessageValidMessageAndCodeNullCulture()
     {
-        Assert.AreEqual("my arguments", GetMessage("code1", null, new object[] { "my", "arguments" }), "Resolve");
+        Assert.That(GetMessage("code1", null, new object[] { "my", "arguments" }), Is.EqualTo("my arguments"), "Resolve");
     }
 
     [Test]
     public void GetMessageUseDefaultCode()
     {
         UseCodeAsDefaultMessage = true;
-        Assert.AreEqual("null", GetMessage("null", new object[] { "arguments" }), "message");
-        Assert.IsTrue(UseCodeAsDefaultMessage, "default");
+        Assert.That(GetMessage("null", new object[] { "arguments" }), Is.EqualTo("null"), "message");
+        Assert.That(UseCodeAsDefaultMessage, Is.True, "default");
     }
 
     [Test]
@@ -158,7 +158,7 @@ public sealed class AbstractMessageSourceTests : AbstractMessageSource
         A.CallTo(() => res.GetCodes()).Returns(new string[] { "code1" });
         A.CallTo(() => res.GetArguments()).Returns(new object[] { "my", "resolvable" });
 
-        Assert.AreEqual("spring my resolvable", GetMessage("code2", CultureInfo.CurrentCulture, new object[] { "spring", res }), "Resolve");
+        Assert.That(GetMessage("code2", CultureInfo.CurrentCulture, new object[] { "spring", res }), Is.EqualTo("spring my resolvable"), "Resolve");
     }
 
     [Test]
@@ -169,7 +169,7 @@ public sealed class AbstractMessageSourceTests : AbstractMessageSource
         A.CallTo(() => res.GetCodes()).Returns(new string[] { "nullCode" });
         A.CallTo(() => res.GetArguments()).Returns(null);
 
-        Assert.AreEqual("myDefaultMessage", GetMessage(res, null), "Resolve");
+        Assert.That(GetMessage(res, null), Is.EqualTo("myDefaultMessage"), "Resolve");
     }
 
     private void ResetMe()

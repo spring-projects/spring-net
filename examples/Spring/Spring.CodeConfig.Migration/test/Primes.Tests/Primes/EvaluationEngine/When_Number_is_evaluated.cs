@@ -15,7 +15,7 @@ namespace Tests.EvaluationEngine
         {
             var primeEvaluationEngine = new PrimeEvaluationEngine();
 
-            Assert.IsTrue(primeEvaluationEngine.IsPrime(PRIME_TEST_VALUE));
+            Assert.That(primeEvaluationEngine.IsPrime(PRIME_TEST_VALUE), Is.True);
         }
 
         [Test]
@@ -23,7 +23,7 @@ namespace Tests.EvaluationEngine
         {
             var primeEvaluationEngine = new PrimeEvaluationEngine();
 
-            Assert.IsFalse(primeEvaluationEngine.IsPrime(NON_PRIME_TEST_VALUE));
+            Assert.That(primeEvaluationEngine.IsPrime(NON_PRIME_TEST_VALUE), Is.False);
         }
     }
 }

@@ -150,7 +150,7 @@ public sealed class AbstractQueueTests
     public void AddSucceed()
     {
         SucceedQueue q = new SucceedQueue();
-        Assert.IsTrue(q.Add(Int32.Parse("2")));
+        Assert.That(q.Add(Int32.Parse("2")), Is.True);
     }
 
     [Test]

@@ -140,7 +140,7 @@ public class MockApplicationContext : AbstractApplicationContext
 
     public void Verify()
     {
-        Assert.AreEqual(actualCloseCalls, expectedCloseCalls, "Did not receive the expected Count for object " + MockName);
+        Assert.That(expectedCloseCalls, Is.EqualTo(actualCloseCalls), "Did not receive the expected Count for object " + MockName);
         _isVerified = true;
     }
 

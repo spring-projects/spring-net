@@ -38,12 +38,12 @@ public class SimpleMessageListenerContainerTests : AbstractDependencyInjectionSp
     [Test]
     public void SendAndRecieveAsync()
     {
-        Assert.NotNull(simpleGateway);
-        Assert.NotNull(simpleMessageListener);
-        Assert.AreEqual(0, simpleMessageListener.MessageCount);
+        Assert.That(simpleGateway, Is.Not.Null);
+        Assert.That(simpleMessageListener, Is.Not.Null);
+        Assert.That(simpleMessageListener.MessageCount, Is.EqualTo(0));
         simpleGateway.Publish("CSCO", 123.45);
         Thread.Sleep(1000);
-        Assert.AreEqual(1, simpleMessageListener.MessageCount);
+        Assert.That(simpleMessageListener.MessageCount, Is.EqualTo(1));
     }
 
     protected override string[] ConfigLocations

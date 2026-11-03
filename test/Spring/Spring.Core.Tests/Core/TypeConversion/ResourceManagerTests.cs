@@ -33,8 +33,8 @@ public sealed class ResourceManagerConverterTests
     public void CanConvertFrom()
     {
         ResourceManagerConverter cvt = new ResourceManagerConverter();
-        Assert.IsTrue(cvt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
-        Assert.IsFalse(cvt.CanConvertFrom(null));
+        Assert.That(cvt.CanConvertFrom(typeof(string)), Is.True, "Conversion from a string instance must be supported.");
+        Assert.That(cvt.CanConvertFrom(null), Is.False);
     }
 
     /// <summary>
@@ -45,8 +45,8 @@ public sealed class ResourceManagerConverterTests
     {
         ResourceManagerConverter cvt = new ResourceManagerConverter();
         object actual = cvt.ConvertFrom("Spring.TestResource.txt, Spring.Core.Tests");
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(typeof(ResourceManager), actual.GetType());
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.GetType(), Is.EqualTo(typeof(ResourceManager)));
     }
 
     /// <summary>

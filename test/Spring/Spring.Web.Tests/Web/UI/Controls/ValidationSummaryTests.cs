@@ -30,6 +30,6 @@ public class ValidationSummaryTests
     public void DefaultsToDivValidationErrorsRenderer()
     {
         ValidationSummary vs = new ValidationSummary();
-        Assert.AreEqual(typeof(DivValidationErrorsRenderer), vs.Renderer.GetType());
+        Assert.That(vs.Renderer.GetType(), Is.EqualTo(typeof(DivValidationErrorsRenderer)));
     }
 }

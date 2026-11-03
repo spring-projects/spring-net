@@ -20,9 +20,9 @@ public class IsAopProxyTests
     [Test]
     public void TargetIsNotAProxy()
     {
-        Assert.False(AopUtils.IsAopProxy(_target));
-        Assert.False(AopUtils.IsInheritanceAopProxy(_target));
-        Assert.False(AopUtils.IsInheritanceAopProxyType(_target.GetType()));
+        Assert.That(AopUtils.IsAopProxy(_target), Is.False);
+        Assert.That(AopUtils.IsInheritanceAopProxy(_target), Is.False);
+        Assert.That(AopUtils.IsInheritanceAopProxyType(_target.GetType()), Is.False);
     }
 
     [Test]
@@ -30,13 +30,13 @@ public class IsAopProxyTests
     {
         var pf = new ProxyFactory(typeof(ITestObject), new DebugAdvice());
         pf.Target = _target;
-        Assert.False(pf.ProxyTargetType);
+        Assert.That(pf.ProxyTargetType, Is.False);
 
         var proxy = (ITestObject) pf.GetProxy();
 
-        Assert.True(AopUtils.IsCompositionAopProxy(proxy));
-        Assert.True(AopUtils.IsAopProxy(proxy));
-        Assert.IsNotInstanceOf<TestObject>(proxy);
+        Assert.That(AopUtils.IsCompositionAopProxy(proxy), Is.True);
+        Assert.That(AopUtils.IsAopProxy(proxy), Is.True);
+        Assert.That(proxy, Is.Not.InstanceOf<TestObject>());
     }
 
     [Test]
@@ -47,20 +47,20 @@ public class IsAopProxyTests
         pf.ProxyTargetType = true;
 
         var proxy = (TestObject) pf.GetProxy();
-        Assert.True(AopUtils.IsDecoratorAopProxy(proxy));
-        Assert.True(AopUtils.IsAopProxy(proxy));
+        Assert.That(AopUtils.IsDecoratorAopProxy(proxy), Is.True);
+        Assert.That(AopUtils.IsAopProxy(proxy), Is.True);
     }
 
     [Test]
     public void IsInheritanceBasedProxyTypeReturnsFalseForNull()
     {
-        Assert.False(AopUtils.IsInheritanceAopProxyType(null));
+        Assert.That(AopUtils.IsInheritanceAopProxyType(null), Is.False);
     }
 
     [Test]
     public void IsInheritanceBasedProxyReturnsFalseForNull()
     {
-        Assert.False(AopUtils.IsInheritanceAopProxy(null));
+        Assert.That(AopUtils.IsInheritanceAopProxy(null), Is.False);
     }
 
     [Test]
@@ -69,13 +69,13 @@ public class IsAopProxyTests
         using (var ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("IsAopProxyTests.xml", this.GetType())))
         {
             var proxy = (TestObject) ctx["michael"];
-            Assert.AreEqual("Michael", proxy.Name);
+            Assert.That(proxy.Name, Is.EqualTo("Michael"));
 
-            Assert.True(AopUtils.IsInheritanceAopProxyType(proxy.GetType()));
-            Assert.True(AopUtils.IsAopProxyType(proxy.GetType()));
+            Assert.That(AopUtils.IsInheritanceAopProxyType(proxy.GetType()), Is.True);
+            Assert.That(AopUtils.IsAopProxyType(proxy.GetType()), Is.True);
 
-            Assert.True(AopUtils.IsInheritanceAopProxy(proxy));
-            Assert.True(AopUtils.IsAopProxy(proxy));
+            Assert.That(AopUtils.IsInheritanceAopProxy(proxy), Is.True);
+            Assert.That(AopUtils.IsAopProxy(proxy), Is.True);
         }
     }
 }

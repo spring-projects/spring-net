@@ -52,7 +52,7 @@ public class MultiDelegatingDbProviderTests
         }
         catch (ArgumentException ex)
         {
-            Assert.AreEqual("Key identifying target IDbProvider in TargetDbProviders dictionary property is required to be of type string.  Key = [1], type = [System.Int32]", ex.Message);
+            Assert.That(ex.Message, Is.EqualTo("Key identifying target IDbProvider in TargetDbProviders dictionary property is required to be of type string.  Key = [1], type = [System.Int32]"));
         }
     }
 
@@ -70,7 +70,7 @@ public class MultiDelegatingDbProviderTests
         }
         catch (ArgumentException ex)
         {
-            Assert.AreEqual("Value in TargetDbProviders dictionary is not of type IDbProvider.  Type = [System.Int32]", ex.Message);
+            Assert.That(ex.Message, Is.EqualTo("Value in TargetDbProviders dictionary is not of type IDbProvider.  Type = [System.Int32]"));
         }
     }
 
@@ -86,12 +86,12 @@ public class MultiDelegatingDbProviderTests
         multiDbProvider.AfterPropertiesSet();
         try
         {
-            Assert.AreEqual("connString1", multiDbProvider.ConnectionString);
+            Assert.That(multiDbProvider.ConnectionString, Is.EqualTo("connString1"));
             Assert.Fail("InvalidDataAccessApiUsageException should have been thrown");
         }
         catch (InvalidDataAccessApiUsageException exception)
         {
-            Assert.AreEqual("No provider name found in thread local storage.  Consider setting the property DefaultDbProvider to fallback to a default value.", exception.Message);
+            Assert.That(exception.Message, Is.EqualTo("No provider name found in thread local storage.  Consider setting the property DefaultDbProvider to fallback to a default value."));
         }
         finally
         {
@@ -112,12 +112,12 @@ public class MultiDelegatingDbProviderTests
         try
         {
             MultiDelegatingDbProvider.CurrentDbProviderName = "db2";
-            Assert.AreEqual("connString1", multiDbProvider.ConnectionString);
+            Assert.That(multiDbProvider.ConnectionString, Is.EqualTo("connString1"));
             Assert.Fail("InvalidDataAccessApiUsageException should have been thrown");
         }
         catch (InvalidDataAccessApiUsageException exception)
         {
-            Assert.AreEqual("'db2' was not under the thread local key 'dbProviderName' and no default IDbProvider was set.", exception.Message);
+            Assert.That(exception.Message, Is.EqualTo("'db2' was not under the thread local key 'dbProviderName' and no default IDbProvider was set."));
         }
         finally
         {
@@ -142,12 +142,12 @@ public class MultiDelegatingDbProviderTests
 
         //an aside, set setter for connection string
         multiDbProvider.ConnectionString = "connString1Reset";
-        Assert.AreEqual("connString1Reset", multiDbProvider.ConnectionString);
+        Assert.That(multiDbProvider.ConnectionString, Is.EqualTo("connString1Reset"));
 
         MultiDelegatingDbProvider.CurrentDbProviderName = "db2";
         try
         {
-            Assert.AreEqual("connString2", multiDbProvider.ConnectionString);
+            Assert.That(multiDbProvider.ConnectionString, Is.EqualTo("connString2"));
         }
         finally
         {
@@ -173,7 +173,7 @@ public class MultiDelegatingDbProviderTests
         MultiDelegatingDbProvider.CurrentDbProviderName = "db314";
         try
         {
-            Assert.AreEqual("connString1", multiDbProvider.ConnectionString);
+            Assert.That(multiDbProvider.ConnectionString, Is.EqualTo("connString1"));
         }
         finally
         {
@@ -217,16 +217,16 @@ public class MultiDelegatingDbProviderTests
         multiDbProvider.TargetDbProviders = targetDbProviders;
         multiDbProvider.AfterPropertiesSet();
 
-        Assert.IsNotNull(multiDbProvider.CreateConnection());
-        Assert.IsNotNull(multiDbProvider.CreateCommand());
-        Assert.IsNotNull(multiDbProvider.CreateParameter());
-        Assert.IsNotNull(multiDbProvider.CreateDataAdapter());
-        Assert.IsNotNull(multiDbProvider.CreateCommandBuilder() as DbCommandBuilder);
-        Assert.AreEqual("@p1", multiDbProvider.CreateParameterName("p1"));
-        Assert.AreEqual("cc1", multiDbProvider.CreateParameterNameForCollection("c1"));
-        Assert.IsNotNull(multiDbProvider.DbMetadata);
-        Assert.AreEqual("badsql", multiDbProvider.ExtractError(e));
-        Assert.IsTrue(multiDbProvider.IsDataAccessException(dbException));
-        Assert.IsFalse(multiDbProvider.IsDataAccessException(e));
+        Assert.That(multiDbProvider.CreateConnection(), Is.Not.Null);
+        Assert.That(multiDbProvider.CreateCommand(), Is.Not.Null);
+        Assert.That(multiDbProvider.CreateParameter(), Is.Not.Null);
+        Assert.That(multiDbProvider.CreateDataAdapter(), Is.Not.Null);
+        Assert.That(multiDbProvider.CreateCommandBuilder() as DbCommandBuilder, Is.Not.Null);
+        Assert.That(multiDbProvider.CreateParameterName("p1"), Is.EqualTo("@p1"));
+        Assert.That(multiDbProvider.CreateParameterNameForCollection("c1"), Is.EqualTo("cc1"));
+        Assert.That(multiDbProvider.DbMetadata, Is.Not.Null);
+        Assert.That(multiDbProvider.ExtractError(e), Is.EqualTo("badsql"));
+        Assert.That(multiDbProvider.IsDataAccessException(dbException), Is.True);
+        Assert.That(multiDbProvider.IsDataAccessException(e), Is.False);
     }
 }

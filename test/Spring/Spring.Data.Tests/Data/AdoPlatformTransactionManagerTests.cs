@@ -39,10 +39,10 @@ public class AdoPlatformTransactionManagerTests
     [TearDown]
     public void TearDown()
     {
-        Assert.IsTrue(TransactionSynchronizationManager.ResourceDictionary.Count == 0);
-        Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-        Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
+        Assert.That(TransactionSynchronizationManager.ResourceDictionary.Count == 0, Is.True);
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.False);
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+        Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.False);
     }
 
     [Test]
@@ -60,13 +60,13 @@ public class AdoPlatformTransactionManagerTests
 
         TransactionTemplate tt = new TransactionTemplate(tm);
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         tt.Execute(new TransactionCommitTxCallback(dbProvider));
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         //standard tx timeout.
@@ -89,8 +89,8 @@ public class AdoPlatformTransactionManagerTests
 
         TransactionTemplate tt = new TransactionTemplate(tm);
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         Exception ex = new ArgumentException("test exception");
         try
@@ -100,11 +100,11 @@ public class AdoPlatformTransactionManagerTests
         }
         catch (ArgumentException e)
         {
-            Assert.AreEqual(ex, e);
+            Assert.That(e, Is.EqualTo(ex));
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         //standard tx timeout.
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
@@ -125,8 +125,8 @@ public class AdoPlatformTransactionManagerTests
         AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
         tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
-        Assert.IsFalse(TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(TransactionSynchronizationManager.HasResource(dbProvider), Is.False, "Hasn't thread db provider");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.False, "Synchronizations not active");
 
         ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
         TestTransactionSynchronization synch =
@@ -136,7 +136,7 @@ public class AdoPlatformTransactionManagerTests
         bool outerTransactionBoundaryReached = false;
         try
         {
-            Assert.IsTrue(ts.IsNewTransaction);
+            Assert.That(ts.IsNewTransaction, Is.True);
             TransactionTemplate tt = new TransactionTemplate(tm);
             TransactionTemplate tt2 = new TransactionTemplate(tm);
             tt.Execute(new ParticipatingTxWithRollbackOnlyTxCallback(tt2, dbProvider));
@@ -152,14 +152,14 @@ public class AdoPlatformTransactionManagerTests
                 tm.Rollback(ts);
             }
 
-            Assert.IsTrue(outerTransactionBoundaryReached);
+            Assert.That(outerTransactionBoundaryReached, Is.True);
         }
 
-        Assert.IsFalse(TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsFalse(synch.beforeCommitCalled);
-        Assert.IsTrue(synch.beforeCompletionCalled);
-        Assert.IsFalse(synch.afterCommitCalled);
-        Assert.IsTrue(synch.afterCompletionCalled);
+        Assert.That(TransactionSynchronizationManager.HasResource(dbProvider), Is.False, "Hasn't thread db provider");
+        Assert.That(synch.beforeCommitCalled, Is.False);
+        Assert.That(synch.beforeCompletionCalled, Is.True);
+        Assert.That(synch.afterCommitCalled, Is.False);
+        Assert.That(synch.afterCompletionCalled, Is.True);
 
         //standard tx timeout.
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
@@ -193,12 +193,12 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.RequiresNew;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         tt.Execute(new PropagationRequiresNewWithExistingTransactionCallback(tt, dbProvider));
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedTwiceExactly();
         A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
@@ -234,14 +234,14 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt2 = new TransactionTemplate(tm2);
         tt2.PropagationBehavior = TransactionPropagation.RequiresNew;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider2), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider2), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         tt.Execute(new PropagationRequiresNewWithExistingTransactionCallback(tt2, dbProvider));
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider2), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider2), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
@@ -280,9 +280,9 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt2 = new TransactionTemplate(tm2);
         tt2.PropagationBehavior = TransactionPropagation.RequiresNew;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider2), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider2), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         try
         {
@@ -292,11 +292,11 @@ public class AdoPlatformTransactionManagerTests
         }
         catch (CannotCreateTransactionException ex)
         {
-            Assert.AreSame(failure, ex.InnerException);
+            Assert.That(ex.InnerException, Is.SameAs(failure));
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider2), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider2), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
@@ -318,8 +318,8 @@ public class AdoPlatformTransactionManagerTests
 
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.RequiresNew;
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         tt.Execute(new PropagationNotSupportedWithExistingTransactionCallback(tt, dbProvider));
 
@@ -343,8 +343,8 @@ public class AdoPlatformTransactionManagerTests
 
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.RequiresNew;
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         try
         {
@@ -356,7 +356,7 @@ public class AdoPlatformTransactionManagerTests
             //expected.
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
@@ -381,12 +381,12 @@ public class AdoPlatformTransactionManagerTests
 
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.Supports;
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         tt.Execute(new PropagationRequiresNewWithExistingConnectionCallback(tt, connection, connection2, dbProvider));
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
@@ -409,11 +409,11 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.RequiresNew;
         tt.TransactionIsolationLevel = IsolationLevel.Serializable;
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         tt.Execute(new TransactionCommitTxCallback(dbProvider));
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
@@ -448,7 +448,7 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.TransactionTimeout = timeout;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         try
         {
@@ -470,7 +470,7 @@ public class AdoPlatformTransactionManagerTests
             }
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
@@ -508,7 +508,7 @@ public class AdoPlatformTransactionManagerTests
             // expected
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
     }
 
     private object TransactionWithExceptionNoOp(ITransactionStatus status)
@@ -540,7 +540,7 @@ public class AdoPlatformTransactionManagerTests
             //expected
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
         A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
@@ -571,7 +571,7 @@ public class AdoPlatformTransactionManagerTests
             //expected
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
@@ -602,7 +602,7 @@ public class AdoPlatformTransactionManagerTests
             //expected
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
@@ -626,11 +626,11 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.Supports;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         tt.Execute(new TransactionWithPropagationSupportsCallback(dbProvider));
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
     }
 
     [Test]
@@ -644,11 +644,11 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.NotSupported;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         tt.Execute(new TransactionWithPropagationNotSupportedCallback(dbProvider));
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
     }
 
     [Test]
@@ -662,11 +662,11 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.Never;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         tt.Execute(new TransactionWithPropagationNotSupportedCallback(dbProvider));
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
     }
 
     [Test]
@@ -684,8 +684,8 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.Nested;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         try
         {
@@ -697,7 +697,7 @@ public class AdoPlatformTransactionManagerTests
             // expected
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
         A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
@@ -718,12 +718,12 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.Nested;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         tt.Execute(TransactionWithPropagationNestedMethod);
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
@@ -732,7 +732,7 @@ public class AdoPlatformTransactionManagerTests
 
     private object TransactionWithPropagationNestedMethod(ITransactionStatus status)
     {
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
         return null;
     }
 
@@ -751,12 +751,12 @@ public class AdoPlatformTransactionManagerTests
         TransactionTemplate tt = new TransactionTemplate(tm);
         tt.PropagationBehavior = TransactionPropagation.Nested;
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         tt.Execute(TransactionWithPropagationNestedAndRollbackMethod);
 
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+        Assert.That(!TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Hasn't thread db provider");
 
         A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
         A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
@@ -765,7 +765,7 @@ public class AdoPlatformTransactionManagerTests
 
     private object TransactionWithPropagationNestedAndRollbackMethod(ITransactionStatus status)
     {
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
         status.SetRollbackOnly();
         return null;
     }
@@ -784,12 +784,12 @@ internal class ExistingTransactionWithPropagationNestedCallback : ITransactionCa
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
         //TODO: Note no support for savepoints at this time (1.1), so can't check that a savepoint isn't present.
 
         tt.Execute(new ExistingTransactionWithPropagationNestedCallback2(dbProvider));
 
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
         //TODO: Note no support for savepoints at this time (1.1), so can't check that a savepoint isn't present.
         return null;
     }
@@ -806,9 +806,9 @@ internal class ExistingTransactionWithPropagationNestedCallback2 : ITransactionC
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(TransactionSynchronizationManager.HasResource(dbProvider), "Has thread db provider");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations active");
-        Assert.IsTrue(!status.IsNewTransaction, "Isn't new transaction");
+        Assert.That(TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Has thread db provider");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations active");
+        Assert.That(!status.IsNewTransaction, Is.True, "Isn't new transaction");
         //TODO: Note no support for savepoints at this time (1.1), so can't check that a savepoint is present.
         return null;
     }
@@ -825,8 +825,8 @@ internal class TransactionWithPropagationNotSupportedCallback : ITransactionCall
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-        Assert.IsTrue(!status.IsNewTransaction, "Is not new transaction");
+        Assert.That(!TransactionSynchronizationManager.HasResource(provider), Is.True, "Hasn't thread db provider");
+        Assert.That(!status.IsNewTransaction, Is.True, "Is not new transaction");
         return null;
     }
 }
@@ -842,10 +842,10 @@ internal class TransactionWithPropagationSupportsCallback : ITransactionCallback
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-        Assert.IsTrue(!status.IsNewTransaction, "Is not new transaction");
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-        Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
+        Assert.That(!TransactionSynchronizationManager.HasResource(provider), Is.True, "Hasn't thread db provider");
+        Assert.That(!status.IsNewTransaction, Is.True, "Is not new transaction");
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+        Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.False);
         return null;
     }
 }
@@ -907,13 +907,13 @@ internal class PropagationRequiresNewWithExistingConnectionCallback : ITransacti
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations active");
-        Assert.AreSame(connection, ConnectionUtils.GetConnection(dbProvider));
-        Assert.AreSame(connection, ConnectionUtils.GetConnection(dbProvider));
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations active");
+        Assert.That(ConnectionUtils.GetConnection(dbProvider), Is.SameAs(connection));
+        Assert.That(ConnectionUtils.GetConnection(dbProvider), Is.SameAs(connection));
         tt.PropagationBehavior = TransactionPropagation.RequiresNew;
         tt.ReadOnly = true;
         tt.Execute(new PropagationRequiresNewWithExistingConnectionCallback2(dbProvider, connection2));
-        Assert.AreSame(connection, ConnectionUtils.GetConnection(dbProvider));
+        Assert.That(ConnectionUtils.GetConnection(dbProvider), Is.SameAs(connection));
         return null;
     }
 }
@@ -931,11 +931,11 @@ internal class PropagationRequiresNewWithExistingConnectionCallback2 : ITransact
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(TransactionSynchronizationManager.HasResource(dbProvider), "Has thread db provider");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations active");
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-        Assert.AreSame(connection2, ConnectionUtils.GetConnection(dbProvider));
-        Assert.AreSame(connection2, ConnectionUtils.GetConnection(dbProvider));
+        Assert.That(TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Has thread db provider");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations active");
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+        Assert.That(ConnectionUtils.GetConnection(dbProvider), Is.SameAs(connection2));
+        Assert.That(ConnectionUtils.GetConnection(dbProvider), Is.SameAs(connection2));
 
         return null;
     }
@@ -952,7 +952,7 @@ internal class PropagationNeverWithExistingTransactionCallback : ITransactionCal
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
         innerTxTemplate.PropagationBehavior = TransactionPropagation.Never;
         innerTxTemplate.Execute(new PropagationNeverWithExistingTransactionCallback2());
         Assert.Fail("Should have thrown IllegalTransactionStateException");
@@ -982,14 +982,14 @@ internal class PropagationNotSupportedWithExistingTransactionCallback : ITransac
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronization active");
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
         innerTxTemplate.PropagationBehavior = TransactionPropagation.NotSupported;
         innerTxTemplate.Execute(new PropagationNotSupportedWithExistingTransactionCallback2(dbProvider));
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-        Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+        Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
         return null;
     }
 }
@@ -1005,11 +1005,11 @@ internal class PropagationNotSupportedWithExistingTransactionCallback2 : ITransa
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(!TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-        Assert.IsTrue(!status.IsNewTransaction, "Isn't new transaction");
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-        Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
+        Assert.That(!TransactionSynchronizationManager.HasResource(provider), Is.True, "Hasn't thread db provider");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True);
+        Assert.That(!status.IsNewTransaction, Is.True, "Isn't new transaction");
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+        Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.False);
         status.SetRollbackOnly();
         return null;
     }
@@ -1026,10 +1026,10 @@ internal class PropagationRequiresNewWithExistingTransactionAndUnrelatedFailingD
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-        Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronization active");
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+        Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
         innerTxTemplate.Execute(new PropagationRequiresNewWithExistingTransactionAndUnrelatedFailingDataSourceCallback2());
         return null;
     }
@@ -1058,15 +1058,15 @@ internal class PropagationRequiresNewWithExistingTransactionCallback : ITransact
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-        Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronization active");
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+        Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
         innerTxTemplate.Execute(new PropagationRequiresNewWithExistingTransactionCallback2(dbProvider));
 
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-        Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+        Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
         return null;
     }
 }
@@ -1082,11 +1082,11 @@ internal class PropagationRequiresNewWithExistingTransactionCallback2 : ITransac
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(TransactionSynchronizationManager.HasResource(dbProvider), "Has thread connection");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-        Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+        Assert.That(TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Has thread connection");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronization active");
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+        Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
         status.SetRollbackOnly();
         return null;
     }
@@ -1103,11 +1103,11 @@ internal class TransactionCommitTxCallback : ITransactionCallback
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(TransactionSynchronizationManager.HasResource(provider), "Has thread db provider");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-        Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+        Assert.That(TransactionSynchronizationManager.HasResource(provider), Is.True, "Has thread db provider");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True);
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+        Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
         return null;
     }
 }
@@ -1125,9 +1125,9 @@ internal class TransactionRollbackTxCallback : ITransactionCallback
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-        Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+        Assert.That(TransactionSynchronizationManager.HasResource(provider), Is.True, "Hasn't thread db provider");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True);
+        Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
         throw exception;
     }
 }
@@ -1145,11 +1145,11 @@ internal class ParticipatingTxWithRollbackOnlyTxCallback : ITransactionCallback
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(!status.IsNewTransaction, "Is existing transaction");
-        Assert.IsFalse(status.RollbackOnly, "Is not rollback-only");
+        Assert.That(!status.IsNewTransaction, Is.True, "Is existing transaction");
+        Assert.That(status.RollbackOnly, Is.False, "Is not rollback-only");
         innerTxTemplate.Execute(new ParticipatingTxWithRollbackOnlyTxCallback2(dbProvider));
-        Assert.IsTrue(!status.IsNewTransaction, "Is existing transaction");
-        Assert.IsTrue(status.RollbackOnly, "Is rollback-only");
+        Assert.That(!status.IsNewTransaction, Is.True, "Is existing transaction");
+        Assert.That(status.RollbackOnly, Is.True, "Is rollback-only");
         return null;
     }
 }
@@ -1165,9 +1165,9 @@ internal class ParticipatingTxWithRollbackOnlyTxCallback2 : ITransactionCallback
 
     public object DoInTransaction(ITransactionStatus status)
     {
-        Assert.IsTrue(TransactionSynchronizationManager.HasResource(dbProvider), "Has thread connection");
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
-        Assert.IsTrue(!status.IsNewTransaction, "Is existing transaction");
+        Assert.That(TransactionSynchronizationManager.HasResource(dbProvider), Is.True, "Has thread connection");
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronization active");
+        Assert.That(!status.IsNewTransaction, Is.True, "Is existing transaction");
         status.SetRollbackOnly();
         return null;
     }
@@ -1205,7 +1205,7 @@ internal class TestTransactionSynchronization : ITransactionSynchronization
             Assert.Fail("Should never be called");
         }
 
-        Assert.IsFalse(beforeCommitCalled);
+        Assert.That(beforeCommitCalled, Is.False);
         beforeCommitCalled = true;
     }
 
@@ -1216,21 +1216,21 @@ internal class TestTransactionSynchronization : ITransactionSynchronization
             Assert.Fail("Should never be called");
         }
 
-        Assert.IsFalse(afterCommitCalled);
+        Assert.That(afterCommitCalled, Is.False);
         afterCommitCalled = true;
     }
 
     public void BeforeCompletion()
     {
-        Assert.IsFalse(beforeCompletionCalled);
+        Assert.That(beforeCompletionCalled, Is.False);
         beforeCompletionCalled = true;
     }
 
     public void AfterCompletion(TransactionSynchronizationStatus syncStatus)
     {
-        Assert.IsFalse(afterCompletionCalled);
+        Assert.That(afterCompletionCalled, Is.False);
         afterCompletionCalled = true;
-        Assert.IsTrue(syncStatus == status);
-        Assert.IsTrue(TransactionSynchronizationManager.HasResource(provider));
+        Assert.That(syncStatus == status, Is.True);
+        Assert.That(TransactionSynchronizationManager.HasResource(provider), Is.True);
     }
 }

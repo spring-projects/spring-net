@@ -45,7 +45,7 @@ public class AdvisorAdapterRegistrationTests
         catch (UnknownAdviceTypeException)
         {
             // expected
-            Assert.AreEqual(0, GetAdviceImpl(to).InvocationCounter);
+            Assert.That(GetAdviceImpl(to).InvocationCounter, Is.EqualTo(0));
         }
     }
 
@@ -59,7 +59,7 @@ public class AdvisorAdapterRegistrationTests
         try
         {
             to.ReturnsThis();
-            Assert.AreEqual(1, GetAdviceImpl(to).InvocationCounter);
+            Assert.That(GetAdviceImpl(to).InvocationCounter, Is.EqualTo(1));
         }
         catch (UnknownAdviceTypeException)
         {

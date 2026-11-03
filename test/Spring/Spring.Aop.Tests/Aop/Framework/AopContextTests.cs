@@ -56,11 +56,13 @@ public sealed class AopContextTests
         string foo = "Foo";
         AopContext.PushProxy(foo);
         object fooref = AopContext.CurrentProxy;
-        Assert.IsTrue(ReferenceEquals(foo, fooref),
+        Assert.That(ReferenceEquals(foo, fooref),
+            Is.True,
             "Not the exact same instance (must be).");
         // must not have been popped off the stack by looking at it...
         object foorefref = AopContext.CurrentProxy;
-        Assert.IsTrue(ReferenceEquals(fooref, foorefref),
+        Assert.That(ReferenceEquals(fooref, foorefref),
+            Is.True,
             "Not the exact same instance (must be).");
     }
 
@@ -73,11 +75,11 @@ public sealed class AopContextTests
     [Test(Description = "SPRNET-1158")]
     public void IsActiveMatchesStackState()
     {
-        Assert.IsFalse(AopContext.IsActive);
+        Assert.That(AopContext.IsActive, Is.False);
         AopContext.PushProxy("Foo");
-        Assert.IsTrue(AopContext.IsActive);
+        Assert.That(AopContext.IsActive, Is.True);
         AopContext.PopProxy();
-        Assert.IsFalse(AopContext.IsActive);
+        Assert.That(AopContext.IsActive, Is.False);
     }
 
     [Test, Explicit]
@@ -114,7 +116,7 @@ public sealed class AopContextTests
             }
         }
 
-        Assert.AreEqual(runs, interceptor.Calls);
+        Assert.That(interceptor.Calls, Is.EqualTo(runs));
 
         interceptor = new PeformanceTestAopContextInterceptor();
         proxy = CreateProxy(testObject, interceptor, true);
@@ -126,7 +128,7 @@ public sealed class AopContextTests
             }
         }
 
-        Assert.AreEqual(runs, interceptor.Calls);
+        Assert.That(interceptor.Calls, Is.EqualTo(runs));
     }
 
     private class PeformanceTestAopContextInterceptor : IMethodInterceptor
@@ -188,21 +190,21 @@ public sealed class AopContextTests
 
         ITestObject proxy = CreateProxyChain(interceptor, true);
 
-        Assert.IsFalse(AopContext.IsActive);
-        Assert.AreEqual(this, proxy.DoSomething(this), "Incorrect return value");
-        Assert.IsFalse(AopContext.IsActive);
-        Assert.AreEqual(2, interceptor.Calls); // 2 interceptions on the way
+        Assert.That(AopContext.IsActive, Is.False);
+        Assert.That(proxy.DoSomething(this), Is.EqualTo(this), "Incorrect return value");
+        Assert.That(AopContext.IsActive, Is.False);
+        Assert.That(interceptor.Calls, Is.EqualTo(2)); // 2 interceptions on the way
     }
 
     private ITestObject CreateProxyChain(IAdvice interceptor, bool exposeProxy)
     {
         ITestObject first = new ChainableTestObject(null);
         ITestObject firstProxy = CreateProxy(first, interceptor, exposeProxy);
-        Assert.IsNotNull(firstProxy);
+        Assert.That(firstProxy, Is.Not.Null);
 
         ITestObject second = new ChainableTestObject(firstProxy);
         ITestObject secondProxy = CreateProxy(second, interceptor, exposeProxy);
-        Assert.IsNotNull(secondProxy);
+        Assert.That(secondProxy, Is.Not.Null);
         return secondProxy;
     }
 
@@ -223,14 +225,14 @@ public sealed class AopContextTests
         public object Invoke(IMethodInvocation invocation)
         {
             Calls++;
-            Assert.IsTrue(AopContext.IsActive);
-            Assert.IsNotNull(AopContext.CurrentProxy);
-            Assert.AreSame(invocation.Proxy, AopContext.CurrentProxy);
+            Assert.That(AopContext.IsActive, Is.True);
+            Assert.That(AopContext.CurrentProxy, Is.Not.Null);
+            Assert.That(AopContext.CurrentProxy, Is.SameAs(invocation.Proxy));
 
             Object ret = invocation.Proceed();
 
-            Assert.IsNotNull(AopContext.CurrentProxy);
-            Assert.IsTrue(AopContext.IsActive);
+            Assert.That(AopContext.CurrentProxy, Is.Not.Null);
+            Assert.That(AopContext.IsActive, Is.True);
             return ret;
         }
     }

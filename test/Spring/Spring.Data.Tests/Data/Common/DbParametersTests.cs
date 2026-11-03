@@ -40,11 +40,11 @@ public class DbParametersTests
         DbParameters dbParameters = new DbParameters(dbProvider);
         dbParameters.Add("p1", DbType.String);
         IDataParameter parameter = dbParameters[0];
-        Assert.AreEqual("p1", parameter.ParameterName);
+        Assert.That(parameter.ParameterName, Is.EqualTo("p1"));
         dbParameters.SetValue("p1", "foo");
         object springParameter = dbParameters.GetValue("p1");
-        Assert.IsNotNull(springParameter);
-        Assert.AreEqual("foo", springParameter);
+        Assert.That(springParameter, Is.Not.Null);
+        Assert.That(springParameter, Is.EqualTo("foo"));
     }
 #endif
 
@@ -55,10 +55,10 @@ public class DbParametersTests
         DbParameters dbParameters = new DbParameters(dbProvider);
         dbParameters.Add("p1", DbType.String);
         IDataParameter parameter = dbParameters[0];
-        Assert.AreEqual("@p1", parameter.ParameterName);
+        Assert.That(parameter.ParameterName, Is.EqualTo("@p1"));
         dbParameters.SetValue("p1", "foo");
         object springParameter = dbParameters.GetValue("p1");
-        Assert.IsNotNull(springParameter);
-        Assert.AreEqual("foo", springParameter);
+        Assert.That(springParameter, Is.Not.Null);
+        Assert.That(springParameter, Is.EqualTo("foo"));
     }
 }

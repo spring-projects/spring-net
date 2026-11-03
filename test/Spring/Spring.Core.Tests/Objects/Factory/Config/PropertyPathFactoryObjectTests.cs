@@ -46,7 +46,7 @@ public sealed class PropertyPathFactoryObjectTests
         fac.PropertyPath = "name";
         fac.ObjectFactory = mockFactory;
         string name = (string) fac.GetObject();
-        Assert.AreEqual("Fiona Apple", name);
+        Assert.That(name, Is.EqualTo("Fiona Apple"));
     }
 
     [Test]
@@ -62,7 +62,7 @@ public sealed class PropertyPathFactoryObjectTests
         fac.PropertyPath = "spouse.name";
         fac.ObjectFactory = mockFactory;
         string name = (string) fac.GetObject();
-        Assert.AreEqual("Fiona Apple", name);
+        Assert.That(name, Is.EqualTo("Fiona Apple"));
     }
 
     [Test]
@@ -75,7 +75,7 @@ public sealed class PropertyPathFactoryObjectTests
         fac.ObjectName = "foo.name";
         fac.ObjectFactory = mockFactory;
         string name = (string) fac.GetObject();
-        Assert.AreEqual("Fiona Apple", name);
+        Assert.That(name, Is.EqualTo("Fiona Apple"));
     }
 
     [Test]
@@ -99,7 +99,7 @@ public sealed class PropertyPathFactoryObjectTests
         fac.ObjectName = "   \nfoo.name  ";
         fac.ObjectFactory = mockFactory;
         string name = (string) fac.GetObject();
-        Assert.AreEqual("Fiona Apple", name);
+        Assert.That(name, Is.EqualTo("Fiona Apple"));
     }
 
     [Test]
@@ -114,7 +114,7 @@ public sealed class PropertyPathFactoryObjectTests
         fac.ObjectName = "foo.spouse.name";
         fac.ObjectFactory = mockFactory;
         string name = (string) fac.GetObject();
-        Assert.AreEqual("Fiona Apple", name);
+        Assert.That(name, Is.EqualTo("Fiona Apple"));
     }
 
     [Test]

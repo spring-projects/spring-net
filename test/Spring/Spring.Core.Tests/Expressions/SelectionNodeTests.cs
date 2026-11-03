@@ -33,16 +33,16 @@ public class SelectionNodeTests
         char[] result;
 
         result = Evaluate("?{ true }", input);
-        Assert.AreEqual(input, result);
+        Assert.That(result, Is.EqualTo(input));
         result = Evaluate("?{ true, 5, 10 }", input);
-        Assert.AreEqual(new char[] { 'f', 'g', 'h', 'i', 'j', 'k' }, result);
+        Assert.That(result, Is.EqualTo(new char[] { 'f', 'g', 'h', 'i', 'j', 'k' }));
         result = Evaluate("?{ true, 5 }", input);
-        Assert.AreEqual(new char[] { 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' }, result);
+        Assert.That(result, Is.EqualTo(new char[] { 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' }));
         result = Evaluate("?{ true, 0, 10 }", input);
-        Assert.AreEqual(new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k' }, result);
+        Assert.That(result, Is.EqualTo(new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k' }));
 
         result = Evaluate("?{ T(System.Convert).ToInt32(#this) % 2 == 0, 1, 3 }", input);
-        Assert.AreEqual(new char[] { 'd', 'f', 'h' }, result);
+        Assert.That(result, Is.EqualTo(new char[] { 'd', 'f', 'h' }));
     }
 
     private char[] Evaluate(string expression, char[] input)

@@ -140,7 +140,7 @@ public class TestResourceLoader
         Type contextType = (context is Type) ? (Type) context : context.GetType();
         string resname = contextType.FullName + ext;
         Stream stm = contextType.Assembly.GetManifestResourceStream(resname);
-        Assert.IsNotNull(stm, "Resource '{0}' in assembly '{1}' not found", resname, contextType.Assembly.FullName);
+        Assert.That(stm, Is.Not.Null, $"Resource '{resname}' in assembly '{contextType.Assembly.FullName}' not found");
         return stm;
     }
 

@@ -35,8 +35,8 @@ public class NumberFormatterTests
     public void ParseNullOrEmptyValue()
     {
         NumberFormatter fmt = new NumberFormatter();
-        Assert.AreEqual(0, fmt.Parse(null));
-        Assert.IsTrue(fmt.Parse("") is double);
+        Assert.That(fmt.Parse(null), Is.EqualTo(0));
+        Assert.That(fmt.Parse("") is double, Is.True);
     }
 
     [Test]
@@ -51,22 +51,22 @@ public class NumberFormatterTests
     public void FormatUsingDefaults()
     {
         NumberFormatter fmt = new NumberFormatter("en-US");
-        Assert.AreEqual("1,234.00", fmt.Format(1234));
-        Assert.AreEqual("1,234.56", fmt.Format(1234.56));
-        Assert.AreEqual("-1,234.00", fmt.Format(-1234));
-        Assert.AreEqual("-1,234.56", fmt.Format(-1234.56));
+        Assert.That(fmt.Format(1234), Is.EqualTo("1,234.00"));
+        Assert.That(fmt.Format(1234.56), Is.EqualTo("1,234.56"));
+        Assert.That(fmt.Format(-1234), Is.EqualTo("-1,234.00"));
+        Assert.That(fmt.Format(-1234.56), Is.EqualTo("-1,234.56"));
 
         fmt = new NumberFormatter("sr-SP-Latn");
 #if NETFRAMEWORK
-        Assert.AreEqual("1.234,00", fmt.Format(1234));
-        Assert.AreEqual("1.234,56", fmt.Format(1234.56));
-        Assert.AreEqual("-1.234,00", fmt.Format(-1234));
-        Assert.AreEqual("-1.234,56", fmt.Format(-1234.56));
+        Assert.That(fmt.Format(1234), Is.EqualTo("1.234,00"));
+        Assert.That(fmt.Format(1234.56), Is.EqualTo("1.234,56"));
+        Assert.That(fmt.Format(-1234), Is.EqualTo("-1.234,00"));
+        Assert.That(fmt.Format(-1234.56), Is.EqualTo("-1.234,56"));
 #else
-        Assert.AreEqual("1.234,000", fmt.Format(1234));
-        Assert.AreEqual("1.234,560", fmt.Format(1234.56));
-        Assert.AreEqual("-1.234,000", fmt.Format(-1234));
-        Assert.AreEqual("-1.234,560", fmt.Format(-1234.56));
+        Assert.That(fmt.Format(1234), Is.EqualTo("1.234,000"));
+        Assert.That(fmt.Format(1234.56), Is.EqualTo("1.234,560"));
+        Assert.That(fmt.Format(-1234), Is.EqualTo("-1.234,000"));
+        Assert.That(fmt.Format(-1234.56), Is.EqualTo("-1.234,560"));
 #endif
     }
 
@@ -75,16 +75,16 @@ public class NumberFormatterTests
     public void ParseUsingDefaults()
     {
         NumberFormatter fmt = new NumberFormatter("en-US");
-        Assert.AreEqual(1234, fmt.Parse("1,234.00"));
-        Assert.AreEqual(1234.56, fmt.Parse("1,234.56"));
-        Assert.AreEqual(-1234, fmt.Parse("-1,234.00"));
-        Assert.AreEqual(-1234.56, fmt.Parse("-1,234.56"));
+        Assert.That(fmt.Parse("1,234.00"), Is.EqualTo(1234));
+        Assert.That(fmt.Parse("1,234.56"), Is.EqualTo(1234.56));
+        Assert.That(fmt.Parse("-1,234.00"), Is.EqualTo(-1234));
+        Assert.That(fmt.Parse("-1,234.56"), Is.EqualTo(-1234.56));
 
         fmt = new NumberFormatter("sr-SP-Latn");
-        Assert.AreEqual(1234, fmt.Parse("1.234,00"));
-        Assert.AreEqual(1234.56, fmt.Parse("1.234,56"));
-        Assert.AreEqual(-1234, fmt.Parse("-1.234,00"));
-        Assert.AreEqual(-1234.56, fmt.Parse("-1.234,56"));
+        Assert.That(fmt.Parse("1.234,00"), Is.EqualTo(1234));
+        Assert.That(fmt.Parse("1.234,56"), Is.EqualTo(1234.56));
+        Assert.That(fmt.Parse("-1.234,00"), Is.EqualTo(-1234));
+        Assert.That(fmt.Parse("-1.234,56"), Is.EqualTo(-1234.56));
     }
 
     [Test]
@@ -94,25 +94,25 @@ public class NumberFormatterTests
         NumberFormatter fmt = new NumberFormatter("en-US");
         fmt.DecimalDigits = 0;
         fmt.NegativePattern = 0;
-        Assert.AreEqual("1,234", fmt.Format(1234));
-        Assert.AreEqual("1,235", fmt.Format(1234.56));
-        Assert.AreEqual("(1,234)", fmt.Format(-1234));
-        Assert.AreEqual("(1,235)", fmt.Format(-1234.56));
+        Assert.That(fmt.Format(1234), Is.EqualTo("1,234"));
+        Assert.That(fmt.Format(1234.56), Is.EqualTo("1,235"));
+        Assert.That(fmt.Format(-1234), Is.EqualTo("(1,234)"));
+        Assert.That(fmt.Format(-1234.56), Is.EqualTo("(1,235)"));
 
         fmt = new NumberFormatter("sr-SP-Cyrl");
         fmt.GroupSizes = new int[] { 1, 2 };
         fmt.GroupSeparator = "'";
 
 #if NETFRAMEWORK
-        Assert.AreEqual("1'23'4,00", fmt.Format(1234));
-        Assert.AreEqual("1'23'4,56", fmt.Format(1234.56));
-        Assert.AreEqual("-1'23'4,00", fmt.Format(-1234));
-        Assert.AreEqual("-1'23'4,56", fmt.Format(-1234.56));
+        Assert.That(fmt.Format(1234), Is.EqualTo("1'23'4,00"));
+        Assert.That(fmt.Format(1234.56), Is.EqualTo("1'23'4,56"));
+        Assert.That(fmt.Format(-1234), Is.EqualTo("-1'23'4,00"));
+        Assert.That(fmt.Format(-1234.56), Is.EqualTo("-1'23'4,56"));
 #else
-        Assert.AreEqual("1'23'4,000", fmt.Format(1234));
-        Assert.AreEqual("1'23'4,560", fmt.Format(1234.56));
-        Assert.AreEqual("-1'23'4,000", fmt.Format(-1234));
-        Assert.AreEqual("-1'23'4,560", fmt.Format(-1234.56));
+        Assert.That(fmt.Format(1234), Is.EqualTo("1'23'4,000"));
+        Assert.That(fmt.Format(1234.56), Is.EqualTo("1'23'4,560"));
+        Assert.That(fmt.Format(-1234), Is.EqualTo("-1'23'4,000"));
+        Assert.That(fmt.Format(-1234.56), Is.EqualTo("-1'23'4,560"));
 #endif
     }
 
@@ -122,17 +122,17 @@ public class NumberFormatterTests
         NumberFormatter fmt = new NumberFormatter("en-US");
         fmt.DecimalDigits = 0;
         fmt.NegativePattern = 0;
-        Assert.AreEqual(1234, fmt.Parse("1,234"));
-        Assert.AreEqual(1234.56, fmt.Parse("1,234.56"));
-        Assert.AreEqual(-1234, fmt.Parse("(1,234)"));
-        Assert.AreEqual(-1234.56, fmt.Parse("(1,234.56)"));
+        Assert.That(fmt.Parse("1,234"), Is.EqualTo(1234));
+        Assert.That(fmt.Parse("1,234.56"), Is.EqualTo(1234.56));
+        Assert.That(fmt.Parse("(1,234)"), Is.EqualTo(-1234));
+        Assert.That(fmt.Parse("(1,234.56)"), Is.EqualTo(-1234.56));
 
         fmt = new NumberFormatter("sr-SP-Cyrl");
         fmt.GroupSizes = new int[] { 1, 2 };
         fmt.GroupSeparator = "'";
-        Assert.AreEqual(1234, fmt.Parse("1'23'4,00"));
-        Assert.AreEqual(1234.56, fmt.Parse("1'23'4,56"));
-        Assert.AreEqual(-1234, fmt.Parse("-1'23'4,00"));
-        Assert.AreEqual(-1234.56, fmt.Parse("-1'23'4,56"));
+        Assert.That(fmt.Parse("1'23'4,00"), Is.EqualTo(1234));
+        Assert.That(fmt.Parse("1'23'4,56"), Is.EqualTo(1234.56));
+        Assert.That(fmt.Parse("-1'23'4,00"), Is.EqualTo(-1234));
+        Assert.That(fmt.Parse("-1'23'4,56"), Is.EqualTo(-1234.56));
     }
 }

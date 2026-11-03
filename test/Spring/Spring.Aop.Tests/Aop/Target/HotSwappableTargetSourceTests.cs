@@ -58,25 +58,25 @@ public sealed class HotSwappableTargetSourceTests
 
         ISideEffectObject proxied = (ISideEffectObject) ObjectFactory.GetObject("swappable");
         //	assertEquals(target1, ((Advised) proxied).getTarget());
-        Assert.AreEqual(target1.Count, proxied.Count);
+        Assert.That(proxied.Count, Is.EqualTo(target1.Count));
         proxied.doWork();
-        Assert.AreEqual(INITIAL_COUNT + 1, proxied.Count);
+        Assert.That(proxied.Count, Is.EqualTo(INITIAL_COUNT + 1));
 
         HotSwappableTargetSource swapper = (HotSwappableTargetSource) ObjectFactory.GetObject("swapper");
         Object old = swapper.Swap(target2);
-        Assert.AreEqual(target1, old, "Correct old target was returned");
+        Assert.That(old, Is.EqualTo(target1), "Correct old target was returned");
 
         // TODO should be able to make this assertion: need to fix target handling
         // in AdvisedSupport
         //assertEquals(target2, ((Advised) proxied).getTarget());
 
-        Assert.AreEqual(20, proxied.Count);
+        Assert.That(proxied.Count, Is.EqualTo(20));
         proxied.doWork();
-        Assert.AreEqual(21, target2.Count);
+        Assert.That(target2.Count, Is.EqualTo(21));
 
         // Swap it back
         swapper.Swap(target1);
-        Assert.AreEqual(target1.Count, proxied.Count);
+        Assert.That(proxied.Count, Is.EqualTo(target1.Count));
     }
 
     [Test]
@@ -91,7 +91,8 @@ public sealed class HotSwappableTargetSourceTests
     {
         HotSwappableTargetSource source = new HotSwappableTargetSource(this);
         object foo = source.Swap(new SideEffectObject());
-        Assert.IsTrue(object.ReferenceEquals(this, foo),
+        Assert.That(object.ReferenceEquals(this, foo),
+            Is.True,
             "Swap() is not returning the old target.");
     }
 
@@ -106,7 +107,8 @@ public sealed class HotSwappableTargetSourceTests
     {
         HotSwappableTargetSource source = new HotSwappableTargetSource(this);
         object foo = source.GetTarget();
-        Assert.IsTrue(object.ReferenceEquals(this, foo),
+        Assert.That(object.ReferenceEquals(this, foo),
+            Is.True,
             "Ctor is not storing the supplied target.");
     }
 }

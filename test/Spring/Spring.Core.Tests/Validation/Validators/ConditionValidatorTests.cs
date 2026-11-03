@@ -33,14 +33,14 @@ public sealed class ConditionValidatorTests
     {
         ConditionValidator validator = new ConditionValidator();
         validator.Test = Expression.Parse("true");
-        Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
+        Assert.That(validator.Validate(null, new ValidationErrors()), Is.True);
     }
 
     [Test]
     public void StraightFalse()
     {
         ConditionValidator validator = new ConditionValidator("false", null);
-        Assert.IsFalse(validator.Validate(null, new ValidationErrors()));
+        Assert.That(validator.Validate(null, new ValidationErrors()), Is.False);
     }
 
     [Test]
@@ -50,7 +50,7 @@ public sealed class ConditionValidatorTests
         tesla.Name = "Nikola Tesla";
 
         ConditionValidator validator = new ConditionValidator(Expression.Parse("Name == 'Nikola Tesla'"), null);
-        Assert.IsTrue(validator.Validate(tesla, new ValidationErrors()));
+        Assert.That(validator.Validate(tesla, new ValidationErrors()), Is.True);
     }
 
     [Test]
@@ -62,12 +62,12 @@ public sealed class ConditionValidatorTests
         ConditionValidator validator = new ConditionValidator(Expression.Parse("Name == 'Nikola Tesla'"), null);
         validator.Actions = new ErrorMessageAction[] { new ErrorMessageAction("Wrong name", "InventorValidator") };
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(tesla, errors));
-        Assert.IsFalse(errors.IsEmpty);
+        Assert.That(validator.Validate(tesla, errors), Is.False);
+        Assert.That(errors.IsEmpty, Is.False);
         IList<string> namedErrors = errors.GetResolvedErrors("InventorValidator", new NullMessageSource());
-        Assert.AreEqual(1, namedErrors.Count);
+        Assert.That(namedErrors.Count, Is.EqualTo(1));
         string error = (string) namedErrors[0];
-        Assert.AreEqual("Wrong name", error);
+        Assert.That(error, Is.EqualTo("Wrong name"));
     }
 
     [Test]
@@ -80,7 +80,7 @@ public sealed class ConditionValidatorTests
 
         bool valid = validator.Validate(new object(), null, errors);
 
-        Assert.IsTrue(valid, "Validation should succeed when condition validator is not evaluated.");
-        Assert.AreEqual(0, errors.GetErrors("errors").Count);
+        Assert.That(valid, Is.True, "Validation should succeed when condition validator is not evaluated.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(0));
     }
 }

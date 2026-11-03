@@ -34,7 +34,7 @@ public sealed class PropertyAccessExceptionsExceptionTests
         PropertyAccessExceptionsException ex
             = new PropertyAccessExceptionsException(wrapper, new PropertyAccessException[] { });
         PropertyAccessException nullException = ex.GetPropertyAccessException("Age");
-        Assert.IsNull(nullException);
+        Assert.That(nullException, Is.Null);
     }
 
     [Test]
@@ -44,14 +44,14 @@ public sealed class PropertyAccessExceptionsExceptionTests
         PropertyAccessExceptionsException ex
             = new PropertyAccessExceptionsException(wrapper, new PropertyAccessException[] { new TypeMismatchException(new PropertyChangeEventArgs("Doctor", new NestedTestObject("Foo"), "rubbish"), typeof(INestedTestObject)), new MethodInvocationException(new TargetInvocationException("Bad format", new FormatException("'12' is not a valid argument for 'foo'..")), new PropertyChangeEventArgs("Friends", new ArrayList(), "trash")) });
         PropertyAccessException doctorPropertyException = ex.GetPropertyAccessException("Doctor");
-        Assert.IsNotNull(doctorPropertyException);
-        Assert.AreEqual("typeMismatch", doctorPropertyException.ErrorCode);
-        Assert.AreEqual("Foo", ((NestedTestObject) doctorPropertyException.PropertyChangeArgs.OldValue).Company);
+        Assert.That(doctorPropertyException, Is.Not.Null);
+        Assert.That(doctorPropertyException.ErrorCode, Is.EqualTo("typeMismatch"));
+        Assert.That(((NestedTestObject) doctorPropertyException.PropertyChangeArgs.OldValue).Company, Is.EqualTo("Foo"));
         PropertyAccessException friendsPropertyException = ex.GetPropertyAccessException("Friends");
-        Assert.IsNotNull(friendsPropertyException);
-        Assert.AreEqual("methodInvocation", friendsPropertyException.ErrorCode);
-        Assert.AreEqual(wrapper, ex.ObjectWrapper);
-        Assert.AreEqual(wrapper.WrappedInstance, ex.BindObject);
-        Assert.AreEqual(ex.Message, ex.ToString());
+        Assert.That(friendsPropertyException, Is.Not.Null);
+        Assert.That(friendsPropertyException.ErrorCode, Is.EqualTo("methodInvocation"));
+        Assert.That(ex.ObjectWrapper, Is.EqualTo(wrapper));
+        Assert.That(ex.BindObject, Is.EqualTo(wrapper.WrappedInstance));
+        Assert.That(ex.ToString(), Is.EqualTo(ex.Message));
     }
 }

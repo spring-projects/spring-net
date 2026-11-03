@@ -31,9 +31,9 @@ public class TypeAssemblyHolderTests
     {
         Type testType = typeof(TestObject);
         TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.AssemblyQualifiedName);
-        Assert.IsTrue(tah.IsAssemblyQualified);
-        Assert.AreEqual(testType.FullName, tah.TypeName);
-        Assert.AreEqual(testType.Assembly.FullName, tah.AssemblyName);
+        Assert.That(tah.IsAssemblyQualified, Is.True);
+        Assert.That(tah.TypeName, Is.EqualTo(testType.FullName));
+        Assert.That(tah.AssemblyName, Is.EqualTo(testType.Assembly.FullName));
     }
 
     [Test]
@@ -41,9 +41,9 @@ public class TypeAssemblyHolderTests
     {
         Type testType = typeof(TestObject);
         TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.FullName);
-        Assert.IsFalse(tah.IsAssemblyQualified);
-        Assert.AreEqual(testType.FullName, tah.TypeName);
-        Assert.AreEqual(null, tah.AssemblyName);
+        Assert.That(tah.IsAssemblyQualified, Is.False);
+        Assert.That(tah.TypeName, Is.EqualTo(testType.FullName));
+        Assert.That(tah.AssemblyName, Is.EqualTo(null));
     }
 
     [Test]
@@ -51,9 +51,9 @@ public class TypeAssemblyHolderTests
     {
         Type testType = typeof(TestGenericObject<int, string>);
         TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.FullName);
-        Assert.IsFalse(tah.IsAssemblyQualified);
-        Assert.AreEqual(testType.FullName, tah.TypeName);
-        Assert.AreEqual(null, tah.AssemblyName);
+        Assert.That(tah.IsAssemblyQualified, Is.False);
+        Assert.That(tah.TypeName, Is.EqualTo(testType.FullName));
+        Assert.That(tah.AssemblyName, Is.EqualTo(null));
     }
 
     [Test]
@@ -61,8 +61,8 @@ public class TypeAssemblyHolderTests
     {
         Type testType = typeof(TestGenericObject<int, string>);
         TypeAssemblyHolder tah = new TypeAssemblyHolder(testType.AssemblyQualifiedName);
-        Assert.IsTrue(tah.IsAssemblyQualified);
-        Assert.AreEqual(testType.FullName, tah.TypeName);
-        Assert.AreEqual(testType.Assembly.FullName, tah.AssemblyName);
+        Assert.That(tah.IsAssemblyQualified, Is.True);
+        Assert.That(tah.TypeName, Is.EqualTo(testType.FullName));
+        Assert.That(tah.AssemblyName, Is.EqualTo(testType.Assembly.FullName));
     }
 }

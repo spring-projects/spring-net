@@ -50,8 +50,8 @@ public class NmsTemplateTests : AbstractDependencyInjectionSpringContextTests
     [Test]
     public void ConvertAndSend()
     {
-        Assert.NotNull(connectionFactory);
-        Assert.NotNull(nmsTemplate);
+        Assert.That(connectionFactory, Is.Not.Null);
+        Assert.That(nmsTemplate, Is.Not.Null);
 
         string msgText = "Hello World";
 
@@ -68,10 +68,10 @@ public class NmsTemplateTests : AbstractDependencyInjectionSpringContextTests
 
     private void AssertRecievedHelloWorldMessage(string msgText, object message)
     {
-        Assert.NotNull(message);
+        Assert.That(message, Is.Not.Null);
         string text = message as string;
-        Assert.NotNull(text);
-        Assert.AreEqual(msgText, text);
+        Assert.That(text, Is.Not.Null);
+        Assert.That(text, Is.EqualTo(msgText));
     }
 
     /// <summary>

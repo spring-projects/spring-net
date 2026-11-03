@@ -67,7 +67,8 @@ public class XmlObjectDefinitionReaderTests
 
         foreach (string ns in namespaces)
         {
-            Assert.IsNotNull(NamespaceParserRegistry.GetParser(ns),
+            Assert.That(NamespaceParserRegistry.GetParser(ns),
+                Is.Not.Null,
                 string.Format("Parser for Namespace {0} could not be auto-registered.", ns));
         }
     }
@@ -83,7 +84,7 @@ public class XmlObjectDefinitionReaderTests
     [TestCase("http://www.springframework.net/nvelocity", "Spring.Template.Velocity")]
     public void RemovedNamespaceFailsWithErrorNamingTheNamespace(string namespaceUri, string removedPackage)
     {
-        Assert.IsNull(NamespaceParserRegistry.GetParser(namespaceUri));
+        Assert.That(NamespaceParserRegistry.GetParser(namespaceUri), Is.Null);
 
         XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(new DefaultListableObjectFactory());
         ObjectDefinitionStoreException ex = Assert.Throws<ObjectDefinitionStoreException>(() => reader.LoadObjectDefinitions(new StringResource(
@@ -125,7 +126,7 @@ public class XmlObjectDefinitionReaderTests
                                                     </objects>
                                                     "));
             object apc = of.GetObject(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME);
-            Assert.NotNull(apc);
+            Assert.That(apc, Is.Not.Null);
         }
         finally
         {
@@ -162,7 +163,7 @@ public class XmlObjectDefinitionReaderTests
 	</object>
 </objects>
 "));
-        Assert.AreEqual(" \n\r\t", ((TestObject) of.GetObject("test")).Name);
+        Assert.That(((TestObject) of.GetObject("test")).Name, Is.EqualTo(" \n\r\t"));
     }
 
     [Test]
@@ -184,9 +185,9 @@ public class XmlObjectDefinitionReaderTests
 	</object>
 </objects>
 "));
-        Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test2")).Name);
-        Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test3")).Name);
-        Assert.AreEqual(string.Empty, ((TestObject) of.GetObject("test4")).Name);
+        Assert.That(((TestObject) of.GetObject("test2")).Name, Is.Empty);
+        Assert.That(((TestObject) of.GetObject("test3")).Name, Is.Empty);
+        Assert.That(((TestObject) of.GetObject("test4")).Name, Is.Empty);
     }
 
     [Test]
@@ -202,7 +203,7 @@ public class XmlObjectDefinitionReaderTests
 	</object>
 </objects>
 "));
-        Assert.AreEqual(" \n\r\t", ((TestObject) of.GetObject("test4")).Name);
+        Assert.That(((TestObject) of.GetObject("test4")).Name, Is.EqualTo(" \n\r\t"));
     }
 
     [Test]
@@ -222,7 +223,7 @@ public class XmlObjectDefinitionReaderTests
         }
         catch (ObjectDefinitionStoreException ex)
         {
-            Assert.IsTrue(ex.Message.IndexOf("Line 3 in XML document from  violates the schema.") > -1);
+            Assert.That(ex.Message.IndexOf("Line 3 in XML document from  violates the schema.") > -1, Is.True);
         }
     }
 
@@ -243,7 +244,7 @@ public class XmlObjectDefinitionReaderTests
         }
         catch (ObjectDefinitionStoreException ex)
         {
-            Assert.IsTrue(ex.Message.IndexOf("Line 4 in XML document from  is not well formed.") > -1);
+            Assert.That(ex.Message.IndexOf("Line 4 in XML document from  is not well formed.") > -1, Is.True);
         }
     }
 
@@ -301,8 +302,8 @@ public class XmlObjectDefinitionReaderTests
 </core:objects>
 "));
             TestObject test2 = (TestObject) of.GetObject("test2");
-            Assert.AreEqual(typeof(TestObject), test2.GetType());
-            Assert.IsNotNull(test2.Sibling);
+            Assert.That(test2.GetType(), Is.EqualTo(typeof(TestObject)));
+            Assert.That(test2.Sibling, Is.Not.Null);
         }
         finally
         {
@@ -328,20 +329,20 @@ public class XmlObjectDefinitionReaderTests
 </objects>
 "));
         AbstractObjectDefinition od1 = (AbstractObjectDefinition) of.GetObjectDefinition("test1");
-        Assert.IsFalse(od1.IsSingleton);
-        Assert.IsTrue(od1.IsAbstract);
-        Assert.IsFalse(od1.IsLazyInit);
+        Assert.That(od1.IsSingleton, Is.False);
+        Assert.That(od1.IsAbstract, Is.True);
+        Assert.That(od1.IsLazyInit, Is.False);
 
         AbstractObjectDefinition od2 = (AbstractObjectDefinition) of.GetObjectDefinition("test2");
-        Assert.IsTrue(od2.IsSingleton);
-        Assert.IsFalse(od2.IsAbstract);
-        Assert.IsTrue(od2.IsLazyInit);
-        Assert.AreEqual(AutoWiringMode.No, od2.AutowireMode);
-        Assert.AreEqual("init", od2.InitMethodName);
-        Assert.AreEqual("destroy", od2.DestroyMethodName);
-        Assert.AreEqual(1, od2.DependsOn.Count);
-        Assert.AreEqual("test1", od2.DependsOn[0]);
-        Assert.AreEqual(DependencyCheckingMode.Simple, od2.DependencyCheck);
+        Assert.That(od2.IsSingleton, Is.True);
+        Assert.That(od2.IsAbstract, Is.False);
+        Assert.That(od2.IsLazyInit, Is.True);
+        Assert.That(od2.AutowireMode, Is.EqualTo(AutoWiringMode.No));
+        Assert.That(od2.InitMethodName, Is.EqualTo("init"));
+        Assert.That(od2.DestroyMethodName, Is.EqualTo("destroy"));
+        Assert.That(od2.DependsOn.Count, Is.EqualTo(1));
+        Assert.That(od2.DependsOn[0], Is.EqualTo("test1"));
+        Assert.That(od2.DependencyCheck, Is.EqualTo(DependencyCheckingMode.Simple));
     }
 
     [Test]

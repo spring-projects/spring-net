@@ -66,8 +66,8 @@ namespace SpringAir.Data.Ado
         public void GetAllAircraftSunnyDay()
         {
             IList aircraft = dao.GetAllAircraft();
-            Assert.IsNotNull(aircraft, "Must never return a null aircraft list.");
-            Assert.AreEqual(5, aircraft.Count);
+            Assert.That(aircraft, Is.Not.Null, "Must never return a null aircraft list.");
+            Assert.That(aircraft.Count, Is.EqualTo(5));
             foreach (Aircraft plane in aircraft)
             {
                 Console.Out.WriteLine(plane);
@@ -78,7 +78,7 @@ namespace SpringAir.Data.Ado
         public void GetAircraftSunnyDay()
         {
             Aircraft plane = dao.GetAircraft(0);
-            Assert.IsNotNull(plane, "Failed to retrive an Aircraft that is definitely in the database.");
+            Assert.That(plane, Is.Not.Null, "Failed to retrive an Aircraft that is definitely in the database.");
             Console.Out.WriteLine(plane);
         }
     }

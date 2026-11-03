@@ -79,10 +79,10 @@ public class AbstractAdvisorAutoProxyCreatorTests
         TestAdvisorAutoProxyCreator apc = new TestAdvisorAutoProxyCreator();
         apc.ObjectFactory = of;
         IList<object> advisors = apc.GetAdvicesAndAdvisorsForObject(typeof(object), "dummyTarget");
-        Assert.AreEqual(1, advisors.Count);
-        Assert.AreEqual("RegularAdvisor", ((TestAdvisor) advisors[0]).Name);
+        Assert.That(advisors.Count, Is.EqualTo(1));
+        Assert.That(((TestAdvisor) advisors[0]).Name, Is.EqualTo("RegularAdvisor"));
 
-        Assert.AreEqual(1, apc.CheckedAdvisors.Count);
-        Assert.AreEqual("regular", apc.CheckedAdvisors[0]);
+        Assert.That(apc.CheckedAdvisors.Count, Is.EqualTo(1));
+        Assert.That(apc.CheckedAdvisors[0], Is.EqualTo("regular"));
     }
 }

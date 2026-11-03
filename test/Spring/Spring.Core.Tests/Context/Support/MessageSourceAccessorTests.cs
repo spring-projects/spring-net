@@ -62,7 +62,7 @@ public class MessageSourceAccessorTests
         A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Returns(MSGRESULT);
 
         MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE, MSGARGS));
+        Assert.That(msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE, MSGARGS), Is.EqualTo(MSGRESULT));
     }
 
     [Test]
@@ -71,7 +71,7 @@ public class MessageSourceAccessorTests
         A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Returns(MSGRESULT);
 
         MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource, MSGCULTURE);
-        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGARGS));
+        Assert.That(msgSourceAccessor.GetMessage(MSGCODE, MSGARGS), Is.EqualTo(MSGRESULT));
     }
 
     [Test]
@@ -80,7 +80,7 @@ public class MessageSourceAccessorTests
         A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture, MSGARGS)).Returns(MSGRESULT);
 
         MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGARGS));
+        Assert.That(msgSourceAccessor.GetMessage(MSGCODE, MSGARGS), Is.EqualTo(MSGRESULT));
     }
 
     [Test]
@@ -89,7 +89,7 @@ public class MessageSourceAccessorTests
         A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE)).Returns(MSGRESULT);
 
         MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE));
+        Assert.That(msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE), Is.EqualTo(MSGRESULT));
     }
 
     [Test]
@@ -98,7 +98,7 @@ public class MessageSourceAccessorTests
         A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture)).Returns(MSGRESULT);
 
         MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE));
+        Assert.That(msgSourceAccessor.GetMessage(MSGCODE), Is.EqualTo(MSGRESULT));
     }
 
     [Test]
@@ -107,7 +107,7 @@ public class MessageSourceAccessorTests
         A.CallTo(() => mockMsgSource.GetMessage(mockMsgSourceResolvable, MSGCULTURE)).Returns(MSGRESULT);
 
         MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(mockMsgSourceResolvable, MSGCULTURE));
+        Assert.That(msgSourceAccessor.GetMessage(mockMsgSourceResolvable, MSGCULTURE), Is.EqualTo(MSGRESULT));
     }
 
     [Test]
@@ -116,6 +116,6 @@ public class MessageSourceAccessorTests
         A.CallTo(() => mockMsgSource.GetMessage(mockMsgSourceResolvable, CultureInfo.CurrentUICulture)).Returns(MSGRESULT);
 
         MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(mockMsgSourceResolvable));
+        Assert.That(msgSourceAccessor.GetMessage(mockMsgSourceResolvable), Is.EqualTo(MSGRESULT));
     }
 }

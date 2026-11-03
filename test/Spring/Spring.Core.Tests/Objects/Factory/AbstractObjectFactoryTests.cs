@@ -58,12 +58,12 @@ public abstract class AbstractObjectFactoryTests
         }
         catch (ObjectDefinitionStoreException ex)
         {
-            Assert.IsTrue(-1 < ex.Message.IndexOf("already registered"));
+            Assert.That(-1 < ex.Message.IndexOf("already registered"), Is.True);
         }
 
-        Assert.AreEqual(1, of.GetAliases("nAmE").Count);
-        Assert.AreEqual(testObject, of.GetObject("nAmE"));
-        Assert.AreEqual(testObject, of.GetObject("ALIAS"));
+        Assert.That(of.GetAliases("nAmE").Count, Is.EqualTo(1));
+        Assert.That(of.GetObject("nAmE"), Is.EqualTo(testObject));
+        Assert.That(of.GetObject("ALIAS"), Is.EqualTo(testObject));
     }
 
     /// <summary>
@@ -72,15 +72,15 @@ public abstract class AbstractObjectFactoryTests
     [Test]
     public void Inheritance()
     {
-        Assert.IsTrue(ObjectFactory.ContainsObject("rod"));
-        Assert.IsTrue(ObjectFactory.ContainsObject("roderick"));
+        Assert.That(ObjectFactory.ContainsObject("rod"), Is.True);
+        Assert.That(ObjectFactory.ContainsObject("roderick"), Is.True);
         TestObject rod = (TestObject) ObjectFactory["rod"];
         TestObject roderick = (TestObject) ObjectFactory["roderick"];
-        Assert.IsTrue(rod != roderick, "not == ");
-        Assert.IsTrue(rod.Name.Equals("Rod"), "rod.name is Rod");
-        Assert.IsTrue(rod.Age == 31, "rod.age is 31");
-        Assert.IsTrue(roderick.Name.Equals("Roderick"), "roderick.name is Roderick");
-        Assert.IsTrue(roderick.Age == rod.Age, "roderick.age was inherited");
+        Assert.That(rod != roderick, Is.True, "not == ");
+        Assert.That(rod.Name.Equals("Rod"), Is.True, "rod.name is Rod");
+        Assert.That(rod.Age == 31, Is.True, "rod.age is 31");
+        Assert.That(roderick.Name.Equals("Roderick"), Is.True, "roderick.name is Roderick");
+        Assert.That(roderick.Age == rod.Age, Is.True, "roderick.age was inherited");
     }
 
     [Test]
@@ -111,11 +111,11 @@ public abstract class AbstractObjectFactoryTests
     public void LifecycleCallbacks()
     {
         LifecycleObject lb = (LifecycleObject) ObjectFactory.GetObject("lifecycle");
-        Assert.AreEqual("lifecycle", lb.ObjectName);
+        Assert.That(lb.ObjectName, Is.EqualTo("lifecycle"));
         // The dummy business method will throw an exception if the
         // necessary callbacks weren't invoked in the right order
         lb.BusinessMethod();
-        Assert.IsFalse(lb.Destroyed, "Was destroyed");
+        Assert.That(lb.Destroyed, Is.False, "Was destroyed");
     }
 
     [Test(Description = "SPRNET-1208")]
@@ -124,24 +124,24 @@ public abstract class AbstractObjectFactoryTests
         AbstractObjectFactory aof = ObjectFactory;
         LifecycleObject.PostProcessor lb = new LifecycleObject.PostProcessor();
         aof.AddObjectPostProcessor(lb);
-        Assert.AreSame(aof, lb.ObjectFactory);
+        Assert.That(lb.ObjectFactory, Is.SameAs(aof));
     }
 
     [Test]
     public void FindsValidInstance()
     {
         object o = ObjectFactory.GetObject("rod");
-        Assert.IsTrue(o is TestObject, "Rod object is a TestObject");
+        Assert.That(o is TestObject, Is.True, "Rod object is a TestObject");
         TestObject rod = (TestObject) o;
-        Assert.IsTrue(rod.Name.Equals("Rod"), "rod.name is Rod");
-        Assert.IsTrue(rod.Age == 31, "rod.age is 31");
+        Assert.That(rod.Name.Equals("Rod"), Is.True, "rod.name is Rod");
+        Assert.That(rod.Age == 31, Is.True, "rod.age is 31");
     }
 
     [Test]
     public void GetInstanceByMatchingClass()
     {
         object o = ObjectFactory.GetObject("rod", typeof(TestObject));
-        Assert.IsTrue(o is TestObject, "Rod object is a TestObject");
+        Assert.That(o is TestObject, Is.True, "Rod object is a TestObject");
     }
 
     [Test]
@@ -154,10 +154,10 @@ public abstract class AbstractObjectFactoryTests
         }
         catch (ObjectNotOfRequiredTypeException ex)
         {
-            Assert.IsTrue(ex.ObjectName.Equals("rod"), "Exception has correct object name");
-            Assert.IsTrue(ex.RequiredType.Equals(typeof(IObjectFactory)), "Exception requiredType must be ObjectFactory.class");
-            Assert.IsTrue(typeof(TestObject).IsAssignableFrom(ex.ActualType), "Exception actualType as TestObject.class");
-            Assert.IsTrue(ex.ActualInstance == ObjectFactory.GetObject("rod"), "Actual instance is correct");
+            Assert.That(ex.ObjectName.Equals("rod"), Is.True, "Exception has correct object name");
+            Assert.That(ex.RequiredType.Equals(typeof(IObjectFactory)), Is.True, "Exception requiredType must be ObjectFactory.class");
+            Assert.That(typeof(TestObject).IsAssignableFrom(ex.ActualType), Is.True, "Exception actualType as TestObject.class");
+            Assert.That(ex.ActualInstance == ObjectFactory.GetObject("rod"), Is.True, "Actual instance is correct");
         }
     }
 
@@ -165,14 +165,14 @@ public abstract class AbstractObjectFactoryTests
     public virtual void GetSharedInstanceByMatchingClass()
     {
         object o = ObjectFactory.GetObject("rod", typeof(TestObject));
-        Assert.IsTrue(o is TestObject, "Rod object is a TestObject");
+        Assert.That(o is TestObject, Is.True, "Rod object is a TestObject");
     }
 
     [Test]
     public virtual void GetSharedInstanceByMatchingClassNoCatch()
     {
         object o = ObjectFactory.GetObject("rod", typeof(TestObject));
-        Assert.IsTrue(o is TestObject, "Rod object is a TestObject");
+        Assert.That(o is TestObject, Is.True, "Rod object is a TestObject");
     }
 
     [Test]
@@ -186,9 +186,9 @@ public abstract class AbstractObjectFactoryTests
         catch (ObjectNotOfRequiredTypeException ex)
         {
             // So far, so good
-            Assert.IsTrue(ex.ObjectName.Equals("rod"), "Exception has correct object name");
-            Assert.IsTrue(ex.RequiredType.Equals(typeof(IObjectFactory)), "Exception requiredType must be IObjectFactory class");
-            Assert.IsTrue(typeof(TestObject).IsAssignableFrom(ex.ActualType), "Exception actualType as TestObject class");
+            Assert.That(ex.ObjectName.Equals("rod"), Is.True, "Exception has correct object name");
+            Assert.That(ex.RequiredType.Equals(typeof(IObjectFactory)), Is.True, "Exception requiredType must be IObjectFactory class");
+            Assert.That(typeof(TestObject).IsAssignableFrom(ex.ActualType), Is.True, "Exception actualType as TestObject class");
         }
         catch (Exception ex)
         {
@@ -202,10 +202,10 @@ public abstract class AbstractObjectFactoryTests
         try
         {
             object o = ObjectFactory.GetObject("rod");
-            Assert.IsTrue(o is TestObject, "Rod object1 is a TestObject");
+            Assert.That(o is TestObject, Is.True, "Rod object1 is a TestObject");
             object o1 = ObjectFactory.GetObject("rod");
-            Assert.IsTrue(o1 is TestObject, "Rod object2 is a TestObject");
-            Assert.IsTrue(o == o1, "Object equals applies");
+            Assert.That(o1 is TestObject, Is.True, "Rod object2 is a TestObject");
+            Assert.That(o == o1, Is.True, "Object equals applies");
         }
         catch
         {
@@ -216,7 +216,7 @@ public abstract class AbstractObjectFactoryTests
     [Test]
     public void NotThere()
     {
-        Assert.IsFalse(ObjectFactory.ContainsObject("Mr Squiggle"));
+        Assert.That(ObjectFactory.ContainsObject("Mr Squiggle"), Is.False);
         Assert.Throws<NoSuchObjectDefinitionException>(() => ObjectFactory.GetObject("Mr Squiggle"));
     }
 
@@ -226,9 +226,9 @@ public abstract class AbstractObjectFactoryTests
         try
         {
             object o = ObjectFactory.GetObject("validEmpty");
-            Assert.IsTrue(o is TestObject, "validEmpty object is a TestObject");
+            Assert.That(o is TestObject, Is.True, "validEmpty object is a TestObject");
             TestObject ve = (TestObject) o;
-            Assert.IsTrue(ve.Name == null && ve.Age == 0 && ve.Spouse == null, "Valid empty has defaults");
+            Assert.That(ve.Name == null && ve.Age == 0 && ve.Spouse == null, Is.True, "Valid empty has defaults");
         }
         catch
         {
@@ -252,17 +252,17 @@ public abstract class AbstractObjectFactoryTests
         }
         catch (ObjectCreationException wex)
         {
-            Assert.IsTrue(wex.InnerException is PropertyAccessExceptionsException);
+            Assert.That(wex.InnerException is PropertyAccessExceptionsException, Is.True);
             PropertyAccessExceptionsException ex = (PropertyAccessExceptionsException) wex.InnerException;
             // Furthers
-            Assert.IsTrue(ex.ExceptionCount == 1, "Has one error");
-            Assert.IsTrue(ex.GetPropertyAccessException("age") != null, "Error is for field age");
+            Assert.That(ex.ExceptionCount == 1, Is.True, "Has one error");
+            Assert.That(ex.GetPropertyAccessException("age") != null, Is.True, "Error is for field age");
 
             TestObject tb = (TestObject) ex.ObjectWrapper.WrappedInstance;
-            Assert.IsTrue(tb.Age == 0, "Age still has default");
-            Assert.IsTrue(ex.GetPropertyAccessException("age").PropertyChangeArgs.NewValue.Equals("34x"), "We have rejected age in exception");
-            Assert.IsTrue(tb.Name.Equals("typeMismatch"), "valid name stuck");
-            Assert.IsTrue(tb.Spouse.Name.Equals("Rod"), "valid spouse stuck");
+            Assert.That(tb.Age == 0, Is.True, "Age still has default");
+            Assert.That(ex.GetPropertyAccessException("age").PropertyChangeArgs.NewValue.Equals("34x"), Is.True, "We have rejected age in exception");
+            Assert.That(tb.Name.Equals("typeMismatch"), Is.True, "valid name stuck");
+            Assert.That(tb.Spouse.Name.Equals("Rod"), Is.True, "valid spouse stuck");
         }
     }
 
@@ -270,30 +270,30 @@ public abstract class AbstractObjectFactoryTests
     public virtual void GrandParentDefinitionFoundInObjectFactory()
     {
         TestObject dad = (TestObject) ObjectFactory.GetObject("father");
-        Assert.IsTrue(dad.Name.Equals("Albert"), "Dad has correct name");
+        Assert.That(dad.Name.Equals("Albert"), Is.True, "Dad has correct name");
     }
 
     [Test]
     public virtual void GrandParentDefinitionFoundInObjectFactoryWithType()
     {
         TestObject dad = (TestObject) ObjectFactory.GetObject("typedfather", typeof(TestObject));
-        Assert.AreEqual(null, dad.Name, "Dad has not correct name");
+        Assert.That(dad.Name, Is.EqualTo(null), "Dad has not correct name");
     }
 
     [Test]
     public virtual void GrandParentDefinitionFoundInObjectFactoryWithArguments()
     {
         TestObject dad = (TestObject) ObjectFactory.GetObject("namedfather", new object[] { "Hugo", 65 });
-        Assert.AreEqual("Hugo", dad.Name, "Dad has not correct name");
-        Assert.AreEqual(65, dad.Age, "Dad has not correct age");
+        Assert.That(dad.Name, Is.EqualTo("Hugo"), "Dad has not correct name");
+        Assert.That(dad.Age, Is.EqualTo(65), "Dad has not correct age");
     }
 
     [Test]
     public virtual void GrandParentDefinitionFoundInObjectFactoryWithTypeAndArguments()
     {
         TestObject dad = (TestObject) ObjectFactory.GetObject("typedfather", typeof(TestObject), new object[] { "Chris", 66 });
-        Assert.AreEqual("Chris", dad.Name, "Dad has not correct name");
-        Assert.AreEqual(66, dad.Age, "Dad has not correct age");
+        Assert.That(dad.Name, Is.EqualTo("Chris"), "Dad has not correct name");
+        Assert.That(dad.Age, Is.EqualTo(66), "Dad has not correct age");
     }
 
     [Test(Description = "Extra check that the type is really passed on to the parent factory")]
@@ -312,25 +312,25 @@ public abstract class AbstractObjectFactoryTests
     [Test]
     public virtual void FactorySingleton()
     {
-        Assert.IsTrue(ObjectFactory.IsSingleton("&singletonFactory"));
-        Assert.IsTrue(ObjectFactory.IsSingleton("singletonFactory"));
+        Assert.That(ObjectFactory.IsSingleton("&singletonFactory"), Is.True);
+        Assert.That(ObjectFactory.IsSingleton("singletonFactory"), Is.True);
         TestObject tb = (TestObject) ObjectFactory.GetObject("singletonFactory");
-        Assert.IsTrue(tb.Name.Equals(DummyFactory.SINGLETON_NAME), "Singleton from factory has correct name, not " + tb.Name);
+        Assert.That(tb.Name.Equals(DummyFactory.SINGLETON_NAME), Is.True, "Singleton from factory has correct name, not " + tb.Name);
         DummyFactory factory = (DummyFactory) ObjectFactory.GetObject("&singletonFactory");
         TestObject tb2 = (TestObject) ObjectFactory.GetObject("singletonFactory");
-        Assert.IsTrue(tb == tb2, "Singleton references ==");
-        Assert.IsTrue(factory.ObjectFactory != null, "FactoryObject is ObjectFactoryAware");
+        Assert.That(tb == tb2, Is.True, "Singleton references ==");
+        Assert.That(factory.ObjectFactory != null, Is.True, "FactoryObject is ObjectFactoryAware");
     }
 
     [Test]
     public virtual void FactoryPrototype()
     {
-        Assert.IsTrue(ObjectFactory.IsSingleton("&prototypeFactory"));
-        Assert.IsFalse(ObjectFactory.IsSingleton("prototypeFactory"));
+        Assert.That(ObjectFactory.IsSingleton("&prototypeFactory"), Is.True);
+        Assert.That(ObjectFactory.IsSingleton("prototypeFactory"), Is.False);
         TestObject tb = (TestObject) ObjectFactory.GetObject("prototypeFactory");
-        Assert.IsTrue(!tb.Name.Equals(DummyFactory.SINGLETON_NAME));
+        Assert.That(!tb.Name.Equals(DummyFactory.SINGLETON_NAME), Is.True);
         TestObject tb2 = (TestObject) ObjectFactory.GetObject("prototypeFactory");
-        Assert.IsTrue(tb != tb2, "Prototype references !=");
+        Assert.That(tb != tb2, Is.True, "Prototype references !=");
     }
 
     /// <summary>
@@ -341,7 +341,7 @@ public abstract class AbstractObjectFactoryTests
     public virtual void GetFactoryItself()
     {
         DummyFactory factory = (DummyFactory) ObjectFactory.GetObject("&singletonFactory");
-        Assert.IsTrue(factory != null);
+        Assert.That(factory != null, Is.True);
     }
 
     /// <summary>Check that AfterPropertiesSet gets called on factory.</summary>
@@ -350,7 +350,7 @@ public abstract class AbstractObjectFactoryTests
     {
         TestObject tb = (TestObject) ObjectFactory.GetObject("singletonFactory");
         DummyFactory factory = (DummyFactory) ObjectFactory.GetObject("&singletonFactory");
-        Assert.IsTrue(factory.WasInitialized, "Factory was not initialized even though it implemented IInitializingObject");
+        Assert.That(factory.WasInitialized, Is.True, "Factory was not initialized even though it implemented IInitializingObject");
     }
 
     /// <summary>
@@ -373,14 +373,14 @@ public abstract class AbstractObjectFactoryTests
         }
         catch (NoSuchObjectDefinitionException ex)
         {
-            Assert.IsTrue(alias.Equals(ex.ObjectName));
+            Assert.That(alias.Equals(ex.ObjectName), Is.True);
         }
 
         // Create alias
         ObjectFactory.RegisterAlias("rod", alias);
         object rod = ObjectFactory.GetObject("rod");
         object aliasRod = ObjectFactory.GetObject(alias);
-        Assert.IsTrue(rod == aliasRod);
+        Assert.That(rod == aliasRod, Is.True);
         Assert.Throws<ObjectDefinitionStoreException>(() => ObjectFactory.RegisterAlias("father", alias));
     }
 
@@ -404,13 +404,13 @@ public abstract class AbstractObjectFactoryTests
         of.RegisterSingleton("A", new object());
         of.RegisterSingleton("C", new object());
         of.RegisterSingleton("B", new object());
-        Assert.AreEqual(new string[] { "A", "C", "B" }, of.GetSingletonNames());
+        Assert.That(of.GetSingletonNames(), Is.EqualTo(new string[] { "A", "C", "B" }));
 
         of = CreateObjectFactory(false);
         of.RegisterSingleton("A", new object());
         of.RegisterSingleton("C", new object());
         of.RegisterSingleton("B", new object());
-        Assert.AreEqual(new string[] { "A", "C", "B" }, of.GetSingletonNames(typeof(object)));
+        Assert.That(of.GetSingletonNames(typeof(object)), Is.EqualTo(new string[] { "A", "C", "B" }));
     }
 
     [Test]
@@ -468,9 +468,9 @@ public abstract class AbstractObjectFactoryTests
         of.RegisterSingleton("product2", new ObjectReferenceFactoryObject("product2Target", of));
 
         TestObject to = (TestObject) of.GetObject("product1");
-        Assert.NotNull(to);
-        Assert.NotNull(to.Spouse);
-        Assert.NotNull(((TestObject) to.Spouse).Sibling);
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Spouse, Is.Not.Null);
+        Assert.That(((TestObject) to.Spouse).Sibling, Is.Not.Null);
     }
 
     [Test]
@@ -497,7 +497,7 @@ public abstract class AbstractObjectFactoryTests
         }
         catch (ObjectCurrentlyInCreationException ex)
         {
-            Assert.AreEqual("product1", ex.ObjectName);
+            Assert.That(ex.ObjectName, Is.EqualTo("product1"));
         }
     }
 
@@ -770,11 +770,11 @@ public class SPRNET_1315
         Parent theParent = ObjectFactory.GetObject("parent") as Parent;
         theParent.Dispose();
 
-        Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
-        Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
-        Assert.IsNotNull(theParent.InjectedChild, "Parent's child dependency not set as expected");
-        Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
-        Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        Assert.That(_parentCounter, Is.EqualTo(0), "Should have no remaining parent objects after dispose");
+        Assert.That(_childCounter, Is.EqualTo(1), "Should have exactly ONE child object");
+        Assert.That(theParent.InjectedChild, Is.Not.Null, "Parent's child dependency not set as expected");
+        Assert.That(invocationLog[2], Is.EqualTo("Parent Destructor"), "Parent Destructor wasn't called third!");
+        Assert.That(invocationLog.Count, Is.EqualTo(3), "Should have no further object lifecycle behavior after parent destruction!");
     }
 
     [Test]
@@ -784,11 +784,11 @@ public class SPRNET_1315
 
         Parent theParent = ObjectFactory.GetObject("parent") as Parent;
 
-        Assert.AreEqual(1, _parentCounter, "Should have exactly ONE parent object");
-        Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
-        Assert.IsNotNull(theParent.InjectedChild, "Parent's child dependency not set as expected");
-        Assert.AreEqual("Child Constructor", invocationLog[0], "Child Constructor wasn't called first!");
-        Assert.AreEqual("Parent Constructor", invocationLog[1], "Parent Constructor wasn't called second!");
+        Assert.That(_parentCounter, Is.EqualTo(1), "Should have exactly ONE parent object");
+        Assert.That(_childCounter, Is.EqualTo(1), "Should have exactly ONE child object");
+        Assert.That(theParent.InjectedChild, Is.Not.Null, "Parent's child dependency not set as expected");
+        Assert.That(invocationLog[0], Is.EqualTo("Child Constructor"), "Child Constructor wasn't called first!");
+        Assert.That(invocationLog[1], Is.EqualTo("Parent Constructor"), "Parent Constructor wasn't called second!");
     }
 
     [Test]
@@ -799,11 +799,11 @@ public class SPRNET_1315
         Parent theParent = ObjectFactory.GetObject("parent") as Parent;
         theParent.Dispose();
 
-        Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
-        Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
+        Assert.That(_parentCounter, Is.EqualTo(0), "Should have no remaining parent objects after dispose");
+        Assert.That(_childCounter, Is.EqualTo(1), "Should have exactly ONE child object");
 
-        Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
-        Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        Assert.That(invocationLog[2], Is.EqualTo("Parent Destructor"), "Parent Destructor wasn't called third!");
+        Assert.That(invocationLog.Count, Is.EqualTo(3), "Should have no further object lifecycle behavior after parent destruction!");
     }
 
     [Test]
@@ -813,10 +813,10 @@ public class SPRNET_1315
 
         Parent theParent = ObjectFactory.GetObject("parent") as Parent;
 
-        Assert.AreEqual(1, _parentCounter, "Should have exactly ONE parent object");
-        Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
-        Assert.AreEqual("Child Constructor", invocationLog[0], "Child Constructor wasn't called first!");
-        Assert.AreEqual("Parent Constructor", invocationLog[1], "Parent Constructor wasn't called second!");
+        Assert.That(_parentCounter, Is.EqualTo(1), "Should have exactly ONE parent object");
+        Assert.That(_childCounter, Is.EqualTo(1), "Should have exactly ONE child object");
+        Assert.That(invocationLog[0], Is.EqualTo("Child Constructor"), "Child Constructor wasn't called first!");
+        Assert.That(invocationLog[1], Is.EqualTo("Parent Constructor"), "Parent Constructor wasn't called second!");
     }
 
     [Test]
@@ -830,11 +830,11 @@ public class SPRNET_1315
         //trigger the disposal of the singletons
         ObjectFactory.Dispose();
 
-        Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
-        Assert.AreEqual(0, _childCounter, "Should have no remaining child objects after dispose");
-        Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
-        Assert.AreEqual("Child Destructor", invocationLog[3], "Child Destructor wasn't called fourth!");
-        Assert.AreEqual(4, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        Assert.That(_parentCounter, Is.EqualTo(0), "Should have no remaining parent objects after dispose");
+        Assert.That(_childCounter, Is.EqualTo(0), "Should have no remaining child objects after dispose");
+        Assert.That(invocationLog[2], Is.EqualTo("Parent Destructor"), "Parent Destructor wasn't called third!");
+        Assert.That(invocationLog[3], Is.EqualTo("Child Destructor"), "Child Destructor wasn't called fourth!");
+        Assert.That(invocationLog.Count, Is.EqualTo(4), "Should have no further object lifecycle behavior after parent destruction!");
     }
 
     [Test]
@@ -846,17 +846,17 @@ public class SPRNET_1315
         ObjectFactory.GetObject("parent");
 
         //make certain they are created successfully
-        Assert.AreEqual(1, _parentCounter, "Should have exactly ONE parent object");
-        Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
+        Assert.That(_parentCounter, Is.EqualTo(1), "Should have exactly ONE parent object");
+        Assert.That(_childCounter, Is.EqualTo(1), "Should have exactly ONE child object");
 
         //trigger the disposal of the singletons
         ObjectFactory.Dispose();
 
-        Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
-        Assert.AreEqual(0, _childCounter, "Should have no remaining child objects after dispose");
-        Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
-        Assert.AreEqual("Child Destructor", invocationLog[3], "Child Destructor wasn't called fourth!");
-        Assert.AreEqual(4, invocationLog.Count, "Should have no further object lifecycle behavior after child destruction!");
+        Assert.That(_parentCounter, Is.EqualTo(0), "Should have no remaining parent objects after dispose");
+        Assert.That(_childCounter, Is.EqualTo(0), "Should have no remaining child objects after dispose");
+        Assert.That(invocationLog[2], Is.EqualTo("Parent Destructor"), "Parent Destructor wasn't called third!");
+        Assert.That(invocationLog[3], Is.EqualTo("Child Destructor"), "Child Destructor wasn't called fourth!");
+        Assert.That(invocationLog.Count, Is.EqualTo(4), "Should have no further object lifecycle behavior after child destruction!");
     }
 
     [Test]
@@ -870,10 +870,10 @@ public class SPRNET_1315
         //trigger the disposal of the singletons
         ObjectFactory.Dispose();
 
-        Assert.AreEqual(1, _parentCounter, "Should have ONE remaining parent objects after dispose");
-        Assert.AreEqual(0, _childCounter, "Should have no remaining child objects after dispose");
-        Assert.AreEqual("Child Destructor", invocationLog[2], "Child Destructor wasn't called third!");
-        Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after child destruction!");
+        Assert.That(_parentCounter, Is.EqualTo(1), "Should have ONE remaining parent objects after dispose");
+        Assert.That(_childCounter, Is.EqualTo(0), "Should have no remaining child objects after dispose");
+        Assert.That(invocationLog[2], Is.EqualTo("Child Destructor"), "Child Destructor wasn't called third!");
+        Assert.That(invocationLog.Count, Is.EqualTo(3), "Should have no further object lifecycle behavior after child destruction!");
     }
 
     [Test]
@@ -887,10 +887,10 @@ public class SPRNET_1315
         //trigger the disposal of the singletons
         ObjectFactory.Dispose();
 
-        Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
-        Assert.AreEqual(1, _childCounter, "Should have ONE remaining child object after dispose");
-        Assert.AreEqual("Parent Destructor", invocationLog[2], "Child Destructor wasn't called third!");
-        Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        Assert.That(_parentCounter, Is.EqualTo(0), "Should have no remaining parent objects after dispose");
+        Assert.That(_childCounter, Is.EqualTo(1), "Should have ONE remaining child object after dispose");
+        Assert.That(invocationLog[2], Is.EqualTo("Parent Destructor"), "Child Destructor wasn't called third!");
+        Assert.That(invocationLog.Count, Is.EqualTo(3), "Should have no further object lifecycle behavior after parent destruction!");
     }
 
     [Test]
@@ -902,16 +902,16 @@ public class SPRNET_1315
         ObjectFactory.GetObject("parent");
 
         //make certain they are created successfully
-        Assert.AreEqual(1, _parentCounter, "Should have exactly ONE parent object");
-        Assert.AreEqual(1, _childCounter, "Should have exactly ONE child object");
+        Assert.That(_parentCounter, Is.EqualTo(1), "Should have exactly ONE parent object");
+        Assert.That(_childCounter, Is.EqualTo(1), "Should have exactly ONE child object");
 
         //trigger the disposal of the singletons
         ObjectFactory.Dispose();
 
-        Assert.AreEqual(0, _parentCounter, "Should have no remaining parent objects after dispose");
-        Assert.AreEqual(1, _childCounter, "Should have no remaining child objects after dispose");
-        Assert.AreEqual("Parent Destructor", invocationLog[2], "Parent Destructor wasn't called third!");
-        Assert.AreEqual(3, invocationLog.Count, "Should have no further object lifecycle behavior after parent destruction!");
+        Assert.That(_parentCounter, Is.EqualTo(0), "Should have no remaining parent objects after dispose");
+        Assert.That(_childCounter, Is.EqualTo(1), "Should have no remaining child objects after dispose");
+        Assert.That(invocationLog[2], Is.EqualTo("Parent Destructor"), "Parent Destructor wasn't called third!");
+        Assert.That(invocationLog.Count, Is.EqualTo(3), "Should have no further object lifecycle behavior after parent destruction!");
     }
 
     private void WireParentAndChildWithDependsOnDeclarationDependency(bool parentIsSingleton, bool childIsSingleton)

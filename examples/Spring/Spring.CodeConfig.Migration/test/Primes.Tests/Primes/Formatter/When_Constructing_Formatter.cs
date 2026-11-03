@@ -11,7 +11,7 @@ namespace Tests.Formatter
         {
             var outputFormatter = new OutputFormatter();
 
-            Assert.IsNotNull(outputFormatter);
+            Assert.That(outputFormatter, Is.Not.Null);
         }
     }
 }

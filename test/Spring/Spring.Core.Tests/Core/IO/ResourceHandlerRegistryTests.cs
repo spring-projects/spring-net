@@ -62,8 +62,8 @@ public sealed class ResourceHandlerRegistryTests
         // overwrite, must not complain...
         ResourceHandlerRegistry.RegisterResourceHandler("beep", typeof(AssemblyResource));
         IResource res = new ConfigurableResourceLoader().GetResource("beep://Spring.Core.Tests/Spring/TestResource.txt");
-        Assert.IsNotNull(res, "Resource must not be null");
-        Assert.AreEqual(typeof(AssemblyResource), res.GetType(),
+        Assert.That(res, Is.Not.Null, "Resource must not be null");
+        Assert.That(res.GetType(), Is.EqualTo(typeof(AssemblyResource)),
             "The original IResource Type associated with the 'beep' protocol " +
             "must have been overwritten; expecting an AssemblyResource 'cos " +
             "we registered it last under the 'beep' protocol.");

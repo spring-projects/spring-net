@@ -56,8 +56,8 @@ public class DefaultAopProxyFactoryTests
         advisedSupport.Target = new DoesNotImplementAnyInterfacesTestObject();
 
         IAopProxy aopProxy = CreateAopProxy(advisedSupport);
-        Assert.IsNotNull(aopProxy);
-        Assert.IsTrue(AopUtils.IsDecoratorAopProxy(aopProxy));
+        Assert.That(aopProxy, Is.Not.Null);
+        Assert.That(AopUtils.IsDecoratorAopProxy(aopProxy), Is.True);
     }
 
     [Test]
@@ -65,9 +65,9 @@ public class DefaultAopProxyFactoryTests
     {
         ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
         IAopProxy aopProxy = CreateAopProxy(advisedSupport);
-        Assert.IsNotNull(aopProxy);
+        Assert.That(aopProxy, Is.Not.Null);
 
-        Assert.IsTrue(AopUtils.IsCompositionAopProxy(aopProxy));
+        Assert.That(AopUtils.IsCompositionAopProxy(aopProxy), Is.True);
     }
 
     [Test]
@@ -78,8 +78,8 @@ public class DefaultAopProxyFactoryTests
         advisedSupport.Target = new TestObject();
 
         IAopProxy aopProxy = CreateAopProxy(advisedSupport);
-        Assert.IsNotNull(aopProxy);
-        Assert.IsTrue(AopUtils.IsDecoratorAopProxy(aopProxy));
+        Assert.That(aopProxy, Is.Not.Null);
+        Assert.That(AopUtils.IsDecoratorAopProxy(aopProxy), Is.True);
     }
 
     public class DoesNotImplementAnyInterfacesTestObject

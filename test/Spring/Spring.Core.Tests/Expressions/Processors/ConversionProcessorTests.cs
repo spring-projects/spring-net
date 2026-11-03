@@ -59,10 +59,10 @@ public class ConversionProcessorTests
         ConversionProcessor cp = new ConversionProcessor();
         object result;
         result = cp.Process(null, new object[] { typeof(int) });
-        Assert.IsNull(result);
+        Assert.That(result, Is.Null);
         ICollection input = new object[] { };
         result = cp.Process(input, new object[] { typeof(int) });
-        Assert.AreEqual(input, result);
+        Assert.That(result, Is.EqualTo(input));
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class ConversionProcessorTests
     {
         ConversionProcessor cp = new ConversionProcessor();
         object result = cp.Process(new object[] { 0, 1 }, new object[] { typeof(int) });
-        Assert.IsTrue(result is int[]);
+        Assert.That(result is int[], Is.True);
     }
 
     [Test]
@@ -80,6 +80,6 @@ public class ConversionProcessorTests
         ICollection result = (ICollection) cp.Process(new object[] { "0", 1, 1.1m, "1.1", 1.1f }, new object[] { typeof(decimal) });
         decimal sum = 0;
         foreach (decimal element in result) sum += element;
-        Assert.AreEqual(4.3f, sum);
+        Assert.That(sum, Is.EqualTo(4.3f));
     }
 }

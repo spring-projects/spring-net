@@ -52,9 +52,9 @@ public class AdoTemplateTests
     {
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/adoTemplateTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         dbProvider = ctx["DbProvider"] as IDbProvider;
-        Assert.IsNotNull(dbProvider);
+        Assert.That(dbProvider, Is.Not.Null);
         adoOperations = new AdoTemplate(dbProvider);
         transactionManager = new AdoPlatformTransactionManager(dbProvider);
     }
@@ -71,9 +71,9 @@ public class AdoTemplateTests
 
         dataSet = new DataSet();
         adoOperations.DataSetFill(dataSet, CommandType.Text, testObjectsql + ";" + creditObjectsql, new string[] { "TestObjects", "CreditObjects" });
-        Assert.AreEqual(2, dataSet.Tables.Count);
-        Assert.AreEqual(4, dataSet.Tables["TestObjects"].Rows.Count);
-        Assert.AreEqual(4, dataSet.Tables["CreditObjects"].Rows.Count);
+        Assert.That(dataSet.Tables.Count, Is.EqualTo(2));
+        Assert.That(dataSet.Tables["TestObjects"].Rows.Count, Is.EqualTo(4));
+        Assert.That(dataSet.Tables["CreditObjects"].Rows.Count, Is.EqualTo(4));
     }
 
     [Test]
@@ -85,8 +85,8 @@ public class AdoTemplateTests
 
         dataSet = new DataSet();
         adoOperations.DataSetFill(dataSet, CommandType.Text, sql, new string[] { "TestObjects" });
-        Assert.AreEqual(1, dataSet.Tables.Count);
-        Assert.AreEqual(4, dataSet.Tables["TestObjects"].Rows.Count);
+        Assert.That(dataSet.Tables.Count, Is.EqualTo(1));
+        Assert.That(dataSet.Tables["TestObjects"].Rows.Count, Is.EqualTo(4));
 
         dataSet = new DataSet();
         DataTableMappingCollection mappingCollection =
@@ -95,13 +95,13 @@ public class AdoTemplateTests
         testObjectsMapping.ColumnMappings.Add("TestObjectNo", "UserID");
         testObjectsMapping.ColumnMappings.Add("Name", "UserName");
         adoOperations.DataSetFill(dataSet, CommandType.Text, sql, mappingCollection);
-        Assert.AreEqual(1, dataSet.Tables.Count);
-        Assert.AreEqual(4, dataSet.Tables["TestObjects"].Rows.Count);
+        Assert.That(dataSet.Tables.Count, Is.EqualTo(1));
+        Assert.That(dataSet.Tables["TestObjects"].Rows.Count, Is.EqualTo(4));
         foreach (DataRow testObjectRow in dataSet.Tables["TestObjects"].Rows)
         {
-            Assert.IsNotNull(testObjectRow["UserID"]);
-            Assert.IsNotNull(testObjectRow["Age"]);
-            Assert.IsNotNull(testObjectRow["UserName"]);
+            Assert.That(testObjectRow["UserID"], Is.Not.Null);
+            Assert.That(testObjectRow["Age"], Is.Not.Null);
+            Assert.That(testObjectRow["UserName"], Is.Not.Null);
         }
     }
 
@@ -159,8 +159,8 @@ public class AdoTemplateTests
         String sql = "select TestObjectNo, Age, Name from TestObjects";
         DataSet dataSet = new DataSet();
         adoOperations.DataSetFill(dataSet, CommandType.Text, sql);
-        Assert.AreEqual(1, dataSet.Tables.Count);
-        Assert.AreEqual(count, dataSet.Tables["Table"].Rows.Count);
+        Assert.That(dataSet.Tables.Count, Is.EqualTo(1));
+        Assert.That(dataSet.Tables["Table"].Rows.Count, Is.EqualTo(count));
         return sql;
     }
 
@@ -169,8 +169,8 @@ public class AdoTemplateTests
         String sql = "select CreditID, CreditAmount from Credits";
         DataSet dataSet = new DataSet();
         adoOperations.DataSetFill(dataSet, CommandType.Text, sql);
-        Assert.AreEqual(1, dataSet.Tables.Count);
-        Assert.AreEqual(count, dataSet.Tables["Table"].Rows.Count);
+        Assert.That(dataSet.Tables.Count, Is.EqualTo(1));
+        Assert.That(dataSet.Tables["Table"].Rows.Count, Is.EqualTo(count));
         return sql;
     }
 
@@ -226,7 +226,7 @@ public class AdoTemplateTests
         IResultSetExtractor rse = new TestObjectExtractor();
         String sql = "select TestObjectNo, Age, Name from TestObjects";
         IList testObjectList = (IList) adoOperations.QueryWithResultSetExtractor(CommandType.Text, sql, rse);
-        Assert.AreEqual(4, testObjectList.Count);
+        Assert.That(testObjectList.Count, Is.EqualTo(4));
     }
 
     [Test]

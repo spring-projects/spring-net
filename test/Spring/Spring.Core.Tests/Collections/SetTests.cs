@@ -67,10 +67,10 @@ public abstract class SetTests
         Set.AddAll(UniqueStuff);
         SetForSetOps.AddAll(new object[] { "Bar", StuffOne });
         ISet union = Set.Union(SetForSetOps);
-        Assert.IsTrue(union.Count == UniqueStuff.Length + 1);
-        Assert.IsFalse(object.ReferenceEquals(union, Set), "Got back same instance after set operation.");
-        Assert.IsTrue(Set.Count == UniqueStuff.Length);
-        Assert.IsTrue(SetForSetOps.Count == 2);
+        Assert.That(union.Count == UniqueStuff.Length + 1, Is.True);
+        Assert.That(object.ReferenceEquals(union, Set), Is.False, "Got back same instance after set operation.");
+        Assert.That(Set.Count == UniqueStuff.Length, Is.True);
+        Assert.That(SetForSetOps.Count == 2, Is.True);
     }
 
     [Test]
@@ -79,10 +79,10 @@ public abstract class SetTests
         Set.AddAll(UniqueStuff);
         SetForSetOps.AddAll(new object[] { "Bar", StuffOne });
         ISet intersection = Set.Intersect(SetForSetOps);
-        Assert.IsTrue(intersection.Count == 1);
-        Assert.IsFalse(object.ReferenceEquals(intersection, Set), "Got back same instance after set operation.");
-        Assert.IsTrue(Set.Count == UniqueStuff.Length);
-        Assert.IsTrue(SetForSetOps.Count == 2);
+        Assert.That(intersection.Count == 1, Is.True);
+        Assert.That(object.ReferenceEquals(intersection, Set), Is.False, "Got back same instance after set operation.");
+        Assert.That(Set.Count == UniqueStuff.Length, Is.True);
+        Assert.That(SetForSetOps.Count == 2, Is.True);
     }
 
     [Test]
@@ -91,10 +91,10 @@ public abstract class SetTests
         Set.AddAll(UniqueStuff);
         SetForSetOps.AddAll(new object[] { "Bar", StuffOne });
         ISet minus = Set.Minus(SetForSetOps);
-        Assert.IsTrue(minus.Count == UniqueStuff.Length - 1);
-        Assert.IsFalse(object.ReferenceEquals(minus, Set), "Got back same instance after set operation.");
-        Assert.IsTrue(Set.Count == UniqueStuff.Length);
-        Assert.IsTrue(SetForSetOps.Count == 2);
+        Assert.That(minus.Count == UniqueStuff.Length - 1, Is.True);
+        Assert.That(object.ReferenceEquals(minus, Set), Is.False, "Got back same instance after set operation.");
+        Assert.That(Set.Count == UniqueStuff.Length, Is.True);
+        Assert.That(SetForSetOps.Count == 2, Is.True);
     }
 
     [Test]
@@ -103,26 +103,26 @@ public abstract class SetTests
         Set.AddAll(UniqueStuff);
         SetForSetOps.AddAll(new object[] { "Bar", StuffOne });
         ISet xor = Set.ExclusiveOr(SetForSetOps);
-        Assert.IsTrue(xor.Count == 3);
-        Assert.IsTrue(xor.ContainsAll(new object[] { "Bar", StuffTwo, StuffThree }));
-        Assert.IsFalse(object.ReferenceEquals(xor, Set), "Got back same instance after set operation.");
-        Assert.IsTrue(Set.Count == UniqueStuff.Length);
-        Assert.IsTrue(SetForSetOps.Count == 2);
+        Assert.That(xor.Count == 3, Is.True);
+        Assert.That(xor.ContainsAll(new object[] { "Bar", StuffTwo, StuffThree }), Is.True);
+        Assert.That(object.ReferenceEquals(xor, Set), Is.False, "Got back same instance after set operation.");
+        Assert.That(Set.Count == UniqueStuff.Length, Is.True);
+        Assert.That(SetForSetOps.Count == 2, Is.True);
     }
 
     [Test]
     public void Contains()
     {
         Set.AddAll(UniqueStuff);
-        Assert.IsTrue(Set.Contains(StuffThree));
-        Assert.IsFalse(Set.Contains("SourDough"));
+        Assert.That(Set.Contains(StuffThree), Is.True);
+        Assert.That(Set.Contains("SourDough"), Is.False);
     }
 
     [Test]
     public void ContainsAll()
     {
         Set.AddAll(UniqueStuff);
-        Assert.IsTrue(Set.ContainsAll(new object[] { StuffThree, StuffTwo, StuffOne }));
+        Assert.That(Set.ContainsAll(new object[] { StuffThree, StuffTwo, StuffOne }), Is.True);
     }
 
     [Test]
@@ -130,14 +130,14 @@ public abstract class SetTests
     {
         Set.Add(StuffOne);
         Set.Remove(StuffOne);
-        Assert.IsTrue(Set.IsEmpty);
+        Assert.That(Set.IsEmpty, Is.True);
     }
 
     [Test]
     public void Add()
     {
-        Assert.IsTrue(Set.Add(StuffOne));
-        Assert.IsTrue(Set.Count == 1, "Added 1 unique item, but the Count property wasn't sitting at 1.");
+        Assert.That(Set.Add(StuffOne), Is.True);
+        Assert.That(Set.Count == 1, Is.True, "Added 1 unique item, but the Count property wasn't sitting at 1.");
     }
 
     [Test]
@@ -145,11 +145,11 @@ public abstract class SetTests
     {
         if (SupportsNull)
         {
-            Assert.IsTrue(Set.Add(StuffOne));
-            Assert.IsTrue(Set.Add(null));
-            Assert.IsTrue(Set.Count == 2, "Added 2 unique item (one null), but the Count property wasn't sitting at 2.");
-            Assert.IsFalse(Set.Add(null));
-            Assert.IsTrue(Set.Count == 2, "Added null to a set already containing null, but the Count property changed.");
+            Assert.That(Set.Add(StuffOne), Is.True);
+            Assert.That(Set.Add(null), Is.True);
+            Assert.That(Set.Count == 2, Is.True, "Added 2 unique item (one null), but the Count property wasn't sitting at 2.");
+            Assert.That(Set.Add(null), Is.False);
+            Assert.That(Set.Count == 2, Is.True, "Added null to a set already containing null, but the Count property changed.");
         }
     }
 
@@ -169,7 +169,7 @@ public abstract class SetTests
                 }
             }
 
-            Assert.IsTrue(gotNull, "Stuffed a null value into the set but didn't get it back when enumerating over the set.");
+            Assert.That(gotNull, Is.True, "Stuffed a null value into the set but didn't get it back when enumerating over the set.");
         }
     }
 
@@ -192,7 +192,7 @@ public abstract class SetTests
                 }
             }
 
-            Assert.IsTrue(gotNull, "Copied a set with a null value into an array, but the resulting array did not contain a a null.");
+            Assert.That(gotNull, Is.True, "Copied a set with a null value into an array, but the resulting array did not contain a a null.");
         }
     }
 
@@ -200,22 +200,22 @@ public abstract class SetTests
     public void AddDuplicate()
     {
         Set.Add(StuffOne);
-        Assert.IsFalse(Set.Add(StuffOne));
-        Assert.IsTrue(Set.Count == 1, "Added 2 duplicate items, but the Count property wasn't sitting at 1.");
+        Assert.That(Set.Add(StuffOne), Is.False);
+        Assert.That(Set.Count == 1, Is.True, "Added 2 duplicate items, but the Count property wasn't sitting at 1.");
     }
 
     [Test]
     public void AddAll()
     {
-        Assert.IsTrue(Set.AddAll(UniqueStuff));
-        Assert.IsTrue(Set.Count == UniqueStuff.Length, "Added 3 unique items, but the Count property wasn't sitting at 3.");
+        Assert.That(Set.AddAll(UniqueStuff), Is.True);
+        Assert.That(Set.Count == UniqueStuff.Length, Is.True, "Added 3 unique items, but the Count property wasn't sitting at 3.");
     }
 
     [Test]
     public void AddAllDuplicated()
     {
-        Assert.IsTrue(Set.AddAll(DuplicatedStuff));
-        Assert.IsTrue(Set.Count == 2, "Added 3 (2 duplicated) items, but the Count property wasn't sitting at 2.");
+        Assert.That(Set.AddAll(DuplicatedStuff), Is.True);
+        Assert.That(Set.Count == 2, Is.True, "Added 3 (2 duplicated) items, but the Count property wasn't sitting at 2.");
     }
 
     [Test]
@@ -223,10 +223,10 @@ public abstract class SetTests
     {
         Set.AddAll(UniqueStuff);
         Set.Remove(StuffOne);
-        Assert.IsTrue(Set.Count == (UniqueStuff.Length - 1));
-        Assert.IsFalse(Set.Contains(StuffOne));
-        Assert.IsTrue(Set.Contains(StuffTwo));
-        Assert.IsTrue(Set.Contains(StuffThree));
+        Assert.That(Set.Count == (UniqueStuff.Length - 1), Is.True);
+        Assert.That(Set.Contains(StuffOne), Is.False);
+        Assert.That(Set.Contains(StuffTwo), Is.True);
+        Assert.That(Set.Contains(StuffThree), Is.True);
     }
 
     [Test]
@@ -235,9 +235,9 @@ public abstract class SetTests
         if (SupportsNull)
         {
             Set.AddAll(UniqueStuff);
-            Assert.IsFalse(Set.Remove(null));
+            Assert.That(Set.Remove(null), Is.False);
             Set.Add(null);
-            Assert.IsTrue(Set.Remove(null));
+            Assert.That(Set.Remove(null), Is.True);
         }
     }
 
@@ -247,10 +247,10 @@ public abstract class SetTests
         Set.AddAll(UniqueStuff);
         object[] removed = new object[] { StuffOne, StuffTwo };
         Set.RemoveAll(removed);
-        Assert.IsTrue(Set.Count == (UniqueStuff.Length - removed.Length));
-        Assert.IsFalse(Set.Contains(StuffOne));
-        Assert.IsFalse(Set.Contains(StuffTwo));
-        Assert.IsTrue(Set.Contains(StuffThree));
+        Assert.That(Set.Count == (UniqueStuff.Length - removed.Length), Is.True);
+        Assert.That(Set.Contains(StuffOne), Is.False);
+        Assert.That(Set.Contains(StuffTwo), Is.False);
+        Assert.That(Set.Contains(StuffThree), Is.True);
     }
 
     [Test]
@@ -258,10 +258,10 @@ public abstract class SetTests
     {
         Set.AddAll(UniqueStuff);
         Set.RetainAll(new object[] { StuffOne, StuffTwo });
-        Assert.IsTrue(Set.Count == 2);
-        Assert.IsTrue(Set.Contains(StuffOne));
-        Assert.IsTrue(Set.Contains(StuffTwo));
-        Assert.IsFalse(Set.Contains(StuffThree));
+        Assert.That(Set.Count == 2, Is.True);
+        Assert.That(Set.Contains(StuffOne), Is.True);
+        Assert.That(Set.Contains(StuffTwo), Is.True);
+        Assert.That(Set.Contains(StuffThree), Is.False);
     }
 
     [Test]
@@ -269,7 +269,7 @@ public abstract class SetTests
     {
         Set.AddAll(UniqueStuff);
         Set.Clear();
-        Assert.IsTrue(Set.Count == 0, "Calling Clear () did not remove all of the elements.");
+        Assert.That(Set.Count == 0, Is.True, "Calling Clear () did not remove all of the elements.");
     }
 
     /// <summary>

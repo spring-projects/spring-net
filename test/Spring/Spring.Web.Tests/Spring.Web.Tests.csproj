@@ -10,9 +10,6 @@
   <ItemGroup>
     <PackageReference Include="FakeItEasy" />
     <PackageReference Include="FakeItEasy.Analyzer.CSharp" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="NUnitAsp, Version=1.5.1.27647, Culture=neutral, PublicKeyToken=f9bdb8e9d00f2b23">
@@ -49,4 +46,10 @@
     <EmbeddedResource Include="Context\Support\*.xml" />
     <EmbeddedResource Include="Web\Support\ControlInterceptionTests.objects.xml" />
   </ItemGroup>
+  <!-- These tests run pages inside NUnitAspEx's ASP.NET host, which loads the page code-behind types from bin\*.dll and
+       ignores an executable. The Microsoft.Testing.Platform runner needs the assembly to be an .exe, so ship a .dll copy
+       of it as well for the host to find. -->
+  <Target Name="CopyTestAssemblyAsDll" AfterTargets="CopyFilesToOutputDirectory">
+    <Copy SourceFiles="@(IntermediateAssembly)" DestinationFiles="$(OutDir)$(TargetName).dll" />
+  </Target>
 </Project>

@@ -30,9 +30,10 @@ public sealed class StreamConverterTests
     public void CanConvertFrom()
     {
         StreamConverter vrt = new StreamConverter();
-        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)),
+        Assert.That(vrt.CanConvertFrom(typeof(string)),
+            Is.True,
             "Conversion from a string instance must be supported.");
-        Assert.IsFalse(vrt.CanConvertFrom(typeof(int)));
+        Assert.That(vrt.CanConvertFrom(typeof(int)), Is.False);
     }
 
     [Test]
@@ -41,7 +42,7 @@ public sealed class StreamConverterTests
     {
         StreamConverter vrt = new StreamConverter();
         Stream actual = vrt.ConvertFrom("http://www.springframework.net/") as Stream;
-        Assert.IsNotNull(actual);
+        Assert.That(actual, Is.Not.Null);
     }
 
     [Test]

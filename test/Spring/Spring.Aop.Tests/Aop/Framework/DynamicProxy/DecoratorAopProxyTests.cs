@@ -34,7 +34,7 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
     {
         advisedSupport.ProxyTargetType = true;
         object proxy = CreateAopProxy(advisedSupport).GetProxy();
-        Assert.IsTrue(AopUtils.IsDecoratorAopProxy(proxy));
+        Assert.That(AopUtils.IsDecoratorAopProxy(proxy), Is.True);
         return proxy;
     }
 
@@ -84,14 +84,14 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         IAopProxy aop = CreateAopProxy(advised);
 
         object proxy = aop.GetProxy();
-        Assert.IsTrue(AopUtils.IsDecoratorAopProxy(proxy), "Should be a decorator-based proxy");
-        Assert.IsTrue(proxy is ITestObject);
-        Assert.IsTrue(proxy is TestObject);
+        Assert.That(AopUtils.IsDecoratorAopProxy(proxy), Is.True, "Should be a decorator-based proxy");
+        Assert.That(proxy is ITestObject, Is.True);
+        Assert.That(proxy is TestObject, Is.True);
 
         ITestObject itb = (ITestObject) proxy;
-        Assert.AreEqual(32, itb.Age, "Incorrect age");
+        Assert.That(itb.Age, Is.EqualTo(32), "Incorrect age");
         TestObject tb = (TestObject) proxy;
-        Assert.AreEqual(32, tb.Age, "Incorrect age");
+        Assert.That(tb.Age, Is.EqualTo(32), "Incorrect age");
     }
 
     [Test]
@@ -108,13 +108,13 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         advised.AddAdvice(ni);
 
         DoesNotImplementInterfaceTestObject proxy = CreateProxy(advised) as DoesNotImplementInterfaceTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
-        Assert.AreEqual(target.Name, proxy.Name, "Incorrect name");
+        Assert.That(proxy.Name, Is.EqualTo(target.Name), "Incorrect name");
         proxy.Name = "Bruno Baia";
-        Assert.AreEqual("Bruno Baia", proxy.Name, "Incorrect name");
+        Assert.That(proxy.Name, Is.EqualTo("Bruno Baia"), "Incorrect name");
 
-        Assert.AreEqual(3, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -131,14 +131,14 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         advised.AddAdvice(ni);
 
         DoesNotImplementInterfaceTestObject proxy = CreateProxy(advised) as DoesNotImplementInterfaceTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         // GetName() calls underlying protected "GetNameInternal()" which calls get_Name
-        Assert.AreEqual(target.Name, proxy.GetName(), "Incorrect name");
+        Assert.That(proxy.GetName(), Is.EqualTo(target.Name), "Incorrect name");
         target.Name = "Bruno Baia";
-        Assert.AreEqual("Bruno Baia", proxy.GetName(), "Incorrect name");
+        Assert.That(proxy.GetName(), Is.EqualTo("Bruno Baia"), "Incorrect name");
 
-        Assert.AreEqual(2, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -155,14 +155,14 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         advised.AddAdvice(ni);
 
         DoesNotImplementInterfaceTestObject proxy = CreateProxy(advised) as DoesNotImplementInterfaceTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         // GetName() calls underlying protected "GetNameInternal()" which calls get_Name
-        Assert.AreEqual(target.Name, proxy.GetName(), "Incorrect name");
+        Assert.That(proxy.GetName(), Is.EqualTo(target.Name), "Incorrect name");
         proxy.Name = "Bruno Baia";
-        Assert.AreEqual("Bruno Baia", proxy.Name, "Incorrect name");
+        Assert.That(proxy.Name, Is.EqualTo("Bruno Baia"), "Incorrect name");
 
-        Assert.AreEqual(3, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -179,14 +179,14 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         advised.AddAdvice(ni);
 
         DoesNotImplementInterfaceTestObject proxy = CreateProxy(advised) as DoesNotImplementInterfaceTestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
         // Location is final and doesn't belong to an interface so can't proxy.
         // method call goes directly to the proxy
         // and will not have access to the valid _location field
-        Assert.IsNull(proxy.Location);
+        Assert.That(proxy.Location, Is.Null);
 
-        Assert.AreEqual(0, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -203,13 +203,13 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
 
         // Cast to the interface that method belongs to
         ITestObject proxy = CreateProxy(advised) as ITestObject;
-        Assert.IsNotNull(proxy);
+        Assert.That(proxy, Is.Not.Null);
 
-        Assert.AreEqual(target.Name, proxy.Name, "Incorrect name");
+        Assert.That(proxy.Name, Is.EqualTo(target.Name), "Incorrect name");
         proxy.Name = "Bruno Baia";
-        Assert.AreEqual("Bruno Baia", proxy.Name, "Incorrect name");
+        Assert.That(proxy.Name, Is.EqualTo("Bruno Baia"), "Incorrect name");
 
-        Assert.AreEqual(3, ni.Count);
+        Assert.That(ni.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -244,15 +244,15 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("MarkerVirtualMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetCustomAttributes(false);
-        Assert.IsNotNull(attrs, "Should have 1 attribute applied to the target method.");
-        Assert.AreEqual(1, attrs.Length, "Should have 1 attribute applied to the target method.");
-        Assert.AreEqual(typeof(MarkerAttribute), attrs[0].GetType(), "Wrong System.Type of Attribute applied to the target method.");
+        Assert.That(attrs, Is.Not.Null, "Should have 1 attribute applied to the target method.");
+        Assert.That(attrs.Length, Is.EqualTo(1), "Should have 1 attribute applied to the target method.");
+        Assert.That(attrs[0].GetType(), Is.EqualTo(typeof(MarkerAttribute)), "Wrong System.Type of Attribute applied to the target method.");
     }
 
     [Test]
@@ -266,14 +266,14 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("MarkerVirtualMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetCustomAttributes(false);
-        Assert.IsNotNull(attrs);
-        Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the target method.");
+        Assert.That(attrs, Is.Not.Null);
+        Assert.That(attrs.Length, Is.EqualTo(0), "Should not have attribute applied to the target method.");
     }
 
     [Test]
@@ -286,15 +286,15 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("MarkerVirtualMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetParameters()[1].GetCustomAttributes(false);
-        Assert.IsNotNull(attrs, "Should have had 1 attribute applied to the method's parameter.");
-        Assert.AreEqual(1, attrs.Length, "Should have had 1 attribute applied to the method's parameter.");
-        Assert.AreEqual(typeof(MarkerAttribute), attrs[0].GetType(), "Wrong System.Type of Attribute applied to the method's parameter.");
+        Assert.That(attrs, Is.Not.Null, "Should have had 1 attribute applied to the method's parameter.");
+        Assert.That(attrs.Length, Is.EqualTo(1), "Should have had 1 attribute applied to the method's parameter.");
+        Assert.That(attrs[0].GetType(), Is.EqualTo(typeof(MarkerAttribute)), "Wrong System.Type of Attribute applied to the method's parameter.");
     }
 
     [Test]
@@ -308,14 +308,14 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("MarkerVirtualMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetParameters()[1].GetCustomAttributes(false);
-        Assert.IsNotNull(attrs);
-        Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's parameter.");
+        Assert.That(attrs, Is.Not.Null);
+        Assert.That(attrs.Length, Is.EqualTo(0), "Should not have attribute applied to the method's parameter.");
     }
 
     [Test]
@@ -328,15 +328,15 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("MarkerVirtualMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.ReturnTypeCustomAttributes.GetCustomAttributes(false);
-        Assert.IsNotNull(attrs, "Should have had 1 attribute applied to the method's return value.");
-        Assert.AreEqual(1, attrs.Length, "Should have had 1 attribute applied to the method's return value.");
-        Assert.AreEqual(typeof(MarkerAttribute), attrs[0].GetType(), "Wrong System.Type of Attribute applied to the method's return value.");
+        Assert.That(attrs, Is.Not.Null, "Should have had 1 attribute applied to the method's return value.");
+        Assert.That(attrs.Length, Is.EqualTo(1), "Should have had 1 attribute applied to the method's return value.");
+        Assert.That(attrs[0].GetType(), Is.EqualTo(typeof(MarkerAttribute)), "Wrong System.Type of Attribute applied to the method's return value.");
     }
 
     [Test]
@@ -350,14 +350,14 @@ public class DecoratorAopProxyTests : AbstractAopProxyTests
         IAopProxy aopProxy = CreateAopProxy(advised);
 
         object proxy = aopProxy.GetProxy();
-        Assert.IsNotNull(proxy, "The proxy generated by a (valid) call to GetProxy() was null.");
+        Assert.That(proxy, Is.Not.Null, "The proxy generated by a (valid) call to GetProxy() was null.");
 
         MethodInfo method = proxy.GetType().GetMethod("MarkerVirtualMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.ReturnTypeCustomAttributes.GetCustomAttributes(false);
-        Assert.IsNotNull(attrs);
-        Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's return value.");
+        Assert.That(attrs, Is.Not.Null);
+        Assert.That(attrs.Length, Is.EqualTo(0), "Should not have attribute applied to the method's return value.");
     }
 
     internal class NonPublicTestObject

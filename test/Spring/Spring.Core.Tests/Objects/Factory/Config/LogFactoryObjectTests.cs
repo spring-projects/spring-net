@@ -63,7 +63,7 @@ public sealed class LogFactoryObjectTests
     {
         LogFactoryObject fac = new LogFactoryObject();
         fac.LogName = "   Foo  ";
-        Assert.AreEqual("Foo", fac.LogName);
+        Assert.That(fac.LogName, Is.EqualTo("Foo"));
     }
 
     [Test]
@@ -72,7 +72,7 @@ public sealed class LogFactoryObjectTests
         LogFactoryObject fac = new LogFactoryObject();
         fac.LogName = "Foo";
         ILog log = fac.GetObject() as ILog;
-        Assert.IsNotNull(log, "Mmm... pulled a null ILog instance from a properly configured LogFactoryObject instance.");
+        Assert.That(log, Is.Not.Null, "Mmm... pulled a null ILog instance from a properly configured LogFactoryObject instance.");
     }
 
     [Test]
@@ -82,7 +82,8 @@ public sealed class LogFactoryObjectTests
         fac.LogName = "Foo";
         ILog log = fac.GetObject() as ILog;
         ILog anotherLogInstance = fac.GetObject() as ILog;
-        Assert.IsTrue(log == anotherLogInstance,
+        Assert.That(log == anotherLogInstance,
+            Is.True,
             "Okay, the LogFactoryObject ain't returning shared instances (it should).");
     }
 
@@ -104,7 +105,8 @@ public sealed class LogFactoryObjectTests
     public void ItsDefinitelyASingletonYeah()
     {
         LogFactoryObject fac = new LogFactoryObject("Bing!");
-        Assert.IsTrue(fac.IsSingleton,
+        Assert.That(fac.IsSingleton,
+            Is.True,
             "The LogFactoryObject class must be configured to return shared instances (it currently ain't).");
     }
 
@@ -112,7 +114,7 @@ public sealed class LogFactoryObjectTests
     public void ObjectTypePropertyYieldsTheCorrectType()
     {
         LogFactoryObject fac = new LogFactoryObject("Bing!");
-        Assert.AreEqual(typeof(ILog), fac.ObjectType,
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(ILog)),
             "Mmm... the LogFactoryObject class ain't giving back ILog types (it must).");
     }
 }

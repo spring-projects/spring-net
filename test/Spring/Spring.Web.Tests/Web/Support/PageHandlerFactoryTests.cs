@@ -40,7 +40,7 @@ public class PageHandlerFactoryTests : WebFormTestCase
         HttpWebClient client = Host.CreateWebClient();
         // a session-less page - checks, if session is correctly disabled
         string result = client.GetPage("DisablesSession.aspx");
-        Assert.AreEqual("OK", result);
+        Assert.That(result, Is.EqualTo("OK"));
     }
 
     [Test, Explicit]
@@ -48,7 +48,7 @@ public class PageHandlerFactoryTests : WebFormTestCase
     {
         HttpWebClient client = Host.CreateWebClient();
         string result = client.GetPage("ReadOnlySession.aspx");
-        Assert.AreEqual("OK", result);
+        Assert.That(result, Is.EqualTo("OK"));
     }
 
     [Test]
@@ -56,12 +56,12 @@ public class PageHandlerFactoryTests : WebFormTestCase
     {
         HttpWebClient client = Host.CreateWebClient();
         string result = client.GetPage("MaintainsSession1.aspx");
-        Assert.AreEqual("OK", result);
-//            Assert.AreEqual("somevalue", AspTestContext.HttpContext.Session["maintainsSession"]);
+        Assert.That(result, Is.EqualTo("OK"));
+//            Assert.That(AspTestContext.HttpContext.Session["maintainsSession"], Is.EqualTo("somevalue"));
 
         // checks previously set session variable
         result = client.GetPage("MaintainsSession2.aspx");
-        Assert.AreEqual("OK", result);
+        Assert.That(result, Is.EqualTo("OK"));
     }
 
     /// <summary>
@@ -84,8 +84,8 @@ public class PageHandlerFactoryTests : WebFormTestCase
             }
             catch (HttpException e)
             {
-                Assert.AreEqual(404, e.GetHttpCode());
-                Assert.IsTrue(e.Message.IndexOf(ctx.HttpWorkerRequest.GetFilePath()) > 0);
+                Assert.That(e.GetHttpCode(), Is.EqualTo(404));
+                Assert.That(e.Message.IndexOf(ctx.HttpWorkerRequest.GetFilePath()) > 0, Is.True);
             }
         }
     }

@@ -96,66 +96,66 @@ public sealed class ResourceSetMessageSourceTests
 
         // MessageSourceAccessor functionality
         MessageSourceAccessor accessor = new MessageSourceAccessor(ac);
-        Assert.AreEqual("message3", accessor.GetMessage("code3", CultureInfo.CurrentUICulture, null));
+        Assert.That(accessor.GetMessage("code3", CultureInfo.CurrentUICulture, null), Is.EqualTo("message3"));
 
         // IMessageSourceResolveable
-        Assert.AreEqual("message3", ac.GetMessage("code3", CultureInfo.CurrentUICulture, null));
+        Assert.That(ac.GetMessage("code3", CultureInfo.CurrentUICulture, null), Is.EqualTo("message3"));
         IMessageSourceResolvable resolvable = new DefaultMessageSourceResolvable("code3");
 
-        Assert.AreEqual("message3", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
+        Assert.That(ac.GetMessage(resolvable, CultureInfo.CurrentUICulture), Is.EqualTo("message3"));
         resolvable = new DefaultMessageSourceResolvable(new string[] { "code4", "code3" });
-        Assert.AreEqual("message3", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
+        Assert.That(ac.GetMessage(resolvable, CultureInfo.CurrentUICulture), Is.EqualTo("message3"));
 
-        Assert.AreEqual("message3", ac.GetMessage("code3", CultureInfo.CurrentUICulture, null));
+        Assert.That(ac.GetMessage("code3", CultureInfo.CurrentUICulture, null), Is.EqualTo("message3"));
         resolvable = new DefaultMessageSourceResolvable(new string[] { "code4", "code3" });
-        Assert.AreEqual("message3", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
+        Assert.That(ac.GetMessage(resolvable, CultureInfo.CurrentUICulture), Is.EqualTo("message3"));
 
         object[] arguments = new object[] { "Hello", new DefaultMessageSourceResolvable(new string[] { "code1" }) };
-        Assert.AreEqual("Hello, message1", ac.GetMessage("hello", CultureInfo.CurrentUICulture, arguments));
+        Assert.That(ac.GetMessage("hello", CultureInfo.CurrentUICulture, arguments), Is.EqualTo("Hello, message1"));
 
         // test default message without and with args
-        Assert.AreEqual("default", ac.GetMessage(null, "default", CultureInfo.CurrentUICulture, null));
-        Assert.AreEqual("default", ac.GetMessage(null, "default", CultureInfo.CurrentUICulture, arguments));
+        Assert.That(ac.GetMessage(null, "default", CultureInfo.CurrentUICulture, null), Is.EqualTo("default"));
+        Assert.That(ac.GetMessage(null, "default", CultureInfo.CurrentUICulture, arguments), Is.EqualTo("default"));
 
         /* not supported
-        Assert.AreEqual("{0}, default", ac.GetMessage(null, "{0}, default", CultureInfo.CurrentUICulture, null));
+        Assert.That(ac.GetMessage(null, "{0}, default", CultureInfo.CurrentUICulture, null), Is.EqualTo("{0}, default"));
          */
 
-        Assert.AreEqual("Hello, default", ac.GetMessage(null, "{0}, default", CultureInfo.CurrentUICulture, arguments));
+        Assert.That(ac.GetMessage(null, "{0}, default", CultureInfo.CurrentUICulture, arguments), Is.EqualTo("Hello, default"));
 
         // test resolvable with default message, without and with args
         resolvable = new DefaultMessageSourceResolvable(null, null, "default");
-        Assert.AreEqual("default", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
+        Assert.That(ac.GetMessage(resolvable, CultureInfo.CurrentUICulture), Is.EqualTo("default"));
         resolvable = new DefaultMessageSourceResolvable(null, arguments, "default");
-        Assert.AreEqual("default", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
+        Assert.That(ac.GetMessage(resolvable, CultureInfo.CurrentUICulture), Is.EqualTo("default"));
 
         /* not supported
             resolvable = new DefaultMessageSourceResolvable(null, null, "{0}, default");
-            Assert.AreEqual("{0}, default", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
+            Assert.That(ac.GetMessage(resolvable, CultureInfo.CurrentUICulture), Is.EqualTo("{0}, default"));
         */
 
         resolvable = new DefaultMessageSourceResolvable(null, arguments, "{0}, default");
-        Assert.AreEqual("Hello, default", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
+        Assert.That(ac.GetMessage(resolvable, CultureInfo.CurrentUICulture), Is.EqualTo("Hello, default"));
 
         // test message args
-        Assert.AreEqual("Arg1, Arg2", ac.GetMessage("hello", CultureInfo.CurrentUICulture, new object[] { "Arg1", "Arg2" }));
+        Assert.That(ac.GetMessage("hello", CultureInfo.CurrentUICulture, new object[] { "Arg1", "Arg2" }), Is.EqualTo("Arg1, Arg2"));
 
         /* not supported
-            Assert.AreEqual("{0}, {1}", ac.GetMessage("hello", CultureInfo.CurrentUICulture, null));
+            Assert.That(ac.GetMessage("hello", CultureInfo.CurrentUICulture, null), Is.EqualTo("{0}, {1}"));
         */
 
         /* not supported
-            Assert.AreEqual("Hello\nWorld", ac.GetMessage("escaped"));
+            Assert.That(ac.GetMessage("escaped"), Is.EqualTo("Hello\nWorld"));
         }
         else
         {
-            Assert.AreEqual("Hello\\nWorld", ac.GetMessage("escaped"));
+            Assert.That(ac.GetMessage("escaped"), Is.EqualTo("Hello\\nWorld"));
         }
         */
 
         try
         {
-            Assert.AreEqual("MyNonExistantMessage", ac.GetMessage("MyNonExistantMessage"));
+            Assert.That(ac.GetMessage("MyNonExistantMessage"), Is.EqualTo("MyNonExistantMessage"));
             if (!useCodeAsDefaultMessage)
             {
                 Assert.Fail("Should have thrown NoSuchMessagException");
@@ -175,7 +175,7 @@ public sealed class ResourceSetMessageSourceTests
     public void SimpleFormat()
     {
         string msg = String.Format(CultureInfo.CurrentUICulture, "\"Hello World\"");
-        Assert.AreEqual("\"Hello World\"", msg);
+        Assert.That(msg, Is.EqualTo("\"Hello World\""));
     }
 #if !MONO
     //Spring's CultureTestScope seems incompatible on .NET 1.1 with NUnit's new in 2.5.2 changes for setting UI Culture.
@@ -208,8 +208,8 @@ public sealed class ResourceSetMessageSourceTests
     public void ResourceSetMessageSourceToString()
     {
         messageSource.ResourceManagers = resourceManagerList;
-        Assert.AreEqual("ResourceSetMessageSource with ResourceManagers of base names = [Spring.Resources.Spring.Context.Tests]",
-            messageSource.ToString(), "ToString not as expected");
+        Assert.That(messageSource.ToString(),
+            Is.EqualTo("ResourceSetMessageSource with ResourceManagers of base names = [Spring.Resources.Spring.Context.Tests]"), "ToString not as expected");
     }
 
     /// <summary>
@@ -225,43 +225,43 @@ public sealed class ResourceSetMessageSourceTests
 
     private void GetMessageLocalizationFallbacks(IMessageSource msgSource)
     {
-        Assert.AreEqual("Dies ist Spring.NET",
-            msgSource.GetMessage("MyMessage", new object[] { "Spring", ".NET" }), "message not as expected");
+        Assert.That(msgSource.GetMessage("MyMessage", new object[] { "Spring", ".NET" }),
+            Is.EqualTo("Dies ist Spring.NET"), "message not as expected");
 
-        Assert.AreEqual("Isso e Spring.NET",
-            msgSource.GetMessage("MyMessage", new CultureInfo("pt-BR"), new object[] { "Spring", ".NET" }), "message not as expected");
+        Assert.That(msgSource.GetMessage("MyMessage", new CultureInfo("pt-BR"), new object[] { "Spring", ".NET" }),
+            Is.EqualTo("Isso e Spring.NET"), "message not as expected");
 
-        Assert.AreEqual("Visual Studio liebt Spring.NET",
-            msgSource.GetMessage("MyNewMessage", new object[] { "Spring", ".NET" }), "message not as expected");
+        Assert.That(msgSource.GetMessage("MyNewMessage", new object[] { "Spring", ".NET" }),
+            Is.EqualTo("Visual Studio liebt Spring.NET"), "message not as expected");
 
         // test localization fallbacks
-        Assert.AreEqual("Visual Studio loves Spring.NET",
-            msgSource.GetMessage("MyNewMessage", new CultureInfo("pt-BR"), new object[] { "Spring", ".NET" }), "message not as expected");
+        Assert.That(msgSource.GetMessage("MyNewMessage", new CultureInfo("pt-BR"), new object[] { "Spring", ".NET" }),
+            Is.EqualTo("Visual Studio loves Spring.NET"), "message not as expected");
 
-        Assert.AreEqual("Des is Spring.NET",
-            msgSource.GetMessage("MyMessage", new CultureInfo("de-AT"), new object[] { "Spring", ".NET" }), "message not as expected");
+        Assert.That(msgSource.GetMessage("MyMessage", new CultureInfo("de-AT"), new object[] { "Spring", ".NET" }),
+            Is.EqualTo("Des is Spring.NET"), "message not as expected");
 
-        Assert.AreEqual("Dies ist Spring.NET",
-            msgSource.GetMessage("MyMessage", new CultureInfo("de"), new object[] { "Spring", ".NET" }), "message not as expected");
+        Assert.That(msgSource.GetMessage("MyMessage", new CultureInfo("de"), new object[] { "Spring", ".NET" }),
+            Is.EqualTo("Dies ist Spring.NET"), "message not as expected");
 
-        Assert.AreEqual("Visual Studio liebt Spring.NET",
-            msgSource.GetMessage("MyNewMessage", new CultureInfo("de-AT"), new object[] { "Spring", ".NET" }), "message not as expected");
+        Assert.That(msgSource.GetMessage("MyNewMessage", new CultureInfo("de-AT"), new object[] { "Spring", ".NET" }),
+            Is.EqualTo("Visual Studio liebt Spring.NET"), "message not as expected");
 
         // extra tests for the "exotic" serbian culture
         if (!SystemUtils.MonoRuntime)
         {
-            Assert.AreEqual("Ovo je Spring.NET",
-                msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianLatinCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
+            Assert.That(msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianLatinCultureName), new object[] { "Spring", ".NET" }),
+                Is.EqualTo("Ovo je Spring.NET"), "message not as expected");
 
-            Assert.AreEqual("Ово је Spring.NET",
-                msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName),
-                    new object[] { "Spring", ".NET" }), "message not as expected");
+            Assert.That(msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName),
+                    new object[] { "Spring", ".NET" }),
+                Is.EqualTo("Ово је Spring.NET"), "message not as expected");
 
-            Assert.AreEqual("Visual Studio voli Spring.NET",
-                msgSource.GetMessage("MyNewMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
+            Assert.That(msgSource.GetMessage("MyNewMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName), new object[] { "Spring", ".NET" }),
+                Is.EqualTo("Visual Studio voli Spring.NET"), "message not as expected");
 
-            Assert.AreEqual("First name",
-                msgSource.GetMessage("field.firstname", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName)), "message not as expected");
+            Assert.That(msgSource.GetMessage("field.firstname", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName)),
+                Is.EqualTo("First name"), "message not as expected");
         }
     }
 
@@ -279,7 +279,7 @@ public sealed class ResourceSetMessageSourceTests
         resourceManagerList.Add(new ResourceManager(baseName, ass));
         messageSource.ResourceManagers = resourceManagerList;
         object obj = messageSource.GetResourceObject("bubblechamber", CultureInfo.CurrentCulture);
-        Assert.IsNotNull(obj, "expected to retrieve object form resource set");
+        Assert.That(obj, Is.Not.Null, "expected to retrieve object form resource set");
         System.Drawing.Bitmap bitMap = null;
 
         //.NET 1.0 returns this as a base64 string while .NET 1.1 returns it as a Bitmap
@@ -299,12 +299,12 @@ public sealed class ResourceSetMessageSourceTests
         {
             bitMap = obj as System.Drawing.Bitmap;
         }
-        Assert.IsNotNull(bitMap, "expected to retrieve BitMap. Instead Type = " + obj.GetType());
-        Assert.AreEqual(146, bitMap.Size.Width, "Width of image wrong");
-        Assert.AreEqual(119, bitMap.Size.Height, "Height of image wrong");
+        Assert.That(bitMap, Is.Not.Null, "expected to retrieve BitMap. Instead Type = " + obj.GetType());
+        Assert.That(bitMap.Size.Width, Is.EqualTo(146), "Width of image wrong");
+        Assert.That(bitMap.Size.Height, Is.EqualTo(119), "Height of image wrong");
 
         object obj2 = messageSource.GetResourceObject("notExist", CultureInfo.CurrentCulture);
-        Assert.IsNull(obj2, "non existent resourse found");
+        Assert.That(obj2, Is.Null, "non existent resourse found");
     }
 
     private string FixBase64ForImage(string Image)
@@ -328,8 +328,8 @@ public sealed class ResourceSetMessageSourceTests
         messageSource.ResourceManagers = resourceManagerList;
 
         messageSource.ApplyResources(to, "testObject", CultureInfo.CurrentCulture);
-        Assert.AreEqual("Mark", to.Name);
-        Assert.AreEqual(35, to.Age);
+        Assert.That(to.Name, Is.EqualTo("Mark"));
+        Assert.That(to.Age, Is.EqualTo(35));
     }
 #endif
 
@@ -343,7 +343,7 @@ public sealed class ResourceSetMessageSourceTests
         DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(codes, null);
 
         messageSource.ResourceManagers = resourceManagerList;
-        Assert.AreEqual(messageSource.GetMessage("error.required", CultureInfo.CurrentCulture, dmr, "dude!"), "First name is required dude!", "message not as expected");
+        Assert.That(messageSource.GetMessage("error.required", CultureInfo.CurrentCulture, dmr, "dude!"), Is.EqualTo("First name is required dude!"), "message not as expected");
     }
 
     /// <summary>
@@ -365,7 +365,7 @@ public sealed class ResourceSetMessageSourceTests
     {
         messageSource.ResourceManagers = resourceManagerList;
         object resource = messageSource.GetResourceObject("MyNullMessage", CultureInfo.InvariantCulture);
-        Assert.AreEqual(String.Empty, resource, "should've returned empty string");
+        Assert.That(resource, Is.Empty, "should've returned empty string");
     }
 
     /// <summary>
@@ -376,9 +376,9 @@ public sealed class ResourceSetMessageSourceTests
     public void ResourceSetMessageSourceCachedMessage()
     {
         messageSource.ResourceManagers = resourceManagerList;
-        Assert.AreEqual("This is Spring.NET", messageSource.GetMessage("MyMessage", CultureInfo.InvariantCulture, new object[] { "Spring", ".NET" }), "message");
-        Assert.AreEqual("Visual Studio loves Spring.NET", messageSource.GetMessage("MyNewMessage", CultureInfo.InvariantCulture, "Spring", ".NET"), "message");
-        Assert.AreEqual("This is Spring.NET", messageSource.GetMessage("MyMessage", CultureInfo.InvariantCulture, new object[] { "Spring", ".NET" }), "message");
+        Assert.That(messageSource.GetMessage("MyMessage", CultureInfo.InvariantCulture, new object[] { "Spring", ".NET" }), Is.EqualTo("This is Spring.NET"), "message");
+        Assert.That(messageSource.GetMessage("MyNewMessage", CultureInfo.InvariantCulture, "Spring", ".NET"), Is.EqualTo("Visual Studio loves Spring.NET"), "message");
+        Assert.That(messageSource.GetMessage("MyMessage", CultureInfo.InvariantCulture, new object[] { "Spring", ".NET" }), Is.EqualTo("This is Spring.NET"), "message");
     }
 
     /// <summary>
@@ -396,12 +396,12 @@ public sealed class ResourceSetMessageSourceTests
 
         //Repeat the test for the first resource manager
 
-        Assert.AreEqual("This is Spring.NET",
-            messageSource.GetMessage("MyMessage", new CultureInfo("en"), new object[] { "Spring", ".NET" }), "message not as expected");
+        Assert.That(messageSource.GetMessage("MyMessage", new CultureInfo("en"), new object[] { "Spring", ".NET" }),
+            Is.EqualTo("This is Spring.NET"), "message not as expected");
 
         //Now with the newly added one
-        Assert.AreEqual("Hello Mr. Anderson",
-            messageSource.GetMessage("message",
-                new object[] { "Mr.", "Anderson" }), "message not as expected");
+        Assert.That(messageSource.GetMessage("message",
+                new object[] { "Mr.", "Anderson" }),
+            Is.EqualTo("Hello Mr. Anderson"), "message not as expected");
     }
 }

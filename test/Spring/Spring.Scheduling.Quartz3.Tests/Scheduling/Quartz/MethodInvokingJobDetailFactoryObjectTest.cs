@@ -49,10 +49,10 @@ public class MethodInvokingJobDetailFactoryObjectTest
     {
         factory.AfterPropertiesSet();
         IJobDetail jd = (IJobDetail) factory.GetObject();
-        Assert.IsNotNull(jd, "job detail was null");
-        Assert.AreEqual(FACTORY_NAME, jd.Key.Name, "job name did not default to factory name");
-        Assert.AreEqual(jd.JobType, typeof(MethodInvokingJob), "factory did not create method invoking job");
-        Assert.IsTrue(jd.Durable, "job was not durable");
+        Assert.That(jd, Is.Not.Null, "job detail was null");
+        Assert.That(jd.Key.Name, Is.EqualTo(FACTORY_NAME), "job name did not default to factory name");
+        Assert.That(jd.JobType, Is.EqualTo(typeof(MethodInvokingJob)), "factory did not create method invoking job");
+        Assert.That(jd.Durable, Is.True, "job was not durable");
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ public class MethodInvokingJobDetailFactoryObjectTest
         factory.Concurrent = false;
         factory.AfterPropertiesSet();
         IJobDetail jd = (IJobDetail) factory.GetObject();
-        Assert.IsNotNull(jd, "job detail was null");
-        Assert.AreEqual(jd.JobType, typeof(StatefulMethodInvokingJob), "factory did not create stateful method invoking job");
+        Assert.That(jd, Is.Not.Null, "job detail was null");
+        Assert.That(jd.JobType, Is.EqualTo(typeof(StatefulMethodInvokingJob)), "factory did not create stateful method invoking job");
     }
 }

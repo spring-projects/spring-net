@@ -39,12 +39,12 @@ public class TransactionAttributeSourceTests
         tas.MethodMap = methodMap;
 
         ITransactionAttribute ta = tas.ReturnTransactionAttribute(typeof(object).GetMethod("GetHashCode"), null);
-        Assert.IsNotNull(ta);
-        Assert.AreEqual(TransactionPropagation.Required, ta.PropagationBehavior);
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(ta.PropagationBehavior, Is.EqualTo(TransactionPropagation.Required));
 
         ta = tas.ReturnTransactionAttribute(typeof(object).GetMethod("ToString"), null);
-        Assert.IsNotNull(ta);
-        Assert.AreEqual(TransactionPropagation.Supports, ta.PropagationBehavior);
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(ta.PropagationBehavior, Is.EqualTo(TransactionPropagation.Supports));
     }
 
     /// <summary>
@@ -60,11 +60,11 @@ public class TransactionAttributeSourceTests
         methodMap.Add("ToString", new DefaultTransactionAttribute(TransactionPropagation.Supports));
         tas.NameMap = methodMap;
         ITransactionAttribute ta = tas.ReturnTransactionAttribute(typeof(object).GetMethod("GetHashCode"), null);
-        Assert.IsNotNull(ta);
-        Assert.AreEqual(TransactionPropagation.Required, ta.PropagationBehavior);
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(ta.PropagationBehavior, Is.EqualTo(TransactionPropagation.Required));
         ta = tas.ReturnTransactionAttribute(typeof(object).GetMethod("ToString"), null);
-        Assert.IsNotNull(ta);
-        Assert.AreEqual(TransactionPropagation.Supports, ta.PropagationBehavior);
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(ta.PropagationBehavior, Is.EqualTo(TransactionPropagation.Supports));
     }
 
     [Test]
@@ -75,8 +75,8 @@ public class TransactionAttributeSourceTests
         attributes.Add("*ashCode", "PROPAGATION_REQUIRED");
         tas.NameProperties = attributes;
         ITransactionAttribute ta = tas.ReturnTransactionAttribute(typeof(object).GetMethod("GetHashCode"), null);
-        Assert.IsNotNull(ta);
-        Assert.AreEqual(TransactionPropagation.Required, ta.PropagationBehavior);
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(ta.PropagationBehavior, Is.EqualTo(TransactionPropagation.Required));
     }
 
     [Test]
@@ -87,8 +87,8 @@ public class TransactionAttributeSourceTests
         attributes.Add("GetHashCod*", "PROPAGATION_REQUIRED");
         tas.NameProperties = attributes;
         ITransactionAttribute ta = tas.ReturnTransactionAttribute(typeof(object).GetMethod("GetHashCode"), null);
-        Assert.IsNotNull(ta);
-        Assert.AreEqual(TransactionPropagation.Required, ta.PropagationBehavior);
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(ta.PropagationBehavior, Is.EqualTo(TransactionPropagation.Required));
     }
 
     [Test]
@@ -100,8 +100,8 @@ public class TransactionAttributeSourceTests
         attributes.Add("GetHashCode", "PROPAGATION_MANDATORY");
         tas.NameProperties = attributes;
         ITransactionAttribute ta = tas.ReturnTransactionAttribute(typeof(object).GetMethod("GetHashCode"), null);
-        Assert.IsNotNull(ta);
-        Assert.AreEqual(TransactionPropagation.Mandatory, ta.PropagationBehavior);
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(ta.PropagationBehavior, Is.EqualTo(TransactionPropagation.Mandatory));
     }
 
     [Test]
@@ -112,6 +112,6 @@ public class TransactionAttributeSourceTests
         attributes.Add("", "PROPAGATION_MANDATORY");
         tas.NameProperties = attributes;
         ITransactionAttribute ta = tas.ReturnTransactionAttribute(typeof(object).GetMethod("GetHashCode"), null);
-        Assert.IsNull(ta);
+        Assert.That(ta, Is.Null);
     }
 }

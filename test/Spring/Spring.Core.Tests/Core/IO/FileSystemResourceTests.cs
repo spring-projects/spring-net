@@ -35,7 +35,7 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
     {
         FileSystemResource res = new FileSystemResource(@"file://\\server\share\samples\artfair\");
         FileSystemResource res2 = (FileSystemResource) res.CreateRelative(@"file://./index.html");
-        Assert.AreEqual(new Uri(Path.Combine(Environment.CurrentDirectory, "index.html")).AbsolutePath, res2.Uri.AbsolutePath);
+        Assert.That(res2.Uri.AbsolutePath, Is.EqualTo(new Uri(Path.Combine(Environment.CurrentDirectory, "index.html")).AbsolutePath));
     }
 
     [Test]
@@ -61,7 +61,7 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
         {
             using (TextReader reader = new StreamReader(s))
             {
-                Assert.AreEqual("hello world", reader.ReadLine());
+                Assert.That(reader.ReadLine(), Is.EqualTo("hello world"));
             }
         }
     }
@@ -82,7 +82,7 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
         {
             using (TextReader reader = new StreamReader(s))
             {
-                Assert.AreEqual("hello world", reader.ReadLine());
+                Assert.That(reader.ReadLine(), Is.EqualTo("hello world"));
             }
         }
     }
@@ -92,7 +92,7 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
     {
         FileInfo file = CreateFileForTheCurrentDirectory();
         IResource res = new FileSystemResource("file://~/" + TemporaryFileName);
-        Assert.AreEqual(file.FullName, res.File.FullName,
+        Assert.That(res.File.FullName, Is.EqualTo(file.FullName),
             "The file name with file://~ must have resolved to a file " +
             "in the current directory of the currently executing domain.");
     }
@@ -104,7 +104,7 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, TemporaryFileName)));
         IResource res = new FileSystemResource("file://~/../" + TemporaryFileName);
         string fileNameOneDirectoryUp = file.Directory.Parent.FullName + "\\" + TemporaryFileName;
-        Assert.AreEqual(fileNameOneDirectoryUp, res.File.FullName,
+        Assert.That(res.File.FullName, Is.EqualTo(fileNameOneDirectoryUp),
             "The file name with file://~/.. must have resolved to a file " +
             "in the parent directory of the currently executing domain.");
     }
@@ -177,7 +177,7 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
         // test that the CreateRelative () method works with the supplied 'relativePath'
         IResource resource = new FileSystemResource(rootPath);
         IResource relative = resource.CreateRelative(relativePath + filename);
-        Assert.IsTrue(relative.Exists);
+        Assert.That(relative.Exists, Is.True);
         if (file.Exists)
         {
             try
@@ -197,8 +197,8 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
         FileSystemResource res = new FileSystemResource(@"C:\dummy.txt");
 
         IResource rel0 = res.CreateRelative(@"c:\index.html");
-        Assert.IsTrue(rel0 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\index.html]", rel0.Description);
+        Assert.That(rel0 is FileSystemResource, Is.True);
+        Assert.That(rel0.Description, Is.EqualTo(@"file [c:\index.html]"));
     }
 
     [Test]
@@ -207,20 +207,20 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
         FileSystemResource res = new FileSystemResource(@"c:\dummy.txt");
 
         IResource rel0 = res.CreateRelative(@"\index.html");
-        Assert.IsTrue(rel0 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\index.html]", rel0.Description);
+        Assert.That(rel0 is FileSystemResource, Is.True);
+        Assert.That(rel0.Description, Is.EqualTo(@"file [c:\index.html]"));
 
         IResource rel1 = res.CreateRelative(@"index.html");
-        Assert.IsTrue(rel1 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\index.html]", rel1.Description);
+        Assert.That(rel1 is FileSystemResource, Is.True);
+        Assert.That(rel1.Description, Is.EqualTo(@"file [c:\index.html]"));
 
         IResource rel2 = res.CreateRelative(@"samples/artfair/index.html");
-        Assert.IsTrue(rel2 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\samples\artfair\index.html]", rel2.Description);
+        Assert.That(rel2 is FileSystemResource, Is.True);
+        Assert.That(rel2.Description, Is.EqualTo(@"file [c:\samples\artfair\index.html]"));
 
         IResource rel3 = res.CreateRelative(@".\samples\artfair\index.html");
-        Assert.IsTrue(rel3 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\samples\artfair\index.html]", rel3.Description);
+        Assert.That(rel3 is FileSystemResource, Is.True);
+        Assert.That(rel3.Description, Is.EqualTo(@"file [c:\samples\artfair\index.html]"));
     }
 
     [Test]
@@ -229,28 +229,28 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
         FileSystemResource res = new FileSystemResource(@"c:\samples\artfair\dummy.txt");
 
         IResource rel0 = res.CreateRelative(@"/index.html");
-        Assert.IsTrue(rel0 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\index.html]", rel0.Description);
+        Assert.That(rel0 is FileSystemResource, Is.True);
+        Assert.That(rel0.Description, Is.EqualTo(@"file [c:\index.html]"));
 
         IResource rel1 = res.CreateRelative(@"index.html");
-        Assert.IsTrue(rel1 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\samples\artfair\index.html]", rel1.Description);
+        Assert.That(rel1 is FileSystemResource, Is.True);
+        Assert.That(rel1.Description, Is.EqualTo(@"file [c:\samples\artfair\index.html]"));
 
         IResource rel2 = res.CreateRelative(@"demo\index.html");
-        Assert.IsTrue(rel2 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\samples\artfair\demo\index.html]", rel2.Description);
+        Assert.That(rel2 is FileSystemResource, Is.True);
+        Assert.That(rel2.Description, Is.EqualTo(@"file [c:\samples\artfair\demo\index.html]"));
 
         IResource rel3 = res.CreateRelative(@"./demo/index.html");
-        Assert.IsTrue(rel3 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\samples\artfair\demo\index.html]", rel3.Description);
+        Assert.That(rel3 is FileSystemResource, Is.True);
+        Assert.That(rel3.Description, Is.EqualTo(@"file [c:\samples\artfair\demo\index.html]"));
 
         IResource rel4 = res.CreateRelative(@"../calculator/index.html");
-        Assert.IsTrue(rel4 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\samples\calculator\index.html]", rel4.Description);
+        Assert.That(rel4 is FileSystemResource, Is.True);
+        Assert.That(rel4.Description, Is.EqualTo(@"file [c:\samples\calculator\index.html]"));
 
         IResource rel5 = res.CreateRelative(@"..\..\index.html");
-        Assert.IsTrue(rel5 is FileSystemResource);
-        Assert.AreEqual(@"file [c:\index.html]", rel5.Description);
+        Assert.That(rel5 is FileSystemResource, Is.True);
+        Assert.That(rel5.Description, Is.EqualTo(@"file [c:\index.html]"));
     }
 
     [Test]
@@ -259,8 +259,8 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
         FileSystemResource res = new FileSystemResource(@"\\server\share\dummy.txt");
 
         IResource rel0 = res.CreateRelative(@"\\server\share\index.html");
-        Assert.IsTrue(rel0 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\index.html]", rel0.Description);
+        Assert.That(rel0 is FileSystemResource, Is.True);
+        Assert.That(rel0.Description, Is.EqualTo(@"file [\\server\share\index.html]"));
     }
 
     [Test]
@@ -269,20 +269,20 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
         FileSystemResource res = new FileSystemResource(@"\\server\share\dummy.txt");
 
         IResource rel0 = res.CreateRelative(@"\index.html");
-        Assert.IsTrue(rel0 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\index.html]", rel0.Description);
+        Assert.That(rel0 is FileSystemResource, Is.True);
+        Assert.That(rel0.Description, Is.EqualTo(@"file [\\server\share\index.html]"));
 
         IResource rel1 = res.CreateRelative(@"index.html");
-        Assert.IsTrue(rel1 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\index.html]", rel1.Description);
+        Assert.That(rel1 is FileSystemResource, Is.True);
+        Assert.That(rel1.Description, Is.EqualTo(@"file [\\server\share\index.html]"));
 
         IResource rel2 = res.CreateRelative(@"samples/artfair/index.html");
-        Assert.IsTrue(rel2 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\samples\artfair\index.html]", rel2.Description);
+        Assert.That(rel2 is FileSystemResource, Is.True);
+        Assert.That(rel2.Description, Is.EqualTo(@"file [\\server\share\samples\artfair\index.html]"));
 
         IResource rel3 = res.CreateRelative(@".\samples\artfair\index.html");
-        Assert.IsTrue(rel3 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\samples\artfair\index.html]", rel3.Description);
+        Assert.That(rel3 is FileSystemResource, Is.True);
+        Assert.That(rel3.Description, Is.EqualTo(@"file [\\server\share\samples\artfair\index.html]"));
     }
 
     [Test]
@@ -291,27 +291,27 @@ public class FileSystemResourceTests : FileSystemResourceCommonTests
         FileSystemResource res = new FileSystemResource(@"\\server\share\samples\artfair\dummy.txt");
 
         IResource rel0 = res.CreateRelative(@"/index.html");
-        Assert.IsTrue(rel0 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\index.html]", rel0.Description);
+        Assert.That(rel0 is FileSystemResource, Is.True);
+        Assert.That(rel0.Description, Is.EqualTo(@"file [\\server\share\index.html]"));
 
         IResource rel1 = res.CreateRelative(@"index.html");
-        Assert.IsTrue(rel1 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\samples\artfair\index.html]", rel1.Description);
+        Assert.That(rel1 is FileSystemResource, Is.True);
+        Assert.That(rel1.Description, Is.EqualTo(@"file [\\server\share\samples\artfair\index.html]"));
 
         IResource rel2 = res.CreateRelative(@"demo\index.html");
-        Assert.IsTrue(rel2 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\samples\artfair\demo\index.html]", rel2.Description);
+        Assert.That(rel2 is FileSystemResource, Is.True);
+        Assert.That(rel2.Description, Is.EqualTo(@"file [\\server\share\samples\artfair\demo\index.html]"));
 
         IResource rel3 = res.CreateRelative(@"./demo/index.html");
-        Assert.IsTrue(rel3 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\samples\artfair\demo\index.html]", rel3.Description);
+        Assert.That(rel3 is FileSystemResource, Is.True);
+        Assert.That(rel3.Description, Is.EqualTo(@"file [\\server\share\samples\artfair\demo\index.html]"));
 
         IResource rel4 = res.CreateRelative(@"../calculator/index.html");
-        Assert.IsTrue(rel4 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\samples\calculator\index.html]", rel4.Description);
+        Assert.That(rel4 is FileSystemResource, Is.True);
+        Assert.That(rel4.Description, Is.EqualTo(@"file [\\server\share\samples\calculator\index.html]"));
 
         IResource rel5 = res.CreateRelative(@"..\..\index.html");
-        Assert.IsTrue(rel5 is FileSystemResource);
-        Assert.AreEqual(@"file [\\server\share\index.html]", rel5.Description);
+        Assert.That(rel5 is FileSystemResource, Is.True);
+        Assert.That(rel5.Description, Is.EqualTo(@"file [\\server\share\index.html]"));
     }
 }

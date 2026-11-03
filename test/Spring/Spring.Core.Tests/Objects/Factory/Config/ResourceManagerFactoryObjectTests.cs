@@ -36,13 +36,13 @@ public sealed class ResourceManagerFactoryObjectTests
         fac.BaseName = "Spring.Resources.SampleResources";
         fac.AssemblyName = "Spring.Core.Tests";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(ResourceManager), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(ResourceManager)));
         object actual = fac.GetObject();
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(typeof(ResourceManager), actual.GetType());
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.GetType(), Is.EqualTo(typeof(ResourceManager)));
         ResourceManager rm = (ResourceManager) actual;
         string message = rm.GetString("message");
-        Assert.AreEqual("Hello {0} {1}", message);
+        Assert.That(message, Is.EqualTo("Hello {0} {1}"));
     }
 
     [Test]
@@ -72,6 +72,6 @@ public sealed class ResourceManagerFactoryObjectTests
     [Test]
     public void ObjectTypeReallyIsResourceManager()
     {
-        Assert.AreEqual(typeof(ResourceManager), new ResourceManagerFactoryObject().ObjectType);
+        Assert.That(new ResourceManagerFactoryObject().ObjectType, Is.EqualTo(typeof(ResourceManager)));
     }
 }

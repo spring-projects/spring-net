@@ -32,14 +32,16 @@ public sealed class TruePointcutTests
         IPointcut deserializedVersion
             = (IPointcut) SerializationTestUtils.SerializeAndDeserialize(
                 TruePointcut.True);
-        Assert.IsTrue(Object.ReferenceEquals(TruePointcut.True, deserializedVersion),
+        Assert.That(Object.ReferenceEquals(TruePointcut.True, deserializedVersion),
+            Is.True,
             "Singleton instance not being deserialized correctly");
     }
 
     [Test]
     public void IsSerializable()
     {
-        Assert.IsTrue(SerializationTestUtils.IsSerializable(TruePointcut.True),
+        Assert.That(SerializationTestUtils.IsSerializable(TruePointcut.True),
+            Is.True,
             "TruePointcut must be serializable.");
     }
 }

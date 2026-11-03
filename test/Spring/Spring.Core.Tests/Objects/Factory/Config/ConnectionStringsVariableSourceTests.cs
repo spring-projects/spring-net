@@ -31,12 +31,12 @@ public sealed class ConnectionStringsVariableSourceTests
         ConnectionStringsVariableSource vs = new ConnectionStringsVariableSource();
 
         // existing vars
-        Assert.AreEqual("mySqlServerConnectionString", vs.ResolveVariable("mySqlDataSource.connectionString"));
-        Assert.AreEqual("System.Data.SqlClient", vs.ResolveVariable("mySqlDataSource.providerName"));
-        Assert.AreEqual("myOracleConnectionString", vs.ResolveVariable("myOracleDataSource.connectionString"));
-        Assert.AreEqual("System.Data.OracleClient", vs.ResolveVariable("myOracleDataSource.providerName"));
+        Assert.That(vs.ResolveVariable("mySqlDataSource.connectionString"), Is.EqualTo("mySqlServerConnectionString"));
+        Assert.That(vs.ResolveVariable("mySqlDataSource.providerName"), Is.EqualTo("System.Data.SqlClient"));
+        Assert.That(vs.ResolveVariable("myOracleDataSource.connectionString"), Is.EqualTo("myOracleConnectionString"));
+        Assert.That(vs.ResolveVariable("myOracleDataSource.providerName"), Is.EqualTo("System.Data.OracleClient"));
 
         // non-existant variable
-        Assert.IsNull(vs.ResolveVariable("dummy"));
+        Assert.That(vs.ResolveVariable("dummy"), Is.Null);
     }
 }

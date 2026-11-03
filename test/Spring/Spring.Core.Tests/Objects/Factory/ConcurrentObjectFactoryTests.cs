@@ -59,8 +59,8 @@ public class ConcurrentObjectFactoryTests
         ConcurrentObject c1 = (ConcurrentObject) factory.GetObject("object1");
         ConcurrentObject c2 = (ConcurrentObject) factory.GetObject("object2");
 
-        Assert.AreEqual(date1, c1.Date);
-        Assert.AreEqual(date2, c2.Date);
+        Assert.That(c1.Date, Is.EqualTo(date1));
+        Assert.That(c2.Date, Is.EqualTo(date2));
     }
 
     public class ConcurrentObject

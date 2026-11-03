@@ -30,9 +30,9 @@ public class CompositionAopProxyTests : AbstractAopProxyTests
 {
     protected override object CreateProxy(AdvisedSupport advisedSupport)
     {
-        Assert.IsFalse(advisedSupport.ProxyTargetType, "Not forcible decorator-based proxy");
+        Assert.That(advisedSupport.ProxyTargetType, Is.False, "Not forcible decorator-based proxy");
         object proxy = CreateAopProxy(advisedSupport).GetProxy();
-        Assert.IsTrue(AopUtils.IsCompositionAopProxy(proxy), "Should be a composition-based proxy: " + proxy.GetType());
+        Assert.That(AopUtils.IsCompositionAopProxy(proxy), Is.True, "Should be a composition-based proxy: " + proxy.GetType());
         return proxy;
     }
 
@@ -59,8 +59,8 @@ public class CompositionAopProxyTests : AbstractAopProxyTests
 
         object proxy = CreateProxy(advised);
 
-        Assert.IsTrue(proxy is ITestObject);
-        Assert.IsFalse(proxy is TestObject);
+        Assert.That(proxy is ITestObject, Is.True);
+        Assert.That(proxy is TestObject, Is.False);
     }
 
     [Test]
@@ -74,9 +74,9 @@ public class CompositionAopProxyTests : AbstractAopProxyTests
 
         IFoo proxy = (IFoo) CreateProxy(advised);
 
-        Assert.AreSame(obj, proxy.GetBarThis(),
+        Assert.That(proxy.GetBarThis(), Is.SameAs(obj),
             "Target should be returned when return types are incompatible");
-        Assert.AreSame(proxy, proxy.GetFooThis(),
+        Assert.That(proxy.GetFooThis(), Is.SameAs(proxy),
             "Proxy should be returned when return types are compatible");
     }
 

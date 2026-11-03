@@ -68,30 +68,30 @@ public class VariableAccessorTests
     public void AcceptsNullVariableSource()
     {
         VariableAccessor va = new VariableAccessor(null);
-        Assert.AreEqual("default", va.GetString("somekey", "default"));
+        Assert.That(va.GetString("somekey", "default"), Is.EqualTo("default"));
     }
 
     [Test]
     public void GetString()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual("String", va.GetString("ValidString", "DefaultString"));
-        Assert.AreEqual("DefaultString", va.GetString("NonExistingString", "DefaultString"));
+        Assert.That(va.GetString("ValidString", "DefaultString"), Is.EqualTo("String"));
+        Assert.That(va.GetString("NonExistingString", "DefaultString"), Is.EqualTo("DefaultString"));
     }
 
     [Test]
     public void GetStringIgnoresEmptyString()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual("DefaultString", va.GetString("EmptyString", "DefaultString"));
+        Assert.That(va.GetString("EmptyString", "DefaultString"), Is.EqualTo("DefaultString"));
     }
 
     [Test]
     public void GetChar()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual('c', va.GetChar("ValidChar", 'a'));
-        Assert.AreEqual('a', va.GetChar("InvalidChar", 'a', false));
+        Assert.That(va.GetChar("ValidChar", 'a'), Is.EqualTo('c'));
+        Assert.That(va.GetChar("InvalidChar", 'a', false), Is.EqualTo('a'));
         Assert.Throws<ArgumentException>(() => va.GetChar("InvalidChar", 'a', true));
     }
 
@@ -99,24 +99,24 @@ public class VariableAccessorTests
     public void GetBoolean()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual(true, va.GetBoolean("ValidBoolean", false));
-        Assert.AreEqual(true, va.GetBoolean("InvalidBoolean", true, false));
+        Assert.That(va.GetBoolean("ValidBoolean", false), Is.EqualTo(true));
+        Assert.That(va.GetBoolean("InvalidBoolean", true, false), Is.EqualTo(true));
     }
 
     [Test]
     public void GetByte()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual((byte) 1, va.GetByte("ValidByte", 2));
-        Assert.AreEqual((byte) 2, va.GetByte("InvalidByte", 2, false));
+        Assert.That(va.GetByte("ValidByte", 2), Is.EqualTo((byte) 1));
+        Assert.That(va.GetByte("InvalidByte", 2, false), Is.EqualTo((byte) 2));
     }
 
     [Test]
     public void GetInt16()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual((short) 1, va.GetInt16("ValidInt16", 2));
-        Assert.AreEqual((short) 2, va.GetInt16("InvalidInt16", 2, false));
+        Assert.That(va.GetInt16("ValidInt16", 2), Is.EqualTo((short) 1));
+        Assert.That(va.GetInt16("InvalidInt16", 2, false), Is.EqualTo((short) 2));
         va.GetInt16("InvalidInt16", 2, true);
     }
 
@@ -124,24 +124,24 @@ public class VariableAccessorTests
     public void GetInt32()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual((int) 1, va.GetInt32("ValidInt32", 2));
-        Assert.AreEqual((int) 2, va.GetInt32("InvalidInt32", 2, false));
+        Assert.That(va.GetInt32("ValidInt32", 2), Is.EqualTo((int) 1));
+        Assert.That(va.GetInt32("InvalidInt32", 2, false), Is.EqualTo((int) 2));
     }
 
     [Test]
     public void GetInt64()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual((long) 1, va.GetInt64("ValidInt64", 2));
-        Assert.AreEqual((long) 2, va.GetInt64("InvalidInt64", 2, false));
+        Assert.That(va.GetInt64("ValidInt64", 2), Is.EqualTo((long) 1));
+        Assert.That(va.GetInt64("InvalidInt64", 2, false), Is.EqualTo((long) 2));
     }
 
     [Test]
     public void GetFloat()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual((float) 1, va.GetFloat("ValidFloat", 2.0f));
-        Assert.AreEqual((float) 2, va.GetFloat("InvalidFloat", 2.0f, false));
+        Assert.That(va.GetFloat("ValidFloat", 2.0f), Is.EqualTo((float) 1));
+        Assert.That(va.GetFloat("InvalidFloat", 2.0f, false), Is.EqualTo((float) 2));
         va.GetFloat("InvalidFloat", 2, true);
     }
 
@@ -149,8 +149,8 @@ public class VariableAccessorTests
     public void GetDouble()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual((double) 1, va.GetDouble("ValidDouble", 2.0));
-        Assert.AreEqual((double) 2, va.GetDouble("InvalidDouble", 2.0, false));
+        Assert.That(va.GetDouble("ValidDouble", 2.0), Is.EqualTo((double) 1));
+        Assert.That(va.GetDouble("InvalidDouble", 2.0, false), Is.EqualTo((double) 2));
         va.GetDouble("InvalidDouble", 2, true);
     }
 
@@ -158,8 +158,8 @@ public class VariableAccessorTests
     public void GetDecimal()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual((decimal) 1, va.GetDecimal("ValidDecimal", 2.0m));
-        Assert.AreEqual((decimal) 2, va.GetDecimal("InvalidDecimal", 2.0m, false));
+        Assert.That(va.GetDecimal("ValidDecimal", 2.0m), Is.EqualTo((decimal) 1));
+        Assert.That(va.GetDecimal("InvalidDecimal", 2.0m, false), Is.EqualTo((decimal) 2));
         va.GetDecimal("InvalidDecimal", 2, true);
     }
 
@@ -167,8 +167,8 @@ public class VariableAccessorTests
     public void GetGuid()
     {
         VariableAccessor va = new VariableAccessor(_testVariableSource);
-        Assert.AreEqual(TESTGUID, va.GetGuid("ValidGuid", TESTGUID_DEFAULT));
-        Assert.AreEqual(TESTGUID_DEFAULT, va.GetGuid("InvalidGuid", TESTGUID_DEFAULT, false));
+        Assert.That(va.GetGuid("ValidGuid", TESTGUID_DEFAULT), Is.EqualTo(TESTGUID));
+        Assert.That(va.GetGuid("InvalidGuid", TESTGUID_DEFAULT, false), Is.EqualTo(TESTGUID_DEFAULT));
     }
 
     [Test]
@@ -190,9 +190,9 @@ public class VariableAccessorTests
     public static void DoGetDateTime(DictionaryVariableSource testVariables)
     {
         var va = new VariableAccessor(testVariables);
-        Assert.AreEqual(TESTDATETIME, va.GetDateTime("ValidDateTime", null, TESTDATETIME_DEFAULT));
-        Assert.AreEqual(TESTDATETIME.ToUniversalTime(), va.GetDateTime("ValidDateTimeUtcRoundtripFormatted", "u", TESTDATETIME_DEFAULT));
-        Assert.AreEqual(TESTDATETIME_DEFAULT, va.GetDateTime("InvalidDateTime", null, TESTDATETIME_DEFAULT, false));
+        Assert.That(va.GetDateTime("ValidDateTime", null, TESTDATETIME_DEFAULT), Is.EqualTo(TESTDATETIME));
+        Assert.That(va.GetDateTime("ValidDateTimeUtcRoundtripFormatted", "u", TESTDATETIME_DEFAULT), Is.EqualTo(TESTDATETIME.ToUniversalTime()));
+        Assert.That(va.GetDateTime("InvalidDateTime", null, TESTDATETIME_DEFAULT, false), Is.EqualTo(TESTDATETIME_DEFAULT));
         Assert.Throws<FormatException>(() => va.GetDateTime("InvalidDateTime", null, TESTDATETIME_DEFAULT, true));
     }
 }

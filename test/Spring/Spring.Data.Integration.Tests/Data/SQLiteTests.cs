@@ -83,7 +83,7 @@ public class SQLiteTests
         dbProvider.ConnectionString = "Data Source=XE;User ID=hr;Password=hr;Unicode=True";
         AdoTemplate adoTemplate = new AdoTemplate(dbProvider);
         decimal count = (decimal) adoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from emp");
-        Assert.AreEqual(14, count);
+        Assert.That(count, Is.EqualTo(14));
 
         EmpProc empProc = new EmpProc(dbProvider);
         IDictionary dict = empProc.GetEmployees();
@@ -109,7 +109,7 @@ public class SQLiteTests
         IDbProvider dbProvider = DbProviderFactory.GetDbProvider("Odbc-2.0");
         dbProvider.ConnectionString =
             "Driver={Adaptive Server Enterprise};server=MARKT60;port=5000;Database=pubs2;uid=sa;pwd=;";
-        Assert.IsNotNull(dbProvider);
+        Assert.That(dbProvider, Is.Not.Null);
         AdoTemplate adoTemplate = new AdoTemplate(dbProvider);
         IList<string> authorList =
             adoTemplate.QueryWithRowMapperDelegate<string>(CommandType.Text, "select au_lname from authors",
@@ -119,7 +119,7 @@ public class SQLiteTests
             Console.WriteLine(s);
         }
 
-        Assert.IsTrue(authorList.Count > 0);
+        Assert.That(authorList.Count > 0, Is.True);
     }
 
     /*
@@ -139,9 +139,9 @@ public class SQLiteTests
                 HelloProc proc = new HelloProc(dbProvider);
                 IDictionary dict = proc.GetResults();
 
-                Assert.AreEqual("Go Sybase", dict["@inoutParam"]);
-                Assert.AreEqual("Hello mango", dict["@outParam"]);
-                Assert.AreEqual(101, (int) dict["RETURN_VALUE"]);
+                Assert.That(dict["@inoutParam"], Is.EqualTo("Go Sybase"));
+                Assert.That(dict["@outParam"], Is.EqualTo("Hello mango"));
+                Assert.That((int) dict["RETURN_VALUE"], Is.EqualTo(101));
                 foreach (DictionaryEntry entry in dict)
                 {
                     Console.WriteLine("Key = " + entry.Key + ", Value = " + entry.Value);
@@ -162,9 +162,9 @@ public class SQLiteTests
                 adoTemplate.ExecuteNonQuery(CommandType.StoredProcedure, "sp_hello", parameters);
 
 
-                Assert.AreEqual("Go Sybase", parameters["@inoutParam"].Value);
-                Assert.AreEqual("Hello mango", parameters[2].Value);
-                Assert.AreEqual(101, (int) parameters[3].Value);
+                Assert.That(parameters["@inoutParam"].Value, Is.EqualTo("Go Sybase"));
+                Assert.That(parameters[2].Value, Is.EqualTo("Hello mango"));
+                Assert.That((int) parameters[3].Value, Is.EqualTo(101));
             }
     */
     [Test]
@@ -213,7 +213,7 @@ public class SQLiteTests
         dbProvider.ConnectionString = "Data Source='MARKT60';Port='5000';UID='sa';PWD='';Database='pubs2';";
         PubDao pubDao = new PubDao(dbProvider);
         IList<Sale> sales = pubDao.GetSales("5023");
-        Assert.AreEqual(50, sales.Count);
+        Assert.That(sales.Count, Is.EqualTo(50));
     }
 
     [Test]
@@ -225,7 +225,7 @@ public class SQLiteTests
             "Driver={Adaptive Server Enterprise};server=MARKT60;port=5000;Database=pubs2;uid=sa;pwd=;";
         PubDao pubDao = new PubDao(dbProvider);
         IList<Sale> sales = pubDao.GetSales("5023");
-        Assert.AreEqual(50, sales.Count);
+        Assert.That(sales.Count, Is.EqualTo(50));
     }
 
     [Test]
@@ -251,7 +251,7 @@ public class SQLiteTests
                     }
                 }
 
-                Assert.AreEqual(50, i);
+                Assert.That(i, Is.EqualTo(50));
             }
         }
     }

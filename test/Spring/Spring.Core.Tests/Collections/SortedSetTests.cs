@@ -48,7 +48,7 @@ public class SortedSetTests : SetTests
         int j = 0;
         foreach (object o in mySet)
         {
-            Assert.AreEqual(j++, o, "Found element out of order while iterating over SortedSet");
+            Assert.That(o, Is.EqualTo(j++), "Found element out of order while iterating over SortedSet");
         }
     }
 }

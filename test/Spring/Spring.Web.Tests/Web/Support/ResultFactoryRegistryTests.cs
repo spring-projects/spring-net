@@ -38,8 +38,8 @@ public class ResultFactoryRegistryTests
         IResultFactory resultFactory = A.Fake<IResultFactory>();
 
         IResultFactory prevFactory = ResultFactoryRegistry.DefaultResultFactory;
-        Assert.AreSame(prevFactory, ResultFactoryRegistry.SetDefaultFactory(resultFactory));
-        Assert.AreSame(resultFactory, ResultFactoryRegistry.DefaultResultFactory);
+        Assert.That(ResultFactoryRegistry.SetDefaultFactory(resultFactory), Is.SameAs(prevFactory));
+        Assert.That(ResultFactoryRegistry.DefaultResultFactory, Is.SameAs(resultFactory));
 
         // verify default factory is used for unknown result mode
         A.CallTo(() => resultFactory.CreateResult(null, "resultText")).Returns(new Result());
@@ -57,7 +57,7 @@ public class ResultFactoryRegistryTests
 
         foreach (string resultMode in Enum.GetNames(typeof(ResultMode)))
         {
-            Assert.IsNotNull(ResultFactoryRegistry.CreateResult(resultMode + ":resultText"));
+            Assert.That(ResultFactoryRegistry.CreateResult(resultMode + ":resultText"), Is.Not.Null);
         }
     }
 
@@ -72,7 +72,7 @@ public class ResultFactoryRegistryTests
 
         // verify factory registry does not allow nulls to be returned
         A.CallTo(() => resultFactory.CreateResult("resultMode", "resultText")).Returns(result);
-        Assert.AreSame(result, ResultFactoryRegistry.CreateResult("resultMode:resultText"));
+        Assert.That(ResultFactoryRegistry.CreateResult("resultMode:resultText"), Is.SameAs(result));
     }
 
     [Test]

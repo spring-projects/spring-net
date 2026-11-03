@@ -57,8 +57,8 @@ public class WebObjectDefinitionReaderTests
             reader.LoadObjectDefinitions(new StringResource(xml));
         }
 
-        Assert.IsTrue(objectFactory.ContainsObjectDefinition("Spring.Web.UI.UserControl"));
-        Assert.IsTrue(objectFactory.GetObjectDefinition("Spring.Web.UI.UserControl").IsAbstract);
+        Assert.That(objectFactory.ContainsObjectDefinition("Spring.Web.UI.UserControl"), Is.True);
+        Assert.That(objectFactory.GetObjectDefinition("Spring.Web.UI.UserControl").IsAbstract, Is.True);
     }
 
     [Test]
@@ -84,9 +84,9 @@ public class WebObjectDefinitionReaderTests
             reader.LoadObjectDefinitions(new StringResource(xml));
         }
 
-        Assert.IsTrue(objectFactory.ContainsObjectDefinition("/MyPage.aspx"));
-        Assert.AreEqual(typeof(Spring.Web.UI.Page), objectFactory.GetType("/MyPage.aspx"));
-        Assert.IsTrue(objectFactory.ContainsObjectDefinition("Spring.Web.UI.UserControl"));
+        Assert.That(objectFactory.ContainsObjectDefinition("/MyPage.aspx"), Is.True);
+        Assert.That(objectFactory.GetType("/MyPage.aspx"), Is.EqualTo(typeof(Spring.Web.UI.Page)));
+        Assert.That(objectFactory.ContainsObjectDefinition("Spring.Web.UI.UserControl"), Is.True);
     }
 
     [Test]
@@ -111,9 +111,9 @@ public class WebObjectDefinitionReaderTests
             reader.LoadObjectDefinitions(new StringResource(xml));
         }
 
-        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mypage"));
-        Assert.AreEqual(typeof(Spring.Web.UI.Page), objectFactory.GetType("mypage"));
-        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mycontrol"));
+        Assert.That(objectFactory.ContainsObjectDefinition("mypage"), Is.True);
+        Assert.That(objectFactory.GetType("mypage"), Is.EqualTo(typeof(Spring.Web.UI.Page)));
+        Assert.That(objectFactory.ContainsObjectDefinition("mycontrol"), Is.True);
     }
 
     [Test]
@@ -138,9 +138,9 @@ public class WebObjectDefinitionReaderTests
             reader.LoadObjectDefinitions(new StringResource(xml));
         }
 
-        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mypage"));
-        Assert.AreEqual(typeof(Spring.Web.UI.Page), objectFactory.GetType("mypage"));
-        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mycontrol"));
+        Assert.That(objectFactory.ContainsObjectDefinition("mypage"), Is.True);
+        Assert.That(objectFactory.GetType("mypage"), Is.EqualTo(typeof(Spring.Web.UI.Page)));
+        Assert.That(objectFactory.ContainsObjectDefinition("mycontrol"), Is.True);
     }
 
     [Test]
@@ -165,9 +165,9 @@ public class WebObjectDefinitionReaderTests
             reader.LoadObjectDefinitions(new StringResource(xml));
         }
 
-        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mypage"));
-        Assert.IsTrue(objectFactory.ContainsObject("mypageAlias"));
-        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mycontrol"));
-        Assert.IsTrue(objectFactory.ContainsObject("mycontrolAlias"));
+        Assert.That(objectFactory.ContainsObjectDefinition("mypage"), Is.True);
+        Assert.That(objectFactory.ContainsObject("mypageAlias"), Is.True);
+        Assert.That(objectFactory.ContainsObjectDefinition("mycontrol"), Is.True);
+        Assert.That(objectFactory.ContainsObject("mycontrolAlias"), Is.True);
     }
 }

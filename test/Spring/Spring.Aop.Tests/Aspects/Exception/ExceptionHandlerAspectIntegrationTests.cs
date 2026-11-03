@@ -104,7 +104,7 @@ public class ExceptionHandlerAspectIntegrationTests
         }
         catch (ArithmeticException)
         {
-            Assert.IsTrue(spelActionExecuted);
+            Assert.That(spelActionExecuted, Is.True);
         }
     }
 
@@ -147,7 +147,7 @@ public class ExceptionHandlerAspectIntegrationTests
                 }
             }
 
-            Assert.IsTrue(found, "did not find logging output");
+            Assert.That(found, Is.True, "did not find logging output");
         }
     }
 
@@ -293,7 +293,7 @@ public class ExceptionHandlerAspectIntegrationTests
         catch (InvalidOperationException e)
         {
             Assert.That(e.InnerException, Is.InstanceOf(typeof(ArithmeticException)), "Inner exception.");
-            Assert.AreEqual("My Message, Method Name Exceptional", e.Message);
+            Assert.That(e.Message, Is.EqualTo("My Message, Method Name Exceptional"));
         }
         catch (Exception e)
         {
@@ -316,7 +316,7 @@ public class ExceptionHandlerAspectIntegrationTests
         catch (InvalidOperationException e)
         {
             Assert.That(e.InnerException, Is.InstanceOf(typeof(ArithmeticException)));
-            Assert.AreEqual("My Message", e.Message);
+            Assert.That(e.Message, Is.EqualTo("My Message"));
         }
         catch (Exception e)
         {
@@ -338,7 +338,7 @@ public class ExceptionHandlerAspectIntegrationTests
         }
         catch (InvalidOperationException e)
         {
-            Assert.AreEqual("Wrapped ArithmeticException", e.Message);
+            Assert.That(e.Message, Is.EqualTo("Wrapped ArithmeticException"));
         }
         catch (Exception e)
         {
@@ -360,8 +360,8 @@ public class ExceptionHandlerAspectIntegrationTests
         }
         catch (InvalidOperationException e)
         {
-            Assert.IsNull(e.InnerException);
-            Assert.AreEqual("My Message", e.Message);
+            Assert.That(e.InnerException, Is.Null);
+            Assert.That(e.Message, Is.EqualTo("My Message"));
         }
         catch (Exception e)
         {
@@ -383,8 +383,8 @@ public class ExceptionHandlerAspectIntegrationTests
         }
         catch (InvalidOperationException e)
         {
-            Assert.IsNull(e.InnerException);
-            Assert.AreEqual("Replaced ArithmeticException", e.Message);
+            Assert.That(e.InnerException, Is.Null);
+            Assert.That(e.Message, Is.EqualTo("Replaced ArithmeticException"));
         }
         catch (Exception e)
         {
@@ -430,7 +430,7 @@ public class ExceptionHandlerAspectIntegrationTests
         try
         {
             int retVal = to.ExceptionalWithReturnValue(new ArithmeticException("Bad Math"));
-            Assert.AreEqual(12, retVal);
+            Assert.That(retVal, Is.EqualTo(12));
         }
         catch (Exception)
         {
@@ -456,10 +456,10 @@ public class ExceptionHandlerAspectIntegrationTests
         }
         catch (InvalidOperationException e)
         {
-            Assert.IsNotNull(e.InnerException);
+            Assert.That(e.InnerException, Is.Not.Null);
             Exception innerEx = e.InnerException;
-            Assert.AreEqual("My Message", e.Message);
-            Assert.AreEqual("Bad Math", innerEx.Message);
+            Assert.That(e.Message, Is.EqualTo("My Message"));
+            Assert.That(innerEx.Message, Is.EqualTo("Bad Math"));
         }
         catch (Exception e)
         {
@@ -511,7 +511,7 @@ public class ExceptionHandlerAspectIntegrationTests
             }
         }
 
-        Assert.IsTrue(found, "did not find logging output [" + searchString + "]  Logging values = "
+        Assert.That(found, Is.True, "did not find logging output [" + searchString + "]  Logging values = "
                              + StringUtils.CollectionToCommaDelimitedString(loggerFactory.LoggerEvents));
     }
 }

@@ -139,7 +139,7 @@ public sealed class PropertyPlaceholderConfigurerTests
         defaultProperties.Add(theProperty, expectedName);
         cfg.Properties = defaultProperties;
         cfg.PostProcessObjectFactory(mock);
-        Assert.AreEqual(expectedName, def.PropertyValues.GetPropertyValue(theProperty).Value,
+        Assert.That(def.PropertyValues.GetPropertyValue(theProperty).Value, Is.EqualTo(expectedName),
             "Property placeholder value was not replaced with the resolved value.");
 
         A.CallTo(() => mock.AddEmbeddedValueResolver(A<IStringValueResolver>._)).MustHaveHappened();
@@ -168,7 +168,7 @@ public sealed class PropertyPlaceholderConfigurerTests
         defaultProperties.Add(theProperty, expectedName);
         cfg.Properties = defaultProperties;
         cfg.PostProcessObjectFactory(mock);
-        Assert.AreEqual(expectedName, def.PropertyValues.GetPropertyValue(theProperty).Value,
+        Assert.That(def.PropertyValues.GetPropertyValue(theProperty).Value, Is.EqualTo(expectedName),
             "Property placeholder value was not replaced with the resolved value.");
 
         A.CallTo(() => mock.AddEmbeddedValueResolver(A<IStringValueResolver>._)).MustHaveHappened();
@@ -192,8 +192,8 @@ public sealed class PropertyPlaceholderConfigurerTests
         ac.Refresh();
 
         TestObject to = (TestObject) ac["to"];
-        Assert.AreEqual(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE"),
-            to.Touchy);
+        Assert.That(to.Touchy,
+            Is.EqualTo(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE")));
     }
 
     /// <summary>
@@ -217,7 +217,7 @@ public sealed class PropertyPlaceholderConfigurerTests
         ac.Refresh();
 
         TestObject to = (TestObject) ac["to"];
-        Assert.AreEqual("G5", to.Touchy, "Fallback mode is not respecting previously set values.");
+        Assert.That(to.Touchy, Is.EqualTo("G5"), "Fallback mode is not respecting previously set values.");
     }
 
     /// <summary>
@@ -242,8 +242,8 @@ public sealed class PropertyPlaceholderConfigurerTests
         ac.Refresh();
 
         TestObject to = (TestObject) ac["to"];
-        Assert.AreEqual(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE"),
-            to.Touchy);
+        Assert.That(to.Touchy,
+            Is.EqualTo(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE")));
     }
 
     [Test]
@@ -276,7 +276,7 @@ public sealed class PropertyPlaceholderConfigurerTests
         catch (ObjectDefinitionStoreException ex)
         {
             // expected
-            Assert.IsTrue(ex.Message.IndexOf("ref") != -1);
+            Assert.That(ex.Message.IndexOf("ref") != -1, Is.True);
         }
     }
 
@@ -297,7 +297,7 @@ public sealed class PropertyPlaceholderConfigurerTests
 
         TestObject to1 = (TestObject) ac.GetObject("to1");
         ;
-        Assert.AreEqual(2147483647, to1.Age);
+        Assert.That(to1.Age, Is.EqualTo(2147483647));
     }
 
     [Test]
@@ -351,30 +351,30 @@ public sealed class PropertyPlaceholderConfigurerTests
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
         TestObject tb2 = (TestObject) ac.GetObject("tb2");
         TestObject tb3 = (TestObject) ac.GetObject("tb3");
-        Assert.AreEqual(98, tb1.Age);
-        Assert.AreEqual(98, tb2.Age);
-        Assert.AreEqual(98, tb3.Age);
-        Assert.AreEqual("namemyvar${", tb1.Name);
-        Assert.AreEqual("myvarname98", tb2.Name);
-        Assert.AreEqual(tb2, tb1.Spouse);
-        Assert.AreEqual(2, tb2.Friends.Count);
+        Assert.That(tb1.Age, Is.EqualTo(98));
+        Assert.That(tb2.Age, Is.EqualTo(98));
+        Assert.That(tb3.Age, Is.EqualTo(98));
+        Assert.That(tb1.Name, Is.EqualTo("namemyvar${"));
+        Assert.That(tb2.Name, Is.EqualTo("myvarname98"));
+        Assert.That(tb1.Spouse, Is.EqualTo(tb2));
+        Assert.That(tb2.Friends.Count, Is.EqualTo(2));
         IEnumerator ie = tb2.Friends.GetEnumerator();
         ie.MoveNext();
-        Assert.AreEqual("na98me", ie.Current);
+        Assert.That(ie.Current, Is.EqualTo("na98me"));
         ie.MoveNext();
-        Assert.AreEqual(tb2, ie.Current);
-        Assert.AreEqual(2, tb2.SomeSet.Count);
-        Assert.IsTrue(tb2.SomeSet.Contains("na98me"));
-        Assert.IsTrue(tb2.SomeSet.Contains(tb2));
-        Assert.AreEqual(4, tb2.SomeMap.Count);
-        Assert.AreEqual(tb2, tb2.SomeMap["key1"]);
-        Assert.AreEqual("98name", tb2.SomeMap["key2"]);
+        Assert.That(ie.Current, Is.EqualTo(tb2));
+        Assert.That(tb2.SomeSet.Count, Is.EqualTo(2));
+        Assert.That(tb2.SomeSet.Contains("na98me"), Is.True);
+        Assert.That(tb2.SomeSet.Contains(tb2), Is.True);
+        Assert.That(tb2.SomeMap.Count, Is.EqualTo(4));
+        Assert.That(tb2.SomeMap["key1"], Is.EqualTo(tb2));
+        Assert.That(tb2.SomeMap["key2"], Is.EqualTo("98name"));
         TestObject inner1 = (TestObject) tb2.SomeMap["key3"];
         TestObject inner2 = (TestObject) tb2.SomeMap["key4"];
-        Assert.AreEqual(0, inner1.Age);
-        Assert.AreEqual(null, inner1.Name);
-        Assert.AreEqual(98, inner2.Age);
-        Assert.AreEqual("namemyvar${", inner2.Name);
+        Assert.That(inner1.Age, Is.EqualTo(0));
+        Assert.That(inner1.Name, Is.EqualTo(null));
+        Assert.That(inner2.Age, Is.EqualTo(98));
+        Assert.That(inner2.Name, Is.EqualTo("namemyvar${"));
     }
 
     /// <summary>
@@ -433,8 +433,8 @@ public sealed class PropertyPlaceholderConfigurerTests
 
         A.CallTo(() => mock.AddEmbeddedValueResolver(A<IStringValueResolver>._)).MustHaveHappened();
 
-        Assert.AreEqual(expectedName,
-            def.ConstructorArgumentValues.GetNamedArgumentValue("name").Value,
+        Assert.That(def.ConstructorArgumentValues.GetNamedArgumentValue("name").Value,
+            Is.EqualTo(expectedName),
             "Named argument placeholder value was not replaced.");
     }
 
@@ -462,8 +462,8 @@ public sealed class PropertyPlaceholderConfigurerTests
 
         A.CallTo(() => mock.AddEmbeddedValueResolver(null)).WithAnyArguments().MustHaveHappened();
 
-        Assert.AreEqual(expectedName,
-            def.ConstructorArgumentValues.GetNamedArgumentValue("name").Value,
+        Assert.That(def.ConstructorArgumentValues.GetNamedArgumentValue("name").Value,
+            Is.EqualTo(expectedName),
             "Named argument placeholder value was not replaced.");
     }
 
@@ -478,8 +478,8 @@ public sealed class PropertyPlaceholderConfigurerTests
 			IApplicationContext ctx = new XmlApplicationContext(
 				"file://Spring/Objects/Factory/Config/PropertyPlaceholderConfigurerTests.xml");
 			TestObjectDAO to = (TestObjectDAO) ctx["testObjectDao"];
-			Assert.AreEqual(testConnectionString, to.DbConnection.ConnectionString);
-			Assert.AreEqual(1000, to.MaxResults);
+        Assert.That(to.DbConnection.ConnectionString, Is.EqualTo(testConnectionString));
+        Assert.That(to.MaxResults, Is.EqualTo(1000));
 		}
 
 		/// <summary>
@@ -493,8 +493,8 @@ public sealed class PropertyPlaceholderConfigurerTests
 			IApplicationContext ctx = new XmlApplicationContext(
 				"file://Spring/Objects/Factory/Config/PPCTwoLocationsTwoSectionsTests.xml");
 			TestObjectDAO to = (TestObjectDAO) ctx["testObjectDao"];
-            Assert.AreEqual(testConnectionStringTwo, to.DbConnection.ConnectionString);
-			Assert.AreEqual(1000, to.MaxResults);
+        Assert.That(to.DbConnection.ConnectionString, Is.EqualTo(testConnectionStringTwo));
+        Assert.That(to.MaxResults, Is.EqualTo(1000));
 		}
 
 		/// <summary>
@@ -508,8 +508,8 @@ public sealed class PropertyPlaceholderConfigurerTests
 			IApplicationContext ctx = new XmlApplicationContext(
 				"file://Spring/Objects/Factory/Config/PPCTwoLocationsOneSectionTests.xml");
 			TestObjectDAO to = (TestObjectDAO) ctx["testObjectDao"];
-            Assert.AreEqual(testConnectionString, to.DbConnection.ConnectionString);
-			Assert.AreEqual(1000, to.MaxResults);
+        Assert.That(to.DbConnection.ConnectionString, Is.EqualTo(testConnectionString));
+        Assert.That(to.MaxResults, Is.EqualTo(1000));
 		}
 
 		/// <summary>
@@ -521,20 +521,20 @@ public sealed class PropertyPlaceholderConfigurerTests
 		{
 			string resourceName = "Spring/Objects/Factory/Config/PPC-SPRNET-55.xml";
 			XmlObjectFactory ctx = new XmlObjectFactory(new FileSystemResource(resourceName));
-			Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
 			IObjectFactoryPostProcessor processor = (IObjectFactoryPostProcessor) ctx["appendConfigurer"];
 			processor.PostProcessObjectFactory(ctx);
 			TestObjectDAO to = (TestObjectDAO) ctx["appendDao"];
-			Assert.AreEqual(testConnectionString + "," + testConnectionStringTwo, to.DbConnection.ConnectionString);
-			Assert.AreEqual(1000, to.MaxResults);
+        Assert.That(to.DbConnection.ConnectionString, Is.EqualTo(testConnectionString + "," + testConnectionStringTwo));
+        Assert.That(to.MaxResults, Is.EqualTo(1000));
 
 			ctx = new XmlObjectFactory(new FileSystemResource(resourceName));
 			processor = (IObjectFactoryPostProcessor) ctx["noAppendConfigurer"];
 			processor.PostProcessObjectFactory(ctx);
 
 			to = (TestObjectDAO) ctx["noAppendDao"];
-            Assert.AreEqual(testConnectionStringTwo, to.DbConnection.ConnectionString);
-			Assert.AreEqual(1000, to.MaxResults);
+        Assert.That(to.DbConnection.ConnectionString, Is.EqualTo(testConnectionStringTwo));
+        Assert.That(to.MaxResults, Is.EqualTo(1000));
 		}
 #endif
 
@@ -556,7 +556,7 @@ public sealed class PropertyPlaceholderConfigurerTests
         PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
         cfg.IgnoreUnresolvablePlaceholders = true;
         cfg.PostProcessObjectFactory(mock);
-        Assert.AreEqual(placeholder, foo.Name);
+        Assert.That(foo.Name, Is.EqualTo(placeholder));
 
         A.CallTo(() => mock.AddEmbeddedValueResolver(null)).WithAnyArguments().MustHaveHappened();
     }
@@ -567,10 +567,10 @@ public sealed class PropertyPlaceholderConfigurerTests
         IResource resource = new ReadOnlyXmlTestResource("PropertyResourceConfigurerTests.xml", GetType());
         XmlObjectFactory xbf = new XmlObjectFactory(resource);
         PropertyPlaceholderConfigurer ppc = (PropertyPlaceholderConfigurer) xbf.GetObject("PlaceholderConfigurer");
-        Assert.IsNotNull(ppc);
+        Assert.That(ppc, Is.Not.Null);
         ppc.PostProcessObjectFactory(xbf);
         TestObject to = (TestObject) xbf.GetObject("Test1");
-        Assert.AreEqual("A DefName", to.Name);
+        Assert.That(to.Name, Is.EqualTo("A DefName"));
     }
 
     [Test]
@@ -579,11 +579,11 @@ public sealed class PropertyPlaceholderConfigurerTests
         IResource resource = new ReadOnlyXmlTestResource("PropertyResourceConfigurerTests.xml", GetType());
         XmlObjectFactory xbf = new XmlObjectFactory(resource);
         PropertyPlaceholderConfigurer ppc = (PropertyPlaceholderConfigurer) xbf.GetObject("ConfigSectionPlaceholderConfigurer");
-        Assert.IsNotNull(ppc);
+        Assert.That(ppc, Is.Not.Null);
         ppc.PostProcessObjectFactory(xbf);
 
-        Assert.AreEqual("name from section", ((TestObject) xbf.GetObject("Test3")).Name);
-        Assert.AreEqual("name from sectiongroup/section", ((TestObject) xbf.GetObject("Test4")).Name);
+        Assert.That(((TestObject) xbf.GetObject("Test3")).Name, Is.EqualTo("name from section"));
+        Assert.That(((TestObject) xbf.GetObject("Test4")).Name, Is.EqualTo("name from sectiongroup/section"));
     }
 
     [Test]
@@ -593,14 +593,14 @@ public sealed class PropertyPlaceholderConfigurerTests
             "file://Spring/Objects/Factory/Config/PPCWithTypesTests.xml");
 
         object obj = ctx["testObject"];
-        Assert.IsTrue(obj is TestObject);
+        Assert.That(obj is TestObject, Is.True);
 
         TestObject to = (TestObject) obj;
 
-        Assert.AreEqual(2, to.Pets.Count);
-        Assert.AreEqual(2, to.PeriodicTable.Count);
-        Assert.AreEqual(2, to.Computers.Count);
-        Assert.IsTrue(to.PeriodicTable.Contains("C"));
+        Assert.That(to.Pets.Count, Is.EqualTo(2));
+        Assert.That(to.PeriodicTable.Count, Is.EqualTo(2));
+        Assert.That(to.Computers.Count, Is.EqualTo(2));
+        Assert.That(to.PeriodicTable.Contains("C"), Is.True);
     }
 
     [Test]
@@ -612,6 +612,6 @@ public sealed class PropertyPlaceholderConfigurerTests
 
         var testObject = context.GetObject<TestObject>("testObject");
 
-        Assert.AreEqual("correct_name", testObject.Name);
+        Assert.That(testObject.Name, Is.EqualTo("correct_name"));
     }
 }

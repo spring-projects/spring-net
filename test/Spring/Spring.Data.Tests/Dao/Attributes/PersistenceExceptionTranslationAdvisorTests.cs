@@ -58,7 +58,7 @@ public class PersistenceExceptionTranslationAdvisorTests
         }
         catch (Exception ex)
         {
-            Assert.AreSame(persistenceException, ex);
+            Assert.That(ex, Is.SameAs(persistenceException));
         }
     }
 
@@ -78,7 +78,7 @@ public class PersistenceExceptionTranslationAdvisorTests
         }
         catch (Exception ex)
         {
-            Assert.AreSame(doNotTranslate, ex);
+            Assert.That(ex, Is.SameAs(doNotTranslate));
         }
     }
 
@@ -118,7 +118,7 @@ public class PersistenceExceptionTranslationAdvisorTests
         catch (DataAccessException ex)
         {
             //Expected
-            Assert.AreSame(persistenceException, ex.InnerException);
+            Assert.That(ex.InnerException, Is.SameAs(persistenceException));
         }
         catch (PersistenceException)
         {

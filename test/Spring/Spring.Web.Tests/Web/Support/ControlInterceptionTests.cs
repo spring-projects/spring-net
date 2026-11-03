@@ -56,11 +56,11 @@ public class ControlInterceptionTests
 
         MockControl mock = new MockControl();
         ctl.Controls.Add(mock);
-        Assert.IsTrue(mock.GotIt);
+        Assert.That(mock.GotIt, Is.True);
 
         mock = new MockControl();
         ctl.Controls.AddAt(0, mock);
-        Assert.IsTrue(mock.GotIt);
+        Assert.That(mock.GotIt, Is.True);
     }
 
     [Test]
@@ -71,17 +71,17 @@ public class ControlInterceptionTests
         subControl.Controls.Add(subSubControl);
 
         // DI occcurs *after* adding control(s) to rooted hierarchy
-        Assert.IsFalse(subControl.GotIt);
-        Assert.IsFalse(subSubControl.GotIt);
+        Assert.That(subControl.GotIt, Is.False);
+        Assert.That(subSubControl.GotIt, Is.False);
 
         Control rootControl = GetRootControl();
         rootControl.Controls.Add(subControl);
-        Assert.IsTrue(subControl.GotIt);
-        Assert.IsTrue(subSubControl.GotIt);
+        Assert.That(subControl.GotIt, Is.True);
+        Assert.That(subSubControl.GotIt, Is.True);
 
         MockControl subSubSubControl = new MockControl();
         subSubControl.Controls.Add(subSubSubControl);
-        Assert.IsTrue(subSubSubControl.GotIt);
+        Assert.That(subSubSubControl.GotIt, Is.True);
     }
 
     [Test]
@@ -94,11 +94,11 @@ public class ControlInterceptionTests
 
         MockControl subControl = new MockControl();
         ctl.Controls.Add(subControl);
-        Assert.IsTrue(subControl.GotIt);
+        Assert.That(subControl.GotIt, Is.True);
 
         MockControl subControl2 = new MockControl();
         ctl.Controls.AddAt(0, subControl2);
-        Assert.IsTrue(subControl2.GotIt);
+        Assert.That(subControl2.GotIt, Is.True);
     }
 
     [Test]
@@ -111,11 +111,11 @@ public class ControlInterceptionTests
 
         MockControl subControl = new MockControl();
         ctl.Controls.Add(subControl);
-        Assert.IsTrue(subControl.GotIt);
+        Assert.That(subControl.GotIt, Is.True);
 
         MockControl subControl2 = new MockControl();
         ctl.Controls.AddAt(0, subControl2);
-        Assert.IsTrue(subControl2.GotIt);
+        Assert.That(subControl2.GotIt, Is.True);
     }
 
     [Test]
@@ -128,11 +128,11 @@ public class ControlInterceptionTests
 
         MockControl subControl = new MockControl();
         ctl.Controls.Add(subControl);
-        Assert.IsTrue(subControl.GotIt);
+        Assert.That(subControl.GotIt, Is.True);
 
         MockControl subControl2 = new MockControl();
         ctl.Controls.AddAt(0, subControl2);
-        Assert.IsTrue(subControl2.GotIt);
+        Assert.That(subControl2.GotIt, Is.True);
     }
 
     [Test]
@@ -147,16 +147,16 @@ public class ControlInterceptionTests
 
             MockControl subControl = new MockControl();
             ctl.Controls.Add(subControl);
-            Assert.IsTrue(subControl.GotIt);
-            Assert.IsNotNull(subControl.ApplicationContext);
-            Assert.IsTrue(ContextRegistry.GetContext() == subControl.ApplicationContext);
+            Assert.That(subControl.GotIt, Is.True);
+            Assert.That(subControl.ApplicationContext, Is.Not.Null);
+            Assert.That(ContextRegistry.GetContext() == subControl.ApplicationContext, Is.True);
 
             // controls get AppContext from to their location (if any)
             MockControl subControl2 = new MockControl("/controls");
             ctl.Controls.AddAt(0, subControl2);
-            Assert.IsTrue(subControl2.GotIt);
-            Assert.IsNotNull(subControl2.ApplicationContext);
-            Assert.IsTrue(ContextRegistry.GetContext("/controls/") == subControl2.ApplicationContext);
+            Assert.That(subControl2.GotIt, Is.True);
+            Assert.That(subControl2.ApplicationContext, Is.Not.Null);
+            Assert.That(ContextRegistry.GetContext("/controls/") == subControl2.ApplicationContext, Is.True);
         }
     }
 
@@ -189,7 +189,7 @@ public class MockControl : UserControl, IApplicationContextAware
         set
         {
             // ensure DI occurs only once
-            Assert.IsFalse(GotIt);
+            Assert.That(GotIt, Is.False);
             this._gotIt = value;
         }
     }

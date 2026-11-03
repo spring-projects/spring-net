@@ -49,17 +49,17 @@ public class HttpApplicationConfigurerTests
 
         HttpApplicationConfigurer h1 = new HttpApplicationConfigurer();
         h1.ApplicationTemplate = rod;
-        Assert.AreEqual(rod, h1.ApplicationTemplate);
+        Assert.That(h1.ApplicationTemplate, Is.EqualTo(rod));
 
         // h2 returns same template as h1
         HttpApplicationConfigurer h2 = new HttpApplicationConfigurer();
-        Assert.AreEqual(rod, h2.ApplicationTemplate);
-        Assert.AreEqual(h2.ApplicationTemplate, h1.ApplicationTemplate);
+        Assert.That(h2.ApplicationTemplate, Is.EqualTo(rod));
+        Assert.That(h1.ApplicationTemplate, Is.EqualTo(h2.ApplicationTemplate));
 
         // allows overriding
         rod = new RootObjectDefinition();
         h2.ApplicationTemplate = rod;
-        Assert.AreEqual(rod, h1.ApplicationTemplate);
+        Assert.That(h1.ApplicationTemplate, Is.EqualTo(rod));
     }
 
     /// <summary>
@@ -75,17 +75,17 @@ public class HttpApplicationConfigurerTests
 
         // is shared
         h1 = new HttpApplicationConfigurer();
-        Assert.IsNotNull(h1.ModuleTemplates);
+        Assert.That(h1.ModuleTemplates, Is.Not.Null);
         h2 = new HttpApplicationConfigurer();
-        Assert.AreEqual(h1.ModuleTemplates, h2.ModuleTemplates);
+        Assert.That(h2.ModuleTemplates, Is.EqualTo(h1.ModuleTemplates));
 
         // allows overriding
         rod = new RootObjectDefinition();
         h1.ModuleTemplates.Add("test", rod);
-        Assert.AreEqual(rod, h1.ModuleTemplates["test"]);
+        Assert.That(h1.ModuleTemplates["test"], Is.EqualTo(rod));
         h2.ModuleTemplates.Add("test", rod);
-        Assert.AreEqual(1, h2.ModuleTemplates.Count);
-        Assert.AreEqual(rod, h2.ModuleTemplates["test"]);
+        Assert.That(h2.ModuleTemplates.Count, Is.EqualTo(1));
+        Assert.That(h2.ModuleTemplates["test"], Is.EqualTo(rod));
     }
 
     [Test]
@@ -113,10 +113,10 @@ public class HttpApplicationConfigurerTests
         TestApplication appObject = new TestApplication(new ModuleEntry[] { new ModuleEntry("TestModule1", m1), new ModuleEntry("TestModule2", m2), });
         HttpApplicationConfigurer.Configure(appContext, appObject);
         // app configured
-        Assert.AreEqual(appContext.GetObject("testObject"), appObject.TestObject);
+        Assert.That(appObject.TestObject, Is.EqualTo(appContext.GetObject("testObject")));
         // modules configured
-        Assert.AreEqual(appContext.GetObject("testObject1"), m1.TestObject);
-        Assert.AreEqual(appContext.GetObject("testObject2"), m2.TestObject);
+        Assert.That(m1.TestObject, Is.EqualTo(appContext.GetObject("testObject1")));
+        Assert.That(m2.TestObject, Is.EqualTo(appContext.GetObject("testObject2")));
     }
 
     [Test]
@@ -185,16 +185,16 @@ public class HttpApplicationConfigurerTests
         HttpApplicationConfigurer.Configure(appContext, appObject);
 
         //base class property has carried through successfully
-        Assert.Contains("GrandParentValue1", module.GrandParentProperty);
+        Assert.That(module.GrandParentProperty, Does.Contain("GrandParentValue1"));
 
         //parent property values remain in the final instance
-        Assert.Contains("ParentValue1", module.ParentProperty);
-        Assert.Contains("ParentValue2", module.ParentProperty);
-        Assert.Contains("ParentValue3", module.ParentProperty);
-        Assert.Contains("ParentValue4", module.ParentProperty);
+        Assert.That(module.ParentProperty, Does.Contain("ParentValue1"));
+        Assert.That(module.ParentProperty, Does.Contain("ParentValue2"));
+        Assert.That(module.ParentProperty, Does.Contain("ParentValue3"));
+        Assert.That(module.ParentProperty, Does.Contain("ParentValue4"));
 
         //the new additional value has been merged into the property
-        Assert.Contains("MergedValueToFind", module.ParentProperty);
+        Assert.That(module.ParentProperty, Does.Contain("MergedValueToFind"));
     }
 
     [Test]
@@ -208,10 +208,10 @@ public class HttpApplicationConfigurerTests
         TestApplication appObject = new TestApplication(new ModuleEntry[] { new ModuleEntry("TestModule1", m1), new ModuleEntry("TestModule2", m2), });
         HttpApplicationConfigurer.Configure(appContext, appObject);
         // app configured
-        Assert.AreEqual(appContext.GetObject("testObject"), appObject.TestObject);
+        Assert.That(appObject.TestObject, Is.EqualTo(appContext.GetObject("testObject")));
         // modules configured
-        Assert.AreEqual(appContext.GetObject("testObject1"), m1.TestObject);
-        Assert.AreEqual(null, m2.TestObject);
+        Assert.That(m1.TestObject, Is.EqualTo(appContext.GetObject("testObject1")));
+        Assert.That(m2.TestObject, Is.EqualTo(null));
     }
 
     private static StaticApplicationContext CreateTestContext()
@@ -223,7 +223,7 @@ public class HttpApplicationConfigurerTests
         appContext.RegisterSingleton("testObject2", typeof(object), null);
         appContext.Refresh();
         testObject = appContext.GetObject("testObject");
-        Assert.IsNotNull(testObject);
+        Assert.That(testObject, Is.Not.Null);
         return appContext;
     }
 

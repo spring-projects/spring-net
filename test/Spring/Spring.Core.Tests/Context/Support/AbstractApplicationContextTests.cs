@@ -77,8 +77,8 @@ public class AbstractApplicationContextTests
             resultException = (ApplicationException) e.GetBaseException();
         }
 
-        Assert.AreEqual("dummy", resultException.Message);
-        Assert.IsTrue(secondHandlerExecuted);
+        Assert.That(resultException.Message, Is.EqualTo("dummy"));
+        Assert.That(secondHandlerExecuted, Is.True);
     }
 
     [Test]
@@ -91,9 +91,9 @@ public class AbstractApplicationContextTests
         parentCtx.Refresh();
         childContext.Refresh();
 
-        Assert.AreNotSame(msgSource, childContext.MessageSource);
-        Assert.AreSame(msgSource, parentCtx.MessageSource);
-        Assert.AreEqual(msgSource, ((IHierarchicalMessageSource) childContext.MessageSource).ParentMessageSource);
+        Assert.That(childContext.MessageSource, Is.Not.SameAs(msgSource));
+        Assert.That(parentCtx.MessageSource, Is.SameAs(msgSource));
+        Assert.That(((IHierarchicalMessageSource) childContext.MessageSource).ParentMessageSource, Is.EqualTo(msgSource));
     }
 
     [Test]
@@ -106,8 +106,8 @@ public class AbstractApplicationContextTests
         parentCtx.Refresh();
         childContext.Refresh();
 
-        Assert.AreSame(eventRegistry, parentCtx.EventRegistry);
-        Assert.AreNotSame(eventRegistry, childContext.EventRegistry);
+        Assert.That(parentCtx.EventRegistry, Is.SameAs(eventRegistry));
+        Assert.That(childContext.EventRegistry, Is.Not.SameAs(eventRegistry));
     }
 
     /// <summary>
@@ -123,7 +123,8 @@ public class AbstractApplicationContextTests
         _context.Refresh();
         object foo = _context
             .GetObject(AbstractApplicationContext.MessageSourceObjectName);
-        Assert.IsTrue(foo is ITestObject,
+        Assert.That(foo is ITestObject,
+            Is.True,
             "Registered non-IMessageSource object under the default message source name, but " +
             "failed to get it out of the context. Object retrieved is of type [ " + foo.GetType() + "].");
     }
@@ -141,7 +142,8 @@ public class AbstractApplicationContextTests
         _context.Refresh();
         object foo = _context
             .GetObject(AbstractApplicationContext.EventRegistryObjectName);
-        Assert.IsTrue(foo is ITestObject,
+        Assert.That(foo is ITestObject,
+            Is.True,
             "Registered non-IEventRegistry object under the default message source name, but " +
             "failed to get it out of the context. Object retrieved is of type [ " + foo.GetType() + "].");
     }
@@ -152,10 +154,10 @@ public class AbstractApplicationContextTests
         _context.RegisterSingleton();
         _context.Refresh();
         MockContextAwareObject mcao1 = (MockContextAwareObject) _context.GetObject("mcao-single");
-        Assert.IsTrue(mcao1.ApplicationContext == _context, "context");
+        Assert.That(mcao1.ApplicationContext == _context, Is.True, "context");
         object mcao2 = _context.GetObject("mcao-single");
-        Assert.IsTrue(mcao1 == mcao2, "same");
-        Assert.IsTrue(_context.IsSingleton("mcao-single"), "singleton?");
+        Assert.That(mcao1 == mcao2, Is.True, "same");
+        Assert.That(_context.IsSingleton("mcao-single"), Is.True, "singleton?");
     }
 
     [Test]
@@ -164,10 +166,10 @@ public class AbstractApplicationContextTests
         _context.RegisterObject();
         _context.Refresh();
         MockContextAwareObject mcao1 = (MockContextAwareObject) _context.GetObject("mcao-proto");
-        Assert.IsTrue(mcao1.ApplicationContext == _context, "context");
-        Assert.IsTrue(!_context.IsSingleton("mcao-proto"), "singleton");
+        Assert.That(mcao1.ApplicationContext == _context, Is.True, "context");
+        Assert.That(!_context.IsSingleton("mcao-proto"), Is.True, "singleton");
         MockContextAwareObject mcao2 = (MockContextAwareObject) _context.GetObject("mcao-proto");
-        Assert.IsTrue(mcao1 != mcao2, "instance");
+        Assert.That(mcao1 != mcao2, Is.True, "instance");
     }
 
     [Test]
@@ -176,7 +178,7 @@ public class AbstractApplicationContextTests
         _context.RegisterSingleton();
         _context.Refresh();
         MockContextAwareObject mcao1 = (MockContextAwareObject) _context.GetObject("mcao-single");
-        Assert.AreEqual(mcao1.ApplicationContext.Name, "MockApplicationContextName");
+        Assert.That(mcao1.ApplicationContext.Name, Is.EqualTo("MockApplicationContextName"));
     }
 
     [Test]
@@ -185,13 +187,13 @@ public class AbstractApplicationContextTests
         _context.RegisterObject();
         _context.Refresh();
         MockContextAwareObject mcao1 = (MockContextAwareObject) _context.GetObject("mcao-proto");
-        Assert.AreEqual(mcao1.ApplicationContext.Name, "MockApplicationContextName");
+        Assert.That(mcao1.ApplicationContext.Name, Is.EqualTo("MockApplicationContextName"));
     }
 
     [Test]
     public void ParentNull()
     {
-        Assert.IsNull(_context.ParentContext, "parent is not null");
+        Assert.That(_context.ParentContext, Is.Null, "parent is not null");
     }
 
     [Test]
@@ -199,8 +201,8 @@ public class AbstractApplicationContextTests
     {
         IApplicationContext parentContext = new MockApplicationContext("MockApplicationContextParent");
         _context = new MockApplicationContext("MockApplicationContextName", parentContext);
-        Assert.IsNotNull(_context.ParentContext, "parent is null");
-        Assert.IsNull(_context.ParentContext.ParentContext, "parent is null");
+        Assert.That(_context.ParentContext, Is.Not.Null, "parent is null");
+        Assert.That(_context.ParentContext.ParentContext, Is.Null, "parent is null");
     }
 
     public enum ObjectProcessingState
@@ -231,7 +233,7 @@ public class AbstractApplicationContextTests
             : this()
         {
             // ensure postprocessor has been instantiated *before* this object
-            Assert.AreEqual(expectObjectPostProcessorInstances, EverythingAwareObjectPostProcessor.InstanceCount);
+            Assert.That(EverythingAwareObjectPostProcessor.InstanceCount, Is.EqualTo(expectObjectPostProcessorInstances));
         }
 
         public ObjectProcessingState CurrentState
@@ -245,7 +247,7 @@ public class AbstractApplicationContextTests
             get { throw new NotImplementedException(); }
             set
             {
-                Assert.AreEqual(ObjectProcessingState.SetApplicationContext, this.CurrentState);
+                Assert.That(this.CurrentState, Is.EqualTo(ObjectProcessingState.SetApplicationContext));
                 this.CurrentState++;
             }
         }
@@ -254,7 +256,7 @@ public class AbstractApplicationContextTests
         {
             set
             {
-                Assert.AreEqual(ObjectProcessingState.SetObjectName, this.CurrentState);
+                Assert.That(this.CurrentState, Is.EqualTo(ObjectProcessingState.SetObjectName));
                 this.CurrentState++;
             }
         }
@@ -272,7 +274,7 @@ public class AbstractApplicationContextTests
                 }
 
                 objectFactorySet = true;
-                Assert.AreEqual(ObjectProcessingState.SetObjectFactory, this.CurrentState);
+                Assert.That(this.CurrentState, Is.EqualTo(ObjectProcessingState.SetObjectFactory));
                 this.CurrentState++;
             }
         }
@@ -290,7 +292,7 @@ public class AbstractApplicationContextTests
 
         public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
         {
-            Assert.AreEqual(ObjectProcessingState.PostProcessObjectFactory, CurrentState);
+            Assert.That(CurrentState, Is.EqualTo(ObjectProcessingState.PostProcessObjectFactory));
             CurrentState++;
         }
     }
@@ -309,21 +311,21 @@ public class AbstractApplicationContextTests
             : this()
         {
             // ensure factorypostprocessor has been instantiated *before* this object
-            Assert.AreEqual(expectObjectFactoryPostProcessorInstances, EverythingAwareObjectFactoryPostProcessor.InstanceCount);
+            Assert.That(EverythingAwareObjectFactoryPostProcessor.InstanceCount, Is.EqualTo(expectObjectFactoryPostProcessorInstances));
         }
 
         public object PostProcessBeforeInitialization(object instance, string name)
         {
-            Assert.AreNotEqual(this, instance);
-            Assert.AreEqual(ObjectProcessingState.ObjectPostProcessorBeforeInitialization, CurrentState);
+            Assert.That(instance, Is.Not.EqualTo(this));
+            Assert.That(CurrentState, Is.EqualTo(ObjectProcessingState.ObjectPostProcessorBeforeInitialization));
             CurrentState++;
             return instance;
         }
 
         public object PostProcessAfterInitialization(object instance, string objectName)
         {
-            Assert.AreNotEqual(this, instance);
-            Assert.AreEqual(ObjectProcessingState.ObjectPostProcessorAfterInitialization, CurrentState);
+            Assert.That(instance, Is.Not.EqualTo(this));
+            Assert.That(CurrentState, Is.EqualTo(ObjectProcessingState.ObjectPostProcessorAfterInitialization));
             CurrentState++;
             return instance;
         }
@@ -361,11 +363,11 @@ public class AbstractApplicationContextTests
     {
         MockApplicationContext myContext = new MockApplicationContext("myContext");
         DefaultListableObjectFactory objectFactory = (DefaultListableObjectFactory) myContext.ObjectFactory;
-        Assert.AreEqual(0, objectFactory.ObjectPostProcessorCount);
+        Assert.That(objectFactory.ObjectPostProcessorCount, Is.EqualTo(0));
         myContext.Refresh();
         int defaultProcessors = objectFactory.ObjectPostProcessors.Count;
         myContext.Refresh();
-        Assert.AreEqual(defaultProcessors, objectFactory.ObjectPostProcessors.Count);
+        Assert.That(objectFactory.ObjectPostProcessors.Count, Is.EqualTo(defaultProcessors));
     }
 
     [Test]
@@ -386,8 +388,8 @@ public class AbstractApplicationContextTests
         }
         catch (Exception e)
         {
-//            Console.WriteLine(e);
-            Assert.IsInstanceOf(typeof(CannotLoadObjectTypeException), e);
+            //            Console.WriteLine(e);
+            Assert.That(e, Is.InstanceOf(typeof(CannotLoadObjectTypeException)));
         }
     }
 }

@@ -35,11 +35,11 @@ public sealed class PropertyFileVariableSourceTests
                 "assembly://Spring.Core.Tests/Spring.Data.Spring.Objects.Factory.Config/one.properties");
 
         // existing vars
-        Assert.AreEqual("Aleks Seovic", vs.ResolveVariable("name"));
-        Assert.AreEqual("32", vs.ResolveVariable("age"));
+        Assert.That(vs.ResolveVariable("name"), Is.EqualTo("Aleks Seovic"));
+        Assert.That(vs.ResolveVariable("age"), Is.EqualTo("32"));
 
         // non-existant variable
-        Assert.IsNull(vs.ResolveVariable("dummy"));
+        Assert.That(vs.ResolveVariable("dummy"), Is.Null);
     }
 
     [Test]
@@ -56,8 +56,8 @@ public sealed class PropertyFileVariableSourceTests
         };
 
         // existing vars
-        Assert.AreEqual("Aleks Seovic", vs.ResolveVariable("name"));
-        Assert.AreEqual("32", vs.ResolveVariable("age"));
+        Assert.That(vs.ResolveVariable("name"), Is.EqualTo("Aleks Seovic"));
+        Assert.That(vs.ResolveVariable("age"), Is.EqualTo("32"));
     }
 
     [Test]
@@ -73,11 +73,11 @@ public sealed class PropertyFileVariableSourceTests
         };
 
         // existing vars
-        Assert.AreEqual("Aleksandar Seovic", vs.ResolveVariable("name")); // should be overriden by the second file
-        Assert.AreEqual("32", vs.ResolveVariable("age"));
-        Assert.AreEqual("Marija,Ana,Nadja", vs.ResolveVariable("family"));
+        Assert.That(vs.ResolveVariable("name"), Is.EqualTo("Aleksandar Seovic")); // should be overriden by the second file
+        Assert.That(vs.ResolveVariable("age"), Is.EqualTo("32"));
+        Assert.That(vs.ResolveVariable("family"), Is.EqualTo("Marija,Ana,Nadja"));
 
         // non-existant variable
-        Assert.IsNull(vs.ResolveVariable("dummy"));
+        Assert.That(vs.ResolveVariable("dummy"), Is.Null);
     }
 }

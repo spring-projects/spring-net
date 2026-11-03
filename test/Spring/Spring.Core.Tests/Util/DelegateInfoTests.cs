@@ -41,33 +41,33 @@ public sealed class DelegateInfoTests
     [Test]
     public void IsDelegateWithBadType()
     {
-        Assert.IsFalse(DelegateInfo.IsDelegate(typeof(string)));
+        Assert.That(DelegateInfo.IsDelegate(typeof(string)), Is.False);
     }
 
     [Test]
     public void IsDelegateWithNullType()
     {
-        Assert.IsFalse(DelegateInfo.IsDelegate(null));
+        Assert.That(DelegateInfo.IsDelegate(null), Is.False);
     }
 
     [Test]
     public void IsDelegate()
     {
-        Assert.IsTrue(DelegateInfo.IsDelegate(typeof(EventHandler)));
+        Assert.That(DelegateInfo.IsDelegate(typeof(EventHandler)), Is.True);
     }
 
     [Test]
     public void GetReturnType()
     {
         DelegateInfo del = new DelegateInfo(typeof(EventHandler));
-        Assert.AreEqual(typeof(void), del.GetReturnType());
+        Assert.That(del.GetReturnType(), Is.EqualTo(typeof(void)));
     }
 
     [Test]
     public void GetReturnTypeWithNonVoidReturningDelegate()
     {
         DelegateInfo del = new DelegateInfo(typeof(FooHandler));
-        Assert.AreEqual(typeof(string), del.GetReturnType());
+        Assert.That(del.GetReturnType(), Is.EqualTo(typeof(string)));
     }
 
     [Test]
@@ -75,8 +75,8 @@ public sealed class DelegateInfoTests
     {
         DelegateInfo del = new DelegateInfo(typeof(NoParametersHandler));
         Type[] types = del.GetParameterTypes();
-        Assert.IsNotNull(types);
-        Assert.AreEqual(0, types.Length);
+        Assert.That(types, Is.Not.Null);
+        Assert.That(types.Length, Is.EqualTo(0));
     }
 
     [Test]
@@ -84,8 +84,8 @@ public sealed class DelegateInfoTests
     {
         DelegateInfo del = new DelegateInfo(typeof(FooHandler));
         Type[] types = del.GetParameterTypes();
-        Assert.IsNotNull(types);
-        Assert.AreEqual(3, types.Length);
+        Assert.That(types, Is.Not.Null);
+        Assert.That(types.Length, Is.EqualTo(3));
     }
 
     [Test]
@@ -95,15 +95,15 @@ public sealed class DelegateInfoTests
 
         // null method...
         MethodInfo method = GetType().GetMethod("SeaBass said that? Well, if that guy over there is SeaBass...");
-        Assert.IsFalse(del.IsSignatureCompatible(method));
+        Assert.That(del.IsSignatureCompatible(method), Is.False);
 
         // method that doesn;t have the required number of parameters...
         method = GetType().GetMethod("OddNumberOfParametersForFooHandler");
-        Assert.IsFalse(del.IsSignatureCompatible(method));
+        Assert.That(del.IsSignatureCompatible(method), Is.False);
 
         // method that doesn't have the required number of parameters...
         method = GetType().GetMethod("IncompatibleParametersForFooHandler");
-        Assert.IsFalse(del.IsSignatureCompatible(method));
+        Assert.That(del.IsSignatureCompatible(method), Is.False);
     }
 
     public string OddNumberOfParametersForFooHandler(string bar, int x)
@@ -124,7 +124,7 @@ public sealed class DelegateInfoTests
             typeof(Yossarian).GetMethod(
                 "DoFoo",
                 BindingFlags.Public | BindingFlags.Static);
-        Assert.IsTrue(del.IsSignatureCompatible(method));
+        Assert.That(del.IsSignatureCompatible(method), Is.True);
     }
 
     [Test]
@@ -132,7 +132,7 @@ public sealed class DelegateInfoTests
     {
         DelegateInfo del = new DelegateInfo(typeof(FooHandler));
         MethodInfo method = GetType().GetMethod("DoFoo");
-        Assert.IsFalse(del.IsSignatureCompatible(method));
+        Assert.That(del.IsSignatureCompatible(method), Is.False);
     }
 
     [Test]
@@ -141,13 +141,13 @@ public sealed class DelegateInfoTests
         EventInfo evt = typeof(Assembly).GetEvent("ModuleResolve");
 
         MethodInfo rubbishMethod = GetType().GetMethod("MethodSignatureIsCompatibleStatic");
-        Assert.IsFalse(DelegateInfo.IsSignatureCompatible(evt, rubbishMethod));
+        Assert.That(DelegateInfo.IsSignatureCompatible(evt, rubbishMethod), Is.False);
 
         MethodInfo compatibleMethod = typeof(Yossarian).GetMethod("Resolve");
-        Assert.IsTrue(DelegateInfo.IsSignatureCompatible(evt, compatibleMethod));
+        Assert.That(DelegateInfo.IsSignatureCompatible(evt, compatibleMethod), Is.True);
 
-        Assert.IsFalse(DelegateInfo.IsSignatureCompatible(null, compatibleMethod));
-        Assert.IsFalse(DelegateInfo.IsSignatureCompatible(evt, null));
+        Assert.That(DelegateInfo.IsSignatureCompatible(null, compatibleMethod), Is.False);
+        Assert.That(DelegateInfo.IsSignatureCompatible(evt, null), Is.False);
     }
 
     private string DoFoo(string bar, int x, EventArgs e)

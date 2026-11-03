@@ -9,7 +9,7 @@ public class EventValuesTests
     public void EmptyEventValues()
     {
         EventValues eventValues = new EventValues();
-        Assert.AreEqual(0, eventValues.Events.Count);
+        Assert.That(eventValues.Events.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -17,7 +17,7 @@ public class EventValuesTests
     {
         EventValues eventValues = new EventValues();
         eventValues.AddHandler(new MyEventHandler());
-        Assert.AreEqual(1, eventValues.Events.Count);
+        Assert.That(eventValues.Events.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -26,7 +26,7 @@ public class EventValuesTests
         EventValues eventValues = new EventValues();
         eventValues.AddHandler(new MyEventHandler());
         eventValues.AddHandler(new MyEventHandler());
-        Assert.AreEqual(1, eventValues.Events.Count);
+        Assert.That(eventValues.Events.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -35,9 +35,9 @@ public class EventValuesTests
         EventValues eventValues = new EventValues();
         eventValues.AddHandler(new MyEventHandler());
         eventValues.AddHandler(new MyEventHandler());
-        Assert.AreEqual(1, eventValues.Events.Count);
+        Assert.That(eventValues.Events.Count, Is.EqualTo(1));
         EventValues eventValues2 = new EventValues(eventValues);
-        Assert.AreEqual(1, eventValues2.Events.Count);
+        Assert.That(eventValues2.Events.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -45,7 +45,7 @@ public class EventValuesTests
     {
         EventValues eventValues = new EventValues();
         eventValues.AddAll(null);
-        Assert.AreEqual(0, eventValues.Events.Count);
+        Assert.That(eventValues.Events.Count, Is.EqualTo(0));
     }
 
     internal class MyEventHandler : IEventHandlerValue

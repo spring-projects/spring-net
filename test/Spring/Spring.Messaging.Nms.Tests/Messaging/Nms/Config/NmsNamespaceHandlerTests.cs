@@ -51,14 +51,14 @@ public class NmsNamespaceHandlerTests
     [Test]
     public void Registered()
     {
-        Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/nms"));
+        Assert.That(NamespaceParserRegistry.GetParser("http://www.springframework.net/nms"), Is.Not.Null);
     }
 
     [Test]
     public void ObjectsCreated()
     {
         var containers = ctx.GetObjects<SimpleMessageListenerContainer>();
-        Assert.AreEqual(3, containers.Count);
+        Assert.That(containers.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -83,8 +83,8 @@ public class NmsNamespaceHandlerTests
             }
         }
 
-        Assert.AreEqual(1, defaultConnectionFactoryCount, "1 container should have the default connectionFactory");
-        Assert.AreEqual(2, explicitConnectionFactoryCount, "2 containers should have the explicit connectionFactory");
+        Assert.That(defaultConnectionFactoryCount, Is.EqualTo(1), "1 container should have the default connectionFactory");
+        Assert.That(explicitConnectionFactoryCount, Is.EqualTo(2), "2 containers should have the explicit connectionFactory");
     }
 
     [Test]
@@ -94,16 +94,16 @@ public class NmsNamespaceHandlerTests
         TestObject testObject2 = (TestObject) ctx.GetObject("testObject2");
         TestMessageListener testObject3 = (TestMessageListener) ctx.GetObject("testObject3");
 
-        Assert.IsNull(testObject1.Name);
-        Assert.IsNull(testObject2.Name);
-        Assert.IsNull(testObject3.Message);
+        Assert.That(testObject1.Name, Is.Null);
+        Assert.That(testObject2.Name, Is.Null);
+        Assert.That(testObject3.Message, Is.Null);
 
         ITextMessage message1 = A.Fake<ITextMessage>();
         A.CallTo(() => message1.Text).Returns("Test1");
 
         IMessageListener listener1 = GetListener("listener1");
         listener1.OnMessage(message1);
-        Assert.AreEqual("Test1", testObject1.Name);
+        Assert.That(testObject1.Name, Is.EqualTo("Test1"));
 
         ITextMessage message2 = A.Fake<ITextMessage>();
         A.CallTo(() => message2.Text).Returns("Test1");
@@ -119,7 +119,7 @@ public class NmsNamespaceHandlerTests
         string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
         IMessageListener listener3 = GetListener(targetName);
         listener3.OnMessage(message3);
-        Assert.AreSame(message3, testObject3.Message);
+        Assert.That(testObject3.Message, Is.SameAs(message3));
     }
 
     private IMessageListener GetListener(string containerObjectName)

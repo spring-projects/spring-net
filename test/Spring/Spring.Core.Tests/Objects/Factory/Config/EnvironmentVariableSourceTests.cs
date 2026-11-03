@@ -31,11 +31,11 @@ public sealed class EnvironmentVariableSourceTests
         EnvironmentVariableSource vs = new EnvironmentVariableSource();
 
         // existing vars
-        Assert.AreEqual(Environment.GetEnvironmentVariable("path"), vs.ResolveVariable("path"));
-        Assert.AreEqual(Environment.GetEnvironmentVariable("PATH"), vs.ResolveVariable("PATH"));
-        Assert.AreEqual(Environment.GetEnvironmentVariable("ComputerName"), vs.ResolveVariable("computerName"));
+        Assert.That(vs.ResolveVariable("path"), Is.EqualTo(Environment.GetEnvironmentVariable("path")));
+        Assert.That(vs.ResolveVariable("PATH"), Is.EqualTo(Environment.GetEnvironmentVariable("PATH")));
+        Assert.That(vs.ResolveVariable("computerName"), Is.EqualTo(Environment.GetEnvironmentVariable("ComputerName")));
 
         // non-existant variable
-        Assert.IsNull(vs.ResolveVariable("dummy"));
+        Assert.That(vs.ResolveVariable("dummy"), Is.Null);
     }
 }

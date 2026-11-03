@@ -129,7 +129,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertTrue(bool condition)
     {
-        Assert.IsTrue(condition);
+        Assert.That(condition, Is.True);
     }
 
     /// <summary>
@@ -137,7 +137,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertTrue(string message, bool condition)
     {
-        Assert.IsTrue(condition, message);
+        Assert.That(condition, Is.True, message);
     }
 
     /// <summary>
@@ -145,7 +145,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertEquals(object expected, object actual)
     {
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     /// <summary>
@@ -153,7 +153,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertEquals(string message, object expected, object actual)
     {
-        Assert.AreEqual(expected, actual, message);
+        Assert.That(actual, Is.EqualTo(expected), message);
     }
 
     /// <summary>
@@ -161,7 +161,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertNotNull(object o)
     {
-        Assert.IsNotNull(o);
+        Assert.That(o, Is.Not.Null);
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertNotNull(string message, object o)
     {
-        Assert.IsNotNull(o, message);
+        Assert.That(o, Is.Not.Null, message);
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertNull(object o)
     {
-        Assert.IsNull(o);
+        Assert.That(o, Is.Null);
     }
 
     /// <summary>
@@ -185,7 +185,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertNull(string message, object o)
     {
-        Assert.IsNull(o, message);
+        Assert.That(o, Is.Null, message);
     }
 
     /// <summary>
@@ -193,7 +193,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertSame(object expected, object actual)
     {
-        Assert.AreSame(expected, actual);
+        Assert.That(actual, Is.SameAs(expected));
     }
 
     /// <summary>
@@ -201,7 +201,7 @@ public class CompatibilityAdapter
     /// </summary>
     public static void AssertSame(string message, object expected, object actual)
     {
-        Assert.AreSame(expected, actual, message);
+        Assert.That(actual, Is.SameAs(expected), message);
     }
 
     /// <summary>

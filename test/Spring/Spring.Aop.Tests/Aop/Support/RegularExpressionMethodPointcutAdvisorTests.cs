@@ -48,16 +48,16 @@ public class RegularExpressionMethodPointcutAdvisorTests
         IPerson advised = (IPerson) iof.GetObject("SettersAdvised");
         // Interceptor behind regexp advisor
         NopInterceptor nop = (NopInterceptor) iof.GetObject("NopInterceptor");
-        Assert.AreEqual(0, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(0));
 
         int newAge = 12;
         // Not advised
         advised.Exceptional(null);
-        Assert.AreEqual(0, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(0));
         advised.SetAge(newAge);
-        Assert.AreEqual(newAge, advised.GetAge());
+        Assert.That(advised.GetAge(), Is.EqualTo(newAge));
         // Only setter fired
-        Assert.AreEqual(1, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(1));
     }
 
     /// <summary>
@@ -71,23 +71,23 @@ public class RegularExpressionMethodPointcutAdvisorTests
 
         // Interceptor behind regexp advisor
         NopInterceptor nop = (NopInterceptor) iof.GetObject("NopInterceptor");
-        Assert.AreEqual(0, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(0));
 
         int newAge = 12;
         // Not advised
         advised.Exceptional(null);
-        Assert.AreEqual(0, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(0));
 
         // This is proxied
         advised.ReturnsThis();
-        Assert.AreEqual(1, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(1));
 
         // Only setter is advised
         advised.SetAge(newAge);
-        Assert.AreEqual(2, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(2));
 
-        Assert.AreEqual(newAge, advised.GetAge());
-        Assert.AreEqual(2, nop.Count);
+        Assert.That(advised.GetAge(), Is.EqualTo(newAge));
+        Assert.That(nop.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -98,33 +98,33 @@ public class RegularExpressionMethodPointcutAdvisorTests
         IPerson p = (IPerson) iof.GetObject("SerializableSettersAdvised");
         // Interceptor behind regexp advisor
         NopInterceptor nop = (NopInterceptor) iof.GetObject("NopInterceptor");
-        Assert.AreEqual(0, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(0));
 
         int newAge = 12;
         // Not advised
-        Assert.AreEqual(0, p.GetAge());
-        Assert.AreEqual(0, nop.Count);
+        Assert.That(p.GetAge(), Is.EqualTo(0));
+        Assert.That(nop.Count, Is.EqualTo(0));
 
         // This is proxied
         p.SetAge(newAge);
-        Assert.AreEqual(1, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(1));
         p.SetAge(newAge);
-        Assert.AreEqual(newAge, p.GetAge());
+        Assert.That(p.GetAge(), Is.EqualTo(newAge));
         // Only setter fired
-        Assert.AreEqual(2, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(2));
 
         // Serialize and continue...
 
 #if !NETCOREAPP // deep chains for Type serialization problems, not worth the effort at the moment
         p = (IPerson) SerializationTestUtils.SerializeAndDeserialize(p);
-        Assert.AreEqual(newAge, p.GetAge());
+        Assert.That(p.GetAge(), Is.EqualTo(newAge));
 #endif
         // Remembers count, but we need to get a new reference to nop...
         nop = (SerializableNopInterceptor) ((IAdvised) p).Advisors[0].Advice;
-        Assert.AreEqual(2, nop.Count);
-        Assert.AreEqual("SerializableSettersAdvised", p.GetName());
+        Assert.That(nop.Count, Is.EqualTo(2));
+        Assert.That(p.GetName(), Is.EqualTo("SerializableSettersAdvised"));
         p.SetAge(newAge + 1);
-        Assert.AreEqual(3, nop.Count);
-        Assert.AreEqual(newAge + 1, p.GetAge());
+        Assert.That(nop.Count, Is.EqualTo(3));
+        Assert.That(p.GetAge(), Is.EqualTo(newAge + 1));
     }
 }

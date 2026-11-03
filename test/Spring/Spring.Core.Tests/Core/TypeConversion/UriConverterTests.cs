@@ -29,8 +29,8 @@ public sealed class UriConverterTests
     public void CanConvertFrom()
     {
         UriConverter vrt = new UriConverter();
-        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
-        Assert.IsFalse(vrt.CanConvertFrom(typeof(int)));
+        Assert.That(vrt.CanConvertFrom(typeof(string)), Is.True, "Conversion from a string instance must be supported.");
+        Assert.That(vrt.CanConvertFrom(typeof(int)), Is.False);
     }
 
     [Test]
@@ -38,8 +38,8 @@ public sealed class UriConverterTests
     {
         UriConverter vrt = new UriConverter();
         object actual = vrt.ConvertFrom("svn://localhost/Spring/trunk/");
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(typeof(System.Uri), actual.GetType());
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.GetType(), Is.EqualTo(typeof(System.Uri)));
     }
 
     [Test]
@@ -53,7 +53,7 @@ public sealed class UriConverterTests
         catch (Exception ex)
         {
             // check that the inner exception was doe to the malformed URL
-            Assert.IsTrue(ex.InnerException is UriFormatException);
+            Assert.That(ex.InnerException is UriFormatException, Is.True);
         }
     }
 

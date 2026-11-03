@@ -53,10 +53,10 @@ namespace Spring.Data.NHibernate
             sfo.HibernateProperties = properties;
             sfo.AfterPropertiesSet();
 
-            Assert.IsNotNull(sfo.Configuration);
-            Assert.AreEqual(sfo.Configuration.Properties[Environment.ConnectionProvider], typeof(DriverConnectionProvider).AssemblyQualifiedName);
-            Assert.AreEqual(sfo.Configuration.Properties[Environment.ConnectionDriver], typeof(SqlClientDriver).AssemblyQualifiedName);
-            Assert.AreEqual(sfo.Configuration.Properties[Environment.Dialect], typeof(MsSql2000Dialect).AssemblyQualifiedName);
+            Assert.That(sfo.Configuration, Is.Not.Null);
+            Assert.That(typeof(DriverConnectionProvider).AssemblyQualifiedName, Is.EqualTo(sfo.Configuration.Properties[Environment.ConnectionProvider]));
+            Assert.That(typeof(SqlClientDriver).AssemblyQualifiedName, Is.EqualTo(sfo.Configuration.Properties[Environment.ConnectionDriver]));
+            Assert.That(typeof(MsSql2000Dialect).AssemblyQualifiedName, Is.EqualTo(sfo.Configuration.Properties[Environment.Dialect]));
 
             Assert.Throws<KeyNotFoundException>(() =>
             {
@@ -64,7 +64,7 @@ namespace Spring.Data.NHibernate
                     sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass];
             }, "ProxyFactoryFactory should not be explicitly set!");
 
-            Assert.AreNotEqual(typeof(BytecodeProvider), Environment.BytecodeProvider.GetType(), "default IBytecodeProvider should not be Spring's BytecodeProvider!");
+            Assert.That(Environment.BytecodeProvider.GetType(), Is.Not.EqualTo(typeof(BytecodeProvider)), "default IBytecodeProvider should not be Spring's BytecodeProvider!");
         }
 
         [Test]

@@ -55,12 +55,12 @@ public sealed class InvalidateCacheAdviceTests
 
         ExpectCacheInstanceRetrieval("cache", cache);
 
-        Assert.AreEqual(3, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(3));
 
         // item "two" should be removed from cache
         advice.AfterReturning(null, method, args, null);
-        Assert.AreEqual(2, cache.Count);
-        Assert.IsNull(cache.Get(2));
+        Assert.That(cache.Count, Is.EqualTo(2));
+        Assert.That(cache.Get(2), Is.Null);
     }
 
     [Test]
@@ -71,12 +71,12 @@ public sealed class InvalidateCacheAdviceTests
 
         ExpectCacheInstanceRetrieval("cache", cache);
 
-        Assert.AreEqual(3, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(3));
 
         // all items except item "two" should be removed from cache
         advice.AfterReturning(null, method, args, null);
-        Assert.AreEqual(1, cache.Count);
-        Assert.AreEqual("two", cache.Get(2));
+        Assert.That(cache.Count, Is.EqualTo(1));
+        Assert.That(cache.Get(2), Is.EqualTo("two"));
     }
 
     [Test]
@@ -86,11 +86,11 @@ public sealed class InvalidateCacheAdviceTests
 
         ExpectCacheInstanceRetrieval("cache", cache);
 
-        Assert.AreEqual(3, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(3));
 
         // all items should be removed from cache
         advice.AfterReturning(null, method, null, null);
-        Assert.AreEqual(0, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -102,12 +102,12 @@ public sealed class InvalidateCacheAdviceTests
         ExpectCacheInstanceRetrieval("cache", cache);
         ExpectCacheInstanceRetrieval("cache", cache);
 
-        Assert.AreEqual(3, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(3));
 
         // item "two" should be removed from cache
         // all items except item "two" should be removed from cache
         advice.AfterReturning(null, method, args, null);
-        Assert.AreEqual(0, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -116,12 +116,12 @@ public sealed class InvalidateCacheAdviceTests
         MethodInfo method = typeof(InvalidateCacheTarget).GetMethod("InvalidateWithCondition");
         object[] args = new object[] { 3 };
 
-        Assert.AreEqual(3, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(3));
 
         // no items should be removed from cache
         advice.AfterReturning(null, method, args, null);
-        Assert.AreEqual(3, cache.Count);
-        Assert.AreEqual("three", cache.Get(3));
+        Assert.That(cache.Count, Is.EqualTo(3));
+        Assert.That(cache.Get(3), Is.EqualTo("three"));
     }
 
     private void ExpectCacheInstanceRetrieval(string cacheName, ICache cacheToReturn)

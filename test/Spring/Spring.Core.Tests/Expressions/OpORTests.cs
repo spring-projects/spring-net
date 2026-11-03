@@ -29,20 +29,20 @@ public class OpORTests
     public void OrsNumbers()
     {
         OpOR bor = new OpOR(new IntLiteralNode("2"), new IntLiteralNode("3"));
-        Assert.AreEqual(2 | 3, bor.GetValue(null, null));
+        Assert.That(bor.GetValue(null, null), Is.EqualTo(2 | 3));
     }
 
     [Test]
     public void OrsBooleans()
     {
         OpOR bor = new OpOR(new BooleanLiteralNode("false"), new BooleanLiteralNode("true"));
-        Assert.AreEqual(false || true, bor.GetValue(null, null));
+        Assert.That(bor.GetValue(null, null), Is.EqualTo(false || true));
     }
 
     [Test(Description = "SPRNET-1381")]
     public void TestShortcircuitOrOperator()
     {
         object boolean = ExpressionEvaluator.GetValue(new Inventor(), "Name == null or Name.Length == 0");
-        Assert.AreEqual(true, boolean);
+        Assert.That(boolean, Is.EqualTo(true));
     }
 }

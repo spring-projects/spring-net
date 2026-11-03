@@ -30,9 +30,9 @@ public sealed class MethodParametersCountCriteriaTests
     public void Instantiation()
     {
         MethodParametersCountCriteria criteria = new MethodParametersCountCriteria();
-        Assert.AreEqual(0, criteria.ExpectedParameterCount);
+        Assert.That(criteria.ExpectedParameterCount, Is.EqualTo(0));
         criteria = new MethodParametersCountCriteria(10);
-        Assert.AreEqual(10, criteria.ExpectedParameterCount);
+        Assert.That(criteria.ExpectedParameterCount, Is.EqualTo(10));
     }
 
     [Test]
@@ -53,16 +53,16 @@ public sealed class MethodParametersCountCriteriaTests
     {
         MethodParametersCountCriteria criteria = new MethodParametersCountCriteria();
         MethodInfo method = GetType().GetMethod("NoParameter", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
 
         criteria = new MethodParametersCountCriteria(0);
         method = GetType().GetMethod("NoParameter", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
 
         criteria = new MethodParametersCountCriteria();
         criteria.ExpectedParameterCount = 0;
         method = GetType().GetMethod("NoParameter", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
     }
 
     [Test]
@@ -70,7 +70,7 @@ public sealed class MethodParametersCountCriteriaTests
     {
         MethodParametersCountCriteria criteria = new MethodParametersCountCriteria(1);
         MethodInfo method = GetType().GetMethod("OneParameter", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
     }
 
     [Test]
@@ -78,7 +78,7 @@ public sealed class MethodParametersCountCriteriaTests
     {
         MethodParametersCountCriteria criteria = new MethodParametersCountCriteria(2);
         MethodInfo method = GetType().GetMethod("TwoParameters", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
     }
 
     [Test]
@@ -86,26 +86,26 @@ public sealed class MethodParametersCountCriteriaTests
     {
         MethodParametersCountCriteria criteria = new MethodParametersCountCriteria(1);
         MethodInfo method = GetType().GetMethod("ParamsParameters", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsFalse(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.False);
 
         criteria = new MethodParametersCountCriteria(2);
         method = GetType().GetMethod("ParamsParameters", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
 
         criteria = new MethodParametersCountCriteria(3);
         method = GetType().GetMethod("ParamsParameters", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
 
         criteria = new MethodParametersCountCriteria(5);
         method = GetType().GetMethod("ParamsParameters", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
     }
 
     [Test]
     public void IsNotSatisfiedWithNull()
     {
         MethodParametersCountCriteria criteria = new MethodParametersCountCriteria();
-        Assert.IsFalse(criteria.IsSatisfied(null));
+        Assert.That(criteria.IsSatisfied(null), Is.False);
     }
 
     // some methods for testing signatures...

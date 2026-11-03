@@ -72,7 +72,7 @@ public class AopSerializationTests
             }
         }
 
-        Assert.IsEmpty(brokenTypes);
+        Assert.That(brokenTypes, Is.Empty);
     }
 
     protected bool CheckIsSerializable(Type t)

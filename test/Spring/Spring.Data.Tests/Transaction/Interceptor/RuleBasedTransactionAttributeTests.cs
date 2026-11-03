@@ -10,10 +10,10 @@ public class RuleBasedTransactionAttributeTests
     public void DefaultRule()
     {
         var rta = new RuleBasedTransactionAttribute();
-        Assert.IsTrue(rta.RollbackOn(new SystemException()));
+        Assert.That(rta.RollbackOn(new SystemException()), Is.True);
         //mlp 3/17 changed rollback to rollback on all exceptions.
-        Assert.IsTrue(rta.RollbackOn(new ApplicationException()));
-        Assert.IsTrue(rta.RollbackOn(new TransactionSystemException()));
+        Assert.That(rta.RollbackOn(new ApplicationException()), Is.True);
+        Assert.That(rta.RollbackOn(new TransactionSystemException()), Is.True);
     }
 
     [Test]
@@ -24,10 +24,10 @@ public class RuleBasedTransactionAttributeTests
         RuleBasedTransactionAttribute
             rta = new RuleBasedTransactionAttribute(TransactionPropagation.Required, list);
 
-        Assert.IsTrue(rta.RollbackOn(new SystemException()));
+        Assert.That(rta.RollbackOn(new SystemException()), Is.True);
         //mlp 3/17 changed rollback to rollback on all exceptions.
-        Assert.IsTrue(rta.RollbackOn(new ApplicationException()));
-        Assert.IsTrue((rta.RollbackOn(new TransactionSystemException())));
+        Assert.That(rta.RollbackOn(new ApplicationException()), Is.True);
+        Assert.That((rta.RollbackOn(new TransactionSystemException())), Is.True);
     }
 
     [Test]
@@ -38,8 +38,8 @@ public class RuleBasedTransactionAttributeTests
         list.Add(new RollbackRuleAttribute("Spring.Transaction.TransactionSystemException"));
 
         var rta = new RuleBasedTransactionAttribute(TransactionPropagation.Required, list);
-        Assert.IsFalse(rta.RollbackOn(new SystemException()));
-        Assert.IsTrue(rta.RollbackOn(new TransactionSystemException()));
+        Assert.That(rta.RollbackOn(new SystemException()), Is.False);
+        Assert.That(rta.RollbackOn(new TransactionSystemException()), Is.True);
     }
 
     [Test]
@@ -62,8 +62,8 @@ public class RuleBasedTransactionAttributeTests
 
     private void ruleForSelectionRollbackOnChecked(RuleBasedTransactionAttribute rta)
     {
-        Assert.IsTrue(rta.RollbackOn(new SystemException()));
-        Assert.IsTrue(rta.RollbackOn(new TransactionSystemException()));
+        Assert.That(rta.RollbackOn(new SystemException()), Is.True);
+        Assert.That(rta.RollbackOn(new TransactionSystemException()), Is.True);
     }
 
     [Test]
@@ -74,8 +74,8 @@ public class RuleBasedTransactionAttributeTests
         list.Add(new NoRollbackRuleAttribute("Spring.Transaction.TransactionSystemException"));
         var rta = new RuleBasedTransactionAttribute(TransactionPropagation.Required, list);
 
-        Assert.IsTrue(rta.RollbackOn(new SystemException()));
-        Assert.IsFalse(rta.RollbackOn(new TransactionSystemException()));
+        Assert.That(rta.RollbackOn(new SystemException()), Is.True);
+        Assert.That(rta.RollbackOn(new TransactionSystemException()), Is.False);
     }
 
     [Test]
@@ -85,9 +85,9 @@ public class RuleBasedTransactionAttributeTests
         list.Add(new NoRollbackRuleAttribute("System.Exception"));
         var rta = new RuleBasedTransactionAttribute(TransactionPropagation.Required, list);
 
-        Assert.IsFalse(rta.RollbackOn(new SystemException()));
-        Assert.IsFalse(rta.RollbackOn(new DataException()));
-        Assert.IsFalse(rta.RollbackOn(new ApplicationException()));
-        Assert.IsFalse(rta.RollbackOn(new TransactionSystemException()));
+        Assert.That(rta.RollbackOn(new SystemException()), Is.False);
+        Assert.That(rta.RollbackOn(new DataException()), Is.False);
+        Assert.That(rta.RollbackOn(new ApplicationException()), Is.False);
+        Assert.That(rta.RollbackOn(new TransactionSystemException()), Is.False);
     }
 }

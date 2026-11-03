@@ -34,8 +34,8 @@ public sealed class ArgumentConvertingMethodInvokerTests
         vkr.Arguments = new object[] { "Rick, Mark, Griffin, Si, Choy, Aleks" };
         vkr.Prepare();
         string actual = vkr.Invoke() as string;
-        Assert.IsNotNull(actual);
-        Assert.AreEqual("Hi Rick, Mark, Griffin, Si, Choy, Aleks", actual);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("Hi Rick, Mark, Griffin, Si, Choy, Aleks"));
     }
 
     [Test]
@@ -49,9 +49,9 @@ public sealed class ArgumentConvertingMethodInvokerTests
         vkr.Arguments = new object[] { "Rick, Mark, Griffin, Federico, Choy, Aleks" };
         vkr.Prepare();
         string actual = vkr.Invoke() as string;
-        Assert.IsNotNull(actual);
-        Assert.AreEqual("Hi ya'll", actual);
-        Assert.IsNotNull(instance.developers);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("Hi ya'll"));
+        Assert.That(instance.developers, Is.Not.Null);
     }
 
     [Test]
@@ -65,9 +65,9 @@ public sealed class ArgumentConvertingMethodInvokerTests
         vkr.AddNamedArgument("nameS", new object[] { "Rick, Mark, Griffin, Federico, Choy, Aleks" });
         vkr.Prepare();
         string actual = vkr.Invoke() as string;
-        Assert.IsNotNull(actual);
-        Assert.AreEqual("Hi ya'll", actual);
-        Assert.IsNotNull(instance.developers);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("Hi ya'll"));
+        Assert.That(instance.developers, Is.Not.Null);
     }
 
     [Test]
@@ -82,8 +82,8 @@ public sealed class ArgumentConvertingMethodInvokerTests
         vkr.Arguments = new object[] { "Lebowski" };
         vkr.Prepare();
         string actual = vkr.Invoke() as string;
-        Assert.IsNotNull(actual);
-        Assert.AreEqual("Hi Lebowski", actual);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("Hi Lebowski"));
     }
 }
 

@@ -66,8 +66,8 @@ public class TransactionTemplateTests
 
         TransactionTemplate temp = new TransactionTemplate(mock);
         temp.AfterPropertiesSet();
-        Assert.AreEqual(mock, temp.PlatformTransactionManager);
-        Assert.IsNull(temp.Execute(DummyTransactionMethod));
+        Assert.That(temp.PlatformTransactionManager, Is.EqualTo(mock));
+        Assert.That(temp.Execute(DummyTransactionMethod), Is.Null);
 
         A.CallTo(() => mock.GetTransaction(A<ITransactionDefinition>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mock.Commit(A<ITransactionStatus>._)).MustHaveHappenedOnceExactly();

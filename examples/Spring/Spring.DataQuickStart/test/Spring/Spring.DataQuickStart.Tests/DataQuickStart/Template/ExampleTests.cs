@@ -35,7 +35,7 @@ namespace Spring.DataQuickStart.Template
         {
             CommandCallbackDao commandCallbackDao = ctx["commandCallbackDao"] as CommandCallbackDao;
             int count = commandCallbackDao.FindCountWithPostalCode("1010");
-            Assert.AreEqual(3, count);
+            Assert.That(count, Is.EqualTo(3));
         }
         
         [Test]
@@ -43,21 +43,21 @@ namespace Spring.DataQuickStart.Template
         {
             ResultSetExtractorDao dao = ctx["resultSetExtractorDao"] as ResultSetExtractorDao;
             IDictionary postalCodeDictionary = dao.GetPostalCodeCustomerMapping();
-            Assert.IsNotNull(postalCodeDictionary);
-            Assert.AreEqual(87, postalCodeDictionary.Count);
+            Assert.That(postalCodeDictionary, Is.Not.Null);
+            Assert.That(postalCodeDictionary.Count, Is.EqualTo(87));
 
             IList contactNameList = dao.GetCustomerNameByCountryAndCity("Brazil", "Sao Paulo");
-            Assert.AreEqual(4, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(4));
 
             contactNameList = dao.GetCustomerNameByCountryAndCityWithParamsBuilder("Brazil", "Sao Paulo");
-            Assert.AreEqual(4, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(4));
 
 
             contactNameList = dao.GetCustomerNameByCountryAndCityWithCommandSetter("Brazil", "Sao Paulo");
-            Assert.AreEqual(4, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(4));
 
             contactNameList = dao.GetCustomerNameByCountry("Brazil");
-            Assert.AreEqual(9, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(9));
         }
         
         [Test]
@@ -77,8 +77,8 @@ namespace Spring.DataQuickStart.Template
         {
             RowCallbackDao dao = ctx["rowCallbackDao"] as RowCallbackDao;
             IDictionary postalCodeDictionary = dao.GetPostalCodeCustomerMapping();
-            Assert.IsNotNull(postalCodeDictionary);
-            Assert.AreEqual(87, postalCodeDictionary.Count);
+            Assert.That(postalCodeDictionary, Is.Not.Null);
+            Assert.That(postalCodeDictionary.Count, Is.EqualTo(87));
         }
         
         [Test]
@@ -86,7 +86,7 @@ namespace Spring.DataQuickStart.Template
         {
             QueryForObjectDao dao = ctx["queryForObjectDao"] as QueryForObjectDao;
             Customer customer = dao.GetCustomer("Hanna Moos");
-            Assert.AreEqual(customer.ContactName, "Hanna Moos");            
+            Assert.That("Hanna Moos", Is.EqualTo(customer.ContactName));            
         }
         
         [Test]
@@ -94,7 +94,7 @@ namespace Spring.DataQuickStart.Template
         {
             CustOrdersDetailStoredProc storedProc = ctx["custOrdersDetailStoredProc"] as CustOrdersDetailStoredProc;
             IList details = storedProc.GetOrderDetails(10278);
-            Assert.AreEqual(4, details.Count);
+            Assert.That(details.Count, Is.EqualTo(4));
         }
 
         [Test]
@@ -102,20 +102,20 @@ namespace Spring.DataQuickStart.Template
         {
             CustomerDataSetDao customerDataSetDao = ctx["customerDataSetDao"] as CustomerDataSetDao;
             DataSet dataSet = customerDataSetDao.GetCustomers();
-            Assert.AreEqual(91, dataSet.Tables["Table"].Rows.Count);
+            Assert.That(dataSet.Tables["Table"].Rows.Count, Is.EqualTo(91));
 
             dataSet = customerDataSetDao.GetCustomers("Customers");
-            Assert.AreEqual(91, dataSet.Tables["Customers"].Rows.Count);
+            Assert.That(dataSet.Tables["Customers"].Rows.Count, Is.EqualTo(91));
 
             dataSet = customerDataSetDao.GetCustomersLike("M%");
-            Assert.AreEqual(12, dataSet.Tables["Table"].Rows.Count);
+            Assert.That(dataSet.Tables["Table"].Rows.Count, Is.EqualTo(12));
 
             dataSet = new DataSet();
             dataSet.Locale = CultureInfo.InvariantCulture;
 
 
             customerDataSetDao.FillCustomers(dataSet);
-            Assert.AreEqual(91, dataSet.Tables["Customers"].Rows.Count);
+            Assert.That(dataSet.Tables["Customers"].Rows.Count, Is.EqualTo(91));
 
 
             AddAndEditRow(dataSet);
@@ -127,10 +127,10 @@ namespace Spring.DataQuickStart.Template
 
                 int count =
                     (int)adoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers where CustomerId = 'NewID'");
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 count = (int)adoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers where CustomerId = 'ALFKI' and Phone = '030-0074322'");
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
             }
             finally
@@ -173,17 +173,17 @@ namespace Spring.DataQuickStart.Template
                 DataSet dataSet = new DataSet();
                 dataSet.Locale = CultureInfo.InvariantCulture;
                 customerDataSetDao.FillCustomers(dataSet);
-                Assert.AreEqual(91, dataSet.Tables["Customers"].Rows.Count);
+                Assert.That(dataSet.Tables["Customers"].Rows.Count, Is.EqualTo(91));
 
                 AddAndEditRow(dataSet);
 
                 customerDataSetDao.Update(dataSet);
 
                 int count = (int)adoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers where CustomerId = 'NewID'");
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
                 count = (int)adoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers where CustomerId = 'ALFKI' and Phone = '030-0074322'");
-                Assert.AreEqual(1, count);
+                Assert.That(count, Is.EqualTo(1));
 
             } finally
             {
@@ -196,8 +196,8 @@ namespace Spring.DataQuickStart.Template
 
         private static void AssertsOnCustomerList(IList customerList)
         {
-            Assert.IsNotNull(customerList);
-            Assert.AreEqual(91, customerList.Count);
+            Assert.That(customerList, Is.Not.Null);
+            Assert.That(customerList.Count, Is.EqualTo(91));
         }
     }
 }

@@ -31,7 +31,7 @@ public sealed class ExclusiveValidatorGroupTests
     public void DefaultsToFastValidate()
     {
         ExclusiveValidatorGroup evg = new ExclusiveValidatorGroup();
-        Assert.IsTrue(evg.FastValidate);
+        Assert.That(evg.FastValidate, Is.True);
     }
 
     [Test]
@@ -49,10 +49,10 @@ public sealed class ExclusiveValidatorGroupTests
 
         bool valid = vg.Validate(new object(), errors);
 
-        Assert.IsFalse(valid, "Validation should fail when all inner validators return false.");
-        Assert.AreEqual(3, errors.GetErrors("errors").Count);
-        Assert.AreEqual(1, errors.GetErrors("exclusiveErrors").Count);
-        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        Assert.That(valid, Is.False, "Validation should fail when all inner validators return false.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(3));
+        Assert.That(errors.GetErrors("exclusiveErrors").Count, Is.EqualTo(1));
+        Assert.That(errors.GetErrors("existingErrors").Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -70,10 +70,10 @@ public sealed class ExclusiveValidatorGroupTests
 
         bool valid = vg.Validate(new object(), errors);
 
-        Assert.IsFalse(valid, "Validation should fail when all inner validators return true.");
-        Assert.AreEqual(0, errors.GetErrors("errors").Count);
-        Assert.AreEqual(1, errors.GetErrors("exclusiveErrors").Count);
-        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        Assert.That(valid, Is.False, "Validation should fail when all inner validators return true.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(0));
+        Assert.That(errors.GetErrors("exclusiveErrors").Count, Is.EqualTo(1));
+        Assert.That(errors.GetErrors("existingErrors").Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -91,15 +91,15 @@ public sealed class ExclusiveValidatorGroupTests
 
         bool valid = vg.Validate(new object(), errors);
 
-        Assert.IsTrue(valid, "Validation should succeed when single inner validator returns true.");
-        Assert.AreEqual(0, errors.GetErrors("errors").Count);
-        Assert.AreEqual(0, errors.GetErrors("exclusiveErrors").Count);
-        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        Assert.That(valid, Is.True, "Validation should succeed when single inner validator returns true.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(0));
+        Assert.That(errors.GetErrors("exclusiveErrors").Count, Is.EqualTo(0));
+        Assert.That(errors.GetErrors("existingErrors").Count, Is.EqualTo(1));
 
         // ALL validators are called
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[0]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[1]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[2]).WasCalled);
+        Assert.That(((BaseTestValidator) vg.Validators[0]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[1]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[2]).WasCalled, Is.True);
     }
 
     [Test]
@@ -110,11 +110,11 @@ public sealed class ExclusiveValidatorGroupTests
         IValidationErrors errors = new ValidationErrors();
         WhenMultipleValidatorsReturnTrue(vg, errors);
         // validators are called only until validation result is known
-        Assert.AreEqual(1, errors.GetErrors("errors").Count);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[0]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[1]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[2]).WasCalled);
-        Assert.IsFalse(((BaseTestValidator) vg.Validators[3]).WasCalled);
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(1));
+        Assert.That(((BaseTestValidator) vg.Validators[0]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[1]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[2]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[3]).WasCalled, Is.False);
     }
 
     [Test]
@@ -125,11 +125,11 @@ public sealed class ExclusiveValidatorGroupTests
         IValidationErrors errors = new ValidationErrors();
         WhenMultipleValidatorsReturnTrue(vg, errors);
         // ALL validators are called
-        Assert.AreEqual(2, errors.GetErrors("errors").Count);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[0]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[1]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[2]).WasCalled);
-        Assert.IsTrue(((BaseTestValidator) vg.Validators[3]).WasCalled);
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(2));
+        Assert.That(((BaseTestValidator) vg.Validators[0]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[1]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[2]).WasCalled, Is.True);
+        Assert.That(((BaseTestValidator) vg.Validators[3]).WasCalled, Is.True);
     }
 
     private void WhenMultipleValidatorsReturnTrue(ExclusiveValidatorGroup vg, IValidationErrors errors)
@@ -145,9 +145,9 @@ public sealed class ExclusiveValidatorGroupTests
 
         bool valid = vg.Validate(new object(), errors);
 
-        Assert.IsFalse(valid, "Validation should not succeed when multiple inner validators return true.");
-        Assert.AreEqual(1, errors.GetErrors("exclusiveErrors").Count);
-        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        Assert.That(valid, Is.False, "Validation should not succeed when multiple inner validators return true.");
+        Assert.That(errors.GetErrors("exclusiveErrors").Count, Is.EqualTo(1));
+        Assert.That(errors.GetErrors("existingErrors").Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -162,8 +162,8 @@ public sealed class ExclusiveValidatorGroupTests
 
         bool valid = vg.Validate(new object(), errors);
 
-        Assert.IsTrue(valid, "Validation should succeed when group validator is not evaluated.");
-        Assert.AreEqual(0, errors.GetErrors("errors").Count);
-        Assert.AreEqual(1, errors.GetErrors("existingErrors").Count);
+        Assert.That(valid, Is.True, "Validation should succeed when group validator is not evaluated.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(0));
+        Assert.That(errors.GetErrors("existingErrors").Count, Is.EqualTo(1));
     }
 }

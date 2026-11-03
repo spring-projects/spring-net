@@ -30,10 +30,10 @@ namespace Spring.Data.NHibernate
             lsfo.HibernateProperties = properties;
             lsfo.AfterPropertiesSet();
 
-            Assert.IsNotNull(lsfo.Configuration);
-            Assert.AreEqual(lsfo.Configuration.Properties[NhCfg.Environment.ConnectionProvider], typeof(DriverConnectionProvider).AssemblyQualifiedName);
-            Assert.AreEqual(lsfo.Configuration.Properties[NhCfg.Environment.ConnectionDriver], typeof(SqlClientDriver).AssemblyQualifiedName);
-            Assert.AreEqual(lsfo.Configuration.Properties[NhCfg.Environment.Dialect], typeof(MsSql2000Dialect).AssemblyQualifiedName);
+            Assert.That(lsfo.Configuration, Is.Not.Null);
+            Assert.That(typeof(DriverConnectionProvider).AssemblyQualifiedName, Is.EqualTo(lsfo.Configuration.Properties[NhCfg.Environment.ConnectionProvider]));
+            Assert.That(typeof(SqlClientDriver).AssemblyQualifiedName, Is.EqualTo(lsfo.Configuration.Properties[NhCfg.Environment.ConnectionDriver]));
+            Assert.That(typeof(MsSql2000Dialect).AssemblyQualifiedName, Is.EqualTo(lsfo.Configuration.Properties[NhCfg.Environment.Dialect]));
         }
     }
 }

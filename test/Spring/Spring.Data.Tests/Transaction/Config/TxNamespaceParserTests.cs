@@ -82,19 +82,19 @@ public class TxNamespaceParserTests
 
         IApplicationContext appCtx = new ResourceXmlApplicationContext(appCtxCfg);
 //            DefaultAdvisorAutoProxyCreator daapc = (DefaultAdvisorAutoProxyCreator) appCtx.GetObject(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME);
-//            Assert.AreEqual(2, daapc.Order);
+//            Assert.That(daapc.Order, Is.EqualTo(2));
     }
 
     [Test]
     public void Registered()
     {
-        Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/tx"));
-        Assert.IsTrue(ctx.ContainsObjectDefinition(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME));
+        Assert.That(NamespaceParserRegistry.GetParser("http://www.springframework.net/tx"), Is.Not.Null);
+        Assert.That(ctx.ContainsObjectDefinition(AopNamespaceUtils.AUTO_PROXY_CREATOR_OBJECT_NAME), Is.True);
 
         string className = typeof(ObjectFactoryTransactionAttributeSourceAdvisor).FullName;
         string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
 
-        Assert.IsTrue(ctx.ContainsObjectDefinition(targetName));
+        Assert.That(ctx.ContainsObjectDefinition(targetName), Is.True);
     }
 
     [Test]
@@ -102,18 +102,18 @@ public class TxNamespaceParserTests
     {
         ITestObject testObject = TestObject;
         CallCountingTransactionManager ptm = ctx["transactionManager"] as CallCountingTransactionManager;
-        Assert.IsNotNull(ptm);
+        Assert.That(ptm, Is.Not.Null);
 
         // try with transactional
-        Assert.AreEqual(0, ptm.begun, "Should not have started any transactions");
+        Assert.That(ptm.begun, Is.EqualTo(0), "Should not have started any transactions");
         testObject.GetDescription();
-        Assert.AreEqual(1, ptm.begun, "Should have 1 started transaction");
-        Assert.AreEqual(1, ptm.commits, "Should have 1 committed transaction");
+        Assert.That(ptm.begun, Is.EqualTo(1), "Should have 1 started transaction");
+        Assert.That(ptm.commits, Is.EqualTo(1), "Should have 1 committed transaction");
 
         // try with non-transaction
         int i = testObject.Age;
-        Assert.IsNotNull(i);
-        Assert.AreEqual(1, ptm.begun, "Should not have started another transaction");
+        Assert.That((object) i, Is.Not.Null);
+        Assert.That(ptm.begun, Is.EqualTo(1), "Should not have started another transaction");
 
         // try with exceptional
         try
@@ -123,8 +123,8 @@ public class TxNamespaceParserTests
         }
         catch (Exception)
         {
-            Assert.AreEqual(2, ptm.begun, "Should have another started transaction");
-            Assert.AreEqual(1, ptm.rollbacks, "Should have 1 rolled back transaction");
+            Assert.That(ptm.begun, Is.EqualTo(2), "Should have another started transaction");
+            Assert.That(ptm.rollbacks, Is.EqualTo(1), "Should have 1 rolled back transaction");
         }
     }
 
@@ -141,15 +141,15 @@ public class TxNamespaceParserTests
     public void RollbackRules()
     {
         TransactionInterceptor txInterceptor = ctx.GetObject("txRollbackAdvice") as TransactionInterceptor;
-        Assert.IsNotNull(txInterceptor);
+        Assert.That(txInterceptor, Is.Not.Null);
 
         MethodInfo getDescriptionMethod = typeof(ITestObject).GetMethod("GetDescription");
         MethodInfo exceptionalMethod = typeof(ITestObject).GetMethod("Exceptional");
         ITransactionAttributeSource txAttrSource = txInterceptor.TransactionAttributeSource;
         ITransactionAttribute txAttr = txAttrSource.ReturnTransactionAttribute(getDescriptionMethod, typeof(ITestObject));
-        Assert.IsTrue(txAttr.RollbackOn(new System.ApplicationException()));
+        Assert.That(txAttr.RollbackOn(new System.ApplicationException()), Is.True);
 
         txAttr = txAttrSource.ReturnTransactionAttribute(exceptionalMethod, typeof(ITestObject));
-        Assert.IsFalse(txAttr.RollbackOn(new System.ArithmeticException()));
+        Assert.That(txAttr.RollbackOn(new System.ArithmeticException()), Is.False);
     }
 }

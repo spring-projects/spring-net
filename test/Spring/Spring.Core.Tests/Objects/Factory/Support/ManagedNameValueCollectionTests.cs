@@ -37,7 +37,7 @@ public class ManagedNameValueCollectionTests
         child.Add("three", "three");
         child.MergeEnabled = true;
         NameValueCollection mergedList = (NameValueCollection) child.Merge(parent);
-        Assert.AreEqual(3, mergedList.Count);
+        Assert.That(mergedList.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -45,7 +45,7 @@ public class ManagedNameValueCollectionTests
     {
         ManagedNameValueCollection child = new ManagedNameValueCollection();
         child.MergeEnabled = true;
-        Assert.AreSame(child, child.Merge(null));
+        Assert.That(child.Merge(null), Is.SameAs(child));
     }
 
     [Test]
@@ -72,7 +72,7 @@ public class ManagedNameValueCollectionTests
         ManagedNameValueCollection child = new ManagedNameValueCollection();
         child.MergeEnabled = true;
         NameValueCollection mergedMap = (NameValueCollection) child.Merge(parent);
-        Assert.AreEqual(2, mergedMap.Count);
+        Assert.That(mergedMap.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -85,7 +85,7 @@ public class ManagedNameValueCollectionTests
         child.Add("one", "fork");
         child.MergeEnabled = true;
         NameValueCollection mergedMap = (NameValueCollection) child.Merge(parent);
-        Assert.AreEqual(2, mergedMap.Count);
-        Assert.AreEqual("fork", mergedMap["one"]);
+        Assert.That(mergedMap.Count, Is.EqualTo(2));
+        Assert.That(mergedMap["one"], Is.EqualTo("fork"));
     }
 }

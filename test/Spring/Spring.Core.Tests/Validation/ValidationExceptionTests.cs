@@ -30,22 +30,22 @@ public sealed class ValidationExceptionTests
     public void InstantiationUsingDefaultConstructor()
     {
         ValidationException ex = new ValidationException();
-        Assert.IsNull(ex.ValidationErrors);
+        Assert.That(ex.ValidationErrors, Is.Null);
     }
 
     [Test]
     public void InstantiationSupplyingValidationErrors()
     {
         ValidationException ex = new ValidationException(new ValidationErrors());
-        Assert.IsTrue(ex.ValidationErrors.IsEmpty);
+        Assert.That(ex.ValidationErrors.IsEmpty, Is.True);
     }
 
     [Test]
     public void InstantiationSupplyingMessageAndValidationErrors()
     {
         ValidationException ex = new ValidationException("my message", new ValidationErrors());
-        Assert.AreEqual("my message", ex.Message);
-        Assert.IsTrue(ex.ValidationErrors.IsEmpty);
+        Assert.That(ex.Message, Is.EqualTo("my message"));
+        Assert.That(ex.ValidationErrors.IsEmpty, Is.True);
     }
 
     [Test]
@@ -53,10 +53,10 @@ public sealed class ValidationExceptionTests
     {
         Exception rootCause = new Exception("root cause");
         ValidationException ex = new ValidationException("my message", rootCause, new ValidationErrors());
-        Assert.AreEqual("my message", ex.Message);
-        Assert.IsTrue(ex.ValidationErrors.IsEmpty);
-        Assert.AreEqual(rootCause, ex.InnerException);
-        Assert.AreEqual("root cause", ex.InnerException.Message);
+        Assert.That(ex.Message, Is.EqualTo("my message"));
+        Assert.That(ex.ValidationErrors.IsEmpty, Is.True);
+        Assert.That(ex.InnerException, Is.EqualTo(rootCause));
+        Assert.That(ex.InnerException.Message, Is.EqualTo("root cause"));
     }
 
     [Test]
@@ -71,8 +71,8 @@ public sealed class ValidationExceptionTests
         buffer.Position = 0;
         ValidationException e2 = (ValidationException) serializer.Deserialize(buffer);
 
-        Assert.AreEqual("my message", e2.Message);
-        Assert.IsTrue(e2.ValidationErrors.IsEmpty);
-        Assert.AreEqual("root cause", e2.InnerException.Message);
+        Assert.That(e2.Message, Is.EqualTo("my message"));
+        Assert.That(e2.ValidationErrors.IsEmpty, Is.True);
+        Assert.That(e2.InnerException.Message, Is.EqualTo("root cause"));
     }
 }

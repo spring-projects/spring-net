@@ -33,15 +33,15 @@ public sealed class TypedStringValueTests
         string expectedNow = DateTime.Now.ToShortDateString();
 
         TypedStringValue tsv = new TypedStringValue(expectedNow, typeof(DateTime));
-        Assert.AreEqual(expectedNow, tsv.Value);
-        Assert.AreEqual(typeof(DateTime), tsv.TargetType);
+        Assert.That(tsv.Value, Is.EqualTo(expectedNow));
+        Assert.That(tsv.TargetType, Is.EqualTo(typeof(DateTime)));
 
         tsv = new TypedStringValue(expectedNow);
-        Assert.AreEqual(expectedNow, tsv.Value);
+        Assert.That(tsv.Value, Is.EqualTo(expectedNow));
 
         tsv = new TypedStringValue(expectedNow, typeof(DateTime).FullName);
-        Assert.AreEqual(expectedNow, tsv.Value);
-        Assert.AreEqual(typeof(DateTime).FullName, tsv.TargetTypeName);
+        Assert.That(tsv.Value, Is.EqualTo(expectedNow));
+        Assert.That(tsv.TargetTypeName, Is.EqualTo(typeof(DateTime).FullName));
     }
 
     [Test]
@@ -79,7 +79,8 @@ public sealed class TypedStringValueTests
     [Test]
     public void IsSerializable()
     {
-        Assert.IsTrue(SerializationTestUtils.IsSerializable(new TypedStringValue()),
+        Assert.That(SerializationTestUtils.IsSerializable(new TypedStringValue()),
+            Is.True,
             "Must be marked as [Serializable].");
     }
 
@@ -93,13 +94,14 @@ public sealed class TypedStringValueTests
         value.Value = expectedValue;
 
         object foo = SerializationTestUtils.SerializeAndDeserialize(value);
-        Assert.IsNotNull(foo, "Serialization roundtrip must never result in null.");
+        Assert.That(foo, Is.Not.Null, "Serialization roundtrip must never result in null.");
         TypedStringValue deser = foo as TypedStringValue;
-        Assert.IsNotNull(deser,
+        Assert.That(deser,
+            Is.Not.Null,
             "Serialization roundtrip yielded the wrong Type of object.");
-        Assert.AreEqual(expectedType, deser.TargetType,
+        Assert.That(deser.TargetType, Is.EqualTo(expectedType),
             "Serialization roundtrip yielded the wrong TargetType.");
-        Assert.AreEqual(expectedValue, deser.Value,
+        Assert.That(deser.Value, Is.EqualTo(expectedValue),
             "Serialization roundtrip yielded the wrong Value.");
     }
 
@@ -107,27 +109,27 @@ public sealed class TypedStringValueTests
     public void HasTargetType()
     {
         TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime));
-        Assert.IsTrue(tsv.HasTargetType);
+        Assert.That(tsv.HasTargetType, Is.True);
     }
 
     [Test]
     public void HasTargetTypeReturnsFalseWhenTargetTypeNotResolved()
     {
         TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime).FullName);
-        Assert.IsFalse(tsv.HasTargetType);
+        Assert.That(tsv.HasTargetType, Is.False);
 
         tsv = new TypedStringValue(string.Empty, typeof(DateTime));
-        Assert.IsTrue(tsv.HasTargetType);
+        Assert.That(tsv.HasTargetType, Is.True);
         tsv.TargetTypeName = typeof(DateTime).FullName;
-        Assert.IsFalse(tsv.HasTargetType);
+        Assert.That(tsv.HasTargetType, Is.False);
     }
 
     [Test]
     public void ResolveTargetType()
     {
         TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime).FullName);
-        Assert.IsFalse(tsv.HasTargetType);
-        Assert.AreEqual(typeof(DateTime), tsv.ResolveTargetType());
-        Assert.IsTrue(tsv.HasTargetType);
+        Assert.That(tsv.HasTargetType, Is.False);
+        Assert.That(tsv.ResolveTargetType(), Is.EqualTo(typeof(DateTime)));
+        Assert.That(tsv.HasTargetType, Is.True);
     }
 }

@@ -51,7 +51,7 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("ctor-args.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         TestObject rod = (TestObject) xof.GetObject("rod");
-        Assert.AreEqual(1, rod.Age);
+        Assert.That(rod.Age, Is.EqualTo(1));
 
         RootObjectDefinition def = (RootObjectDefinition) xof.GetObjectDefinition("rod");
         ConstructorResolver resolver = new ConstructorResolver(xof, xof, new SimpleInstantiationStrategy(),
@@ -64,7 +64,7 @@ public sealed class XmlObjectCollectionTests
 
         TestObject foo = (TestObject) xof.GetObject("foo");
 
-        Assert.AreEqual(2, foo.Age);
+        Assert.That(foo.Age, Is.EqualTo(2));
     }
 
     [Test]
@@ -81,9 +81,9 @@ public sealed class XmlObjectCollectionTests
         // Our object doesn't modify the collection:
         // of course it could be a different copy in a real object
         IList friends = (IList) rod.Friends;
-        Assert.IsTrue(friends.Count == 2);
-        Assert.IsTrue(friends[0] == jen, "First friend must be jen, not " + friends[0]);
-        Assert.IsTrue(friends[1] == dave);
+        Assert.That(friends.Count == 2, Is.True);
+        Assert.That(friends[0] == jen, Is.True, "First friend must be jen, not " + friends[0]);
+        Assert.That(friends[1] == dave, Is.True);
         // Should be ordered
     }
 
@@ -97,19 +97,19 @@ public sealed class XmlObjectCollectionTests
         TestObject dave = (TestObject) xof.GetObject("pDavid");
         TestObject rod = (TestObject) xof.GetObject("pRod");
         IList friends = (IList) rod.Friends;
-        Assert.IsTrue(friends.Count == 2);
-        Assert.IsTrue(friends[0].ToString().Equals(jen.ToString()), "First friend must be jen, not " + friends[0]);
-        Assert.IsTrue(friends[0] != jen, "Jen not same instance");
-        Assert.IsTrue(friends[1].ToString().Equals(dave.ToString()));
-        Assert.IsTrue(friends[1] != dave, "Dave not same instance");
+        Assert.That(friends.Count == 2, Is.True);
+        Assert.That(friends[0].ToString().Equals(jen.ToString()), Is.True, "First friend must be jen, not " + friends[0]);
+        Assert.That(friends[0] != jen, Is.True, "Jen not same instance");
+        Assert.That(friends[1].ToString().Equals(dave.ToString()), Is.True);
+        Assert.That(friends[1] != dave, Is.True, "Dave not same instance");
 
         TestObject rod2 = (TestObject) xof.GetObject("pRod");
         IList friends2 = (IList) rod2.Friends;
-        Assert.IsTrue(friends2.Count == 2);
-        Assert.IsTrue(friends2[0].ToString().Equals(jen.ToString()), "First friend must be jen, not " + friends2[0]);
-        Assert.IsTrue(friends2[0] != friends[0], "Jen not same instance");
-        Assert.IsTrue(friends2[1].ToString().Equals(dave.ToString()));
-        Assert.IsTrue(friends2[1] != friends[1], "Dave not same instance");
+        Assert.That(friends2.Count == 2, Is.True);
+        Assert.That(friends2[0].ToString().Equals(jen.ToString()), Is.True, "First friend must be jen, not " + friends2[0]);
+        Assert.That(friends2[0] != friends[0], Is.True, "Jen not same instance");
+        Assert.That(friends2[1].ToString().Equals(dave.ToString()), Is.True);
+        Assert.That(friends2[1] != friends[1], Is.True, "Dave not same instance");
     }
 
     [Test]
@@ -119,7 +119,7 @@ public sealed class XmlObjectCollectionTests
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         TestObject loner = (TestObject) xof.GetObject("loner");
         TestObject dave = (TestObject) xof.GetObject("david");
-        Assert.IsTrue(loner.Friends.Count == 1);
+        Assert.That(loner.Friends.Count == 1, Is.True);
         bool contains = false;
         foreach (object friend in loner.Friends)
         {
@@ -130,7 +130,7 @@ public sealed class XmlObjectCollectionTests
             }
         }
 
-        Assert.IsTrue(contains);
+        Assert.That(contains, Is.True);
     }
 
     [Test]
@@ -140,14 +140,14 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         MixedCollectionObject jumble = (MixedCollectionObject) xof.GetObject("jumble");
-        Assert.AreEqual(1, MixedCollectionObject.nrOfInstances);
+        Assert.That(MixedCollectionObject.nrOfInstances, Is.EqualTo(1));
         xof.GetObject("david", typeof(TestObject));
-        Assert.IsTrue(jumble.Jumble.Count == 4, "Expected 3 elements, not " + jumble.Jumble.Count);
+        Assert.That(jumble.Jumble.Count == 4, Is.True, "Expected 3 elements, not " + jumble.Jumble.Count);
         IList l = (IList) jumble.Jumble;
-        Assert.IsTrue(l[0].Equals(xof.GetObject("david")));
-        Assert.IsTrue(l[1].Equals("literal"));
-        Assert.IsTrue(l[2].Equals(xof.GetObject("jenny")));
-        Assert.IsTrue(l[3].Equals("rod"));
+        Assert.That(l[0].Equals(xof.GetObject("david")), Is.True);
+        Assert.That(l[1].Equals("literal"), Is.True);
+        Assert.That(l[2].Equals(xof.GetObject("jenny")), Is.True);
+        Assert.That(l[3].Equals("rod"), Is.True);
     }
 
     /// <summary>
@@ -161,8 +161,8 @@ public sealed class XmlObjectCollectionTests
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         TestObject objectWithTypedFriends = (TestObject) xof.GetObject("objectWithTypedFriends");
         TestObjectList tol = objectWithTypedFriends.TypedFriends;
-        Assert.AreEqual(1, tol.Count);
-        Assert.IsTrue(tol[0].Equals(xof.GetObject("david")));
+        Assert.That(tol.Count, Is.EqualTo(1));
+        Assert.That(tol[0].Equals(xof.GetObject("david")), Is.True);
     }
 
     /// <summary>
@@ -174,8 +174,8 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         TestObject testObject = (TestObject) xof.GetObject("objectWithIndexer");
-        Assert.IsNotNull(testObject);
-        Assert.AreEqual("my string value", testObject[0]);
+        Assert.That(testObject, Is.Not.Null);
+        Assert.That(testObject[0], Is.EqualTo("my string value"));
     }
 
     /// <summary>
@@ -189,46 +189,46 @@ public sealed class XmlObjectCollectionTests
         var objectNames = xof.GetObjectDefinitionNames();
         TestObject tb1 = (TestObject) xof.GetObject("aliased");
         TestObject alias1 = (TestObject) xof.GetObject("myalias");
-        Assert.IsTrue(tb1 == alias1);
+        Assert.That(tb1 == alias1, Is.True);
 
         var tb1Aliases = xof.GetAliases("aliased");
-        Assert.AreEqual(1, tb1Aliases.Count);
-        Assert.IsTrue(tb1Aliases.Contains("myalias"));
-        Assert.IsTrue(objectNames.Contains("aliased"));
-        Assert.IsFalse(objectNames.Contains("myalias"));
+        Assert.That(tb1Aliases.Count, Is.EqualTo(1));
+        Assert.That(tb1Aliases.Contains("myalias"), Is.True);
+        Assert.That(objectNames.Contains("aliased"), Is.True);
+        Assert.That(objectNames.Contains("myalias"), Is.False);
 
         TestObject tb2 = (TestObject) xof.GetObject("multiAliased");
         TestObject alias2 = (TestObject) xof.GetObject("alias1");
         TestObject alias3 = (TestObject) xof.GetObject("alias2");
-        Assert.IsTrue(tb2 == alias2);
-        Assert.IsTrue(tb2 == alias3);
+        Assert.That(tb2 == alias2, Is.True);
+        Assert.That(tb2 == alias3, Is.True);
         var tb2Aliases = xof.GetAliases("multiAliased");
-        Assert.AreEqual(2, tb2Aliases.Count);
-        Assert.IsTrue(tb2Aliases.Contains("alias1"));
-        Assert.IsTrue(tb2Aliases.Contains("alias2"));
-        Assert.IsTrue(objectNames.Contains("multiAliased"));
-        Assert.IsFalse(objectNames.Contains("alias1"));
-        Assert.IsFalse(objectNames.Contains("alias2"));
+        Assert.That(tb2Aliases.Count, Is.EqualTo(2));
+        Assert.That(tb2Aliases.Contains("alias1"), Is.True);
+        Assert.That(tb2Aliases.Contains("alias2"), Is.True);
+        Assert.That(objectNames.Contains("multiAliased"), Is.True);
+        Assert.That(objectNames.Contains("alias1"), Is.False);
+        Assert.That(objectNames.Contains("alias2"), Is.False);
 
         TestObject tb3 = (TestObject) xof.GetObject("aliasWithoutId1");
         TestObject alias4 = (TestObject) xof.GetObject("aliasWithoutId2");
         TestObject alias5 = (TestObject) xof.GetObject("aliasWithoutId3");
-        Assert.IsTrue(tb3 == alias4);
-        Assert.IsTrue(tb3 == alias5);
+        Assert.That(tb3 == alias4, Is.True);
+        Assert.That(tb3 == alias5, Is.True);
 
         var tb3Aliases = xof.GetAliases("aliasWithoutId1");
-        Assert.AreEqual(2, tb2Aliases.Count);
-        Assert.IsTrue(tb3Aliases.Contains("aliasWithoutId2"));
-        Assert.IsTrue(tb3Aliases.Contains("aliasWithoutId3"));
-        Assert.IsTrue(objectNames.Contains("aliasWithoutId1"));
-        Assert.IsFalse(objectNames.Contains("aliasWithoutId2"));
-        Assert.IsFalse(objectNames.Contains("aliasWithoutId3"));
+        Assert.That(tb2Aliases.Count, Is.EqualTo(2));
+        Assert.That(tb3Aliases.Contains("aliasWithoutId2"), Is.True);
+        Assert.That(tb3Aliases.Contains("aliasWithoutId3"), Is.True);
+        Assert.That(objectNames.Contains("aliasWithoutId1"), Is.True);
+        Assert.That(objectNames.Contains("aliasWithoutId2"), Is.False);
+        Assert.That(objectNames.Contains("aliasWithoutId3"), Is.False);
 
         string className = typeof(TestObject).FullName;
         string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
 
         TestObject tb4 = (TestObject) xof.GetObject(targetName);
-        Assert.AreEqual(null, tb4.Name);
+        Assert.That(tb4.Name, Is.EqualTo(null));
     }
 
     /// <summary>
@@ -245,8 +245,8 @@ public sealed class XmlObjectCollectionTests
 
         TestObject aleks = (TestObject) xof.GetObject("aleks");
         IList pets = (IList) aleks.Pets;
-        Assert.IsTrue(pets.Count == 1);
-        Assert.IsTrue(pets[0].Equals("Nadja"));
+        Assert.That(pets.Count == 1, Is.True);
+        Assert.That(pets[0].Equals("Nadja"), Is.True);
     }
 
     /// <summary>
@@ -260,9 +260,9 @@ public sealed class XmlObjectCollectionTests
 
         TestObject to = (TestObject) xof.GetObject("readOnlyDictionary");
         IDictionary table = to.PeriodicTable;
-        Assert.IsTrue(table.Count == 2);
-        Assert.AreEqual("1", table["hydrogen"], "Dictionary Value incorrect");
-        Assert.AreEqual("12", table["carbon"], "Dictionary value incorrect");
+        Assert.That(table.Count == 2, Is.True);
+        Assert.That(table["hydrogen"], Is.EqualTo("1"), "Dictionary Value incorrect");
+        Assert.That(table["carbon"], Is.EqualTo("12"), "Dictionary value incorrect");
     }
 
     /// <summary>
@@ -276,7 +276,7 @@ public sealed class XmlObjectCollectionTests
 
         TestObject to = (TestObject) xof.GetObject("readOnlySet");
         ISet computers = to.Computers;
-        Assert.IsTrue(computers.Count == 2);
+        Assert.That(computers.Count == 2, Is.True);
         bool foundDell = false;
         bool foundIbm = false;
         foreach (string name in computers)
@@ -292,8 +292,8 @@ public sealed class XmlObjectCollectionTests
             }
         }
 
-        Assert.IsTrue(foundDell, "Dell string not found in ISet");
-        Assert.IsTrue(foundIbm, "IBM T41 not found in ISet");
+        Assert.That(foundDell, Is.True, "Dell string not found in ISet");
+        Assert.That(foundIbm, Is.True, "IBM T41 not found in ISet");
     }
 
     [Test]
@@ -302,7 +302,7 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("emptyMap");
-        Assert.IsTrue(hasMap.Map.Count == 0);
+        Assert.That(hasMap.Map.Count == 0, Is.True);
     }
 
     [Test]
@@ -311,10 +311,10 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("literalMap");
-        Assert.IsTrue(hasMap.Map.Count == 3);
-        Assert.IsTrue(hasMap.Map["foo"].Equals("bar"));
-        Assert.IsTrue(hasMap.Map["fi"].Equals("fum"));
-        Assert.IsTrue(hasMap.Map["fa"] == null);
+        Assert.That(hasMap.Map.Count == 3, Is.True);
+        Assert.That(hasMap.Map["foo"].Equals("bar"), Is.True);
+        Assert.That(hasMap.Map["fi"].Equals("fum"), Is.True);
+        Assert.That(hasMap.Map["fa"] == null, Is.True);
     }
 
     [Test]
@@ -323,11 +323,11 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("mixedMap");
-        Assert.IsTrue(hasMap.Map.Count == 3);
-        Assert.IsTrue(hasMap.Map["foo"].Equals("bar"));
+        Assert.That(hasMap.Map.Count == 3, Is.True);
+        Assert.That(hasMap.Map["foo"].Equals("bar"), Is.True);
         TestObject jenny = (TestObject) xof.GetObject("jenny");
-        Assert.IsTrue(hasMap.Map["jenny"] == jenny);
-        Assert.IsTrue(hasMap.Map["david"].Equals("david"));
+        Assert.That(hasMap.Map["jenny"] == jenny, Is.True);
+        Assert.That(hasMap.Map["david"].Equals("david"), Is.True);
     }
 
     [Test]
@@ -338,16 +338,16 @@ public sealed class XmlObjectCollectionTests
 
         TestObject jenny = (TestObject) xof.GetObject("pJenny");
         HasMap hasMap = (HasMap) xof.GetObject("pMixedMap");
-        Assert.IsTrue(hasMap.Map.Count == 2);
-        Assert.IsTrue(hasMap.Map["foo"].Equals("bar"));
-        Assert.IsTrue(hasMap.Map["jenny"].ToString().Equals(jenny.ToString()));
-        Assert.IsTrue(hasMap.Map["jenny"] != jenny, "Not same instance");
+        Assert.That(hasMap.Map.Count == 2, Is.True);
+        Assert.That(hasMap.Map["foo"].Equals("bar"), Is.True);
+        Assert.That(hasMap.Map["jenny"].ToString().Equals(jenny.ToString()), Is.True);
+        Assert.That(hasMap.Map["jenny"] != jenny, Is.True, "Not same instance");
 
         HasMap hasMap2 = (HasMap) xof.GetObject("pMixedMap");
-        Assert.IsTrue(hasMap2.Map.Count == 2);
-        Assert.IsTrue(hasMap2.Map["foo"].Equals("bar"));
-        Assert.IsTrue(hasMap2.Map["jenny"].ToString().Equals(jenny.ToString()));
-        Assert.IsTrue(hasMap2.Map["jenny"] != hasMap.Map["jenny"], "Not same instance");
+        Assert.That(hasMap2.Map.Count == 2, Is.True);
+        Assert.That(hasMap2.Map["foo"].Equals("bar"), Is.True);
+        Assert.That(hasMap2.Map["jenny"].ToString().Equals(jenny.ToString()), Is.True);
+        Assert.That(hasMap2.Map["jenny"] != hasMap.Map["jenny"], Is.True, "Not same instance");
     }
 
     [Test]
@@ -356,38 +356,39 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("mixedMapWithList");
-        Assert.IsTrue(hasMap.Map.Count == 4);
-        Assert.IsTrue(hasMap.Map["foo"].Equals("bar"));
+        Assert.That(hasMap.Map.Count == 4, Is.True);
+        Assert.That(hasMap.Map["foo"].Equals("bar"), Is.True);
         TestObject jenny = (TestObject) xof.GetObject("jenny");
-        Assert.IsTrue(hasMap.Map["jenny"].Equals(jenny));
+        Assert.That(hasMap.Map["jenny"].Equals(jenny), Is.True);
 
         // Check list
         IList l = (IList) hasMap.Map["list"];
-        Assert.IsNotNull(l);
-        Assert.IsTrue(l.Count == 4);
-        Assert.IsTrue(l[0].Equals("zero"));
-        Assert.IsTrue(l[3] == null);
+        Assert.That(l, Is.Not.Null);
+        Assert.That(l.Count == 4, Is.True);
+        Assert.That(l[0].Equals("zero"), Is.True);
+        Assert.That(l[3] == null, Is.True);
 
         // Check nested map in list
         IDictionary m = (IDictionary) l[1];
-        Assert.IsNotNull(m);
-        Assert.IsTrue(m.Count == 2);
-        Assert.IsTrue(m["fo"].Equals("bar"));
-        Assert.IsTrue(m["jen"].Equals(jenny), "Map element 'jenny' should be equal to jenny object, not " + m["jen"]);
+        Assert.That(m, Is.Not.Null);
+        Assert.That(m.Count == 2, Is.True);
+        Assert.That(m["fo"].Equals("bar"), Is.True);
+        Assert.That(m["jen"].Equals(jenny), Is.True, "Map element 'jenny' should be equal to jenny object, not " + m["jen"]);
 
         // Check nested list in list
         l = (IList) l[2];
-        Assert.IsNotNull(l);
-        Assert.IsTrue(l.Count == 2);
-        Assert.IsTrue(l[0].Equals(jenny));
-        Assert.IsTrue(l[1].Equals("ba"));
+        Assert.That(l, Is.Not.Null);
+        Assert.That(l.Count == 2, Is.True);
+        Assert.That(l[0].Equals(jenny), Is.True);
+        Assert.That(l[1].Equals("ba"), Is.True);
 
         // Check nested map
         m = (IDictionary) hasMap.Map["map"];
-        Assert.IsNotNull(m);
-        Assert.IsTrue(m.Count == 2);
-        Assert.IsTrue(m["foo"].Equals("bar"));
-        Assert.IsTrue(m["jenny"].Equals(jenny),
+        Assert.That(m, Is.Not.Null);
+        Assert.That(m.Count == 2, Is.True);
+        Assert.That(m["foo"].Equals("bar"), Is.True);
+        Assert.That(m["jenny"].Equals(jenny),
+            Is.True,
             "Map element 'jenny' should be equal to jenny object, not " + m["jenny"]);
     }
 
@@ -397,7 +398,7 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("emptySet");
-        Assert.IsTrue(hasMap.Set.Count == 0);
+        Assert.That(hasMap.Set.Count == 0, Is.True);
     }
 
     [Test]
@@ -406,11 +407,11 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("set");
-        Assert.IsTrue(hasMap.Set.Count == 3);
-        Assert.IsTrue(hasMap.Set.Contains("bar"));
+        Assert.That(hasMap.Set.Count == 3, Is.True);
+        Assert.That(hasMap.Set.Contains("bar"), Is.True);
         TestObject jenny = (TestObject) xof.GetObject("jenny");
-        Assert.IsTrue(hasMap.Set.Contains(jenny));
-        Assert.IsTrue(hasMap.Set.Contains(null));
+        Assert.That(hasMap.Set.Contains(jenny), Is.True);
+        Assert.That(hasMap.Set.Contains(null), Is.True);
     }
 
     [Test]
@@ -419,7 +420,7 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("emptyProps");
-        Assert.IsTrue(hasMap.Props.Count == 0);
+        Assert.That(hasMap.Props.Count == 0, Is.True);
     }
 
     /// <summary>
@@ -431,7 +432,7 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("emptyValue");
-        Assert.AreEqual("", hasMap.Props.Get("foo"), "Expected empty string");
+        Assert.That(hasMap.Props.Get("foo"), Is.Empty, "Expected empty string");
     }
 
     [Test]
@@ -440,9 +441,9 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("props");
-        Assert.AreEqual(2, hasMap.Props.Count);
-        Assert.AreEqual("bar", hasMap.Props["foo"]);
-        Assert.AreEqual("TWO", hasMap.Props["2"]);
+        Assert.That(hasMap.Props.Count, Is.EqualTo(2));
+        Assert.That(hasMap.Props["foo"], Is.EqualTo("bar"));
+        Assert.That(hasMap.Props["2"], Is.EqualTo("TWO"));
     }
 
     [Test]
@@ -451,11 +452,11 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("propsWithSameKey");
-        Assert.AreEqual(2, hasMap.Props.Count);
-        Assert.AreEqual("OnE,tWo", hasMap.Props["foo"]);
-        Assert.AreEqual(2, hasMap.Props.GetValues("bar").Length);
-        Assert.AreEqual("OnE", hasMap.Props.GetValues("bar")[0]);
-        Assert.AreEqual("tWo", hasMap.Props.GetValues("bar")[1]);
+        Assert.That(hasMap.Props.Count, Is.EqualTo(2));
+        Assert.That(hasMap.Props["foo"], Is.EqualTo("OnE,tWo"));
+        Assert.That(hasMap.Props.GetValues("bar").Length, Is.EqualTo(2));
+        Assert.That(hasMap.Props.GetValues("bar")[0], Is.EqualTo("OnE"));
+        Assert.That(hasMap.Props.GetValues("bar")[1], Is.EqualTo("tWo"));
     }
 
     [Test]
@@ -464,10 +465,10 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("delimitedProps");
-        Assert.AreEqual(2, hasMap.Props.Count);
-        Assert.AreEqual(3, hasMap.Props.GetValues("foo").Length);
-        Assert.AreEqual(7, hasMap.Props.GetValues("days").Length);
-        Assert.AreEqual("wednesday", hasMap.Props.GetValues("days")[2]);
+        Assert.That(hasMap.Props.Count, Is.EqualTo(2));
+        Assert.That(hasMap.Props.GetValues("foo").Length, Is.EqualTo(3));
+        Assert.That(hasMap.Props.GetValues("days").Length, Is.EqualTo(7));
+        Assert.That(hasMap.Props.GetValues("days")[2], Is.EqualTo("wednesday"));
     }
 
     [Test]
@@ -476,9 +477,9 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("objectArray");
-        Assert.IsTrue(hasMap.ObjectArray.Length == 2);
-        Assert.IsTrue(hasMap.ObjectArray[0].Equals("one"));
-        Assert.IsTrue(hasMap.ObjectArray[1].Equals(xof.GetObject("jenny")));
+        Assert.That(hasMap.ObjectArray.Length == 2, Is.True);
+        Assert.That(hasMap.ObjectArray[0].Equals("one"), Is.True);
+        Assert.That(hasMap.ObjectArray[1].Equals(xof.GetObject("jenny")), Is.True);
     }
 
     [Test]
@@ -487,9 +488,9 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         HasMap hasMap = (HasMap) xof.GetObject("classArray");
-        Assert.IsTrue(hasMap.ClassArray.Length == 2);
-        Assert.IsTrue(hasMap.ClassArray[0].Equals(typeof(String)));
-        Assert.IsTrue(hasMap.ClassArray[1].Equals(typeof(Exception)));
+        Assert.That(hasMap.ClassArray.Length == 2, Is.True);
+        Assert.That(hasMap.ClassArray[0].Equals(typeof(String)), Is.True);
+        Assert.That(hasMap.ClassArray[1].Equals(typeof(Exception)), Is.True);
     }
 
     [Test]
@@ -498,11 +499,11 @@ public sealed class XmlObjectCollectionTests
         XmlObjectFactory xof = new XmlObjectFactory(
             new ReadOnlyXmlTestResource("collections.xml", GetType()));
         IDictionary map = (IDictionary) xof.GetObject("mapWithEntryValueShortcut");
-        Assert.AreEqual(2, map.Count);
+        Assert.That(map.Count, Is.EqualTo(2));
         string v1 = (string) map["rob"];
-        Assert.AreEqual("robert", v1);
+        Assert.That(v1, Is.EqualTo("robert"));
         string v2 = (string) map["jen"];
-        Assert.AreEqual("jenny", v2);
+        Assert.That(v2, Is.EqualTo("jenny"));
     }
 
     [Test]
@@ -511,11 +512,11 @@ public sealed class XmlObjectCollectionTests
         XmlObjectFactory xof = new XmlObjectFactory(
             new ReadOnlyXmlTestResource("collections.xml", GetType()));
         IDictionary map = (IDictionary) xof.GetObject("mapWithStringKeysSpecifiedAsElements");
-        Assert.AreEqual(2, map.Count);
+        Assert.That(map.Count, Is.EqualTo(2));
         string v1 = (string) map["rick"];
-        Assert.AreEqual("Rick Evans", v1);
+        Assert.That(v1, Is.EqualTo("Rick Evans"));
         string v2 = (string) map["uncleelvis"];
-        Assert.AreEqual("Elvis Orten", v2);
+        Assert.That(v2, Is.EqualTo("Elvis Orten"));
     }
 
     [Test]
@@ -551,11 +552,11 @@ public sealed class XmlObjectCollectionTests
         XmlObjectFactory xof = new XmlObjectFactory(
             new ReadOnlyXmlTestResource("collections.xml", GetType()));
         IDictionary map = (IDictionary) xof.GetObject("mapWithKeyRefAttributeShortcuts");
-        Assert.AreEqual(2, map.Count);
+        Assert.That(map.Count, Is.EqualTo(2));
         string v1 = (string) map[new TestObject("Rick Evans", 30)];
-        Assert.AreEqual("Rick Evans", v1);
+        Assert.That(v1, Is.EqualTo("Rick Evans"));
         string v2 = (string) map[new TestObject("Uncle Elvis", 47)];
-        Assert.AreEqual("Elvis Orten", v2);
+        Assert.That(v2, Is.EqualTo("Elvis Orten"));
     }
 
     [Test]
@@ -564,20 +565,20 @@ public sealed class XmlObjectCollectionTests
         XmlObjectFactory xof = new XmlObjectFactory(
             new ReadOnlyXmlTestResource("collections.xml", GetType()));
         IDictionary map = (IDictionary) xof.GetObject("mapWithValueRefAttributeShortcuts");
-        Assert.AreEqual(2, map.Count);
+        Assert.That(map.Count, Is.EqualTo(2));
         foreach (string key in map.Keys)
         {
             object obj = map[key];
-            Assert.IsNotNull(obj);
-            Assert.AreEqual(typeof(TestObject), obj.GetType(), "Wrong value assigned to value of dictionary.");
+            Assert.That(obj, Is.Not.Null);
+            Assert.That(obj.GetType(), Is.EqualTo(typeof(TestObject)), "Wrong value assigned to value of dictionary.");
             TestObject tob = (TestObject) obj;
             if (key == "rick")
             {
-                Assert.AreEqual("Rick Evans", tob.Name, "Wrong object value assigned to the 'rick' key.");
+                Assert.That(tob.Name, Is.EqualTo("Rick Evans"), "Wrong object value assigned to the 'rick' key.");
             }
             else if (key == "uncleelvis")
             {
-                Assert.AreEqual("Uncle Elvis", tob.Name, "Wrong object value assigned to the 'uncleelvis' key.");
+                Assert.That(tob.Name, Is.EqualTo("Uncle Elvis"), "Wrong object value assigned to the 'uncleelvis' key.");
             }
         }
     }
@@ -588,17 +589,17 @@ public sealed class XmlObjectCollectionTests
         ListFactoryObject listFactory = new ListFactoryObject();
         listFactory.SourceList = new ArrayList();
         listFactory.AfterPropertiesSet();
-        Assert.IsTrue(listFactory.GetObject() is ArrayList);
+        Assert.That(listFactory.GetObject() is ArrayList, Is.True);
 
         SetFactoryObject setFactory = new SetFactoryObject();
         setFactory.SourceSet = new HybridSet();
         setFactory.AfterPropertiesSet();
-        Assert.IsTrue(setFactory.GetObject() is HybridSet);
+        Assert.That(setFactory.GetObject() is HybridSet, Is.True);
 
         DictionaryFactoryObject dictionaryFactory = new DictionaryFactoryObject();
         dictionaryFactory.SourceDictionary = new Hashtable();
         dictionaryFactory.AfterPropertiesSet();
-        Assert.IsTrue(dictionaryFactory.GetObject() is Hashtable);
+        Assert.That(dictionaryFactory.GetObject() is Hashtable, Is.True);
     }
 
     [Test]
@@ -607,10 +608,10 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         IList list = (IList) xof.GetObject("listFactory");
-        Assert.IsTrue(list is LinkedList);
-        Assert.IsTrue(list.Count == 2);
-        Assert.AreEqual("bar", list[0]);
-        Assert.AreEqual("jenny", list[1]);
+        Assert.That(list is LinkedList, Is.True);
+        Assert.That(list.Count == 2, Is.True);
+        Assert.That(list[0], Is.EqualTo("bar"));
+        Assert.That(list[1], Is.EqualTo("jenny"));
     }
 
     [Test]
@@ -619,10 +620,10 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         IList list = (IList) xof.GetObject("pListFactory");
-        Assert.IsTrue(list is LinkedList);
-        Assert.IsTrue(list.Count == 2);
-        Assert.AreEqual("bar", list[0]);
-        Assert.AreEqual("jenny", list[1]);
+        Assert.That(list is LinkedList, Is.True);
+        Assert.That(list.Count == 2, Is.True);
+        Assert.That(list[0], Is.EqualTo("bar"));
+        Assert.That(list[1], Is.EqualTo("jenny"));
     }
 
     [Test]
@@ -631,10 +632,10 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         Set mySet = (Set) xof.GetObject("setFactory");
-        Assert.IsTrue(mySet is HybridSet);
-        Assert.IsTrue(mySet.Count == 2);
-        Assert.IsTrue(mySet.Contains("bar"));
-        Assert.IsTrue(mySet.Contains("jenny"));
+        Assert.That(mySet is HybridSet, Is.True);
+        Assert.That(mySet.Count == 2, Is.True);
+        Assert.That(mySet.Contains("bar"), Is.True);
+        Assert.That(mySet.Contains("jenny"), Is.True);
     }
 
     [Test]
@@ -643,10 +644,10 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         Set mySet = (Set) xof.GetObject("pSetFactory");
-        Assert.IsTrue(mySet is HybridSet);
-        Assert.IsTrue(mySet.Count == 2);
-        Assert.IsTrue(mySet.Contains("bar"));
-        Assert.IsTrue(mySet.Contains("jenny"));
+        Assert.That(mySet is HybridSet, Is.True);
+        Assert.That(mySet.Count == 2, Is.True);
+        Assert.That(mySet.Contains("bar"), Is.True);
+        Assert.That(mySet.Contains("jenny"), Is.True);
     }
 
     [Test]
@@ -655,9 +656,9 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         IDictionary map = (IDictionary) xof.GetObject("mapFactory");
-        Assert.IsTrue(map.Count == 2);
-        Assert.AreEqual("bar", map["foo"]);
-        Assert.AreEqual("jenny", map["jen"]);
+        Assert.That(map.Count == 2, Is.True);
+        Assert.That(map["foo"], Is.EqualTo("bar"));
+        Assert.That(map["jen"], Is.EqualTo("jenny"));
     }
 
     [Test]
@@ -666,9 +667,9 @@ public sealed class XmlObjectCollectionTests
         IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
         XmlObjectFactory xof = new XmlObjectFactory(resource);
         IDictionary map = (IDictionary) xof.GetObject("pMapFactory");
-        Assert.IsTrue(map.Count == 2);
-        Assert.AreEqual("bar", map["foo"]);
-        Assert.AreEqual("jenny", map["jen"]);
+        Assert.That(map.Count == 2, Is.True);
+        Assert.That(map["foo"], Is.EqualTo("bar"));
+        Assert.That(map["jen"], Is.EqualTo("jenny"));
     }
 
     [Test]
@@ -677,11 +678,11 @@ public sealed class XmlObjectCollectionTests
         XmlObjectFactory xof = new XmlObjectFactory(
             new ReadOnlyXmlTestResource("collections.xml", GetType()));
         IDictionary map = (IDictionary) xof.GetObject("mapWithNonStringKeys");
-        Assert.AreEqual(2, map.Count);
+        Assert.That(map.Count, Is.EqualTo(2));
         string v1 = (string) map[new TestObject("Rick Evans", 30)];
-        Assert.AreEqual("Rick Evans", v1);
+        Assert.That(v1, Is.EqualTo("Rick Evans"));
         string v2 = (string) map[new TestObject("Uncle Elvis", 47)];
-        Assert.AreEqual("Elvis Orten", v2);
+        Assert.That(v2, Is.EqualTo("Elvis Orten"));
     }
 
     [Test]
@@ -689,10 +690,10 @@ public sealed class XmlObjectCollectionTests
     {
         XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("collections.xml", GetType()));
         NonGenericExpressionHolder obj = (NonGenericExpressionHolder) xof.GetObject("nonGenericExpressionHolder");
-        Assert.AreEqual(2, obj[0].GetValue());
-        Assert.AreEqual(8, obj[1].GetValue());
-        Assert.AreEqual("ALEKSANDAR SEOVIC", obj[2].GetValue());
-        Assert.IsTrue((bool) obj[3].GetValue());
+        Assert.That(obj[0].GetValue(), Is.EqualTo(2));
+        Assert.That(obj[1].GetValue(), Is.EqualTo(8));
+        Assert.That(obj[2].GetValue(), Is.EqualTo("ALEKSANDAR SEOVIC"));
+        Assert.That((bool) obj[3].GetValue(), Is.True);
     }
 
     [Test]
@@ -700,10 +701,10 @@ public sealed class XmlObjectCollectionTests
     {
         XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("collections.xml", GetType()));
         NonGenericExpressionHolder obj = (NonGenericExpressionHolder) xof.GetObject("nonGenericExpressionHolder");
-        Assert.AreEqual(2, obj["0"].GetValue());
-        Assert.AreEqual(8, obj["1"].GetValue());
-        Assert.AreEqual("ALEKSANDAR SEOVIC", obj["2"].GetValue());
-        Assert.IsTrue((bool) obj["3"].GetValue());
+        Assert.That(obj["0"].GetValue(), Is.EqualTo(2));
+        Assert.That(obj["1"].GetValue(), Is.EqualTo(8));
+        Assert.That(obj["2"].GetValue(), Is.EqualTo("ALEKSANDAR SEOVIC"));
+        Assert.That((bool) obj["3"].GetValue(), Is.True);
     }
 
     [Test]
@@ -711,10 +712,10 @@ public sealed class XmlObjectCollectionTests
     {
         XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("collections.xml", GetType()));
         GenericExpressionHolder obj = (GenericExpressionHolder) xof.GetObject("genericExpressionHolder");
-        Assert.AreEqual(2, obj[0].GetValue());
-        Assert.AreEqual(8, obj[1].GetValue());
-        Assert.AreEqual("ALEKSANDAR SEOVIC", obj[2].GetValue());
-        Assert.IsTrue((bool) obj[3].GetValue());
+        Assert.That(obj[0].GetValue(), Is.EqualTo(2));
+        Assert.That(obj[1].GetValue(), Is.EqualTo(8));
+        Assert.That(obj[2].GetValue(), Is.EqualTo("ALEKSANDAR SEOVIC"));
+        Assert.That((bool) obj[3].GetValue(), Is.True);
     }
 
     [Test]
@@ -722,10 +723,10 @@ public sealed class XmlObjectCollectionTests
     {
         XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("collections.xml", GetType()));
         GenericExpressionHolder obj = (GenericExpressionHolder) xof.GetObject("genericExpressionHolder");
-        Assert.AreEqual(2, obj["0"].GetValue());
-        Assert.AreEqual(8, obj["1"].GetValue());
-        Assert.AreEqual("ALEKSANDAR SEOVIC", obj["2"].GetValue());
-        Assert.IsTrue((bool) obj["3"].GetValue());
+        Assert.That(obj["0"].GetValue(), Is.EqualTo(2));
+        Assert.That(obj["1"].GetValue(), Is.EqualTo(8));
+        Assert.That(obj["2"].GetValue(), Is.EqualTo("ALEKSANDAR SEOVIC"));
+        Assert.That((bool) obj["3"].GetValue(), Is.True);
     }
 }
 
@@ -779,4 +780,4 @@ public class GenericExpressionHolder
     {
         get { return this.expressionsDictionary[key]; }
     }
-}
+}

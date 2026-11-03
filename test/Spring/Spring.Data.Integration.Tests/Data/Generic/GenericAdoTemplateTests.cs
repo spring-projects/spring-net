@@ -75,7 +75,7 @@ public class GenericAdoTemplateTests
 
             return (int) command.ExecuteScalar();
         });
-        Assert.AreEqual(1, count);
+        Assert.That(count, Is.EqualTo(1));
     }
 
     [Test]
@@ -92,7 +92,7 @@ public class GenericAdoTemplateTests
 
             return (int) command.ExecuteScalar();
         });
-        Assert.AreEqual(1, count);
+        Assert.That(count, Is.EqualTo(1));
     }
 
     [Test]
@@ -101,7 +101,7 @@ public class GenericAdoTemplateTests
         TestObjectDao testDao = new TestObjectDao();
         testDao.AdoTemplate = adoTemplate;
         IList<TestObject> testObjects = testDao.FindAll();
-        Assert.IsNotNull(testObjects);
+        Assert.That(testObjects, Is.Not.Null);
     }
 
     [Test]
@@ -111,8 +111,8 @@ public class GenericAdoTemplateTests
         IDbCommandCreator cc = ccf.NewDbCommandCreator(null);
         IList<TestObject> testObjects = adoTemplate.QueryWithCommandCreator(cc,
             new TestObjectResultSetExtractor<List<TestObject>>());
-        Assert.IsNotNull(testObjects);
-        Assert.AreEqual(2, testObjects.Count);
+        Assert.That(testObjects, Is.Not.Null);
+        Assert.That(testObjects.Count, Is.EqualTo(2));
         foreach (TestObject o in testObjects)
         {
             Console.WriteLine(o);

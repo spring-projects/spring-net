@@ -9,7 +9,7 @@ public class IncorrectResultSizeDataAccessExceptionTests
     public void SizeGetter()
     {
         IncorrectResultSizeDataAccessException ex = new IncorrectResultSizeDataAccessException(1, 4);
-        Assert.AreEqual(1, ex.ExpectedSize);
-        Assert.AreEqual(4, ex.ActualSize);
+        Assert.That(ex.ExpectedSize, Is.EqualTo(1));
+        Assert.That(ex.ActualSize, Is.EqualTo(4));
     }
 }

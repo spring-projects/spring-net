@@ -27,6 +27,12 @@
 
     <ImplicitUsings>enable</ImplicitUsings>
 
+    <!-- Test projects run on Microsoft.Testing.Platform (`dotnet test` with the runner chosen in global.json): the runner is
+         compiled into the test assembly, so it is an executable. NUnit3TestAdapter reads EnableNUnitRunner; for a
+         project that does not use NUnit it does nothing. -->
+    <OutputType>Exe</OutputType>
+    <EnableNUnitRunner>true</EnableNUnitRunner>
+
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>None</AnalysisMode>
@@ -35,6 +41,14 @@
   <!-- BinaryFormatter was removed from the shared framework in .NET 9; the tests still round-trip [Serializable] types through it. -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
     <PackageReference Include="System.Runtime.Serialization.Formatters" />
+  </ItemGroup>
+
+  <!-- NUnit stack for every test project; a project that uses another framework sets UseNUnit to false. -->
+  <ItemGroup Condition=" '$(UseNUnit)' != 'false' ">
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="NUnit.Analyzers" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
   </ItemGroup>
 
   <ItemGroup>

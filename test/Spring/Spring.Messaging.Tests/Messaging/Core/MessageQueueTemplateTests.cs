@@ -42,7 +42,7 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
     public void MessageCreator()
     {
         MessageQueueTemplate mqt = applicationContext["txqueue"] as MessageQueueTemplate;
-        Assert.IsNotNull(mqt);
+        Assert.That(mqt, Is.Not.Null);
         string path = @".\Private$\mlptestqueue";
         if (MessageQueue.Exists(path))
         {
@@ -58,7 +58,7 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
             return mq;
         });
 
-        Assert.IsTrue(mqt.MessageQueueFactory.ContainsMessageQueue("newQueueDefinition"));
+        Assert.That(mqt.MessageQueueFactory.ContainsMessageQueue("newQueueDefinition"), Is.True);
 
         SendAndReceive("newQueueDefinition", mqt);
 
@@ -93,15 +93,15 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
     public void MessageQueueCreatedinThreadLocalStorage()
     {
         MessageQueueTemplate q = applicationContext["queue"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
-        Assert.AreEqual(q.DefaultMessageQueue, q.MessageQueueFactory.CreateMessageQueue(q.DefaultMessageQueueObjectName));
+        Assert.That(q, Is.Not.Null);
+        Assert.That(q.MessageQueueFactory.CreateMessageQueue(q.DefaultMessageQueueObjectName), Is.EqualTo(q.DefaultMessageQueue));
     }
 
     [Test]
     public void SendAndReceiveNonTransactional()
     {
         MessageQueueTemplate q = applicationContext["queue"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
         q.ConvertAndSend("Hello World 1");
         ReceiveHelloWorld(null, q, 1);
     }
@@ -110,7 +110,7 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
     public void SendAndReceiveNonTransactionalRemotePrivateQueue()
     {
         MessageQueueTemplate q = applicationContext["queueTemplate-remote"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
         q.ConvertAndSend("Hello World 1");
         //ReceiveHelloWorld(null, q, 1);
     }
@@ -127,17 +127,17 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
             o = q.ReceiveAndConvert(messageQueueObjectName);
         }
 
-        Assert.IsNotNull(o);
+        Assert.That(o, Is.Not.Null);
         string data = o as string;
-        Assert.IsNotNull(data);
-        Assert.AreEqual("Hello World " + index, data);
+        Assert.That(data, Is.Not.Null);
+        Assert.That(data, Is.EqualTo("Hello World " + index));
     }
 
     [Test]
     public void SendNonTxMessageQueueUsingMessageTx()
     {
         MessageQueueTemplate q = applicationContext["queue"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
         SendAndReceive(q);
     }
 
@@ -145,7 +145,7 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
     public void SendTxMessageQueueUsingMessageTx()
     {
         MessageQueueTemplate q = applicationContext["txqueue"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
         SendAndReceive(q);
     }
 
@@ -153,7 +153,7 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
     public void SendTxMessageQueueUsingTxScope()
     {
         MessageQueueTemplate q = applicationContext["txqueue"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
         SendUsingMessageTxScope(q);
         Receive(null, q);
     }
@@ -230,13 +230,13 @@ public class MessageQueueTemplateTests : AbstractDependencyInjectionSpringContex
 
         Message msg = rmQ.Receive();
 
-        Assert.IsNotNull(msg);
+        Assert.That(msg, Is.Not.Null);
     }
 
     public void GetAllFromQueue()
     {
         MessageQueueTemplate q = applicationContext["queue"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
         for (int i = 0; i < 5; i++)
         {
             Console.WriteLine(q.ReceiveAndConvert());

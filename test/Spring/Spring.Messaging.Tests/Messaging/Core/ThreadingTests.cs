@@ -38,6 +38,6 @@ public class ThreadingTests
         Interlocked.Increment(ref activeListenerCount);
         // just gets the current value...
         int count = Interlocked.CompareExchange(ref activeListenerCount, -1, -1);
-        Assert.AreEqual(1, count);
+        Assert.That(count, Is.EqualTo(1));
     }
 }

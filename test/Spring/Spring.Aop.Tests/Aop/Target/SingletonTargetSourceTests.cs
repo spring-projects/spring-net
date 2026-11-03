@@ -35,21 +35,22 @@ public sealed class SingletonTargetSourceTests
     public void TargetType()
     {
         SingletonTargetSource source = new SingletonTargetSource(this);
-        Assert.AreEqual(GetType(), source.TargetType, "Wrong TargetType being returned.");
+        Assert.That(source.TargetType, Is.EqualTo(GetType()), "Wrong TargetType being returned.");
     }
 
     [Test]
     public void IsStatic()
     {
         SingletonTargetSource source = new SingletonTargetSource(this);
-        Assert.IsTrue(source.IsStatic, "Must be static.");
+        Assert.That(source.IsStatic, Is.True, "Must be static.");
     }
 
     [Test]
     public void GetTarget()
     {
         SingletonTargetSource source = new SingletonTargetSource(this);
-        Assert.IsTrue(object.ReferenceEquals(source.GetTarget(), this),
+        Assert.That(object.ReferenceEquals(source.GetTarget(), this),
+            Is.True,
             "Same target source reference not being returned by GetTarget().");
     }
 
@@ -58,13 +59,13 @@ public sealed class SingletonTargetSourceTests
     {
         SingletonTargetSource lhs = new SingletonTargetSource(this);
         SingletonTargetSource rhs = new SingletonTargetSource(this);
-        Assert.AreEqual(lhs, rhs, "Equals() not correct for same instance comparison.");
+        Assert.That(rhs, Is.EqualTo(lhs), "Equals() not correct for same instance comparison.");
     }
 
     [Test]
     public void EqualsNullInstance()
     {
         SingletonTargetSource lhs = new SingletonTargetSource(this);
-        Assert.IsFalse(lhs.Equals(null), "Equals() not correct for null instance comparison.");
+        Assert.That(lhs.Equals(null), Is.False, "Equals() not correct for null instance comparison.");
     }
 }

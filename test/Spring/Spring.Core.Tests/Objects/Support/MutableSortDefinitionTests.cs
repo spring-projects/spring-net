@@ -29,9 +29,9 @@ public sealed class MutableSortDefinitionTests
     public void Instantiation()
     {
         MutableSortDefinition def = new MutableSortDefinition();
-        Assert.IsTrue(def.IgnoreCase);
-        Assert.IsTrue(def.Ascending);
-        Assert.IsNotNull(def.Property);
+        Assert.That(def.IgnoreCase, Is.True);
+        Assert.That(def.Ascending, Is.True);
+        Assert.That(def.Property, Is.Not.Null);
     }
 
     [Test]
@@ -39,10 +39,10 @@ public sealed class MutableSortDefinitionTests
     {
         ISortDefinition copy = new MutableSortDefinition("Bing!", false, false);
         MutableSortDefinition def = new MutableSortDefinition(copy);
-        Assert.IsFalse(def.IgnoreCase);
-        Assert.IsFalse(def.Ascending);
-        Assert.IsNotNull(def.Property);
-        Assert.AreEqual(copy.Property, def.Property);
+        Assert.That(def.IgnoreCase, Is.False);
+        Assert.That(def.Ascending, Is.False);
+        Assert.That(def.Property, Is.Not.Null);
+        Assert.That(def.Property, Is.EqualTo(copy.Property));
     }
 
     [Test]
@@ -51,9 +51,9 @@ public sealed class MutableSortDefinitionTests
         ISortDefinition copy = new MutableSortDefinition("Rab", false, false);
         MutableSortDefinition def = new MutableSortDefinition("Bing!", false, false);
         def.Property = "Rab";
-        Assert.AreEqual(copy, def);
-        Assert.AreEqual(copy.GetHashCode(), def.GetHashCode());
-        Assert.IsFalse(def.Equals(null));
+        Assert.That(def, Is.EqualTo(copy));
+        Assert.That(def.GetHashCode(), Is.EqualTo(copy.GetHashCode()));
+        Assert.That(def.Equals(null), Is.False);
     }
 
     [Test]
@@ -61,8 +61,8 @@ public sealed class MutableSortDefinitionTests
     {
         MutableSortDefinition def = new MutableSortDefinition();
         def.Property = null;
-        Assert.IsNotNull(def.Property);
-        Assert.AreEqual(string.Empty, def.Property);
+        Assert.That(def.Property, Is.Not.Null);
+        Assert.That(def.Property, Is.Empty);
     }
 
     [Test]
@@ -72,7 +72,7 @@ public sealed class MutableSortDefinitionTests
         bool originalAscendingValue = def.Ascending;
         def.Property = "Name";
         def.Property = "Name"; // sort order should (must!) be reversed now...
-        Assert.IsFalse(def.Ascending == originalAscendingValue);
+        Assert.That(def.Ascending == originalAscendingValue, Is.False);
     }
 
     [Test]
@@ -82,6 +82,6 @@ public sealed class MutableSortDefinitionTests
         bool originalAscendingValue = def.Ascending;
         def.Property = "Name";
         def.Property = "Age"; // sort order must not be toggled (different property)
-        Assert.IsTrue(def.Ascending == originalAscendingValue);
+        Assert.That(def.Ascending == originalAscendingValue, Is.True);
     }
 }

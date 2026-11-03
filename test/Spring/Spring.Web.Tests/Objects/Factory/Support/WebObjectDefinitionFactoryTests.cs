@@ -39,11 +39,11 @@ public class WebObjectDefinitionFactoryTests : WebApplicationTests
         IConfigurableObjectDefinition definition
             = factory.CreateObjectDefinition(
                 typeof(TestObject).FullName, null, AppDomain.CurrentDomain);
-        Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
-        Assert.AreEqual(typeof(TestObject), definition.ObjectType);
-        Assert.AreEqual(0, definition.PropertyValues.PropertyValues.Count,
+        Assert.That(definition, Is.Not.Null, "CreateObjectDefinition with no parent is returning null (it must never do so).");
+        Assert.That(definition.ObjectType, Is.EqualTo(typeof(TestObject)));
+        Assert.That(definition.PropertyValues.PropertyValues.Count, Is.EqualTo(0),
             "Must not have any property values as none were passed in.");
-        Assert.AreEqual(0, definition.ConstructorArgumentValues.ArgumentCount,
+        Assert.That(definition.ConstructorArgumentValues.ArgumentCount, Is.EqualTo(0),
             "Must not have any ctor args as none were passed in.");
     }
 
@@ -54,11 +54,11 @@ public class WebObjectDefinitionFactoryTests : WebApplicationTests
         IConfigurableObjectDefinition definition
             = factory.CreateObjectDefinition(
                 typeof(TestObject).FullName, "Aimee Mann", AppDomain.CurrentDomain);
-        Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
-        Assert.AreEqual(typeof(TestObject), definition.ObjectType);
-        Assert.AreEqual(0, definition.PropertyValues.PropertyValues.Count,
+        Assert.That(definition, Is.Not.Null, "CreateObjectDefinition with no parent is returning null (it must never do so).");
+        Assert.That(definition.ObjectType, Is.EqualTo(typeof(TestObject)));
+        Assert.That(definition.PropertyValues.PropertyValues.Count, Is.EqualTo(0),
             "Must not have any property values as none were passed in.");
-        Assert.AreEqual(0, definition.ConstructorArgumentValues.ArgumentCount,
+        Assert.That(definition.ConstructorArgumentValues.ArgumentCount, Is.EqualTo(0),
             "Must not have any ctor args as none were passed in.");
     }
 
@@ -69,11 +69,11 @@ public class WebObjectDefinitionFactoryTests : WebApplicationTests
         IConfigurableObjectDefinition definition
             = factory.CreateObjectDefinition(
                 typeof(TestObject).FullName, null, null);
-        Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
-        Assert.AreEqual(typeof(TestObject).FullName, definition.ObjectTypeName);
-        Assert.AreEqual(0, definition.PropertyValues.PropertyValues.Count,
+        Assert.That(definition, Is.Not.Null, "CreateObjectDefinition with no parent is returning null (it must never do so).");
+        Assert.That(definition.ObjectTypeName, Is.EqualTo(typeof(TestObject).FullName));
+        Assert.That(definition.PropertyValues.PropertyValues.Count, Is.EqualTo(0),
             "Must not have any property values as none were passed in.");
-        Assert.AreEqual(0, definition.ConstructorArgumentValues.ArgumentCount,
+        Assert.That(definition.ConstructorArgumentValues.ArgumentCount, Is.EqualTo(0),
             "Must not have any ctor args as none were passed in.");
     }
 
@@ -90,9 +90,9 @@ public class WebObjectDefinitionFactoryTests : WebApplicationTests
             WebObjectDefinitionFactory factory = new WebObjectDefinitionFactory();
             IWebObjectDefinition definition
                 = (IWebObjectDefinition) factory.CreateObjectDefinition("/Test/testform.aspx", null, AppDomain.CurrentDomain);
-            Assert.IsNotNull(definition, "CreateObjectDefinition with no parent is returning null (it must never do so).");
-            Assert.IsTrue(definition.IsPage, ".aspx extension must result in a page instance");
-            Assert.AreEqual(typeof(RootWebObjectDefinition), definition.GetType());
+            Assert.That(definition, Is.Not.Null, "CreateObjectDefinition with no parent is returning null (it must never do so).");
+            Assert.That(definition.IsPage, Is.True, ".aspx extension must result in a page instance");
+            Assert.That(definition.GetType(), Is.EqualTo(typeof(RootWebObjectDefinition)));
         }
     }
 
@@ -109,9 +109,9 @@ public class WebObjectDefinitionFactoryTests : WebApplicationTests
             WebObjectDefinitionFactory factory = new WebObjectDefinitionFactory();
             IWebObjectDefinition definition
                 = (IWebObjectDefinition) factory.CreateObjectDefinition("/Test/testform.aspx", "parentdefinition", AppDomain.CurrentDomain);
-            Assert.IsNotNull(definition, "CreateObjectDefinition with parent is returning null (it must never do so).");
-            Assert.IsTrue(definition.IsPage, ".aspx extension must result in a page instance");
-            Assert.AreEqual(typeof(ChildWebObjectDefinition), definition.GetType());
+            Assert.That(definition, Is.Not.Null, "CreateObjectDefinition with parent is returning null (it must never do so).");
+            Assert.That(definition.IsPage, Is.True, ".aspx extension must result in a page instance");
+            Assert.That(definition.GetType(), Is.EqualTo(typeof(ChildWebObjectDefinition)));
         }
     }
 

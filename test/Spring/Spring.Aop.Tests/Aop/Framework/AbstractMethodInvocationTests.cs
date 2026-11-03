@@ -59,7 +59,7 @@ public abstract class AbstractMethodInvocationTests
         AbstractMethodInvocation join = CreateMethodInvocation(
             null, target, target.GetTargetMethodNoArgs(), null, null, target.GetType(), null);
         string score = (string) join.Proceed();
-        Assert.AreEqual(Target.DefaultScore + Target.Suffix, score);
+        Assert.That(score, Is.EqualTo(Target.DefaultScore + Target.Suffix));
     }
 
     [Test]
@@ -69,7 +69,7 @@ public abstract class AbstractMethodInvocationTests
         AbstractMethodInvocation join = CreateMethodInvocation(
             null, target, target.GetTargetMethodNoArgs(), null, null, target.GetType(), new ArrayList());
         string score = (string) join.Proceed();
-        Assert.AreEqual(Target.DefaultScore + Target.Suffix, score);
+        Assert.That(score, Is.EqualTo(Target.DefaultScore + Target.Suffix));
     }
 
     [Test]
@@ -169,7 +169,7 @@ public abstract class AbstractMethodInvocationTests
             Expect.Call(interceptor.Invoke(join)).Returns(target.BullseyeMethod().ToLower(CultureInfo.InvariantCulture));
             repository.ReplayAll();
             string score = (string) join.Proceed();
-            Assert.AreEqual(target.BullseyeMethod().ToLower(CultureInfo.InvariantCulture) + Target.Suffix, score);
+            Assert.That(score, Is.EqualTo(target.BullseyeMethod().ToLower(CultureInfo.InvariantCulture) + Target.Suffix));
             repository.VerifyAll();
             */
 
@@ -181,7 +181,7 @@ public abstract class AbstractMethodInvocationTests
         A.CallTo(() => mock.Invoke(null)).WithAnyArguments().Returns(target.BullseyeMethod().ToLower(CultureInfo.InvariantCulture));
 
         string score = (string) join.Proceed();
-        Assert.AreEqual(Target.DefaultScore.ToLower(CultureInfo.InvariantCulture) + Target.Suffix, score);
+        Assert.That(score, Is.EqualTo(Target.DefaultScore.ToLower(CultureInfo.InvariantCulture) + Target.Suffix));
     }
 
     [Test]

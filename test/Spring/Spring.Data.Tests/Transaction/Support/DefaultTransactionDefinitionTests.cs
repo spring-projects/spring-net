@@ -10,30 +10,30 @@ public class DefaultTransactionDefinitionTests
     public void VanillaTest()
     {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition(TransactionPropagation.NotSupported);
-        Assert.IsTrue(def.PropagationBehavior == TransactionPropagation.NotSupported);
+        Assert.That(def.PropagationBehavior == TransactionPropagation.NotSupported, Is.True);
         def.PropagationBehavior = TransactionPropagation.Nested;
-        Assert.IsTrue(def.PropagationBehavior == TransactionPropagation.Nested);
+        Assert.That(def.PropagationBehavior == TransactionPropagation.Nested, Is.True);
         def.TransactionIsolationLevel = IsolationLevel.ReadCommitted;
-        Assert.IsTrue(def.TransactionIsolationLevel == IsolationLevel.ReadCommitted);
+        Assert.That(def.TransactionIsolationLevel == IsolationLevel.ReadCommitted, Is.True);
         def.TransactionTimeout = 1000;
-        Assert.IsTrue(1000 == def.TransactionTimeout);
-        Assert.IsTrue(false == def.ReadOnly);
+        Assert.That(1000 == def.TransactionTimeout, Is.True);
+        Assert.That(false == def.ReadOnly, Is.True);
         def.ReadOnly = true;
-        Assert.IsTrue(def.ReadOnly);
+        Assert.That(def.ReadOnly, Is.True);
     }
 
     [Test]
     public void PropogationBehaviorDefault()
     {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        Assert.IsTrue(def.PropagationBehavior == TransactionPropagation.Required);
+        Assert.That(def.PropagationBehavior == TransactionPropagation.Required, Is.True);
     }
 
     [Test]
     public void IsolationLevelDefault()
     {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        Assert.IsTrue(def.TransactionIsolationLevel == IsolationLevel.ReadCommitted);
+        Assert.That(def.TransactionIsolationLevel == IsolationLevel.ReadCommitted, Is.True);
     }
 
     [Test]
@@ -49,7 +49,7 @@ public class DefaultTransactionDefinitionTests
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         DefaultTransactionDefinition def2 = new DefaultTransactionDefinition();
 
-        Assert.IsTrue(def.ToString() == def2.ToString());
+        Assert.That(def.ToString() == def2.ToString(), Is.True);
         def.Equals(def2);
     }
 
@@ -60,14 +60,14 @@ public class DefaultTransactionDefinitionTests
         def.TransactionIsolationLevel = IsolationLevel.Chaos;
         def.TransactionTimeout = 1000;
         def.ReadOnly = true;
-        Assert.AreEqual("PROPAGATION_Never,ISOLATION_Chaos,timeout_1000,readOnly", def.ToString());
+        Assert.That(def.ToString(), Is.EqualTo("PROPAGATION_Never,ISOLATION_Chaos,timeout_1000,readOnly"));
 
         DefaultTransactionDefinition def2 = new DefaultTransactionDefinition(TransactionPropagation.Never);
         def2.TransactionIsolationLevel = IsolationLevel.Chaos;
         def2.TransactionTimeout = 1000;
         def2.ReadOnly = true;
 
-        Assert.IsTrue(def2.Equals(def));
-        Assert.IsTrue(def.GetHashCode() == def2.GetHashCode());
+        Assert.That(def2.Equals(def), Is.True);
+        Assert.That(def.GetHashCode() == def2.GetHashCode(), Is.True);
     }
 }

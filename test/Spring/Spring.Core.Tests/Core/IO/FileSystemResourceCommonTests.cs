@@ -50,7 +50,7 @@ public abstract class FileSystemResourceCommonTests
     public void CreateFileSystemResourceWithPathName()
     {
         FileSystemResource fileSystemResource = CreateResourceInstance(TemporaryFileName);
-        Assert.AreEqual(TemporaryFileName, fileSystemResource.File.Name);
+        Assert.That(fileSystemResource.File.Name, Is.EqualTo(TemporaryFileName));
     }
 
     [Test]
@@ -58,13 +58,13 @@ public abstract class FileSystemResourceCommonTests
     {
         FileInfo file = GetAssemblyLocation(Assembly.GetExecutingAssembly());
         FileSystemResource fileSystemResource = CreateResourceInstance("~/" + file.Name);
-        Assert.IsTrue(fileSystemResource.Exists);
+        Assert.That(fileSystemResource.Exists, Is.True);
     }
 
     [Test]
     public void FileSystemResourceNotExists()
     {
-        Assert.IsFalse(CreateResourceInstance("asdfasfadf").Exists);
+        Assert.That(CreateResourceInstance("asdfasfadf").Exists, Is.False);
     }
 
     [Test]
@@ -82,7 +82,7 @@ public abstract class FileSystemResourceCommonTests
         FileSystemResource fileSystemResource = CreateResourceInstance("~/" + file.Name);
         using (Stream inputStream = fileSystemResource.InputStream)
         {
-            Assert.IsNotNull(inputStream);
+            Assert.That(inputStream, Is.Not.Null);
         }
     }
 
@@ -93,7 +93,7 @@ public abstract class FileSystemResourceCommonTests
         FileSystemResource fileSystemResource = CreateResourceInstance("~/" + file.Name);
         using (Stream inputStream = fileSystemResource.InputStream)
         {
-            Assert.IsTrue(inputStream.CanRead);
+            Assert.That(inputStream.CanRead, Is.True);
         }
     }
 
@@ -102,14 +102,14 @@ public abstract class FileSystemResourceCommonTests
     {
         FileSystemResource fileSystemResource = CreateResourceInstance(TemporaryFileName);
         string expectedDescription = "file [" + fileSystemResource.File.FullName + "]";
-        Assert.AreEqual(expectedDescription, fileSystemResource.Description);
+        Assert.That(fileSystemResource.Description, Is.EqualTo(expectedDescription));
     }
 
     [Test]
     public void GetURL()
     {
         FileSystemResource fileSystemResource = CreateResourceInstance(TemporaryFileName);
-        Assert.IsNotNull(fileSystemResource.Uri);
+        Assert.That(fileSystemResource.Uri, Is.Not.Null);
     }
 
     /// <summary>
@@ -121,11 +121,12 @@ public abstract class FileSystemResourceCommonTests
     {
         // a suitable subdirectory of total pish
         IResource resource = CreateResourceInstance("dork/muller.venken");
-        Assert.IsFalse(resource.Exists,
+        Assert.That(resource.Exists,
+            Is.False,
             "This test needs to feed off of a base resource that explicitly *doesn't* exist; but the resource seems to exist anyway.");
         IResource relative =
             resource.CreateRelative("../" + GetAssemblyLocation(Assembly.GetExecutingAssembly()).Name);
-        Assert.IsTrue(relative.Exists);
+        Assert.That(relative.Exists, Is.True);
     }
 
     [Test]
@@ -134,8 +135,8 @@ public abstract class FileSystemResourceCommonTests
         IResource resource = new FileSystemResource(GetAssemblyLocation(Assembly.GetExecutingAssembly()).FullName);
         IResource relative =
             resource.CreateRelative("foo/bar/../../" + GetAssemblyLocation(Assembly.GetExecutingAssembly()).Name);
-        Assert.IsTrue(relative.Exists);
-        Assert.IsTrue(resource.Equals(relative));
+        Assert.That(relative.Exists, Is.True);
+        Assert.That(resource.Equals(relative), Is.True);
     }
 
     [Test]
@@ -150,7 +151,7 @@ public abstract class FileSystemResourceCommonTests
     {
         IResource resource = CreateResourceInstance("boba.licious");
         IResource relative = resource.CreateRelative(string.Empty);
-        Assert.IsFalse(relative.Exists);
+        Assert.That(relative.Exists, Is.False);
     }
 
     [Test]
@@ -160,8 +161,8 @@ public abstract class FileSystemResourceCommonTests
         IResource res2 = CreateResourceInstance("/index.html");
 
         IResource rel0 = res.CreateRelative("/index.html");
-        Assert.IsTrue(rel0 is FileSystemResource);
-        Assert.AreEqual(res2.File.FullName, rel0.File.FullName);
+        Assert.That(rel0 is FileSystemResource, Is.True);
+        Assert.That(rel0.File.FullName, Is.EqualTo(res2.File.FullName));
     }
 
     [Test]
@@ -171,24 +172,24 @@ public abstract class FileSystemResourceCommonTests
         FileSystemResource res2;
 
         IResource rel0 = res.CreateRelative("/index.html");
-        Assert.IsTrue(rel0 is FileSystemResource);
+        Assert.That(rel0 is FileSystemResource, Is.True);
         res2 = CreateResourceInstance("/index.html");
-        Assert.AreEqual(res2.File.FullName, rel0.File.FullName);
+        Assert.That(rel0.File.FullName, Is.EqualTo(res2.File.FullName));
 
         IResource rel1 = res.CreateRelative(@"index.html");
-        Assert.IsTrue(rel1 is FileSystemResource);
+        Assert.That(rel1 is FileSystemResource, Is.True);
         res2 = CreateResourceInstance("/index.html");
-        Assert.AreEqual(res2.File.FullName, rel1.File.FullName);
+        Assert.That(rel1.File.FullName, Is.EqualTo(res2.File.FullName));
 
         IResource rel2 = res.CreateRelative(@"samples/artfair/index.html");
-        Assert.IsTrue(rel2 is FileSystemResource);
+        Assert.That(rel2 is FileSystemResource, Is.True);
         res2 = CreateResourceInstance("/samples/artfair/index.html");
-        Assert.AreEqual(res2.File.FullName, rel2.File.FullName);
+        Assert.That(rel2.File.FullName, Is.EqualTo(res2.File.FullName));
 
         IResource rel3 = res.CreateRelative(@"./samples/artfair/index.html");
-        Assert.IsTrue(rel3 is FileSystemResource);
+        Assert.That(rel3 is FileSystemResource, Is.True);
         res2 = CreateResourceInstance("/samples/artfair/index.html");
-        Assert.AreEqual(res2.File.FullName, rel3.File.FullName);
+        Assert.That(rel3.File.FullName, Is.EqualTo(res2.File.FullName));
     }
 
     [Test]
@@ -198,33 +199,33 @@ public abstract class FileSystemResourceCommonTests
         FileSystemResource resExpected;
 
         IResource rel0 = res.CreateRelative(@"/index.html");
-        Assert.IsTrue(rel0 is FileSystemResource);
+        Assert.That(rel0 is FileSystemResource, Is.True);
         resExpected = CreateResourceInstance("/index.html");
-        Assert.AreEqual(resExpected.File.FullName, rel0.File.FullName);
+        Assert.That(rel0.File.FullName, Is.EqualTo(resExpected.File.FullName));
 
         IResource rel1 = res.CreateRelative(@"index.html");
-        Assert.IsTrue(rel1 is FileSystemResource);
+        Assert.That(rel1 is FileSystemResource, Is.True);
         resExpected = CreateResourceInstance("/samples/artfair/index.html");
-        Assert.AreEqual(resExpected.File.FullName, rel1.File.FullName);
+        Assert.That(rel1.File.FullName, Is.EqualTo(resExpected.File.FullName));
 
         IResource rel2 = res.CreateRelative(@"demo\index.html");
-        Assert.IsTrue(rel2 is FileSystemResource);
+        Assert.That(rel2 is FileSystemResource, Is.True);
         resExpected = CreateResourceInstance("/samples/artfair/demo/index.html");
-        Assert.AreEqual(resExpected.File.FullName, rel2.File.FullName);
+        Assert.That(rel2.File.FullName, Is.EqualTo(resExpected.File.FullName));
 
         IResource rel3 = res.CreateRelative(@"./demo/index.html");
-        Assert.IsTrue(rel3 is FileSystemResource);
+        Assert.That(rel3 is FileSystemResource, Is.True);
         resExpected = CreateResourceInstance("/samples/artfair/demo/index.html");
-        Assert.AreEqual(resExpected.File.FullName, rel3.File.FullName);
+        Assert.That(rel3.File.FullName, Is.EqualTo(resExpected.File.FullName));
 
         IResource rel4 = res.CreateRelative(@"../calculator/index.html");
-        Assert.IsTrue(rel4 is FileSystemResource);
+        Assert.That(rel4 is FileSystemResource, Is.True);
         resExpected = CreateResourceInstance("/samples/calculator/index.html");
-        Assert.AreEqual(resExpected.File.FullName, rel4.File.FullName);
+        Assert.That(rel4.File.FullName, Is.EqualTo(resExpected.File.FullName));
 
         IResource rel5 = res.CreateRelative(@"..\..\index.html");
         resExpected = CreateResourceInstance("/index.html");
-        Assert.AreEqual(resExpected.File.FullName, rel5.File.FullName);
+        Assert.That(rel5.File.FullName, Is.EqualTo(resExpected.File.FullName));
     }
 
     [Test]
@@ -241,8 +242,8 @@ public abstract class FileSystemResourceCommonTests
             new FileInfo(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, TemporaryFileName)));
         StreamWriter writer = file.CreateText();
         FileSystemResource res = CreateResourceInstance("~/" + TemporaryFileName);
-        Assert.IsTrue(res.File.Exists);
-        Assert.AreEqual(file.FullName.ToLower(), res.File.FullName.ToLower());
+        Assert.That(res.File.Exists, Is.True);
+        Assert.That(res.File.FullName.ToLower(), Is.EqualTo(file.FullName.ToLower()));
         try
         {
             writer.Close();
@@ -269,7 +270,7 @@ public abstract class FileSystemResourceCommonTests
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, TemporaryFileName)));
         StreamWriter writer = file.CreateText();
         FileSystemResource res = CreateResourceInstance("    ~/" + TemporaryFileName);
-        Assert.AreEqual(file.FullName.ToLower(), res.File.FullName.ToLower());
+        Assert.That(res.File.FullName.ToLower(), Is.EqualTo(file.FullName.ToLower()));
         try
         {
             writer.Close();
@@ -292,7 +293,7 @@ public abstract class FileSystemResourceCommonTests
     {
         FileSystemResource res = CreateResourceInstance("foo~.txt");
         // must not have replaced ~; its only valid at the start of a resource name...
-        Assert.AreEqual("foo~.txt", res.File.Name);
+        Assert.That(res.File.Name, Is.EqualTo("foo~.txt"));
     }
 
     [Test]
@@ -300,7 +301,7 @@ public abstract class FileSystemResourceCommonTests
     {
         FileInfo file = CreateFileForTheCurrentDirectory();
         IResource res = CreateResourceInstance(TemporaryFileName);
-        Assert.AreEqual(file.FullName.ToLower(), res.File.FullName.ToLower(),
+        Assert.That(res.File.FullName.ToLower(), Is.EqualTo(file.FullName.ToLower()),
             "The bare file name all by itself must have resolved to a file in the current " +
             "directory of the currently executing domain.");
     }
@@ -310,7 +311,7 @@ public abstract class FileSystemResourceCommonTests
     {
         FileInfo file = CreateFileForTheCurrentDirectory();
         IResource res = CreateResourceInstance("~/" + TemporaryFileName);
-        Assert.AreEqual(file.FullName.ToLower(), res.File.FullName.ToLower(),
+        Assert.That(res.File.FullName.ToLower(), Is.EqualTo(file.FullName.ToLower()),
             "The file name with ~/ must have resolved to a file " +
             "in the current directory of the currently executing domain.");
     }

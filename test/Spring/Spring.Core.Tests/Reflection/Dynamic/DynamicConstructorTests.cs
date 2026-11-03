@@ -67,11 +67,11 @@ public sealed class DynamicConstructorTests
         IDynamicConstructor newInventor = DynamicConstructor.Create(
             typeof(Inventor).GetConstructor(new Type[] { typeof(string), typeof(DateTime), typeof(string) }));
         Inventor ana = (Inventor) newInventor.Invoke(new object[] { "Ana Maria Seovic", new DateTime(2004, 8, 14), "Serbian" });
-        Assert.AreEqual("Ana Maria Seovic", ana.Name);
+        Assert.That(ana.Name, Is.EqualTo("Ana Maria Seovic"));
 
         IDynamicConstructor newDate = DynamicConstructor.Create(
             typeof(DateTime).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(int) }));
-        Assert.AreEqual(DateTime.Today, newDate.Invoke(new object[] { DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day }));
+        Assert.That(newDate.Invoke(new object[] { DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day }), Is.EqualTo(DateTime.Today));
     }
 
     private DateTime start, stop;

@@ -70,7 +70,7 @@ public class InfrastructureAdvisorAutoProxyCreatorTests
         TestAdvisorAutoProxyCreator apc = new TestAdvisorAutoProxyCreator();
         apc.ObjectFactory = of;
         IList<object> advisors = apc.GetAdvicesAndAdvisorsForObject(typeof(object), "dummyTarget");
-        Assert.AreEqual(1, advisors.Count);
-        Assert.AreEqual("InfrastructureAdvisor", ((TestAdvisor) advisors[0]).Name);
+        Assert.That(advisors.Count, Is.EqualTo(1));
+        Assert.That(((TestAdvisor) advisors[0]).Name, Is.EqualTo("InfrastructureAdvisor"));
     }
 }

@@ -31,9 +31,9 @@ public class TransactionInterceptorTests : AbstractTransactionAspectTests
     {
         TransactionInterceptor ti = new TransactionInterceptor();
         ti.TransactionManager = ptm;
-        Assert.AreEqual(ptm, ti.TransactionManager);
+        Assert.That(ti.TransactionManager, Is.EqualTo(ptm));
         ti.TransactionAttributeSource = tas;
-        Assert.AreEqual(tas, ti.TransactionAttributeSource);
+        Assert.That(ti.TransactionAttributeSource, Is.EqualTo(tas));
         ProxyFactory pf = new ProxyFactory(target);
         pf.AddAdvice(0, ti);
         return pf.GetProxy();

@@ -24,7 +24,7 @@ namespace Tests.Formatter
 
             IList<string> formattedOutput = outputFormatter.Format(_generatedPrimes);
 
-            Assert.IsAssignableFrom(typeof (List<string>), formattedOutput);
+            Assert.That(formattedOutput, Is.AssignableFrom(typeof(List<string>)));
         }
 
 
@@ -41,7 +41,7 @@ namespace Tests.Formatter
             {
                 splitPrimes = item.Split(",".ToCharArray());
 
-                Assert.LessOrEqual(splitPrimes.Length, 5);
+                Assert.That(splitPrimes.Length, Is.LessThanOrEqualTo(5));
             }
         }
 
@@ -56,7 +56,7 @@ namespace Tests.Formatter
 
             for (int i = 10; i < formattedOutput.Count; i += 11)
             {
-                Assert.IsTrue(formattedOutput[i].Contains("Count:"));
+                Assert.That(formattedOutput[i].Contains("Count:"), Is.True);
             }
         }
     }

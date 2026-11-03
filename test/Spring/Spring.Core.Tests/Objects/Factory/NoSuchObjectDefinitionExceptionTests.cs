@@ -36,8 +36,8 @@ public sealed class NoSuchObjectDefinitionExceptionTests
         NoSuchObjectDefinitionException ex
             = new NoSuchObjectDefinitionException(NotFoundObjectDefinitionName, "Cannot dynamically build object key...");
         NoSuchObjectDefinitionException deserializedException = Serialize(ex);
-        Assert.IsNotNull(deserializedException);
-        Assert.AreEqual(NotFoundObjectDefinitionName, deserializedException.ObjectName, "'ObjectName' property was not serialized correctly.");
+        Assert.That(deserializedException, Is.Not.Null);
+        Assert.That(deserializedException.ObjectName, Is.EqualTo(NotFoundObjectDefinitionName), "'ObjectName' property was not serialized correctly.");
     }
 
     [Test]
@@ -46,8 +46,8 @@ public sealed class NoSuchObjectDefinitionExceptionTests
         NoSuchObjectDefinitionException ex
             = new NoSuchObjectDefinitionException(NotFoundObjectDefinitionType, null);
         NoSuchObjectDefinitionException deserializedException = Serialize(ex);
-        Assert.IsNotNull(deserializedException);
-        Assert.AreEqual(NotFoundObjectDefinitionType, deserializedException.ObjectType, "'ObjectType' property was not serialized correctly.");
+        Assert.That(deserializedException, Is.Not.Null);
+        Assert.That(deserializedException.ObjectType, Is.EqualTo(NotFoundObjectDefinitionType), "'ObjectType' property was not serialized correctly.");
     }
 
     private NoSuchObjectDefinitionException Serialize(NoSuchObjectDefinitionException inputException)

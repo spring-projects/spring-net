@@ -124,7 +124,7 @@ public class TransactionTemplateTests
     public static void PerformOperations(ITestObjectManager mgr,
         ITestObjectDao dao)
     {
-        Assert.IsNotNull(mgr);
+        Assert.That(mgr, Is.Not.Null);
         TestObject to1 = new TestObject();
         to1.Name = "Jack";
         to1.Age = 7;
@@ -134,19 +134,19 @@ public class TransactionTemplateTests
         mgr.SaveTwoTestObjects(to1, to2);
 
         TestObject to = dao.FindByName("Jack");
-        Assert.IsNotNull(to);
+        Assert.That(to, Is.Not.Null);
 
         to = dao.FindByName("Jill");
-        Assert.IsNotNull(to);
-        Assert.AreEqual("Jill", to.Name);
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Name, Is.EqualTo("Jill"));
 
         mgr.DeleteTwoTestObjects("Jack", "Jill");
 
         to = dao.FindByName("Jack");
-        Assert.IsNull(to);
+        Assert.That(to, Is.Null);
 
         to = dao.FindByName("Jill");
-        Assert.IsNull(to);
+        Assert.That(to, Is.Null);
     }
 
     [Test]
@@ -154,7 +154,7 @@ public class TransactionTemplateTests
     {
         TransactionTemplate tt = new TransactionTemplate(transactionManager);
         object result = tt.Execute(new SimpleTransactionCallback(dbProvider));
-        Assert.AreEqual(2, (int) result);
+        Assert.That((int) result, Is.EqualTo(2));
     }
 
     [Test]
@@ -184,7 +184,7 @@ public class TransactionTemplateTests
         }
 
         transactionManager.Commit(status);
-        Assert.AreEqual(2, iCount);
+        Assert.That(iCount, Is.EqualTo(2));
     }
 
     private class SimpleTransactionCallback : ITransactionCallback

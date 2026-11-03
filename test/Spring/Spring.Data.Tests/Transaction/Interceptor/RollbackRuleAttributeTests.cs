@@ -27,45 +27,45 @@ public class RollbackRuleAttributeTests
     public void FoundImmediatelyWithString()
     {
         RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Exception");
-        Assert.IsTrue(rr.GetDepth(typeof(Exception)) == 0);
+        Assert.That(rr.GetDepth(typeof(Exception)) == 0, Is.True);
     }
 
     [Test]
     public void FoundImmediatelyWithClass()
     {
         RollbackRuleAttribute rr = new RollbackRuleAttribute(typeof(Exception));
-        Assert.IsTrue(rr.GetDepth(new Exception()) == 0);
+        Assert.That(rr.GetDepth(new Exception()) == 0, Is.True);
     }
 
     [Test]
     public void FoundImmediatelyWithType()
     {
         RollbackRuleAttribute rr = new RollbackRuleAttribute(typeof(Exception));
-        Assert.IsTrue(rr.GetDepth(typeof(Exception)) == 0);
+        Assert.That(rr.GetDepth(typeof(Exception)) == 0, Is.True);
     }
 
     [Test]
     public void NotFound()
     {
         RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Data.DataException");
-        Assert.IsTrue(rr.GetDepth(typeof(ApplicationException)) == -1);
+        Assert.That(rr.GetDepth(typeof(ApplicationException)) == -1, Is.True);
     }
 
     [Test]
     public void Ancestry()
     {
         RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Exception");
-        Assert.IsTrue(rr.GetDepth(typeof(DataException)) == 2);
+        Assert.That(rr.GetDepth(typeof(DataException)) == 2, Is.True);
     }
 
     [Test]
     public void AlwaysTrue()
     {
         RollbackRuleAttribute rr = new RollbackRuleAttribute("System.Exception");
-        Assert.IsTrue(rr.GetDepth(typeof(SystemException)) > 0);
-        Assert.IsTrue(rr.GetDepth(typeof(ApplicationException)) > 0);
-        Assert.IsTrue(rr.GetDepth(typeof(DataException)) > 0);
-        Assert.IsTrue(rr.GetDepth(typeof(TransactionSystemException)) > 0);
+        Assert.That(rr.GetDepth(typeof(SystemException)) > 0, Is.True);
+        Assert.That(rr.GetDepth(typeof(ApplicationException)) > 0, Is.True);
+        Assert.That(rr.GetDepth(typeof(DataException)) > 0, Is.True);
+        Assert.That(rr.GetDepth(typeof(TransactionSystemException)) > 0, Is.True);
     }
 
     [Test]

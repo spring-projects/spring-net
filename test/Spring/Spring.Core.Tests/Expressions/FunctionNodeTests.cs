@@ -38,7 +38,7 @@ public class FunctionNodeTests
         fn.addChild(str);
 
         IExpression exp = fn;
-        Assert.AreEqual(str.Text, exp.GetValue(null, vars));
+        Assert.That(exp.GetValue(null, vars), Is.EqualTo(str.Text));
     }
 
     [Test]
@@ -57,7 +57,7 @@ public class FunctionNodeTests
         fn.addChild(str2);
 
         IExpression exp = fn;
-        Assert.AreEqual(string.Format("{0},{1},{2}", this.GetHashCode(), str.Text, str2.Text), exp.GetValue(null, vars));
+        Assert.That(exp.GetValue(null, vars), Is.EqualTo(string.Format("{0},{1},{2}", this.GetHashCode(), str.Text, str2.Text)));
     }
 
     private delegate string TestCallback(string arg1, string arg2);

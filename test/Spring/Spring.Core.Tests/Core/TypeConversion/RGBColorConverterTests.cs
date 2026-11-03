@@ -33,10 +33,10 @@ public sealed class RGBColorConverterTests
         RGBColorConverter converter = new RGBColorConverter();
         Color actual =
             (Color) converter.ConvertFrom(String.Format("{0}, {1}, {2}", expected.R, expected.G, expected.B));
-        Assert.AreEqual(expected.A, actual.A);
-        Assert.AreEqual(expected.R, actual.R);
-        Assert.AreEqual(expected.G, actual.G);
-        Assert.AreEqual(expected.B, actual.B);
+        Assert.That(actual.A, Is.EqualTo(expected.A));
+        Assert.That(actual.R, Is.EqualTo(expected.R));
+        Assert.That(actual.G, Is.EqualTo(expected.G));
+        Assert.That(actual.B, Is.EqualTo(expected.B));
     }
 
     [Test]
@@ -81,7 +81,7 @@ public sealed class RGBColorConverterTests
             Color expected = Color.BlanchedAlmond;
             RGBColorConverter vrt = new RGBColorConverter();
             Color actual = (Color) vrt.ConvertFrom(expected.Name);
-            Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
         }
 #endif
 
@@ -99,17 +99,17 @@ public sealed class RGBColorConverterTests
         RGBColorConverter converter = new RGBColorConverter();
         Color actual =
             (Color) converter.ConvertFrom(String.Format("{0}, {1}, {2}, {3}", expected.A, expected.R, expected.G, expected.B));
-        Assert.AreEqual(expected.A, actual.A);
-        Assert.AreEqual(expected.R, actual.R);
-        Assert.AreEqual(expected.G, actual.G);
-        Assert.AreEqual(expected.B, actual.B);
+        Assert.That(actual.A, Is.EqualTo(expected.A));
+        Assert.That(actual.R, Is.EqualTo(expected.R));
+        Assert.That(actual.G, Is.EqualTo(expected.G));
+        Assert.That(actual.B, Is.EqualTo(expected.B));
     }
 
     [Test]
     public void CanConvertFrom()
     {
         RGBColorConverter vrt = new RGBColorConverter();
-        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
-        Assert.IsFalse(vrt.CanConvertFrom(typeof(int)));
+        Assert.That(vrt.CanConvertFrom(typeof(string)), Is.True, "Conversion from a string instance must be supported.");
+        Assert.That(vrt.CanConvertFrom(typeof(int)), Is.False);
     }
 }

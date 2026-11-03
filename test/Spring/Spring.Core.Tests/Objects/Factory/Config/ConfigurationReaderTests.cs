@@ -54,9 +54,9 @@ public sealed class ConfigurationReaderTests
         catch (ConfigurationErrorsException cfgex)
         {
 #if NETFRAMEWORK
-            Assert.IsInstanceOf(typeof(NotSupportedException), cfgex.InnerException);
+            Assert.That(cfgex.InnerException, Is.InstanceOf(typeof(NotSupportedException)));
 #else
-                Assert.IsInstanceOf(typeof(ArgumentException), cfgex.InnerException);
+            Assert.That(cfgex.InnerException, Is.InstanceOf(typeof(ArgumentException)));
 #endif
         }
     }
@@ -67,15 +67,16 @@ public sealed class ConfigurationReaderTests
         using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
         {
             NameValueCollection props = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo");
-            Assert.IsNotNull(props,
+            Assert.That(props,
+                Is.Not.Null,
                 "Failed to read in any properties at all (props is null).");
-            Assert.AreEqual(2, props.Count,
+            Assert.That(props.Count, Is.EqualTo(2),
                 "Wrong number of properties read in.");
-            Assert.AreEqual("kiley",
-                props["rilo"],
+            Assert.That(props["rilo"],
+                Is.EqualTo("kiley"),
                 "Wrong value for second property");
-            Assert.AreEqual("lewis",
-                props["jenny"],
+            Assert.That(props["jenny"],
+                Is.EqualTo("lewis"),
                 "Wrong value for second property");
         }
     }
@@ -98,10 +99,10 @@ public sealed class ConfigurationReaderTests
         using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
         {
             ConnectionStringsSection css = ConfigurationReader.GetSection<ConnectionStringsSection>(new InputStreamResource(stream, ""), "connectionStrings");
-            Assert.IsNotNull(css, "Failed to read in any properties at all (props is null).");
-            Assert.IsNotNull(css.ConnectionStrings["Sales"]);
-            Assert.AreEqual("System.Data.SqlClient", css.ConnectionStrings["Sales"].ProviderName);
-            Assert.AreEqual("server=myserver;database=Products;uid=user name;pwd=secure password", css.ConnectionStrings["Sales"].ConnectionString);
+            Assert.That(css, Is.Not.Null, "Failed to read in any properties at all (props is null).");
+            Assert.That(css.ConnectionStrings["Sales"], Is.Not.Null);
+            Assert.That(css.ConnectionStrings["Sales"].ProviderName, Is.EqualTo("System.Data.SqlClient"));
+            Assert.That(css.ConnectionStrings["Sales"].ConnectionString, Is.EqualTo("server=myserver;database=Products;uid=user name;pwd=secure password"));
         }
     }
 
@@ -120,10 +121,10 @@ public sealed class ConfigurationReaderTests
         using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
         {
             ConnectionStringsSection css = ConfigurationReader.GetSection<ConnectionStringsSection>(new InputStreamResource(stream, ""), "connectionStrings");
-            Assert.IsNotNull(css, "Failed to read in any properties at all (props is null).");
-            Assert.IsNotNull(css.ConnectionStrings["Sales"]);
-            Assert.AreEqual("System.Data.SqlClient", css.ConnectionStrings["Sales"].ProviderName);
-            Assert.AreEqual("server=myserver;database=Products;uid=user name;pwd=secure password", css.ConnectionStrings["Sales"].ConnectionString);
+            Assert.That(css, Is.Not.Null, "Failed to read in any properties at all (props is null).");
+            Assert.That(css.ConnectionStrings["Sales"], Is.Not.Null);
+            Assert.That(css.ConnectionStrings["Sales"].ProviderName, Is.EqualTo("System.Data.SqlClient"));
+            Assert.That(css.ConnectionStrings["Sales"].ConnectionString, Is.EqualTo("server=myserver;database=Products;uid=user name;pwd=secure password"));
         }
     }
 
@@ -133,15 +134,16 @@ public sealed class ConfigurationReaderTests
         using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
         {
             NameValueCollection props = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo");
-            Assert.IsNotNull(props,
+            Assert.That(props,
+                Is.Not.Null,
                 "Failed to read in any properties at all (props is null).");
-            Assert.AreEqual(2, props.Count,
+            Assert.That(props.Count, Is.EqualTo(2),
                 "Wrong number of properties read in.");
-            Assert.AreEqual("kiley",
-                props["rilo"],
+            Assert.That(props["rilo"],
+                Is.EqualTo("kiley"),
                 "Wrong value for second property");
-            Assert.AreEqual("lewis",
-                props["jenny"],
+            Assert.That(props["jenny"],
+                Is.EqualTo("lewis"),
                 "Wrong value for second property");
         }
     }
@@ -155,8 +157,8 @@ public sealed class ConfigurationReaderTests
             defaults.Add("jenny", "agutter");
             NameValueCollection props
                 = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", defaults);
-            Assert.IsTrue(ReferenceEquals(defaults, props), "Must have got same collection as was passed in.");
-            Assert.AreEqual("lewis", props["jenny"], "Wrong value for overridden property (was not overridden");
+            Assert.That(ReferenceEquals(defaults, props), Is.True, "Must have got same collection as was passed in.");
+            Assert.That(props["jenny"], Is.EqualTo("lewis"), "Wrong value for overridden property (was not overridden");
         }
     }
 
@@ -169,8 +171,8 @@ public sealed class ConfigurationReaderTests
             defaults.Add("jenny", "agutter");
             NameValueCollection props
                 = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", defaults, false);
-            Assert.IsTrue(ReferenceEquals(defaults, props), "Must have got same collection as was passed in.");
-            Assert.AreEqual("agutter,lewis", props["jenny"], "Wrong value for overridden property (was not overridden");
+            Assert.That(ReferenceEquals(defaults, props), Is.True, "Must have got same collection as was passed in.");
+            Assert.That(props["jenny"], Is.EqualTo("agutter,lewis"), "Wrong value for overridden property (was not overridden");
         }
     }
 
@@ -181,10 +183,10 @@ public sealed class ConfigurationReaderTests
         {
             NameValueCollection props
                 = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", null);
-            Assert.IsNotNull(props, "Failed to read in any properties at all (props is null).");
-            Assert.AreEqual(2, props.Count, "Wrong number of properties read in.");
-            Assert.AreEqual("kiley", props["rilo"], "Wrong value for second property");
-            Assert.AreEqual("lewis", props["jenny"], "Wrong value for second property");
+            Assert.That(props, Is.Not.Null, "Failed to read in any properties at all (props is null).");
+            Assert.That(props.Count, Is.EqualTo(2), "Wrong number of properties read in.");
+            Assert.That(props["rilo"], Is.EqualTo("kiley"), "Wrong value for second property");
+            Assert.That(props["jenny"], Is.EqualTo("lewis"), "Wrong value for second property");
         }
     }
 
@@ -202,10 +204,10 @@ public sealed class ConfigurationReaderTests
         {
             NameValueCollection props
                 = ConfigurationReader.Read(new InputStreamResource(stream, ""), "foo", null);
-            Assert.IsNotNull(props, "Failed to read in any properties at all (props is null).");
-            Assert.AreEqual(2, props.Count, "Wrong number of properties read in.");
-            Assert.AreEqual("kiley", props["rilo"], "Wrong value for second property");
-            Assert.AreEqual("lewis", props["jenny"], "Wrong value for second property");
+            Assert.That(props, Is.Not.Null, "Failed to read in any properties at all (props is null).");
+            Assert.That(props.Count, Is.EqualTo(2), "Wrong number of properties read in.");
+            Assert.That(props["rilo"], Is.EqualTo("kiley"), "Wrong value for second property");
+            Assert.That(props["jenny"], Is.EqualTo("lewis"), "Wrong value for second property");
         }
     }
 

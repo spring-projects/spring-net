@@ -44,14 +44,14 @@ public sealed class ConfigurableResourceLoaderTests
         try
         {
             IResource withoutProtocol = loader.GetResource(fileName);
-            Assert.IsNotNull(withoutProtocol, "Resource should not be null");
-            Assert.IsTrue(withoutProtocol is FileSystemResource, "Expected FileSystemResource");
-            Assert.IsTrue(withoutProtocol.Exists, "Resource should exist but it does not");
+            Assert.That(withoutProtocol, Is.Not.Null, "Resource should not be null");
+            Assert.That(withoutProtocol is FileSystemResource, Is.True, "Expected FileSystemResource");
+            Assert.That(withoutProtocol.Exists, Is.True, "Resource should exist but it does not");
 
             IResource withProtocol = loader.GetResource("file:///" + fileName);
-            Assert.IsNotNull(withProtocol, "Resource should not be null");
-            Assert.IsTrue(withProtocol is FileSystemResource, "Expected FileSystemResource");
-            Assert.IsTrue(withProtocol.Exists, "Resource should exist but it does not");
+            Assert.That(withProtocol, Is.Not.Null, "Resource should not be null");
+            Assert.That(withProtocol is FileSystemResource, Is.True, "Expected FileSystemResource");
+            Assert.That(withProtocol.Exists, Is.True, "Resource should exist but it does not");
         }
         finally
         {
@@ -67,7 +67,7 @@ public sealed class ConfigurableResourceLoaderTests
             new FileInfo(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename)));
         StreamWriter writer = expectedFile.CreateText();
         FileSystemResource res = (FileSystemResource) loader.GetResource("~/" + filename);
-        Assert.AreEqual(expectedFile.FullName, res.File.FullName);
+        Assert.That(res.File.FullName, Is.EqualTo(expectedFile.FullName));
         try
         {
             writer.Close();
@@ -93,7 +93,7 @@ public sealed class ConfigurableResourceLoaderTests
             new FileInfo(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename)));
         StreamWriter writer = expectedFile.CreateText();
         FileSystemResource res = (FileSystemResource) loader.GetResource("   ~/" + filename);
-        Assert.AreEqual(expectedFile.FullName, res.File.FullName);
+        Assert.That(res.File.FullName, Is.EqualTo(expectedFile.FullName));
         try
         {
             writer.Close();
@@ -126,14 +126,14 @@ public sealed class ConfigurableResourceLoaderTests
         try
         {
             IResource withoutProtocol = loader.GetResource(fileName);
-            Assert.IsNotNull(withoutProtocol, "Resource should not be null");
-            Assert.IsTrue(withoutProtocol is FileSystemResource, "Expected FileSystemResource");
-            Assert.IsTrue(withoutProtocol.Exists, "Resource should exist but it does not");
+            Assert.That(withoutProtocol, Is.Not.Null, "Resource should not be null");
+            Assert.That(withoutProtocol is FileSystemResource, Is.True, "Expected FileSystemResource");
+            Assert.That(withoutProtocol.Exists, Is.True, "Resource should exist but it does not");
 
             IResource withProtocol = loader.GetResource("file://" + fileName);
-            Assert.IsNotNull(withProtocol, "Resource should not be null");
-            Assert.IsTrue(withProtocol is FileSystemResource, "Expected FileSystemResource");
-            Assert.IsTrue(withProtocol.Exists, "Resource should exist but it does not");
+            Assert.That(withProtocol, Is.Not.Null, "Resource should not be null");
+            Assert.That(withProtocol is FileSystemResource, Is.True, "Expected FileSystemResource");
+            Assert.That(withProtocol.Exists, Is.True, "Resource should exist but it does not");
         }
         finally
         {
@@ -149,8 +149,8 @@ public sealed class ConfigurableResourceLoaderTests
     public void GetHttpUrlResource()
     {
         IResource res = loader.GetResource("http://www.springframework.net/license.html");
-        Assert.IsNotNull(res, "Resource should not be null");
-        Assert.AreEqual(typeof(UrlResource), res.GetType());
+        Assert.That(res, Is.Not.Null, "Resource should not be null");
+        Assert.That(res.GetType(), Is.EqualTo(typeof(UrlResource)));
     }
 
     /// <summary>
@@ -160,8 +160,8 @@ public sealed class ConfigurableResourceLoaderTests
     public void GetAssemblyResource()
     {
         IResource res = loader.GetResource("assembly://Spring.Core.Tests/Spring/TestResource.txt");
-        Assert.IsNotNull(res, "Resource should not be null");
-        Assert.AreEqual(typeof(AssemblyResource), res.GetType());
+        Assert.That(res, Is.Not.Null, "Resource should not be null");
+        Assert.That(res.GetType(), Is.EqualTo(typeof(AssemblyResource)));
     }
 
     [Test]

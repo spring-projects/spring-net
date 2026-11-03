@@ -33,7 +33,7 @@ public class ManagedSetTests
         child.Add("three");
         child.MergeEnabled = true;
         ISet mergedList = (ISet) child.Merge(parent);
-        Assert.AreEqual(3, mergedList.Count);
+        Assert.That(mergedList.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class ManagedSetTests
         ManagedSet child = new ManagedSet();
         child.Add("one");
         child.MergeEnabled = true;
-        Assert.AreSame(child, child.Merge(null));
+        Assert.That(child.Merge(null), Is.SameAs(child));
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class ManagedSetTests
         ManagedSet child = new ManagedSet();
         child.MergeEnabled = true;
         ISet mergedSet = (ISet) child.Merge(parent);
-        Assert.AreEqual(2, mergedSet.Count);
+        Assert.That(mergedSet.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -83,6 +83,6 @@ public class ManagedSetTests
         child.Add("one");
         child.MergeEnabled = true;
         ISet mergedList = (ISet) child.Merge(parent);
-        Assert.AreEqual(2, mergedList.Count);
+        Assert.That(mergedList.Count, Is.EqualTo(2));
     }
 }

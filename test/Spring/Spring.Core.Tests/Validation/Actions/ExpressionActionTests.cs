@@ -34,22 +34,22 @@ public class ExpressionActionTests
 
         ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
         action.Execute(true, context, vars, null);
-        Assert.AreEqual("valid", vars["result"]);
+        Assert.That(vars["result"], Is.EqualTo("valid"));
 
         action = new ExpressionAction(Expression.Parse("#result = Name"), Expression.Parse("#result = Nationality"));
         action.Execute(true, context, vars, null);
-        Assert.AreEqual(context.Name, vars["result"]);
+        Assert.That(vars["result"], Is.EqualTo(context.Name));
 
         action = new ExpressionAction();
         action.Valid = Expression.Parse("#result = DOB.Year");
         action.Invalid = Expression.Parse("#result = DOB.Month");
         action.Execute(true, context, vars, null);
-        Assert.AreEqual(context.DOB.Year, vars["result"]);
+        Assert.That(vars["result"], Is.EqualTo(context.DOB.Year));
 
         vars.Clear();
         action = new ExpressionAction(null, "#result = 'invalid'");
         action.Execute(true, context, vars, null);
-        Assert.IsFalse(vars.ContainsKey("result"), "Result should not exist when valid expression is null.");
+        Assert.That(vars.ContainsKey("result"), Is.False, "Result should not exist when valid expression is null.");
     }
 
     [Test]
@@ -60,22 +60,22 @@ public class ExpressionActionTests
 
         ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
         action.Execute(false, context, vars, null);
-        Assert.AreEqual("invalid", vars["result"]);
+        Assert.That(vars["result"], Is.EqualTo("invalid"));
 
         action = new ExpressionAction(Expression.Parse("#result = Name"), Expression.Parse("#result = Nationality"));
         action.Execute(false, context, vars, null);
-        Assert.AreEqual(context.Nationality, vars["result"]);
+        Assert.That(vars["result"], Is.EqualTo(context.Nationality));
 
         action = new ExpressionAction();
         action.Valid = Expression.Parse("#result = DOB.Year");
         action.Invalid = Expression.Parse("#result = DOB.Month");
         action.Execute(false, context, vars, null);
-        Assert.AreEqual(context.DOB.Month, vars["result"]);
+        Assert.That(vars["result"], Is.EqualTo(context.DOB.Month));
 
         vars.Clear();
         action = new ExpressionAction("#result = 'valid'", null);
         action.Execute(false, context, vars, null);
-        Assert.IsFalse(vars.ContainsKey("result"), "Result should not exist when invalid expression is null.");
+        Assert.That(vars.ContainsKey("result"), Is.False, "Result should not exist when invalid expression is null.");
     }
 
     [Test]
@@ -87,6 +87,6 @@ public class ExpressionActionTests
         ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
         action.When = Expression.Parse("false");
         action.Execute(true, context, vars, null);
-        Assert.IsFalse(vars.ContainsKey("result"));
+        Assert.That(vars.ContainsKey("result"), Is.False);
     }
 }

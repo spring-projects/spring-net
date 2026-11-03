@@ -12,14 +12,14 @@ public class DefaultTransactionStatusTests
         ISmartTransactionObject txn = A.Fake<ISmartTransactionObject>();
 
         DefaultTransactionStatus stat = new DefaultTransactionStatus(txn, true, false, false, true, new object());
-        Assert.IsNotNull(stat.Transaction);
-        Assert.IsTrue(!stat.ReadOnly);
-        Assert.IsTrue(!stat.NewSynchronization);
-        Assert.IsNotNull(stat.SuspendedResources);
-        Assert.IsTrue(stat.IsNewTransaction);
-        Assert.IsTrue(!stat.RollbackOnly);
+        Assert.That(stat.Transaction, Is.Not.Null);
+        Assert.That(!stat.ReadOnly, Is.True);
+        Assert.That(!stat.NewSynchronization, Is.True);
+        Assert.That(stat.SuspendedResources, Is.Not.Null);
+        Assert.That(stat.IsNewTransaction, Is.True);
+        Assert.That(!stat.RollbackOnly, Is.True);
         stat.SetRollbackOnly();
-        Assert.IsTrue(stat.RollbackOnly);
+        Assert.That(stat.RollbackOnly, Is.True);
     }
 
     [Test]
@@ -52,8 +52,8 @@ public class DefaultTransactionStatusTests
         ISavepointManager saveMgr = A.Fake<ISavepointManager>();
         DefaultTransactionStatus status = new DefaultTransactionStatus(saveMgr, true, false, false, true, new object());
         status.CreateAndHoldSavepoint("savepoint");
-        Assert.IsTrue(status.HasSavepoint);
-        Assert.AreEqual("savepoint", status.Savepoint);
+        Assert.That(status.HasSavepoint, Is.True);
+        Assert.That(status.Savepoint, Is.EqualTo("savepoint"));
     }
 
     [Test]
@@ -71,8 +71,8 @@ public class DefaultTransactionStatusTests
         string savepoint = "savepoint";
         DefaultTransactionStatus status = new DefaultTransactionStatus(saveMgr, true, false, false, true, new object());
         status.CreateAndHoldSavepoint(savepoint);
-        Assert.IsTrue(status.HasSavepoint);
-        Assert.AreEqual(savepoint, status.Savepoint);
+        Assert.That(status.HasSavepoint, Is.True);
+        Assert.That(status.Savepoint, Is.EqualTo(savepoint));
 
         status.RollbackToHeldSavepoint();
         A.CallTo(() => saveMgr.RollbackToSavepoint(savepoint)).MustHaveHappened();
@@ -93,8 +93,8 @@ public class DefaultTransactionStatusTests
         string savepoint = "savepoint";
         DefaultTransactionStatus status = new DefaultTransactionStatus(saveMgr, true, false, false, true, new object());
         status.CreateAndHoldSavepoint(savepoint);
-        Assert.IsTrue(status.HasSavepoint);
-        Assert.AreEqual(savepoint, status.Savepoint);
+        Assert.That(status.HasSavepoint, Is.True);
+        Assert.That(status.Savepoint, Is.EqualTo(savepoint));
 
         status.ReleaseHeldSavepoint();
         A.CallTo(() => saveMgr.CreateSavepoint(savepoint)).MustHaveHappened();

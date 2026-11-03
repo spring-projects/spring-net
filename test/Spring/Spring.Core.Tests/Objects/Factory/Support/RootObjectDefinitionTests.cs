@@ -31,8 +31,8 @@ public sealed class RootObjectDefinitionTests
     public void InstantiationWithClassName()
     {
         RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject).AssemblyQualifiedName, new ConstructorArgumentValues(), new MutablePropertyValues());
-        Assert.IsFalse(def.HasObjectType);
-        Assert.Throws<ApplicationException>(() => Assert.IsNull(def.ObjectType)); // must bail...
+        Assert.That(def.HasObjectType, Is.False);
+        Assert.Throws<ApplicationException>(() => Assert.That(def.ObjectType, Is.Null)); // must bail...
     }
 
     [Test]
@@ -62,21 +62,21 @@ public sealed class RootObjectDefinitionTests
         RootObjectDefinition def = new RootObjectDefinition(other);
 
         // ...
-        Assert.AreEqual(typeof(TestObject), def.ObjectType);
-        Assert.AreEqual(AutoWiringMode.Constructor, def.AutowireMode);
-        Assert.IsFalse(def.IsSingleton);
-        Assert.AreEqual("Umberto Eco", def.InitMethodName);
-        Assert.AreEqual("Pedulismus", def.DestroyMethodName);
-        Assert.AreEqual(DependencyCheckingMode.Objects, def.DependencyCheck);
-        Assert.IsTrue(def.IsAbstract);
-        Assert.IsTrue(def.IsLazyInit);
-        Assert.AreEqual("IfINeedYouIllJustUseYourSimpleName", def.FactoryMethodName);
-        Assert.AreEqual("PerspirationShop", def.FactoryObjectName);
-        Assert.AreEqual("Ohhh", def.ResourceDescription);
-        Assert.IsTrue(def.HasConstructorArgumentValues);
-        Assert.AreEqual(other.ConstructorArgumentValues.ArgumentCount, def.ConstructorArgumentValues.ArgumentCount);
-        Assert.AreEqual(other.PropertyValues.PropertyValues.Count, def.PropertyValues.PropertyValues.Count);
-        Assert.AreEqual(other.EventHandlerValues.Events.Count, def.EventHandlerValues.Events.Count);
+        Assert.That(def.ObjectType, Is.EqualTo(typeof(TestObject)));
+        Assert.That(def.AutowireMode, Is.EqualTo(AutoWiringMode.Constructor));
+        Assert.That(def.IsSingleton, Is.False);
+        Assert.That(def.InitMethodName, Is.EqualTo("Umberto Eco"));
+        Assert.That(def.DestroyMethodName, Is.EqualTo("Pedulismus"));
+        Assert.That(def.DependencyCheck, Is.EqualTo(DependencyCheckingMode.Objects));
+        Assert.That(def.IsAbstract, Is.True);
+        Assert.That(def.IsLazyInit, Is.True);
+        Assert.That(def.FactoryMethodName, Is.EqualTo("IfINeedYouIllJustUseYourSimpleName"));
+        Assert.That(def.FactoryObjectName, Is.EqualTo("PerspirationShop"));
+        Assert.That(def.ResourceDescription, Is.EqualTo("Ohhh"));
+        Assert.That(def.HasConstructorArgumentValues, Is.True);
+        Assert.That(def.ConstructorArgumentValues.ArgumentCount, Is.EqualTo(other.ConstructorArgumentValues.ArgumentCount));
+        Assert.That(def.PropertyValues.PropertyValues.Count, Is.EqualTo(other.PropertyValues.PropertyValues.Count));
+        Assert.That(def.EventHandlerValues.Events.Count, Is.EqualTo(other.EventHandlerValues.Events.Count));
     }
 
     [Test]
@@ -128,23 +128,23 @@ public sealed class RootObjectDefinitionTests
         rod.OverrideFrom(cod);
 
         // ...
-        Assert.AreEqual("ChildObjectTypeName", rod.ObjectTypeName);
-        Assert.AreEqual(AutoWiringMode.ByType, rod.AutowireMode);
-        Assert.AreEqual(true, rod.IsSingleton);
-        Assert.AreEqual("InitChild", rod.InitMethodName);
-        Assert.AreEqual("DestroyChild", rod.DestroyMethodName);
-        Assert.AreEqual(DependencyCheckingMode.None, rod.DependencyCheck);
-        Assert.AreEqual(4, rod.DependsOn.Count);
-        Assert.AreEqual(false, rod.IsAbstract);
-        Assert.AreEqual(false, rod.IsLazyInit);
-        Assert.AreEqual("ChildFactoryMethodName", rod.FactoryMethodName);
-        Assert.AreEqual("ChildFactoryObjectName", rod.FactoryObjectName);
-        Assert.AreEqual("ChildResourceDescription", rod.ResourceDescription);
-        Assert.AreEqual(2, rod.ConstructorArgumentValues.ArgumentCount);
-        Assert.AreEqual(2, rod.PropertyValues.PropertyValues.Count);
-        Assert.AreEqual("Val1", rod.PropertyValues.GetPropertyValue("Prop1").Value);
-        Assert.AreEqual(50, rod.PropertyValues.GetPropertyValue("Age").Value);
-        Assert.AreEqual(2, rod.EventHandlerValues.Events.Count);
+        Assert.That(rod.ObjectTypeName, Is.EqualTo("ChildObjectTypeName"));
+        Assert.That(rod.AutowireMode, Is.EqualTo(AutoWiringMode.ByType));
+        Assert.That(rod.IsSingleton, Is.EqualTo(true));
+        Assert.That(rod.InitMethodName, Is.EqualTo("InitChild"));
+        Assert.That(rod.DestroyMethodName, Is.EqualTo("DestroyChild"));
+        Assert.That(rod.DependencyCheck, Is.EqualTo(DependencyCheckingMode.None));
+        Assert.That(rod.DependsOn.Count, Is.EqualTo(4));
+        Assert.That(rod.IsAbstract, Is.EqualTo(false));
+        Assert.That(rod.IsLazyInit, Is.EqualTo(false));
+        Assert.That(rod.FactoryMethodName, Is.EqualTo("ChildFactoryMethodName"));
+        Assert.That(rod.FactoryObjectName, Is.EqualTo("ChildFactoryObjectName"));
+        Assert.That(rod.ResourceDescription, Is.EqualTo("ChildResourceDescription"));
+        Assert.That(rod.ConstructorArgumentValues.ArgumentCount, Is.EqualTo(2));
+        Assert.That(rod.PropertyValues.PropertyValues.Count, Is.EqualTo(2));
+        Assert.That(rod.PropertyValues.GetPropertyValue("Prop1").Value, Is.EqualTo("Val1"));
+        Assert.That(rod.PropertyValues.GetPropertyValue("Age").Value, Is.EqualTo(50));
+        Assert.That(rod.EventHandlerValues.Events.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -162,13 +162,15 @@ public sealed class RootObjectDefinitionTests
     {
         RootObjectDefinition def
             = new RootObjectDefinition(typeof(TestObject), null, null);
-        Assert.IsNotNull(def.ConstructorArgumentValues,
+        Assert.That(def.ConstructorArgumentValues,
+            Is.Not.Null,
             "Must never be null, but rather just empty.");
-        Assert.AreEqual(0, def.ConstructorArgumentValues.ArgumentCount,
+        Assert.That(def.ConstructorArgumentValues.ArgumentCount, Is.EqualTo(0),
             "Must be empty if null was passed to the ctor.");
-        Assert.IsNotNull(def.PropertyValues,
+        Assert.That(def.PropertyValues,
+            Is.Not.Null,
             "Must never be null, but rather just empty.");
-        Assert.AreEqual(0, def.PropertyValues.PropertyValues.Count,
+        Assert.That(def.PropertyValues.PropertyValues.Count, Is.EqualTo(0),
             "Must be empty if null was passed to the ctor.");
     }
 }

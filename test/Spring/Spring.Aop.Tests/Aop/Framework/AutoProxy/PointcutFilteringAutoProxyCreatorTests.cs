@@ -33,7 +33,7 @@ public class PointcutFilteringAutoProxyCreatorTests
         PointcutFilteringAutoProxyCreator apc = new PointcutFilteringAutoProxyCreator();
         apc.Pointcut = new SdkRegularExpressionMethodPointcut(".*\\.GetHashCode");
         object result = apc.PostProcessAfterInitialization(new TestObject(), "testObject");
-        Assert.IsTrue(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.True);
     }
 
     [Test]
@@ -42,7 +42,7 @@ public class PointcutFilteringAutoProxyCreatorTests
         PointcutFilteringAutoProxyCreator apc = new PointcutFilteringAutoProxyCreator();
         apc.Pointcut = new SdkRegularExpressionMethodPointcut(".*\\.DOEsNOTExist");
         object result = apc.PostProcessAfterInitialization(new TestObject(), "testObject");
-        Assert.IsFalse(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.False);
     }
 
     [Test]

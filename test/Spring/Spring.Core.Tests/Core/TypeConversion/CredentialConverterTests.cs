@@ -45,13 +45,13 @@ public sealed class CredentialConverterTests
     {
         CredentialConverter cc = new CredentialConverter();
         object credential = cc.ConvertFrom(@"Spring\bbaia:sprnet");
-        Assert.IsNotNull(credential);
-        Assert.IsTrue(credential is NetworkCredential);
+        Assert.That(credential, Is.Not.Null);
+        Assert.That(credential is NetworkCredential, Is.True);
 
         NetworkCredential nc = (NetworkCredential) credential;
-        Assert.AreEqual("Spring", nc.Domain);
-        Assert.AreEqual("bbaia", nc.UserName);
-        Assert.AreEqual("sprnet", nc.Password);
+        Assert.That(nc.Domain, Is.EqualTo("Spring"));
+        Assert.That(nc.UserName, Is.EqualTo("bbaia"));
+        Assert.That(nc.Password, Is.EqualTo("sprnet"));
     }
 
     [Test]
@@ -73,13 +73,13 @@ public sealed class CredentialConverterTests
     {
         CredentialConverter cc = new CredentialConverter();
         object credential = cc.ConvertFrom(@"bbaia:sprnet");
-        Assert.IsNotNull(credential);
-        Assert.IsTrue(credential is NetworkCredential);
+        Assert.That(credential, Is.Not.Null);
+        Assert.That(credential is NetworkCredential, Is.True);
 
         NetworkCredential nc = (NetworkCredential) credential;
-        Assert.AreEqual(string.Empty, nc.Domain);
-        Assert.AreEqual("bbaia", nc.UserName);
-        Assert.AreEqual("sprnet", nc.Password);
+        Assert.That(nc.Domain, Is.Empty);
+        Assert.That(nc.UserName, Is.EqualTo("bbaia"));
+        Assert.That(nc.Password, Is.EqualTo("sprnet"));
     }
 
     [Test]
@@ -94,13 +94,13 @@ public sealed class CredentialConverterTests
     {
         CredentialConverter cc = new CredentialConverter();
         object credential = cc.ConvertFrom(@"Spring\bbaia");
-        Assert.IsNotNull(credential);
-        Assert.IsTrue(credential is NetworkCredential);
+        Assert.That(credential, Is.Not.Null);
+        Assert.That(credential is NetworkCredential, Is.True);
 
         NetworkCredential nc = (NetworkCredential) credential;
-        Assert.AreEqual("Spring", nc.Domain);
-        Assert.AreEqual("bbaia", nc.UserName);
-        Assert.AreEqual(string.Empty, nc.Password);
+        Assert.That(nc.Domain, Is.EqualTo("Spring"));
+        Assert.That(nc.UserName, Is.EqualTo("bbaia"));
+        Assert.That(nc.Password, Is.Empty);
     }
 
     [Test]
@@ -115,12 +115,12 @@ public sealed class CredentialConverterTests
     {
         CredentialConverter cc = new CredentialConverter();
         object credential = cc.ConvertFrom(@"bbaia");
-        Assert.IsNotNull(credential);
-        Assert.IsTrue(credential is NetworkCredential);
+        Assert.That(credential, Is.Not.Null);
+        Assert.That(credential is NetworkCredential, Is.True);
 
         NetworkCredential nc = (NetworkCredential) credential;
-        Assert.AreEqual(string.Empty, nc.Domain);
-        Assert.AreEqual("bbaia", nc.UserName);
-        Assert.AreEqual(string.Empty, nc.Password);
+        Assert.That(nc.Domain, Is.Empty);
+        Assert.That(nc.UserName, Is.EqualTo("bbaia"));
+        Assert.That(nc.Password, Is.Empty);
     }
 }

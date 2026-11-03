@@ -69,7 +69,7 @@ public class CollectionUtilsTests
     {
         ArrayList list = new ArrayList();
         list.Add(null);
-        Assert.IsTrue(CollectionUtils.Contains(list, null));
+        Assert.That(CollectionUtils.Contains(list, null), Is.True);
     }
 
     [Test]
@@ -88,7 +88,7 @@ public class CollectionUtilsTests
         list.Add(3);
         list.Add(4);
 
-        Assert.IsTrue(CollectionUtils.Contains(list, 3));
+        Assert.That(CollectionUtils.Contains(list, 3), Is.True);
     }
 
     [Test]
@@ -100,7 +100,7 @@ public class CollectionUtilsTests
         list.Add(3);
         list.Add(4);
 
-        Assert.IsFalse(CollectionUtils.Contains(list, 5));
+        Assert.That(CollectionUtils.Contains(list, 5), Is.False);
     }
 
     [Test]
@@ -114,7 +114,7 @@ public class CollectionUtilsTests
     {
         ArrayList list = new ArrayList();
         CollectionUtils.Add(list, null);
-        Assert.IsTrue(list.Count == 1);
+        Assert.That(list.Count == 1, Is.True);
     }
 
     [Test]
@@ -130,7 +130,7 @@ public class CollectionUtilsTests
         ArrayList list = new ArrayList();
         object obj1 = new object();
         CollectionUtils.Add(list, obj1);
-        Assert.IsTrue(list.Count == 1);
+        Assert.That(list.Count == 1, Is.True);
     }
 
     [Test]
@@ -162,7 +162,7 @@ public class CollectionUtilsTests
         ArrayList source = new ArrayList();
         source.Add(1);
 
-        Assert.IsTrue(CollectionUtils.ContainsAll(target, source));
+        Assert.That(CollectionUtils.ContainsAll(target, source), Is.True);
     }
 
     [Test]
@@ -178,7 +178,7 @@ public class CollectionUtilsTests
         source.Add(2);
         source.Add(3);
 
-        Assert.IsTrue(CollectionUtils.ContainsAll(target, source));
+        Assert.That(CollectionUtils.ContainsAll(target, source), Is.True);
     }
 
     [Test]
@@ -190,7 +190,7 @@ public class CollectionUtilsTests
         target.Add(3);
 
         ArrayList source = new ArrayList();
-        Assert.IsTrue(CollectionUtils.ContainsAll(target, source));
+        Assert.That(CollectionUtils.ContainsAll(target, source), Is.True);
     }
 
     [Test]
@@ -198,7 +198,7 @@ public class CollectionUtilsTests
     {
         ArrayList target = new ArrayList();
         ArrayList source = new ArrayList();
-        Assert.IsFalse(CollectionUtils.ContainsAll(target, source));
+        Assert.That(CollectionUtils.ContainsAll(target, source), Is.False);
     }
 
     [Test]
@@ -217,14 +217,14 @@ public class CollectionUtilsTests
 
         ArrayList source = CollectionUtils.ToArrayList(target);
 
-        Assert.AreEqual(target.Count, source.Count);
+        Assert.That(source.Count, Is.EqualTo(target.Count));
     }
 
     [Test]
     public void EmptyArrayElements()
     {
         ArrayList source = CollectionUtils.ToArrayList(new NoContainsNoAddCollection());
-        Assert.AreEqual(0, source.Count);
+        Assert.That(source.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -265,7 +265,7 @@ public class CollectionUtilsTests
         source.Add(6);
 
         CollectionUtils.RemoveAll(target, source);
-        Assert.IsTrue(3 == target.Count);
+        Assert.That(3 == target.Count, Is.True);
     }
 
     [Test]
@@ -284,7 +284,7 @@ public class CollectionUtilsTests
         source.Add(6);
 
         CollectionUtils.RemoveAll(target, source);
-        Assert.IsTrue(3 == target.Count);
+        Assert.That(3 == target.Count, Is.True);
     }
 
     [Test]
@@ -306,49 +306,49 @@ public class CollectionUtilsTests
         source.Add(6);
 
         CollectionUtils.RemoveAll(target, source);
-        Assert.IsTrue(0 == target.Count);
+        Assert.That(0 == target.Count, Is.True);
     }
 
     [Test]
     public void IsCollectionEmptyOrNull()
     {
         ArrayList list = new ArrayList();
-        Assert.IsTrue(CollectionUtils.IsEmpty(list));
+        Assert.That(CollectionUtils.IsEmpty(list), Is.True);
         list.Add("foo");
-        Assert.IsFalse(CollectionUtils.IsEmpty(list));
+        Assert.That(CollectionUtils.IsEmpty(list), Is.False);
         list = null;
-        Assert.IsTrue(CollectionUtils.IsEmpty(list));
+        Assert.That(CollectionUtils.IsEmpty(list), Is.True);
     }
 
     [Test]
     public void IsDictionaryEmptyOrNull()
     {
         Hashtable t = new Hashtable();
-        Assert.IsTrue(CollectionUtils.IsEmpty(t));
+        Assert.That(CollectionUtils.IsEmpty(t), Is.True);
         t["foo"] = "bar";
-        Assert.IsFalse(CollectionUtils.IsEmpty(t));
+        Assert.That(CollectionUtils.IsEmpty(t), Is.False);
         t = null;
-        Assert.IsTrue(CollectionUtils.IsEmpty(t));
+        Assert.That(CollectionUtils.IsEmpty(t), Is.True);
     }
 
     [Test]
     public void FindValueOfType()
     {
         ArrayList list = new ArrayList();
-        Assert.IsNull(CollectionUtils.FindValueOfType(list, typeof(String)));
+        Assert.That(CollectionUtils.FindValueOfType(list, typeof(String)), Is.Null);
         list.Add("foo");
         object obj = CollectionUtils.FindValueOfType(list, typeof(String));
-        Assert.IsNotNull(obj);
-        Assert.IsNotNull(obj as string);
+        Assert.That(obj, Is.Not.Null);
+        Assert.That(obj as string, Is.Not.Null);
         string val = obj as string;
-        Assert.AreEqual("foo", val);
+        Assert.That(val, Is.EqualTo("foo"));
 
         list.Add(new TestObject("Joe", 34));
         obj = CollectionUtils.FindValueOfType(list, typeof(TestObject));
-        Assert.IsNotNull(obj);
+        Assert.That(obj, Is.Not.Null);
         TestObject to = obj as TestObject;
-        Assert.IsNotNull(to);
-        Assert.AreEqual("Joe", to.Name);
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Name, Is.EqualTo("Joe"));
 
         list.Add(new TestObject("Mary", 33));
         try
@@ -368,7 +368,7 @@ public class CollectionUtilsTests
         ArrayList list = new ArrayList();
         list.Add("mystring");
         string[] strList = (string[]) CollectionUtils.ToArray(list, typeof(string));
-        Assert.AreEqual(1, strList.Length);
+        Assert.That(strList.Length, Is.EqualTo(1));
 
         try
         {
@@ -388,12 +388,12 @@ public class CollectionUtilsTests
         ICollection resultList = CollectionUtils.StableSort(entries, new CollectionUtils.CompareCallback(CompareEntries));
         DictionaryEntry[] resultEntries = (DictionaryEntry[]) CollectionUtils.ToArray(resultList, typeof(DictionaryEntry));
 
-        Assert.AreEqual(0, resultEntries[0].Value);
-        Assert.AreEqual(1, resultEntries[1].Value);
-        Assert.AreEqual(2, resultEntries[2].Value);
-        Assert.AreEqual(3, resultEntries[3].Value);
-        Assert.AreEqual(4, resultEntries[4].Value);
-        Assert.AreEqual(5, resultEntries[5].Value);
+        Assert.That(resultEntries[0].Value, Is.EqualTo(0));
+        Assert.That(resultEntries[1].Value, Is.EqualTo(1));
+        Assert.That(resultEntries[2].Value, Is.EqualTo(2));
+        Assert.That(resultEntries[3].Value, Is.EqualTo(3));
+        Assert.That(resultEntries[4].Value, Is.EqualTo(4));
+        Assert.That(resultEntries[5].Value, Is.EqualTo(5));
     }
 
     private int CompareEntries(object x, object y)
@@ -407,10 +407,10 @@ public class CollectionUtilsTests
     [Test]
     public void FindFirstMatchReturnsNullIfAnyInputIsEmpty()
     {
-        Assert.IsNull(CollectionUtils.FindFirstMatch(null, null));
-        Assert.IsNull(CollectionUtils.FindFirstMatch(new string[0], new string[0]));
-        Assert.IsNull(CollectionUtils.FindFirstMatch(null, new string[] { "x" }));
-        Assert.IsNull(CollectionUtils.FindFirstMatch(new string[] { "x" }, null));
+        Assert.That(CollectionUtils.FindFirstMatch(null, null), Is.Null);
+        Assert.That(CollectionUtils.FindFirstMatch(new string[0], new string[0]), Is.Null);
+        Assert.That(CollectionUtils.FindFirstMatch(null, new string[] { "x" }), Is.Null);
+        Assert.That(CollectionUtils.FindFirstMatch(new string[] { "x" }, null), Is.Null);
     }
 
     [Test]
@@ -419,6 +419,6 @@ public class CollectionUtilsTests
         ArrayList source = new ArrayList();
         string[] candidates = new string[] { "G", "B", "H" };
         source.AddRange(new string[] { "A", "B", "C" });
-        Assert.AreEqual("B", CollectionUtils.FindFirstMatch(source, candidates));
+        Assert.That(CollectionUtils.FindFirstMatch(source, candidates), Is.EqualTo("B"));
     }
 }

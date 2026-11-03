@@ -50,8 +50,8 @@ public class ServiceDomainTransactionManagerTests
 
         tt.Execute(TransactionCommitMethod);
 
-        Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.False);
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
 
         SimpleServiceConfig serviceConfig = new SimpleServiceConfig();
         ConfigureServiceConfig(serviceConfig, true);
@@ -61,8 +61,8 @@ public class ServiceDomainTransactionManagerTests
 
     private object TransactionCommitMethod(ITransactionStatus status)
     {
-        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True);
+        Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
         return null;
     }
 
@@ -81,7 +81,7 @@ public class ServiceDomainTransactionManagerTests
 
         TransactionTemplate tt = new TransactionTemplate(tm);
 
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         Exception ex = new ArgumentException("test exception");
         try
@@ -91,10 +91,10 @@ public class ServiceDomainTransactionManagerTests
         }
         catch (ArgumentException e)
         {
-            Assert.AreEqual(ex, e);
+            Assert.That(e, Is.EqualTo(ex));
         }
 
-        Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+        Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
         A.CallTo(() => txAdapter.SetAbort()).MustHaveHappenedOnceExactly();
         A.CallTo(() => txAdapter.Enter(serviceConfig)).MustHaveHappenedOnceExactly();
@@ -164,9 +164,9 @@ public class ServiceDomainTransactionManagerTests
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+            Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True);
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
             throw exception;
         }
     }
@@ -182,23 +182,23 @@ public class ServiceDomainTransactionManagerTests
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-            Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+            Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronization active");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
             tt.Execute(new TransactionDelegate(TransactionMethod));
-            Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
             return null;
         }
 
         private object TransactionMethod(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
-            Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronization active");
+            Assert.That(status.IsNewTransaction, Is.True, "Is new transaction");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
             status.SetRollbackOnly();
             return null;
         }

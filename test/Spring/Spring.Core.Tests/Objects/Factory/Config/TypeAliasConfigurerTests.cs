@@ -101,41 +101,41 @@ public class TypeAliasConfigurerTests
         IApplicationContext ctx = new XmlApplicationContext("file://Spring/Objects/Factory/Config/TypeAliases.xml");
 
         object obj1 = ctx.GetObject("testObject1");
-        Assert.IsNotNull(obj1);
-        Assert.AreEqual(typeof(TestObject), obj1.GetType());
+        Assert.That(obj1, Is.Not.Null);
+        Assert.That(obj1.GetType(), Is.EqualTo(typeof(TestObject)));
 
         object obj2 = ctx.GetObject("testObject2");
-        Assert.IsNotNull(obj2);
-        Assert.AreEqual(typeof(TestObject), obj2.GetType());
+        Assert.That(obj2, Is.Not.Null);
+        Assert.That(obj2.GetType(), Is.EqualTo(typeof(TestObject)));
 
         object obj3 = ctx.GetObject("testObject3");
-        Assert.IsNotNull(obj3);
-        Assert.AreEqual(typeof(TestObject), obj3.GetType());
-        Assert.AreEqual("Bruno", ((TestObject) obj3).Name);
-        Assert.AreEqual(26, ((TestObject) obj3).Age);
+        Assert.That(obj3, Is.Not.Null);
+        Assert.That(obj3.GetType(), Is.EqualTo(typeof(TestObject)));
+        Assert.That(((TestObject) obj3).Name, Is.EqualTo("Bruno"));
+        Assert.That(((TestObject) obj3).Age, Is.EqualTo(26));
 
         // SPRNET-1119
         object obj4 = ctx.GetObject("testObject4");
-        Assert.IsNotNull(obj4);
-        Assert.AreEqual(typeof(TestObject), obj4.GetType());
-        Assert.AreEqual("Bruno", ((TestObject) obj4).Name);
-        Assert.AreEqual(30, ((TestObject) obj4).Age);
+        Assert.That(obj4, Is.Not.Null);
+        Assert.That(obj4.GetType(), Is.EqualTo(typeof(TestObject)));
+        Assert.That(((TestObject) obj4).Name, Is.EqualTo("Bruno"));
+        Assert.That(((TestObject) obj4).Age, Is.EqualTo(30));
 
         object obj6 = ctx.GetObject("testObject6");
-        Assert.IsNotNull(obj6);
-        Assert.AreEqual(typeof(TestObject), obj6.GetType());
-        Assert.AreEqual("name from section", ((TestObject) obj6).Name);
-        Assert.AreEqual(27, ((TestObject) obj6).Age);
+        Assert.That(obj6, Is.Not.Null);
+        Assert.That(obj6.GetType(), Is.EqualTo(typeof(TestObject)));
+        Assert.That(((TestObject) obj6).Name, Is.EqualTo("name from section"));
+        Assert.That(((TestObject) obj6).Age, Is.EqualTo(27));
 
         object obj5 = ctx.GetObject("testObject5");
-        Assert.IsNotNull(obj5);
-        Assert.AreEqual(typeof(TestObject), obj5.GetType());
-        Assert.AreEqual("overide-name", ((TestObject) obj5).Name);
-        Assert.AreEqual(26, ((TestObject) obj5).Age);
+        Assert.That(obj5, Is.Not.Null);
+        Assert.That(obj5.GetType(), Is.EqualTo(typeof(TestObject)));
+        Assert.That(((TestObject) obj5).Name, Is.EqualTo("overide-name"));
+        Assert.That(((TestObject) obj5).Age, Is.EqualTo(26));
 
         object vpc = ctx.GetObject("vpc");
-        Assert.IsNotNull(vpc);
-        Assert.AreEqual(typeof(VariablePlaceholderConfigurer), vpc.GetType());
+        Assert.That(vpc, Is.Not.Null);
+        Assert.That(vpc.GetType(), Is.EqualTo(typeof(VariablePlaceholderConfigurer)));
     }
 
     private void CreateConfigurerAndTestLinkedList(IDictionary typeAliases)
@@ -148,11 +148,12 @@ public class TypeAliasConfigurerTests
         typeAliasConfigurer.PostProcessObjectFactory(factory);
 
         //todo investigate mocking the typeregistry, for now ask the actual one for information.
-        Assert.IsTrue(TypeRegistry.ContainsAlias("LinkedList"),
+        Assert.That(TypeRegistry.ContainsAlias("LinkedList"),
+            Is.True,
             "TypeAliasConfigurer did not register a type alias with the TypeRegistry");
 
         Type linkedListType = TypeRegistry.ResolveType("LinkedList");
-        Assert.IsTrue(linkedListType.Equals(typeof(LinkedList)), "Incorrect type resolved.");
-        Assert.AreEqual(1, typeAliasConfigurer.Order);
+        Assert.That(linkedListType.Equals(typeof(LinkedList)), Is.True, "Incorrect type resolved.");
+        Assert.That(typeAliasConfigurer.Order, Is.EqualTo(1));
     }
 }

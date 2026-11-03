@@ -46,7 +46,7 @@ public class MethodNodeTests
 
         IExpression exp = mn;
         int[] input = new int[] { 1, 2, 3 };
-        Assert.AreSame(input, exp.GetValue(input, vars));
+        Assert.That(exp.GetValue(input, vars), Is.SameAs(input));
     }
 
     private class HasCompute
@@ -66,12 +66,12 @@ public class MethodNodeTests
     {
         IExpression exp = Expression.Parse("Compute()");
 
-        Assert.AreEqual(1, exp.GetValue(new HasCompute()));
+        Assert.That(exp.GetValue(new HasCompute()), Is.EqualTo(1));
 
         ArgumentException ex = Assert.Throws<ArgumentException>(() => exp.GetValue(new NoCompute()));
-        Assert.AreEqual("Method 'Compute' with the specified number and types of arguments does not exist.", ex.Message);
+        Assert.That(ex.Message, Is.EqualTo("Method 'Compute' with the specified number and types of arguments does not exist."));
 
-        Assert.AreEqual(1, exp.GetValue(new HasCompute()));
+        Assert.That(exp.GetValue(new HasCompute()), Is.EqualTo(1));
     }
 
     [Test, Explicit]
@@ -97,7 +97,7 @@ public class MethodNodeTests
         mn.addChild(exp);
 
         IExpression mnExp = mn;
-        Assert.AreEqual("dummy", mnExp.GetValue(0m, null));
+        Assert.That(mnExp.GetValue(0m, null), Is.EqualTo("dummy"));
 
         int runs = 10000000;
 

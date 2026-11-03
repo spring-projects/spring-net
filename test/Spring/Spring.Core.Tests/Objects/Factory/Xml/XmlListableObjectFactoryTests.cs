@@ -100,21 +100,21 @@ namespace Spring.Objects.Factory.Xml
         public virtual void FactoryNesting()
         {
             ITestObject father = (ITestObject) ObjectFactory.GetObject("father");
-            Assert.IsTrue(father != null, "Object from root context");
+            Assert.That(father != null, Is.True, "Object from root context");
 
             ITestObject rod = (ITestObject) ObjectFactory.GetObject("rod");
-            Assert.IsTrue("Rod".Equals(rod.Name), "Object from child context");
-            Assert.IsTrue(rod.Spouse == father, "Object has external reference");
+            Assert.That("Rod".Equals(rod.Name), Is.True, "Object from child context");
+            Assert.That(rod.Spouse == father, Is.True, "Object has external reference");
 
             rod = (ITestObject) parent.GetObject("rod");
-            Assert.IsTrue("Roderick".Equals(rod.Name), "Object from root context");
+            Assert.That("Roderick".Equals(rod.Name), Is.True, "Object from root context");
         }
 
         [Test]
         public virtual void FactoryReferences()
         {
             DummyReferencer dref = (DummyReferencer) ObjectFactory.GetObject("factoryReferencer");
-            Assert.IsTrue(dref.TestObject1 == dref.TestObject2);
+            Assert.That(dref.TestObject1 == dref.TestObject2, Is.True);
         }
 
         [Test]
@@ -122,13 +122,13 @@ namespace Spring.Objects.Factory.Xml
         {
             // check that not broken by circular reference resolution mechanism
             DummyReferencer ref1 = (DummyReferencer) ObjectFactory.GetObject("prototypeReferencer");
-            Assert.IsTrue(ref1.TestObject1 != ref1.TestObject2, "Not referencing same Object twice");
+            Assert.That(ref1.TestObject1 != ref1.TestObject2, Is.True, "Not referencing same Object twice");
             DummyReferencer ref2 = (DummyReferencer) ObjectFactory.GetObject("prototypeReferencer");
-            Assert.IsTrue(ref1 != ref2, "Not the same referencer");
-            Assert.IsTrue(ref2.TestObject1 != ref2.TestObject2, "Not referencing same Object twice");
-            Assert.IsTrue(ref1.TestObject1 != ref2.TestObject1, "Not referencing same Object twice");
-            Assert.IsTrue(ref1.TestObject2 != ref2.TestObject2, "Not referencing same Object twice");
-            Assert.IsTrue(ref1.TestObject1 != ref2.TestObject2, "Not referencing same Object twice");
+            Assert.That(ref1 != ref2, Is.True, "Not the same referencer");
+            Assert.That(ref2.TestObject1 != ref2.TestObject2, Is.True, "Not referencing same Object twice");
+            Assert.That(ref1.TestObject1 != ref2.TestObject1, Is.True, "Not referencing same Object twice");
+            Assert.That(ref1.TestObject2 != ref2.TestObject2, Is.True, "Not referencing same Object twice");
+            Assert.That(ref1.TestObject1 != ref2.TestObject2, Is.True, "Not referencing same Object twice");
         }
 
         [Test]
@@ -138,10 +138,10 @@ namespace Spring.Objects.Factory.Xml
             TestObject kathy = (TestObject) ObjectFactory.GetObject("kathy");
             DummyFactory factory = (DummyFactory) ObjectFactory.GetObject("&singletonFactory");
             TestObject factoryCreated = (TestObject) ObjectFactory.GetObject("singletonFactory");
-            Assert.IsTrue(kerry.PostProcessed);
-            Assert.IsTrue(kathy.PostProcessed);
-            Assert.IsTrue(factory.PostProcessed);
-            Assert.IsTrue(factoryCreated.PostProcessed);
+            Assert.That(kerry.PostProcessed, Is.True);
+            Assert.That(kathy.PostProcessed, Is.True);
+            Assert.That(factory.PostProcessed, Is.True);
+            Assert.That(factoryCreated.PostProcessed, Is.True);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public virtual void CountSingletons()
         {
-            Assert.AreEqual(13, ObjectFactory.GetSingletonCount(), "Number of singletons incorrect");
+            Assert.That(ObjectFactory.GetSingletonCount(), Is.EqualTo(13), "Number of singletons incorrect");
         }
 
         [Test]

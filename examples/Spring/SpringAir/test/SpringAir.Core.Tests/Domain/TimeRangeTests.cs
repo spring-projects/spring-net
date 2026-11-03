@@ -40,8 +40,8 @@ namespace SpringAir.Domain
         public void DefaultTypeConverterIsSet()
         {
             TypeConverter vrtr = TypeDescriptor.GetConverter(typeof(TimeRange));
-            Assert.IsNotNull(vrtr, "Must not be null, default converter must be returned.");
-            Assert.AreEqual(typeof(TimeRange.TimeRangeTypeConverter), vrtr.GetType(), "Wrong type of default converter returned.");
+            Assert.That(vrtr, Is.Not.Null, "Must not be null, default converter must be returned.");
+            Assert.That(vrtr.GetType(), Is.EqualTo(typeof(TimeRange.TimeRangeTypeConverter)), "Wrong type of default converter returned.");
         }
 	}
 
@@ -58,7 +58,7 @@ namespace SpringAir.Domain
             TimeRange expectedRange = new TimeRange(12, 9);
             TimeRange.TimeRangeTypeConverter vrtr = new TimeRange.TimeRangeTypeConverter();
             TimeRange range = (TimeRange) vrtr.ConvertFrom("[12-9]");
-            Assert.AreEqual(expectedRange, range);
+            Assert.That(range, Is.EqualTo(expectedRange));
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace SpringAir.Domain
             TimeRange expectedRange = new TimeRange(12, 9);
             TimeRange.TimeRangeTypeConverter vrtr = new TimeRange.TimeRangeTypeConverter();
             TimeRange range = (TimeRange) vrtr.ConvertFrom("[ 12 - 9 ]");
-            Assert.AreEqual(expectedRange, range);
+            Assert.That(range, Is.EqualTo(expectedRange));
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace SpringAir.Domain
             string expectedRange = "[12 - 9]";
             TimeRange.TimeRangeTypeConverter vrtr = new TimeRange.TimeRangeTypeConverter();
             string range = (string) vrtr.ConvertTo(new TimeRange(12, 9), typeof(string));
-            Assert.AreEqual(expectedRange, range);
+            Assert.That(range, Is.EqualTo(expectedRange));
         }
     }
 }

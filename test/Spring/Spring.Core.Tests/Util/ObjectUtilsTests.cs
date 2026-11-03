@@ -35,7 +35,7 @@ public class ObjectUtilsTests
     {
         string first = null;
         string second = null;
-        Assert.IsTrue(ObjectUtils.NullSafeEquals(first, second));
+        Assert.That(ObjectUtils.NullSafeEquals(first, second), Is.True);
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class ObjectUtilsTests
     {
         string first = null;
         string second = "";
-        Assert.IsFalse(ObjectUtils.NullSafeEquals(first, second));
+        Assert.That(ObjectUtils.NullSafeEquals(first, second), Is.False);
     }
 
     [Test]
@@ -51,7 +51,7 @@ public class ObjectUtilsTests
     {
         string first = "";
         string second = null;
-        Assert.IsFalse(ObjectUtils.NullSafeEquals(first, second));
+        Assert.That(ObjectUtils.NullSafeEquals(first, second), Is.False);
     }
 
     [Test]
@@ -59,7 +59,7 @@ public class ObjectUtilsTests
     {
         string first = "this is it";
         string second = "this is it";
-        Assert.IsTrue(ObjectUtils.NullSafeEquals(first, second));
+        Assert.That(ObjectUtils.NullSafeEquals(first, second), Is.True);
     }
 
     [Test]
@@ -67,7 +67,7 @@ public class ObjectUtilsTests
     {
         string first = "this is it";
         int second = 12;
-        Assert.IsFalse(ObjectUtils.NullSafeEquals(first, second));
+        Assert.That(ObjectUtils.NullSafeEquals(first, second), Is.False);
     }
 
     [Test]
@@ -82,7 +82,7 @@ public class ObjectUtilsTests
             object foo = domain.CreateInstanceAndUnwrap(GetType().Assembly.FullName, typeof(Foo).FullName);
             // the instance is definitely assignable to the supplied interface type...
             bool isAssignable = ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IFoo), foo);
-            Assert.IsFalse(isAssignable, "Proxied instance was not recognized as such.");
+            Assert.That(isAssignable, Is.False, "Proxied instance was not recognized as such.");
         }
         finally
         {
@@ -100,8 +100,8 @@ public class ObjectUtilsTests
     public void InstantiateType()
     {
         object foo = ObjectUtils.InstantiateType(typeof(TestObject));
-        Assert.IsNotNull(foo, "Failed to instantiate an instance of a valid Type.");
-        Assert.IsTrue(foo is TestObject, "The instantiated instance was not an instance of the type that was passed in.");
+        Assert.That(foo, Is.Not.Null, "Failed to instantiate an instance of a valid Type.");
+        Assert.That(foo is TestObject, Is.True, "The instantiated instance was not an instance of the type that was passed in.");
     }
 
     [Test]
@@ -115,7 +115,7 @@ public class ObjectUtilsTests
         catch (FatalReflectionException ex)
         {
             // no nasty "TargetInvocationException" is in between!
-            Assert.AreEqual(typeof(ThrowingWithinConstructorException), ex.InnerException.GetType());
+            Assert.That(ex.InnerException.GetType(), Is.EqualTo(typeof(ThrowingWithinConstructorException)));
         }
     }
 
@@ -156,9 +156,9 @@ public class ObjectUtilsTests
             BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { typeof(string) },
             null);
         object foo = ObjectUtils.InstantiateType(ctor, new object[] { "Chungking Express" });
-        Assert.IsNotNull(foo, "Failed to instantiate an instance of a valid Type.");
-        Assert.IsTrue(foo is OnlyPrivateCtor, "The instantiated instance was not an instance of the type that was passed in.");
-        Assert.AreEqual("Chungking Express", ((OnlyPrivateCtor) foo).Name);
+        Assert.That(foo, Is.Not.Null, "Failed to instantiate an instance of a valid Type.");
+        Assert.That(foo is OnlyPrivateCtor, Is.True, "The instantiated instance was not an instance of the type that was passed in.");
+        Assert.That(((OnlyPrivateCtor) foo).Name, Is.EqualTo("Chungking Express"));
     }
 
     [Test]
@@ -173,8 +173,8 @@ public class ObjectUtilsTests
         Type type = typeof(TestObject);
         ConstructorInfo ctor = type.GetConstructor(Type.EmptyTypes);
         object foo = ObjectUtils.InstantiateType(ctor, ObjectUtils.EmptyObjects);
-        Assert.IsNotNull(foo, "Failed to instantiate an instance of a valid Type.");
-        Assert.IsTrue(foo is TestObject, "The instantiated instance was not an instance of the Type that was passed in.");
+        Assert.That(foo, Is.Not.Null, "Failed to instantiate an instance of a valid Type.");
+        Assert.That(foo is TestObject, Is.True, "The instantiated instance was not an instance of the Type that was passed in.");
     }
 
     [Test]
@@ -183,11 +183,11 @@ public class ObjectUtilsTests
         Type type = typeof(TestObject);
         ConstructorInfo ctor = type.GetConstructor(new Type[] { typeof(string), typeof(int) });
         object foo = ObjectUtils.InstantiateType(ctor, new object[] { "Yakov Petrovich Golyadkin", 39 });
-        Assert.IsNotNull(foo, "Failed to instantiate an instance of a valid Type.");
-        Assert.IsTrue(foo is TestObject, "The instantiated instance was not an instance of the Type that was passed in.");
+        Assert.That(foo, Is.Not.Null, "Failed to instantiate an instance of a valid Type.");
+        Assert.That(foo is TestObject, Is.True, "The instantiated instance was not an instance of the Type that was passed in.");
         TestObject obj = foo as TestObject;
-        Assert.AreEqual("Yakov Petrovich Golyadkin", obj.Name);
-        Assert.AreEqual(39, obj.Age);
+        Assert.That(obj.Name, Is.EqualTo("Yakov Petrovich Golyadkin"));
+        Assert.That(obj.Age, Is.EqualTo(39));
     }
 
     [Test]
@@ -209,21 +209,21 @@ public class ObjectUtilsTests
     [Test]
     public void IsSimpleProperty()
     {
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(string)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(long)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(bool)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(int)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(float)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(ushort)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(double)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(ulong)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(char)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(uint)));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(string[])));
-        Assert.IsTrue(ObjectUtils.IsSimpleProperty(typeof(Type)));
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(string)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(long)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(bool)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(int)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(float)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(ushort)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(double)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(ulong)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(char)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(uint)), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(string[])), Is.True);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(Type)), Is.True);
 
-        Assert.IsFalse(ObjectUtils.IsSimpleProperty(typeof(TestObject)));
-        Assert.IsFalse(ObjectUtils.IsSimpleProperty(typeof(IList[])));
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(TestObject)), Is.False);
+        Assert.That(ObjectUtils.IsSimpleProperty(typeof(IList[])), Is.False);
     }
 
     [Test]
@@ -233,7 +233,7 @@ public class ObjectUtilsTests
         IList list = new string[] { expected, "Aw!", "Man!" };
         IEnumerator enumerator = list.GetEnumerator();
         object actual = ObjectUtils.EnumerateFirstElement(enumerator);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [Test]
@@ -243,7 +243,7 @@ public class ObjectUtilsTests
         IList list = new string[] { "Aw!", "Man!", expected };
         IEnumerator enumerator = list.GetEnumerator();
         object actual = ObjectUtils.EnumerateElementAtIndex(enumerator, 2);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [Test]
@@ -252,7 +252,7 @@ public class ObjectUtilsTests
         string expected = "Mmm...";
         IList list = new string[] { "Aw!", "Man!", expected };
         object actual = ObjectUtils.EnumerateElementAtIndex(list, 2);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [Test]

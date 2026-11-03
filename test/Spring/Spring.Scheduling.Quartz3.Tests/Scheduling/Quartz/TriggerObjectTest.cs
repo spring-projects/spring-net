@@ -50,9 +50,9 @@ public abstract class TriggerObjectTest
     {
         ((IInitializingObject) trigger).AfterPropertiesSet();
 
-        Assert.AreEqual(TRIGGER_NAME, trigger.Key.Name, "trigger name mismatch");
-        Assert.AreEqual(SchedulerConstants.DefaultGroup, trigger.Key.Group, "trigger group name mismatch");
-        Assert.IsNull(trigger.JobKey, "trigger job name not null");
+        Assert.That(trigger.Key.Name, Is.EqualTo(TRIGGER_NAME), "trigger name mismatch");
+        Assert.That(trigger.Key.Group, Is.EqualTo(SchedulerConstants.DefaultGroup), "trigger group name mismatch");
+        Assert.That(trigger.JobKey, Is.Null, "trigger job name not null");
         AssertDateTimesEqualityWithAllowedDelta(DateTime.UtcNow, trigger.StartTimeUtc, 1500);
     }
 
@@ -69,8 +69,8 @@ public abstract class TriggerObjectTest
         DateTime START_TIME = new DateTime(1982, 6, 28, 13, 10, 0);
         trigger.StartTimeUtc = START_TIME;
         trigger.Key = new TriggerKey(NAME, GROUP);
-        Assert.AreEqual(NAME, trigger.Key.Name, "trigger name mismatch");
-        Assert.AreEqual(GROUP, trigger.Key.Group, "trigger group name mismatch");
+        Assert.That(trigger.Key.Name, Is.EqualTo(NAME), "trigger name mismatch");
+        Assert.That(trigger.Key.Group, Is.EqualTo(GROUP), "trigger group name mismatch");
         AssertDateTimesEqualityWithAllowedDelta(START_TIME, trigger.StartTimeUtc, 1500);
     }
 
@@ -85,8 +85,8 @@ public abstract class TriggerObjectTest
         const string jobName = "jobName";
         const string jobGroup = "jobGroup";
 
-        Assert.AreEqual(jobName, trigger.JobKey.Name, "trigger job name was not from job detail");
-        Assert.AreEqual(jobGroup, trigger.JobKey.Group, "trigger job group was not from job detail");
+        Assert.That(trigger.JobKey.Name, Is.EqualTo(jobName), "trigger job name was not from job detail");
+        Assert.That(trigger.JobKey.Group, Is.EqualTo(jobGroup), "trigger job group was not from job detail");
     }
 
     /// <summary>
@@ -98,6 +98,6 @@ public abstract class TriggerObjectTest
     protected static void AssertDateTimesEqualityWithAllowedDelta(DateTimeOffset d1, DateTimeOffset d2, int allowedDeltaInMilliseconds)
     {
         int diffInMillis = (int) Math.Abs((d1 - d2).TotalMilliseconds);
-        Assert.LessOrEqual(diffInMillis, allowedDeltaInMilliseconds, "too much difference in times");
+        Assert.That(diffInMillis, Is.LessThanOrEqualTo(allowedDeltaInMilliseconds), "too much difference in times");
     }
 }

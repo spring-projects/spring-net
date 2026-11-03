@@ -52,8 +52,8 @@ public class SafePropertyTests : BasePropertyTests
         object o = GetVisualBasicTestObject();
         IDynamicProperty simpleProperty = Create(o.GetType().GetProperty("SimpleProperty"));
         simpleProperty.SetValue(o, "CanGetSimpleText", "args");
-        Assert.AreEqual("CanGetSimpleText", ThisLastPropertyValue.GetValue(o));
-        Assert.AreEqual("CanGetSimpleText", simpleProperty.GetValue(o));
+        Assert.That(ThisLastPropertyValue.GetValue(o), Is.EqualTo("CanGetSimpleText"));
+        Assert.That(simpleProperty.GetValue(o), Is.EqualTo("CanGetSimpleText"));
     }
 
     [Test]
@@ -70,13 +70,13 @@ public class SafePropertyTests : BasePropertyTests
 
         // write
         simpleProperty.SetValue(o, "CanGetSetSimpleIndexer", 2);
-        Assert.AreEqual("CanGetSetSimpleIndexer", ThisLastPropertyValue.GetValue(o));
-        Assert.AreEqual(2, ThisArg1.GetValue(o));
+        Assert.That(ThisLastPropertyValue.GetValue(o), Is.EqualTo("CanGetSetSimpleIndexer"));
+        Assert.That(ThisArg1.GetValue(o), Is.EqualTo(2));
 
         // read
         object value = simpleProperty.GetValue(o, 3);
-        Assert.AreEqual("CanGetSetSimpleIndexer", value);
-        Assert.AreEqual(3, ThisArg1.GetValue(o));
+        Assert.That(value, Is.EqualTo("CanGetSetSimpleIndexer"));
+        Assert.That(ThisArg1.GetValue(o), Is.EqualTo(3));
     }
 
     [Test]
@@ -93,15 +93,15 @@ public class SafePropertyTests : BasePropertyTests
 
         // write
         property.SetValue(o, "CanGetSetComplexIndexer", 2, "Arg2");
-        Assert.AreEqual("CanGetSetComplexIndexer", ThisLastPropertyValue.GetValue(o));
-        Assert.AreEqual(2.0, (double) ThisArg1.GetValue(o));
-        Assert.AreEqual("Arg2", ThisArg2.GetValue(o));
+        Assert.That(ThisLastPropertyValue.GetValue(o), Is.EqualTo("CanGetSetComplexIndexer"));
+        Assert.That((double) ThisArg1.GetValue(o), Is.EqualTo(2.0));
+        Assert.That(ThisArg2.GetValue(o), Is.EqualTo("Arg2"));
 
         // read
         object value = property.GetValue(o, 3, "Arg3");
-        Assert.AreEqual("CanGetSetComplexIndexer", value);
-        Assert.AreEqual(3.0, (double) ThisArg1.GetValue(o));
-        Assert.AreEqual("Arg3", ThisArg2.GetValue(o));
+        Assert.That(value, Is.EqualTo("CanGetSetComplexIndexer"));
+        Assert.That((double) ThisArg1.GetValue(o), Is.EqualTo(3.0));
+        Assert.That(ThisArg2.GetValue(o), Is.EqualTo("Arg3"));
     }
 
     [Test]
@@ -112,14 +112,14 @@ public class SafePropertyTests : BasePropertyTests
         IDynamicProperty third = Create(typeof(Something).GetProperty("Third"));
         third.SetValue(something, 456);
         //this should be ok, because both get and set of the "Third" property are public
-        Assert.AreEqual(456, third.GetValue(something));
+        Assert.That(third.GetValue(something), Is.EqualTo(456));
 
         IDynamicProperty second = Create(typeof(Something).GetProperty("Second"));
-        Assert.AreEqual(2, second.GetValue(something));
+        Assert.That(second.GetValue(something), Is.EqualTo(2));
         //this should not cause MethodAccessException because "second" is created using "CreateSafe"
         second.SetValue(something, 123);
 
-        Assert.AreEqual(123, second.GetValue(something));
+        Assert.That(second.GetValue(something), Is.EqualTo(123));
     }
 
     [Test]
@@ -130,12 +130,12 @@ public class SafePropertyTests : BasePropertyTests
         IDynamicProperty third = Create(typeof(Something).GetProperty("Third"));
         //this should be ok, because both get and set of the "Third" property are public
         third.SetValue(something, 456);
-        Assert.AreEqual(456, third.GetValue(something));
+        Assert.That(third.GetValue(something), Is.EqualTo(456));
 
         IDynamicProperty first = Create(typeof(Something).GetProperty("First"));
         first.SetValue(something, 123);
         //this should not cause MethodAccessException, "first" is createtd using "CreateSafe"
-        Assert.AreEqual(123, first.GetValue(something));
+        Assert.That(first.GetValue(something), Is.EqualTo(123));
     }
 
     private static Type s__visualBasicTestObjectType;

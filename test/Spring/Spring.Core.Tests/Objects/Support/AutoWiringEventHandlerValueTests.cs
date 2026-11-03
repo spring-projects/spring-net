@@ -46,10 +46,10 @@ public class AutoWiringEventHandlerValueTests
         source.OnPing();
 
         // ascertain that the event listener was indeed notified of the raised event
-        Assert.IsTrue(listener.GotPing, "The listener was not notified of the raised event.");
-        Assert.IsTrue(listener.PingCount == 1, "The listener was notified more than once for a single raising of the source event (registered to listen more than once?)");
-        Assert.IsFalse(listener.GotPinging, "The listener was (incorrectly) notified of an event that wasn't raised.");
-        Assert.IsFalse(listener.GotPinged, "The listener was (incorrectly) notified of an event that wasn't raised.");
+        Assert.That(listener.GotPing, Is.True, "The listener was not notified of the raised event.");
+        Assert.That(listener.PingCount == 1, Is.True, "The listener was notified more than once for a single raising of the source event (registered to listen more than once?)");
+        Assert.That(listener.GotPinging, Is.False, "The listener was (incorrectly) notified of an event that wasn't raised.");
+        Assert.That(listener.GotPinged, Is.False, "The listener was (incorrectly) notified of an event that wasn't raised.");
     }
 
     [Test]
@@ -69,9 +69,9 @@ public class AutoWiringEventHandlerValueTests
         source.OnPing();
 
         // ascertain that the event listener was not notified of the raised event
-        Assert.IsFalse(listener.GotPing, "The listener was (incorrectly) notified of the raised event.");
-        Assert.IsFalse(listener.GotPinging, "The listener was (incorrectly) notified of an event that wasn't raised.");
-        Assert.IsFalse(listener.GotPinged, "The listener was (incorrectly) notified of an event that wasn't raised.");
+        Assert.That(listener.GotPing, Is.False, "The listener was (incorrectly) notified of the raised event.");
+        Assert.That(listener.GotPinging, Is.False, "The listener was (incorrectly) notified of an event that wasn't raised.");
+        Assert.That(listener.GotPinged, Is.False, "The listener was (incorrectly) notified of an event that wasn't raised.");
     }
 
     [Test]
@@ -90,9 +90,9 @@ public class AutoWiringEventHandlerValueTests
         source.OnPing();
 
         // ascertain that the event handler was indeed notified of the raised event
-        Assert.IsTrue(listener.GotPing, "The listener was not notified of the raised event.");
-        Assert.IsFalse(listener.GotPinging, "The listener was (incorrectly) notified of an event that wasn't raised.");
-        Assert.IsFalse(listener.GotPinged, "The listener was (incorrectly) notified of an event that wasn't raised.");
+        Assert.That(listener.GotPing, Is.True, "The listener was not notified of the raised event.");
+        Assert.That(listener.GotPinging, Is.False, "The listener was (incorrectly) notified of an event that wasn't raised.");
+        Assert.That(listener.GotPinged, Is.False, "The listener was (incorrectly) notified of an event that wasn't raised.");
     }
 
     [Test]
@@ -113,9 +113,9 @@ public class AutoWiringEventHandlerValueTests
         source.OnPinged();
 
         // ascertain that the event listener was indeed notified of the raised event
-        Assert.IsTrue(listener.GotPinging, "The listener was not notified of the raised event.");
-        Assert.IsTrue(listener.GotPing, "The listener was not notified of the raised event.");
-        Assert.IsTrue(listener.GotPinged, "The listener was not notified of the raised event.");
+        Assert.That(listener.GotPinging, Is.True, "The listener was not notified of the raised event.");
+        Assert.That(listener.GotPing, Is.True, "The listener was not notified of the raised event.");
+        Assert.That(listener.GotPinged, Is.True, "The listener was not notified of the raised event.");
     }
 
     [Test]
@@ -135,9 +135,9 @@ public class AutoWiringEventHandlerValueTests
         source.OnPing();
 
         // ascertain that the event listener was indeed notified of the raised event
-        Assert.IsFalse(listener.GotPinging, "The listener was (incorrectly) notified of the raised event.");
-        Assert.IsTrue(listener.GotPing, "The listener was not  notified of the raised event.");
-        Assert.IsFalse(listener.GotPinged, "The listener was (incorrectly) notified of the raised event.");
+        Assert.That(listener.GotPinging, Is.False, "The listener was (incorrectly) notified of the raised event.");
+        Assert.That(listener.GotPing, Is.True, "The listener was not  notified of the raised event.");
+        Assert.That(listener.GotPinged, Is.False, "The listener was (incorrectly) notified of the raised event.");
     }
 
     [Test]
@@ -157,11 +157,11 @@ public class AutoWiringEventHandlerValueTests
         source.OnPinging();
 
         // ascertain that the event listener was indeed notified of the raised event
-        Assert.IsTrue(listener.GotPinging, "The listener was not notified of the raised event.");
-        Assert.IsFalse(listener.GotPing, "The listener was (incorrectly) notified of the raised event.");
+        Assert.That(listener.GotPinging, Is.True, "The listener was not notified of the raised event.");
+        Assert.That(listener.GotPing, Is.False, "The listener was (incorrectly) notified of the raised event.");
         // the moral of the story is...
         //     don't use greedy method name regex's for autowiring, be explicit
-        Assert.IsTrue(listener.GotPinged, "The listener was not notified of the raised event.");
+        Assert.That(listener.GotPinged, Is.True, "The listener was not notified of the raised event.");
     }
 
     [Test]
@@ -181,9 +181,9 @@ public class AutoWiringEventHandlerValueTests
         source.OnPing();
 
         // ascertain that the event listener was not notified of the raised event
-        Assert.IsTrue(listener.GotPing, "The listener was not notified of the raised event.");
-        Assert.IsFalse(listener.GotPinging, "The listener was (incorrectly) notified of an event that wasn't raised.");
-        Assert.IsFalse(listener.GotPinged, "The listener was (incorrectly) notified of an event that wasn't raised.");
+        Assert.That(listener.GotPing, Is.True, "The listener was not notified of the raised event.");
+        Assert.That(listener.GotPinging, Is.False, "The listener was (incorrectly) notified of an event that wasn't raised.");
+        Assert.That(listener.GotPinged, Is.False, "The listener was (incorrectly) notified of an event that wasn't raised.");
     }
 }
 
