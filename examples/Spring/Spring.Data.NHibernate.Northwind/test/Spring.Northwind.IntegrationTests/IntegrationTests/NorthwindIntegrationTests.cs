@@ -80,8 +80,8 @@ namespace Spring.Northwind.IntegrationTests
             c.CompanyName = "Interface21";
             customerDao.Save(c);
             c = customerDao.Get("MPOLL");
-            Assert.That("MPOLL", Is.EqualTo(c.Id));
-            Assert.That("Interface21", Is.EqualTo(c.CompanyName));
+            Assert.That(c.Id, Is.EqualTo("MPOLL"));
+            Assert.That(c.CompanyName, Is.EqualTo("Interface21"));
 
             //Without flushing, nothing changes in the database:
             int customerCount = (int)AdoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from Customers");
@@ -101,8 +101,8 @@ namespace Spring.Northwind.IntegrationTests
             customerDao.Update(c);
 
             c = customerDao.Get("MPOLL");
-            Assert.That("MPOLL", Is.EqualTo(c.Id));
-            Assert.That("SpringSource", Is.EqualTo(c.CompanyName));
+            Assert.That(c.Id, Is.EqualTo("MPOLL"));
+            Assert.That(c.CompanyName, Is.EqualTo("SpringSource"));
 
             customerDao.Delete(c);
 

@@ -90,7 +90,7 @@ namespace Spring.DataQuickStart.GenericTemplate
         {
             QueryForObjectDao dao = ctx["queryForObjectDao"] as QueryForObjectDao;
             Customer customer = dao.GetCustomer("Hanna Moos");
-            Assert.That("Hanna Moos", Is.EqualTo(customer.ContactName));
+            Assert.That(customer.ContactName, Is.EqualTo("Hanna Moos"));
         }
 
         [Test]

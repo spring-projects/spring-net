@@ -135,7 +135,6 @@
   <ItemGroup>
     <Content Include="App_Themes\Spring\Spring.skin" />
     <Content Include="Config\Aspects.xml" />
-    <Content Include="Config\Log4Net.xml" />
     <Content Include="Shared\MasterPage.master" />
   </ItemGroup>
   <ItemGroup>

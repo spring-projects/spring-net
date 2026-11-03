@@ -21,7 +21,8 @@
 #region Imports
 
 using System;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
+using Spring;
 using Spring.Web.UI;
 
 #endregion
@@ -33,15 +34,11 @@ using Spring.Web.UI;
 /// <version>$Id: Home.aspx.cs,v 1.2 2006/11/15 20:30:52 aseovic Exp $</version>
 public partial class HomePage : Page
 {
-	private static readonly ILog logger = LogManager.GetLogger(typeof(HomePage));
+	private static readonly ILogger logger = LogManager.GetLogger(typeof(HomePage));
 
 	private void Page_Load(object sender, EventArgs e)
 	{
-		if (logger.IsDebugEnabled)
-		{
-			logger.Debug(string.Format(this.CultureResolver.ResolveCulture(),
-			                           "The [{0}] page is being loaded...", GetType().Name));
-		}
+		logger.LogDebug("The [{PageName}] page is being loaded...", GetType().Name);
 	}
 
 	#region Web Form Designer generated code

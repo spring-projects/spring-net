@@ -48,9 +48,9 @@ namespace SpringAir.Domain
 			StringReader sr = new StringReader (sw.ToString());
 			Flight flightAfter = (Flight) s.Deserialize (sr);
 
-            Assert.That(1, Is.EqualTo(flightAfter.Id));
-            Assert.That("UA 0123", Is.EqualTo(flightAfter.FlightNumber));
-            Assert.That(DateTime.MinValue, Is.EqualTo(flightAfter.DepartureTime));
+            Assert.That(flightAfter.Id, Is.EqualTo(1));
+            Assert.That(flightAfter.FlightNumber, Is.EqualTo("UA 0123"));
+            Assert.That(flightAfter.DepartureTime, Is.EqualTo(DateTime.MinValue));
             Assert.That(flightAfter.SeatPlan, Is.EqualTo(flightBefore.SeatPlan));
 		}
     }
