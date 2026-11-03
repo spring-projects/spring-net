@@ -82,38 +82,28 @@ public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerial
     /// <returns>true if the specified Object is equal to the current target object; otherwise, false</returns>
     public override bool Equals(object obj)
     {
-        bool equals = false;
         object target = m_targetSource.GetTarget();
-        AdvisedProxy otherProxy = obj as AdvisedProxy;
-        object otherTarget = null;
-        if (otherProxy != null)
+        try
         {
-            otherTarget = otherProxy.m_targetSource.GetTarget();
-            if (target == null)
+            if (obj is AdvisedProxy otherProxy)
             {
-                equals = (otherTarget == null);
+                object otherTarget = otherProxy.m_targetSource.GetTarget();
+                try
+                {
+                    return target == null ? otherTarget == null : target.Equals(otherTarget);
+                }
+                finally
+                {
+                    otherProxy.m_targetSource.ReleaseTarget(otherTarget);
+                }
             }
-            else
-            {
-                equals = target.Equals(otherTarget);
-            }
-        }
-        else if (target == null)
-        {
-            equals = (obj == null);
-        }
-        else
-        {
-            equals = target.Equals(obj);
-        }
 
-        m_targetSource.ReleaseTarget(target);
-        if (otherProxy != null)
-        {
-            otherProxy.m_targetSource.ReleaseTarget(otherTarget);
+            return target == null ? obj == null : target.Equals(obj);
         }
-
-        return equals;
+        finally
+        {
+            m_targetSource.ReleaseTarget(target);
+        }
     }
 
     /// <summary>
@@ -122,15 +112,15 @@ public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerial
     /// <returns>A hash code for the target object.</returns>
     public override int GetHashCode()
     {
-        int hashCode = 0;
         object target = m_targetSource.GetTarget();
-        if (target != null)
+        try
         {
-            hashCode = target.GetHashCode();
+            return target != null ? target.GetHashCode() : 0;
         }
-
-        m_targetSource.ReleaseTarget(target);
-        return hashCode;
+        finally
+        {
+            m_targetSource.ReleaseTarget(target);
+        }
     }
 
     /// <summary>
@@ -139,18 +129,14 @@ public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerial
     /// <returns>A String that represents the target object</returns>
     public override string ToString()
     {
-        string str;
         object target = m_targetSource.GetTarget();
-        if (target != null)
+        try
         {
-            str = target.ToString();
+            return target != null ? target.ToString() : base.ToString();
         }
-        else
+        finally
         {
-            str = base.ToString();
+            m_targetSource.ReleaseTarget(target);
         }
-
-        m_targetSource.ReleaseTarget(target);
-        return str;
     }
 }

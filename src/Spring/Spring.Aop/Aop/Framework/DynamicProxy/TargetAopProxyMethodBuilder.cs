@@ -94,12 +94,23 @@ public class TargetAopProxyMethodBuilder : AbstractAopProxyMethodBuilder
         il.EmitCall(OpCodes.Callvirt, References.GetTargetMethod, null);
         il.Emit(OpCodes.Stloc, target);
 
+        // The target has been borrowed (it may come from a pool), so it must go back
+        // on every path out of the invocation, including when the advice chain or the
+        // target method throws. The evaluation stack is empty at both ends of the
+        // protected region, results live in locals (returnValue, arguments), and
+        // BeginExceptionBlock/EndExceptionBlock emit the required 'leave' instructions.
+        il.BeginExceptionBlock();
+
         base.GenerateMethodLogic(il, method, interfaceMethod);
+
+        il.BeginFinallyBlock();
 
         PushAdvisedProxy(il);
         il.Emit(OpCodes.Ldfld, References.TargetSourceField);
         PushTarget(il);
         il.EmitCall(OpCodes.Callvirt, References.GetReleaseTargetMethod, null);
+
+        il.EndExceptionBlock();
     }
 
     /// <summary>

@@ -427,8 +427,6 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
         // copy our properties (proxyTargetClass) inherited from ProxyConfig
         proxyFactory.CopyFrom(this);
 
-        object target = targetSource.GetTarget();
-
         if (!ProxyTargetType)
         {
             // Must allow for introductions; can't just set interfaces to
