@@ -27,8 +27,6 @@ partial class Build : FalloutBuild
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")] readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Parameter("Build EMS")] readonly bool BuildEms = false;
-
     [Parameter("Version")] readonly string ProjectVersion = "4.0.0";
 
     [Solution] readonly Solution Solution;
@@ -143,10 +141,8 @@ partial class Build : FalloutBuild
         {
             foreach (var solutionFile in ExamplesDirectory.GlobFiles("**/*.sln"))
             {
-                if (solutionFile.ToString().Contains("Spring.EmsQuickStart") && !BuildEms
-                    || solutionFile.ToString().Contains("Spring.Examples.Pool")
+                if (solutionFile.ToString().Contains("Spring.Examples.Pool")
                     || solutionFile.ToString().Contains("SpringAir")
-                    || solutionFile.ToString().Contains("Spring.Web.Extensions.Example")
                     || solutionFile.ToString().Contains("Spring.WebQuickStart"))
                 {
                     continue;
@@ -203,7 +199,7 @@ partial class Build : FalloutBuild
             var binDirectory = RootDirectory / "bin";
             binDirectory.CreateOrCleanDirectory();
 
-            var moduleNames = new[] { "Common.Logging", "Common.Logging.Core", "Spring.Core", "Spring.Aop", "Spring.Data", "Spring.Data.NHibernate*", "Spring.Web", "Spring.Web.Mvc5", "Spring.Web.Extensions", "Spring.Services", "Spring.Testing.NUnit", "Spring.Testing.Microsoft", "Spring.Messaging.Ems", "Spring.Messaging.Nms", "Spring.Messaging", "Spring.Scheduling.Quartz3", "Spring.Template.Velocity", "Spring.Web.Conversation.NHibernate5", };
+            var moduleNames = new[] { "Spring.Core", "Spring.Aop", "Spring.Data", "Spring.Data.NHibernate*", "Spring.Web", "Spring.Web.Mvc5", "Spring.Testing.NUnit", "Spring.Testing.Microsoft", "Spring.Messaging.Nms", "Spring.Messaging", "Spring.Scheduling.Quartz3", "Spring.Web.Conversation.NHibernate5", };
 
             var patterns = moduleNames
                 .SelectMany(x => new[] { "**/" + Configuration + "/**/" + x + ".dll", "**/" + Configuration + "/**/" + x + ".xml", "**/" + Configuration + "/**/" + x + ".pdb" })
@@ -245,7 +241,6 @@ partial class Build : FalloutBuild
     IEnumerable<Project> GetActiveProjects()
     {
         var packTargets = Solution.AllProjects
-            .Where(x => x.Name != "Spring.Messaging.Ems" || BuildEms)
             .Where(x => !x.Name.Contains("_build"));
         return packTargets;
     }

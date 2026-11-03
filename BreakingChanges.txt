@@ -12,6 +12,25 @@ Changes (3.1 to 4.0)
    4.7.0). 4.7.0 pulled in System.Drawing.Common 4.7.0, which has a critical advisory
    (GHSA-rxg9-xrhp-64gj).
 
+4. Five packages were removed. They have no 4.0 replacement and receive no further releases:
+   - Spring.Services: .NET Remoting exporters and factories, the ASMX web service client proxy
+     (WebServiceProxyFactory), Enterprise Services (serviced components), WCF integration and
+     the Windows service application host. These are .NET Framework-only technologies that
+     Microsoft has not carried forward to modern .NET. The ASMX web service exporter
+     (WebServiceExporter) is part of Spring.Web and remains.
+   - Spring.Messaging.Ems: TIBCO EMS integration. It needed TIBCO's non-redistributable
+     TIBCO.EMS.dll and had no runnable tests.
+   - Spring.Web.Extensions: ASP.NET AJAX integration (the JavaScript exporter), a .NET
+     Framework-only technology.
+   - Spring.Template.Velocity and Spring.Template.Velocity.Castle: NVelocity templating, whose
+     underlying library is unmaintained.
+   The corresponding XML configuration namespaces (http://www.springframework.net/remoting,
+   /wcf, /ems and /nvelocity) are no longer registered. A configuration file that still uses one
+   of them fails schema validation with an ObjectDefinitionStoreException whose message says
+   "The '<namespace URI>' namespace was provided by <package>, which was removed in Spring.NET
+   4.0." The matching examples (Calculator, EmsQuickStart, WcfQuickStart and
+   Web.Extensions.Example) were removed too.
+
 Changes (3.0.x to 3.1)
 ========================
 

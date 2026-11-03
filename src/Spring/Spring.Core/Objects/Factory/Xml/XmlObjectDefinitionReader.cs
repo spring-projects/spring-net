@@ -325,6 +325,16 @@ public class XmlObjectDefinitionReader : AbstractObjectDefinitionReader
                 {
                     throw new RetryParseException();
                 }
+
+                string removedPackage = NamespaceParserRegistry.GetRemovedNamespacePackage(xmlReader.NamespaceURI);
+                if (removedPackage != null)
+                {
+                    throw new XmlSchemaValidationException(
+                        $"The '{xmlReader.NamespaceURI}' namespace was provided by {removedPackage}, which was removed in Spring.NET 4.0. {ex.Message}",
+                        ex,
+                        ex.LineNumber,
+                        ex.LinePosition);
+                }
             }
 
             throw ex;

@@ -60,9 +60,7 @@ public class XmlObjectDefinitionReaderTests
         {
             "http://www.springframework.net/tx", "http://www.springframework.net/aop", "http://www.springframework.net/db", "http://www.springframework.net/database",
 #if !NETCOREAPP
-                "http://www.springframework.net/remoting",
                 "http://www.springframework.net/nms",
-                "http://www.springframework.net/nvelocity",
 #endif
             "http://www.springframework.net/validation"
         };
@@ -74,19 +72,31 @@ public class XmlObjectDefinitionReaderTests
         }
     }
 
-#if !NETCOREAPP
-        [Test]
-        public void AutoRegistersAllWellknownNamespaceParsers_3_0()
-        {
-            string[] namespaces = { "http://www.springframework.net/wcf" };
+    /// <summary>
+    /// The remoting, WCF, EMS and NVelocity integrations were removed in 4.0, so their
+    /// namespaces are no longer registered. A configuration that still uses one fails to load
+    /// with an error that names the namespace and the removed package.
+    /// </summary>
+    [TestCase("http://www.springframework.net/remoting", "Spring.Services")]
+    [TestCase("http://www.springframework.net/wcf", "Spring.Services")]
+    [TestCase("http://www.springframework.net/ems", "Spring.Messaging.Ems")]
+    [TestCase("http://www.springframework.net/nvelocity", "Spring.Template.Velocity")]
+    public void RemovedNamespaceFailsWithErrorNamingTheNamespace(string namespaceUri, string removedPackage)
+    {
+        Assert.IsNull(NamespaceParserRegistry.GetParser(namespaceUri));
 
-            foreach (string ns in namespaces)
-            {
-                Assert.IsNotNull(NamespaceParserRegistry.GetParser(ns),
-                    string.Format("Parser for Namespace {0} could not be auto-registered.", ns));
-            }
-        }
-#endif
+        XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(new DefaultListableObjectFactory());
+        ObjectDefinitionStoreException ex = Assert.Throws<ObjectDefinitionStoreException>(() => reader.LoadObjectDefinitions(new StringResource(
+            @"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net' xmlns:x='" + namespaceUri + @"'>
+    <x:removed id='anything'/>
+</objects>")));
+
+        // schema validation rejects the unknown namespace first; the reader adds which package used to provide it
+        Assert.That(ex.Message, Does.Contain("violates the schema"));
+        Assert.That(ex.Message, Does.Contain("The '" + namespaceUri + "' namespace was provided by " + removedPackage + ", which was removed in Spring.NET 4.0."));
+        Assert.That(ex.Message, Does.Contain("'" + namespaceUri + ":removed' element is not declared"));
+    }
 
     [Test]
     [Ignore("this test cannot co-exist with AutoRegistersAllWellknownNamespaceParsers b/c that test will have already loaded the Spring.Data ass'y")]

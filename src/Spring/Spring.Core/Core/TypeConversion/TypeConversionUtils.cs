@@ -266,8 +266,7 @@ public class TypeConversionUtils
     {
         if (newValue is MarshalByRefObject)
         {
-            //TODO see what type of type checking can be done.  May need to
-            //preserve information when proxy was created by SaoServiceExporter.
+            //TODO see what type of type checking can be done for transparent proxies.
             return true;
         }
 

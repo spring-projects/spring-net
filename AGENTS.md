@@ -4,7 +4,7 @@ Guidance for AI coding agents working in this repository. Human-facing documenta
 
 ## Project overview
 
-Spring.NET is a port and extension of the Java Spring Framework for .NET: IoC container, AOP, expression language, declarative transaction management, ADO.NET framework, ASP.NET (WebForms/MVC5/WebAPI) integration, NHibernate 5, Quartz.NET, messaging (MSMQ, NMS, TIBCO EMS), NVelocity templating, and NUnit/MSTest testing support. Apache 2.0 licensed. Packages are published to NuGet from git tags (`v*.*.*`) via NuGet Trusted Publishing (GitHub OIDC), not a stored API key.
+Spring.NET is a port and extension of the Java Spring Framework for .NET: IoC container, AOP, expression language, declarative transaction management, ADO.NET framework, ASP.NET (WebForms/MVC5/WebAPI) integration, NHibernate 5, Quartz.NET, messaging (MSMQ, NMS), and NUnit/MSTest testing support. Apache 2.0 licensed. Packages are published to NuGet from git tags (`v*.*.*`) via NuGet Trusted Publishing (GitHub OIDC), not a stored API key.
 
 ## Build and test commands
 
@@ -34,10 +34,9 @@ dotnet test test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj -f net10.0 --
 
 ### Integration tests
 
-Fallout's `Test` target excludes `*.Integration.Tests` projects (and `Spring.Web.Conversation.NHibernate5.Tests`) by default; they need external infrastructure and are gated behind flags: `--test-full`, `--test-integration-data`, `--test-integration-nms`, `--test-integration-ms-mq`, `--test-integration-ems`. `Spring.Services.Tests` is always excluded. Several test projects are Windows-only (net472: Web, Mvc5, Velocity, Messaging/MSMQ).
+Fallout's `Test` target excludes `*.Integration.Tests` projects (and `Spring.Web.Conversation.NHibernate5.Tests`) by default; they need external infrastructure and are gated behind flags: `--test-full`, `--test-integration-data`, `--test-integration-nms`, `--test-integration-ms-mq`. Several test projects are Windows-only (net472: Web, Mvc5, Messaging/MSMQ).
 
 - SQL Server-backed tests (`Spring.Data.Integration.Tests`, `Spring.Data.NHibernate5.Integration.Tests`, `Spring.Scheduling.Quartz3.Integration.Tests`): `docker-compose.yml` brings up SQL Server; setup scripts in `build-support/*.sql` and the test projects' `Data/` folders. See README.md "Running tests" for the full recipe.
-- TIBCO EMS projects need `TIBCO.EMS.dll` (not in the repo) and are excluded from the solution build; enable with `--build-ems`.
 
 ## Architecture
 
@@ -49,11 +48,9 @@ Fallout's `Test` target excludes `*.Integration.Tests` projects (and `Spring.Web
 | Spring.Aop | AOP framework (dynamic proxies, advice, pointcuts) |
 | Spring.Data | Transaction management + ADO.NET framework |
 | Spring.Data.NHibernate5 | NHibernate 5 integration (RootNamespace `Spring.Data.NHibernate`) |
-| Spring.Web / .Extensions / .Mvc5 | ASP.NET WebForms / AJAX / MVC5+WebAPI integration (net472 only) |
-| Spring.Services | Remoting, web services, Enterprise Services (net472 only) |
-| Spring.Messaging / .Nms / .Ems | MSMQ / Apache NMS / TIBCO EMS integration |
+| Spring.Web / .Mvc5 | ASP.NET WebForms / MVC5+WebAPI integration (net472 only) |
+| Spring.Messaging / .Nms | MSMQ / Apache NMS integration |
 | Spring.Scheduling.Quartz3 | Quartz.NET 3.x integration |
-| Spring.Template.Velocity(.Castle) | NVelocity templating |
 | Spring.Testing.NUnit / .Microsoft | DI-enabled test fixture base classes |
 
 Key mechanics (defined in `src/Directory.Build.props` and `test/Directory.Build.props` — there is **no root** Directory.Build.props):

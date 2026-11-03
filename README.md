@@ -23,19 +23,12 @@ Spring.NET contains:
 * ADO.NET framework
     * Simplifies use of ADO.NET. DAO support classes and integration with Spring's declarative transaction management
       functionality
-* Portable Service Abstractions
-    * Export plain .NET objects via .NET Remoting, Web Service or .NET Serviced Component and create client side proxies
-      based on endpoint URL and service interface.
 * NHibernate Integation
     * NHibernate 5 integration to simplify use of NHibernate and participate in Spring's declarative transaction
       management functionality.
-* ASP.NET AJAX Integration
-    * Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
 * NUnit and MSTest integration
     * Provides Dependency Injection of test cases and Spring container loading and caching. . Data access and
       transaction management features aid with integration testing.
-* WCF integration
-    * Provides Dependency Injection and applicatin of AOP advice to WCF services
 * Quartz integration
     * Configure Quartz jobs using dependency injection and Spring's transactional support to persist job details
 * MSMQ integration
@@ -43,10 +36,6 @@ Spring.NET contains:
       transaction management features.
 * NMS integration
     * Simplifies the use of NMS by providing helper classes for message sending and receiving.
-* TIBCO EMS integration
-    * Simplifies the use of TIBCO EMS by providing helper classes for message sending and receiving.
-* NVelocity integration
-    * Simplifies the use of configuring NVelocity
 
 Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE Spring Framework is based on code
 published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wrox, 2002).
@@ -101,20 +90,10 @@ on the .NET BCL.
     * Contents: NHibernate 5.x integration
     * Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
-* __Spring.Services__ (~70
-  KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Services.svg)](https://www.nuget.org/packages/Spring.Services/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Services)](#)
-    * Contents: Web Services, Remoting, and Enterprise Component based services.
-    * Dependencies: Spring.Core, Spring.Aop
-
 * __Spring.Web__ (~165
   KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Web.svg)](https://www.nuget.org/packages/Spring.Web/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Web)](#)
     * Contents: ASP.NET based Web Application Framework.
     * Dependencies: Spring.Core, Spring.Aop
-
-* __Spring.Web.Extensions__ (~8
-  KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Web.Extensions.svg)](https://www.nuget.org/packages/Spring.Web.Extensions/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Web.Extensions)](#)
-    * Contents: ASP.NET AJAX Integartion
-    * Dependencies: Spring.Core, Spring.Aop, System.Web.Extensions
 
 * __Spring.Web.Mvc5__ (~8
   KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Web.Mvc5.svg)](https://www.nuget.org/packages/Spring.Web.Mvc5/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Web.Mvc5)](#)
@@ -146,11 +125,6 @@ on the .NET BCL.
     * Contents: Quartz32.x Integration
     * Dependencies: Spring.Core, Spring.Data, Quartz
 
-* __Spring.Template.Velocity__ (~44
-  KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Template.Velocity.svg)](https://www.nuget.org/packages/Spring.Template.Velocity/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Template.Velocity)](#)
-    * Contents: NVelocity Integration
-    * Dependencies: Spring.Core, NVelocity
-
 ## WHERE TO START?
 
 Documentation can be found in the "docs" directory:
@@ -165,13 +139,10 @@ Documented sample applications can be found in "examples":
 * AopQuickStart - Show use of AOP features.
 * CachingQuickStart - Show use of Caching abstraction.
 * SpringAir - Show use of Spring.Web features.
-* Calculator - Show use of Spring.Services features.
 * WebQuickStart - Show step by step usage of Spring.Web features.
-* Web.Extensions.Example - Show ASP.NET AJAX integartion.
 * DataQuickStart - Show use of Spring.Data data access features.
 * TxQuickStart - Show use of Spring's transaction features.
 * Data.NHibernate.Northwind - Show use of Spring's NHibernate features.
-* WCFQuickStart - Show use of DI and AOP with WCF
 * NMSQuickStart - Sample application using NMS
 * MSMQ QuickStart - Sample application using MSMQ
 * Quartz Example - Scheduling using Quartz

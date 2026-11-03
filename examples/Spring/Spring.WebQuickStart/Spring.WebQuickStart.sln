@@ -49,23 +49,19 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.WebQuickStart.Provid
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Core.2010", "..\..\..\src\Spring\Spring.Core\Spring.Core.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Core", "..\..\..\src\Spring\Spring.Core\Spring.Core.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Core.Tests.2010", "..\..\..\test\Spring\Spring.Core.Tests\Spring.Core.Tests.csproj", "{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Core.Tests", "..\..\..\test\Spring\Spring.Core.Tests\Spring.Core.Tests.csproj", "{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.2010", "..\..\..\src\Spring\Spring.Web\Spring.Web.csproj", "{BA4789EB-281A-48EA-8763-28B9F0596A18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web", "..\..\..\src\Spring\Spring.Web\Spring.Web.csproj", "{BA4789EB-281A-48EA-8763-28B9F0596A18}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.Tests.2010", "..\..\..\test\Spring\Spring.Web.Tests\Spring.Web.Tests.csproj", "{C67E47AA-1ACD-41B4-A465-4D336A2319CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.Tests", "..\..\..\test\Spring\Spring.Web.Tests\Spring.Web.Tests.csproj", "{C67E47AA-1ACD-41B4-A465-4D336A2319CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Aop.2010", "..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj", "{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Aop", "..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj", "{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Data.2010", "..\..\..\src\Spring\Spring.Data\Spring.Data.csproj", "{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Data", "..\..\..\src\Spring\Spring.Data\Spring.Data.csproj", "{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Template.Velocity.2010", "..\..\..\src\Spring\Spring.Template.Velocity\Spring.Template.Velocity.csproj", "{6630B5A3-5471-40F7-B058-4C1D17B219EF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Services.2010", "..\..\..\src\Spring\Spring.Services\Spring.Services.csproj", "{88601B69-E2E6-44CA-A2B4-82CD635A16AA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Nms.2010", "..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.csproj", "{E2B834B9-9476-470B-9D5D-97183124A31F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Nms", "..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.csproj", "{E2B834B9-9476-470B-9D5D-97183124A31F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,30 +153,6 @@ Global
 		{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|.NET.Build.0 = Debug|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|.NET.ActiveCfg = Release|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|.NET.Build.0 = Release|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|.NET.Build.0 = Debug|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|.NET.ActiveCfg = Release|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|.NET.Build.0 = Release|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E2B834B9-9476-470B-9D5D-97183124A31F}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{E2B834B9-9476-470B-9D5D-97183124A31F}.Debug|.NET.Build.0 = Debug|Any CPU
 		{E2B834B9-9476-470B-9D5D-97183124A31F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

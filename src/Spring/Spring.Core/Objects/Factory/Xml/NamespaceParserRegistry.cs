@@ -67,6 +67,25 @@ public class NamespaceParserRegistry
     private readonly static IDictionary wellknownNamespaceParserTypeNames;
     private static XmlSchemaSet schemas;
 
+    // Namespaces whose parsers shipped in packages that Spring.NET 4.0 removed, so a configuration that still uses one
+    // fails with a message that names the removed package instead of a bare schema error.
+    private static readonly Dictionary<string, string> s_removedNamespacePackages = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["http://www.springframework.net/remoting"] = "Spring.Services",
+        ["http://www.springframework.net/wcf"] = "Spring.Services",
+        ["http://www.springframework.net/ems"] = "Spring.Messaging.Ems",
+        ["http://www.springframework.net/nvelocity"] = "Spring.Template.Velocity",
+    };
+
+    /// <summary>
+    /// Returns the package that provided the parser for <paramref name="namespaceUri"/> before Spring.NET 4.0 removed
+    /// it, or <c>null</c> when the namespace was not removed.
+    /// </summary>
+    internal static string GetRemovedNamespacePackage(string namespaceUri)
+    {
+        return namespaceUri != null && s_removedNamespacePackages.TryGetValue(namespaceUri, out string package) ? package : null;
+    }
+
     /// <summary>
     /// Creates a new instance of the NamespaceParserRegistry class.
     /// </summary>
@@ -83,18 +102,10 @@ public class NamespaceParserRegistry
             "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
         wellknownNamespaceParserTypeNames["http://www.springframework.net/database"] =
             "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
-        wellknownNamespaceParserTypeNames["http://www.springframework.net/remoting"] =
-            "Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services";
-        wellknownNamespaceParserTypeNames["http://www.springframework.net/wcf"] =
-            "Spring.ServiceModel.Config.WcfNamespaceParser, Spring.Services";
         wellknownNamespaceParserTypeNames["http://www.springframework.net/nms"] =
             "Spring.Messaging.Nms.Config.NmsNamespaceParser, Spring.Messaging.Nms";
-        wellknownNamespaceParserTypeNames["http://www.springframework.net/ems"] =
-            "Spring.Messaging.Ems.Config.EmsNamespaceParser, Spring.Messaging.Ems";
         wellknownNamespaceParserTypeNames["http://www.springframework.net/validation"] =
             "Spring.Validation.Config.ValidationNamespaceParser, Spring.Core";
-        wellknownNamespaceParserTypeNames["http://www.springframework.net/nvelocity"] =
-            "Spring.Template.Velocity.Config.TemplateNamespaceParser, Spring.Template.Velocity";
 
         Reset();
     }
