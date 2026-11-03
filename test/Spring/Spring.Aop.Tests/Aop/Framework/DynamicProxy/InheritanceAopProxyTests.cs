@@ -38,6 +38,41 @@ public class InheritanceAopProxyTests
         return ((IAopProxy) proxyCtorInfo.Invoke(new object[] { advisedSupport })).GetProxy();
     }
 
+    public class ThrowingInheritanceObject
+    {
+        public virtual void Throw() => throw new InvalidOperationException("boom");
+
+        public virtual void DoNothing()
+        {
+        }
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public void ExposedProxyIsPoppedWhenCallThrows(bool advised)
+    {
+        while (AopContext.IsActive)
+        {
+            AopContext.PopProxy();
+        }
+
+        AdvisedSupport support = new AdvisedSupport();
+        support.Target = new ThrowingInheritanceObject();
+        support.ExposeProxy = true;
+        if (advised)
+        {
+            support.AddAdvice(new NopInterceptor());
+        }
+
+        ThrowingInheritanceObject proxy = (ThrowingInheritanceObject) CreateProxy(support);
+
+        Assert.That(() => proxy.Throw(), Throws.TypeOf<InvalidOperationException>());
+        Assert.That(AopContext.IsActive, Is.False, "proxy stack leaked an entry after a throwing call");
+
+        proxy.DoNothing();
+        Assert.That(AopContext.IsActive, Is.False);
+    }
+
     [Test]
     public void DirectCall()
     {

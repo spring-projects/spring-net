@@ -45,6 +45,8 @@ public class ReleaseTargetTests
         ProbeStruct ThrowStruct();
         string ThrowString();
         void CallInnerThenCaptureProxy();
+        T ThrowGeneric<T>();
+        T EchoGeneric<T>(T value);
     }
 
     public interface IThrowingIntroduction
@@ -82,6 +84,10 @@ public class ReleaseTargetTests
         public virtual ProbeStruct ThrowStruct() => throw new InvalidOperationException("boom");
 
         public virtual string ThrowString() => throw new InvalidOperationException("boom");
+
+        public virtual T ThrowGeneric<T>() => throw new InvalidOperationException("boom");
+
+        public virtual T EchoGeneric<T>(T value) => value;
 
         public IReleaseProbe Inner;
         public object SeenProxy;
@@ -384,5 +390,28 @@ public class ReleaseTargetTests
         Assert.That(() => proxy.ThrowIntroduced(), Throws.TypeOf<InvalidOperationException>());
 
         Assert.That(AopContext.IsActive, Is.False, "proxy stack leaked an entry after a throwing introduced call");
+    }
+
+    [TestCase(false, false)]
+    [TestCase(false, true)]
+    [TestCase(true, false)]
+    [TestCase(true, true)]
+    public void GenericMethodsReleaseTargetAndPopExposedProxy(bool decorator, bool advised)
+    {
+        MockTargetSource targetSource = CreateCountingTargetSource(out _);
+        IReleaseProbe proxy = CreateProxy(targetSource, decorator, advised, exposeProxy: true);
+
+        Assert.That(proxy.EchoGeneric(5), Is.EqualTo(5));
+        Assert.That(proxy.EchoGeneric("x"), Is.EqualTo("x"));
+        AssertBalanced(targetSource, 2);
+        Assert.That(AopContext.IsActive, Is.False);
+
+        Assert.That(() => proxy.ThrowGeneric<int>(), Throws.TypeOf<InvalidOperationException>());
+        AssertBalanced(targetSource, 3);
+        Assert.That(AopContext.IsActive, Is.False);
+
+        Assert.That(() => proxy.ThrowGeneric<string>(), Throws.TypeOf<InvalidOperationException>());
+        AssertBalanced(targetSource, 4);
+        Assert.That(AopContext.IsActive, Is.False);
     }
 }

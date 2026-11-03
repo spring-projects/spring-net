@@ -32,6 +32,13 @@ public abstract class AbstractAopProxyTypeBuilder :
     /// Generates the IL instructions that pushes
     /// the target instance on which calls should be delegated to.
     /// </summary>
+    /// <remarks>
+    /// This default borrows a target with <see cref="ITargetSource.GetTarget"/> and emits no matching
+    /// <see cref="ITargetSource.ReleaseTarget"/>. No builder in this library reaches it: the
+    /// composition and decorator method builders keep the target in a local and release it themselves,
+    /// and the inheritance builder overrides it. A derived builder that relies on this default with a
+    /// pooled or otherwise non-static target source must release the target itself.
+    /// </remarks>
     /// <param name="il">The IL generator to use.</param>
     public override void PushTarget(ILGenerator il)
     {

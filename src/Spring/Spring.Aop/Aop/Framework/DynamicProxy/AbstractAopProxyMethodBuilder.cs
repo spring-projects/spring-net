@@ -178,6 +178,11 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
     /// <summary>
     /// Generates the proxy method.
     /// </summary>
+    /// <remarks>
+    /// The method logic (<see cref="GenerateMethodLogic"/>) is emitted inside a try region whose
+    /// finally pops the exposed proxy from the <see cref="AopContext"/> stack. An override that
+    /// bypasses this method must therefore pop the proxy itself, on every path out of the call.
+    /// </remarks>
     /// <param name="il">The IL generator to use.</param>
     /// <param name="method">The method to proxy.</param>
     /// <param name="interfaceMethod">
@@ -447,6 +452,12 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
     /// <summary>
     /// Generates method logic.
     /// </summary>
+    /// <remarks>
+    /// The emitted code runs inside try/finally regions (see <see cref="GenerateMethod"/>), so it must
+    /// leave the evaluation stack empty, keep the result in the return value local, and must not
+    /// emit <c>ret</c> or branch out of the region. Overrides that acquire a resource (such as the
+    /// target) should release it in a finally block of their own.
+    /// </remarks>
     /// <param name="il">The IL generator to use.</param>
     /// <param name="method">The method to proxy.</param>
     /// <param name="interfaceMethod">
@@ -601,8 +612,12 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
         ILGenerator il, MethodInfo method, MethodInfo interfaceMethod);
 
     /// <summary>
-    /// Ends method by returning return value if appropriate.
+    /// Ends method by loading the return value, if appropriate.
     /// </summary>
+    /// <remarks>
+    /// This runs after the try/finally regions, which have already popped the exposed proxy from
+    /// the <see cref="AopContext"/> stack. It must not emit <c>ret</c>; the caller does.
+    /// </remarks>
     /// <param name="il">The IL generator to use.</param>
     /// <param name="method">The method to proxy.</param>
     protected virtual void EndMethod(ILGenerator il, MethodInfo method)
