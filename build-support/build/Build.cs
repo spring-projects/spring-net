@@ -141,6 +141,15 @@ partial class Build : FalloutBuild
         {
             foreach (var solutionFile in ExamplesDirectory.GlobFiles("**/*.sln"))
             {
+                // These solutions hold ASP.NET web site projects that reference the multi-targeted src projects.
+                // A web site's solution metaproject calls GetTargetPath on the outer, TargetFrameworks build,
+                // which does not define it (MSB4057), so they can't be built from the solution.
+                if (solutionFile.ToString().Contains("SpringAir")
+                    || solutionFile.ToString().Contains("Spring.WebQuickStart"))
+                {
+                    continue;
+                }
+
                 MSBuild(s => s
                     .SetTargets("Restore", "Rebuild")
                     .SetConfiguration(Configuration)
