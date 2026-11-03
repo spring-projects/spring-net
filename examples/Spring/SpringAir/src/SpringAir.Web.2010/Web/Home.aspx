@@ -4,7 +4,7 @@
 	<p>
 		SpringAir models a flight reservation system.
 	    <br />
-		Using SpringAir, you can browse flights, <a href="BookTrip/TripForm.aspx">book a trip</a> and use <a href="../BookingAgentWebService.asmx">Booking Agent Web Service</a>.
+		Using SpringAir, you can browse flights and <a href="BookTrip/TripForm.aspx">book a trip</a>.
 	</p>
 	<p>
 		SpringAir demonstrates the following features of Spring.NET's web support...

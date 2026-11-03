@@ -51,7 +51,7 @@ namespace Spring.Context.Support;
 ///     </configSections>
 ///     <spring>
 ///		    <typeAliases>
-///			    <alias name="WebServiceExporter" type="Spring.Web.Services.WebServiceExporter, Spring.Web"/>
+///			    <alias name="PageHandler" type="MyCompany.MyProject.MyNamespace.PageHandler, MyAssembly"/>
 ///			    <alias name="MyType" type="MyCompany.MyProject.MyNamespace.MyType, MyAssembly"/>
 ///			    ...
 ///		    </typeAliases>

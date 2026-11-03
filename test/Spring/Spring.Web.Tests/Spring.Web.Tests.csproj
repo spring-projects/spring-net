@@ -21,7 +21,6 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Spring.Core.Tests\TestAssemblySetup.cs" Link="TestAssemblySetup.cs" />

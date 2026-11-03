@@ -16,8 +16,7 @@ Changes (3.1 to 4.0)
    - Spring.Services: .NET Remoting exporters and factories, the ASMX web service client proxy
      (WebServiceProxyFactory), Enterprise Services (serviced components), WCF integration and
      the Windows service application host. These are .NET Framework-only technologies that
-     Microsoft has not carried forward to modern .NET. The ASMX web service exporter
-     (WebServiceExporter) is part of Spring.Web and remains.
+     Microsoft has not carried forward to modern .NET.
    - Spring.Messaging.Ems: TIBCO EMS integration. It needed TIBCO's non-redistributable
      TIBCO.EMS.dll and had no runnable tests.
    - Spring.Web.Extensions: ASP.NET AJAX integration (the JavaScript exporter), a .NET
@@ -30,6 +29,13 @@ Changes (3.1 to 4.0)
    "The '<namespace URI>' namespace was provided by <package>, which was removed in Spring.NET
    4.0." The matching examples (Calculator, EmsQuickStart, WcfQuickStart and
    Web.Extensions.Example) were removed too.
+
+   Spring.Web's ASMX web service exporter (Spring.Web.Services.WebServiceExporter and
+   WebServiceHandlerFactory) was removed too, with no replacement. Remove any *.asmx handler
+   registration that points at Spring.Web.Services.WebServiceHandlerFactory from web.config,
+   together with the WebServiceExporter object definitions. To keep a service, write the .asmx
+   class by hand and resolve the object from the application context, or move to WCF/CoreWCF
+   or ASP.NET Core.
 
 5. Dependency floors were raised: Microsoft.Extensions.Logging.Abstractions 8.0.3,
    Microsoft.Bcl.HashCode 6.0.0, Microsoft.Win32.Registry 5.0.0, System.CodeDom 8.0.0,
