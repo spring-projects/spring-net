@@ -65,17 +65,12 @@ Release contents:
 
 * `src` contains the C# source files for the framework
 * `test` contains the C# source files for Spring.NET's test suite
-* `bin` contains various Spring.NET distribution dll files
-* `lib/Net` contains shared third-party libraries needed for building the framework
-* `doc` contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
+* `doc` contains the reference documentation sources and the Spring.NET xsd.
 * `examples` contains sample applications.
-* `build-support` contains additonal applications need to build using NAnt as some convenience
-  VS.NET solution files.
-* `dev-support` contains 'developer support' tools and code, such as solution templates for VS.NET
+* `build-support` contains the Fallout build (`build-support/build`) and the SQL scripts for the integration-test databases.
+* `website` contains the sources of the project website.
 
-debug build is done using /DEBUG:full and release build using /DEBUG:pdbonly flags.
-
-The VS.NET solution for the framework and examples are provided.
+Build with `./build.cmd` (Windows) or `./build.sh` (Linux/macOS); see the targets in `build-support/build`.
 
 Latest info is available at the public website: http://www.springframework.net/
 
