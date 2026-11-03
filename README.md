@@ -174,11 +174,20 @@ suffice.
   script to run by hand. CI runs the same target on Linux (the `integration-linux` job).
 - To run against a SQL Server you already have, for example on a Windows machine without a Linux container engine, set
   `SPRING_TEST_SQLSERVER` to an administrator's connection string. No container is started and the same scripts run against that
-  server (they drop and recreate the test databases and the `springqa` login, so do not point it at a server you care about):
+  server (they drop and recreate the test databases and the `springqa` login, so do not point it at a server you care about).
+  The server must allow SQL Server (mixed-mode) authentication, because the tests log in as `springqa`. In PowerShell:
 
   ```
-  set SPRING_TEST_SQLSERVER=Server=localhost;Integrated Security=true;TrustServerCertificate=true
+  $env:SPRING_TEST_SQLSERVER = "Server=localhost;Integrated Security=true;TrustServerCertificate=true"
   ./build.cmd IntegrationTest
+  ```
+
+  `./build.cmd IntegrationTest` runs the net10.0 and net472 builds of a project one after the other when the variable is set.
+  When you call `dotnet test` yourself, pass `--max-parallel-test-modules 1`, because Microsoft.Testing.Platform otherwise runs
+  both builds at once and they would drop and recreate the same databases under each other:
+
+  ```
+  dotnet test --project test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.csproj --max-parallel-test-modules 1
   ```
 - The tests learn where the server is from these environment variables, which the test assembly sets once the scripts have run
   (the XML contexts use them as `${...}` placeholders):

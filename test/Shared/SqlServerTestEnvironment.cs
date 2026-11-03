@@ -131,7 +131,16 @@ internal static class SqlServerTestEnvironment
             }
             catch
             {
-                await DisposeContainerAsync();
+                // Report the failure of the setup, not one of the cleanup after it.
+                try
+                {
+                    await DisposeContainerAsync();
+                }
+                catch (Exception)
+                {
+                    // The container's Ryuk reaper removes it anyway.
+                }
+
                 throw;
             }
         }

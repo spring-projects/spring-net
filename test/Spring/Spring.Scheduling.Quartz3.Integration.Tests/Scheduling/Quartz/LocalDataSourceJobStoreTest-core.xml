@@ -8,9 +8,7 @@
   <!-- Property placeholder configurer for database settings -->
 
   <object type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
-    <property name="ConfigSections" value="appSettings" />
-    <property name="EnvironmentVariableMode" value="Fallback" />
-  </object>
+    <property name="ConfigSections" value="appSettings" />  </object>
 
   <!-- DB -->
 

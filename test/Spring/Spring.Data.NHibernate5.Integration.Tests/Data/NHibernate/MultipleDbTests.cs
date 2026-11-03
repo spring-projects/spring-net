@@ -66,7 +66,7 @@ namespace Spring.Data.NHibernate
         }
 
         [Test]
-        [Ignore("4.0: HibernateTemplate.Save throws 'Write operations are not allowed in read-only mode (FlushMode.NEVER)' in a SessionScope session under TxScopeTransactionManager")]
+        [Explicit("Requires MSDTC: it runs MultipleDBAccess, whose two session factories enlist two connections in one TransactionScope")]
         public void MultipleDBAccessUsingMultipleSessionScopes()
         {
             SessionScope scope1 = new SessionScope((ISessionFactory) ctx["SessionFactory1"], false);

@@ -77,6 +77,14 @@ public partial class Build
     void RunTestProjects(IEnumerable<Project> testTargets)
     {
         var failedProjects = new List<string>();
+
+        // Microsoft.Testing.Platform runs the modules of a multi-targeted project (net10.0 and net472) at the same time. Against
+        // a server named by SPRING_TEST_SQLSERVER they would drop and recreate the same databases under each other, so they run
+        // one after the other then. With a container per module (the default) there is nothing to share.
+        var maxParallelModules = string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("SPRING_TEST_SQLSERVER"))
+            ? System.Environment.ProcessorCount
+            : 1;
+
         foreach (var project in testTargets)
         {
             // The repo runs tests on Microsoft.Testing.Platform (global.json), where the project goes in --project
@@ -89,7 +97,7 @@ public partial class Build
             {
                 if (EnvironmentInfo.IsWin)
                 {
-                    DotNet($"test --project {project.Path} --configuration {Configuration} --no-restore --no-progress --report-trx --results-directory {results}");
+                    DotNet($"test --project {project.Path} --configuration {Configuration} --no-restore --no-progress --report-trx --results-directory {results} --max-parallel-test-modules {maxParallelModules}");
                 }
                 else
                 {

@@ -50,7 +50,7 @@ jobs:
       - name: Run './build.sh Compile IntegrationTest'
         run: ./build.sh Compile IntegrationTest
       - name: Upload test results
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: integration-test-results
