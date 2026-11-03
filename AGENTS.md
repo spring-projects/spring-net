@@ -74,9 +74,8 @@ Key mechanics (defined in `src/Directory.Build.props` and `test/Directory.Build.
 
 ## Legacy areas — do not modify
 
-- NAnt-era build files, superseded by the Fallout build but still committed: `Spring.build`, `*.include`, `Build-ci.cmd`, `build-release-all.cmd`, `appveyor.yml.old`, most of `build-support/` (exception: `build-support/tools/antlr-2.7.6` is still used by the `Antlr` target).
-- `dev-support/`, `templates/` — VS 2008-era templates. `lib/` — checked-in legacy third-party DLLs. `doc/` — DocBook sources + vendored toolchain (CI ignores `doc/**`).
-- Orphan test folders not in the solution (reference removed projects): `test/Spring/Spring.Web.Mvc.Tests`, `Spring.Messaging.Ems.Tests`, `Spring.Data.NHibernate.Tests`.
+- `doc/` — DocBook reference sources and their vendored toolchain (CI ignores `doc/**`); kept until the documentation moves to Markdown.
+- `build-support/tools/antlr-2.7.6` — used by the `Antlr` target until the Parlot parser (#375) replaces ANTLR.
 
 ## Website
 
