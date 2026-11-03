@@ -155,7 +155,16 @@ public class LogExceptionHandler : AbstractExceptionHandler
             exception = thrown as Exception;
         }
 
-        adviceLogger.Log(logLevel, exception, "{Message}", message?.ToString());
+        // A failing logging provider must not replace the exception the advised method threw.
+        try
+        {
+            adviceLogger.Log(logLevel, exception, "{Message}", message?.ToString());
+        }
+        catch (Exception e)
+        {
+            log.LogWarning(e, "Was not able to write the log entry for action expression [{ActionExpression}]", ActionExpressionText);
+        }
+
         return "logged";
     }
 }

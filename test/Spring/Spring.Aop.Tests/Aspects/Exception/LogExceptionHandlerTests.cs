@@ -244,12 +244,21 @@ public class LogExceptionHandlerTests
     }
 
     [Test]
-    public void FailureOfTheLoggingProviderIsNotReportedAsAnExpressionFailure()
+    public void FailureOfTheLoggingProviderIsReportedAndDoesNotReplaceTheException()
     {
-        LogManager.LoggerFactory = new ThrowingLoggerFactory();
+        // The handler's own logger comes from the recording factory; only the advice logger,
+        // resolved per call, comes from the failing one.
         var handler = new LogExceptionHandler { LogName = "my.category", ActionExpressionText = "'msg'" };
+        LogManager.LoggerFactory = new ThrowingLoggerFactory();
 
-        Assert.Throws<InvalidOperationException>(() => handler.HandleException(CreateCallContext(new ArithmeticException())));
+        object result = null;
+        Assert.DoesNotThrow(() => result = handler.HandleException(CreateCallContext(new ArithmeticException())));
+
+        Assert.That(result, Is.EqualTo("logged"));
+        LogEntry warning = loggerFactory.Entries.Single();
+        Assert.That(warning.Level, Is.EqualTo(LogLevel.Warning));
+        Assert.That(warning.Message, Is.EqualTo("Was not able to write the log entry for action expression ['msg']"));
+        Assert.That(warning.Exception, Is.TypeOf<InvalidOperationException>());
     }
 
     private sealed class ThrowingLoggerFactory : ILoggerFactory
