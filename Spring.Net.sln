@@ -227,6 +227,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {803E6B42-7DEE-4DCC-83D0-51925047BCB0}
-		NAntAddinLastFileName = Spring.build
 	EndGlobalSection
 EndGlobal
