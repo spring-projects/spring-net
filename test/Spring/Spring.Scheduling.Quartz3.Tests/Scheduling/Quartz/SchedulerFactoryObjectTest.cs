@@ -53,6 +53,30 @@ public class SchedulerFactoryObjectTest
     }
 
     /// <summary>
+    /// Disposing a factory that was never initialized must not throw.
+    /// </summary>
+    [Test]
+    public void TestDispose_NotInitialized()
+    {
+        Assert.That(() => factory.Dispose(), Throws.Nothing);
+    }
+
+    /// <summary>
+    /// Disposing an initialized factory shuts the scheduler down.
+    /// </summary>
+    [Test]
+    public void TestDispose_Initialized_ShutsDownScheduler()
+    {
+        factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
+        factory.AutoStartup = false;
+        factory.AfterPropertiesSet();
+
+        factory.Dispose();
+
+        A.CallTo(() => TestSchedulerFactory.MockScheduler.Shutdown(A<bool>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+    }
+
+    /// <summary>
     /// Tests AfterPropertiesSet behavior.
     /// </summary>
     [Test]
