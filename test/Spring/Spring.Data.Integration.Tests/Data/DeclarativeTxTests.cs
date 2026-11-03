@@ -44,6 +44,12 @@ public class DeclarativeTxTests
         transactionManager = ctx["adoTransactionManager"] as IPlatformTransactionManager;
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        ctx?.Dispose();
+    }
+
     [Test]
     public void DeclarativeWithAttributes()
     {

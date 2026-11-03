@@ -32,6 +32,12 @@ public class AutowireByTypeNotRequiredTests
             "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByTypeNotRequiredObjects.xml");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void InjectOnField()
     {

@@ -32,6 +32,12 @@ public class AutowireByTypeFailTests
             "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByTypeFailObjects.xml");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void FailFieldInjectionTooManyObjects()
     {

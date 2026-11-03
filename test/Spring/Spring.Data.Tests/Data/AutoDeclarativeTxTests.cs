@@ -42,6 +42,12 @@ public class AutoDeclarativeTxTests
             new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Data/AutoDeclarativeTxTests.xml");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        ctx?.Dispose();
+    }
+
     [Test]
     public void CoordinatorDeclarativeWithAttributes()
     {

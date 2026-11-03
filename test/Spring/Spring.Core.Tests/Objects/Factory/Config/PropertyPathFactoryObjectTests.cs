@@ -35,6 +35,12 @@ public sealed class PropertyPathFactoryObjectTests
         mockFactory = A.Fake<IObjectFactory>();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        mockFactory?.Dispose();
+    }
+
     [Test]
     public void GetObject_ViaTargetObjectName()
     {

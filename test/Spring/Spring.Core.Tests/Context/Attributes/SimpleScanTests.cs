@@ -33,6 +33,12 @@ public class SimpleScanTests
         _applicationContext = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("SimpleScanTest.xml", GetType()));
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     //[Test]
     public void FooService()
     {

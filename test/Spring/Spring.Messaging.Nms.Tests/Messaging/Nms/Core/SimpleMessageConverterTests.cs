@@ -41,6 +41,12 @@ public class SimpleMessageConverterTests
         converter = new SimpleMessageConverter();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        session?.Dispose();
+    }
+
     [Test]
     public void StringConversion()
     {

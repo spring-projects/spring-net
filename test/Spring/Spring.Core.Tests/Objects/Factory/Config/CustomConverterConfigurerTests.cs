@@ -37,6 +37,12 @@ public sealed class CustomConverterConfigurerTests
         factory = A.Fake<IConfigurableListableObjectFactory>();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        factory?.Dispose();
+    }
+
     [Test]
     public void UseInvalidKeyForConverterMapKey()
     {

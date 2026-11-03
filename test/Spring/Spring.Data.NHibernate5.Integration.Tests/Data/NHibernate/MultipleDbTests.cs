@@ -47,6 +47,12 @@ namespace Spring.Data.NHibernate
             ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/MultipleDbTests.xml");
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ctx?.Dispose();
+        }
+
         // TODO: this test fails - check out why
         [Test]
         public void MultipleDBAccess()

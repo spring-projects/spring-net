@@ -27,7 +27,11 @@ public abstract class WebApplicationTests
 {
     private readonly string virtualPath;
     private readonly string relativePhysicalPath;
+    // NUnit1032: the fixture does not own the host. AspFixtureHost hands out a shared instance and
+    // ReleaseInstance (in TestFixtureTearDown) is what gives it back, so Dispose is not called here.
+#pragma warning disable NUnit1032
     private IAspFixtureHost host;
+#pragma warning restore NUnit1032
 
     public IAspFixtureHost Host
     {

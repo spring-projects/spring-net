@@ -44,6 +44,12 @@ public sealed class CacheParameterAdviceTests
         cache = new NonExpiringCache();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        mockContext?.Dispose();
+    }
+
     [Test]
     public void TestSimpleParameterCaching()
     {

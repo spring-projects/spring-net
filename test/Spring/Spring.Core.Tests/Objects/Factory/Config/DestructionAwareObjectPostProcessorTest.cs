@@ -40,6 +40,12 @@ public class DestructionAwareObjectPostProcessorTest
         _context.Refresh();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _context?.Dispose();
+    }
+
     [Test]
     public void PostProcessBeforeDestructionIsCalled()
     {

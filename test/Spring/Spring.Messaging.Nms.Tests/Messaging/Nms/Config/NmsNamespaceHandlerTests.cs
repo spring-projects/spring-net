@@ -48,6 +48,12 @@ public class NmsNamespaceHandlerTests
         ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("NmsNamespaceHandlerTests.xml", GetType()));
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        ctx?.Dispose();
+    }
+
     [Test]
     public void Registered()
     {

@@ -89,6 +89,7 @@ public class ExceptionHandlerAspectIntegrationTests
         //reset so other tests can produce some output if needed.
         loggerFactory.LoggerEvents.Clear();
         LogManager.LoggerFactory = originalFactory;
+        loggerFactory?.Dispose();
     }
 
     [Test]

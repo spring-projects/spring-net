@@ -54,6 +54,12 @@ public sealed class ProxyFactoryObjectTests
         factory = new XmlObjectFactory(new ReadOnlyXmlTestResource("proxyFactoryTests.xml", GetType()));
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        factory?.Dispose();
+    }
+
     [Test]
     public void TargetThrowsInvalidCastException()
     {

@@ -44,6 +44,12 @@ namespace Spring.Data.NHibernate
             }
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ctx?.Dispose();
+        }
+
         [Test]
         public void DbProviderTranslation()
         {

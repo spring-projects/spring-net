@@ -43,6 +43,13 @@ public class MessageTemplateTests
         CreateMocks();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        mockConnection?.Dispose();
+        mockSession?.Dispose();
+    }
+
     private NmsTemplate CreateTemplate()
     {
         NmsTemplate template = new NmsTemplate();

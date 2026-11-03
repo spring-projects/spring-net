@@ -52,6 +52,12 @@ public class SchedulerFactoryObjectTest
         A.CallTo(() => TestSchedulerFactory.MockScheduler.SchedulerName).Returns("scheduler");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        factory?.Dispose();
+    }
+
     /// <summary>
     /// Disposing a factory that was never initialized must not throw.
     /// </summary>

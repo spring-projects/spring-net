@@ -43,6 +43,12 @@ public sealed class CacheAspectIntegrationTests
         cacheAspect.ApplicationContext = context;
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        context?.Dispose();
+    }
+
     [Test]
     public void TestCaching()
     {

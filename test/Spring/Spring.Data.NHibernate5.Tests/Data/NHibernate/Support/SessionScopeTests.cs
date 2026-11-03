@@ -43,6 +43,12 @@ namespace Spring.Data.NHibernate.Support
             expectedDefaultFlushMode = SessionScopeSettings.FLUSHMODE_DEFAULT;
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            expectedSessionFactory?.Dispose();
+        }
+
         [Test]
         public void CanCreateAndClose()
         {

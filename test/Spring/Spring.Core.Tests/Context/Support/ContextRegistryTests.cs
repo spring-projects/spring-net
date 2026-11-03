@@ -277,6 +277,15 @@ public sealed class ContextRegistryTests
             _greatGrandChildContext.ParentContext = _grandChildContext;
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _greatGrandChildContext?.Dispose();
+            _grandChildContext?.Dispose();
+            _childContext?.Dispose();
+            _parentContext?.Dispose();
+        }
+
         [Test]
         public void RegisterContext_ConstructsNestedPathBasedNames_IfRegisterdInHierarchicalOrder()
         {

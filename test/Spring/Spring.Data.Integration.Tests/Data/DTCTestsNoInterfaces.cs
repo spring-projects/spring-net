@@ -35,6 +35,12 @@ public class DTCTestsNoInterfaces
             new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/" + ctxName);
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        ctx?.Dispose();
+    }
+
     [Test]
 #if NETCOREAPP
         [Ignore("Not supported on .NET Core")]

@@ -71,6 +71,12 @@ public class TxNamespaceParserTests
         ctx = new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Transaction.Config/TxNamespaceParserTests.xml");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        ctx?.Dispose();
+    }
+
     // TODO (EE)
     [Test]
     public void AppliesTxAttributeDrivenAttributes()

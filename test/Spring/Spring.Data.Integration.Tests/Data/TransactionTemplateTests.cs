@@ -61,6 +61,7 @@ public class TransactionTemplateTests
         ITestObjectManager testObjectManager = ctx["testObjectManager"] as ITestObjectManager;
         testObjectManager.DeleteTwoTestObjects("Jack", "Jill");
         testObjectManager.DeleteAllTestObjects();
+        ctx?.Dispose();
     }
 
     /// <summary>

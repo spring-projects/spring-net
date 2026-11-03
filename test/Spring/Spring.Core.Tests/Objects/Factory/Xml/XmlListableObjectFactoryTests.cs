@@ -96,6 +96,12 @@ namespace Spring.Objects.Factory.Xml
             base.ObjectFactory = factory;
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            parent?.Dispose();
+        }
+
         [Test]
         public virtual void FactoryNesting()
         {

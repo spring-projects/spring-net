@@ -1,8 +1,0 @@
-# Layered on the repository .editorconfig for everything under test/.
-
-[*.cs]
-# NUnit1032 (an IDisposable field should be disposed in [TearDown]) is the one NUnit.Analyzers finding that is not part
-# of the NUnit 5 migration: about forty fixtures have never disposed the contexts and factories they create. Disposing them
-# changes test lifecycles (SchedulerFactoryObject.Dispose, for one, throws on a factory that was never initialized), so
-# it is kept out of the migration and reported as a suggestion until someone fixes the fixtures one by one.
-dotnet_diagnostic.NUnit1032.severity = suggestion

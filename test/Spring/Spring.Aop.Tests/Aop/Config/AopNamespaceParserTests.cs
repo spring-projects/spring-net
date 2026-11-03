@@ -41,6 +41,12 @@ public class AopNamespaceParserTests
         ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("AopNamespaceParserTests.xml", this.GetType()));
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        ctx?.Dispose();
+    }
+
     [Test]
     public void Registered()
     {

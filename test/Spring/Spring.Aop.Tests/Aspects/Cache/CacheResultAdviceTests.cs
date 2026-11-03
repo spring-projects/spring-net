@@ -56,6 +56,12 @@ public sealed class CacheResultAdviceTests
         binaryFormatterCache = new BinaryFormatterCache();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        mockContext?.Dispose();
+    }
+
     /// <summary>
     /// Change History:
     /// 2007-08-22 (oakinger): changed behaviour to cache null values as well

@@ -85,6 +85,12 @@ namespace Spring.Data.NHibernate
             CleanupDatabase(dbProvider.CreateConnection());
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ctx?.Dispose();
+        }
+
         private static void CleanupDatabase(IDbConnection conn)
         {
             conn.Open();
@@ -236,6 +242,8 @@ namespace Spring.Data.NHibernate
         {
             //BasicConfigurator.Configure();
             string assemblyName = GetType().Assembly.GetName().Name;
+            // replaces the context SetUp created; dispose that one first
+            ctx?.Dispose();
             ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/txScopeBugTests.xml");
 
             dbProvider = ctx["DbProvider"] as IDbProvider;
