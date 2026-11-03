@@ -1,11 +1,56 @@
 version: 2
 updates:
+  # Central package versions (Directory.Packages.props) and the dotnet local tools manifest.
+  # NOTE: Fallout.Common (a PackageReference in build-support/build) and fallout.globaltool
+  # (.config/dotnet-tools.json) must stay in lockstep; Dependabot bumps them independently.
+  # They are excluded here and bumped manually together (see "Agent hazards" in AGENTS.md).
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      nuget-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+        exclude-patterns:
+          - "Fallout.*"
+    ignore:
+      - dependency-name: "Fallout.*"
 
+  # One grouped PR per week for the website instead of one PR per package.
+  # Security updates are not affected by "groups" unless they match a group's applies-to,
+  # so they keep arriving as separate, immediate PRs.
   - package-ecosystem: "npm"
     directory: "/website"
     schedule:
       interval: "weekly"
+    groups:
+      website-minor-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # Gatsby 5 is pinned to React 18 and webpack-era tooling; majors need a Gatsby upgrade.
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "gatsby*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "sharp"
+      - dependency-name: "file-type"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
