@@ -110,6 +110,15 @@ Changes (3.1 to 4.0)
    - Spring.Testing.Microsoft requires MSTest.TestFramework 4.5.2 or later (was 3.4.3). The base classes
      are source compatible with it, and build for netstandard2.0, net472 and net10.0.
 
+10. LogExceptionHandler.ActionExpressionText is now the message expression only. The level and the
+   exception come from LogLevel and LogMessageOnly, and the getter returns the expression as set,
+   not the #log.<Level>(...) wrapper it used to return. A handler configured with
+   #log.Fatal('msg', #e) no longer logs: that form worked on 3.0.2 and earlier only by accident of
+   nesting, and nothing has been logged by it since 3.0.3, when logging moved to
+   Microsoft.Extensions.Logging. It now writes a warning that says so. To migrate:
+   - Before: ActionExpressionText="#log.Fatal('msg', #e)"
+   - After:  ActionExpressionText="'msg'" LogLevel="Critical"
+
 Changes (3.0.x to 3.1)
 ========================
 

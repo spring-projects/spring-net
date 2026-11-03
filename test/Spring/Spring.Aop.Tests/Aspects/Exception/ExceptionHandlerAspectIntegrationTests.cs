@@ -44,9 +44,20 @@ public class ExceptionHandlerAspectIntegrationTests
         exceptionHandlerAdvice = new ExceptionHandlerAdvice();
     }
 
+    public sealed class CapturedEvent(string category, LogLevel level, string message)
+    {
+        public string Category { get; } = category;
+
+        public LogLevel Level { get; } = level;
+
+        public string Message { get; } = message;
+
+        public override string ToString() => $"{Level} {Category}: {Message}";
+    }
+
     public class CapturingLoggerFactory : ILoggerFactory
     {
-        public List<string> LoggerEvents { get; set; } = [];
+        public List<CapturedEvent> LoggerEvents { get; set; } = [];
 
         public void Dispose()
         {
@@ -54,15 +65,15 @@ public class ExceptionHandlerAspectIntegrationTests
 
         public ILogger CreateLogger(string categoryName)
         {
-            return new CapturingLogger(LoggerEvents);
+            return new CapturingLogger(categoryName, LoggerEvents);
         }
 
-        public class CapturingLogger(List<string> loggedEvents) : ILogger
+        public class CapturingLogger(string category, List<CapturedEvent> loggedEvents) : ILogger
         {
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
                 var message = formatter(state, exception);
-                loggedEvents.Add(message);
+                loggedEvents.Add(new CapturedEvent(category, logLevel, message));
             }
 
             public bool IsEnabled(LogLevel logLevel)
@@ -96,17 +107,14 @@ public class ExceptionHandlerAspectIntegrationTests
     public void ExecuteSpelAction()
     {
         string executeHandlerText =
-            "on exception name ArithmeticException execute Spring.Aspects.Exceptions.ExceptionHandlerAspectIntegrationTests.Executed(true)";
+            "on exception name ArithmeticException execute T(Spring.Aspects.Exceptions.ExceptionHandlerAspectIntegrationTests, Spring.Aop.Tests).Executed(true)";
         ITestObject to = CreateTestObjectProxy(executeHandlerText);
+        spelActionExecuted = false;
 
-        try
-        {
-            to.Exceptional(new ArithmeticException());
-        }
-        catch (ArithmeticException)
-        {
-            Assert.That(spelActionExecuted, Is.True);
-        }
+        // The execute action returns null, which the advice treats as handled: the exception is not rethrown.
+        Assert.DoesNotThrow(() => to.Exceptional(new ArithmeticException()));
+
+        Assert.That(spelActionExecuted, Is.True, "Logged: " + string.Join("; ", loggerFactory.LoggerEvents));
     }
 
     public static void Executed(bool val)
@@ -132,24 +140,10 @@ public class ExceptionHandlerAspectIntegrationTests
         pf.AddAdvice(exceptionHandlerAdvice);
         ITestObject to = (ITestObject) pf.GetProxy();
 
-        try
-        {
-            to.Exceptional(new ArithmeticException());
-            Assert.Fail("Should have thrown exception when only logging");
-        }
-        catch (ArithmeticException)
-        {
-            bool found = false;
-            foreach (var loggerEvent in loggerFactory.LoggerEvents)
-            {
-                if (loggerEvent.IndexOf("Hello World") >= 0)
-                {
-                    found = true;
-                }
-            }
+        var thrown = new ArithmeticException("Bad Math");
+        Assert.Throws<ArithmeticException>(() => to.Exceptional(thrown), "Should have thrown exception when only logging");
 
-            Assert.That(found, Is.True, "did not find logging output");
-        }
+        AssertLogged("Hello World, exception message = Bad Math, target method = Exceptional", LogLevel.Trace, "adviceHandler");
     }
 
     [Test]
@@ -157,7 +151,7 @@ public class ExceptionHandlerAspectIntegrationTests
     {
         string logHandlerText = "on exception name ArithmeticException log 'My Message, Method Name ' + #method.Name";
 
-        ExecuteLoggingHandler(logHandlerText, "My Message");
+        ExecuteLoggingHandler(logHandlerText, "My Message, Method Name Exceptional", LogLevel.Trace, "LogExceptionHandler");
     }
 
     [Test]
@@ -165,7 +159,7 @@ public class ExceptionHandlerAspectIntegrationTests
     {
         string logHandlerText = "on exception name ArithmeticException log 'My Message, Method Name ' + #method.Name";
 
-        ExecuteLoggingHandler(logHandlerText, "My Message");
+        ExecuteLoggingHandler(logHandlerText, "My Message, Method Name Exceptional", LogLevel.Trace, "LogExceptionHandler");
     }
 
     [Test]
@@ -173,7 +167,7 @@ public class ExceptionHandlerAspectIntegrationTests
     {
         string logHandlerText = "on exception (#e is T(System.ArithmeticException)) log 'My Message, Method Name ' + #method.Name";
 
-        ExecuteLoggingHandler(logHandlerText, "My Message");
+        ExecuteLoggingHandler(logHandlerText, "My Message, Method Name Exceptional", LogLevel.Trace, "LogExceptionHandler");
     }
 
     [Test]
@@ -182,17 +176,26 @@ public class ExceptionHandlerAspectIntegrationTests
         LogExceptionHandler exHandler = new LogExceptionHandler();
         exHandler.ConstraintExpressionText = "#e is T(System.ArithmeticException)";
         exHandler.LogName = "adviceHandler";
-        exHandler.ActionExpressionText = "#log.Fatal('Request Timeout occured', #e)";
+        exHandler.LogLevel = LogLevel.Critical;
+        exHandler.ActionExpressionText = "'Request Timeout occured'";
 
-        ExecuteLoggingHandlerInList(exHandler, "Request Timeout");
+        ITestObject to = CreateTestObjectProxyInList(exHandler);
+
+        Assert.Throws<ArithmeticException>(() => to.Exceptional(new ArithmeticException()));
+
+        AssertLogged("Request Timeout occured", LogLevel.Critical, "adviceHandler");
     }
 
     [Test]
     public void LoggingTestWithConstraintExpressionWithKeyedExceptionHandler()
     {
         LogExceptionHandler exHandler = new LogExceptionHandler();
-        ExecuteLoggingHandlerWithKeyedLogHandler(exHandler,
-            @"on exception (#e is T(System.ArithmeticException)) log 'Request Timeout occured'", "Request Timeout");
+        ITestObject to = CreateTestObjectProxyWithKeyedHandler(exHandler,
+            @"on exception (#e is T(System.ArithmeticException)) log 'Request Timeout occured'");
+
+        Assert.Throws<ArithmeticException>(() => to.Exceptional(new ArithmeticException()));
+
+        AssertLogged("Request Timeout occured", LogLevel.Trace, "LogExceptionHandler");
     }
 
     [Test]
@@ -200,7 +203,7 @@ public class ExceptionHandlerAspectIntegrationTests
     {
         string logHandlerText = "on foobar name ArithmeticException log 'My Message, Method Name ' + #method.Name";
 
-        Assert.Throws<ArgumentException>(() => ExecuteLoggingHandler(logHandlerText, "My Message"));
+        Assert.Throws<ArgumentException>(() => CreateTestObjectProxy(logHandlerText));
     }
 
     [Test]
@@ -208,7 +211,7 @@ public class ExceptionHandlerAspectIntegrationTests
     {
         string logHandlerText = "on exception (#e is System.FooBar) log 'My Message, Method Name ' + #method.Name";
 
-        ExecuteLoggingHandler(logHandlerText, "Was not able to evaluate constraint expression [#e is System.FooBar]");
+        ExecuteLoggingHandler(logHandlerText, "Was not able to evaluate constraint expression [#e is System.FooBar]", LogLevel.Warning, typeof(LogExceptionHandler).FullName, expectMessageLogged: false);
     }
 
     [Test]
@@ -216,48 +219,24 @@ public class ExceptionHandlerAspectIntegrationTests
     {
         string logHandlerText = "on exception (1+1) log 'My Message, Method Name ' + #method.Name";
 
-        ExecuteLoggingHandler(logHandlerText, "Was not able to unbox constraint expression to boolean [1+1]");
+        ExecuteLoggingHandler(logHandlerText, "Was not able to unbox constraint expression to boolean [1+1]", LogLevel.Warning, typeof(LogExceptionHandler).FullName, expectMessageLogged: false);
     }
 
-    private void ExecuteLoggingHandler(string logHandlerText, string searchString)
+    /// <summary>
+    /// Runs a proxied method that throws and checks that exactly the expected entry was written.
+    /// A handler whose constraint can't be evaluated reports a warning and logs no message,
+    /// which <paramref name="expectMessageLogged"/> <c>false</c> checks for.
+    /// </summary>
+    private void ExecuteLoggingHandler(string logHandlerText, string expectedMessage, LogLevel expectedLevel, string expectedCategory, bool expectMessageLogged = true)
     {
         ITestObject to = CreateTestObjectProxy(logHandlerText);
 
-        try
-        {
-            to.Exceptional(new ArithmeticException());
-        }
-        catch (ArithmeticException)
-        {
-            AssertSearchString(searchString);
-        }
-    }
+        Assert.Throws<ArithmeticException>(() => to.Exceptional(new ArithmeticException()));
 
-    private void ExecuteLoggingHandlerInList(IExceptionHandler handler, string searchString)
-    {
-        ITestObject to = CreateTestObjectProxyInList(handler);
-
-        try
+        AssertLogged(expectedMessage, expectedLevel, expectedCategory);
+        if (!expectMessageLogged)
         {
-            to.Exceptional(new ArithmeticException());
-        }
-        catch (ArithmeticException)
-        {
-            AssertSearchString(searchString);
-        }
-    }
-
-    private void ExecuteLoggingHandlerWithKeyedLogHandler(IExceptionHandler handler, string handlerText, string searchString)
-    {
-        ITestObject to = CreateTestObjectProxyWithKeyedHandler(handler, handlerText);
-
-        try
-        {
-            to.Exceptional(new ArithmeticException());
-        }
-        catch (ArithmeticException)
-        {
-            AssertSearchString(searchString);
+            Assert.That(loggerFactory.LoggerEvents.Where(e => e.Message.StartsWith("My Message")), Is.Empty);
         }
     }
 
@@ -501,18 +480,17 @@ public class ExceptionHandlerAspectIntegrationTests
         return (ITestObject) pf.GetProxy();
     }
 
-    private void AssertSearchString(string searchString)
+    /// <summary>
+    /// Asserts that exactly one entry was written with this message, level and category.
+    /// The message must match exactly, so the warning that a failed expression produces can't stand in for it.
+    /// </summary>
+    private void AssertLogged(string expectedMessage, LogLevel expectedLevel, string expectedCategory)
     {
-        bool found = false;
-        foreach (var loggerEvent in loggerFactory.LoggerEvents)
-        {
-            if (loggerEvent.IndexOf(searchString) >= 0)
-            {
-                found = true;
-            }
-        }
+        var matches = loggerFactory.LoggerEvents
+            .Where(e => e.Message == expectedMessage && e.Level == expectedLevel && e.Category == expectedCategory)
+            .ToList();
 
-        Assert.That(found, Is.True, "did not find logging output [" + searchString + "]  Logging values = "
-                             + StringUtils.CollectionToCommaDelimitedString(loggerFactory.LoggerEvents));
+        Assert.That(matches, Has.Count.EqualTo(1), "did not find logging output [" + expectedMessage + "]  Logging values = "
+                                                  + StringUtils.CollectionToCommaDelimitedString(loggerFactory.LoggerEvents));
     }
 }

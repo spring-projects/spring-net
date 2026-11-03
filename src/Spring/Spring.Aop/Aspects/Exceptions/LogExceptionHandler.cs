@@ -20,8 +20,24 @@ using Spring.Expressions;
 namespace Spring.Aspects.Exceptions;
 
 /// <summary>
-/// Log the exceptions.  Default log nameis "LogExceptionHandler" and log level is Debug
+/// Logs the exceptions that this handler is configured for.
+/// Default log name is "LogExceptionHandler" and default log level is <see cref="Microsoft.Extensions.Logging.LogLevel.Trace"/>.
 /// </summary>
+/// <remarks>
+/// <para>
+/// The <see cref="ActionExpressionText"/> is the Spring expression (SpEL) that produces the log message. It is
+/// evaluated against the call context, which provides <c>#method</c>, <c>#args</c>, <c>#target</c> and
+/// <c>#e</c>, and the resulting text is written to the logger named <see cref="LogName"/> at <see cref="LogLevel"/>.
+/// The exception is attached to the entry unless <see cref="LogMessageOnly"/> is set.
+/// </para>
+/// <para>
+/// Before 3.0.3 an expression such as <c>#log.Fatal('message', #e)</c> also worked, by accident of nesting;
+/// it has not since the switch to Microsoft.Extensions.Logging, whose
+/// <see cref="Microsoft.Extensions.Logging.ILogger"/> has no such instance methods. Give the message expression
+/// only, for example <c>'message'</c>. A failing expression that starts with <c>#log.</c> is reported with a
+/// warning that names this form.
+/// </para>
+/// </remarks>
 /// <author>Mark Pollack</author>
 public class LogExceptionHandler : AbstractExceptionHandler
 {
@@ -30,10 +46,6 @@ public class LogExceptionHandler : AbstractExceptionHandler
     private LogLevel logLevel = LogLevel.Trace;
 
     private bool logMessageOnly = false;
-
-    private bool first = true;
-
-    private string actionExpressionText;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LogExceptionHandler"/> class.
@@ -84,35 +96,23 @@ public class LogExceptionHandler : AbstractExceptionHandler
     }
 
     /// <summary>
-    /// Gets the action translation expression text.  Overridden to add approprate settings to
-    /// the SpEL expression that does the logging so that it depends on the values of LogLevel and
-    /// LogMessageOnly.  Those properties must be set to the desired values before calling this method.
-    ///
+    /// Gets or sets the Spring expression (SpEL) that produces the message to log.
     /// </summary>
-    /// <value>The action translation expression.</value>
+    /// <remarks>
+    /// The getter returns the expression as it was set. Earlier versions returned the expression wrapped in
+    /// a call on <c>#log</c>, which depended on <see cref="LogLevel"/> and <see cref="LogMessageOnly"/> having been
+    /// set first, and ignored every assignment after the first. The level and the message-only setting are now
+    /// applied when the exception is handled, so the order of property assignments no longer matters.
+    /// </remarks>
+    /// <value>The message expression.</value>
     public override string ActionExpressionText
     {
-        get { return actionExpressionText; }
-        set
-        {
-            if (first)
-            {
-                first = false;
-                string textPart1 = "#log." + LogLevel.ToString() + "(" + value;
-                if (logMessageOnly)
-                {
-                    actionExpressionText = textPart1 + ")";
-                }
-                else
-                {
-                    actionExpressionText = textPart1 + ", #e)";
-                }
-            }
-        }
+        get { return base.ActionExpressionText; }
+        set { base.ActionExpressionText = value; }
     }
 
     /// <summary>
-    /// Handles the exception.
+    /// Handles the exception by logging the message that <see cref="ActionExpressionText"/> evaluates to.
     /// </summary>
     /// <param name="callContextDictionary">the calling context dictionary</param>
     /// <returns>
@@ -122,15 +122,47 @@ public class LogExceptionHandler : AbstractExceptionHandler
     {
         //TODO log name is targettype.
         ILogger adviceLogger = LogManager.GetLogger(logName);
-        callContextDictionary.Add("log", adviceLogger);
+
+        // Stays available to user expressions that reference #log; the handler itself does not call it.
+        // Assigned rather than added, because several log handlers can run against the same call context.
+        callContextDictionary["log"] = adviceLogger;
+        object message;
         try
         {
             IExpression expression = Expression.Parse(ActionExpressionText);
-            expression.GetValue(null, callContextDictionary);
+            message = expression.GetValue(null, callContextDictionary);
         }
         catch (Exception e)
         {
-            log.LogWarning(e, "Was not able to evaluate action expression [{ActionExpression}]", ActionExpressionText);
+            if (ActionExpressionText != null && ActionExpressionText.StartsWith("#log.", StringComparison.Ordinal))
+            {
+                log.LogWarning(
+                    e,
+                    "The '#log.<Level>(...)' form is no longer supported; set ActionExpressionText to the message expression and LogLevel to the level. Was not able to evaluate action expression [{ActionExpression}]",
+                    ActionExpressionText);
+            }
+            else
+            {
+                log.LogWarning(e, "Was not able to evaluate action expression [{ActionExpression}]", ActionExpressionText);
+            }
+
+            return "logged";
+        }
+
+        Exception exception = null;
+        if (!logMessageOnly && callContextDictionary.TryGetValue("e", out object thrown))
+        {
+            exception = thrown as Exception;
+        }
+
+        // A failing logging provider must not replace the exception the advised method threw.
+        try
+        {
+            adviceLogger.Log(logLevel, exception, "{Message}", message?.ToString());
+        }
+        catch (Exception e)
+        {
+            log.LogWarning(e, "Was not able to write the log entry for action expression [{ActionExpression}]", ActionExpressionText);
         }
 
         return "logged";
