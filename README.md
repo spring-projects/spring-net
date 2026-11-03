@@ -198,10 +198,17 @@ suffice.
   | `SPRING_TEST_SQLSERVER_USER`, `SPRING_TEST_SQLSERVER_PASSWORD` | the `springqa` login (`springqa` / `springqa`) |
   | `SPRING_TEST_SQLSERVER_CS_<DATABASE>` | a complete connection string, as `springqa`, for each database the scripts created, with the name upper-cased: `..._CS_SPRING`, `..._CS_CREDITS`, `..._CS_DEBITS`, `..._CS_CREDITSANDDEBITS`, `..._CS_QUARTZ` |
 
+- The NMS integration tests (`Spring.Messaging.Nms.Integration.Tests`) work the same way with an ActiveMQ Classic container (a pinned
+  `apache/activemq-classic` image, on a random host port), and `./build.cmd IntegrationTest` runs them too, on both net10.0 and
+  net472. The test assembly publishes the broker's address as `SPRING_TEST_ACTIVEMQ_BROKER_URI` (`tcp://host:port`), which the XML
+  contexts read as `${SPRING_TEST_ACTIVEMQ_BROKER_URI}`. To use a broker you already run, set that variable before the run and no
+  container is started (`./build.cmd IntegrationTest` then runs the net10.0 and net472 builds one after the other, because they
+  share the broker's queues).
 - Tests that need a distributed transaction (MSDTC) are `[Explicit]`: a SQL Server container cannot take part in one. Run them
   by name against a Windows server with MSDTC enabled if you work on that code.
-- `./build.cmd Test --test-integration-data` also runs the four SQL Server projects as part of the `Test` target, and
-  `--test-full` runs every integration project, including the ones that need ActiveMQ, MSMQ or a SQLite file.
+- `./build.cmd Test --test-integration-data` also runs the four SQL Server projects as part of the `Test` target,
+  `--test-integration-nms` the NMS project, and `--test-full` runs every integration project, including the ones that need
+  MSMQ or a SQLite file.
 
 
 ## Acknowledgements

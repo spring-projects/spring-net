@@ -37,7 +37,7 @@ jobs:
       - name: Run './build.cmd ci'
         run: ./build.sh ci
 
-  # The SQL Server backed integration tests. Each test assembly starts its own SQL Server container with Testcontainers,
+  # The SQL Server and ActiveMQ backed integration tests. Each test assembly starts its own container with Testcontainers,
   # which needs only the Docker daemon that ubuntu-latest provides.
   integration-linux:
     runs-on: ubuntu-latest

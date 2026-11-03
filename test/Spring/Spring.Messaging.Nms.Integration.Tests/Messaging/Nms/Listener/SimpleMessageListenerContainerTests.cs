@@ -42,7 +42,7 @@ public class SimpleMessageListenerContainerTests : AbstractDependencyInjectionSp
         Assert.That(simpleMessageListener, Is.Not.Null);
         Assert.That(simpleMessageListener.MessageCount, Is.EqualTo(0));
         simpleGateway.Publish("CSCO", 123.45);
-        Thread.Sleep(1000);
+        Assert.That(simpleMessageListener.WaitForMessage(TimeSpan.FromSeconds(30)), Is.True, "no message was delivered to the listener");
         Assert.That(simpleMessageListener.MessageCount, Is.EqualTo(1));
     }
 

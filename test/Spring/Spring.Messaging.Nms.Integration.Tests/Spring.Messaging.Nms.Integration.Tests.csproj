@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
+    <TargetFrameworks>net10.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
@@ -11,7 +11,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Apache.NMS" />
-    <PackageReference Include="Apache.NMS.ActiveMQ" Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' " />
+    <PackageReference Include="Apache.NMS.ActiveMQ" />
+    <PackageReference Include="Testcontainers" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Shared\ActiveMqTestEnvironment.cs" Link="ActiveMqTestEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Nms\Core\NmsTemplateTests.xml" />
