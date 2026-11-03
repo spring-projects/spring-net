@@ -32,6 +32,12 @@ public class CodeConfigApplicationContextTests
         scanner = new AssemblyObjectDefinitionScanner();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        context?.Dispose();
+    }
+
     [Test]
     public void Can_Filter_For_Assembly_Based_On_Assembly_Metadata()
     {

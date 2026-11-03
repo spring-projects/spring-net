@@ -39,6 +39,12 @@ public class CollectionMergingGenericTests
         reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("collectionMergingGeneric.xml", GetType()));
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        objectFactory?.Dispose();
+    }
+
     [Test]
     public void MergeList()
     {

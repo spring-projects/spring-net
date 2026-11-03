@@ -42,6 +42,12 @@ namespace Spring.Data.NHibernate
             Assert.That(userCredentialsDbProvider, Is.Not.Null);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ctx?.Dispose();
+        }
+
         [Test]
         [Ignore("Trouble running on Appveyor")]
         public void UserCredentialsDbProvider()

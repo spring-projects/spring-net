@@ -31,6 +31,12 @@ public class AttributeConfigObjectDefinitionParserTests
     {
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void RegisteredComponents()
     {

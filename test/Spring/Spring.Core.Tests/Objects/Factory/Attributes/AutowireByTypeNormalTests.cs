@@ -32,6 +32,12 @@ public class AutowireByTypeNormalTests
             "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByTypeNormalObjects.xml");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void InjectOnField()
     {

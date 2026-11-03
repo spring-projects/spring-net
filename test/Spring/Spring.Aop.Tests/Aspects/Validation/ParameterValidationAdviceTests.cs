@@ -46,6 +46,12 @@ public sealed class ParameterValidationAdviceTests
         requiredValidator.Actions.Add(new ErrorMessageAction("error.required", "errors"));
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        mockContext?.Dispose();
+    }
+
     [Test]
     public void TestValidArgument()
     {

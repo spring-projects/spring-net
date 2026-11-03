@@ -36,6 +36,12 @@ public class ObjectNameGenerationTests
         reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("objectNameGeneration.xml", GetType()));
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        objectFactory?.Dispose();
+    }
+
     [Test]
     public void AssignObjectNames()
     {

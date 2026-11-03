@@ -37,6 +37,12 @@ public class LocalDataSourceJobStoreTest
 #endif
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _ctx?.Dispose();
+    }
+
     [Test]
     [Explicit("Appveyor problems")]
     public void TestLocalDataSourceJobStore()

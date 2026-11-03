@@ -33,6 +33,12 @@ namespace Spring.Context.Config
         {
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _applicationContext?.Dispose();
+        }
+
         [Test]
         public void IncludeRegExpressionFilter()
         {

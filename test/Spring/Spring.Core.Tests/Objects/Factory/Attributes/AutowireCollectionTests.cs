@@ -33,6 +33,12 @@ public class AutowireCollectionTests
             "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/CollectionObjects.xml");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void InjectIntoList()
     {

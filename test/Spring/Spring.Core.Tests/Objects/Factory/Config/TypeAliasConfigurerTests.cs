@@ -40,6 +40,12 @@ public class TypeAliasConfigurerTests
         factory = A.Fake<IConfigurableListableObjectFactory>();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        factory?.Dispose();
+    }
+
     [Test]
     public void Serialization()
     {

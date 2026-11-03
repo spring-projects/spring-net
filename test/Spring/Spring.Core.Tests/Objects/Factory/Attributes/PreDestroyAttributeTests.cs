@@ -54,6 +54,12 @@ public class PreDestroyAttributeTests
         _applicationContext.Refresh();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void PreDestroyMethodExecution()
     {

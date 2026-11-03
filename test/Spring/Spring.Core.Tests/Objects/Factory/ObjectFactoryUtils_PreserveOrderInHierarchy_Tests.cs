@@ -30,6 +30,12 @@ public class ObjectFactoryUtils_PreserveOrderInHierarchy_Tests
         parentFactory.RegisterObjectDefinition("obj2C", rod2C);
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _factory?.Dispose();
+    }
+
     [Test]
     public void ObjectNamesIncludingAncestorsPreserveOrderOfRegistration()
     {

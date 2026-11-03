@@ -36,6 +36,12 @@ public class AutowireByQualifierTests
             "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByQualifierObjects.xml");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void InjectOnField()
     {

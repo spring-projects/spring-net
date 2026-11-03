@@ -1576,11 +1576,10 @@ public sealed class XmlObjectFactoryTests
         Assert.That(fm2.Object.Name, Is.EqualTo("arg2"));
         Assert.That(fm2.Number, Is.EqualTo(fm1.Number));
         Assert.That(fm2.Value, Is.EqualTo("testObjectOnlyPrototypeDISetterString"));
-        var firstValue = fm2.Value;
-        Assert.That(fm2.Value, Is.EqualTo(firstValue));
-        // The TestObject reference is resolved to a prototype in the factory
-        var firstObject = fm2.Object;
-        Assert.That(fm2.Object, Is.SameAs(firstObject));
+        Assert.That(fm2.Value, Is.EqualTo(fm1.Value));
+        // The factory method arguments are passed through to the created object
+        Assert.That(fm1.Object, Is.SameAs(toArg));
+        Assert.That(fm2.Object, Is.SameAs(toArg2));
         Assert.That(ReferenceEquals(fm1, fm2), Is.False);
     }
 

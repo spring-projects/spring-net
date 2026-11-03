@@ -14,6 +14,12 @@ public class ComponentScanObjectDefinitionParserAssemblyFilterTests
     {
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void BaseAssembliesAttributeRequired()
     {

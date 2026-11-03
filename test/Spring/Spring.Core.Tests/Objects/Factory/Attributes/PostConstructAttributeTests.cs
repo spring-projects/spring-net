@@ -58,6 +58,12 @@ public class PostConstructAttributeTests
         _applicationContext.Refresh();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void PostContructMethodExecuted()
     {

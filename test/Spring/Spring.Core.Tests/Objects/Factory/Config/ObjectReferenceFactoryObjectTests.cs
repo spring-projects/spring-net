@@ -34,6 +34,12 @@ public sealed class ObjectReferenceFactoryObjectTests
         factory = A.Fake<IObjectFactory>();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        factory?.Dispose();
+    }
+
     [Test]
     public void NullTargetObjectName()
     {

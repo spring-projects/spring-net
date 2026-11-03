@@ -46,6 +46,7 @@ public sealed class RegistryVariableSourceTests
     public void TearDown()
     {
         Registry.CurrentUser.DeleteSubKey("RegistryVariableSourceTests");
+        key?.Dispose();
     }
 
     [Test]

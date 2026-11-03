@@ -68,6 +68,12 @@ namespace Spring.Data.NHibernate
             CleanupDatabase(dbProvider.CreateConnection());
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ctx?.Dispose();
+        }
+
         private static void CleanupDatabase(IDbConnection conn)
         {
             conn.Open();

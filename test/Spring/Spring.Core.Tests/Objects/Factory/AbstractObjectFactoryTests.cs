@@ -42,6 +42,13 @@ public abstract class AbstractObjectFactoryTests
         set { cachedFactory = value; }
     }
 
+    [TearDown]
+    public void DisposeObjectFactory()
+    {
+        ObjectFactory?.Dispose();
+        ObjectFactory = null;
+    }
+
     [Test]
     public void RespectsCaseInsensitiveNamesAndAliases()
     {
@@ -662,6 +669,12 @@ public class SPRNET_1338
         ObjectFactory.RegisterObjectDefinition("threadCreatorInsideDispose", threadCreatorInsideDispose);
     }
 
+    [TearDown]
+    public void _TearDown()
+    {
+        ObjectFactory?.Dispose();
+    }
+
     [Test]
     [Ignore("Test fails -- waiting for verification re: if bug exists in Java impl")]
     public void CanAvoidLockContentionDuringObjectFactoryDisposal()
@@ -760,6 +773,12 @@ public class SPRNET_1315
         invocationLog.Clear();
         _parentCounter = 0;
         _childCounter = 0;
+    }
+
+    [TearDown]
+    public void _TearDown()
+    {
+        ObjectFactory?.Dispose();
     }
 
     [Test]

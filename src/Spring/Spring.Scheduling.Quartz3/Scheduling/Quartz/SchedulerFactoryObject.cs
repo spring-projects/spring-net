@@ -454,6 +454,12 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
     /// </summary>
     public virtual void Dispose()
     {
+        if (scheduler == null)
+        {
+            // never initialized (AfterPropertiesSet was not called, or failed before creating the scheduler)
+            return;
+        }
+
         Logger.LogInformation("Shutting down Quartz Scheduler");
         scheduler.Shutdown(waitForJobsToCompleteOnShutdown).ConfigureAwait(false).GetAwaiter().GetResult();
     }

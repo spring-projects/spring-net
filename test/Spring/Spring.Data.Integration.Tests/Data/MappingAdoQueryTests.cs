@@ -63,6 +63,7 @@ public class MappingAdoQueryTests
     public void _TestTearDown()
     {
         DeleteTestData();
+        ctx?.Dispose();
     }
 
     private void DeleteTestData()

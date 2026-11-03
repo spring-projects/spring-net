@@ -36,6 +36,7 @@ public class AutowireByValueTests
     [TearDown]
     public void Dispose()
     {
+        _applicationContext?.Dispose();
         ContextRegistry.Clear();
     }
 

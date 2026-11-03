@@ -47,6 +47,12 @@ public sealed class InvalidateCacheAdviceTests
         cache.Insert(3, "three");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        mockContext?.Dispose();
+    }
+
     [Test]
     public void TestSingleKeyInvalidation()
     {

@@ -39,6 +39,13 @@ public class SpringMvcDependencyResolverTests
         _resolver.ApplicationContextName = string.Empty;
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _context?.Dispose();
+        _mvcNamedContext?.Dispose();
+    }
+
     private MvcApplicationContext _context;
     private MvcApplicationContext _mvcNamedContext;
     private SpringMvcDependencyResolver _resolver;

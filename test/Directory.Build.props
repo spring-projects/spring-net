@@ -28,8 +28,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
 
     <!-- Test projects run on Microsoft.Testing.Platform (`dotnet test` with the runner chosen in global.json): the runner is
-         compiled into the test assembly, so it is an executable. NUnit3TestAdapter reads EnableNUnitRunner; for a
-         project that does not use NUnit it does nothing. -->
+         compiled into the test assembly, so it is an executable. EnableNUnitRunner turns on NUnit3TestAdapter's runner. It
+         is set here because the adapter reads it while its own build file is imported, which happens before
+         Directory.Build.targets. A project that uses another framework sets UseNUnit to false in its body, after this file
+         is evaluated, so Directory.Build.targets switches the property back off for it. -->
     <OutputType>Exe</OutputType>
     <EnableNUnitRunner>true</EnableNUnitRunner>
 

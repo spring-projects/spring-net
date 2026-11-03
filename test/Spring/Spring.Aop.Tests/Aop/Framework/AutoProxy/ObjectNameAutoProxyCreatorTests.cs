@@ -41,6 +41,12 @@ public class ObjectNameAutoProxyCreatorTests
         ctx = new XmlApplicationContext(configLocation);
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        ctx?.Dispose();
+    }
+
     [Test]
     public void NoProxy()
     {

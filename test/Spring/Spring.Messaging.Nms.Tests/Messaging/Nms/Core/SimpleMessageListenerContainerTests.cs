@@ -30,7 +30,10 @@ namespace Spring.Messaging.Nms.Core;
 public class SimpleMessageListenerContainerTests
 {
     private static string DESTINATION_NAME = "foo";
+    // NUnit1032: a static destination shared by every test in the fixture; no single test owns it.
+#pragma warning disable NUnit1032
     private static StubQueue QUEUE_DESTINATION = new StubQueue();
+#pragma warning restore NUnit1032
     private static string EXCEPTION_MESSAGE = "This.Is.It";
     private SimpleMessageListenerContainer container;
 
@@ -38,6 +41,12 @@ public class SimpleMessageListenerContainerTests
     public void Setup()
     {
         container = new SimpleMessageListenerContainer();
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        container?.Dispose();
     }
 
     [Test]

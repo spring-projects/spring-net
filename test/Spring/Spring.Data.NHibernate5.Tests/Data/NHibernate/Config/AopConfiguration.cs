@@ -41,6 +41,12 @@ namespace Spring.Data.NHibernate.Config
             ctx = new XmlApplicationContext(aopConfigPath);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            ctx?.Dispose();
+        }
+
         [Test]
         [Ignore("TODO Connects to database")]
         public void ProxyDataAccessAndServiceLayer()

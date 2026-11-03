@@ -64,6 +64,12 @@ public class DbProviderFactoryTests
         ctx = new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Data.Common/DbProviderFactoryTests.xml");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        ctx?.Dispose();
+    }
+
     [Test]
     public void ThreadSafety()
     {

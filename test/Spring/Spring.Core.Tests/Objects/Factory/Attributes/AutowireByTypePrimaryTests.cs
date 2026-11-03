@@ -32,6 +32,12 @@ public class AutowireByTypePrimaryTests
             "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByTypePrimaryObjects.xml");
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _applicationContext?.Dispose();
+    }
+
     [Test]
     public void InjectOnField()
     {

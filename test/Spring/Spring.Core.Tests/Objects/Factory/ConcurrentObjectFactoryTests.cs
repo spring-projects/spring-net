@@ -37,6 +37,12 @@ public class ConcurrentObjectFactoryTests
         factory = new XmlObjectFactory(resource);
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        factory?.Dispose();
+    }
+
     [Test]
     public void SingleThread()
     {

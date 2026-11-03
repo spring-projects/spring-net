@@ -40,6 +40,12 @@ public class CollectionConversionGenericTests
         reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("collectionConversionGeneric.xml", GetType()));
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        objectFactory?.Dispose();
+    }
+
     [Test]
     public void ShouldConvertListToGenericIList()
     {
