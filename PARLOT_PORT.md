@@ -9,7 +9,7 @@ embedded (101 files), the generated lexer and parser, the `Antlr` build target a
 
 - **The same expressions, the same trees.** Everything that was accepted is accepted, with the same node classes, the
   same token types and the same texts, and what was rejected is rejected. See [Equivalence](#equivalence). Evaluation
-  code is untouched.
+  only changes by a stack check, described below, whose cost is in [Benchmarks](#benchmarks).
 - **Parsing is 8 to 48 times faster, with 6.7 to 39 times fewer allocations, on .NET 8**, and 3 to 7 times faster on
   .NET Framework. An `ObjectWrapper` access by property name is 13 times faster, as it allocated a lexer and a parser to
   read a name. See [Benchmarks](#benchmarks).
@@ -34,7 +34,7 @@ embedded (101 files), the generated lexer and parser, the `Antlr` build target a
 
   **Evaluation checks the stack too, which is new.** A long chain such as `1+1+1+...` parses without recursion in both,
   and then overflowed the stack when *evaluated*, at 3,000 terms in a 1 MB thread, and 1,900 prefix operators can do the
-  same on a smaller stack. `BaseNode` now calls `RuntimeHelpers.EnsureSufficientExecutionStack()` for each node it evaluates, so
+  same on a smaller stack. `BaseNode` now calls `RuntimeHelpers.EnsureSufficientExecutionStack()` for each node it evaluates or sets, so
   this is an `InsufficientExecutionStackException`. It costs time on prepared expressions, see [Benchmarks](#benchmarks).
 - **No Windows-only tool to change the grammar.** The grammar is C#, compiled by the normal build.
 - **Dependencies.** No package is added at run time for Parlot: `Parlot.SourceGenerator` is a build-only analyzer
@@ -60,7 +60,7 @@ The repository ships on NuGet and these are breaking for code that used them, wh
 | `internal SyntaxErrorException : RecognitionException`, so `catch (RecognitionException)` | `public SyntaxErrorException : Exception`, with `Line`, `Column` and `Expression` |
 | `SyntaxErrorException.ToString()` was `line 1:6: <message>` | The usual text of an exception, with its stack trace |
 
-Kept as they were: `Expression.Parse`, every node class and their constructors, `BaseNode`, the other members of
+Kept as they were: `Expression.Parse`, every node class and their constructors, `BaseNode` (it now checks the stack in `GetValue` and `SetValue`, without a change of signature), the other members of
 `SpringAST` (`getText`, `setText`, `Type`, `Text`, `getNumberOfChildren`, `removeChildren`, `setType`, `ToStringList`,
 `ToStringTree`, `Equals(object)`), and `Spring.Expressions.Parser.ExpressionParserTokenTypes`, the values of `Type`.
 
@@ -79,11 +79,12 @@ of both with a vocabulary of the tokens and their near misses.
 - An early run of 3.9 million parses found 21 differences, all from one lexer rule (`.` followed by a digit always starts a number,
   even an invalid one), now fixed. Before that, smaller runs found the other lexer and follow-set quirks listed below.
 - The final run: **1,571,952 parses, 615,238 accepted with identical trees, 956,714 rejected by both, no other result.**
-- Run again on the final grammar, with the recursion limit left out and the fixes for named arguments and long paths, it gives the same counts.
+- Run again on the final grammar, with the recursion limit left out, it gives the same counts.
 - The rejected ones have the same column in 91% of the cases, and the same column and message in 81%.
 
 `ExpressionGrammarTests` stays, with the trees and errors ANTLR gave for 216 expressions, chosen for the quirks of the
-grammar, written to `ExpressionGrammarGolden.json` by ANTLR itself.
+grammar, written to `ExpressionGrammarGolden.json` by ANTLR itself. They are compared exactly, for `Parse` and `ParsePrimary`: the 61
+entries where an error has another position or text hold both, this parser's as the expected one and ANTLR's for reference.
 
 The ANTLR grammar has unusual behaviour that this port keeps deliberately, because it decides what is accepted: a dot between
 nodes is optional (`a b` is `a.b`, `1 .a` and `a.` parse), `T(` is one token only without a space, `T(...)` reads any token
@@ -113,7 +114,7 @@ Differences, all deliberate:
 | `Expressions/SpringAST.cs` | The child and sibling links, and the members of `antlr.BaseAST` that remain. |
 
 **Detaching the nodes.** Nodes kept their method names, and only the types of the variables walking them changed from `AST`
-to `SpringAST`, so that the 60 node classes are almost untouched. The evaluation doesn't change.
+to `SpringAST`, so that the 60 node classes are almost untouched. Apart from the stack check in `BaseNode`, the evaluation doesn't change.
 
 **PEG vs LL(2).** A PEG choice can backtrack where ANTLR commits to an alternative after looking at two tokens. Three things keep the same language:
 
@@ -226,12 +227,12 @@ what remains is the first evaluation, so the gain shrinks as expected:
 
 A prepared `GetValue` doesn't depend on the parser, but it pays for the stack check `BaseNode` now does. Arm64, .NET 8, ANTLR then Parlot without
 the check then with it, one short run of each: Small 49 ns, 50 ns, 56 ns; Medium 816 ns, 749 ns, 806 ns; Large 2,042 ns, 1,972 ns, 2,382 ns, with the
-same allocations. So about 8% to 21%, within the noise of this machine only for the smallest gaps. An application that evaluates prepared expressions in a
+same allocations. The last run gave 57 ns, 781 ns and 2,354 ns. So about 4% to 21%, within the noise of this machine for the smallest gaps. An application that evaluates prepared expressions in a
 hot loop gives back that much, for not crashing on a deep tree.
 
-The tables above were measured before the last fixes, which added the check, a field in `Expression` and the guard on named arguments. A new run on
-Arm64 shows no change in parsing beyond the noise (Small 221 ns, Medium 1,161 ns, Large 7,872 ns), and 16 to 520 more bytes per parse, 8 for each primary
-expression (552 B, 2,112 B, 12,608 B). x64 wasn't measured again.
+The tables above were measured before the last fixes, which added the check, the guard on named arguments and a `Then` closing each primary expression,
+with the same allocations. One new run on Arm64 is 5% to 12% slower at parsing than the tables (Small 243 ns, Medium 1,265 ns, Large 8,616 ns). That is within
+what this machine varies under load, though it wasn't isolated, and the ratios to ANTLR stay at 8x to 42x there. x64 wasn't measured again.
 
 `ObjectWrapper.GetPropertyValue` parses the name on each call. `Name` takes the path that only reads a name (`ParseProperty`), `Friends[1].Address.City` the one
 that parses a primary expression (`ParsePrimary`):
@@ -265,3 +266,4 @@ Nothing here blocked the port. Parlot 2.2.1:
 7. **An entry point can't return where it stopped.** A rule without `Eof` needs `When((context, x) => ...)` reading `context.Scanner.Cursor` to check what follows.
 8. **The stack per level is high before tier-up**: in a 1 MB thread, between 200 and 400 levels of parentheses on a first parse in Release, and 96 in the Debug test host. It is far more than ANTLR could reach in practice, and it fails cleanly.
 9. **The generated code is large**: the assembly grows by 75 KB even though 101 ANTLR files and 6,000 generated lines go away. Parsers used twice (`methodOrProperty`, `arguments`) didn't look shared across the choices that use them; this wasn't investigated further.
+10. **The failure overload doesn't say why a parse failed.** Reaching `MaxRecursionDepth` or the end of the stack returns `false` and a position, like a syntax error. The diagnostics overload has the reason but generates the grammar twice. So the message here is a guess from the depth at the failure: from 32 open brackets or prefix operators it says `unexpected token or expression nested too deeply`, including for a plain typo at that depth, and a real stack failure below it reads as an unexpected token.
