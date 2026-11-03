@@ -35,6 +35,11 @@
 
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 
+    <!-- Pack-time API compatibility checks: against the previous major's packages, and between the TFMs of one package.
+         The baseline moves to 4.0.0 once 4.0.0 ships. Accepted differences are in each project's CompatibilitySuppressions.xml. -->
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>3.1.0</PackageValidationBaselineVersion>
+
     <ComVisible>False</ComVisible>
 
     <DebugSymbols>True</DebugSymbols>
