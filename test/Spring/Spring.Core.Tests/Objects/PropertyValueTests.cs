@@ -58,8 +58,11 @@ public sealed class PropertyValueTests
         PropertyValue two = new PropertyValue("Age", 12);
         Assert.That(two, Is.EqualTo(one));
         Assert.That(two.GetHashCode(), Is.EqualTo(one.GetHashCode()));
-        var sameInstance = one;
-        Assert.That(one, Is.EqualTo(sameInstance));
+        Assert.That(one.Equals(one), Is.True);
+        Assert.That(one.Equals(two), Is.True);
+        Assert.That(two.Equals(one), Is.True);
+        Assert.That(one.Equals(new PropertyValue("Age", 13)), Is.False);
+        Assert.That(one.Equals(new PropertyValue("Height", 12)), Is.False);
         Assert.That(one.Equals("Foo"), Is.False);
     }
 

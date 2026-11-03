@@ -294,8 +294,10 @@ public abstract class AbstractAopProxyTests
         ITestCustomer to = CreateProxy(advised) as ITestCustomer;
         Assert.That(to, Is.Not.Null);
         Assert.That(to.Equals(to), Is.True, "identity must be equal");
-        var sameProxy = to;
-        Assert.That(to, Is.EqualTo(sameProxy));
+        ITestCustomer otherProxy = CreateProxy(advised) as ITestCustomer;
+        Assert.That(otherProxy, Is.Not.SameAs(to));
+        Assert.That(to.Equals(otherProxy), Is.True, "proxies of the same target must be equal");
+        Assert.That(otherProxy.Equals(to), Is.True, "equality must be symmetric");
         Assert.That(((IAdvised) to).TargetSource.GetTarget(), Is.EqualTo(to));
     }
 
