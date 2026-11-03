@@ -15,7 +15,6 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Web.Services" />
   </ItemGroup>
 
   <ItemGroup>
