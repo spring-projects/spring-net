@@ -39,8 +39,8 @@ embedded (101 files), the generated lexer and parser, the `Antlr` build target a
 - **No Windows-only tool to change the grammar.** The grammar is C#, compiled by the normal build.
 - **Dependencies.** No package is added at run time for Parlot: `Parlot.SourceGenerator` is a build-only analyzer
   (`PrivateAssets="all"`), which emits the parser into `Spring.Core`. The generated code needs `System.Memory` (now an
-  explicit dependency, it was already there through `Microsoft.Extensions.Logging.Abstractions`) and, on .NET Framework,
-  `System.ValueTuple`, which is new in the package.
+  explicit dependency, it was already there through `Microsoft.Extensions.Logging.Abstractions`) on .NET Framework and
+  .NET Standard 2.0.
 - **The assembly is 8% larger.** `Spring.Core.dll` goes from 908 KB to 983 KB (`netstandard2.0`, Release): the generated
   parser and its embedded support code are larger than the code they replace.
 
@@ -70,7 +70,7 @@ entries. An expression serialized by the previous version was deserialized and e
 
 ## Equivalence
 
-The history of this branch has `ParserDifferentialTests` (commit `40b43984`, removed when ANTLR could no longer run). It
+The history of this branch has `ParserDifferentialTests` (commit `eecad8a5`, removed when ANTLR could no longer run). It
 runs the two parsers side by side, through all four entry points (`Parse`, `ParsePrimary`, `ParseProperty` and
 `ParseLambda`), and compares the printed trees (class, token type, text, children) and the errors. The inputs are 4,204
 strings from the test suite and a hand-written list of edge cases, generated expressions covering each grammar rule, and random mutations
@@ -137,8 +137,7 @@ parameter and `If`, as generating one each would triple the code. `ParseProperty
 
 **Why the generator rather than the `Parlot` runtime package:** `Spring.Core` embeds its parser and is strong-named,
 and the repository already builds with the .NET 10 SDK, which is what the generator requires. A consumer of the package doesn't
-need this SDK. `net462` is below the 4.7.2 floor of the generator, but the code it generates works there:
-four small targets in `Spring.Core.csproj` report 4.7.2 to the generator and give it the `netstandard` facade. The tests below ran on `net462`.
+need this SDK. `net472`, the framework floor of 4.0, is also the floor of the generator, so it needs no MSBuild workaround.
 
 ## Tests
 
@@ -151,6 +150,8 @@ Green reference and result of `Spring.Core.Tests`, whose `ExpressionEvaluatorTes
 
 The 5 failures are the same before and after, and don't touch expressions: currency and percent formatters that depend on the culture of the
 machine. The 32 new tests are `ExpressionGrammarTests`.
+
+These figures predate the rebase onto the 4.0 groundwork. After it, `net10.0` on macOS has 2,494 passed, the same 5 failures and 92 skipped.
 
 ## Benchmarks
 
@@ -255,8 +256,8 @@ that parses a primary expression (`ParsePrimary`):
 
 Nothing here blocked the port. Parlot 2.2.1:
 
-1. **`net462` is refused** (`PARLOT026`, floor 4.7.2), and the package's `netstandard` reference doesn't resolve on its reference assemblies, while the generated code works there. It takes four
-   MSBuild targets. Same finding as Lucene.NET.
+1. **`net462` is refused** (`PARLOT026`, floor 4.7.2), and the package's `netstandard` reference doesn't resolve on its reference assemblies, while the generated code works there. This took four
+   MSBuild targets until the 4.0 floor moved to `net472`. Same finding as Lucene.NET.
 2. **`PARLOT021` is misleading when a call doesn't bind.** `If(() => rule == x, a, If(...))` with parsers whose types made inference fail reported "may only be read inside supported parse-time callbacks"
    rather than the inference error, as the check requires a bound argument. Giving the type, `If<BaseNode>(...)`, fixed it.
 3. **`Unary` can't mix operator types**, although `docs/parsers.md` shows `.Unary((Terms.Char('-'), ...), (Terms.Text("not"), ...))`: `Unary<TInput>(params ...)` can't be inferred.

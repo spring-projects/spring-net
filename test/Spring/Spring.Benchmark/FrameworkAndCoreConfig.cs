@@ -10,7 +10,7 @@ public class FrameworkAndCoreConfig : ManualConfig
 {
     public FrameworkAndCoreConfig()
     {
-        AddJob(Job.Default.WithRuntime(CoreRuntime.Core80));
+        AddJob(Job.Default.WithRuntime(CoreRuntime.Core10_0));
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {

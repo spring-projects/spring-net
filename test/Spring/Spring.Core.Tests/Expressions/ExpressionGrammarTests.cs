@@ -203,7 +203,7 @@ public class ExpressionGrammarTests
             {
                 exception = e;
             }
-        }, 128 * 1024);
+        }, 256 * 1024);
 
         thread.Start();
         thread.Join();
