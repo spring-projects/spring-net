@@ -23,11 +23,11 @@ Plain `dotnet` CLI works too — the solution is `Spring.Net.sln`:
 
 ```
 dotnet build Spring.Net.sln
-dotnet test test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj
-dotnet test test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj -f net10.0 --filter "FullyQualifiedName~XmlObjectFactoryTests"
+dotnet test --project test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj
+dotnet test --project test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj -f net10.0 --filter "FullyQualifiedName~XmlObjectFactoryTests"
 ```
 
-- Test framework is **NUnit 3** (`Spring.Testing.Microsoft.Tests` alone uses MSTest); mocking uses **FakeItEasy**.
+- Test framework is **NUnit 5** (`Spring.Testing.Microsoft.Tests` alone uses MSTest 4), asserting through the constraint model (`Assert.That`, never `ClassicAssert`); mocking uses **FakeItEasy**. Tests run on **Microsoft.Testing.Platform**, selected in `global.json`: every test project is an executable (`OutputType` Exe, `EnableNUnitRunner`), `dotnet test` takes the project as `--project <path>` rather than positionally, and there is no `Microsoft.NET.Test.Sdk`. `./build.cmd Test` writes a TRX file per project under `artifacts/TestResults/`.
 - CI (`.github/workflows/ci.yml`) runs `./build.cmd ci` on windows-latest and `./build.sh ci` on ubuntu-latest for every PR to `main`.
 - **Warnings are errors** in `src/` and `test/` (`TreatWarningsAsErrors=True`), and formatting rule IDE0055 is warning severity — a formatting violation fails the build.
 - Build output goes to `build/$(Configuration)/$(ProjectName)/` (not in-place `bin/`); NuGet packages to `artifacts/`.

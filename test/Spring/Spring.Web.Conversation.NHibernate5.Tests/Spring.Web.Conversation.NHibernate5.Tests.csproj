@@ -13,9 +13,6 @@
     <ProjectReference Include="..\..\..\src\Spring\Spring.Web\Spring.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="System.Data.SQLite.Core" PrivateAssets="None" />
   </ItemGroup>
   <ItemGroup>
@@ -59,5 +56,10 @@
     <Content Include="Data\Spring\Conversation\WebConversationStateTest\TimeOut_WithTimeOut.aspx" />
     <EmbeddedResource Include="Entities\*.hbm.xml" />
   </ItemGroup>
+
+  <!-- NUnitAspEx's ASP.NET host loads page types from bin\*.dll and ignores an executable; ship a .dll copy of the test assembly. -->
+  <Target Name="CopyTestAssemblyAsDll" AfterTargets="CopyFilesToOutputDirectory">
+    <Copy SourceFiles="@(IntermediateAssembly)" DestinationFiles="$(OutDir)$(TargetName).dll" />
+  </Target>
 
 </Project>

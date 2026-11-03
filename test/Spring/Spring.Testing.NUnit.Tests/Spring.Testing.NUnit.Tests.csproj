@@ -12,8 +12,6 @@
   <ItemGroup>
     <PackageReference Include="FakeItEasy" />
     <PackageReference Include="FakeItEasy.Analyzer.CSharp" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NUnit3TestAdapter" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Spring.Testing.NUnit.Tests.build" />
