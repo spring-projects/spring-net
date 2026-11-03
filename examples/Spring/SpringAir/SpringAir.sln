@@ -34,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpringAir.Data.Ado.2010", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpringAir.Data.Ado.Tests.2010", "test\SpringAir.Data.Ado.Tests\SpringAir.Data.Ado.Tests.csproj", "{B0A6F98E-5363-4575-BB6B-A84E91895468}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpringAir.Web.2010.References", "src\SpringAir.Web.2005.References\SpringAir.Web.2010.References.csproj", "{0925F8C7-B2AB-4DD7-AF6D-10DD028C5910}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpringAir.Web.2010.References", "src\SpringAir.Web.2005.References\SpringAir.Web.References.csproj", "{0925F8C7-B2AB-4DD7-AF6D-10DD028C5910}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.2010", "..\..\..\src\Spring\Spring.Web\Spring.Web.csproj", "{A0FEC2A6-6B6A-40B5-959C-97195C4CBF87}"
 EndProject

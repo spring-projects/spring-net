@@ -5,6 +5,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
     <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
     <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Data\Spring.Data.csproj" />
@@ -13,7 +16,6 @@
     <ProjectReference Include="..\SpringAir.Data.Ado\SpringAir.Data.Ado.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Transactions" />
   </ItemGroup>
 </Project>

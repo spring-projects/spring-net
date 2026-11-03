@@ -138,7 +138,6 @@
   <ItemGroup>
     <Content Include="App_Themes\Spring\Spring.skin" />
     <Content Include="Config\Aspects.xml" />
-    <Content Include="Config\Log4Net.xml" />
     <Content Include="Shared\MasterPage.master" />
   </ItemGroup>
   <ItemGroup>
@@ -165,10 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Web.net30.config" />
-    <Content Include="Web.net40.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -203,7 +198,4 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)Web.net40.config"  "$(ProjectDir)Web.config" /Y</PostBuildEvent>
-  </PropertyGroup>
 </Project>
