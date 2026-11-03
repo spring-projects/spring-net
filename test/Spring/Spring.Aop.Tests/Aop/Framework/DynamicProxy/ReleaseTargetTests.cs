@@ -44,6 +44,17 @@ public class ReleaseTargetTests
         int ThrowInt();
         ProbeStruct ThrowStruct();
         string ThrowString();
+        void CallInnerThenCaptureProxy();
+    }
+
+    public interface IThrowingIntroduction
+    {
+        void ThrowIntroduced();
+    }
+
+    public class ThrowingIntroduction : IThrowingIntroduction, AopAlliance.Aop.IAdvice
+    {
+        public void ThrowIntroduced() => throw new InvalidOperationException("boom");
     }
 
     public class ReleaseProbe : IReleaseProbe
@@ -72,6 +83,22 @@ public class ReleaseTargetTests
 
         public virtual string ThrowString() => throw new InvalidOperationException("boom");
 
+        public IReleaseProbe Inner;
+        public object SeenProxy;
+
+        public virtual void CallInnerThenCaptureProxy()
+        {
+            try
+            {
+                Inner.Throw();
+            }
+            catch (InvalidOperationException)
+            {
+            }
+
+            SeenProxy = AopContext.CurrentProxy;
+        }
+
         public bool ThrowFromObjectMethods;
 
         public override bool Equals(object obj) => ThrowFromObjectMethods ? throw new InvalidOperationException("boom") : base.Equals(obj);
@@ -89,9 +116,21 @@ public class ReleaseTargetTests
         }
     }
 
-    private static IReleaseProbe CreateProxy(ITargetSource targetSource, bool decorator, bool advised, AopAlliance.Aop.IAdvice advice = null)
+    [SetUp]
+    [TearDown]
+    public void DrainAopContext()
+    {
+        // the proxy stack is thread-static; start and end every test with it empty
+        while (AopContext.IsActive)
+        {
+            AopContext.PopProxy();
+        }
+    }
+
+    private static IReleaseProbe CreateProxy(ITargetSource targetSource, bool decorator, bool advised, AopAlliance.Aop.IAdvice advice = null, bool exposeProxy = false)
     {
         ProxyFactory factory = new ProxyFactory();
+        factory.ExposeProxy = exposeProxy;
         factory.TargetSource = targetSource;
         if (decorator)
         {
@@ -283,5 +322,67 @@ public class ReleaseTargetTests
         {
             pool.Dispose();
         }
+    }
+
+    [TestCase(false, false)]
+    [TestCase(false, true)]
+    [TestCase(true, false)]
+    [TestCase(true, true)]
+    public void ExposedProxyIsPoppedWhenCallThrows(bool decorator, bool advised)
+    {
+        MockTargetSource targetSource = CreateCountingTargetSource(out _);
+        IReleaseProbe proxy = CreateProxy(targetSource, decorator, advised, exposeProxy: true);
+
+        Assert.That(() => proxy.Throw(), Throws.TypeOf<InvalidOperationException>());
+        Assert.That(AopContext.IsActive, Is.False, "proxy stack leaked an entry after a throwing call");
+        AssertBalanced(targetSource, 1);
+
+        Assert.That(() => proxy.ThrowInt(), Throws.TypeOf<InvalidOperationException>());
+        Assert.That(AopContext.IsActive, Is.False);
+
+        proxy.DoVoid();
+        Assert.That(AopContext.IsActive, Is.False);
+    }
+
+    [TestCase(false, false)]
+    [TestCase(false, true)]
+    [TestCase(true, false)]
+    [TestCase(true, true)]
+    public void OuterProxyStaysCurrentAfterInnerCallThrows(bool decorator, bool advised)
+    {
+        MockTargetSource innerSource = CreateCountingTargetSource(out _);
+        IReleaseProbe inner = CreateProxy(innerSource, decorator, advised, exposeProxy: true);
+        MockTargetSource outerSource = CreateCountingTargetSource(out ReleaseProbe outerProbe);
+        outerProbe.Inner = inner;
+        IReleaseProbe outer = CreateProxy(outerSource, decorator, advised, exposeProxy: true);
+
+        outer.CallInnerThenCaptureProxy();
+
+        Assert.That(outerProbe.SeenProxy, Is.SameAs(outer));
+        Assert.That(AopContext.IsActive, Is.False);
+        AssertBalanced(innerSource, 1);
+        AssertBalanced(outerSource, 1);
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public void ExposedProxyIsPoppedWhenIntroducedMethodThrows(bool decorator)
+    {
+        MockTargetSource targetSource = CreateCountingTargetSource(out _);
+        ProxyFactory factory = new ProxyFactory();
+        factory.ExposeProxy = true;
+        factory.TargetSource = targetSource;
+        factory.ProxyTargetType = decorator;
+        if (!decorator)
+        {
+            factory.AddInterface(typeof(IReleaseProbe));
+        }
+
+        factory.AddIntroduction(new Spring.Aop.Support.DefaultIntroductionAdvisor(new ThrowingIntroduction(), typeof(IThrowingIntroduction)));
+        IThrowingIntroduction proxy = (IThrowingIntroduction) factory.GetProxy();
+
+        Assert.That(() => proxy.ThrowIntroduced(), Throws.TypeOf<InvalidOperationException>());
+
+        Assert.That(AopContext.IsActive, Is.False, "proxy stack leaked an entry after a throwing introduced call");
     }
 }

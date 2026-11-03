@@ -101,6 +101,12 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
 
     private static Dictionary<Type, OpCode> ldindOpCodes;
 
+    /// <summary>
+    /// Records whether this call pushed the proxy on the <see cref="AopContext"/> stack
+    /// (i.e. whether <c>ExposeProxy</c> was set), so that exactly the calls that pushed also pop.
+    /// </summary>
+    private LocalBuilder proxyExposed;
+
     static AbstractAopProxyMethodBuilder()
     {
         ldindOpCodes = new Dictionary<Type, OpCode>();
@@ -188,7 +194,17 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
         GenerateOnProxyTargetMethodCacheField(il, method);
 
         BeginMethod(il, method);
+
+        // Everything between the push and the pop of the exposed proxy runs inside a try,
+        // and the pop is in the finally, so the AopContext stack is restored even when the
+        // advice chain or the target throws. The stack is empty at both ends of the region
+        // and the result lives in the returnValue local, which EndMethod loads afterwards.
+        il.BeginExceptionBlock();
         GenerateMethodLogic(il, method, interfaceMethod);
+        il.BeginFinallyBlock();
+        PopExposedProxy(il);
+        il.EndExceptionBlock();
+
         EndMethod(il, method);
     }
 
@@ -346,6 +362,7 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
         interceptors = il.DeclareLocal(typeof(System.Collections.IList));
         targetType = il.DeclareLocal(typeof(Type));
         arguments = il.DeclareLocal(typeof(Object[]));
+        proxyExposed = il.DeclareLocal(typeof(bool));
 
         if (method.IsGenericMethodDefinition)
         {
@@ -383,17 +400,11 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
     /// <param name="method">The method to proxy.</param>
     protected virtual void BeginMethod(ILGenerator il, MethodInfo method)
     {
-        Label jmpProxyNotExposed = il.DefineLabel();
-
-        // set current proxy to this object
+        // remember whether the proxy is exposed, so the pop mirrors the push
         PushAdvisedProxy(il);
         il.Emit(OpCodes.Ldfld, References.AdvisedField);
         il.EmitCall(OpCodes.Callvirt, References.ExposeProxyProperty, null);
-        il.Emit(OpCodes.Brfalse_S, jmpProxyNotExposed);
-        il.Emit(OpCodes.Ldarg_0);
-        il.EmitCall(OpCodes.Call, References.PushProxyMethod, null);
-
-        il.MarkLabel(jmpProxyNotExposed);
+        il.Emit(OpCodes.Stloc, proxyExposed);
 
         // initialize targetType
         PushTargetType(il);
@@ -405,6 +416,32 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
         PushTargetMethodInfo(il, method);
         il.EmitCall(OpCodes.Call, References.GetInterceptorsMethod, null);
         il.Emit(OpCodes.Stloc, interceptors);
+
+        // set current proxy to this object; this comes last, right before the protected
+        // region, so nothing that can fail sits between the push and the try
+        Label jmpProxyNotExposed = il.DefineLabel();
+        il.Emit(OpCodes.Ldloc, proxyExposed);
+        il.Emit(OpCodes.Brfalse_S, jmpProxyNotExposed);
+        il.Emit(OpCodes.Ldarg_0);
+        il.EmitCall(OpCodes.Call, References.PushProxyMethod, null);
+
+        il.MarkLabel(jmpProxyNotExposed);
+    }
+
+    /// <summary>
+    /// Emits the code that resets the current proxy to its old value, if this call exposed it.
+    /// Runs in the finally block of the method.
+    /// </summary>
+    /// <param name="il">The IL generator to use.</param>
+    private void PopExposedProxy(ILGenerator il)
+    {
+        Label jmpProxyNotExposed = il.DefineLabel();
+
+        il.Emit(OpCodes.Ldloc, proxyExposed);
+        il.Emit(OpCodes.Brfalse_S, jmpProxyNotExposed);
+        il.EmitCall(OpCodes.Call, References.PopProxyMethod, null);
+
+        il.MarkLabel(jmpProxyNotExposed);
     }
 
     /// <summary>
@@ -570,17 +607,7 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
     /// <param name="method">The method to proxy.</param>
     protected virtual void EndMethod(ILGenerator il, MethodInfo method)
     {
-        Label jmpProxyNotExposed = il.DefineLabel();
-
-        // reset current proxy to old value
-        PushAdvisedProxy(il);
-        il.Emit(OpCodes.Ldfld, References.AdvisedField);
-        il.EmitCall(OpCodes.Callvirt, References.ExposeProxyProperty, null);
-        il.Emit(OpCodes.Brfalse_S, jmpProxyNotExposed);
-        il.EmitCall(OpCodes.Call, References.PopProxyMethod, null);
-
-        il.MarkLabel(jmpProxyNotExposed);
-
+        // the exposed proxy has already been reset in the finally block (see GenerateMethod)
         if (methodReturnsValue)
         {
             il.Emit(OpCodes.Ldloc, returnValue);
