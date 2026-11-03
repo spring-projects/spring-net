@@ -141,13 +141,6 @@ partial class Build : FalloutBuild
         {
             foreach (var solutionFile in ExamplesDirectory.GlobFiles("**/*.sln"))
             {
-                if (solutionFile.ToString().Contains("Spring.Examples.Pool")
-                    || solutionFile.ToString().Contains("SpringAir")
-                    || solutionFile.ToString().Contains("Spring.WebQuickStart"))
-                {
-                    continue;
-                }
-
                 MSBuild(s => s
                     .SetTargets("Restore", "Rebuild")
                     .SetConfiguration(Configuration)
