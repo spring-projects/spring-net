@@ -24,7 +24,7 @@ Plain `dotnet` CLI works too — the solution is `Spring.Net.sln`:
 ```
 dotnet build Spring.Net.sln
 dotnet test test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj
-dotnet test test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj -f net8.0 --filter "FullyQualifiedName~XmlObjectFactoryTests"
+dotnet test test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj -f net10.0 --filter "FullyQualifiedName~XmlObjectFactoryTests"
 ```
 
 - Test framework is **NUnit 3** (`Spring.Testing.Microsoft.Tests` alone uses MSTest); mocking uses **FakeItEasy**.
@@ -34,7 +34,7 @@ dotnet test test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj -f net8.0 --f
 
 ### Integration tests
 
-Fallout's `Test` target excludes `*.Integration.Tests` projects (and `Spring.Web.Conversation.NHibernate5.Tests`) by default; they need external infrastructure and are gated behind flags: `--test-full`, `--test-integration-data`, `--test-integration-nms`, `--test-integration-ms-mq`, `--test-integration-ems`. `Spring.Services.Tests` is always excluded. Several test projects are Windows-only (net462: Web, Mvc5, Velocity, Messaging/MSMQ).
+Fallout's `Test` target excludes `*.Integration.Tests` projects (and `Spring.Web.Conversation.NHibernate5.Tests`) by default; they need external infrastructure and are gated behind flags: `--test-full`, `--test-integration-data`, `--test-integration-nms`, `--test-integration-ms-mq`, `--test-integration-ems`. `Spring.Services.Tests` is always excluded. Several test projects are Windows-only (net472: Web, Mvc5, Velocity, Messaging/MSMQ).
 
 - SQL Server-backed tests (`Spring.Data.Integration.Tests`, `Spring.Data.NHibernate5.Integration.Tests`, `Spring.Scheduling.Quartz3.Integration.Tests`): `docker-compose.yml` brings up SQL Server; setup scripts in `build-support/*.sql` and the test projects' `Data/` folders. See README.md "Running tests" for the full recipe.
 - TIBCO EMS projects need `TIBCO.EMS.dll` (not in the repo) and are excluded from the solution build; enable with `--build-ems`.
@@ -49,8 +49,8 @@ Fallout's `Test` target excludes `*.Integration.Tests` projects (and `Spring.Web
 | Spring.Aop | AOP framework (dynamic proxies, advice, pointcuts) |
 | Spring.Data | Transaction management + ADO.NET framework |
 | Spring.Data.NHibernate5 | NHibernate 5 integration (RootNamespace `Spring.Data.NHibernate`) |
-| Spring.Web / .Extensions / .Mvc5 | ASP.NET WebForms / AJAX / MVC5+WebAPI integration (net462 only) |
-| Spring.Services | Remoting, web services, Enterprise Services (net462 only) |
+| Spring.Web / .Extensions / .Mvc5 | ASP.NET WebForms / AJAX / MVC5+WebAPI integration (net472 only) |
+| Spring.Services | Remoting, web services, Enterprise Services (net472 only) |
 | Spring.Messaging / .Nms / .Ems | MSMQ / Apache NMS / TIBCO EMS integration |
 | Spring.Scheduling.Quartz3 | Quartz.NET 3.x integration |
 | Spring.Template.Velocity(.Castle) | NVelocity templating |
@@ -58,7 +58,7 @@ Fallout's `Test` target excludes `*.Integration.Tests` projects (and `Spring.Web
 
 Key mechanics (defined in `src/Directory.Build.props` and `test/Directory.Build.props` — there is **no root** Directory.Build.props):
 
-- **Multi-targeting**: most libraries target `netstandard2.0;net462`; web/services/EMS projects are net462-only. Projects reference the shared MSBuild variable `$(TargetFullFrameworkVersion)` (= net462) instead of literal TFMs. Framework differences are handled with conditional `<Compile Remove>`/`<ItemGroup>` blocks in csproj files, not scattered `#if` directives.
+- **Multi-targeting**: most libraries target `netstandard2.0;net472`; web/services/EMS projects are net472-only. Projects reference the shared MSBuild variable `$(TargetFullFrameworkVersion)` (= net472) instead of literal TFMs. Framework differences are handled with conditional `<Compile Remove>`/`<ItemGroup>` blocks in csproj files, not scattered `#if` directives.
 - **Strong naming**: all assemblies signed with the committed `Spring.Net.snk`.
 - **Central package management**: versions live in `Directory.Packages.props`; csproj `PackageReference`s are versionless.
 - **ANTLR expression parser**: the grammar is `src/Spring/Spring.Core/Expressions/Expression.g`. The generated lexer/parser under `Expressions/Parser/` and a vendored, hand-patched ANTLR 2.7.7 runtime under `Expressions/Parser/antlr/` are **committed — never hand-edit generated files**; regenerate with `./build.cmd Antlr` (see `src/Spring/Spring.Core/README_ANTLR.txt`).

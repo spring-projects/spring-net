@@ -42,7 +42,7 @@ public partial class Build
 
                     if (!EnvironmentInfo.IsWin)
                     {
-                        s = s.SetFramework("net6.0");
+                        s = s.SetFramework("net10.0");
                     }
 
                     return s;
