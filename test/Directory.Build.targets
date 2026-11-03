@@ -1,0 +1,24 @@
+<Project>
+
+  <!-- A test project that uses another framework sets UseNUnit to false in its body. The body is evaluated after
+       Directory.Build.props, so a property condition there cannot see it; this file is evaluated after the body. -->
+  <PropertyGroup Condition=" '$(UseNUnit)' == 'false' ">
+    <EnableNUnitRunner>false</EnableNUnitRunner>
+  </PropertyGroup>
+
+  <!-- The tests assert through the constraint model only, Assert.That(actual, Is.EqualTo(expected)). NUnit 5 still ships the
+       classic model in nunit.framework.legacy.dll: ClassicAssert, StringAssert, CollectionAssert, FileAssert, DirectoryAssert,
+       and the extension members that make Assert.AreEqual(...), Assert.IsTrue(...) and the like compile on Assert. Dropping
+       that assembly from the compiler's references turns every use into a compile error (CS0234, CS0246, CS0117), which the
+       NUnit.Analyzers classic-model rules (NUnit2xxx) cannot do: they skip FileAssert, DirectoryAssert and the Assert
+       extension members. The assembly stays in the output, so NUnit itself is unaffected. -->
+  <Target Name="BanNUnitClassicAssertModel"
+          AfterTargets="FindReferenceAssembliesForReferences"
+          BeforeTargets="CoreCompile"
+          Condition=" '$(UseNUnit)' != 'false' ">
+    <ItemGroup>
+      <ReferencePathWithRefAssemblies Remove="@(ReferencePathWithRefAssemblies->WithMetadataValue('Filename', 'nunit.framework.legacy'))" />
+    </ItemGroup>
+  </Target>
+
+</Project>
