@@ -1,1 +1,0 @@
-cmd.exe /c "echo aaa | powershell.exe %*"
