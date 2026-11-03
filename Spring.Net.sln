@@ -21,10 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Aop", "src\Spring\Sp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Aop.Tests", "test\Spring\Spring.Aop.Tests\Spring.Aop.Tests.csproj", "{2111596A-0327-4C9D-8919-294FBD988A23}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Services", "src\Spring\Spring.Services\Spring.Services.csproj", "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Services.Tests", "test\Spring\Spring.Services.Tests\Spring.Services.Tests.csproj", "{4374F018-9738-46BF-A399-4594CEE75B21}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web", "src\Spring\Spring.Web\Spring.Web.csproj", "{BA4789EB-281A-48EA-8763-28B9F0596A18}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.Tests", "test\Spring\Spring.Web.Tests\Spring.Web.Tests.csproj", "{C67E47AA-1ACD-41B4-A465-4D336A2319CA}"
@@ -34,8 +30,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Data.Tests", "test\Spring\Spring.Data.Tests\Spring.Data.Tests.csproj", "{ACD39D47-1811-40FA-9E7E-5DEA5B9CE6C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Data.Integration.Tests", "test\Spring\Spring.Data.Integration.Tests\Spring.Data.Integration.Tests.csproj", "{91766D21-C568-459F-9BEA-759B011F23CF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.Extensions", "src\Spring\Spring.Web.Extensions\Spring.Web.Extensions.csproj", "{E5E287D2-EE2C-4C99-87CA-EB27B35ABF7B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Testing.NUnit", "src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.csproj", "{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}"
 EndProject
@@ -49,23 +43,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging", "src\Spr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Tests", "test\Spring\Spring.Messaging.Tests\Spring.Messaging.Tests.csproj", "{41BC3AEA-7EB3-48BF-B1EC-84119376AC98}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Template.Velocity", "src\Spring\Spring.Template.Velocity\Spring.Template.Velocity.csproj", "{BF3AB954-8375-407C-9E98-4C51D8072784}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Template.Velocity.Tests", "test\Spring\Spring.Template.Velocity.Tests\Spring.Template.Velocity.Tests.csproj", "{10405837-CB67-40D8-9326-84C9383983E2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Testing.Microsoft", "src\Spring\Spring.Testing.Microsoft\Spring.Testing.Microsoft.csproj", "{2E10A8D3-B8FF-4699-90B8-E621659C58DD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Testing.Microsoft.Tests", "test\Spring\Spring.Testing.Microsoft.Tests\Spring.Testing.Microsoft.Tests.csproj", "{7321149A-47C6-4FBA-9D1A-26FD6815381B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Ems", "src\Spring\Spring.Messaging.Ems\Spring.Messaging.Ems.csproj", "{900E3839-301E-48B1-BAEB-B6645620ACFF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Scheduling.Quartz3", "src\Spring\Spring.Scheduling.Quartz3\Spring.Scheduling.Quartz3.csproj", "{E823D54C-CE82-4868-929F-5F95A999F123}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Scheduling.Quartz3.Integration.Tests", "test\Spring\Spring.Scheduling.Quartz3.Integration.Tests\Spring.Scheduling.Quartz3.Integration.Tests.csproj", "{8CF0F34A-CC93-4D87-AE14-A2DEEF072F26}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Scheduling.Quartz3.Tests", "test\Spring\Spring.Scheduling.Quartz3.Tests\Spring.Scheduling.Quartz3.Tests.csproj", "{247787CF-ECE1-4675-8B42-7DF4329A4891}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Ems.Integration.Tests", "test\Spring\Spring.Messaging.Ems.Integration.Tests\Spring.Messaging.Ems.Integration.Tests.csproj", "{FA934E92-C8C2-428A-BE2A-26818F17A787}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Nms.Integration.Tests", "test\Spring\Spring.Messaging.Nms.Integration.Tests\Spring.Messaging.Nms.Integration.Tests.csproj", "{E5323AC8-137E-4EF7-BC62-3BD6FC0576CD}"
 EndProject
@@ -76,10 +62,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.Mvc5", "src\Spring\Spring.Web.Mvc5\Spring.Web.Mvc5.csproj", "{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.Mvc5.Tests", "test\Spring\Spring.Web.Mvc5.Tests\Spring.Web.Mvc5.Tests.csproj", "{B9590252-6D58-4587-950C-475AB61FDBCF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Template.Velocity.Castle", "src\Spring\Spring.Template.Velocity.Castle\Spring.Template.Velocity.Castle.csproj", "{250601C0-A4AC-41FE-B484-51A9B0D5473D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Template.Velocity.Castle.Tests", "test\Spring\Spring.Template.Velocity.Castle.Tests\Spring.Template.Velocity.Castle.Tests.csproj", "{8D6ED392-8A1F-41C0-A765-22CF384EDEA1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Data.NHibernate5", "src\Spring\Spring.Data.NHibernate5\Spring.Data.NHibernate5.csproj", "{26604974-B6B8-45BA-A72A-66574ADC498B}"
 EndProject
@@ -101,10 +83,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{C0BA
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{76CA894B-7F4F-4F5B-8EFD-FF5253C6FCCE}"
-ProjectSection(SolutionItems) = preProject
-	.github\workflows\ci.yml = .github\workflows\ci.yml
-	.github\workflows\publish.yml = .github\workflows\publish.yml
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -128,14 +110,6 @@ Global
 		{2111596A-0327-4C9D-8919-294FBD988A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2111596A-0327-4C9D-8919-294FBD988A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2111596A-0327-4C9D-8919-294FBD988A23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4374F018-9738-46BF-A399-4594CEE75B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4374F018-9738-46BF-A399-4594CEE75B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4374F018-9738-46BF-A399-4594CEE75B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4374F018-9738-46BF-A399-4594CEE75B21}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA4789EB-281A-48EA-8763-28B9F0596A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA4789EB-281A-48EA-8763-28B9F0596A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA4789EB-281A-48EA-8763-28B9F0596A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -156,10 +130,6 @@ Global
 		{91766D21-C568-459F-9BEA-759B011F23CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91766D21-C568-459F-9BEA-759B011F23CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91766D21-C568-459F-9BEA-759B011F23CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5E287D2-EE2C-4C99-87CA-EB27B35ABF7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5E287D2-EE2C-4C99-87CA-EB27B35ABF7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5E287D2-EE2C-4C99-87CA-EB27B35ABF7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5E287D2-EE2C-4C99-87CA-EB27B35ABF7B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -184,14 +154,6 @@ Global
 		{41BC3AEA-7EB3-48BF-B1EC-84119376AC98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41BC3AEA-7EB3-48BF-B1EC-84119376AC98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41BC3AEA-7EB3-48BF-B1EC-84119376AC98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF3AB954-8375-407C-9E98-4C51D8072784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF3AB954-8375-407C-9E98-4C51D8072784}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF3AB954-8375-407C-9E98-4C51D8072784}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF3AB954-8375-407C-9E98-4C51D8072784}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10405837-CB67-40D8-9326-84C9383983E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10405837-CB67-40D8-9326-84C9383983E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10405837-CB67-40D8-9326-84C9383983E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10405837-CB67-40D8-9326-84C9383983E2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -200,8 +162,6 @@ Global
 		{7321149A-47C6-4FBA-9D1A-26FD6815381B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7321149A-47C6-4FBA-9D1A-26FD6815381B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7321149A-47C6-4FBA-9D1A-26FD6815381B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{900E3839-301E-48B1-BAEB-B6645620ACFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E823D54C-CE82-4868-929F-5F95A999F123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E823D54C-CE82-4868-929F-5F95A999F123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E823D54C-CE82-4868-929F-5F95A999F123}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -214,8 +174,6 @@ Global
 		{247787CF-ECE1-4675-8B42-7DF4329A4891}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{247787CF-ECE1-4675-8B42-7DF4329A4891}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{247787CF-ECE1-4675-8B42-7DF4329A4891}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA934E92-C8C2-428A-BE2A-26818F17A787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA934E92-C8C2-428A-BE2A-26818F17A787}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5323AC8-137E-4EF7-BC62-3BD6FC0576CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E5323AC8-137E-4EF7-BC62-3BD6FC0576CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5323AC8-137E-4EF7-BC62-3BD6FC0576CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -236,14 +194,6 @@ Global
 		{B9590252-6D58-4587-950C-475AB61FDBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{250601C0-A4AC-41FE-B484-51A9B0D5473D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{250601C0-A4AC-41FE-B484-51A9B0D5473D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{250601C0-A4AC-41FE-B484-51A9B0D5473D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{250601C0-A4AC-41FE-B484-51A9B0D5473D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D6ED392-8A1F-41C0-A765-22CF384EDEA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D6ED392-8A1F-41C0-A765-22CF384EDEA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D6ED392-8A1F-41C0-A765-22CF384EDEA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D6ED392-8A1F-41C0-A765-22CF384EDEA1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26604974-B6B8-45BA-A72A-66574ADC498B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26604974-B6B8-45BA-A72A-66574ADC498B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26604974-B6B8-45BA-A72A-66574ADC498B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -277,5 +227,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {803E6B42-7DEE-4DCC-83D0-51925047BCB0}
+		NAntAddinLastFileName = Spring.build
 	EndGlobalSection
 EndGlobal

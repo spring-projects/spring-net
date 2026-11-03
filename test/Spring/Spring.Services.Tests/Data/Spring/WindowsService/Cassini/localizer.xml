@@ -1,6 +1,0 @@
-<objects>
-    <object
-            name="localizer"
-            type="Spring.Services.WindowsService.Common.Localizer+ForApplication">
-    </object>
-</objects>

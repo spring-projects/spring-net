@@ -61,7 +61,6 @@ PrecompiledWeb
 /src/Spring/Spring.Data.NHibernate3/Spring.Data.NHibernate3.xml
 /src/Spring/Spring.Data.NHibernate4/Spring.Data.NHibernate4.xml
 /src/Spring/Spring.Data.NHibernate5/Spring.Data.NHibernate5.xml
-/src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.xml
 /src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.xml
 /src/Spring/Spring.Messaging/Spring.Messaging.xml
 /src/Spring/Spring.Data/Spring.Data.xml
@@ -72,11 +71,7 @@ PrecompiledWeb
 /src/Spring/Spring.Web.Mvc4/Spring.Web.Mvc4.xml
 /src/Spring/Spring.Web.Mvc5/Spring.Web.Mvc5.xml
 /src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.xml
-/src/Spring/Spring.Services/Spring.Services.xml
-/src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.xml
 /src/Spring/Spring.Scheduling.Quartz2/Spring.Scheduling.Quartz2.xml
-/src/Spring/Spring.Template.Velocity.Castle/Spring.Template.Velocity.Castle.xml
-/src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.xml
 /src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.xml
 /src/Spring/Spring.Web.Conversation.NHibernate3/Spring.Web.Conversation.NHibernate3.xml
 

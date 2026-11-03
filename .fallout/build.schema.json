@@ -119,10 +119,6 @@
   "allOf": [
     {
       "properties": {
-        "BuildEms": {
-          "type": "boolean",
-          "description": "Build EMS"
-        },
         "Configuration": {
           "type": "string",
           "enum": [
@@ -151,9 +147,6 @@
           "type": "boolean"
         },
         "TestIntegrationData": {
-          "type": "boolean"
-        },
-        "TestIntegrationEms": {
           "type": "boolean"
         },
         "TestIntegrationMsMq": {

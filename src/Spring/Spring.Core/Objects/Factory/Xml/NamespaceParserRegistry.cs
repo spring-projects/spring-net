@@ -83,18 +83,10 @@ public class NamespaceParserRegistry
             "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
         wellknownNamespaceParserTypeNames["http://www.springframework.net/database"] =
             "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
-        wellknownNamespaceParserTypeNames["http://www.springframework.net/remoting"] =
-            "Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services";
-        wellknownNamespaceParserTypeNames["http://www.springframework.net/wcf"] =
-            "Spring.ServiceModel.Config.WcfNamespaceParser, Spring.Services";
         wellknownNamespaceParserTypeNames["http://www.springframework.net/nms"] =
             "Spring.Messaging.Nms.Config.NmsNamespaceParser, Spring.Messaging.Nms";
-        wellknownNamespaceParserTypeNames["http://www.springframework.net/ems"] =
-            "Spring.Messaging.Ems.Config.EmsNamespaceParser, Spring.Messaging.Ems";
         wellknownNamespaceParserTypeNames["http://www.springframework.net/validation"] =
             "Spring.Validation.Config.ValidationNamespaceParser, Spring.Core";
-        wellknownNamespaceParserTypeNames["http://www.springframework.net/nvelocity"] =
-            "Spring.Template.Velocity.Config.TemplateNamespaceParser, Spring.Template.Velocity";
 
         Reset();
     }
