@@ -124,9 +124,10 @@ internal static partial class ExpressionGrammar
         var primary = startNode.Then(static x => Primary(x)).Operators()
             .Postfix(
                 (node, static (x, child) => AppendToPrimary(x, child)),
-                (Terms.Scan(ScanDot, "."), static (x, _) => x));
+                (Terms.Scan(ScanDot, "."), static (x, _) => x))
+            .Then(static x => FinishPrimary(x));
 
-        var unary = primary
+        var unary = primary.Operators()
             .Unary(
                 (Terms.Char('+'), static x => Operator(new OpUnaryPlus(), PLUS, "+", x)),
                 (Terms.Char('-'), static x => Operator(new OpUnaryMinus(), MINUS, "-", x)),

@@ -99,19 +99,31 @@ internal static partial class ExpressionGrammar
         return offset;
     }
 
-    private static int ScanLeftCurly(ReadOnlySpan<char> span) => CharAt(span, 0) == '{' && CharAt(span, 1) != '|' ? 1 : 0;
+    /// <summary>The token of this type at the start of the text, which isn't the start of a longer one.</summary>
+    private static int ScanToken(ReadOnlySpan<char> span, int expected)
+    {
+        if (span.IsEmpty)
+        {
+            return 0;
+        }
 
-    private static int ScanAssign(ReadOnlySpan<char> span) => CharAt(span, 0) == '=' && CharAt(span, 1) != '=' ? 1 : 0;
+        var length = NextToken(span, out var type);
+        return type == expected ? length : 0;
+    }
 
-    private static int ScanDollar(ReadOnlySpan<char> span) => CharAt(span, 0) == '$' && CharAt(span, 1) != '{' ? 1 : 0;
+    private static int ScanLeftCurly(ReadOnlySpan<char> span) => ScanToken(span, LCURLY);
 
-    private static int ScanPower(ReadOnlySpan<char> span) => CharAt(span, 0) == '^' && CharAt(span, 1) != '{' ? 1 : 0;
+    private static int ScanAssign(ReadOnlySpan<char> span) => ScanToken(span, ASSIGN);
+
+    private static int ScanDollar(ReadOnlySpan<char> span) => ScanToken(span, DOLLAR);
+
+    private static int ScanPower(ReadOnlySpan<char> span) => ScanToken(span, POWER);
 
     private static int ScanDot(ReadOnlySpan<char> span) => CharAt(span, 0) == '.' && !IsDigit(CharAt(span, 1)) ? 1 : 0;
 
-    private static int ScanBang(ReadOnlySpan<char> span) => CharAt(span, 0) == '!' && CharAt(span, 1) != '=' && CharAt(span, 1) != '{' ? 1 : 0;
+    private static int ScanBang(ReadOnlySpan<char> span) => ScanToken(span, BANG);
 
-    private static int ScanQuestion(ReadOnlySpan<char> span) => CharAt(span, 0) == '?' && CharAt(span, 1) != '?' && CharAt(span, 1) != '{' ? 1 : 0;
+    private static int ScanQuestion(ReadOnlySpan<char> span) => ScanToken(span, QMARK);
 
     private static int ScanWord(ReadOnlySpan<char> span)
     {
@@ -589,13 +601,30 @@ internal static partial class ExpressionGrammar
         return node;
     }
 
+    // While a primary expression is read its first child is the last one, whose next sibling is the first one, so that a
+    // long path doesn't walk its nodes for each one
+    private static BaseNode Primary(BaseNode startNode)
+    {
+        startNode.setNextSibling(startNode);
+        return Operator(new Expression(), EXPR, "expression", startNode);
+    }
+
     private static BaseNode AppendToPrimary(BaseNode primary, BaseNode child)
     {
-        ((Expression) primary).AppendParsedChild(child);
+        var last = primary.getFirstChild();
+        child.setNextSibling(last.getNextSibling());
+        last.setNextSibling(child);
+        primary.setFirstChild(child);
         return primary;
     }
 
-    private static BaseNode Primary(BaseNode startNode) => AppendToPrimary(WithType(new Expression(), EXPR, "expression"), startNode);
+    private static BaseNode FinishPrimary(BaseNode primary)
+    {
+        var last = primary.getFirstChild();
+        primary.setFirstChild(last.getNextSibling());
+        last.setNextSibling(null);
+        return primary;
+    }
 
     private static BaseNode MethodOrProperty(string name, IReadOnlyList<BaseNode> arguments) =>
         arguments == null ? WithType(new PropertyOrFieldNode(), ID, name) : Node(new MethodNode(), ID, name, arguments);

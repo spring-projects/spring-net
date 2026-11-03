@@ -43,6 +43,14 @@ public class ExpressionGrammarTests
         }
     }
 
+    /// <summary>Fails instead of hanging when parsing takes much longer than it should.</summary>
+    private static IExpression ParseWithinTimeLimit(string input)
+    {
+        var task = Task.Run(() => Expression.Parse(input));
+        Assert.That(Task.WaitAny(new Task[] { task }, TimeSpan.FromSeconds(5)), Is.EqualTo(0), "Parsing took too long");
+        return task.GetAwaiter().GetResult();
+    }
+
     private static string Describe(Func<IExpression> parse)
     {
         try
@@ -56,31 +64,32 @@ public class ExpressionGrammarTests
     }
 
     /// <summary>
-    /// The trees and syntax errors of the ANTLR 2 parser that this grammar replaced, when it was removed. A difference was
-    /// accepted only in the position or text of an error, that the new parser reports at the token it could not read.
+    /// The trees and syntax errors of the ANTLR 2 parser that this grammar replaced, written by that parser. The entries
+    /// with five items are the errors with a deliberate difference: the position or text of this parser, at the token it
+    /// could not read, then those of the former one, kept for reference.
     /// </summary>
     [Test]
-    public void SameTreesAsTheFormerParser()
+    public void SameTreesAndErrorsAsTheFormerParser()
     {
-        var root = TestContext.CurrentContext.TestDirectory;
-        while (!Directory.Exists(Path.Combine(root, "test")))
+        string[][] entries;
+        using (var stream = typeof(ExpressionGrammarTests).Assembly.GetManifestResourceStream("Spring.Expressions.ExpressionGrammarGolden.json"))
+        using (var reader = new StreamReader(stream))
         {
-            root = Path.GetDirectoryName(root);
+            entries = JsonConvert.DeserializeObject<string[][]>(reader.ReadToEnd());
         }
 
-        var file = Path.Combine(root, "test", "Spring", "Spring.Core.Tests", "Expressions", "ExpressionGrammarGolden.json");
         var failures = new StringBuilder();
-        foreach (var entry in JsonConvert.DeserializeObject<string[][]>(File.ReadAllText(file)))
+        foreach (var entry in entries)
         {
             var input = entry[0];
             var expression = Describe(() => Expression.Parse(input));
-            if (expression != entry[1] && (!expression.StartsWith("ERROR") || !entry[1].StartsWith("ERROR")))
+            var primary = Describe(() => Internal<IExpression>("ParsePrimary", input));
+            if (expression != entry[1])
             {
                 failures.AppendLine($"{input}{Environment.NewLine}  expected {entry[1]}{Environment.NewLine}  actual   {expression}");
             }
 
-            var primary = Describe(() => Internal<IExpression>("ParsePrimary", input));
-            if (primary != entry[2] && (!primary.StartsWith("ERROR") || !entry[2].StartsWith("ERROR")))
+            if (primary != entry[2])
             {
                 failures.AppendLine($"primary {input}{Environment.NewLine}  expected {entry[2]}{Environment.NewLine}  actual   {primary}");
             }
@@ -138,7 +147,7 @@ public class ExpressionGrammarTests
     {
         // The former parser read each parenthesis twice: this one took 3 s at depth 18 and doubled with each level
         var input = new string('(', 50) + "1" + new string(')', 50);
-        Assert.That(Expression.Parse(input).GetValue(), Is.EqualTo(1));
+        Assert.That(ParseWithinTimeLimit(input).GetValue(), Is.EqualTo(1));
     }
 
     [TestCase("(", ")")]
@@ -165,7 +174,7 @@ public class ExpressionGrammarTests
     {
         // Reading each one again as an assignment took 1.6 s at depth 22, and multiplied by 1.5 with each level
         var input = string.Concat(Enumerable.Repeat("new a(b=", 60)) + "1";
-        Assert.Throws<SyntaxErrorException>(() => Expression.Parse(input));
+        Assert.Throws<SyntaxErrorException>(() => ParseWithinTimeLimit(input));
     }
 
     [Test]
@@ -173,7 +182,7 @@ public class ExpressionGrammarTests
     {
         // Appending a node walked the others, which took 11 s for this path
         var input = "a" + string.Concat(Enumerable.Repeat(".a", 160_000));
-        Assert.That(Expression.Parse(input), Is.TypeOf<Expression>());
+        Assert.That(ParseWithinTimeLimit(input), Is.TypeOf<Expression>());
     }
 
     [TestCase(1_900, "-")]

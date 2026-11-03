@@ -57,6 +57,7 @@
     <EmbeddedResource Include="Context\Config\ConfigFiles\*.xml" />
     <EmbeddedResource Include="Context\*.xml" />
     <EmbeddedResource Include="Data\Spring\Objects\Factory\Config\*.properties" />
+    <EmbeddedResource Include="Expressions\ExpressionGrammarGolden.json" />
     <EmbeddedResource Include="Core\TypeResolution\aliasedObjects.xml" />
     <EmbeddedResource Include="Core\IO\TestResource.txt" />
     <EmbeddedResource Include="Core\IO\ConfigSectionResourceTests_config1.xml" />

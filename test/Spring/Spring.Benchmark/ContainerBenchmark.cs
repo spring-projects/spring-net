@@ -15,13 +15,12 @@
 //  */
 
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 using Spring.Benchmark.Classes;
 using Spring.Context.Support;
 
 namespace Spring.Benchmark;
 
-[SimpleJob(RuntimeMoniker.Net472), SimpleJob(RuntimeMoniker.Net80)]
+[Config(typeof(FrameworkAndCoreConfig))]
 [MemoryDiagnoser]
 public class ContainerBenchmark
 {

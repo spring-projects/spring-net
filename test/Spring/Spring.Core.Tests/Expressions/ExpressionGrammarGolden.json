@@ -221,11 +221,15 @@
   ],
   [
     "a^{b,c}",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\",\",<35>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\",\",<35>,line=1,col=5]",
     "ERROR 5 Syntax Error on line 1, column 5: expecting \"RCURLY\", found ','",
     "ERROR 5 Syntax Error on line 1, column 5: expecting \"RCURLY\", found ','"
   ],
   [
     "a^b^c",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"EOF\", found '^'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"^\",<29>,line=1,col=4]",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
   ],
@@ -246,6 +250,8 @@
   ],
   [
     "a==b==c",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"EOF\", found '=='",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"==\",<54>,line=1,col=5]",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
   ],
@@ -256,6 +262,8 @@
   ],
   [
     "a<b<c",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"EOF\", found '<'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"<\",<56>,line=1,col=4]",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
   ],
@@ -331,6 +339,8 @@
   ],
   [
     "a?b",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"EOF\", found '<EOF>'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"COLON\", found ''",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
   ],
@@ -401,6 +411,8 @@
   ],
   [
     "a.5",
+    "ERROR 2 Syntax Error on line 1, column 2: expecting \"EOF\", found '.5'",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\".5\",<53>,line=1,col=2]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]"
   ],
@@ -411,6 +423,8 @@
   ],
   [
     "0x",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected char: 0xFFFF",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected char: 0xFFFF"
   ],
@@ -471,11 +485,15 @@
   ],
   [
     "1.5e",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected char: 0xFFFF",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected char: 0xFFFF"
   ],
   [
     "1.5e+",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
     "ERROR 6 Syntax Error on line 1, column 6: unexpected char: 0xFFFF",
     "ERROR 6 Syntax Error on line 1, column 6: unexpected char: 0xFFFF"
   ],
@@ -526,6 +544,8 @@
   ],
   [
     "new",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]"
   ],
@@ -546,16 +566,22 @@
   ],
   [
     "T(",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found ''",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found ''"
   ],
   [
     "1 2",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found '2'",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"2\",<51>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"2\",<51>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"2\",<51>,line=1,col=3]"
   ],
   [
     "a 'b'",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found 'b'",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"b\",<46>,line=1,col=3]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]"
   ],
@@ -601,6 +627,8 @@
   ],
   [
     "a|b",
+    "ERROR 2 Syntax Error on line 1, column 2: expecting \"EOF\", found '|'",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"|\",<48>,line=1,col=2]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]"
   ],
@@ -631,6 +659,8 @@
   ],
   [
     "(a",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"RPAREN\", found ''",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"RPAREN\", found ''"
   ],
@@ -666,16 +696,22 @@
   ],
   [
     "a(b;c)",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\";\",<18>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\";\",<18>,line=1,col=4]",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ';'",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ';'"
   ],
   [
     "#a(b;c)",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\";\",<18>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\";\",<18>,line=1,col=5]",
     "ERROR 5 Syntax Error on line 1, column 5: expecting \"RPAREN\", found ';'",
     "ERROR 5 Syntax Error on line 1, column 5: expecting \"RPAREN\", found ';'"
   ],
   [
     "$a(b;c)",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\";\",<18>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\";\",<18>,line=1,col=5]",
     "ERROR 5 Syntax Error on line 1, column 5: expecting \"RPAREN\", found ';'",
     "ERROR 5 Syntax Error on line 1, column 5: expecting \"RPAREN\", found ';'"
   ],
@@ -706,21 +742,29 @@
   ],
   [
     "{|",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]"
   ],
   [
     "{|a",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"PIPE\", found ''",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"PIPE\", found ''"
   ],
   [
     "{|a|",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
   ],
   [
     "{|a|b",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"RCURLY\", found ''",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"RCURLY\", found ''"
   ],
@@ -756,36 +800,50 @@
   ],
   [
     "@(a",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ''",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ''"
   ],
   [
     "@(a:",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
   ],
   [
     "@(a:b",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"RPAREN\", found ''",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"RPAREN\", found ''"
   ],
   [
     "@[",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found ''",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found ''"
   ],
   [
     "@[a",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
     "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"\",<1>,line=1,col=4]",
     "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"\",<1>,line=1,col=4]"
   ],
   [
     "@[a(",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
   ],
   [
     "@",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"@\",<36>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"@\",<36>,line=1,col=1]"
   ],
@@ -801,61 +859,85 @@
   ],
   [
     "#",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"#\",<32>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"#\",<32>,line=1,col=1]"
   ],
   [
     "$",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"$\",<34>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"$\",<34>,line=1,col=1]"
   ],
   [
     "#{|",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"{|\",<47>,line=1,col=2]",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"{|\",<47>,line=1,col=2]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"#\",<32>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"#\",<32>,line=1,col=1]"
   ],
   [
     "#{a}",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"}\",<40>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"}\",<40>,line=1,col=4]",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"COLON\", found '}'",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"COLON\", found '}'"
   ],
   [
     "#{a:1",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"RCURLY\", found ''",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"RCURLY\", found ''"
   ],
   [
     "${",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]"
   ],
   [
     "$ {a}",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"{\",<50>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"{\",<50>,line=1,col=3]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"$\",<34>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"$\",<34>,line=1,col=1]"
   ],
   [
     "^{",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]"
   ],
   [
     "a?{b",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
     "ERROR 5 Syntax Error on line 1, column 5: expecting \"RCURLY\", found ''",
     "ERROR 5 Syntax Error on line 1, column 5: expecting \"RCURLY\", found ''"
   ],
   [
     "a?",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
   ],
   [
     "!{",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]"
   ],
   [
     "!",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"!\",<30>,line=1,col=1]",
     "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"\",<1>,line=1,col=2]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"!\",<30>,line=1,col=1]"
   ],
@@ -901,41 +983,57 @@
   ],
   [
     "new a",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"EOF\", found '<EOF>'",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"LBRACKET\", found ''",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"LBRACKET\", found ''"
   ],
   [
     "new a.",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"EOF\", found '.'",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected token: [\".\",<31>,line=1,col=6]",
     "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found ''",
     "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found ''"
   ],
   [
     "new a.b",
+    "ERROR 8 Syntax Error on line 1, column 8: expecting \"EOF\", found '<EOF>'",
+    "ERROR 8 Syntax Error on line 1, column 8: unexpected end of expression",
     "ERROR 8 Syntax Error on line 1, column 8: expecting \"LBRACKET\", found ''",
     "ERROR 8 Syntax Error on line 1, column 8: expecting \"LBRACKET\", found ''"
   ],
   [
     "new T(a)",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"T(\",<44>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"T(\",<44>,line=1,col=5]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]"
   ],
   [
     "new a.T(b)",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"EOF\", found '.'",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected token: [\".\",<31>,line=1,col=6]",
     "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found 'T('",
     "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found 'T('"
   ],
   [
     "new a.in()",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"EOF\", found '.'",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected token: [\".\",<31>,line=1,col=6]",
     "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found 'in'",
     "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found 'in'"
   ],
   [
     "new 1",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"1\",<51>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"1\",<51>,line=1,col=5]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]",
     "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]"
   ],
   [
     "a.in",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
   ],
@@ -946,11 +1044,15 @@
   ],
   [
     "a.new",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found 'new'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"new\",<49>,line=1,col=3]",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
   ],
   [
     "a.true",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found 'true'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"true\",<7>,line=1,col=3]",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
   ],
@@ -961,11 +1063,15 @@
   ],
   [
     "1 .2",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found '.2'",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\".2\",<53>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\".2\",<53>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\".2\",<53>,line=1,col=3]"
   ],
   [
     "1.2.3",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"EOF\", found '.3'",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\".3\",<53>,line=1,col=4]",
     "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\".3\",<53>,line=1,col=4]",
     "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\".3\",<53>,line=1,col=4]"
   ],
@@ -976,11 +1082,15 @@
   ],
   [
     "T(a:b)",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\":\",<23>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\":\",<23>,line=1,col=4]",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ':'",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ':'"
   ],
   [
     "T('a')",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"a\",<46>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"a\",<46>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'a'",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'a'"
   ],
@@ -1016,11 +1126,15 @@
   ],
   [
     "T(in)",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"in\",<11>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"in\",<11>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'in'",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'in'"
   ],
   [
     "T(T(a))",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"T(\",<44>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"T(\",<44>,line=1,col=3]",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'T('",
     "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'T('"
   ],
@@ -1031,21 +1145,29 @@
   ],
   [
     "a b[",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
   ],
   [
     "a(b",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ''",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ''"
   ],
   [
     "a +",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"\",<1>,line=1,col=4]",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
   ],
   [
     "a ?{",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
     "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
   ],

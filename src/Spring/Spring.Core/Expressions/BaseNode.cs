@@ -256,6 +256,7 @@ public abstract class BaseNode : SpringAST, IExpression
 
     protected void SetValue(BaseNode node, object context, EvaluationContext evalContext, object newValue)
     {
+        System.Runtime.CompilerServices.RuntimeHelpers.EnsureSufficientExecutionStack();
         node.Set(context, evalContext, newValue);
     }
 }
