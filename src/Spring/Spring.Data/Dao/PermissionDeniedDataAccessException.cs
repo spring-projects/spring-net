@@ -58,6 +58,9 @@ public class PermissionDeniedDataAccessException : NonTransientDataAccessExcepti
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected PermissionDeniedDataAccessException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

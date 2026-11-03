@@ -44,6 +44,9 @@ public class OpOR : BinaryOperator
     /// <summary>
     /// Create a new instance from SerializationInfo
     /// </summary>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected OpOR(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

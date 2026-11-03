@@ -58,6 +58,9 @@ public class NestedTransactionNotSupportedException : CannotCreateTransactionExc
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected NestedTransactionNotSupportedException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

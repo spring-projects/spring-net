@@ -18,7 +18,6 @@ using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
-using System.Security;
 using Spring.Util;
 using NetDynamicMethod = System.Reflection.Emit.DynamicMethod;
 
@@ -191,30 +190,13 @@ public sealed class DynamicReflectionManager
     }
 
     /// <summary>
-    /// Creates a <see cref="System.Reflection.Emit.DynamicMethod"/> instance with the highest possible code access security.
+    /// Creates a <see cref="System.Reflection.Emit.DynamicMethod"/> instance associated with the module of the <paramref name="member"/>s declaring type.
     /// </summary>
-    /// <remarks>
-    /// If allowed by security policy, associates the method with the <paramref name="member"/>s declaring type.
-    /// Otherwise associates the dynamic method with <see cref="DynamicReflectionManager"/>.
-    /// </remarks>
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static NetDynamicMethod CreateDynamicMethod(string methodName, Type returnType, Type[] argumentTypes, MemberInfo member, bool skipVisibility)
     {
-        NetDynamicMethod dmGetter = null;
         methodName = "_dynamic_" + member.DeclaringType.FullName + "." + methodName;
-        try
-        {
-#if !NETSTANDARD
-                new PermissionSet(System.Security.Permissions.PermissionState.Unrestricted).Demand();
-#endif
-            dmGetter = CreateDynamicMethodInternal(methodName, returnType, argumentTypes, member, skipVisibility);
-        }
-        catch (SecurityException)
-        {
-            dmGetter = CreateDynamicMethodInternal(methodName, returnType, argumentTypes, MethodBase.GetCurrentMethod(), false);
-        }
-
-        return dmGetter;
+        return CreateDynamicMethodInternal(methodName, returnType, argumentTypes, member, skipVisibility);
     }
 
     private static NetDynamicMethod CreateDynamicMethodInternal(string methodName, Type returnType, Type[] argumentTypes, MemberInfo member, bool skipVisibility)

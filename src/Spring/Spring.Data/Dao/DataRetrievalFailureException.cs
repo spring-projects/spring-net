@@ -64,6 +64,9 @@ public class DataRetrievalFailureException : NonTransientDataAccessException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected DataRetrievalFailureException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

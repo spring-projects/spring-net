@@ -234,19 +234,12 @@ public class ResourceHandlerRegistry
 
         lock (syncRoot)
         {
-            Action callback = () =>
+            // register generic uri parser for this scheme
+            if (!UriParser.IsKnownScheme(protocolName))
             {
-                // register generic uri parser for this scheme
-                if (!UriParser.IsKnownScheme(protocolName))
-                {
-                    UriParser.Register(new TolerantUriParser(), protocolName, 0);
-                }
-            };
-#if NETSTANDARD
-                callback();
-#else
-            SecurityCritical.ExecutePrivileged(new System.Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityPermissionFlag.Infrastructure), callback);
-#endif
+                UriParser.Register(new TolerantUriParser(), protocolName, 0);
+            }
+
             IDynamicConstructor ctor = GetResourceConstructor(handlerType);
             resourceHandlers[protocolName] = ctor;
         }

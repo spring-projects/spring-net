@@ -1,4 +1,4 @@
-#if NETSTANDARD
+#if !NETFRAMEWORK
 // ReSharper disable once CheckNamespace
 namespace System.Runtime.Remoting
 {

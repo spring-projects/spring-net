@@ -17,8 +17,6 @@
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
-using System.Security;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.Compilation;
 using System.Web.UI;
@@ -50,18 +48,9 @@ internal abstract class LocalResourceManager : ResourceManager
         LocalResXResourceProviderFactoryType = typeof(IResourceProvider).Assembly.GetType("System.Web.Compilation.ResXResourceProviderFactory", true);
         LocalResXResourceProviderType = typeof(IResourceProvider).Assembly.GetType("System.Web.Compilation.LocalResXResourceProvider", true);
 
-        GetResourceProviderDelegate fnGetResourceProvider = null;
-        ResourceProviderFactory rpf = null;
-        SafeMethod glra = null;
-        SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
-        {
-            fnGetResourceProvider = (GetResourceProviderDelegate) Delegate.CreateDelegate(typeof(GetResourceProviderDelegate), typeof(ResourceExpressionBuilder).GetMethod("GetLocalResourceProvider", BindingFlags.Static | BindingFlags.NonPublic, null, new Type[] { typeof(TemplateControl) }, null));
-            rpf = (ResourceProviderFactory) Activator.CreateInstance(LocalResXResourceProviderFactoryType, true);
-            glra = new SafeMethod(LocalResXResourceProviderType.GetMethod("GetLocalResourceAssembly", BindingFlags.Instance | BindingFlags.NonPublic));
-        });
-        getLocalResourceProvider = fnGetResourceProvider;
-        LocalResXResourceProviderFactory = rpf;
-        fnGetLocalResourceAssembly = glra;
+        getLocalResourceProvider = (GetResourceProviderDelegate) Delegate.CreateDelegate(typeof(GetResourceProviderDelegate), typeof(ResourceExpressionBuilder).GetMethod("GetLocalResourceProvider", BindingFlags.Static | BindingFlags.NonPublic, null, new Type[] { typeof(TemplateControl) }, null));
+        LocalResXResourceProviderFactory = (ResourceProviderFactory) Activator.CreateInstance(LocalResXResourceProviderFactoryType, true);
+        fnGetLocalResourceAssembly = new SafeMethod(LocalResXResourceProviderType.GetMethod("GetLocalResourceAssembly", BindingFlags.Instance | BindingFlags.NonPublic));
     }
 
     internal static ResourceManager GetLocalResourceManager(TemplateControl control)

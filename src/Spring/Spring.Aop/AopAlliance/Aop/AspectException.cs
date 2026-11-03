@@ -51,6 +51,9 @@ public class AspectException : Exception
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Spring.Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Spring.Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Spring.Obsoletions.SharedUrlFormat)]
+#endif
     protected AspectException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

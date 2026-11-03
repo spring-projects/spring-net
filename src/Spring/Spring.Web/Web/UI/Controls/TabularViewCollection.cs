@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -25,9 +24,6 @@ namespace Spring.Web.UI.Controls;
 /// Holds the collection of <see cref="TabularView"/> controls in a <see cref="TabularMultiView"/>.
 /// </summary>
 /// <author>Erich Eichinger</author>
-[
-    AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)
-    , AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 public class TabularViewCollection : ViewCollection
 {
     /// <summary>

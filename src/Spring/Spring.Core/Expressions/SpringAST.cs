@@ -118,6 +118,9 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
     /// <summary>
     /// Create a new instance from SerializationInfo
     /// </summary>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected SpringAST(SerializationInfo info, StreamingContext context)
     {
         base.down = (BaseAST) info.GetValue("down", typeof(BaseAST));
@@ -129,6 +132,9 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
     /// <summary>
     /// populate SerializationInfo from this instance
     /// </summary>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("down", base.down, typeof(SpringAST));

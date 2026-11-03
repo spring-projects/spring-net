@@ -19,6 +19,9 @@ using Microsoft.Extensions.Logging;
 using Quartz;
 using Spring.Objects.Support;
 
+// System.Reflection.MethodInvoker exists since .NET 8 and would be ambiguous with Spring's.
+using MethodInvoker = Spring.Objects.Support.MethodInvoker;
+
 namespace Spring.Scheduling.Quartz;
 
 /// <summary>

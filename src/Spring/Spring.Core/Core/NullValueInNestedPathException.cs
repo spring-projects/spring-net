@@ -16,7 +16,6 @@
 
 using System.Globalization;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using Spring.Util;
 
 namespace Spring.Core;
@@ -123,6 +122,9 @@ public class NullValueInNestedPathException : FatalReflectionException
     /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
     /// that contains contextual information about the source or destination.
     /// </param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected NullValueInNestedPathException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
@@ -142,7 +144,9 @@ public class NullValueInNestedPathException : FatalReflectionException
     /// The destination (see <see cref="System.Runtime.Serialization.StreamingContext"/>)
     /// for this serialization.
     /// </param>
-    [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(
         SerializationInfo info, StreamingContext context)
     {

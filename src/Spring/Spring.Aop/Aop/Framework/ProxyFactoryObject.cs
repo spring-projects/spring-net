@@ -153,6 +153,9 @@ public class ProxyFactoryObject
     private bool freezeProxy;
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected ProxyFactoryObject(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
@@ -168,6 +171,9 @@ public class ProxyFactoryObject
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         base.GetObjectData(info, context);

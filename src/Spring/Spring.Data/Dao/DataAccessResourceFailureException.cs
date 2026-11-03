@@ -58,6 +58,9 @@ public class DataAccessResourceFailureException : DataAccessException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected DataAccessResourceFailureException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

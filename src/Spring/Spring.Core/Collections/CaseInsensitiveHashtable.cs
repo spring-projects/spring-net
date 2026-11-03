@@ -58,6 +58,9 @@ public class CaseInsensitiveHashtable : Hashtable
     /// <param name="context">A <see cref="T:System.Runtime.Serialization.StreamingContext"></see> object containing the source and destination of the serialized stream associated with the <see cref="T:System.Collections.Hashtable"></see>. </param>
     /// <param name="info">A <see cref="T:System.Runtime.Serialization.SerializationInfo"></see> object containing the information required to serialize the <see cref="T:System.Collections.Hashtable"></see> object.</param>
     /// <exception cref="T:System.ArgumentNullException">info is null. </exception>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected CaseInsensitiveHashtable(SerializationInfo info, StreamingContext context) : base(info, context)
     {
         string cultureName = info.GetString("_cultureName");
@@ -72,6 +75,9 @@ public class CaseInsensitiveHashtable : Hashtable
     ///<param name="context">A <see cref="StreamingContext"></see> object containing the source and destination of the serialized stream associated with the <see cref="CaseInsensitiveHashtable"></see>. </param>
     ///<param name="info">A <see cref="SerializationInfo"></see> object containing the information required to serialize the <see cref="CaseInsensitiveHashtable"></see>. </param>
     ///<exception cref="System.ArgumentNullException">info is null. </exception>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         base.GetObjectData(info, context);

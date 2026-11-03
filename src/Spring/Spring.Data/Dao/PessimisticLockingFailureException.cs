@@ -66,6 +66,9 @@ public class PessimisticLockingFailureException : ConcurrencyFailureException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected PessimisticLockingFailureException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

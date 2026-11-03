@@ -18,13 +18,6 @@ using System.Transactions;
 using Microsoft.Extensions.Logging;
 using Spring.Transaction;
 
-#if NETSTANDARD
-using Experimental.System.Messaging;
-
-#else
-using System.Messaging;
-#endif
-
 namespace Spring.Messaging.Listener;
 
 /// <summary>

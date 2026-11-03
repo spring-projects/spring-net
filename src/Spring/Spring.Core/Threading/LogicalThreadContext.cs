@@ -38,7 +38,7 @@ public sealed class LogicalThreadContext
     /// at application startup.
     /// </remarks>
     private static IThreadStorage threadStorage =
-#if NETSTANDARD
+#if !NETFRAMEWORK
             new ThreadStaticStorage();
 #else
         new CallContextStorage();

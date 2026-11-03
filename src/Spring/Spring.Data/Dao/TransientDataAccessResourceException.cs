@@ -58,6 +58,9 @@ public class TransientDataAccessResourceException : TransientDataAccessException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected TransientDataAccessResourceException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

@@ -64,6 +64,9 @@ public class CannotAcquireLockException : PessimisticLockingFailureException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected CannotAcquireLockException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

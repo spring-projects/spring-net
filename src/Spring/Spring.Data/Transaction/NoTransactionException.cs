@@ -59,6 +59,9 @@ public class NoTransactionException : TransactionUsageException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected NoTransactionException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

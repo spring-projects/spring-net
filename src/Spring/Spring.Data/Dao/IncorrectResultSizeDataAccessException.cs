@@ -122,6 +122,9 @@ public class IncorrectResultSizeDataAccessException : InvalidDataAccessApiUsageE
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected IncorrectResultSizeDataAccessException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
         _expectedSize = info.GetInt32("expectedSize");
@@ -129,6 +132,9 @@ public class IncorrectResultSizeDataAccessException : InvalidDataAccessApiUsageE
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("expectedSize", _expectedSize);

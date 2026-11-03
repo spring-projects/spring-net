@@ -358,7 +358,7 @@ public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
             returnValue = il.DeclareLocal(method.ReturnType);
         }
 
-#if DEBUG && !NETSTANDARD
+#if DEBUG && NETFRAMEWORK
             interceptors.SetLocalSymInfo("interceptors");
             targetType.SetLocalSymInfo("targetType");
             arguments.SetLocalSymInfo("arguments");

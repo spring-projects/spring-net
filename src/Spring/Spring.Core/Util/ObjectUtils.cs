@@ -19,7 +19,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.Remoting;
 using Microsoft.Extensions.Logging;
-#if !NETSTANDARD
+#if NETFRAMEWORK
 using System.Runtime.Remoting.Proxies;
 #endif
 
@@ -303,7 +303,7 @@ public sealed class ObjectUtils
             return true;
         }
 
-#if !NETSTANDARD
+#if NETFRAMEWORK
         if (RemotingServices.IsTransparentProxy(obj))
         {
             RealProxy rp = RemotingServices.GetRealProxy(obj);

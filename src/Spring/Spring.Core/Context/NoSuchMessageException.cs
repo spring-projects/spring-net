@@ -67,6 +67,9 @@ public class NoSuchMessageException : ApplicationException
     /// that contains contextual information about the source or
     /// destination.
     /// </param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected NoSuchMessageException(
         SerializationInfo info, StreamingContext context)
         : base(info, context)

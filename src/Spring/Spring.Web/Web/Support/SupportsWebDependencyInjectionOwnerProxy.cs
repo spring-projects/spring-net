@@ -15,8 +15,6 @@
  */
 
 using System.Reflection;
-using System.Security;
-using System.Security.Permissions;
 using System.Web.UI;
 using Spring.Context;
 using Spring.Reflection.Dynamic;
@@ -89,12 +87,7 @@ internal class NamingContainerSupportsWebDependencyInjectionOwnerProxy : Support
 
     static NamingContainerSupportsWebDependencyInjectionOwnerProxy()
     {
-        SafeField fld = null;
-        SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
-        {
-            fld = new SafeField(typeof(Control).GetField("_occasionalFields", BindingFlags.Instance | BindingFlags.NonPublic));
-        });
-        refOccasionalFields = fld;
+        refOccasionalFields = new SafeField(typeof(Control).GetField("_occasionalFields", BindingFlags.Instance | BindingFlags.NonPublic));
     }
 
     public NamingContainerSupportsWebDependencyInjectionOwnerProxy(IApplicationContext defaultApplicationContext, Control targetControl) : base(defaultApplicationContext, targetControl)

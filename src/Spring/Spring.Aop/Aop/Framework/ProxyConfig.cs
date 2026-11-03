@@ -60,6 +60,9 @@ public class ProxyConfig : ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected ProxyConfig(SerializationInfo info, StreamingContext context)
     {
         proxyTargetType = info.GetBoolean("proxyTargetType");
@@ -71,6 +74,9 @@ public class ProxyConfig : ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("proxyTargetType", proxyTargetType);

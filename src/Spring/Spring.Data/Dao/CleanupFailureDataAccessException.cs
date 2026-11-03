@@ -69,6 +69,9 @@ public class CleanupFailureDataAccessException : NonTransientDataAccessException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected CleanupFailureDataAccessException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

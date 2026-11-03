@@ -19,7 +19,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Resources;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using Spring.Collections;
@@ -56,8 +55,6 @@ namespace Spring.Web.UI;
 /// </p>
 /// </remarks>
 /// <author>Aleksandar Seovic</author>
-[AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
-[AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 public class Page : System.Web.UI.Page, IHttpHandler, IApplicationContextAware, ISharedStateAware,
     ISupportsWebDependencyInjection, IWebDataBound, IValidationContainer, IWebNavigable
 {

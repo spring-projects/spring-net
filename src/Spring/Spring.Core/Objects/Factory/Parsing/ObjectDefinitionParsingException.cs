@@ -22,6 +22,9 @@ namespace Spring.Objects.Factory.Parsing;
 [Serializable]
 public class ObjectDefinitionParsingException : ObjectDefinitionStoreException
 {
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected ObjectDefinitionParsingException(SerializationInfo info, StreamingContext context)
     {
     }

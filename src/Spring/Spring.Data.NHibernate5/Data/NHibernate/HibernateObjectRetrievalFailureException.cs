@@ -102,6 +102,9 @@ public class HibernateObjectRetrievalFailureException : ObjectRetrievalFailureEx
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected HibernateObjectRetrievalFailureException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

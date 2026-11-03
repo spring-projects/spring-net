@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion);$(TargetModernFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide MSMQ 3.0 support in Spring.Net</Description>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' != '.NETFramework' ">
     <PackageReference Include="Experimental.System.Messaging.Signed" />
+    <Using Include="Experimental.System.Messaging" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
@@ -13,5 +14,9 @@
   <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' == '.NETFramework' ">
     <Reference Include="System.Messaging" />
     <Reference Include="System.Transactions" />
+    <Using Include="System.Messaging" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Obsoletions.cs" Link="Obsoletions.cs" />
   </ItemGroup>
 </Project>

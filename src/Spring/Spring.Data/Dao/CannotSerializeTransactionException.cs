@@ -64,6 +64,9 @@ public class CannotSerializeTransactionException : PessimisticLockingFailureExce
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected CannotSerializeTransactionException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

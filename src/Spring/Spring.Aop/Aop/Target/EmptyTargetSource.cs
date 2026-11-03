@@ -15,7 +15,6 @@
  */
 
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 namespace Spring.Aop.Target;
 
@@ -120,12 +119,17 @@ public sealed class EmptyTargetSource : ITargetSource, ISerializable
     }
 
     /// <inheritdoc />
-    [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.SetType(typeof(EmptyTargetSourceObjectReference));
     }
 
+    // IObjectReference is how BinaryFormatter resolves the singleton on deserialization. It is obsolete on modern .NET
+    // (SYSLIB0050) with no replacement, and is kept so that .NET Framework users can still round-trip the instance.
+#pragma warning disable SYSLIB0050
     [Serializable]
     private sealed class EmptyTargetSourceObjectReference : IObjectReference
     {
@@ -134,4 +138,5 @@ public sealed class EmptyTargetSource : ITargetSource, ISerializable
             return EmptyTargetSource.Empty;
         }
     }
+#pragma warning restore SYSLIB0050
 }

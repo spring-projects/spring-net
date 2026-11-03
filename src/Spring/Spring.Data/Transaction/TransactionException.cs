@@ -59,6 +59,9 @@ public abstract class TransactionException : ApplicationException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected TransactionException(
         SerializationInfo info, StreamingContext context)
         : base(info, context)

@@ -45,6 +45,9 @@ public class AttributeMethodMatcher : StaticMethodMatcher, ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     private AttributeMethodMatcher(SerializationInfo info, StreamingContext context)
     {
         var type = info.GetString("AttributeType");
@@ -52,6 +55,9 @@ public class AttributeMethodMatcher : StaticMethodMatcher, ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("AttributeType", attributeType?.AssemblyQualifiedName);

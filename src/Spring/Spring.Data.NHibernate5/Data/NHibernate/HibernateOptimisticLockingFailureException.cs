@@ -83,6 +83,9 @@ public class HibernateOptimisticLockingFailureException : ObjectOptimisticLockin
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected HibernateOptimisticLockingFailureException(SerializationInfo info, StreamingContext context) : base(
         info, context)
     {

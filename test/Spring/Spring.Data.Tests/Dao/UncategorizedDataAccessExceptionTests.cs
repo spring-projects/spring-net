@@ -12,6 +12,8 @@ public class UncategorizedDataAccessExceptionTests
         public SampleException() : base() { }
         public SampleException(string message) : base(message) { }
         public SampleException(string message, Exception inner) : base(message, inner) { }
+#pragma warning disable SYSLIB0051 // the base serialization constructor is obsolete on net10.0
         protected SampleException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+#pragma warning restore SYSLIB0051
     }
 }

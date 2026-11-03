@@ -105,6 +105,9 @@ public class TypedStringValue : ISerializable
         TargetTypeName = targetTypeName;
     }
 
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected TypedStringValue(SerializationInfo info, StreamingContext context)
     {
         var type = info.GetString("TargetTypeName");
@@ -207,6 +210,9 @@ public class TypedStringValue : ISerializable
         return resolvedType;
     }
 
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         string targetTypeName = null;

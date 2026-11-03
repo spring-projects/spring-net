@@ -53,6 +53,9 @@ public class ListenerExecutionFailedException : MessagingException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected ListenerExecutionFailedException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }

@@ -16,7 +16,6 @@
 
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.Profile;
 using Spring.Context.Support;
@@ -33,8 +32,6 @@ namespace Spring.Web.Providers;
 /// </p>
 /// </remarks>
 /// <author>Damjan Tomic</author>
-[AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
-[AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 public class ProfileProviderAdapter : ProfileProvider, IProfileProvider
 {
     /// <summary>

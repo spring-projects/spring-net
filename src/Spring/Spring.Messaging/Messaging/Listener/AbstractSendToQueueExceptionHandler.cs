@@ -3,13 +3,6 @@ using Spring.Context;
 using Spring.Messaging.Core;
 using Spring.Objects.Factory;
 
-#if NETSTANDARD
-using Experimental.System.Messaging;
-
-#else
-using System.Messaging;
-#endif
-
 namespace Spring.Messaging.Listener;
 
 /// <summary>

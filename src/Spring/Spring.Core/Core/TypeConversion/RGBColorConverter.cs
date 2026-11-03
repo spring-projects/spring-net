@@ -134,7 +134,7 @@ public sealed class RGBColorConverter : TypeConverter
 
     private static Color FromName(string name)
     {
-#if NETSTANDARD
+#if !NETFRAMEWORK
         throw new NotSupportedException("FromName is not supported under .NET Core");
 #else
             try

@@ -58,6 +58,9 @@ public class ListenerExecutionFailedException : NMSException
     /// </summary>
     /// <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
     /// <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected ListenerExecutionFailedException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

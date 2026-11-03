@@ -105,6 +105,9 @@ public class HeuristicCompletionException : TransactionException, ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected HeuristicCompletionException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
@@ -112,6 +115,9 @@ public class HeuristicCompletionException : TransactionException, ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("outcomeState", _outcomeState);

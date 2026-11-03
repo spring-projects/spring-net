@@ -94,6 +94,9 @@ public class AttributeMatchMethodPointcut : StaticMethodMatcherPointcut, ISerial
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected AttributeMatchMethodPointcut(SerializationInfo info, StreamingContext context)
     {
         Inherit = info.GetBoolean("Inherit");
@@ -103,6 +106,9 @@ public class AttributeMatchMethodPointcut : StaticMethodMatcherPointcut, ISerial
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("Attribute", Attribute?.AssemblyQualifiedName);

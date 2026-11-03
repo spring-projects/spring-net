@@ -63,6 +63,9 @@ public class OptimisticLockingFailureException : ConcurrencyFailureException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected OptimisticLockingFailureException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

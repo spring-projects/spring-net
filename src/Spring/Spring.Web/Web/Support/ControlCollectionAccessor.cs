@@ -15,8 +15,6 @@
  */
 
 using System.Reflection;
-using System.Security;
-using System.Security.Permissions;
 using System.Web.UI;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
@@ -33,17 +31,11 @@ internal class ControlCollectionAccessor
 
     static ControlCollectionAccessor()
     {
-        IDynamicField owner = null;
-
-        SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
-        {
 #if MONO_2_0
-                owner = new SafeField(typeof (ControlCollection).GetField("owner", BindingFlags.Instance | BindingFlags.NonPublic));
+        _owner = new SafeField(typeof (ControlCollection).GetField("owner", BindingFlags.Instance | BindingFlags.NonPublic));
 #else
-            owner = new SafeField(typeof(ControlCollection).GetField("_owner", BindingFlags.Instance | BindingFlags.NonPublic));
+        _owner = new SafeField(typeof(ControlCollection).GetField("_owner", BindingFlags.Instance | BindingFlags.NonPublic));
 #endif
-        });
-        _owner = owner;
     }
 
     private readonly ControlCollection _controls;

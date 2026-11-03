@@ -259,7 +259,7 @@ public class InheritanceBasedAopConfigurer : IObjectFactoryPostProcessor, IObjec
         {
             for (int i = 0; i < objectNames.Count; i++)
             {
-                string mappedName = String.Copy((string) objectNames[i]);
+                string mappedName = (string) objectNames[i];
                 if (PatternMatchUtils.SimpleMatch(mappedName, objectName))
                 {
                     return true;
@@ -300,6 +300,9 @@ public class InheritanceBasedAopConfigurer : IObjectFactoryPostProcessor, IObjec
         }
 
         /// <inheritdoc />
+#if NET
+        [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
         private InheritanceBasedAopTargetSource(SerializationInfo info, StreamingContext context)
         {
             var type = info.GetString("TargetType");
@@ -307,6 +310,9 @@ public class InheritanceBasedAopConfigurer : IObjectFactoryPostProcessor, IObjec
         }
 
         /// <inheritdoc />
+#if NET
+        [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("TargetType", _targetType?.AssemblyQualifiedName);
