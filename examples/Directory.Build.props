@@ -2,6 +2,12 @@
 
   <PropertyGroup>
 
+    <!-- The examples reference the built Spring assemblies by HintPath, so NuGet cannot see their dependency floors
+         (Spring.Core is compiled against Microsoft.Extensions.Logging.Abstractions 8.0.3, while the examples' own
+         Microsoft.Extensions.Logging 8.0.1 only asks for 8.0.2, which fails with CS1705). Pinning transitive packages to
+         the central versions keeps the examples on the same versions as the libraries. -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+
     <CleanedProjectName>$(MSBuildProjectName.Replace('.2010', ''))</CleanedProjectName>
 
     <AssemblyName>$(CleanedProjectName)</AssemblyName>
