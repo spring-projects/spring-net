@@ -17,9 +17,11 @@
     <PackageVersion Include="Microsoft.AspNet.WebApi.WebHost" Version="5.3.0" />
     <PackageVersion Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.14" />
+    <!-- Examples only. Kept on the 8.0 line that matches Spring.Core's Logging.Abstractions floor: the net472 web
+         examples have no binding redirects, so a 10.x closure would fail to load at run time. -->
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageVersion Include="NHibernate" Version="5.7.1" />
