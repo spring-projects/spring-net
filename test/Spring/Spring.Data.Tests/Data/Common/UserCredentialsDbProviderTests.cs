@@ -39,7 +39,7 @@ public class UserCredentialsDbProviderTests
         provider.TargetDbProvider = dbProvider;
         provider.Username = "User ID=springqa";
         provider.Password = "Password=springqa";
-        Assert.AreEqual(connection, provider.CreateConnection());
+        Assert.That(provider.CreateConnection(), Is.EqualTo(connection));
 
         A.CallToSet(() => connection.ConnectionString)
             .WhenArgumentsMatch(x => (string) x[0] == "Data Source=MARKT60\\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa")
@@ -55,7 +55,7 @@ public class UserCredentialsDbProviderTests
 
         UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
         provider.TargetDbProvider = dbProvider;
-        Assert.AreEqual(connection, provider.CreateConnection());
+        Assert.That(provider.CreateConnection(), Is.EqualTo(connection));
     }
 
     [Test]
@@ -69,7 +69,7 @@ public class UserCredentialsDbProviderTests
         UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
         provider.TargetDbProvider = dbProvider;
         provider.SetCredentialsForCurrentThread("User ID=springqa", "Password=springqa");
-        Assert.AreEqual(connection, provider.CreateConnection());
+        Assert.That(provider.CreateConnection(), Is.EqualTo(connection));
 
         A.CallToSet(() => connection.ConnectionString)
             .WhenArgumentsMatch(x => (string) x[0] == "Data Source=MARKT60\\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa")

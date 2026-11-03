@@ -44,9 +44,9 @@ public class CollectionMergingGenericTests
     {
         TestObject to = (TestObject) this.objectFactory.GetObject("childWithList");
         System.Collections.Generic.List<string> list = to.SomeGenericStringList;
-        Assert.That(3, Is.EqualTo(list.Count));
-        Assert.That("Rob Harrop", Is.EqualTo(list[0]));
-        Assert.That("Rod Johnson", Is.EqualTo(list[1]));
-        Assert.That("Juergen Hoeller", Is.EqualTo(list[2]));
+        Assert.That(list.Count, Is.EqualTo(3));
+        Assert.That(list[0], Is.EqualTo("Rob Harrop"));
+        Assert.That(list[1], Is.EqualTo("Rod Johnson"));
+        Assert.That(list[2], Is.EqualTo("Juergen Hoeller"));
     }
 }

@@ -50,33 +50,33 @@ public abstract class AbstractLocalizerTests
     public void TestInvariantCulture()
     {
         Inventor tesla = CreateInventor(CultureInfo.InvariantCulture);
-        Assert.AreEqual("Nikola Tesla", tesla.Name);
-        Assert.AreEqual("Serbian", tesla.Nationality);
-        Assert.AreEqual(new DateTime(1856, 7, 9), tesla.DOB);
-        Assert.AreEqual("Croatia", tesla.PlaceOfBirth.Country);
-        Assert.AreEqual("Smiljan", tesla.PlaceOfBirth.City);
+        Assert.That(tesla.Name, Is.EqualTo("Nikola Tesla"));
+        Assert.That(tesla.Nationality, Is.EqualTo("Serbian"));
+        Assert.That(tesla.DOB, Is.EqualTo(new DateTime(1856, 7, 9)));
+        Assert.That(tesla.PlaceOfBirth.Country, Is.EqualTo("Croatia"));
+        Assert.That(tesla.PlaceOfBirth.City, Is.EqualTo("Smiljan"));
     }
 
     [Test]
     public void TestSerbianLatin()
     {
         Inventor tesla = CreateInventor(new CultureInfo(CultureInfoUtils.SerbianLatinCultureName));
-        Assert.AreEqual("Nikola Tesla", tesla.Name);
-        Assert.AreEqual("Srbin", tesla.Nationality);
-        Assert.AreEqual(new DateTime(1856, 7, 9), tesla.DOB);
-        Assert.AreEqual("Hrvatska", tesla.PlaceOfBirth.Country);
-        Assert.AreEqual("Smiljan", tesla.PlaceOfBirth.City);
+        Assert.That(tesla.Name, Is.EqualTo("Nikola Tesla"));
+        Assert.That(tesla.Nationality, Is.EqualTo("Srbin"));
+        Assert.That(tesla.DOB, Is.EqualTo(new DateTime(1856, 7, 9)));
+        Assert.That(tesla.PlaceOfBirth.Country, Is.EqualTo("Hrvatska"));
+        Assert.That(tesla.PlaceOfBirth.City, Is.EqualTo("Smiljan"));
     }
 
     [Test]
     public void TestSerbianCyrillic()
     {
         Inventor tesla = CreateInventor(new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName));
-        Assert.AreEqual("Никола Тесла", tesla.Name);
-        Assert.AreEqual("Србин", tesla.Nationality);
-        Assert.AreEqual(new DateTime(1856, 7, 9), tesla.DOB);
-        Assert.AreEqual("Хрватска", tesla.PlaceOfBirth.Country);
-        Assert.AreEqual("Смиљан", tesla.PlaceOfBirth.City);
+        Assert.That(tesla.Name, Is.EqualTo("Никола Тесла"));
+        Assert.That(tesla.Nationality, Is.EqualTo("Србин"));
+        Assert.That(tesla.DOB, Is.EqualTo(new DateTime(1856, 7, 9)));
+        Assert.That(tesla.PlaceOfBirth.Country, Is.EqualTo("Хрватска"));
+        Assert.That(tesla.PlaceOfBirth.City, Is.EqualTo("Смиљан"));
     }
 
     [Test]
@@ -118,8 +118,8 @@ public abstract class AbstractLocalizerTests
     public void DefaultResolvesUsingCurrentUICulture()
     {
         Inventor tesla = CreateInventor(null);
-        Assert.AreEqual("Nikola Tesla", tesla.Name);
-        Assert.AreEqual("Srbin", tesla.Nationality);
+        Assert.That(tesla.Name, Is.EqualTo("Nikola Tesla"));
+        Assert.That(tesla.Nationality, Is.EqualTo("Srbin"));
     }
 #endif
     private Inventor CreateInventor(CultureInfo culture)

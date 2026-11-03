@@ -47,11 +47,11 @@ public class ConfigSectionResourceTests
     public void CanCreate()
     {
         ConfigSectionResource csr = CreateConfigSectionResource("_config1.xml");
-        Assert.IsFalse(csr.Exists);
-        Assert.IsNull(csr.File); // always null
-        Assert.IsNull(csr.Uri);
-        Assert.IsTrue(csr.Description.StartsWith("config [") );
-        Assert.IsTrue(csr.Description.EndsWith("#objects]") );
+        Assert.That(csr.Exists, Is.False);
+        Assert.That(csr.File, Is.Null); // always null
+        Assert.That(csr.Uri, Is.Null);
+        Assert.That(csr.Description.StartsWith("config ["), Is.True);
+        Assert.That(csr.Description.EndsWith("#objects]"), Is.True);
     }
 #endif
 

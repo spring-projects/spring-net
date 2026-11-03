@@ -46,13 +46,15 @@ public sealed class ObjectFactoryCreatingFactoryObjectTests
 
         IGenericObjectFactory gof = (IGenericObjectFactory) factory.GetObject();
         IGenericObjectFactory gofOther = (IGenericObjectFactory) factory.GetObject();
-        Assert.IsTrue(Object.ReferenceEquals(gof, gofOther),
+        Assert.That(Object.ReferenceEquals(gof, gofOther),
+            Is.True,
             "Not returning a shared instance (Singleton = true).");
         TestObject one = (TestObject) gof.GetObject();
-        Assert.IsNotNull(one, "Must never return null (IFactoryObject contract).");
+        Assert.That(one, Is.Not.Null, "Must never return null (IFactoryObject contract).");
         TestObject two = (TestObject) gof.GetObject();
-        Assert.IsNotNull(two, "Must never return null (IFactoryObject contract).");
-        Assert.IsTrue(Object.ReferenceEquals(one, two),
+        Assert.That(two, Is.Not.Null, "Must never return null (IFactoryObject contract).");
+        Assert.That(Object.ReferenceEquals(one, two),
+            Is.True,
             "Not returning the same instance.");
     }
 
@@ -71,13 +73,15 @@ public sealed class ObjectFactoryCreatingFactoryObjectTests
 
         IGenericObjectFactory gofOne = (IGenericObjectFactory) factory.GetObject();
         IGenericObjectFactory gofTwo = (IGenericObjectFactory) factory.GetObject();
-        Assert.IsFalse(Object.ReferenceEquals(gofOne, gofTwo),
+        Assert.That(Object.ReferenceEquals(gofOne, gofTwo),
+            Is.False,
             "Not returning distinct instances (Prototype = true).");
         TestObject one = (TestObject) gofOne.GetObject();
-        Assert.IsNotNull(one, "Must never return null (IFactoryObject contract).");
+        Assert.That(one, Is.Not.Null, "Must never return null (IFactoryObject contract).");
         TestObject two = (TestObject) gofTwo.GetObject();
-        Assert.IsNotNull(two, "Must never return null (IFactoryObject contract).");
-        Assert.IsTrue(Object.ReferenceEquals(one, two),
+        Assert.That(two, Is.Not.Null, "Must never return null (IFactoryObject contract).");
+        Assert.That(Object.ReferenceEquals(one, two),
+            Is.True,
             "Not returning the same instance to singleton object.");
     }
 
@@ -92,6 +96,6 @@ public sealed class ObjectFactoryCreatingFactoryObjectTests
     [Test]
     public void ObjectTypeReallyIsIGenericObjectFactory()
     {
-        Assert.AreEqual(typeof(IGenericObjectFactory), new ObjectFactoryCreatingFactoryObject().ObjectType);
+        Assert.That(new ObjectFactoryCreatingFactoryObject().ObjectType, Is.EqualTo(typeof(IGenericObjectFactory)));
     }
 }

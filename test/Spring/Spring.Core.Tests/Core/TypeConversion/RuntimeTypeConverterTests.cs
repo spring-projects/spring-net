@@ -28,16 +28,16 @@ public class RuntimeTypeConverterTests
     public void CanConvertFrom()
     {
         RuntimeTypeConverter cnv = new RuntimeTypeConverter();
-        Assert.IsTrue(cnv.CanConvertFrom(typeof(string)), "Mmm... I can't convert from a string to a Type.");
-        Assert.IsFalse(cnv.CanConvertFrom(GetType()), "Mmm... managed to convert to a Type from a Type of this test. Boing!");
+        Assert.That(cnv.CanConvertFrom(typeof(string)), Is.True, "Mmm... I can't convert from a string to a Type.");
+        Assert.That(cnv.CanConvertFrom(GetType()), Is.False, "Mmm... managed to convert to a Type from a Type of this test. Boing!");
     }
 
     [Test]
     public void CanConvertTo()
     {
         RuntimeTypeConverter cnv = new RuntimeTypeConverter();
-        Assert.IsTrue(cnv.CanConvertTo(typeof(Type)), "Mmm... I can't convert to a Type at all.");
-        Assert.IsFalse(cnv.CanConvertTo(typeof(void)), "Mmm... managed to convert to a Type from a bad type. Boing!");
+        Assert.That(cnv.CanConvertTo(typeof(Type)), Is.True, "Mmm... I can't convert to a Type at all.");
+        Assert.That(cnv.CanConvertTo(typeof(void)), Is.False, "Mmm... managed to convert to a Type from a bad type. Boing!");
     }
 
     [Test]
@@ -52,8 +52,8 @@ public class RuntimeTypeConverterTests
     {
         RuntimeTypeConverter cnv = new RuntimeTypeConverter();
         object foo = cnv.ConvertFrom("System.String");
-        Assert.IsNotNull(foo);
-        Assert.AreEqual(GetType().GetType().FullName, foo.GetType().FullName);
+        Assert.That(foo, Is.Not.Null);
+        Assert.That(foo.GetType().FullName, Is.EqualTo(GetType().GetType().FullName));
     }
 
     [Test]
@@ -61,8 +61,8 @@ public class RuntimeTypeConverterTests
     {
         RuntimeTypeConverter cnv = new RuntimeTypeConverter();
         object foo = cnv.ConvertTo(typeof(string), typeof(string));
-        Assert.IsNotNull(foo);
-        Assert.AreEqual(typeof(string).AssemblyQualifiedName, foo);
+        Assert.That(foo, Is.Not.Null);
+        Assert.That(foo, Is.EqualTo(typeof(string).AssemblyQualifiedName));
     }
 
     [Test]

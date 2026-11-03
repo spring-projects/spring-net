@@ -373,8 +373,8 @@ public class ApplicationObjectSupportTests
     {
         MyApplicationObjectSupportConcrete support = new MyApplicationObjectSupportConcrete();
         support.ApplicationContext = new MyContext2();
-        Assert.IsTrue(support.Init);
-        Assert.IsNotNull(support.MessageSourceAccessor);
+        Assert.That(support.Init, Is.True);
+        Assert.That(support.MessageSourceAccessor, Is.Not.Null);
     }
 
     [Test]
@@ -382,7 +382,7 @@ public class ApplicationObjectSupportTests
     {
         MyApplicationObjectSupport support = new MyApplicationObjectSupport();
         support.ApplicationContext = new MockApplicationContext();
-        Assert.IsTrue(support.Init);
+        Assert.That(support.Init, Is.True);
     }
 
     [Test]
@@ -391,7 +391,7 @@ public class ApplicationObjectSupportTests
         MockApplicationContext ctx = new MockApplicationContext();
         ApplicationObjectSupport support = new MyApplicationObjectSupport(ctx);
         support.ApplicationContext = ctx;
-        Assert.AreEqual(ctx, support.ApplicationContext);
+        Assert.That(support.ApplicationContext, Is.EqualTo(ctx));
     }
 
     [Test]

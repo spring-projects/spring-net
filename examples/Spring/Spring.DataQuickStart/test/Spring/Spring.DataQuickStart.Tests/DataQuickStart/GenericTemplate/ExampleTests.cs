@@ -31,7 +31,7 @@ namespace Spring.DataQuickStart.GenericTemplate
         {
             CommandCallbackDao commandCallbackDao = ctx["commandCallbackDao"] as CommandCallbackDao;
             int count = commandCallbackDao.FindCountWithPostalCodeWithDelegate("1010");
-            Assert.AreEqual(3, count);
+            Assert.That(count, Is.EqualTo(3));
         }
         
         [Test]
@@ -39,26 +39,26 @@ namespace Spring.DataQuickStart.GenericTemplate
         {
             ResultSetExtractorDao dao = ctx["resultSetExtractorDao"] as ResultSetExtractorDao;
             IDictionary<string, IList<string>> postalCodeDictionary = dao.GetPostalCodeCustomerMapping();
-            Assert.IsNotNull(postalCodeDictionary);
-            Assert.AreEqual(87, postalCodeDictionary.Count);
+            Assert.That(postalCodeDictionary, Is.Not.Null);
+            Assert.That(postalCodeDictionary.Count, Is.EqualTo(87));
 
             IList<string> contactNameList = dao.GetCustomerNameByCountryAndCity("Brazil", "Sao Paulo");
-            Assert.AreEqual(4, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(4));
 
             contactNameList = dao.GetCustomerNameByCountryAndCityWithParamsBuilder("Brazil", "Sao Paulo");
-            Assert.AreEqual(4, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(4));
 
             contactNameList = dao.GetCustomerNameByCountryAndCityWithCommandSetterDelegate("Brazil", "Sao Paulo");
-            Assert.AreEqual(4, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(4));
 
             contactNameList = dao.GetCustomerNameByCountryAndCityWithAllDelegates("Brazil", "Sao Paulo");
-            Assert.AreEqual(4, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(4));
 
             contactNameList = dao.GetCustomerNameByCountryAndCityWithCommandSetter("Brazil", "Sao Paulo");
-            Assert.AreEqual(4, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(4));
 
             contactNameList = dao.GetCustomerNameByCountry("Brazil");
-            Assert.AreEqual(9, contactNameList.Count);
+            Assert.That(contactNameList.Count, Is.EqualTo(9));
         }
         
         [Test]
@@ -81,8 +81,8 @@ namespace Spring.DataQuickStart.GenericTemplate
         {
             RowCallbackDao dao = ctx["rowCallbackDao"] as RowCallbackDao;
             IDictionary<string, IList<string>> postalCodeDictionary = dao.GetPostalCodeCustomerMapping();
-            Assert.IsNotNull(postalCodeDictionary);
-            Assert.AreEqual(87, postalCodeDictionary.Count);
+            Assert.That(postalCodeDictionary, Is.Not.Null);
+            Assert.That(postalCodeDictionary.Count, Is.EqualTo(87));
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace Spring.DataQuickStart.GenericTemplate
         {
             QueryForObjectDao dao = ctx["queryForObjectDao"] as QueryForObjectDao;
             Customer customer = dao.GetCustomer("Hanna Moos");
-            Assert.AreEqual(customer.ContactName, "Hanna Moos");
+            Assert.That("Hanna Moos", Is.EqualTo(customer.ContactName));
         }
 
         [Test]
@@ -98,13 +98,13 @@ namespace Spring.DataQuickStart.GenericTemplate
         {
             CustOrdersDetailStoredProc storedProc = ctx["custOrdersDetailStoredProc"] as CustOrdersDetailStoredProc;
             List<OrderDetails> details = storedProc.GetOrderDetails(10278);
-            Assert.AreEqual(4, details.Count);
+            Assert.That(details.Count, Is.EqualTo(4));
         }
 
         private static void AssertsOnCustomerList(IList<Customer> customerList)
         {
-            Assert.IsNotNull(customerList);
-            Assert.AreEqual(91, customerList.Count);
+            Assert.That(customerList, Is.Not.Null);
+            Assert.That(customerList.Count, Is.EqualTo(91));
         }
     }
 }

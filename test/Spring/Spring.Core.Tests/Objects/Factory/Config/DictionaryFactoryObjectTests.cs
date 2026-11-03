@@ -73,7 +73,7 @@ public sealed class DictionaryFactoryObjectTests
     [Test]
     public void ObjectTypeReallyIsIDictionary()
     {
-        Assert.AreEqual(typeof(IDictionary), new DictionaryFactoryObject().ObjectType);
+        Assert.That(new DictionaryFactoryObject().ObjectType, Is.EqualTo(typeof(IDictionary)));
     }
 
     [Test]
@@ -93,14 +93,14 @@ public sealed class DictionaryFactoryObjectTests
         dfo.AfterPropertiesSet();
 
         IDictionary dic = (IDictionary) dfo.GetObject();
-        Assert.IsNotNull(dic);
-        Assert.AreEqual(source.Count, dic.Count);
+        Assert.That(dic, Is.Not.Null);
+        Assert.That(dic.Count, Is.EqualTo(source.Count));
         foreach (DictionaryEntry entry in dic)
         {
             string name = (string) entry.Key;
             TestObject dude = (TestObject) entry.Value;
             TestObject originalDude = (TestObject) source[name];
-            Assert.IsTrue(object.ReferenceEquals(dude, originalDude));
+            Assert.That(object.ReferenceEquals(dude, originalDude), Is.True);
         }
     }
 }

@@ -31,16 +31,16 @@ public class UniqueKeyConverterTests
     public void CanConvertFromStringOnly()
     {
         TypeConverter c = new UniqueKeyConverter();
-        Assert.IsTrue(c.CanConvertFrom(typeof(string)));
-        Assert.IsFalse(c.CanConvertFrom(typeof(object)));
+        Assert.That(c.CanConvertFrom(typeof(string)), Is.True);
+        Assert.That(c.CanConvertFrom(typeof(object)), Is.False);
     }
 
     [Test]
     public void CanConvertToStringOnly()
     {
         TypeConverter c = new UniqueKeyConverter();
-        Assert.IsTrue(c.CanConvertTo(typeof(string)));
-        Assert.IsFalse(c.CanConvertTo(typeof(object)));
+        Assert.That(c.CanConvertTo(typeof(string)), Is.True);
+        Assert.That(c.CanConvertTo(typeof(object)), Is.False);
     }
 
     [Test]
@@ -78,14 +78,14 @@ public class UniqueKeyConverterTests
     public void ConvertFromReturnsNullIfInputNull()
     {
         TypeConverter c = new UniqueKeyConverter();
-        Assert.IsNull(c.ConvertFrom(null));
+        Assert.That(c.ConvertFrom(null), Is.Null);
     }
 
     [Test]
     public void ConvertToReturnsNullIfInputNull()
     {
         TypeConverter c = new UniqueKeyConverter();
-        Assert.IsNull(c.ConvertTo(null, typeof(string)));
+        Assert.That(c.ConvertTo(null, typeof(string)), Is.Null);
     }
 
     [Test]
@@ -96,7 +96,7 @@ public class UniqueKeyConverterTests
 
         TypeConverter c = new UniqueKeyConverter();
         string stringKey = (string) c.ConvertTo(key, typeof(string));
-        Assert.AreEqual(key.ToString(), stringKey);
+        Assert.That(stringKey, Is.EqualTo(key.ToString()));
     }
 
     [Test]
@@ -108,6 +108,6 @@ public class UniqueKeyConverterTests
         TypeConverter c = new UniqueKeyConverter();
         string stringKey = (string) c.ConvertTo(expectedKey, typeof(string));
         UniqueKey key2 = (UniqueKey) c.ConvertFrom(stringKey);
-        Assert.AreEqual(expectedKey, key2);
+        Assert.That(key2, Is.EqualTo(expectedKey));
     }
 }

@@ -14,22 +14,22 @@ public class ResourceHolderSupportTests : ResourceHolderSupport
     [Test]
     public void PropertiesTest()
     {
-        Assert.AreEqual(DateTime.MinValue, Deadline);
-        Assert.IsTrue(!SynchronizedWithTransaction);
-        Assert.IsTrue(!RollbackOnly);
+        Assert.That(Deadline, Is.EqualTo(DateTime.MinValue));
+        Assert.That(!SynchronizedWithTransaction, Is.True);
+        Assert.That(!RollbackOnly, Is.True);
 
         //TODO investigate
         /*
         Deadline = DateTime.Now.AddDays(2);
-        Assert.IsTrue( HasDeadline );
-        Assert.AreEqual( DateTime.Now.AddDays(2).Date, Deadline.Date );
+        Assert.That(HasDeadline, Is.True);
+        Assert.That(Deadline.Date, Is.EqualTo(DateTime.Now.AddDays(2).Date));
         */
 
         SynchronizedWithTransaction = true;
-        Assert.IsTrue(SynchronizedWithTransaction);
+        Assert.That(SynchronizedWithTransaction, Is.True);
 
         RollbackOnly = true;
-        Assert.IsTrue(RollbackOnly);
+        Assert.That(RollbackOnly, Is.True);
     }
 
     [Test]
@@ -45,7 +45,7 @@ public class ResourceHolderSupportTests : ResourceHolderSupport
     public void ZeroMilliseconds()
     {
         Deadline = DateTime.Now.AddDays(-1);
-        Assert.AreEqual( 0, TimeToLiveInMilliseconds );
+        Assert.That(TimeToLiveInMilliseconds, Is.EqualTo(0));
     }
     */
     /*
@@ -53,7 +53,7 @@ public class ResourceHolderSupportTests : ResourceHolderSupport
     public void MillisecondToLive()
     {
         Deadline = DateTime.Now.AddDays(1);
-        Assert.IsTrue( TimeToLiveInMilliseconds >= 0);
+        Assert.That(TimeToLiveInMilliseconds >= 0, Is.True);
     }
     */
     /*
@@ -61,7 +61,7 @@ public class ResourceHolderSupportTests : ResourceHolderSupport
     public void SetDeadline()
     {
         SetDeadlineInSeconds( 10 );
-        Assert.IsTrue( TimeToLiveInSeconds >= 0);
+        Assert.That(TimeToLiveInSeconds >= 0, Is.True);
     }
     */
     /*
@@ -69,7 +69,7 @@ public class ResourceHolderSupportTests : ResourceHolderSupport
     public void SetDeadlineMillis()
     {
         SetDeadlineInMilliseconds(1000);
-        Assert.IsTrue( TimeToLiveInMilliseconds >= 0);
+        Assert.That(TimeToLiveInMilliseconds >= 0, Is.True);
     }
     */
 }

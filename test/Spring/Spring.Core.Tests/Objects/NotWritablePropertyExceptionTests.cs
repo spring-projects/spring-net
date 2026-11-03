@@ -30,23 +30,23 @@ public sealed class NotWritablePropertyExceptionTests
     public void InstantiationSupplyingPropertyTypeAndRootException()
     {
         NotWritablePropertyException ex = new NotWritablePropertyException("Doctor", typeof(TestObject), null);
-        Assert.AreEqual("Doctor", ex.OffendingPropertyName);
-        Assert.AreEqual(typeof(TestObject), ex.ObjectType);
+        Assert.That(ex.OffendingPropertyName, Is.EqualTo("Doctor"));
+        Assert.That(ex.ObjectType, Is.EqualTo(typeof(TestObject)));
     }
 
     [Test]
     public void InstantiationSupplyingNullPropertyTypeAndRootException()
     {
         NotWritablePropertyException ex = new NotWritablePropertyException(null, typeof(TestObject), null);
-        Assert.AreEqual(null, ex.OffendingPropertyName);
-        Assert.AreEqual(typeof(TestObject), ex.ObjectType);
+        Assert.That(ex.OffendingPropertyName, Is.EqualTo(null));
+        Assert.That(ex.ObjectType, Is.EqualTo(typeof(TestObject)));
     }
 
     [Test]
     public void InstantiationSupplyingNullPropertyNullTypeAndRootException()
     {
         NotWritablePropertyException ex = new NotWritablePropertyException(null, null, null);
-        Assert.AreEqual(null, ex.OffendingPropertyName);
-        Assert.AreEqual(null, ex.ObjectType);
+        Assert.That(ex.OffendingPropertyName, Is.EqualTo(null));
+        Assert.That(ex.ObjectType, Is.EqualTo(null));
     }
 }

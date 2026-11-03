@@ -45,29 +45,29 @@ namespace Spring.Data.NHibernate.Config
         [Ignore("TODO Connects to database")]
         public void ProxyDataAccessAndServiceLayer()
         {
-            Assert.IsFalse(AopUtils.IsAopProxy(ctx["DbProvider"]));
-            Assert.IsFalse(AopUtils.IsAopProxy(ctx["SessionFactory"]));
-            Assert.IsFalse(AopUtils.IsAopProxy(ctx["hibernateTransactionManager"]));
-            Assert.IsFalse(AopUtils.IsAopProxy(ctx["transactionManager"]));
-            //Assert.IsTrue(AopUtils.IsAopProxy(ctx["testObjectDaoTransProxy"]));
-            Assert.IsTrue(AopUtils.IsAopProxy(ctx["TestObjectDao"]));
-            Assert.IsTrue(AopUtils.IsAopProxy(ctx["SimpleService"]));
+            Assert.That(AopUtils.IsAopProxy(ctx["DbProvider"]), Is.False);
+            Assert.That(AopUtils.IsAopProxy(ctx["SessionFactory"]), Is.False);
+            Assert.That(AopUtils.IsAopProxy(ctx["hibernateTransactionManager"]), Is.False);
+            Assert.That(AopUtils.IsAopProxy(ctx["transactionManager"]), Is.False);
+            //Assert.That(AopUtils.IsAopProxy(ctx["testObjectDaoTransProxy"]), Is.True);
+            Assert.That(AopUtils.IsAopProxy(ctx["TestObjectDao"]), Is.True);
+            Assert.That(AopUtils.IsAopProxy(ctx["SimpleService"]), Is.True);
 
             CallCountingTransactionManager ccm = ctx["transactionManager"] as CallCountingTransactionManager;
-            Assert.IsNotNull(ccm);
-            Assert.AreEqual(0, ccm.begun);
-            Assert.AreEqual(0, ccm.commits);
+            Assert.That(ccm, Is.Not.Null);
+            Assert.That(ccm.begun, Is.EqualTo(0));
+            Assert.That(ccm.commits, Is.EqualTo(0));
 
             LoggingAroundAdvice caa = ctx["loggingAroundAdvice"] as LoggingAroundAdvice;
-            Assert.IsNotNull(caa);
-            Assert.AreEqual(0, caa.numInvoked);
+            Assert.That(caa, Is.Not.Null);
+            Assert.That(caa.numInvoked, Is.EqualTo(0));
 
             ISimpleService simpleService = ctx["SimpleService"] as ISimpleService;
-            Assert.IsNotNull(simpleService);
+            Assert.That(simpleService, Is.Not.Null);
             simpleService.DoWork(new TestObject());
-            Assert.AreEqual(1, ccm.begun);
-            Assert.AreEqual(1, ccm.commits);
-            Assert.AreEqual(1, caa.numInvoked);
+            Assert.That(ccm.begun, Is.EqualTo(1));
+            Assert.That(ccm.commits, Is.EqualTo(1));
+            Assert.That(caa.numInvoked, Is.EqualTo(1));
         }
     }
 }

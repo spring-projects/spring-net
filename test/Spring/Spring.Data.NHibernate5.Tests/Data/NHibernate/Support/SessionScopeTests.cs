@@ -49,13 +49,13 @@ namespace Spring.Data.NHibernate.Support
             using (SessionScope scope = new SessionScope(expectedSessionFactory, expectedEntityInterceptor, expectedSingleSession, expectedDefaultFlushMode, false))
             {
                 // no op - just create & dispose
-                Assert.AreSame(expectedSessionFactory, scope.SessionFactory);
-                Assert.AreSame(expectedEntityInterceptor, scope.EntityInterceptor);
-                Assert.AreEqual(expectedSingleSession, scope.SingleSession);
-                Assert.AreEqual(expectedDefaultFlushMode, scope.DefaultFlushMode);
+                Assert.That(scope.SessionFactory, Is.SameAs(expectedSessionFactory));
+                Assert.That(scope.EntityInterceptor, Is.SameAs(expectedEntityInterceptor));
+                Assert.That(scope.SingleSession, Is.EqualTo(expectedSingleSession));
+                Assert.That(scope.DefaultFlushMode, Is.EqualTo(expectedDefaultFlushMode));
 
                 // ensure nothing got registered with TSM
-                Assert.IsFalse(TransactionSynchronizationManager.HasResource(expectedSessionFactory));
+                Assert.That(TransactionSynchronizationManager.HasResource(expectedSessionFactory), Is.False);
 
                 scope.Close();
             }
@@ -70,18 +70,18 @@ namespace Spring.Data.NHibernate.Support
             using (SessionScope scope = new SessionScope(expectedSessionFactory, true))
             {
                 // no op - just create & dispose
-                Assert.AreSame(expectedSessionFactory, scope.SessionFactory);
-                //Assert.AreSame(null, scope.EntityInterceptor);
-                Assert.AreEqual(expectedSingleSession, scope.SingleSession);
-                Assert.AreEqual(expectedDefaultFlushMode, scope.DefaultFlushMode);
+                Assert.That(scope.SessionFactory, Is.SameAs(expectedSessionFactory));
+                //Assert.That(scope.EntityInterceptor, Is.SameAs(null));
+                Assert.That(scope.SingleSession, Is.EqualTo(expectedSingleSession));
+                Assert.That(scope.DefaultFlushMode, Is.EqualTo(expectedDefaultFlushMode));
 
                 // ensure SessionHolder object is registered with TSM
-                Assert.IsTrue(TransactionSynchronizationManager.HasResource(expectedSessionFactory));
+                Assert.That(TransactionSynchronizationManager.HasResource(expectedSessionFactory), Is.True);
 
                 SessionHolder sessionHolder =
                     (SessionHolder) TransactionSynchronizationManager.GetResource(expectedSessionFactory);
                 // by default session is lazy, so ask for it.
-                Assert.IsNotNull(sessionHolder.Session);
+                Assert.That(sessionHolder.Session, Is.Not.Null);
                 scope.Close();
             }
 
@@ -115,9 +115,9 @@ namespace Spring.Data.NHibernate.Support
         public void DisposeClosesScope()
         {
             SessionScope scope = new SessionScope(expectedSessionFactory, true);
-            Assert.IsTrue(scope.IsOpen);
+            Assert.That(scope.IsOpen, Is.True);
             scope.Dispose();
-            Assert.IsFalse(scope.IsOpen);
+            Assert.That(scope.IsOpen, Is.False);
         }
 
         [Test]
@@ -127,28 +127,28 @@ namespace Spring.Data.NHibernate.Support
             using (scope = new SessionScope(expectedSessionFactory, true))
             {
                 // ensure is open
-                Assert.IsTrue(scope.IsOpen);
-                Assert.IsFalse(scope.IsParticipating);
+                Assert.That(scope.IsOpen, Is.True);
+                Assert.That(scope.IsParticipating, Is.False);
 
                 scope.Close();
                 // ensure is closed
-                Assert.IsFalse(scope.IsOpen);
-                Assert.IsFalse(scope.IsParticipating);
+                Assert.That(scope.IsOpen, Is.False);
+                Assert.That(scope.IsParticipating, Is.False);
             }
 
-            Assert.IsFalse(scope.IsOpen);
-            Assert.IsFalse(scope.IsParticipating);
+            Assert.That(scope.IsOpen, Is.False);
+            Assert.That(scope.IsParticipating, Is.False);
 
             using (scope = new SessionScope(expectedSessionFactory, true))
             {
                 // ensure is open
-                Assert.IsTrue(scope.IsOpen);
-                Assert.IsFalse(scope.IsParticipating);
+                Assert.That(scope.IsOpen, Is.True);
+                Assert.That(scope.IsParticipating, Is.False);
             }
 
             // ensure dispose closes scope
-            Assert.IsFalse(scope.IsOpen);
-            Assert.IsFalse(scope.IsParticipating);
+            Assert.That(scope.IsOpen, Is.False);
+            Assert.That(scope.IsParticipating, Is.False);
         }
 
         [Test]
@@ -158,22 +158,22 @@ namespace Spring.Data.NHibernate.Support
             using (scope = new SessionScope(expectedSessionFactory, false))
             {
                 // ensure is *not* open
-                Assert.IsFalse(scope.IsOpen);
-                Assert.IsFalse(scope.IsParticipating);
+                Assert.That(scope.IsOpen, Is.False);
+                Assert.That(scope.IsParticipating, Is.False);
 
                 scope.Open();
                 // ensure is open now
-                Assert.IsTrue(scope.IsOpen);
+                Assert.That(scope.IsOpen, Is.True);
 
                 scope.Close();
                 // ensure is closed
-                Assert.IsFalse(scope.IsOpen);
-                Assert.IsFalse(scope.IsParticipating);
+                Assert.That(scope.IsOpen, Is.False);
+                Assert.That(scope.IsParticipating, Is.False);
             }
 
             // ensure is closed
-            Assert.IsFalse(scope.IsOpen);
-            Assert.IsFalse(scope.IsParticipating);
+            Assert.That(scope.IsOpen, Is.False);
+            Assert.That(scope.IsParticipating, Is.False);
         }
 
         [Test]
@@ -183,19 +183,19 @@ namespace Spring.Data.NHibernate.Support
             using (scope = new SessionScope(expectedSessionFactory, null, true, FlushMode.Auto, true))
             {
                 // ensure is open
-                Assert.IsTrue(scope.IsOpen);
-                Assert.IsFalse(scope.IsParticipating);
+                Assert.That(scope.IsOpen, Is.True);
+                Assert.That(scope.IsParticipating, Is.False);
 
                 // ensure registered sessionholder with TSM
-                Assert.IsTrue(TransactionSynchronizationManager.HasResource(expectedSessionFactory));
+                Assert.That(TransactionSynchronizationManager.HasResource(expectedSessionFactory), Is.True);
                 // ensure a sessionHolder is registered
                 SessionHolder sessionHolder = TransactionSynchronizationManager.GetResource(expectedSessionFactory) as SessionHolder;
-                Assert.IsNotNull(sessionHolder);
+                Assert.That(sessionHolder, Is.Not.Null);
             }
 
             // ensure scope is closed and sessionHolder is unregistered from TSM
-            Assert.IsFalse(scope.IsOpen);
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(expectedSessionFactory));
+            Assert.That(scope.IsOpen, Is.False);
+            Assert.That(TransactionSynchronizationManager.HasResource(expectedSessionFactory), Is.False);
         }
 
         [Test]
@@ -209,12 +209,12 @@ namespace Spring.Data.NHibernate.Support
             using (scope = new SessionScope(expectedSessionFactory, null, true, FlushMode.Auto, true))
             {
                 SessionHolder sessionHolder = (SessionHolder) TransactionSynchronizationManager.GetResource(expectedSessionFactory);
-                Assert.IsTrue(sessionHolder.ContainsSession(expectedSession));
+                Assert.That(sessionHolder.ContainsSession(expectedSession), Is.True);
             }
 
             // ensure scope is closed and sessionHolder is unregistered from TSM
-            Assert.IsFalse(scope.IsOpen);
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(expectedSessionFactory));
+            Assert.That(scope.IsOpen, Is.False);
+            Assert.That(TransactionSynchronizationManager.HasResource(expectedSessionFactory), Is.False);
 
             CallToSet(() => expectedSession.FlushMode).WhenArgumentsMatch(x => x.Get<FlushMode>(0) == FlushMode.Auto).MustHaveHappenedOnceExactly();
             CallTo(() => expectedSession.Close()).MustHaveHappenedOnceExactly();
@@ -226,34 +226,34 @@ namespace Spring.Data.NHibernate.Support
             SessionScope scope = null;
             using (scope = new SessionScope(expectedSessionFactory, null, true, FlushMode.Auto, true))
             {
-                Assert.IsTrue(scope.IsOpen);
-                Assert.IsFalse(scope.IsParticipating);
+                Assert.That(scope.IsOpen, Is.True);
+                Assert.That(scope.IsParticipating, Is.False);
 
                 using (SessionScope innerScope = new SessionScope(expectedSessionFactory, true))
                 {
                     // outer scope didn't change
-                    Assert.IsTrue(scope.IsOpen);
-                    Assert.IsFalse(scope.IsParticipating);
+                    Assert.That(scope.IsOpen, Is.True);
+                    Assert.That(scope.IsParticipating, Is.False);
 
                     // participating only - no SessionHolder will be registered!
-                    Assert.IsTrue(innerScope.IsOpen);
-                    Assert.IsTrue(innerScope.IsParticipating);
+                    Assert.That(innerScope.IsOpen, Is.True);
+                    Assert.That(innerScope.IsParticipating, Is.True);
 
                     innerScope.Close();
 
-                    Assert.IsFalse(innerScope.IsOpen);
-                    Assert.IsFalse(innerScope.IsParticipating);
+                    Assert.That(innerScope.IsOpen, Is.False);
+                    Assert.That(innerScope.IsParticipating, Is.False);
 
                     // outer scope didn't change
-                    Assert.IsTrue(scope.IsOpen);
-                    Assert.IsFalse(scope.IsParticipating);
-                    Assert.IsTrue(TransactionSynchronizationManager.HasResource(expectedSessionFactory));
+                    Assert.That(scope.IsOpen, Is.True);
+                    Assert.That(scope.IsParticipating, Is.False);
+                    Assert.That(TransactionSynchronizationManager.HasResource(expectedSessionFactory), Is.True);
                 }
             }
 
             // ensure scope is closed and sessionHolder is unregistered from TSM
-            Assert.IsFalse(scope.IsOpen);
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(expectedSessionFactory));
+            Assert.That(scope.IsOpen, Is.False);
+            Assert.That(TransactionSynchronizationManager.HasResource(expectedSessionFactory), Is.False);
         }
 
         public class TestSessionScopeSettings : SessionScopeSettings

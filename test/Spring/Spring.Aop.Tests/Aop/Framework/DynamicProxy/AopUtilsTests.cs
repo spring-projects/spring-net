@@ -42,24 +42,26 @@ public sealed class AopUtilsTests
     public void PointcutCanNeverApply()
     {
         IPointcut pointcut = new NeverMatchesPointcut();
-        Assert.IsFalse(AopUtils.CanApply(pointcut, typeof(Object), null));
+        Assert.That(AopUtils.CanApply(pointcut, typeof(Object), null), Is.False);
     }
 
     [Test]
     public void PointcutAlwaysApplies()
     {
-        Assert.IsTrue(AopUtils.CanApply(new DefaultPointcutAdvisor(new NopInterceptor()), typeof(Object), null));
-        Assert.IsTrue(AopUtils.CanApply(new DefaultPointcutAdvisor(new NopInterceptor()), typeof(TestObject), new Type[] { typeof(ITestObject) }));
+        Assert.That(AopUtils.CanApply(new DefaultPointcutAdvisor(new NopInterceptor()), typeof(Object), null), Is.True);
+        Assert.That(AopUtils.CanApply(new DefaultPointcutAdvisor(new NopInterceptor()), typeof(TestObject), new Type[] { typeof(ITestObject) }), Is.True);
     }
 
     [Test]
     public void PointcutAppliesToOneMethodOnObject()
     {
         IPointcut pointcut = new OneMethodTestPointcut();
-        Assert.IsTrue(AopUtils.CanApply(pointcut, typeof(object), null),
+        Assert.That(AopUtils.CanApply(pointcut, typeof(object), null),
+            Is.True,
             "Must return true if we're not proxying interfaces.");
-        Assert.IsFalse(AopUtils.CanApply(pointcut, typeof(object),
+        Assert.That(AopUtils.CanApply(pointcut, typeof(object),
                 new Type[] { typeof(ITestObject) }),
+            Is.False,
             "Must return false if we're proxying interfaces.");
     }
 
@@ -69,23 +71,23 @@ public sealed class AopUtilsTests
         IPointcut pointcut = new OneInterfaceTestPointcut();
 
         // Will return true if we're proxying interfaces including ITestObject
-        Assert.IsTrue(AopUtils.CanApply(pointcut, typeof(TestObject), new Type[] { typeof(ITestObject), typeof(IComparable) }));
+        Assert.That(AopUtils.CanApply(pointcut, typeof(TestObject), new Type[] { typeof(ITestObject), typeof(IComparable) }), Is.True);
 
         // Will return true if we're proxying interfaces including ITestObject
-        Assert.IsFalse(AopUtils.CanApply(pointcut, typeof(TestObject), new Type[] { typeof(IComparable) }));
+        Assert.That(AopUtils.CanApply(pointcut, typeof(TestObject), new Type[] { typeof(IComparable) }), Is.False);
     }
 
     [Test]
     public void CanApplyWithAdvisorYieldsTrueIfAdvisorIsNotKnownAdvisorType()
     {
         IAdvisor advisor = A.Fake<IAdvisor>();
-        Assert.IsTrue(AopUtils.CanApply(advisor, typeof(TestObject), null));
+        Assert.That(AopUtils.CanApply(advisor, typeof(TestObject), null), Is.True);
     }
 
     [Test]
     public void CanApplyWithAdvisorYieldsTrueIfAdvisorIsNull()
     {
-        Assert.IsTrue(AopUtils.CanApply((IAdvisor) null, typeof(TestObject), null));
+        Assert.That(AopUtils.CanApply((IAdvisor) null, typeof(TestObject), null), Is.True);
     }
 
     /// <summary>
@@ -96,18 +98,19 @@ public sealed class AopUtilsTests
     {
         DerivedTestObject testObject = new DerivedTestObject();
         IList interfaces = new ArrayList(testObject.GetType().GetInterfaces());
-        Assert.AreEqual(9, interfaces.Count, "Incorrect number of interfaces");
-        Assert.IsTrue(interfaces.Contains(typeof(ITestObject)), "Does not contain ITestObject");
-        Assert.IsTrue(interfaces.Contains(typeof(IOther)), "Does not contain IOther");
+        Assert.That(interfaces.Count, Is.EqualTo(9), "Incorrect number of interfaces");
+        Assert.That(interfaces.Contains(typeof(ITestObject)), Is.True, "Does not contain ITestObject");
+        Assert.That(interfaces.Contains(typeof(IOther)), Is.True, "Does not contain IOther");
     }
 
     [Test]
     public void GetAllInterfacesWithNull()
     {
         Type[] interfaces = AopUtils.GetAllInterfaces(null);
-        Assert.IsNotNull(interfaces,
+        Assert.That(interfaces,
+            Is.Not.Null,
             "Must never return null, even if the argument is null.");
-        Assert.AreEqual(0, interfaces.Length,
+        Assert.That(interfaces.Length, Is.EqualTo(0),
             "Must return an empty array is the argument is null.");
     }
 
@@ -122,9 +125,10 @@ public sealed class AopUtilsTests
     {
         ImplementsNothing instance = new ImplementsNothing();
         Type[] interfaces = AopUtils.GetAllInterfaces(instance);
-        Assert.IsNotNull(interfaces,
+        Assert.That(interfaces,
+            Is.Not.Null,
             "Must never return null, even if the argument doesn't implement any interfaces.");
-        Assert.AreEqual(0, interfaces.Length,
+        Assert.That(interfaces.Length, Is.EqualTo(0),
             "Must return an empty array is the argument doesn't implement any interfaces.");
     }
 
@@ -133,13 +137,14 @@ public sealed class AopUtilsTests
     {
         ImplementsTwoInterfaces instance = new ImplementsTwoInterfaces();
         Type[] interfaces = AopUtils.GetAllInterfaces(instance);
-        Assert.IsNotNull(interfaces, "Must never return null.");
-        Assert.AreEqual(2, interfaces.Length,
+        Assert.That(interfaces, Is.Not.Null, "Must never return null.");
+        Assert.That(interfaces.Length, Is.EqualTo(2),
             "Implements two interfaces.");
         ISet ifaces = new ListSet(interfaces);
-        Assert.IsTrue(
+        Assert.That(
             ifaces.ContainsAll(
                 new Type[] { typeof(IDisposable), typeof(ICloneable) }),
+            Is.True,
             "Did not find the correct interfaces.");
     }
 
@@ -148,12 +153,12 @@ public sealed class AopUtilsTests
     {
         InheritsOneInterface instance = new InheritsOneInterface();
         Type[] interfaces = AopUtils.GetAllInterfaces(instance);
-        Assert.IsNotNull(interfaces, "Must never return null.");
-        Assert.AreEqual(1, interfaces.Length,
+        Assert.That(interfaces, Is.Not.Null, "Must never return null.");
+        Assert.That(interfaces.Length, Is.EqualTo(1),
             "Inherited one interface from superclass.");
         Type iface = interfaces[0];
-        Assert.IsNotNull(iface, "Returned interface cannot be null.");
-        Assert.AreEqual(typeof(IDisposable), iface, "Wrong interface returned.");
+        Assert.That(iface, Is.Not.Null, "Returned interface cannot be null.");
+        Assert.That(iface, Is.EqualTo(typeof(IDisposable)), "Wrong interface returned.");
     }
 
     [Test]
@@ -162,7 +167,7 @@ public sealed class AopUtilsTests
         IIntroductionAdvisor mockIntroAdvisor = A.Fake<IIntroductionAdvisor>();
         A.CallTo(() => mockIntroAdvisor.TypeFilter).Returns(TrueTypeFilter.True);
 
-        Assert.IsTrue(AopUtils.CanApply(mockIntroAdvisor, typeof(TestObject), null));
+        Assert.That(AopUtils.CanApply(mockIntroAdvisor, typeof(TestObject), null), Is.True);
     }
 
     private sealed class OneMethodTestPointcut : StaticMethodMatcherPointcut

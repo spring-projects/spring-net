@@ -57,31 +57,31 @@ public class WebApplicationContextTests : WebFormTestCase
 
         object o;
         o = ctx.GetObject("singletonObject");
-        Assert.IsNotNull(o);
+        Assert.That(o, Is.Not.Null);
         o = ctx.GetObject("prototypeObject");
-        Assert.IsNotNull(o);
+        Assert.That(o, Is.Not.Null);
         o = ctx.GetObject("applicationScopedObject");
-        Assert.IsNotNull(o);
+        Assert.That(o, Is.Not.Null);
         try
         {
             o = ctx.GetObject("requestScopedObject");
-            Assert.IsNotNull(o);
+            Assert.That(o, Is.Not.Null);
             Assert.Fail("shouldn't be allowed");
         }
         catch (ObjectCreationException oce1)
         {
-            Assert.IsTrue(-1 < oce1.Message.IndexOf("'request' scoped web singleton object 'requestScopedObject' requires a valid Request"));
+            Assert.That(-1 < oce1.Message.IndexOf("'request' scoped web singleton object 'requestScopedObject' requires a valid Request"), Is.True);
         }
 
         try
         {
             o = ctx.GetObject("sessionScopedObject");
-            Assert.IsNotNull(o);
+            Assert.That(o, Is.Not.Null);
             Assert.Fail("shouldn't be allowed");
         }
         catch (ObjectCreationException oce1)
         {
-            Assert.IsTrue(-1 < oce1.Message.IndexOf("'session' scoped web singleton object 'sessionScopedObject' requires a valid Session"));
+            Assert.That(-1 < oce1.Message.IndexOf("'session' scoped web singleton object 'sessionScopedObject' requires a valid Session"), Is.True);
         }
 
         return null;

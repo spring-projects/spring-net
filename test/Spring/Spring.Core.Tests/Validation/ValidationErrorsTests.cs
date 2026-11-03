@@ -38,15 +38,15 @@ public sealed class ValidationErrorsTests
         ValidationErrors errors = new ValidationErrors();
         errors.AddError(string.Empty, ErrorMessageOne);
         IList<string> resolvedErrors = errors.GetResolvedErrors(string.Empty, null);
-        Assert.AreEqual(ErrorMessageOne.Id, (string) resolvedErrors[0]);
+        Assert.That((string) resolvedErrors[0], Is.EqualTo(ErrorMessageOne.Id));
     }
 
     [Test]
     public void ContainsNoErrorsDirectlyAfterInstantiation()
     {
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsTrue(errors.IsEmpty);
-        Assert.IsNotNull(errors.GetErrors(GoodErrorKey));
+        Assert.That(errors.IsEmpty, Is.True);
+        Assert.That(errors.GetErrors(GoodErrorKey), Is.Not.Null);
     }
 
     [Test]
@@ -67,9 +67,9 @@ public sealed class ValidationErrorsTests
     {
         IValidationErrors errors = new ValidationErrors();
         errors.AddError(GoodErrorKey, ErrorMessageOne);
-        Assert.IsFalse(errors.IsEmpty);
-        Assert.IsNotNull(errors.GetErrors(GoodErrorKey));
-        Assert.AreEqual(1, errors.GetErrors(GoodErrorKey).Count);
+        Assert.That(errors.IsEmpty, Is.False);
+        Assert.That(errors.GetErrors(GoodErrorKey), Is.Not.Null);
+        Assert.That(errors.GetErrors(GoodErrorKey).Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -78,9 +78,9 @@ public sealed class ValidationErrorsTests
         IValidationErrors errors = new ValidationErrors();
         errors.AddError(GoodErrorKey, ErrorMessageOne);
         errors.AddError(GoodErrorKey, ErrorMessageTwo);
-        Assert.IsFalse(errors.IsEmpty);
-        Assert.IsNotNull(errors.GetErrors(GoodErrorKey));
-        Assert.AreEqual(2, errors.GetErrors(GoodErrorKey).Count);
+        Assert.That(errors.IsEmpty, Is.False);
+        Assert.That(errors.GetErrors(GoodErrorKey), Is.Not.Null);
+        Assert.That(errors.GetErrors(GoodErrorKey).Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -89,12 +89,12 @@ public sealed class ValidationErrorsTests
         IValidationErrors errors = new ValidationErrors();
 
         IList<ErrorMessage> typedErrors = errors.GetErrors("xyz");
-        Assert.IsNotNull(typedErrors);
-        Assert.AreEqual(0, typedErrors.Count);
+        Assert.That(typedErrors, Is.Not.Null);
+        Assert.That(typedErrors.Count, Is.EqualTo(0));
 
         IList<string> resolvedErrors = errors.GetResolvedErrors("xyz", new NullMessageSource());
-        Assert.IsNotNull(resolvedErrors);
-        Assert.AreEqual(0, resolvedErrors.Count);
+        Assert.That(resolvedErrors, Is.Not.Null);
+        Assert.That(resolvedErrors.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -106,9 +106,9 @@ public sealed class ValidationErrorsTests
         errors.MergeErrors(null);
 
         // must be unchanged with no Exception thrown...
-        Assert.IsFalse(errors.IsEmpty);
-        Assert.IsNotNull(errors.GetErrors(GoodErrorKey));
-        Assert.AreEqual(2, errors.GetErrors(GoodErrorKey).Count);
+        Assert.That(errors.IsEmpty, Is.False);
+        Assert.That(errors.GetErrors(GoodErrorKey), Is.Not.Null);
+        Assert.That(errors.GetErrors(GoodErrorKey).Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -123,17 +123,17 @@ public sealed class ValidationErrorsTests
         errors.AddError(GoodErrorKey, ErrorMessageOne);
         errors.MergeErrors(otherErrors);
 
-        Assert.IsFalse(errors.IsEmpty);
+        Assert.That(errors.IsEmpty, Is.False);
         IList<ErrorMessage> mergedErrors = errors.GetErrors(GoodErrorKey);
-        Assert.IsNotNull(mergedErrors);
-        Assert.AreEqual(2, mergedErrors.Count);
-        Assert.AreEqual(ErrorMessageOne, mergedErrors[0]);
-        Assert.AreEqual(ErrorMessageTwo, mergedErrors[1]);
+        Assert.That(mergedErrors, Is.Not.Null);
+        Assert.That(mergedErrors.Count, Is.EqualTo(2));
+        Assert.That(mergedErrors[0], Is.EqualTo(ErrorMessageOne));
+        Assert.That(mergedErrors[1], Is.EqualTo(ErrorMessageTwo));
 
         IList<ErrorMessage> otherErrorsForKey = errors.GetErrors(anotherKey);
-        Assert.IsNotNull(otherErrorsForKey);
-        Assert.AreEqual(1, otherErrorsForKey.Count);
-        Assert.AreEqual(ErrorMessageTwo, otherErrorsForKey[0]);
+        Assert.That(otherErrorsForKey, Is.Not.Null);
+        Assert.That(otherErrorsForKey.Count, Is.EqualTo(1));
+        Assert.That(otherErrorsForKey[0], Is.EqualTo(ErrorMessageTwo));
     }
 
     [Test]
@@ -167,13 +167,13 @@ public sealed class ValidationErrorsTests
         byte[] byteBefore = new byte[streamBefore.Length];
         byte[] byteAfter = new byte[streamAfter.Length];
 
-        Assert.AreEqual(byteAfter.Length, byteBefore.Length);
+        Assert.That(byteBefore.Length, Is.EqualTo(byteAfter.Length));
 
         streamBefore.Position = 0;
         streamAfter.Position = 0;
         streamBefore.Read(byteBefore, 0, (int) streamBefore.Length);
         streamAfter.Read(byteAfter, 0, (int) streamAfter.Length);
 
-        Assert.AreEqual(byteBefore, byteAfter);
+        Assert.That(byteAfter, Is.EqualTo(byteBefore));
     }
 }

@@ -67,7 +67,7 @@ public class CronTriggerObjectTest : TriggerObjectTest
         cronTrigger.JobDetail = jd;
         cronTrigger.AfterPropertiesSet();
         base.TestAfterPropertiesSet_JobDetailGiven();
-        Assert.AreSame(jd, cronTrigger.JobDetail, "job details weren't same");
+        Assert.That(cronTrigger.JobDetail, Is.SameAs(jd), "job details weren't same");
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public class CronTriggerObjectTest : TriggerObjectTest
         data["foo"] = "bar";
         data["number"] = 123;
         cronTrigger.JobDataAsMap = data;
-        CollectionAssert.AreEquivalent(data, cronTrigger.JobDataMap, "Data differed");
+        Assert.That(cronTrigger.JobDataMap, Is.EquivalentTo(data), "Data differed");
     }
 
     /// <summary>
@@ -91,14 +91,14 @@ public class CronTriggerObjectTest : TriggerObjectTest
     {
         TimeSpan expectedDelay = TimeSpan.FromMinutes(10);
         cronTrigger.StartDelay = expectedDelay;
-        Assert.AreEqual(expectedDelay, cronTrigger.StartDelay);
+        Assert.That(cronTrigger.StartDelay, Is.EqualTo(expectedDelay));
 
         cronTrigger.AfterPropertiesSet();
         DateTime now = DateTime.UtcNow;
         TimeSpan delay = cronTrigger.StartTimeUtc - now;
 
         // check roughly
-        Assert.IsTrue(delay > TimeSpan.FromMinutes(9).Add(TimeSpan.FromSeconds(55)));
-        Assert.IsTrue(delay < TimeSpan.FromMinutes(10).Add(TimeSpan.FromSeconds(5)));
+        Assert.That(delay > TimeSpan.FromMinutes(9).Add(TimeSpan.FromSeconds(55)), Is.True);
+        Assert.That(delay < TimeSpan.FromMinutes(10).Add(TimeSpan.FromSeconds(5)), Is.True);
     }
 }

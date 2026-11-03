@@ -29,13 +29,13 @@ public class MessageListenerAdapterTests
     public void DefaultMessageHandlerMethodNameIsTheConstantDefault()
     {
         MessageListenerAdapter adapter = new MessageListenerAdapter();
-        Assert.AreSame(MessageListenerAdapter.ORIGINAL_DEFAULT_LISTENER_METHOD, adapter.DefaultHandlerMethod);
+        Assert.That(adapter.DefaultHandlerMethod, Is.SameAs(MessageListenerAdapter.ORIGINAL_DEFAULT_LISTENER_METHOD));
     }
 
     [Test]
     public void WhenNoHandlerMethodIsSuppliedTheHandlerIsAssumedToBeTheMessageListenerAdapterItself()
     {
         MessageListenerAdapter adapter = new MessageListenerAdapter();
-        Assert.AreSame(adapter, adapter.HandlerObject);
+        Assert.That(adapter.HandlerObject, Is.SameAs(adapter));
     }
 }

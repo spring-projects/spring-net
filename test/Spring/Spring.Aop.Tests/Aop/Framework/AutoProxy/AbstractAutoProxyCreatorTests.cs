@@ -139,9 +139,9 @@ public class AbstractAutoProxyCreatorTests
         of.AddObjectPostProcessor(apc);
 
         ITestObject o = of.GetObject("bar") as ITestObject;
-        Assert.IsTrue(AopUtils.IsAopProxy(o));
+        Assert.That(AopUtils.IsAopProxy(o), Is.True);
         o.Foo();
-        Assert.AreEqual(1, apc.NopInterceptor.Count);
+        Assert.That(apc.NopInterceptor.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -154,9 +154,9 @@ public class AbstractAutoProxyCreatorTests
         of.AddObjectPostProcessor(apc);
 
         ObjectWithoutInterface o = of.GetObject("bar") as ObjectWithoutInterface;
-        Assert.IsTrue(AopUtils.IsAopProxy(o));
+        Assert.That(AopUtils.IsAopProxy(o), Is.True);
         o.Foo();
-        Assert.AreEqual(1, apc.NopInterceptor.Count);
+        Assert.That(apc.NopInterceptor.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -173,15 +173,15 @@ public class AbstractAutoProxyCreatorTests
         of.AddObjectPostProcessor(apc);
 
         ITestObject o = of.GetObject("bar") as ITestObject;
-        Assert.IsTrue(AopUtils.IsAopProxy(o));
+        Assert.That(AopUtils.IsAopProxy(o), Is.True);
 
         // ensure interceptors get called
         o.Foo();
-        Assert.AreEqual(1, apc.NopInterceptor.Count);
+        Assert.That(apc.NopInterceptor.Count, Is.EqualTo(1));
         IAdvised advised = (IAdvised) o;
 
         // ensure target was called
         object target = advised.TargetSource.GetTarget();
-        Assert.AreEqual(1, TransparentProxyFactory.GetRealProxy(target).Count);
+        Assert.That(TransparentProxyFactory.GetRealProxy(target).Count, Is.EqualTo(1));
     }
 }

@@ -34,9 +34,9 @@ public sealed class OrderComparatorTests
         string max = "Max"; // should be stuck at the end 'cos it doesnt implement IOrdered
         object[] list = new object[] { max, one, fifty };
         Array.Sort(list, new OrderComparator());
-        Assert.AreEqual(one, list[0]);
-        Assert.AreEqual(fifty, list[1]);
-        Assert.AreEqual(max, list[2]);
+        Assert.That(list[0], Is.EqualTo(one));
+        Assert.That(list[1], Is.EqualTo(fifty));
+        Assert.That(list[2], Is.EqualTo(max));
     }
 
     [Test]
@@ -45,9 +45,9 @@ public sealed class OrderComparatorTests
         Ordered one = new Ordered(1);
         object[] list = new object[] { null, one, null };
         ArrayUtils.Sort(list, new OrderComparator());
-        Assert.AreEqual(one, list[0], "order comparator instance should be first");
-        Assert.AreEqual(null, list[1]);
-        Assert.AreEqual(null, list[2]);
+        Assert.That(list[0], Is.EqualTo(one), "order comparator instance should be first");
+        Assert.That(list[1], Is.EqualTo(null));
+        Assert.That(list[2], Is.EqualTo(null));
     }
 
     internal sealed class Ordered : IOrdered

@@ -41,10 +41,10 @@ public class AbstractSharedStateFactoryTests
     public void DefaultsToCaseInsensitiveState()
     {
         TestSharedStateFactory p = new TestSharedStateFactory();
-        Assert.IsFalse(p.CaseSensitiveState);
+        Assert.That(p.CaseSensitiveState, Is.False);
         IDictionary state = p.GetSharedStateFor(new object(), "no name");
         state["foo"] = this;
-        Assert.AreSame(this, state["FOO"]);
+        Assert.That(state["FOO"], Is.SameAs(this));
     }
 
     [Test]
@@ -53,16 +53,16 @@ public class AbstractSharedStateFactoryTests
         TestSharedStateFactory p = new TestSharedStateFactory();
 
         // create case-insensitive dict
-        Assert.IsFalse(p.CaseSensitiveState);
+        Assert.That(p.CaseSensitiveState, Is.False);
         IDictionary state = p.GetSharedStateFor(new object(), "no name");
         state["foo"] = this;
-        Assert.AreSame(this, state["FOO"]);
+        Assert.That(state["FOO"], Is.SameAs(this));
 
         // create case-sensitive dict
         p.CaseSensitiveState = true;
         state = p.GetSharedStateFor(new object(), "no name");
         state["foo"] = this;
-        Assert.IsFalse(state.Contains("FOO"));
+        Assert.That(state.Contains("FOO"), Is.False);
     }
 
     [Test]
@@ -71,7 +71,7 @@ public class AbstractSharedStateFactoryTests
         TestSharedStateFactory p = new TestSharedStateFactory();
         // allow "null" for name
         IDictionary state = p.GetSharedStateFor(new object(), null);
-        Assert.IsNotNull(state);
+        Assert.That(state, Is.Not.Null);
         // throws on null for instance
         Assert.Throws<ArgumentNullException>(() => p.GetSharedStateFor(null, "no name"));
     }
@@ -83,9 +83,9 @@ public class AbstractSharedStateFactoryTests
         // allow "null" for name
         IDictionary state = p.GetSharedStateFor(this, "foo");
         IDictionary state2 = p.GetSharedStateFor(this, "FOO");
-        Assert.IsNotNull(state);
-        Assert.IsNotNull(state2);
-        Assert.AreNotSame(state, state2);
+        Assert.That(state, Is.Not.Null);
+        Assert.That(state2, Is.Not.Null);
+        Assert.That(state2, Is.Not.SameAs(state));
     }
 
     [Test]
@@ -94,6 +94,6 @@ public class AbstractSharedStateFactoryTests
         TestSharedStateFactory p = new TestSharedStateFactory();
         // force provider to produce a null key
         IDictionary state = p.GetSharedStateFor(TestSharedStateFactory.SPECIAL_OBJECT, null);
-        Assert.IsNull(state);
+        Assert.That(state, Is.Null);
     }
 }

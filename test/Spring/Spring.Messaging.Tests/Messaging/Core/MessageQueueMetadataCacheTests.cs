@@ -35,22 +35,22 @@ public class MessageQueueMetadataCacheTests : AbstractDependencyInjectionSpringC
     public void InitialzeMessageQueueMetadata()
     {
         MessageQueueMetadataCache cache = new MessageQueueMetadataCache(applicationContext);
-        Assert.AreEqual(0, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(0));
         cache.Initialize();
-        Assert.IsTrue(cache.Initalized);
-        Assert.AreEqual(4, cache.Count);
+        Assert.That(cache.Initalized, Is.True);
+        Assert.That(cache.Count, Is.EqualTo(4));
         MessageQueueMetadata md = cache.Get(@".\Private$\testqueue");
         cache.Remove(@".\Private$\testqueue");
-        Assert.AreEqual(3, cache.Count);
-        Assert.IsNull(cache.Get(@".\Private$\testqueue"));
+        Assert.That(cache.Count, Is.EqualTo(3));
+        Assert.That(cache.Get(@".\Private$\testqueue"), Is.Null);
 
         string[] paths = new string[] { @".\Private$\testtxqueue", @"FormatName:Direct=TCP:192.168.1.105\Private$\testtxqueue", @"FormatName:Direct=TCP:192.168.1.105\Private$\testqueue" };
 
         Assert.That(paths, Is.EquivalentTo(cache.Paths));
         paths = new string[] { @".\Private$\testtxqueue", @"FormatName:Direct=TCP:192.168.1.105\Private$\testtxqueue" };
         cache.RemoveAll(paths);
-        Assert.AreEqual(1, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(1));
         cache.Clear();
-        Assert.AreEqual(0, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(0));
     }
 }

@@ -66,7 +66,7 @@ public sealed class WebServiceExporterTests
         wse.AfterPropertiesSet();
 
         Type proxyType = wse.GetExportedType();
-        Assert.IsTrue(typeof(IService).IsAssignableFrom(proxyType));
+        Assert.That(typeof(IService).IsAssignableFrom(proxyType), Is.True);
     }
 
     [Test]
@@ -78,13 +78,13 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebServiceAttribute wsa = attrs[0] as WebServiceAttribute;
-        Assert.AreEqual("CreatesWebServiceAttributeWithNoDecoratedClassAndMinimalConfig", wsa.Name);
-        Assert.AreEqual(string.Empty, wsa.Description);
-        Assert.AreEqual(WebServiceAttribute.DefaultNamespace, wsa.Namespace);
+        Assert.That(wsa.Name, Is.EqualTo("CreatesWebServiceAttributeWithNoDecoratedClassAndMinimalConfig"));
+        Assert.That(wsa.Description, Is.Empty);
+        Assert.That(wsa.Namespace, Is.EqualTo(WebServiceAttribute.DefaultNamespace));
     }
 
     [Test]
@@ -99,13 +99,13 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebServiceAttribute wsa = attrs[0] as WebServiceAttribute;
-        Assert.AreEqual(wse.Name, wsa.Name);
-        Assert.AreEqual(wse.Description, wsa.Description);
-        Assert.AreEqual(wse.Namespace, wsa.Namespace);
+        Assert.That(wsa.Name, Is.EqualTo(wse.Name));
+        Assert.That(wsa.Description, Is.EqualTo(wse.Description));
+        Assert.That(wsa.Namespace, Is.EqualTo(wse.Namespace));
     }
 
     [Test]
@@ -117,11 +117,11 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceBindingAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebServiceBindingAttribute wsba = attrs[0] as WebServiceBindingAttribute;
-        Assert.AreEqual(WsiProfiles.BasicProfile1_1, wsba.ConformsTo);
+        Assert.That(wsba.ConformsTo, Is.EqualTo(WsiProfiles.BasicProfile1_1));
     }
 
     [Test]
@@ -134,11 +134,11 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceBindingAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebServiceBindingAttribute wsba = attrs[0] as WebServiceBindingAttribute;
-        Assert.AreEqual(WsiProfiles.None, wsba.ConformsTo);
+        Assert.That(wsba.ConformsTo, Is.EqualTo(WsiProfiles.None));
     }
 
     [Test]
@@ -150,11 +150,11 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceBindingAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebServiceBindingAttribute wsba = attrs[0] as WebServiceBindingAttribute;
-        Assert.AreEqual(WsiProfiles.None, wsba.ConformsTo);
+        Assert.That(wsba.ConformsTo, Is.EqualTo(WsiProfiles.None));
     }
 
     [Test]
@@ -166,11 +166,11 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         MethodInfo method = proxyType.GetMethod("SomeMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetCustomAttributes(typeof(WebMethodAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
     }
 
     [Test]
@@ -183,14 +183,14 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         MethodInfo method = proxyType.GetMethod("SomeMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetCustomAttributes(typeof(WebMethodAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebMethodAttribute wma = attrs[0] as WebMethodAttribute;
-        Assert.AreEqual(true, wma.EnableSession);
+        Assert.That(wma.EnableSession, Is.EqualTo(true));
     }
 
     [Test]
@@ -202,13 +202,13 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebServiceAttribute wsa = attrs[0] as WebServiceAttribute;
-        Assert.AreEqual("OverridesExistingWebServiceAttributeWithDecoratedClass", wsa.Name);
-        Assert.AreEqual(string.Empty, wsa.Description);
-        Assert.AreEqual(WebServiceAttribute.DefaultNamespace, wsa.Namespace);
+        Assert.That(wsa.Name, Is.EqualTo("OverridesExistingWebServiceAttributeWithDecoratedClass"));
+        Assert.That(wsa.Description, Is.Empty);
+        Assert.That(wsa.Namespace, Is.EqualTo(WebServiceAttribute.DefaultNamespace));
     }
 
     [Test]
@@ -220,14 +220,14 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         MethodInfo method = proxyType.GetMethod("SomeMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetCustomAttributes(typeof(WebMethodAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebMethodAttribute wma = attrs[0] as WebMethodAttribute;
-        Assert.AreEqual("SomeMethod description", wma.Description);
+        Assert.That(wma.Description, Is.EqualTo("SomeMethod description"));
     }
 
     // TODO : attributes override
@@ -242,14 +242,14 @@ public sealed class WebServiceExporterTests
 
         Type proxyType = wse.GetExportedType();
         MethodInfo method = proxyType.GetMethod("SomeMethod");
-        Assert.IsNotNull(method);
+        Assert.That(method, Is.Not.Null);
 
         object[] attrs = method.GetCustomAttributes(typeof(WebMethodAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebMethodAttribute wma = attrs[0] as WebMethodAttribute;
-        Assert.AreEqual(true, wma.EnableSession);
+        Assert.That(wma.EnableSession, Is.EqualTo(true));
     }
 
     [Test]
@@ -263,11 +263,11 @@ public sealed class WebServiceExporterTests
         Type proxyType = wse.GetExportedType();
 
         object[] attrs = proxyType.GetCustomAttributes(typeof(WebServiceAttribute), true);
-        Assert.IsNotEmpty(attrs);
-        Assert.AreEqual(1, attrs.Length);
+        Assert.That(attrs, Is.Not.Empty);
+        Assert.That(attrs.Length, Is.EqualTo(1));
 
         WebServiceAttribute wsa = attrs[0] as WebServiceAttribute;
-        Assert.AreEqual("AppliesCustomAttributeBuilderToType", wsa.Name);
+        Assert.That(wsa.Name, Is.EqualTo("AppliesCustomAttributeBuilderToType"));
     }
 
     [Test]
@@ -279,7 +279,7 @@ public sealed class WebServiceExporterTests
         wse.AfterPropertiesSet();
 
         Type proxyType = wse.GetExportedType();
-        Assert.IsTrue(typeof(CustomWebService).IsAssignableFrom(proxyType));
+        Assert.That(typeof(CustomWebService).IsAssignableFrom(proxyType), Is.True);
     }
 
     public interface IService

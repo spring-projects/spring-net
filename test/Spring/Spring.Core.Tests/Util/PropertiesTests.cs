@@ -33,10 +33,10 @@ public class PropertiesTests
         root.Add("bar", "is");
         Properties props = new Properties(root);
         props.SetProperty("myPropertyKey", "myPropertyValue");
-        Assert.AreEqual(3, props.Count);
-        Assert.AreEqual("this", props.GetProperty("foo"));
-        Assert.AreEqual("is", props.GetProperty("bar"));
-        Assert.AreEqual("myPropertyValue", props.GetProperty("myPropertyKey"));
+        Assert.That(props.Count, Is.EqualTo(3));
+        Assert.That(props.GetProperty("foo"), Is.EqualTo("this"));
+        Assert.That(props.GetProperty("bar"), Is.EqualTo("is"));
+        Assert.That(props.GetProperty("myPropertyKey"), Is.EqualTo("myPropertyValue"));
     }
 
     [Test]
@@ -45,9 +45,9 @@ public class PropertiesTests
         Properties props = new Properties();
         props.Add("foo", "this");
         props.Add("bar", "is");
-        Assert.AreEqual("this", props.GetProperty("foo"));
-        Assert.AreEqual("is", props.GetProperty("bar"));
-        Assert.AreEqual("it", props.GetProperty("baz", "it"));
+        Assert.That(props.GetProperty("foo"), Is.EqualTo("this"));
+        Assert.That(props.GetProperty("bar"), Is.EqualTo("is"));
+        Assert.That(props.GetProperty("baz", "it"), Is.EqualTo("it"));
     }
 
     [Test]
@@ -56,10 +56,10 @@ public class PropertiesTests
         Properties props = new Properties();
         props.Add("foo", "this");
         props.Add("bar", "is");
-        Assert.AreEqual(2, props.Count);
+        Assert.That(props.Count, Is.EqualTo(2));
         props.Remove("foo");
-        Assert.AreEqual(1, props.Count);
-        Assert.IsFalse(props.ContainsKey("foo"));
+        Assert.That(props.Count, Is.EqualTo(1));
+        Assert.That(props.ContainsKey("foo"), Is.False);
     }
 
     [Test]
@@ -111,10 +111,10 @@ public class PropertiesTests
             {
                 props = new Properties();
                 props.Load(cin);
-                Assert.AreEqual(3, props.Count);
-                Assert.AreEqual("this", props.GetProperty("foo"));
-                Assert.AreEqual("is", props.GetProperty("bar"));
-                Assert.AreEqual("it", props.GetProperty("baz", "it"));
+                Assert.That(props.Count, Is.EqualTo(3));
+                Assert.That(props.GetProperty("foo"), Is.EqualTo("this"));
+                Assert.That(props.GetProperty("bar"), Is.EqualTo("is"));
+                Assert.That(props.GetProperty("baz", "it"), Is.EqualTo("it"));
             }
         }
         finally
@@ -137,9 +137,9 @@ public class PropertiesTests
         Properties props = new Properties();
         props.Load(s);
 
-        Assert.IsTrue("value1".Equals(props["key1"]));
-        Assert.IsTrue("value2".Equals(props["key2"]));
-        Assert.IsTrue("true".Equals(props["leadingspace"]));
+        Assert.That("value1".Equals(props["key1"]), Is.True);
+        Assert.That("value2".Equals(props["key2"]), Is.True);
+        Assert.That("true".Equals(props["leadingspace"]), Is.True);
     }
 
     [Test]
@@ -151,10 +151,10 @@ public class PropertiesTests
         Properties props = new Properties();
         props.Load(s);
 
-        Assert.AreEqual(string.Empty, props["key1"], "key1 should have empty value");
-        Assert.AreEqual(string.Empty, props["key2"], "key2 should have empty value");
-        Assert.IsTrue(props.ContainsKey("key3"));
-        Assert.IsNull(props["key3"]);
+        Assert.That(props["key1"], Is.Empty, "key1 should have empty value");
+        Assert.That(props["key2"], Is.Empty, "key2 should have empty value");
+        Assert.That(props.ContainsKey("key3"), Is.True);
+        Assert.That(props["key3"], Is.Null);
     }
 
     [Test]
@@ -165,7 +165,7 @@ public class PropertiesTests
         Properties props = new Properties();
         props.Load(s);
 
-        Assert.IsTrue("this is a long value element that uses continuation xxx".Equals(props["continued"]));
+        Assert.That("this is a long value element that uses continuation xxx".Equals(props["continued"]), Is.True);
     }
 
     [Test]
@@ -176,7 +176,7 @@ public class PropertiesTests
         Properties props = new Properties();
         props.Load(s);
 
-        Assert.IsTrue("newvalue".Equals(props[":key"]));
+        Assert.That("newvalue".Equals(props[":key"]), Is.True);
     }
 
     [Test]
@@ -187,6 +187,6 @@ public class PropertiesTests
         Properties props = new Properties();
         props.Load(s);
 
-        Assert.IsTrue("test\ttest".Equals(props["escaped"]));
+        Assert.That("test\ttest".Equals(props["escaped"]), Is.True);
     }
 }

@@ -58,13 +58,13 @@ public class DefaultAdvisorAutoProxyCreatorTests
         ctx.Refresh();
 
         ITestObjectFactoryObject fo = (ITestObjectFactoryObject) ctx.GetObject("test");
-        Assert.IsTrue(AopUtils.IsAopProxy(fo));
-        Assert.AreEqual("CreateTestObject", ((IMethodInvocation) capturingAdvice.CapturedCalls[0]).Method.Name);
+        Assert.That(AopUtils.IsAopProxy(fo), Is.True);
+        Assert.That(((IMethodInvocation) capturingAdvice.CapturedCalls[0]).Method.Name, Is.EqualTo("CreateTestObject"));
 
         capturingAdvice.CapturedCalls.Clear();
         ITestObject to = (ITestObject) ctx.GetObject("testProduct");
-        Assert.IsTrue(AopUtils.IsAopProxy(to));
-        Assert.AreEqual("TheName", to.Name);
-        Assert.AreEqual("get_Name", ((IMethodInvocation) capturingAdvice.CapturedCalls[0]).Method.Name);
+        Assert.That(AopUtils.IsAopProxy(to), Is.True);
+        Assert.That(to.Name, Is.EqualTo("TheName"));
+        Assert.That(((IMethodInvocation) capturingAdvice.CapturedCalls[0]).Method.Name, Is.EqualTo("get_Name"));
     }
 }

@@ -34,15 +34,15 @@ public class StringResourceTests
         string FOO_DESCRIPTION = "foo description";
 
         StringResource r = new StringResource(FOO_CONTENT);
-        Assert.AreEqual(FOO_CONTENT, r.Content);
-        Assert.AreEqual(enc, r.Encoding);
-        Assert.AreEqual(string.Empty, r.Description);
+        Assert.That(r.Content, Is.EqualTo(FOO_CONTENT));
+        Assert.That(r.Encoding, Is.EqualTo(enc));
+        Assert.That(r.Description, Is.Empty);
 
         enc = new UTF7Encoding();
         r = new StringResource(FOO_CONTENT, enc, FOO_DESCRIPTION);
-        Assert.AreEqual(FOO_CONTENT, r.Content);
-        Assert.AreEqual(enc, r.Encoding);
-        Assert.AreEqual(FOO_DESCRIPTION, r.Description);
+        Assert.That(r.Content, Is.EqualTo(FOO_CONTENT));
+        Assert.That(r.Encoding, Is.EqualTo(enc));
+        Assert.That(r.Description, Is.EqualTo(FOO_DESCRIPTION));
     }
 
     [Test]
@@ -50,15 +50,15 @@ public class StringResourceTests
     {
         string FOO_CONTENT = "foo\u4567";
         StringResource r = new StringResource(FOO_CONTENT, Encoding.GetEncoding("utf-16"));
-        Assert.AreEqual(FOO_CONTENT, r.Content);
+        Assert.That(r.Content, Is.EqualTo(FOO_CONTENT));
         Stream istm = r.InputStream;
-        Assert.IsTrue(istm.CanRead);
+        Assert.That(istm.CanRead, Is.True);
 
         byte[] chars = new byte[istm.Length];
         istm.Read(chars, 0, chars.Length);
         istm.Close();
         string result = Encoding.GetEncoding("utf-16").GetString(chars);
-        Assert.AreEqual(FOO_CONTENT, result);
+        Assert.That(result, Is.EqualTo(FOO_CONTENT));
     }
 
     [Test]
@@ -73,11 +73,11 @@ public class StringResourceTests
     {
         Encoding utf7 = new UTF7Encoding();
         StringResource r = new StringResource(null, utf7);
-        Assert.AreEqual(string.Empty, r.Content);
+        Assert.That(r.Content, Is.Empty);
         Stream stm = r.InputStream;
-        Assert.IsTrue(stm.CanRead);
-        Assert.IsNotNull(stm);
-        Assert.AreEqual(0, stm.Length);
+        Assert.That(stm.CanRead, Is.True);
+        Assert.That(stm, Is.Not.Null);
+        Assert.That(stm.Length, Is.EqualTo(0));
         stm.Close();
     }
 
@@ -85,10 +85,10 @@ public class StringResourceTests
     public void AlwaysExists()
     {
         StringResource r = new StringResource(null);
-        Assert.IsTrue(r.Exists);
+        Assert.That(r.Exists, Is.True);
         r = new StringResource(string.Empty);
-        Assert.IsTrue(r.Exists);
+        Assert.That(r.Exists, Is.True);
         r = new StringResource("foo");
-        Assert.IsTrue(r.Exists);
+        Assert.That(r.Exists, Is.True);
     }
 }

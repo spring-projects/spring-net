@@ -46,31 +46,31 @@ public class AutoDeclarativeTxTests
     public void CoordinatorDeclarativeWithAttributes()
     {
         ITestCoord coord = ctx["testCoordinator"] as ITestCoord;
-        Assert.IsNotNull(coord);
+        Assert.That(coord, Is.Not.Null);
         CallCountingTransactionManager ccm = ctx["transactionManager"] as CallCountingTransactionManager;
-        Assert.IsNotNull(ccm);
+        Assert.That(ccm, Is.Not.Null);
         LoggingAroundAdvice advice = (LoggingAroundAdvice) ctx["consoleLoggingAroundAdvice"];
-        Assert.IsNotNull(advice);
+        Assert.That(advice, Is.Not.Null);
 
         ITestObjectMgr testObjectMgr = ctx["testObjectManager"] as ITestObjectMgr;
-        Assert.IsNotNull(testObjectMgr);
+        Assert.That(testObjectMgr, Is.Not.Null);
         //Proxied due to NameMatchMethodPointcutAdvisor
-        Assert.IsTrue(AopUtils.IsAopProxy(coord));
+        Assert.That(AopUtils.IsAopProxy(coord), Is.True);
 
         //Proxied due to DefaultAdvisorAutoProxyCreator
-        Assert.IsTrue(AopUtils.IsAopProxy(testObjectMgr));
+        Assert.That(AopUtils.IsAopProxy(testObjectMgr), Is.True);
 
         TestObject to1 = new TestObject("Jack", 7);
         TestObject to2 = new TestObject("Jill", 6);
 
-        Assert.AreEqual(0, ccm.begun);
-        Assert.AreEqual(0, ccm.commits);
-        Assert.AreEqual(0, advice.numInvoked);
+        Assert.That(ccm.begun, Is.EqualTo(0));
+        Assert.That(ccm.commits, Is.EqualTo(0));
+        Assert.That(advice.numInvoked, Is.EqualTo(0));
 
         coord.WorkOn(to1, to2);
 
-        Assert.AreEqual(1, ccm.begun);
-        Assert.AreEqual(1, ccm.commits);
-        Assert.AreEqual(1, advice.numInvoked);
+        Assert.That(ccm.begun, Is.EqualTo(1));
+        Assert.That(ccm.commits, Is.EqualTo(1));
+        Assert.That(advice.numInvoked, Is.EqualTo(1));
     }
 }

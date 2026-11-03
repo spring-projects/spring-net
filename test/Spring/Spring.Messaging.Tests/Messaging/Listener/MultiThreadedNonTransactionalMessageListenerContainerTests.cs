@@ -65,7 +65,7 @@ public class MultiThreadedNonTransactionalMessageListenerContainerTests : Abstra
         System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
 
         MessageQueueTemplate q = applicationContext["testQueueTemplate"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
 
         q.ConvertAndSend("Hello World 1");
         q.ConvertAndSend("Hello World 2");
@@ -76,7 +76,7 @@ public class MultiThreadedNonTransactionalMessageListenerContainerTests : Abstra
         //Reset the state so that running all tests together will succeed.
         exceptionHandler.MessageCount = 0;
 
-        Assert.AreEqual(0, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(0));
 
         timer.Start();
 
@@ -96,9 +96,9 @@ public class MultiThreadedNonTransactionalMessageListenerContainerTests : Abstra
 
         Debug.WriteLine(String.Format("Elapsed Milliseconds: {0}", timer.ElapsedMilliseconds));
 
-        Assert.Less(timer.ElapsedMilliseconds, 50000);
-        Assert.AreEqual(5, listener.MessageCount);
-        Assert.AreEqual(0, exceptionHandler.MessageCount);
+        Assert.That(timer.ElapsedMilliseconds, Is.LessThan(50000));
+        Assert.That(listener.MessageCount, Is.EqualTo(5));
+        Assert.That(exceptionHandler.MessageCount, Is.EqualTo(0));
     }
 
     protected override string[] ConfigLocations

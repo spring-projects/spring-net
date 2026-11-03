@@ -29,18 +29,18 @@ public sealed class EmailValidatorTests
     public void Validate()
     {
         EmailValidator validator = new EmailValidator();
-        Assert.IsTrue(validator.Validate("goran@eu.s4hc.com", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate("goran.milosavljevic@s4hc.com", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate("g.m.m@web_ask.com", new ValidationErrors()));
+        Assert.That(validator.Validate("goran@eu.s4hc.com", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate("goran.milosavljevic@s4hc.com", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate("g.m.m@web_ask.com", new ValidationErrors()), Is.True);
 
-        Assert.IsFalse(validator.Validate("@eu.s4hc.com", new ValidationErrors()));
-        Assert.IsFalse(validator.Validate("g @s4hc.com", new ValidationErrors()));
-        Assert.IsFalse(validator.Validate("g&@s", new ValidationErrors()));
-        Assert.IsFalse(validator.Validate("goran@s", new ValidationErrors()));
-        Assert.IsFalse(validator.Validate("goran@@", new ValidationErrors()));
-        Assert.IsFalse(validator.Validate("goran@eu s4hc.com", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate(" ", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate("", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
+        Assert.That(validator.Validate("@eu.s4hc.com", new ValidationErrors()), Is.False);
+        Assert.That(validator.Validate("g @s4hc.com", new ValidationErrors()), Is.False);
+        Assert.That(validator.Validate("g&@s", new ValidationErrors()), Is.False);
+        Assert.That(validator.Validate("goran@s", new ValidationErrors()), Is.False);
+        Assert.That(validator.Validate("goran@@", new ValidationErrors()), Is.False);
+        Assert.That(validator.Validate("goran@eu s4hc.com", new ValidationErrors()), Is.False);
+        Assert.That(validator.Validate(" ", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate("", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate(null, new ValidationErrors()), Is.True);
     }
 }

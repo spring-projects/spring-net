@@ -98,32 +98,32 @@ public class SafeFieldTests : DynamicFieldTests
     {
         // ro const int
         SafeField constField = new SafeField(SField(type, "constantValue"));
-        Assert.AreEqual(5, constField.GetValue(null));
+        Assert.That(constField.GetValue(null), Is.EqualTo(5));
         try { constField.SetValue(null, 3); }
         catch (InvalidOperationException) { }
 
         // ro static readonly int
         SafeField roVtField = new SafeField(SField(type, "staticReadonlyVTValue"));
-        Assert.AreEqual(11, roVtField.GetValue(null));
+        Assert.That(roVtField.GetValue(null), Is.EqualTo(11));
         try { roVtField.SetValue(null, 10); }
         catch (InvalidOperationException) { }
 
         // ro static readonly object
         SafeField roRefField = new SafeField(SField(type, "staticReadonlyRefValue"));
-        Assert.AreSame(expectedRoRefValue, roRefField.GetValue(null));
+        Assert.That(roRefField.GetValue(null), Is.SameAs(expectedRoRefValue));
         try { roRefField.SetValue(null, new object()); }
         catch (InvalidOperationException) { }
 
         // rw static int
         SafeField vtField = new SafeField(SField(type, "staticVTValue"));
         vtField.SetValue(null, 10);
-        Assert.AreEqual(10, vtField.GetValue(null));
+        Assert.That(vtField.GetValue(null), Is.EqualTo(10));
 
         // rw static object
         SafeField refField = new SafeField(SField(type, "staticRefValue"));
         object o = new object();
         refField.SetValue(null, o);
-        Assert.AreSame(o, refField.GetValue(null));
+        Assert.That(refField.GetValue(null), Is.SameAs(o));
     }
 
     [Test]
@@ -136,28 +136,28 @@ public class SafeFieldTests : DynamicFieldTests
         // ro readonly int
         myStruct = new MyStructWithPrivateFields(123, testref1, 456, testref2);
         SafeField instanceReadonlyVtField = new SafeField(IField(myStruct.GetType(), "instanceReadonlyVTValue"));
-        Assert.AreEqual(123, instanceReadonlyVtField.GetValue(myStruct));
+        Assert.That(instanceReadonlyVtField.GetValue(myStruct), Is.EqualTo(123));
         try { instanceReadonlyVtField.SetValue(myStruct, 10); }
         catch (InvalidOperationException) { }
 
         // ro readonly object
         myStruct = new MyStructWithPrivateFields(123, testref1, 456, testref2);
         SafeField instanceReadonlyRefField = new SafeField(IField(myStruct.GetType(), "instanceReadonlyRefValue"));
-        Assert.AreSame(testref1, instanceReadonlyRefField.GetValue(myStruct));
+        Assert.That(instanceReadonlyRefField.GetValue(myStruct), Is.SameAs(testref1));
         try { instanceReadonlyRefField.SetValue(myStruct, this); }
         catch (InvalidOperationException) { }
 
         // ro int
         myStruct = new MyStructWithPrivateFields(123, testref1, 456, testref2);
         SafeField instanceVtField = new SafeField(IField(myStruct.GetType(), "instanceVTValue"));
-        Assert.AreEqual(456, instanceVtField.GetValue(myStruct));
+        Assert.That(instanceVtField.GetValue(myStruct), Is.EqualTo(456));
         try { instanceVtField.SetValue(myStruct, 10); }
         catch (InvalidOperationException) { }
 
         // ro object
         myStruct = new MyStructWithPrivateFields(123, testref1, 456, testref2);
         SafeField instanceRefField = new SafeField(IField(myStruct.GetType(), "instanceRefValue"));
-        Assert.AreSame(testref2, instanceRefField.GetValue(myStruct));
+        Assert.That(instanceRefField.GetValue(myStruct), Is.SameAs(testref2));
         try { instanceRefField.SetValue(myStruct, 10); }
         catch (InvalidOperationException) { }
     }
@@ -172,30 +172,30 @@ public class SafeFieldTests : DynamicFieldTests
         // ro readonly int
         myClass = new MyClassWithPrivateFields(123, testref1, 456, testref2);
         SafeField instanceReadonlyVtField = new SafeField(IField(myClass.GetType(), "instanceReadonlyVTValue"));
-        Assert.AreEqual(123, instanceReadonlyVtField.GetValue(myClass));
+        Assert.That(instanceReadonlyVtField.GetValue(myClass), Is.EqualTo(123));
         try { instanceReadonlyVtField.SetValue(myClass, 10); }
         catch (InvalidOperationException) { }
 
         // ro readonly object
         myClass = new MyClassWithPrivateFields(123, testref1, 456, testref2);
         SafeField instanceReadonlyRefField = new SafeField(IField(myClass.GetType(), "instanceReadonlyRefValue"));
-        Assert.AreSame(testref1, instanceReadonlyRefField.GetValue(myClass));
+        Assert.That(instanceReadonlyRefField.GetValue(myClass), Is.SameAs(testref1));
         try { instanceReadonlyRefField.SetValue(myClass, this); }
         catch (InvalidOperationException) { }
 
         // rw int
         myClass = new MyClassWithPrivateFields(123, testref1, 456, testref2);
         SafeField instanceVtField = new SafeField(IField(myClass.GetType(), "instanceVTValue"));
-        Assert.AreEqual(456, instanceVtField.GetValue(myClass));
+        Assert.That(instanceVtField.GetValue(myClass), Is.EqualTo(456));
         instanceVtField.SetValue(myClass, 9182);
-        Assert.AreEqual(9182, instanceVtField.GetValue(myClass));
+        Assert.That(instanceVtField.GetValue(myClass), Is.EqualTo(9182));
 
         // rw object
         myClass = new MyClassWithPrivateFields(123, testref1, 456, testref2);
         SafeField instanceRefField = new SafeField(IField(myClass.GetType(), "instanceRefValue"));
-        Assert.AreSame(testref2, instanceRefField.GetValue(myClass));
+        Assert.That(instanceRefField.GetValue(myClass), Is.SameAs(testref2));
         instanceRefField.SetValue(myClass, testref1);
-        Assert.AreSame(testref1, instanceRefField.GetValue(myClass));
+        Assert.That(instanceRefField.GetValue(myClass), Is.SameAs(testref1));
     }
 
     [Test, Explicit]

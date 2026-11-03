@@ -49,7 +49,7 @@ public sealed class PropertyComparatorTests
         TestObject one = new TestObject("Rick", 19);
         TestObject two = new TestObject("Balzac", 205);
         int actual = cmp.Compare(one, two);
-        Assert.IsTrue(actual < 0); // 19 is less than 205
+        Assert.That(actual < 0, Is.True); // 19 is less than 205
     }
 
     [Test]
@@ -63,7 +63,7 @@ public sealed class PropertyComparatorTests
         TestObject two = new TestObject("Balzac", 205);
         two.Lawyer = new NestedTestObject("Wallpaperer");
         int actual = cmp.Compare(one, two);
-        Assert.IsTrue(actual < 0); // Gizajoab is less than Wallpaperer
+        Assert.That(actual < 0, Is.True); // Gizajoab is less than Wallpaperer
     }
 
     [Test]
@@ -77,7 +77,7 @@ public sealed class PropertyComparatorTests
         TestObject two = new TestObject("Balzac", 205);
         // no Lawyer.Company property set on object two...
         int actual = cmp.Compare(one, two);
-        Assert.IsTrue(actual > 0); // Gizajoab is greater than null
+        Assert.That(actual > 0, Is.True); // Gizajoab is greater than null
     }
 
     [Test]
@@ -104,7 +104,7 @@ public sealed class PropertyComparatorTests
         PropertyComparator.Sort(actual, definition);
         for (int i = 0; i < actual.Length; ++i)
         {
-            Assert.AreEqual(expected[i].Name, actual[i].Name);
+            Assert.That(actual[i].Name, Is.EqualTo(expected[i].Name));
         }
     }
 
@@ -122,7 +122,7 @@ public sealed class PropertyComparatorTests
         PropertyComparator.Sort(actual, definition);
         for (int i = 0; i < actual.Length; ++i)
         {
-            Assert.AreEqual(expected[i].Name, actual[i].Name);
+            Assert.That(actual[i].Name, Is.EqualTo(expected[i].Name));
         }
     }
 
@@ -140,7 +140,7 @@ public sealed class PropertyComparatorTests
         PropertyComparator.Sort(actual, definition);
         for (int i = 0; i < actual.Length; ++i)
         {
-            Assert.AreEqual(expected[i].Name, actual[i].Name);
+            Assert.That(actual[i].Name, Is.EqualTo(expected[i].Name));
         }
     }
 
@@ -157,11 +157,11 @@ public sealed class PropertyComparatorTests
 
         Funk one = new Funk(1, "long");
         PropertyComparator cmp = new PropertyComparator(definition);
-        Assert.AreEqual(0, cmp.Compare(null, null));
+        Assert.That(cmp.Compare(null, null), Is.EqualTo(0));
         // nulls are always last (i.e. greater than)
-        Assert.AreEqual(1, cmp.Compare(null, one));
+        Assert.That(cmp.Compare(null, one), Is.EqualTo(1));
         // any non-null instance comes before null (i.e. less than).
-        Assert.AreEqual(-1, cmp.Compare(one, null));
+        Assert.That(cmp.Compare(one, null), Is.EqualTo(-1));
     }
 
     /// <summary>
@@ -176,10 +176,10 @@ public sealed class PropertyComparatorTests
         PropertyComparator cmp = new PropertyComparator(definition);
         ISortDefinition sortDefinition = cmp.SortDefinition;
 
-        Assert.AreSame(definition, sortDefinition);
-        Assert.AreEqual(definition.Property, sortDefinition.Property);
-        Assert.AreEqual(definition.Ascending, sortDefinition.Ascending);
-        Assert.AreEqual(definition.IgnoreCase, sortDefinition.IgnoreCase);
+        Assert.That(sortDefinition, Is.SameAs(definition));
+        Assert.That(sortDefinition.Property, Is.EqualTo(definition.Property));
+        Assert.That(sortDefinition.Ascending, Is.EqualTo(definition.Ascending));
+        Assert.That(sortDefinition.IgnoreCase, Is.EqualTo(definition.IgnoreCase));
     }
 
     internal sealed class Funk

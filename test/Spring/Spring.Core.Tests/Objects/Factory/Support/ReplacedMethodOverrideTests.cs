@@ -83,7 +83,7 @@ public sealed class ReplacedMethodOverrideTests
     public void Matches_TotallyDifferentMethodName()
     {
         ReplacedMethodOverride methodOverride = new ReplacedMethodOverride("Execute", "replacer");
-        Assert.IsFalse(methodOverride.Matches(typeof(Executor).GetMethod("Administer")));
+        Assert.That(methodOverride.Matches(typeof(Executor).GetMethod("Administer")), Is.False);
     }
 
     [Test]
@@ -91,14 +91,14 @@ public sealed class ReplacedMethodOverrideTests
     {
         ReplacedMethodOverride methodOverride = new ReplacedMethodOverride("Administer", "replacer");
         methodOverride.IsOverloaded = false;
-        Assert.IsTrue(methodOverride.Matches(typeof(Executor).GetMethod("Administer")));
+        Assert.That(methodOverride.Matches(typeof(Executor).GetMethod("Administer")), Is.True);
     }
 
     [Test]
     public void Matches_MatchingMethodNameWithOverload()
     {
         ReplacedMethodOverride methodOverride = new ReplacedMethodOverride("Execute", "replacer");
-        Assert.IsTrue(methodOverride.Matches(typeof(Executor).GetMethod("Execute", new Type[] { })));
+        Assert.That(methodOverride.Matches(typeof(Executor).GetMethod("Execute", new Type[] { })), Is.True);
     }
 
     [Test]
@@ -106,7 +106,7 @@ public sealed class ReplacedMethodOverrideTests
     {
         ReplacedMethodOverride methodOverride = new ReplacedMethodOverride("Execute", "replacer");
         methodOverride.AddTypeIdentifier(typeof(object).FullName);
-        Assert.IsTrue(methodOverride.Matches(typeof(Executor).GetMethod("Execute", new Type[] { typeof(object) })));
+        Assert.That(methodOverride.Matches(typeof(Executor).GetMethod("Execute", new Type[] { typeof(object) })), Is.True);
     }
 
     [Test]
@@ -114,7 +114,7 @@ public sealed class ReplacedMethodOverrideTests
     {
         ReplacedMethodOverride methodOverride = new ReplacedMethodOverride("Execute", "replacer");
         methodOverride.AddTypeIdentifier(GetType().FullName);
-        Assert.IsFalse(methodOverride.Matches(typeof(Executor).GetMethod("Execute", new Type[] { typeof(object) })));
+        Assert.That(methodOverride.Matches(typeof(Executor).GetMethod("Execute", new Type[] { typeof(object) })), Is.False);
     }
 
     [Test]
@@ -122,8 +122,8 @@ public sealed class ReplacedMethodOverrideTests
     {
         ReplacedMethodOverride methodOverride = new ReplacedMethodOverride("Execute", "replacer");
         methodOverride.AddTypeIdentifier(typeof(object).FullName);
-        Assert.IsFalse(methodOverride.Matches(typeof(Executor).GetMethod("Execute",
-            new Type[] { typeof(object), typeof(object) })));
+        Assert.That(methodOverride.Matches(typeof(Executor).GetMethod("Execute",
+            new Type[] { typeof(object), typeof(object) })), Is.False);
     }
 
     [Test]
@@ -132,8 +132,8 @@ public sealed class ReplacedMethodOverrideTests
         ReplacedMethodOverride methodOverride = new ReplacedMethodOverride("Execute", "replacer");
         methodOverride.AddTypeIdentifier(typeof(object).FullName);
         methodOverride.AddTypeIdentifier(typeof(object).FullName);
-        Assert.IsTrue(methodOverride.Matches(typeof(Executor).GetMethod("Execute",
-            new Type[] { typeof(object), typeof(object) })));
+        Assert.That(methodOverride.Matches(typeof(Executor).GetMethod("Execute",
+            new Type[] { typeof(object), typeof(object) })), Is.True);
     }
 
     [Test]
@@ -147,7 +147,7 @@ public sealed class ReplacedMethodOverrideTests
     public void ToStringWorks()
     {
         ReplacedMethodOverride methodOverride = new ReplacedMethodOverride("Execute", "replacer");
-        Assert.AreEqual(typeof(ReplacedMethodOverride).Name + " for method 'Execute'; will call object 'replacer'.", methodOverride.ToString());
+        Assert.That(methodOverride.ToString(), Is.EqualTo(typeof(ReplacedMethodOverride).Name + " for method 'Execute'; will call object 'replacer'."));
     }
 
     private sealed class Executor

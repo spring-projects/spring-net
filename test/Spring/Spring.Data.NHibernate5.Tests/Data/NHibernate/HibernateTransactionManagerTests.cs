@@ -83,7 +83,7 @@ namespace Spring.Data.NHibernate
             lsfo.AfterPropertiesSet();
 
             ISessionFactory sfProxy = lsfo.GetObject() as ISessionFactory;
-            Assert.IsNotNull(sfProxy);
+            Assert.That(sfProxy, Is.Not.Null);
 
             HibernateTransactionManager tm = new HibernateTransactionManager();
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -94,19 +94,19 @@ namespace Spring.Data.NHibernate
 
             tt.TransactionIsolationLevel = IsolationLevel.Serializable;
 
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sfProxy), "Hasn't thread session");
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
-            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive, "Actual transaction not active");
+            Assert.That(TransactionSynchronizationManager.HasResource(sfProxy), Is.False, "Hasn't thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(provider), Is.False, "Hasn't thread db provider");
+            Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.False, "Synchronizations not active");
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.False, "Actual transaction not active");
 
             object result = tt.Execute(new TransactionCommitTxCallback(sfProxy, provider));
 
-            Assert.IsTrue(result == list, "Incorrect result list");
+            Assert.That(result == list, Is.True, "Incorrect result list");
 
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sfProxy), "Hasn't thread session");
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
-            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive, "Actual transaction not active");
+            Assert.That(TransactionSynchronizationManager.HasResource(sfProxy), Is.False, "Hasn't thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(provider), Is.False, "Hasn't thread db provider");
+            Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.False, "Synchronizations not active");
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.False, "Actual transaction not active");
 
             A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
             A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
@@ -134,8 +134,8 @@ namespace Spring.Data.NHibernate
 
             TransactionTemplate tt = new TransactionTemplate(tm);
 
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
-            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+            Assert.That(TransactionSynchronizationManager.HasResource(sessionFactory), Is.False, "Hasn't thread session");
+            Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.False, "Synchronizations not active");
 
             try
             {
@@ -146,8 +146,8 @@ namespace Spring.Data.NHibernate
             {
             }
 
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
+            Assert.That(TransactionSynchronizationManager.HasResource(sessionFactory), Is.False, "Hasn't thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(provider), Is.False, "Hasn't thread db provider");
 
             A.CallTo(() => transaction.Rollback()).MustHaveHappened();
             A.CallTo(() => session.Close()).MustHaveHappened();
@@ -174,11 +174,11 @@ namespace Spring.Data.NHibernate
 
             TransactionTemplate tt = new TransactionTemplate(tm);
 
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Shouldn't have a thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sessionFactory), Is.False, "Shouldn't have a thread session");
 
             tt.Execute(new TransactionRollbackOnlyTxCallback(sessionFactory));
 
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Shouldn't have a thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sessionFactory), Is.False, "Shouldn't have a thread session");
 
             A.CallTo(() => session.Flush()).MustHaveHappenedOnceExactly();
             A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
@@ -206,7 +206,7 @@ namespace Spring.Data.NHibernate
             list.Add("test");
 
             object result = tt.Execute(new ParticipatingTransactionWithCommitTxCallback(sessionFactory, list));
-            Assert.IsTrue(result == list);
+            Assert.That(result == list, Is.True);
 
             A.CallTo(() => session.Flush()).MustHaveHappenedOnceExactly();
             A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
@@ -309,11 +309,11 @@ namespace Spring.Data.NHibernate
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
 
             tt.Execute(new ParticipatingTransactionWithWithRequiresNewTxCallback(tt, sessionFactory));
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
 
             A.CallTo(() => transaction.Commit()).MustHaveHappenedTwiceExactly();
             A.CallTo(() => session2.Flush()).MustHaveHappenedOnceExactly();
@@ -341,11 +341,11 @@ namespace Spring.Data.NHibernate
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
 
             tt.Execute(new ParticipatingTransactionWithWithNotSupportedTxCallback(tt, sessionFactory));
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
 
             A.CallTo(() => session.Flush()).MustHaveHappenedTwiceExactly();
             A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
@@ -364,7 +364,7 @@ namespace Spring.Data.NHibernate
             LocalSessionFactoryObjectStub lsfo = new LocalSessionFactoryObjectStub(sessionFactory);
             lsfo.AfterPropertiesSet();
             ISessionFactory sfProxy = (ISessionFactory) lsfo.GetObject();
-            Assert.IsNotNull(sfProxy);
+            Assert.That(sfProxy, Is.Not.Null);
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -372,11 +372,11 @@ namespace Spring.Data.NHibernate
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Supports;
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
 
             tt.Execute(new TransactionWithPropagationSupportsTxCallback(sessionFactory));
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
 
             A.CallTo(() => session.Flush()).MustHaveHappenedOnceExactly();
         }
@@ -405,7 +405,7 @@ namespace Spring.Data.NHibernate
             LocalSessionFactoryObjectStub lsfo = new LocalSessionFactoryObjectStub(sessionFactory);
             lsfo.AfterPropertiesSet();
             ISessionFactory sfProxy = (ISessionFactory) lsfo.GetObject();
-            Assert.IsNotNull(sfProxy);
+            Assert.That(sfProxy, Is.Not.Null);
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -419,11 +419,11 @@ namespace Spring.Data.NHibernate
             ht.TemplateFlushMode = TemplateFlushMode.Eager;
             ht.ExposeNativeSession = true;
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
 
             tt.Execute(new TransactionWithPropagationSupportsAndInnerTransactionTxCallback(tt2, sessionFactory, ht, session1, session2));
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
 
             A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
             A.CallTo(() => session1.Flush()).MustHaveHappenedTwiceExactly();
@@ -488,8 +488,8 @@ namespace Spring.Data.NHibernate
             tm.StubbedTransactionThatReturnsExpectedConnection = adoTransaction;
 
             TransactionTemplate tt = new TransactionTemplate(tm);
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
-            Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
             IList list = new ArrayList();
             list.Add("test");
@@ -500,12 +500,12 @@ namespace Spring.Data.NHibernate
             }
             catch (DataIntegrityViolationException ex)
             {
-                Assert.AreEqual(rootCause, ex.InnerException);
-                Assert.IsTrue(ex.Message.IndexOf("mymsg") != -1);
+                Assert.That(ex.InnerException, Is.EqualTo(rootCause));
+                Assert.That(ex.Message.IndexOf("mymsg") != -1, Is.True);
             }
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
-            Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Hasn't thread session");
+            Assert.That(!TransactionSynchronizationManager.SynchronizationActive, Is.True, "Synchronizations not active");
 
             A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
             A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
@@ -525,10 +525,10 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sfProxy), "Has thread session");
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(TransactionSynchronizationManager.HasResource(sfProxy), Is.True, "Has thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(provider), Is.True, "Hasn't thread db provider");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
             HibernateTemplate ht = new HibernateTemplate(sfProxy);
             return ht.Find("some query string");
         }
@@ -560,7 +560,7 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf), "Has thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sf), Is.True, "Has thread session");
             HibernateTemplate ht = new HibernateTemplate(sf);
             return ht.ExecuteFind(new ThrowExceptionHibernateCallback());
         }
@@ -585,7 +585,7 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf), "Has thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sf), Is.True, "Has thread session");
             HibernateTemplate ht = new HibernateTemplate(sf);
             ht.TemplateFlushMode = TemplateFlushMode.Eager;
             ht.Execute(new HibernateDelegate(Del));
@@ -612,7 +612,7 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf), "Has thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sf), Is.True, "Has thread session");
             HibernateTemplate ht = new HibernateTemplate(sf);
             ht.TemplateFlushMode = TemplateFlushMode.Eager;
             return ht.Execute(new HibernateDelegate(Del));
@@ -635,7 +635,7 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf), "Has thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sf), Is.True, "Has thread session");
             HibernateTemplate ht = new HibernateTemplate(sf);
             ht.TemplateFlushMode = TemplateFlushMode.Eager;
             return ht.ExecuteFind(new ThrowExceptionHibernateCallback());
@@ -662,7 +662,7 @@ namespace Spring.Data.NHibernate
 
         private object TransactionMethod(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf), "Has thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sf), Is.True, "Has thread session");
             HibernateTemplate ht = new HibernateTemplate(sf);
             object returnValue = ht.Execute(new HibernateDelegate(Del));
             status.SetRollbackOnly();
@@ -689,15 +689,15 @@ namespace Spring.Data.NHibernate
         public object DoInTransaction(ITransactionStatus status)
         {
             SessionHolder holder = (SessionHolder) TransactionSynchronizationManager.GetResource(sf);
-            Assert.IsNotNull(holder, "Has thread session");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(holder, Is.Not.Null, "Has thread session");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
 
             tt.Execute(new RequiresNewTxCallback(sf, holder));
 
-            Assert.IsTrue(holder.Session == SessionFactoryUtils.GetSession(sf, false), "Same thread session as before");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(holder.Session == SessionFactoryUtils.GetSession(sf, false), Is.True, "Same thread session as before");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
             return null;
         }
     }
@@ -732,9 +732,9 @@ namespace Spring.Data.NHibernate
 
         public object DoInHibernate(ISession session)
         {
-            Assert.IsTrue(session != holder.Session, "Not enclosing session");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(session != holder.Session, Is.True, "Not enclosing session");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
             return null;
         }
     }
@@ -753,15 +753,15 @@ namespace Spring.Data.NHibernate
         public object DoInTransaction(ITransactionStatus status)
         {
             SessionHolder holder = (SessionHolder) TransactionSynchronizationManager.GetResource(sf);
-            Assert.IsNotNull(holder, "Has thread session");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(holder, Is.Not.Null, "Has thread session");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
             tt.PropagationBehavior = TransactionPropagation.NotSupported;
             tt.Execute(new NotSupportedTxCallback(sf));
 
-            Assert.IsTrue(holder.Session == SessionFactoryUtils.GetSession(sf, false), "Same thread session as before");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(holder.Session == SessionFactoryUtils.GetSession(sf, false), Is.True, "Same thread session as before");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
             return null;
         }
     }
@@ -777,9 +777,9 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sf), "Hasn't thread session");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(!TransactionSynchronizationManager.HasResource(sf), Is.True, "Hasn't thread session");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.False);
 
             HibernateTemplate ht = new HibernateTemplate(sf);
             ht.TemplateFlushMode = TemplateFlushMode.Eager;
@@ -806,16 +806,16 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sf), "Hasn't thread session");
-            Assert.IsTrue(!status.IsNewTransaction, "Is not new transaction");
+            Assert.That(!TransactionSynchronizationManager.HasResource(sf), Is.True, "Hasn't thread session");
+            Assert.That(!status.IsNewTransaction, Is.True, "Is not new transaction");
 
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.False);
 
             HibernateTemplate ht = new HibernateTemplate(sf);
             ht.TemplateFlushMode = TemplateFlushMode.Eager;
             object returnValue = ht.Execute(new HibernateDelegate(Del));
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf), "Has thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sf), Is.True, "Has thread session");
             return null;
         }
 
@@ -845,26 +845,26 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sf), "Hasn't thread session");
-            Assert.IsTrue(!status.IsNewTransaction, "Is not new transaction");
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(!TransactionSynchronizationManager.HasResource(sf), Is.True, "Hasn't thread session");
+            Assert.That(!status.IsNewTransaction, Is.True, "Is not new transaction");
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.False);
 
             ht.Execute(new HibernateDelegate(HibernateDelegate));
 
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf), "Has thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sf), Is.True, "Has thread session");
 
             tt.Execute(new PropagationSupportsTxCallback(ht, session2));
 
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
+            Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+            Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.False);
 
             return null;
         }
 
         private object HibernateDelegate(ISession session)
         {
-            Assert.AreSame(session1, session);
+            Assert.That(session, Is.SameAs(session1));
             return null;
         }
 
@@ -886,9 +886,9 @@ namespace Spring.Data.NHibernate
 
             private object HibernateDelegate(ISession session)
             {
-                Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-                Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
-                Assert.AreSame(session2, session);
+                Assert.That(TransactionSynchronizationManager.CurrentTransactionReadOnly, Is.False);
+                Assert.That(TransactionSynchronizationManager.ActualTransactionActive, Is.True);
+                Assert.That(session, Is.SameAs(session2));
                 return null;
             }
         }
@@ -907,7 +907,7 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sessionFactory), "Has thread session");
+            Assert.That(TransactionSynchronizationManager.HasResource(sessionFactory), Is.True, "Has thread session");
             HibernateTemplate ht = new HibernateTemplate(sessionFactory);
             return ht.ExecuteFind(new TransactionCommitWithFlushFailureHibernateCallback(list));
         }

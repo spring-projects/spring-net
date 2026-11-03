@@ -34,6 +34,6 @@ public sealed class EventListenerAttributeTests
             }
         }
 
-        Assert.IsTrue(found, "EventListener Attribute not found");
+        Assert.That(found, Is.True, "EventListener Attribute not found");
     }
 }

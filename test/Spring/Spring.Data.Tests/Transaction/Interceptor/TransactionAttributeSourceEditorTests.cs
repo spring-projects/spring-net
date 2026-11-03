@@ -14,7 +14,7 @@ public class TransactionAttributeSourceEditorTests
         pe.SetAsText(null);
         ITransactionAttributeSource tas = pe.Value;
         MethodInfo m = typeof(object).GetMethod("GetHashCode");
-        Assert.IsTrue(tas.ReturnTransactionAttribute(m, null) == null);
+        Assert.That(tas.ReturnTransactionAttribute(m, null) == null, Is.True);
     }
 
     [Test]
@@ -55,14 +55,14 @@ public class TransactionAttributeSourceEditorTests
     private void checkTransactionProperties(ITransactionAttributeSource tas, MethodInfo method)
     {
         ITransactionAttribute ta = tas.ReturnTransactionAttribute(method, null);
-        Assert.IsNull(ta);
+        Assert.That(ta, Is.Null);
     }
 
     private void checkTransactionProperties(ITransactionAttributeSource tas, MethodInfo method, TransactionPropagation transactionPropagation)
     {
         ITransactionAttribute ta = tas.ReturnTransactionAttribute(method, null);
-        Assert.IsTrue(ta != null);
-        Assert.IsTrue(ta.TransactionIsolationLevel == IsolationLevel.ReadCommitted);
-        Assert.IsTrue(ta.PropagationBehavior == transactionPropagation);
+        Assert.That(ta != null, Is.True);
+        Assert.That(ta.TransactionIsolationLevel == IsolationLevel.ReadCommitted, Is.True);
+        Assert.That(ta.PropagationBehavior == transactionPropagation, Is.True);
     }
 }

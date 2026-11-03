@@ -58,12 +58,12 @@ public class BaseBindingManagerTests
 
         mgr.BindSourceToTarget(source, target, null);
 
-        Assert.IsTrue(mgr.HasBindings);
-        Assert.AreEqual("Nikola Tesla", target.Name);
-        Assert.AreEqual(new DateTime(1856, 7, 9), target.DOB);
-        Assert.AreEqual(new string[] { "One", "Two" }, target.Inventions);
-        Assert.IsNull(target.PlaceOfBirth.City);
-        Assert.IsNull(target.PlaceOfBirth.Country);
+        Assert.That(mgr.HasBindings, Is.True);
+        Assert.That(target.Name, Is.EqualTo("Nikola Tesla"));
+        Assert.That(target.DOB, Is.EqualTo(new DateTime(1856, 7, 9)));
+        Assert.That(target.Inventions, Is.EqualTo(new string[] { "One", "Two" }));
+        Assert.That(target.PlaceOfBirth.City, Is.Null);
+        Assert.That(target.PlaceOfBirth.Country, Is.Null);
 
         target.Name = "Tesla, Nikola";
         target.DOB = DateTime.Today;
@@ -71,11 +71,11 @@ public class BaseBindingManagerTests
         target.PlaceOfBirth.Country = "Lika";
 
         mgr.BindTargetToSource(source, target, null);
-        Assert.AreEqual("Tesla, Nikola", source["name"]);
-        Assert.AreEqual(DateTime.Today, source["dob"]);
-        Assert.AreEqual("One", ((string[]) source["inventions"])[0]);
-        Assert.AreEqual("Smiljan", source["cityOfBirth"]);
-        Assert.AreEqual("Lika", source["countryOfBirth"]);
+        Assert.That(source["name"], Is.EqualTo("Tesla, Nikola"));
+        Assert.That(source["dob"], Is.EqualTo(DateTime.Today));
+        Assert.That(((string[]) source["inventions"])[0], Is.EqualTo("One"));
+        Assert.That(source["cityOfBirth"], Is.EqualTo("Smiljan"));
+        Assert.That(source["countryOfBirth"], Is.EqualTo("Lika"));
     }
 
     [Test]
@@ -93,12 +93,12 @@ public class BaseBindingManagerTests
 
         mgr.BindSourceToTarget(source, target, null);
 
-        Assert.IsTrue(mgr.HasBindings);
-        Assert.AreEqual("Nikola Tesla", target.Name);
-        Assert.AreEqual(new DateTime(1856, 7, 9), target.DOB);
-        Assert.AreEqual(new string[] { "One", "Two" }, target.Inventions);
-        Assert.IsNull(target.PlaceOfBirth.City);
-        Assert.IsNull(target.PlaceOfBirth.Country);
+        Assert.That(mgr.HasBindings, Is.True);
+        Assert.That(target.Name, Is.EqualTo("Nikola Tesla"));
+        Assert.That(target.DOB, Is.EqualTo(new DateTime(1856, 7, 9)));
+        Assert.That(target.Inventions, Is.EqualTo(new string[] { "One", "Two" }));
+        Assert.That(target.PlaceOfBirth.City, Is.Null);
+        Assert.That(target.PlaceOfBirth.Country, Is.Null);
 
         target.Name = "Tesla, Nikola";
         target.DOB = DateTime.Today;
@@ -106,11 +106,11 @@ public class BaseBindingManagerTests
         target.PlaceOfBirth.Country = "Lika";
 
         mgr.BindTargetToSource(source, target, null);
-        Assert.AreEqual("Tesla, Nikola", source["name"]);
-        Assert.AreEqual(DateTime.Today, source["dob"]);
-        Assert.AreEqual("One", ((string[]) source["inventions"])[0]);
-        Assert.AreEqual("Smiljan", source["cityOfBirth"]);
-        Assert.AreEqual("Lika", source["countryOfBirth"]);
+        Assert.That(source["name"], Is.EqualTo("Tesla, Nikola"));
+        Assert.That(source["dob"], Is.EqualTo(DateTime.Today));
+        Assert.That(((string[]) source["inventions"])[0], Is.EqualTo("One"));
+        Assert.That(source["cityOfBirth"], Is.EqualTo("Smiljan"));
+        Assert.That(source["countryOfBirth"], Is.EqualTo("Lika"));
     }
 
     [Test]
@@ -129,11 +129,11 @@ public class BaseBindingManagerTests
         source["dateofgraduation"] = null;
         target.DateOfGraduation = DateTime.Now;
         mgr.BindSourceToTarget(source, target, null);
-        Assert.IsNull(target.DateOfGraduation);
+        Assert.That(target.DateOfGraduation, Is.Null);
 
         source["dateofgraduation"] = DateTime.Now;
         mgr.BindTargetToSource(source, target, null);
-        Assert.IsNull(source["dateofgraduation"]);
+        Assert.That(source["dateofgraduation"], Is.Null);
     }
 
     [Test]
@@ -152,7 +152,7 @@ public class BaseBindingManagerTests
         source["dateofgraduation"] = string.Empty;
         target.DateOfGraduation = DateTime.Now;
         mgr.BindSourceToTarget(source, target, null);
-        Assert.IsNull(target.DateOfGraduation);
+        Assert.That(target.DateOfGraduation, Is.Null);
     }
 
     [Test]
@@ -176,7 +176,7 @@ public class BaseBindingManagerTests
 
         // binding state is not remembered with ValidationErrors=null!
         dbm.BindTargetToSource(source, target, null);
-        Assert.AreEqual(target.DOB, source["boolValue"]);
+        Assert.That(source["boolValue"], Is.EqualTo(target.DOB));
     }
 
     [Test]
@@ -222,13 +222,13 @@ public class BaseBindingManagerTests
         dbm.AddBinding(binding);
 
         dbm.BindSourceToTarget(source, target, errors);
-        Assert.IsFalse(binding.IsValid(errors));
-        Assert.IsFalse(errors.IsEmpty);
-        Assert.AreEqual(1, errors.GetErrors("errors").Count);
+        Assert.That(binding.IsValid(errors), Is.False);
+        Assert.That(errors.IsEmpty, Is.False);
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(1));
 
         // make sure that the old value doesn't override current invalid value
         dbm.BindTargetToSource(source, target, errors);
-        Assert.AreEqual(false, source["boolValue"]);
+        Assert.That(source["boolValue"], Is.EqualTo(false));
     }
 
     [Test]
@@ -244,13 +244,13 @@ public class BaseBindingManagerTests
         dbm.AddBinding(binding);
 
         dbm.BindTargetToSource(st, st, errors);
-        Assert.IsFalse(binding.IsValid(errors));
-        Assert.IsFalse(errors.IsEmpty);
-        Assert.AreEqual(1, errors.GetErrors("errors").Count);
+        Assert.That(binding.IsValid(errors), Is.False);
+        Assert.That(errors.IsEmpty, Is.False);
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(1));
 
         // make sure that the old value doesn't override current invalid value
         dbm.BindSourceToTarget(st, st, errors);
-        Assert.AreEqual(new DateTime(1856, 7, 9), st.DOB);
+        Assert.That(st.DOB, Is.EqualTo(new DateTime(1856, 7, 9)));
     }
 
     [Test]
@@ -262,11 +262,11 @@ public class BaseBindingManagerTests
 
         dbm.AddBinding("Name", "['name']", BindingDirection.SourceToTarget);
         dbm.BindSourceToTarget(source, target, null);
-        Assert.AreEqual("Nikola Tesla", target["name"]);
+        Assert.That(target["name"], Is.EqualTo("Nikola Tesla"));
 
         target["name"] = "Mihajlo Pupin";
         dbm.BindTargetToSource(source, target, null);
-        Assert.AreEqual("Nikola Tesla", source.Name);
+        Assert.That(source.Name, Is.EqualTo("Nikola Tesla"));
     }
 
     [Test]
@@ -278,11 +278,11 @@ public class BaseBindingManagerTests
 
         dbm.AddBinding("Name", "['name']", BindingDirection.TargetToSource);
         dbm.BindSourceToTarget(source, target, null);
-        Assert.IsNull(target["name"]);
+        Assert.That(target["name"], Is.Null);
 
         target["name"] = "Mihajlo Pupin";
         dbm.BindTargetToSource(source, target, null);
-        Assert.AreEqual("Mihajlo Pupin", source.Name);
+        Assert.That(source.Name, Is.EqualTo("Mihajlo Pupin"));
     }
 
 //    	[Test]

@@ -71,6 +71,6 @@ public class LatchTest
         wait.Acquire();
 
         for (int i = 0; i < n; ++i)
-            Assert.IsTrue(workers[i].worked);
+            Assert.That(workers[i].worked, Is.True);
     }
 }

@@ -83,7 +83,7 @@ public class AdaptableJobFactoryTest
         TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof(NoOpJob));
         IJob job = jobFactory.NewJob(bundle, null);
 
-        Assert.IsNotNull(job, "Returned job was null");
+        Assert.That(job, Is.Not.Null, "Returned job was null");
     }
 }
 

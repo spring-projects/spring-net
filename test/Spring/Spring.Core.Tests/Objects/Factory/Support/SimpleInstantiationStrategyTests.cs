@@ -56,11 +56,11 @@ public sealed class SimpleInstantiationStrategyTests
     {
         SimpleInstantiationStrategy strategy = new SimpleInstantiationStrategy();
         object obj = strategy.Instantiate(SingletonDefinition, null, Factory);
-        Assert.IsNotNull(obj);
-        Assert.IsTrue(obj is ITestObject);
+        Assert.That(obj, Is.Not.Null);
+        Assert.That(obj is ITestObject, Is.True);
         ITestObject actual = (ITestObject) obj;
-        Assert.IsNull(actual.Name);
-        Assert.AreEqual(0, actual.Age);
+        Assert.That(actual.Name, Is.Null);
+        Assert.That(actual.Age, Is.EqualTo(0));
     }
 
     [Test]
@@ -72,11 +72,11 @@ public sealed class SimpleInstantiationStrategyTests
             SingletonDefinition.ObjectType.GetConstructor(
                 new Type[] { typeof(string), typeof(int) }),
             new object[] { "Rick", 19 });
-        Assert.IsNotNull(obj);
-        Assert.IsTrue(obj is ITestObject);
+        Assert.That(obj, Is.Not.Null);
+        Assert.That(obj is ITestObject, Is.True);
         ITestObject actual = (ITestObject) obj;
-        Assert.AreEqual("Rick", actual.Name);
-        Assert.AreEqual(19, actual.Age);
+        Assert.That(actual.Name, Is.EqualTo("Rick"));
+        Assert.That(actual.Age, Is.EqualTo(19));
     }
 
     [Test]
@@ -85,11 +85,11 @@ public sealed class SimpleInstantiationStrategyTests
         SimpleInstantiationStrategy strategy = new SimpleInstantiationStrategy();
         object obj = strategy.Instantiate(SingletonDefinitionWithFactory,
             string.Empty, Factory, typeof(TestObjectFactory).GetMethod("GetObject"), null);
-        Assert.IsNotNull(obj);
-        Assert.IsTrue(obj is ITestObject);
+        Assert.That(obj, Is.Not.Null);
+        Assert.That(obj is ITestObject, Is.True);
         ITestObject actual = (ITestObject) obj;
-        Assert.AreEqual(TestObjectFactory.TheName, actual.Name);
-        Assert.AreEqual(TestObjectFactory.TheAge, actual.Age);
+        Assert.That(actual.Name, Is.EqualTo(TestObjectFactory.TheName));
+        Assert.That(actual.Age, Is.EqualTo(TestObjectFactory.TheAge));
     }
 
     [Test]
@@ -100,8 +100,8 @@ public sealed class SimpleInstantiationStrategyTests
 
         SimpleInstantiationStrategy strategy = new SimpleInstantiationStrategy();
         object foo = strategy.Instantiate(def, "foo", Factory);
-        Assert.IsNotNull(foo);
-        Assert.AreEqual(typeof(TestObject), foo.GetType());
+        Assert.That(foo, Is.Not.Null);
+        Assert.That(foo.GetType(), Is.EqualTo(typeof(TestObject)));
     }
 
     private RootObjectDefinition SingletonDefinition

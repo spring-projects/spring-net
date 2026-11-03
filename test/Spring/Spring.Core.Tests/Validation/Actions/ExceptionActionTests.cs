@@ -55,7 +55,7 @@ public class ExceptionActionTests
         }
         catch (InvalidOperationException e)
         {
-            Assert.AreEqual("invalid", e.Message);
+            Assert.That(e.Message, Is.EqualTo("invalid"));
         }
     }
 
@@ -74,7 +74,7 @@ public class ExceptionActionTests
         }
         catch (InvalidOperationException e)
         {
-            Assert.AreEqual("invalid", e.Message);
+            Assert.That(e.Message, Is.EqualTo("invalid"));
         }
     }
 

@@ -9,6 +9,6 @@ public class WebApplicationContextArgsTests
     public void Default_CaseSensitivity_isFalse()
     {
         WebApplicationContextArgs args = new WebApplicationContextArgs(string.Empty, null, null, null);
-        Assert.False(args.CaseSensitive);
+        Assert.That(args.CaseSensitive, Is.False);
     }
 }

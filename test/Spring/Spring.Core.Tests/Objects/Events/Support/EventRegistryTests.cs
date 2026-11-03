@@ -170,14 +170,14 @@ public class EventRegistryTests
         registry.PublishEvents(source);
 
         EventSubscriber sub = new EventSubscriber();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
 
         source.ClientMethodThatTriggersEvent();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
 
         registry.Subscribe(sub, typeof(ISimpleClient));
         source.ClientMethodThatTriggersEvent();
-        Assert.IsTrue(sub.EventRaised, "Event Not Raised");
+        Assert.That(sub.EventRaised, Is.True, "Event Not Raised");
     }
 
     [Test]
@@ -187,14 +187,14 @@ public class EventRegistryTests
         SimpleClient client = new SimpleClient("PublishAllEvents");
         registry.PublishEvents(client);
         EventSubscriber sub = new EventSubscriber();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
 
         client.ClientMethodThatTriggersEvent();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
 
         registry.Subscribe(sub);
         client.ClientMethodThatTriggersEvent();
-        Assert.IsTrue(sub.EventRaised, "Event Not Raised");
+        Assert.That(sub.EventRaised, Is.True, "Event Not Raised");
     }
 
     [Test]
@@ -205,18 +205,18 @@ public class EventRegistryTests
         registry.PublishEvents(client);
         EventSubscriber sub = new EventSubscriber();
         EventSubscriber sub2 = new EventSubscriber();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
-        Assert.IsFalse(sub2.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
+        Assert.That(sub2.EventRaised, Is.False, "Event raised");
 
         client.ClientMethodThatTriggersEvent();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
-        Assert.IsFalse(sub2.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
+        Assert.That(sub2.EventRaised, Is.False, "Event raised");
 
         registry.Subscribe(sub);
         registry.Subscribe(sub2);
         client.ClientMethodThatTriggersEvent();
-        Assert.IsTrue(sub.EventRaised, "Event Not Raised");
-        Assert.IsTrue(sub2.EventRaised, "Event Not Raised");
+        Assert.That(sub.EventRaised, Is.True, "Event Not Raised");
+        Assert.That(sub2.EventRaised, Is.True, "Event Not Raised");
     }
 
     [Test]
@@ -230,15 +230,15 @@ public class EventRegistryTests
         registry.Subscribe(sub);
         registry.Subscribe(sub2);
         client.ClientMethodThatTriggersEvent();
-        Assert.IsTrue(sub.EventRaised, "Event Not Raised");
-        Assert.IsTrue(sub2.EventRaised, "Event Not Raised");
-        Assert.AreEqual(1, sub.EventCount);
-        Assert.AreEqual(1, sub2.EventCount);
+        Assert.That(sub.EventRaised, Is.True, "Event Not Raised");
+        Assert.That(sub2.EventRaised, Is.True, "Event Not Raised");
+        Assert.That(sub.EventCount, Is.EqualTo(1));
+        Assert.That(sub2.EventCount, Is.EqualTo(1));
 
         registry.Unsubscribe(sub2);
         client.ClientMethodThatTriggersEvent();
-        Assert.AreEqual(2, sub.EventCount);
-        Assert.AreEqual(1, sub2.EventCount);
+        Assert.That(sub.EventCount, Is.EqualTo(2));
+        Assert.That(sub2.EventCount, Is.EqualTo(1));
     }
 
     [Test]
@@ -254,24 +254,24 @@ public class EventRegistryTests
         EventSubscriber sub = new EventSubscriber();
         EventSubscriber sub2 = new EventSubscriber();
 
-        Assert.IsFalse(sub.EventRaised, "Event raised");
-        Assert.IsFalse(sub2.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
+        Assert.That(sub2.EventRaised, Is.False, "Event raised");
 
         client.ClientMethodThatTriggersEvent();
         client2.ClientMethodThatTriggersEvent();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
-        Assert.IsFalse(sub2.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
+        Assert.That(sub2.EventRaised, Is.False, "Event raised");
 
         registry.Subscribe(sub, typeof(SimpleClient));
         registry.Subscribe(sub2, typeof(SimpleClient2));
 
         client.ClientMethodThatTriggersEvent();
-        Assert.IsTrue(sub.EventRaised, "Event Not Raised");
-        Assert.IsFalse(sub2.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.True, "Event Not Raised");
+        Assert.That(sub2.EventRaised, Is.False, "Event raised");
 
         client2.ClientMethodThatTriggersEvent();
-        Assert.IsTrue(sub.EventRaised, "Event Not Raised");
-        Assert.IsTrue(sub2.EventRaised, "Event Not Raised");
+        Assert.That(sub.EventRaised, Is.True, "Event Not Raised");
+        Assert.That(sub2.EventRaised, Is.True, "Event Not Raised");
     }
 
     [Test]
@@ -282,13 +282,13 @@ public class EventRegistryTests
         NoEventSubscriber sub = new NoEventSubscriber();
         registry.PublishEvents(client);
 
-        Assert.IsFalse(sub.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
         client.ClientMethodThatTriggersEvent();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
 
         registry.Subscribe(sub);
         client.ClientMethodThatTriggersEvent();
-        Assert.IsFalse(sub.EventRaised, "Event Raised");
+        Assert.That(sub.EventRaised, Is.False, "Event Raised");
     }
 
     [Test]
@@ -297,14 +297,14 @@ public class EventRegistryTests
         IEventRegistry registry = new EventRegistry();
         SimpleClient client = new SimpleClient("PublishAllEvents");
         SimpleSubscriber sub = new SimpleSubscriber();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
 
         client.ClientMethodThatTriggersEvent();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
 
         registry.Subscribe(sub);
         client.ClientMethodThatTriggersEvent();
-        Assert.IsFalse(sub.EventRaised, "Event Raised");
+        Assert.That(sub.EventRaised, Is.False, "Event Raised");
     }
 
     [Test]
@@ -315,20 +315,20 @@ public class EventRegistryTests
         registry.PublishEvents(client);
         EventSubscriber sub = new EventSubscriber();
         OtherEventSubscriber sub2 = new OtherEventSubscriber();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
-        Assert.IsFalse(sub2.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
+        Assert.That(sub2.EventRaised, Is.False, "Event raised");
 
         client.ClientMethodThatTriggersEvent();
-        Assert.IsFalse(sub.EventRaised, "Event raised");
+        Assert.That(sub.EventRaised, Is.False, "Event raised");
 
         client.ClientMethodThatTriggersEvent3();
-        Assert.IsFalse(sub2.EventRaised, "Event raised");
+        Assert.That(sub2.EventRaised, Is.False, "Event raised");
 
         registry.Subscribe(sub);
         registry.Subscribe(sub2);
         client.ClientMethodThatTriggersEvent();
         client.ClientMethodThatTriggersEvent3();
-        Assert.IsTrue(sub.EventRaised, "Event Not Raised");
-        Assert.IsTrue(sub2.EventRaised, "Event Not Raised");
+        Assert.That(sub.EventRaised, Is.True, "Event Not Raised");
+        Assert.That(sub2.EventRaised, Is.True, "Event Not Raised");
     }
 }

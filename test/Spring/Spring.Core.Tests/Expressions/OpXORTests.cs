@@ -29,16 +29,16 @@ public class OpXORTests
     public void XorsNumbers()
     {
         OpXOR bxor = new OpXOR(new IntLiteralNode("2"), new IntLiteralNode("3"));
-        Assert.AreEqual(2 ^ 3, bxor.GetValue(null, null));
+        Assert.That(bxor.GetValue(null, null), Is.EqualTo(2 ^ 3));
     }
 
     [Test]
     public void XorsBooleans()
     {
         OpXOR bxor1 = new OpXOR(new BooleanLiteralNode("true"), new BooleanLiteralNode("false"));
-        Assert.AreEqual(true ^ false, bxor1.GetValue(null, null));
+        Assert.That(bxor1.GetValue(null, null), Is.EqualTo(true ^ false));
 
         OpXOR bxor2 = new OpXOR(new BooleanLiteralNode("true"), new BooleanLiteralNode("true"));
-        Assert.AreEqual(true ^ true, bxor2.GetValue(null, null));
+        Assert.That(bxor2.GetValue(null, null), Is.EqualTo(true ^ true));
     }
 }

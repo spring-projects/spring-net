@@ -31,14 +31,15 @@ public sealed class NameValueConverterTests
     public void CanConvertFromString()
     {
         NameValueConverter vrt = new NameValueConverter();
-        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
+        Assert.That(vrt.CanConvertFrom(typeof(string)), Is.True, "Conversion from a string instance must be supported.");
     }
 
     [Test]
     public void CanConvertOnlyFromString()
     {
         NameValueConverter vrt = new NameValueConverter();
-        Assert.IsFalse(vrt.CanConvertFrom(typeof(TestObject)),
+        Assert.That(vrt.CanConvertFrom(typeof(TestObject)),
+            Is.False,
             "Seem to be able to convert from non-supported Type.");
     }
 
@@ -52,12 +53,12 @@ public sealed class NameValueConverterTests
             "</foo>";
         NameValueConverter vrt = new NameValueConverter();
         NameValueCollection actual = vrt.ConvertFrom(xml) as NameValueCollection;
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(2, actual.Count);
-        Assert.AreEqual("one", actual.GetKey(0));
-        Assert.AreEqual("two", actual.GetKey(1));
-        Assert.AreEqual("1", actual["one"]);
-        Assert.AreEqual("2", actual["two"]);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.Count, Is.EqualTo(2));
+        Assert.That(actual.GetKey(0), Is.EqualTo("one"));
+        Assert.That(actual.GetKey(1), Is.EqualTo("two"));
+        Assert.That(actual["one"], Is.EqualTo("1"));
+        Assert.That(actual["two"], Is.EqualTo("2"));
     }
 
     [Test]

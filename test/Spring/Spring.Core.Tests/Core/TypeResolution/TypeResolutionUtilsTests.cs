@@ -30,8 +30,8 @@ public sealed class TypeResolutionUtilsTests
     public void ResolveFromAssemblyQualifiedName()
     {
         Type testObjectType = TypeResolutionUtils.ResolveType("Spring.Objects.TestObject, Spring.Core.Tests");
-        Assert.IsNotNull(testObjectType);
-        Assert.IsTrue(testObjectType.Equals(typeof(TestObject)));
+        Assert.That(testObjectType, Is.Not.Null);
+        Assert.That(testObjectType.Equals(typeof(TestObject)), Is.True);
     }
 
     [Test]
@@ -44,8 +44,8 @@ public sealed class TypeResolutionUtilsTests
     public void ResolveFromShortName()
     {
         Type testObjectType = TypeResolutionUtils.ResolveType("Spring.Objects.TestObject");
-        Assert.IsNotNull(testObjectType);
-        Assert.IsTrue(testObjectType.Equals(typeof(TestObject)));
+        Assert.That(testObjectType, Is.Not.Null);
+        Assert.That(testObjectType.Equals(typeof(TestObject)), Is.True);
     }
 
     [Test]
@@ -60,9 +60,9 @@ public sealed class TypeResolutionUtilsTests
         Type[] expected = new Type[] { typeof(IFoo) };
         string[] input = new string[] { typeof(IFoo).AssemblyQualifiedName };
         IList<Type> actual = TypeResolutionUtils.ResolveInterfaceArray(input);
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(expected.Length, actual.Count);
-        Assert.AreEqual(expected[0], actual[0]);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.Count, Is.EqualTo(expected.Length));
+        Assert.That(actual[0], Is.EqualTo(expected[0]));
     }
 
     [Test]
@@ -76,20 +76,20 @@ public sealed class TypeResolutionUtilsTests
     public void MethodMatch()
     {
         MethodInfo absquatulateMethod = typeof(TestObject).GetMethod("Absquatulate");
-        Assert.IsTrue(TypeResolutionUtils.MethodMatch("*", absquatulateMethod), "Should match '*'");
-        Assert.IsTrue(TypeResolutionUtils.MethodMatch("*tulate", absquatulateMethod), "Should match '*tulate'");
-        Assert.IsTrue(TypeResolutionUtils.MethodMatch("Absqua*", absquatulateMethod), "Should match 'Absqua*'");
-        Assert.IsTrue(TypeResolutionUtils.MethodMatch("*quatul*", absquatulateMethod), "Should match '*quatul*'");
-        Assert.IsTrue(TypeResolutionUtils.MethodMatch("Absquatulate", absquatulateMethod), "Should match 'Absquatulate'");
-        Assert.IsTrue(TypeResolutionUtils.MethodMatch("Absquatulate()", absquatulateMethod), "Should match 'Absquatulate()'");
-        Assert.IsTrue(TypeResolutionUtils.MethodMatch("Absquatulate()", absquatulateMethod), "Should match 'Absquatulate()'");
-        Assert.IsFalse(TypeResolutionUtils.MethodMatch("Absquatulate(string)", absquatulateMethod), "Should not match 'Absquatulate(string)'");
+        Assert.That(TypeResolutionUtils.MethodMatch("*", absquatulateMethod), Is.True, "Should match '*'");
+        Assert.That(TypeResolutionUtils.MethodMatch("*tulate", absquatulateMethod), Is.True, "Should match '*tulate'");
+        Assert.That(TypeResolutionUtils.MethodMatch("Absqua*", absquatulateMethod), Is.True, "Should match 'Absqua*'");
+        Assert.That(TypeResolutionUtils.MethodMatch("*quatul*", absquatulateMethod), Is.True, "Should match '*quatul*'");
+        Assert.That(TypeResolutionUtils.MethodMatch("Absquatulate", absquatulateMethod), Is.True, "Should match 'Absquatulate'");
+        Assert.That(TypeResolutionUtils.MethodMatch("Absquatulate()", absquatulateMethod), Is.True, "Should match 'Absquatulate()'");
+        Assert.That(TypeResolutionUtils.MethodMatch("Absquatulate()", absquatulateMethod), Is.True, "Should match 'Absquatulate()'");
+        Assert.That(TypeResolutionUtils.MethodMatch("Absquatulate(string)", absquatulateMethod), Is.False, "Should not match 'Absquatulate(string)'");
 
         MethodInfo addPeriodicElementMethod = typeof(TestObject).GetMethod("AddPeriodicElement");
-        Assert.IsTrue(TypeResolutionUtils.MethodMatch("AddPeriodicElement", addPeriodicElementMethod), "Should match 'AddPeriodicElement'");
-        Assert.IsFalse(TypeResolutionUtils.MethodMatch("AddPeriodicElement()", addPeriodicElementMethod), "Should not match 'AddPeriodicElement()'");
-        Assert.IsFalse(TypeResolutionUtils.MethodMatch("AddPeriodicElement(string)", addPeriodicElementMethod), "Should not match 'AddPeriodicElement(string)'");
-        Assert.IsTrue(TypeResolutionUtils.MethodMatch("AddPeriodicElement(string, string)", addPeriodicElementMethod), "Should match 'AddPeriodicElement(string, string)'");
+        Assert.That(TypeResolutionUtils.MethodMatch("AddPeriodicElement", addPeriodicElementMethod), Is.True, "Should match 'AddPeriodicElement'");
+        Assert.That(TypeResolutionUtils.MethodMatch("AddPeriodicElement()", addPeriodicElementMethod), Is.False, "Should not match 'AddPeriodicElement()'");
+        Assert.That(TypeResolutionUtils.MethodMatch("AddPeriodicElement(string)", addPeriodicElementMethod), Is.False, "Should not match 'AddPeriodicElement(string)'");
+        Assert.That(TypeResolutionUtils.MethodMatch("AddPeriodicElement(string, string)", addPeriodicElementMethod), Is.True, "Should match 'AddPeriodicElement(string, string)'");
     }
 
     internal interface IFoo

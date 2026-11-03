@@ -13,7 +13,7 @@ namespace Tests.Generator
 
             string actual = primeGenerator.GeneratePrimesUpTo(10);
 
-            Assert.AreEqual("2,3,5,7,9", actual);
+            Assert.That(actual, Is.EqualTo("2,3,5,7,9"));
         }
     }
 }

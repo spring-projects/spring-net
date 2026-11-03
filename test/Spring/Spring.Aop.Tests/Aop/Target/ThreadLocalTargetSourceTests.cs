@@ -59,25 +59,25 @@ public class ThreadLocalTargetSourceTests
     public virtual void UseDifferentManagedInstancesInSameThread()
     {
         ISideEffectObject apartment = (ISideEffectObject) ObjectFactory.GetObject("apartment");
-        Assert.AreEqual(INITIAL_COUNT, apartment.Count);
+        Assert.That(apartment.Count, Is.EqualTo(INITIAL_COUNT));
         apartment.doWork();
-        Assert.AreEqual(INITIAL_COUNT + 1, apartment.Count);
+        Assert.That(apartment.Count, Is.EqualTo(INITIAL_COUNT + 1));
 
         ITestObject test = (ITestObject) ObjectFactory.GetObject("threadLocal2");
-        Assert.AreEqual("Rod", test.Name);
-        Assert.AreEqual("Kerry", test.Spouse.Name);
+        Assert.That(test.Name, Is.EqualTo("Rod"));
+        Assert.That(test.Spouse.Name, Is.EqualTo("Kerry"));
     }
 
     [Test]
     public virtual void ReuseInSameThread()
     {
         ISideEffectObject apartment = (ISideEffectObject) ObjectFactory.GetObject("apartment");
-        Assert.AreEqual(INITIAL_COUNT, apartment.Count);
+        Assert.That(apartment.Count, Is.EqualTo(INITIAL_COUNT));
         apartment.doWork();
-        Assert.AreEqual(INITIAL_COUNT + 1, apartment.Count);
+        Assert.That(apartment.Count, Is.EqualTo(INITIAL_COUNT + 1));
 
         apartment = (ISideEffectObject) ObjectFactory.GetObject("apartment");
-        Assert.AreEqual(INITIAL_COUNT + 1, apartment.Count);
+        Assert.That(apartment.Count, Is.EqualTo(INITIAL_COUNT + 1));
     }
 
     /// <summary> Relies on introduction
@@ -87,16 +87,16 @@ public class ThreadLocalTargetSourceTests
     public virtual void CanGetStatsViaMixinIfThereIsAnInterceptorTakingCareOfThem()
     {
         IThreadLocalTargetSourceStats stats = (IThreadLocalTargetSourceStats) ObjectFactory.GetObject("apartment");
-        Assert.AreEqual(0, stats.Invocations);
+        Assert.That(stats.Invocations, Is.EqualTo(0));
         ISideEffectObject apartment = (ISideEffectObject) ObjectFactory.GetObject("apartment");
         apartment.doWork();
-        Assert.AreEqual(1, stats.Invocations);
-        Assert.AreEqual(0, stats.Hits);
+        Assert.That(stats.Invocations, Is.EqualTo(1));
+        Assert.That(stats.Hits, Is.EqualTo(0));
         apartment.doWork();
-        Assert.AreEqual(2, stats.Invocations);
-        Assert.AreEqual(1, stats.Hits);
+        Assert.That(stats.Invocations, Is.EqualTo(2));
+        Assert.That(stats.Hits, Is.EqualTo(1));
         // Only one thread so only one object can have been bound
-        Assert.AreEqual(1, stats.Objects);
+        Assert.That(stats.Objects, Is.EqualTo(1));
     }
 
     public class Runner
@@ -115,9 +115,9 @@ public class ThreadLocalTargetSourceTests
             log.LogDebug("getting object");
             this.mine = (ISideEffectObject) factory.ObjectFactory.GetObject("apartment");
             log.LogDebug("got object; hash code: {HashCode}", this.mine.GetHashCode());
-            Assert.AreEqual(ThreadLocalTargetSourceTests.INITIAL_COUNT, mine.Count);
+            Assert.That(mine.Count, Is.EqualTo(ThreadLocalTargetSourceTests.INITIAL_COUNT));
             mine.doWork();
-            Assert.AreEqual(ThreadLocalTargetSourceTests.INITIAL_COUNT + 1, mine.Count);
+            Assert.That(mine.Count, Is.EqualTo(ThreadLocalTargetSourceTests.INITIAL_COUNT + 1));
         }
     }
 
@@ -126,28 +126,28 @@ public class ThreadLocalTargetSourceTests
     {
         ISideEffectObject apartment = (ISideEffectObject) ObjectFactory.GetObject("apartment");
         log.LogDebug("got object; hash code: {HashCode}", apartment.GetHashCode());
-        Assert.AreEqual(INITIAL_COUNT, apartment.Count);
+        Assert.That(apartment.Count, Is.EqualTo(INITIAL_COUNT));
         apartment.doWork();
         apartment.doWork();
         apartment.doWork();
-        Assert.AreEqual(INITIAL_COUNT + 3, apartment.Count);
+        Assert.That(apartment.Count, Is.EqualTo(INITIAL_COUNT + 3));
 
         Runner r = new Runner(this);
         Thread t = new Thread(new ThreadStart(r.Run));
         t.Start();
         t.Join();
 
-        Assert.IsNotNull(r);
+        Assert.That(r, Is.Not.Null);
 
         // Check it didn't affect the other thread's copy
-        Assert.AreEqual(INITIAL_COUNT + 3, apartment.Count);
+        Assert.That(apartment.Count, Is.EqualTo(INITIAL_COUNT + 3));
 
         // When we use other thread's copy in this thread
         // it should behave like ours
-        Assert.AreEqual(INITIAL_COUNT + 3, r.mine.Count);
+        Assert.That(r.mine.Count, Is.EqualTo(INITIAL_COUNT + 3));
 
         // Bound to two threads
-        Assert.AreEqual(2, ((IThreadLocalTargetSourceStats) apartment).Objects);
+        Assert.That(((IThreadLocalTargetSourceStats) apartment).Objects, Is.EqualTo(2));
     }
 
     private static bool multiThreadedTestFailed = false;
@@ -179,7 +179,7 @@ public class ThreadLocalTargetSourceTests
             thread.Join();
         }
 
-        Assert.IsFalse(multiThreadedTestFailed);
+        Assert.That(multiThreadedTestFailed, Is.False);
     }
 
     private void CheckName(object mtObject)

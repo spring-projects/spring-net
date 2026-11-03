@@ -40,7 +40,7 @@ public class LocalResourceManagerTests : WebApplicationTests
         HttpWebClient client = Host.CreateWebClient();
         string result = client.GetPage("WithResources.aspx");
         Trace.Write(result);
-        Assert.AreEqual("<span id=\"Result\">FromResource</span>", result);
+        Assert.That(result, Is.EqualTo("<span id=\"Result\">FromResource</span>"));
     }
 
     [Test]
@@ -48,6 +48,6 @@ public class LocalResourceManagerTests : WebApplicationTests
     {
         HttpWebClient client = Host.CreateWebClient();
         string result = client.GetPage("WithoutResources.aspx");
-        Assert.AreEqual("OK", result);
+        Assert.That(result, Is.EqualTo("OK"));
     }
 }

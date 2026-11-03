@@ -33,35 +33,39 @@ public sealed class TrueMethodMatcherTests
         IMethodMatcher deserializedVersion
             = (IMethodMatcher) SerializationTestUtils.SerializeAndDeserialize(
                 TrueMethodMatcher.True);
-        Assert.IsTrue(Object.ReferenceEquals(TrueMethodMatcher.True, deserializedVersion),
+        Assert.That(Object.ReferenceEquals(TrueMethodMatcher.True, deserializedVersion),
+            Is.True,
             "Singleton instance not being deserialized correctly");
     }
 
     [Test]
     public void IsSerializable()
     {
-        Assert.IsTrue(SerializationTestUtils.IsSerializable(TrueMethodMatcher.True),
+        Assert.That(SerializationTestUtils.IsSerializable(TrueMethodMatcher.True),
+            Is.True,
             "TrueMethodMatcher must be serializable.");
     }
 
     [Test]
     public void AlwaysMatchesEvenOnNullArguments()
     {
-        Assert.IsTrue(TrueMethodMatcher.True.Matches(null, null),
+        Assert.That(TrueMethodMatcher.True.Matches(null, null),
+            Is.True,
             "Must always match (return true).");
     }
 
     [Test]
     public void AlwaysMatches()
     {
-        Assert.IsTrue(TrueMethodMatcher.True.Matches(
+        Assert.That(TrueMethodMatcher.True.Matches(
                 (MethodInfo) MethodBase.GetCurrentMethod(), GetType()),
+            Is.True,
             "Must always match (return true).");
     }
 
     [Test]
     public void IsRuntime()
     {
-        Assert.IsFalse(TrueMethodMatcher.True.IsRuntime, "Must NOT be runtime.");
+        Assert.That(TrueMethodMatcher.True.IsRuntime, Is.False, "Must NOT be runtime.");
     }
 }

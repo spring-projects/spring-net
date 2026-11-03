@@ -38,7 +38,7 @@ public class ManagedDictionaryTests
         child.Add("three", "three");
         child.MergeEnabled = true;
         IDictionary mergedList = (IDictionary) child.Merge(parent);
-        Assert.AreEqual(3, mergedList.Count);
+        Assert.That(mergedList.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -46,7 +46,7 @@ public class ManagedDictionaryTests
     {
         ManagedDictionary child = new ManagedDictionary();
         child.MergeEnabled = true;
-        Assert.AreSame(child, child.Merge(null));
+        Assert.That(child.Merge(null), Is.SameAs(child));
     }
 
     [Test]
@@ -73,7 +73,7 @@ public class ManagedDictionaryTests
         ManagedDictionary child = new ManagedDictionary();
         child.MergeEnabled = true;
         IDictionary mergedMap = (IDictionary) child.Merge(parent);
-        Assert.AreEqual(2, mergedMap.Count);
+        Assert.That(mergedMap.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -86,8 +86,8 @@ public class ManagedDictionaryTests
         child.Add("one", "fork");
         child.MergeEnabled = true;
         IDictionary mergedMap = (IDictionary) child.Merge(parent);
-        Assert.AreEqual(2, mergedMap.Count);
-        Assert.AreEqual("fork", mergedMap["one"]);
+        Assert.That(mergedMap.Count, Is.EqualTo(2));
+        Assert.That(mergedMap["one"], Is.EqualTo("fork"));
     }
 
     internal class InternalType
@@ -114,7 +114,7 @@ public class ManagedDictionaryTests
                 return element;
             }
         );
-        Assert.AreEqual(typeof(InternalType), resolved[1].GetType());
+        Assert.That(resolved[1].GetType(), Is.EqualTo(typeof(InternalType)));
     }
 
     [Test]
@@ -136,8 +136,8 @@ public class ManagedDictionaryTests
                 return element;
             }
         );
-        Assert.AreEqual(1, resolved.Count);
-        Assert.AreEqual(typeof(List<string>), resolved["key"].GetType());
+        Assert.That(resolved.Count, Is.EqualTo(1));
+        Assert.That(resolved["key"].GetType(), Is.EqualTo(typeof(List<string>)));
     }
 
     [Test]
@@ -159,9 +159,9 @@ public class ManagedDictionaryTests
         IDictionary resolved = (IDictionary) merged.Resolve("somename", new RootObjectDefinition(typeof(object)), "prop",
             (name, definition, argumentName, element) => element);
 
-        Assert.IsInstanceOf<IDictionary<string, int>>(resolved);
-        Assert.AreEqual(3, resolved.Count);
-        Assert.AreEqual(typeof(int), resolved["two"].GetType());
-        Assert.AreEqual(-1, resolved["one"]);
+        Assert.That(resolved, Is.InstanceOf<IDictionary<string, int>>());
+        Assert.That(resolved.Count, Is.EqualTo(3));
+        Assert.That(resolved["two"].GetType(), Is.EqualTo(typeof(int)));
+        Assert.That(resolved["one"], Is.EqualTo(-1));
     }
 }

@@ -28,7 +28,7 @@ public class StaticApplicationContextTests
         StaticApplicationContext ctx = new StaticApplicationContext();
         ctx.Refresh();
         ctx.AddMessage("code1", CultureInfo.CurrentUICulture, "this is {0}");
-        Assert.AreEqual("this is Spring.NET", ctx.GetMessage("code1", "Spring.NET"));
+        Assert.That(ctx.GetMessage("code1", "Spring.NET"), Is.EqualTo("this is Spring.NET"));
     }
 
     [Test]
@@ -38,7 +38,7 @@ public class StaticApplicationContextTests
         ctx.RegisterPrototype("my object", typeof(MockContextAwareObject), null);
         MockContextAwareObject ctx1 = (MockContextAwareObject) ctx.GetObject("my object");
         MockContextAwareObject ctx2 = (MockContextAwareObject) ctx.GetObject("my object");
-        Assert.IsTrue(ctx1 != ctx2);
-        Assert.IsTrue(!ctx.IsSingleton("my object"));
+        Assert.That(ctx1 != ctx2, Is.True);
+        Assert.That(!ctx.IsSingleton("my object"), Is.True);
     }
 }

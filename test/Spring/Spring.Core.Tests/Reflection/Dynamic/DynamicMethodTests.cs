@@ -67,26 +67,26 @@ public sealed class DynamicMethodTests
     public void TestInstanceMethods()
     {
         IDynamicMethod getAge = DynamicMethod.Create(typeof(Inventor).GetMethod("GetAge"));
-        Assert.AreEqual(tesla.GetAge(DateTime.Today), getAge.Invoke(tesla, new object[] { DateTime.Today }));
+        Assert.That(getAge.Invoke(tesla, new object[] { DateTime.Today }), Is.EqualTo(tesla.GetAge(DateTime.Today)));
 
         MethodTarget target = new MethodTarget();
         IDynamicMethod test = DynamicMethod.Create(typeof(MethodTarget).GetMethod("MethodReturningString"));
-        Assert.AreEqual(tesla.Name, test.Invoke(target, new object[] { 5, DateTime.Today, new String[] { "xyz", "abc" }, tesla }));
+        Assert.That(test.Invoke(target, new object[] { 5, DateTime.Today, new String[] { "xyz", "abc" }, tesla }), Is.EqualTo(tesla.Name));
 
         ArrayList list = new ArrayList(new string[] { "one", "two", "three" });
         IDynamicMethod removeAt = DynamicMethod.Create(typeof(ArrayList).GetMethod("RemoveAt"));
         removeAt.Invoke(list, new object[] { 1 });
-        Assert.AreEqual(2, list.Count);
-        Assert.AreEqual("three", list[1]);
+        Assert.That(list.Count, Is.EqualTo(2));
+        Assert.That(list[1], Is.EqualTo("three"));
     }
 
     [Test]
     public void TestStaticMethods()
     {
         IDynamicMethod isNullOrEmpty = DynamicMethod.Create(typeof(StringUtils).GetMethod("IsNullOrEmpty"));
-        Assert.IsTrue((bool) isNullOrEmpty.Invoke(null, new object[] { null }));
-        Assert.IsTrue((bool) isNullOrEmpty.Invoke(null, new object[] { String.Empty }));
-        Assert.IsFalse((bool) isNullOrEmpty.Invoke(null, new object[] { "Ana Maria" }));
+        Assert.That((bool) isNullOrEmpty.Invoke(null, new object[] { null }), Is.True);
+        Assert.That((bool) isNullOrEmpty.Invoke(null, new object[] { String.Empty }), Is.True);
+        Assert.That((bool) isNullOrEmpty.Invoke(null, new object[] { "Ana Maria" }), Is.False);
     }
 
     internal class TheClassAsArgument
@@ -112,7 +112,7 @@ public sealed class DynamicMethodTests
 
         bool ret = (bool) (method.Invoke(new TheClassWithMethod(), new object[] { new TheClassDerivedFromTheArgumentClass() }));
 
-        Assert.IsTrue(ret);
+        Assert.That(ret, Is.True);
     }
 
     [Test]
@@ -121,7 +121,7 @@ public sealed class DynamicMethodTests
         IDynamicMethod dm = DynamicMethod.Create(typeof(TestMethods).GetMethod("PassNullableArgumentStatic"));
         DateTime dt = DateTime.Now;
 
-        Assert.AreEqual(dt, dm.Invoke(null, dt));
+        Assert.That(dm.Invoke(null, dt), Is.EqualTo(dt));
     }
 
     [Test]
@@ -130,7 +130,7 @@ public sealed class DynamicMethodTests
         IDynamicMethod dm = DynamicMethod.Create(typeof(TestMethods).GetMethod("PassReferenceArgumentStatic"));
         DateTime dt = DateTime.Now;
 
-        Assert.IsNull(dm.Invoke(null, null)); // this is ok
+        Assert.That(dm.Invoke(null, null), Is.Null); // this is ok
         try
         {
             dm.Invoke(null); // this is not ok
@@ -151,7 +151,7 @@ public sealed class DynamicMethodTests
     {
         IDynamicMethod sqrt = DynamicMethod.Create(typeof(Math).GetMethod("Sqrt"));
         object result = sqrt.Invoke(null, new object[] { 4 });
-        Assert.AreEqual(Math.Sqrt(4), result);
+        Assert.That(result, Is.EqualTo(Math.Sqrt(4)));
 
         try
         {
@@ -187,30 +187,30 @@ public sealed class DynamicMethodTests
         MethodTarget target = new MethodTarget();
         object[] args = new object[] { "aleks", 5 };
         refMethod.Invoke(target, args);
-        Assert.AreEqual("ALEKS", args[0]);
-        Assert.AreEqual(25, args[1]);
+        Assert.That(args[0], Is.EqualTo("ALEKS"));
+        Assert.That(args[1], Is.EqualTo(25));
 
         IDynamicMethod outMethod = DynamicMethod.Create(typeof(MethodTarget).GetMethod("MethodWithOutParameter"));
         args = new object[] { "aleks", null };
         outMethod.Invoke(target, args);
-        Assert.AreEqual("ALEKS", args[1]);
+        Assert.That(args[1], Is.EqualTo("ALEKS"));
 
         IDynamicMethod refOutMethod = DynamicMethod.Create(typeof(RefOutTestObject).GetMethod("DoIt"));
         RefOutTestObject refOutTarget = new RefOutTestObject();
 
         args = new object[] { 0, 1, null };
         refOutMethod.Invoke(refOutTarget, args);
-        Assert.AreEqual(2, args[1]);
-        Assert.AreEqual("done", args[2]);
+        Assert.That(args[1], Is.EqualTo(2));
+        Assert.That(args[2], Is.EqualTo("done"));
         refOutMethod.Invoke(refOutTarget, args);
-        Assert.AreEqual(3, args[1]);
-        Assert.AreEqual("done", args[2]);
+        Assert.That(args[1], Is.EqualTo(3));
+        Assert.That(args[2], Is.EqualTo("done"));
 
         int count = 0;
         string done;
         target.DoItCaller(0, ref count, out done);
-        Assert.AreEqual(1, count);
-        Assert.AreEqual("done", done);
+        Assert.That(count, Is.EqualTo(1));
+        Assert.That(done, Is.EqualTo("done"));
     }
 
     private DateTime start, stop;

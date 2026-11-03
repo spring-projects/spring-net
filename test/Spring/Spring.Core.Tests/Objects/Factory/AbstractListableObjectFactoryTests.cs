@@ -54,8 +54,9 @@ public abstract class AbstractListableObjectFactoryTests :
     protected internal void AssertCount(int count)
     {
         var defnames = ListableObjectFactory.GetObjectDefinitionNames(true);
-        Assert.IsTrue(
+        Assert.That(
             defnames.Count == count,
+            Is.True,
             $"We should have {count} objects, not {defnames.Count}.");
     }
 
@@ -68,8 +69,9 @@ public abstract class AbstractListableObjectFactoryTests :
     public virtual void AssertTestObjectCount(int count)
     {
         var defnames = ListableObjectFactory.GetObjectNamesForType(typeof(TestObject));
-        Assert.IsTrue(
+        Assert.That(
             defnames.Count == count,
+            Is.True,
             $"We should have {count} objects for class {typeof(TestObject).FullName}, not {defnames.Count}.");
     }
 
@@ -77,7 +79,7 @@ public abstract class AbstractListableObjectFactoryTests :
     public virtual void GetDefinitionsForNoSuchClass()
     {
         var defnames = ListableObjectFactory.GetObjectNamesForType(typeof(string));
-        Assert.IsTrue(defnames.Count == 0, "No string definitions");
+        Assert.That(defnames.Count == 0, Is.True, "No string definitions");
     }
 
     /// <summary>
@@ -89,15 +91,16 @@ public abstract class AbstractListableObjectFactoryTests :
     public virtual void GetCountForFactoryClass()
     {
         int count = ListableObjectFactory.GetObjectNamesForType(typeof(IFactoryObject)).Count;
-        Assert.IsTrue(
+        Assert.That(
             count == 2,
+            Is.True,
             $"Should have 2 factories, not {count}.");
     }
 
     [Test]
     public virtual void ContainsObjectDefinition()
     {
-        Assert.IsTrue(ListableObjectFactory.ContainsObjectDefinition("rod"));
-        Assert.IsTrue(ListableObjectFactory.ContainsObjectDefinition("roderick"));
+        Assert.That(ListableObjectFactory.ContainsObjectDefinition("rod"), Is.True);
+        Assert.That(ListableObjectFactory.ContainsObjectDefinition("roderick"), Is.True);
     }
 }

@@ -41,7 +41,7 @@ public class UniqueKeyTests
     {
         string typeScopedKey = UniqueKey.GetTypeScopedString(typeof(TestObject), "PartialKey");
         string expectedKey = string.Format("{0}.{1}", typeof(TestObject).FullName, "PartialKey");
-        Assert.AreEqual(expectedKey, typeScopedKey);
+        Assert.That(typeScopedKey, Is.EqualTo(expectedKey));
     }
 
     [Test]
@@ -54,14 +54,14 @@ public class UniqueKeyTests
 
         // I know testing implementation details is not the best strategy,
         // but I want to receive an error if this fails (oakinger)
-        Assert.AreEqual(expectedKeyString, expectedKey.ToString());
-        Assert.AreEqual(expectedKeyString.GetHashCode(), expectedKey.GetHashCode());
+        Assert.That(expectedKey.ToString(), Is.EqualTo(expectedKeyString));
+        Assert.That(expectedKey.GetHashCode(), Is.EqualTo(expectedKeyString.GetHashCode()));
 
         // different instances...
-        Assert.AreNotSame(expectedKey, typeScopedKey);
+        Assert.That(typeScopedKey, Is.Not.SameAs(expectedKey));
         // but equal
-        Assert.AreEqual(expectedKey, typeScopedKey);
-        Assert.AreEqual(expectedKey.GetHashCode(), typeScopedKey.GetHashCode());
+        Assert.That(typeScopedKey, Is.EqualTo(expectedKey));
+        Assert.That(typeScopedKey.GetHashCode(), Is.EqualTo(expectedKey.GetHashCode()));
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class UniqueKeyTests
         TestObject testObject = new TestObject();
         string typeScopedKey = UniqueKey.GetInstanceScopedString(testObject, "PartialKey");
         string expectedKey = string.Format("{0}[{1}].{2}", typeof(TestObject).FullName, testObject.GetHashCode(), "PartialKey");
-        Assert.AreEqual(expectedKey, typeScopedKey);
+        Assert.That(typeScopedKey, Is.EqualTo(expectedKey));
     }
 
     [Test]
@@ -84,13 +84,13 @@ public class UniqueKeyTests
 
         // I know testing implementation details is not the best strategy,
         // but I want to receive an error if this fails (oakinger)
-        Assert.AreEqual(expectedKeyString, expectedKey.ToString());
-        Assert.AreEqual(expectedKeyString.GetHashCode(), expectedKey.GetHashCode());
+        Assert.That(expectedKey.ToString(), Is.EqualTo(expectedKeyString));
+        Assert.That(expectedKey.GetHashCode(), Is.EqualTo(expectedKeyString.GetHashCode()));
 
         // different instances...
-        Assert.AreNotSame(expectedKey, instanceScopedKey);
+        Assert.That(instanceScopedKey, Is.Not.SameAs(expectedKey));
         // but equal
-        Assert.AreEqual(expectedKey, instanceScopedKey);
-        Assert.AreEqual(expectedKey.GetHashCode(), instanceScopedKey.GetHashCode());
+        Assert.That(instanceScopedKey, Is.EqualTo(expectedKey));
+        Assert.That(instanceScopedKey.GetHashCode(), Is.EqualTo(expectedKey.GetHashCode()));
     }
 }

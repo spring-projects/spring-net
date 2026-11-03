@@ -36,7 +36,7 @@ public class AsyncTestMethod : AsyncTestTask
 
         public ThreadStartTestMethodAdapter(ThreadStart threadStart)
         {
-            Assert.IsNotNull(threadStart);
+            Assert.That(threadStart, Is.Not.Null);
             this.threadStart = threadStart;
         }
 
@@ -54,7 +54,7 @@ public class AsyncTestMethod : AsyncTestTask
 
     public AsyncTestMethod(int iterations, TestMethod callback, params object[] args) : base(iterations)
     {
-        Assert.IsNotNull(callback);
+        Assert.That(callback, Is.Not.Null);
         this.args = args;
         this.callback = callback;
     }

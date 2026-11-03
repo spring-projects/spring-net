@@ -34,8 +34,8 @@ public class SharedStateAwareProcessorTests
     {
         // check default ctor init
         SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
-        Assert.IsNotNull(ssap.SharedStateFactories);
-        Assert.AreEqual(0, ssap.SharedStateFactories.Length);
+        Assert.That(ssap.SharedStateFactories, Is.Not.Null);
+        Assert.That(ssap.SharedStateFactories.Length, Is.EqualTo(0));
 
         // check we accept a list at all
         ssap = new SharedStateAwareProcessor(new ISharedStateFactory[] { new ByTypeSharedStateFactory() }, Int32.MaxValue);
@@ -102,7 +102,7 @@ public class SharedStateAwareProcessorTests
     {
         SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
         object res = ssap.PostProcessBeforeInitialization(this, null);
-        Assert.AreSame(this, res);
+        Assert.That(res, Is.SameAs(this));
     }
 
     [Test]

@@ -45,14 +45,14 @@ public sealed class RegularExpressionValidatorTests
     public void EmptyStringValidatesToTrue()
     {
         RegularExpressionValidator validator = new RegularExpressionValidator();
-        Assert.IsTrue(validator.Validate(string.Empty, new ValidationErrors()));
+        Assert.That(validator.Validate(string.Empty, new ValidationErrors()), Is.True);
     }
 
     [Test]
     public void WhitespaceStringDoesntEvaluateToTrueByDefault()
     {
         RegularExpressionValidator validator = new RegularExpressionValidator();
-        Assert.IsFalse(validator.Validate("   ", new ValidationErrors()));
+        Assert.That(validator.Validate("   ", new ValidationErrors()), Is.False);
     }
 
     [Test]
@@ -60,16 +60,16 @@ public sealed class RegularExpressionValidatorTests
     {
         RegularExpressionValidator validator = new RegularExpressionValidator();
         validator.Expression = @"\s*";
-        Assert.IsTrue(validator.Validate("   ", new ValidationErrors()));
+        Assert.That(validator.Validate("   ", new ValidationErrors()), Is.True);
     }
 
     [Test]
     public void CaseSensitiveStringMatching()
     {
         RegularExpressionValidator validator = new RegularExpressionValidator("ToString()", "true", @"[A-Z][a-z]*");
-        Assert.IsTrue(validator.Validate("Aleksandar", new ValidationErrors()));
-        Assert.IsFalse(validator.Validate("ALEKSANDAR", new ValidationErrors()));
-        Assert.IsFalse(validator.Validate("aleksandar", new ValidationErrors()));
+        Assert.That(validator.Validate("Aleksandar", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate("ALEKSANDAR", new ValidationErrors()), Is.False);
+        Assert.That(validator.Validate("aleksandar", new ValidationErrors()), Is.False);
     }
 
     [Test]
@@ -77,16 +77,16 @@ public sealed class RegularExpressionValidatorTests
     {
         RegularExpressionValidator validator = new RegularExpressionValidator("ToString()", "true", @"[A-Z][a-z]*");
         validator.Options = RegexOptions.IgnoreCase;
-        Assert.IsTrue(validator.Validate("Aleksandar", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate("ALEKSANDAR", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate("aleksandar", new ValidationErrors()));
+        Assert.That(validator.Validate("Aleksandar", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate("ALEKSANDAR", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate("aleksandar", new ValidationErrors()), Is.True);
     }
 
     [Test]
     public void SunnyDayFailure_Invalid()
     {
         RegularExpressionValidator validator = new RegularExpressionValidator(Expression.Parse("'ljwdf87cwbh'"), Expression.Parse("true"), @"((\d{1,2}\.\d{1,3}\.\d{1,3}\.\d{1,3}))");
-        Assert.IsFalse(validator.Validate("ljwdf87cwbh", new ValidationErrors()));
+        Assert.That(validator.Validate("ljwdf87cwbh", new ValidationErrors()), Is.False);
     }
 
     [Test]
@@ -94,7 +94,7 @@ public sealed class RegularExpressionValidatorTests
     {
         RegularExpressionValidator validator = new RegularExpressionValidator();
         validator.Expression = @"((\d{1,2}\.\d{1,3}\.\d{1,3}\.\d{1,3}))";
-        Assert.IsTrue(validator.Validate("11.222.333.444", new ValidationErrors()));
+        Assert.That(validator.Validate("11.222.333.444", new ValidationErrors()), Is.True);
     }
 
     [Test]
@@ -102,7 +102,7 @@ public sealed class RegularExpressionValidatorTests
     {
         RegularExpressionValidator validator = new RegularExpressionValidator("'ljwdf87cwbh'", "false", @"((\d{1,2}\.\d{1,3}\.\d{1,3}\.\d{1,3}))");
         bool valid = validator.Validate(null, new ValidationErrors());
-        Assert.IsTrue(valid, "Validation should succeed when regex validator is not evaluated.");
+        Assert.That(valid, Is.True, "Validation should succeed when regex validator is not evaluated.");
     }
 
     [Test]
@@ -111,6 +111,6 @@ public sealed class RegularExpressionValidatorTests
         RegularExpressionValidator validator = new RegularExpressionValidator();
         validator.Expression = "[A-Za-z]";
         validator.AllowPartialMatching = true;
-        Assert.True(validator.Validate("123a456", new ValidationErrors()));
+        Assert.That(validator.Validate("123a456", new ValidationErrors()), Is.True);
     }
 }

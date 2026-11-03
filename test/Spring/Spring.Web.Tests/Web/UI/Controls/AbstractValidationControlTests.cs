@@ -38,17 +38,17 @@ public class AbstractValidationControlTests
         TestValidationControl vc;
 
         vc = new TestValidationControl(null);
-        Assert.AreEqual(string.Empty, vc.Provider);
+        Assert.That(vc.Provider, Is.Empty);
 
         vc = new TestValidationControl(null);
         vc.ID = "TestControl";
-        Assert.AreEqual(vc.ID, vc.Provider);
+        Assert.That(vc.Provider, Is.EqualTo(vc.ID));
 
         vc = new TestValidationControl(null);
         vc.ID = "TestControl";
         vc.Provider = "TestProvider";
 
-        Assert.AreEqual("TestProvider", vc.Provider);
+        Assert.That(vc.Provider, Is.EqualTo("TestProvider"));
     }
 
     [Test]
@@ -65,7 +65,7 @@ public class AbstractValidationControlTests
         page.MessageSource = msgSrc;
 
         vc.TestRender(null);
-        Assert.AreEqual("Resolved Message Text", vc.LastErrorsRendered[0]);
+        Assert.That(vc.LastErrorsRendered[0], Is.EqualTo("Resolved Message Text"));
     }
 
     [Test]
@@ -86,7 +86,7 @@ public class AbstractValidationControlTests
         vc.MessageSource = msgSrc;
 
         vc.TestRender(null);
-        Assert.AreEqual("Resolved Message Text", vc.LastErrorsRendered[0]);
+        Assert.That(vc.LastErrorsRendered[0], Is.EqualTo("Resolved Message Text"));
     }
 
     [Test]
@@ -106,7 +106,7 @@ public class AbstractValidationControlTests
         }
         catch (ArgumentNullException ane)
         {
-            Assert.AreEqual("Renderer", ane.ParamName);
+            Assert.That(ane.ParamName, Is.EqualTo("Renderer"));
         }
     }
 
@@ -114,9 +114,9 @@ public class AbstractValidationControlTests
     public void NoExceptionWhenNoValidationContainer()
     {
         TestValidationControl vc = new TestValidationControl();
-        Assert.IsFalse(vc.TheDesignMode);
-        Assert.IsNull(vc.TheMessageSource);
-        Assert.IsNull(vc.TheValidationContainer);
+        Assert.That(vc.TheDesignMode, Is.False);
+        Assert.That(vc.TheMessageSource, Is.Null);
+        Assert.That(vc.TheValidationContainer, Is.Null);
 
         vc.TestRender(null);
     }
@@ -130,10 +130,10 @@ public class AbstractValidationControlTests
         page.Controls.Add(vc);
 
         // assert assumptions
-        Assert.IsFalse(vc.TheDesignMode);
-        Assert.AreSame(page, vc.TheValidationContainer);
-        Assert.AreSame(page.MessageSource, vc.TheMessageSource);
-        Assert.AreEqual(0, page.ValidationErrors.GetResolvedErrors(vc.Provider, vc.TheMessageSource).Count);
+        Assert.That(vc.TheDesignMode, Is.False);
+        Assert.That(vc.TheValidationContainer, Is.SameAs(page));
+        Assert.That(vc.TheMessageSource, Is.SameAs(page.MessageSource));
+        Assert.That(page.ValidationErrors.GetResolvedErrors(vc.Provider, vc.TheMessageSource).Count, Is.EqualTo(0));
 
         vc.TestRender(null);
     }
@@ -145,7 +145,7 @@ public class AbstractValidationControlTests
         UserControl uc = new UserControl();
         TestValidationControl vc = new TestValidationControl();
         uc.Controls.Add(vc);
-        Assert.AreSame(uc, vc.TheValidationContainer);
+        Assert.That(vc.TheValidationContainer, Is.SameAs(uc));
 
         // indirect containment
         uc = new UserControl();
@@ -153,7 +153,7 @@ public class AbstractValidationControlTests
         Control inBetweenControl = new Panel();
         inBetweenControl.Controls.Add(vc);
         uc.Controls.Add(inBetweenControl);
-        Assert.AreSame(uc, vc.TheValidationContainer);
+        Assert.That(vc.TheValidationContainer, Is.SameAs(uc));
     }
 
     [Test]
@@ -163,7 +163,7 @@ public class AbstractValidationControlTests
         Page page = new Page();
         TestValidationControl vc = new TestValidationControl();
         page.Controls.Add(vc);
-        Assert.AreSame(page, vc.TheValidationContainer);
+        Assert.That(vc.TheValidationContainer, Is.SameAs(page));
 
         // indirect containment
         page = new Page();
@@ -171,7 +171,7 @@ public class AbstractValidationControlTests
         Control inBetweenControl = new System.Web.UI.WebControls.Panel();
         inBetweenControl.Controls.Add(vc);
         page.Controls.Add(inBetweenControl);
-        Assert.AreSame(page, vc.TheValidationContainer);
+        Assert.That(vc.TheValidationContainer, Is.SameAs(page));
     }
 
     [Test]
@@ -185,7 +185,7 @@ public class AbstractValidationControlTests
         TestValidationControl ctl = new TestValidationControl();
         page.Controls.Add(ctl);
 
-        Assert.AreEqual(messageSource, ctl.TheMessageSource);
+        Assert.That(ctl.TheMessageSource, Is.EqualTo(messageSource));
     }
 
     [Test]
@@ -197,7 +197,7 @@ public class AbstractValidationControlTests
         Spring.Web.UI.UserControl inBetweenControl = new Spring.Web.UI.UserControl();
         inBetweenControl.Controls.Add(vc);
         page.Controls.Add(inBetweenControl);
-        Assert.AreSame(inBetweenControl, vc.TheValidationContainer);
+        Assert.That(vc.TheValidationContainer, Is.SameAs(inBetweenControl));
     }
 
     [Test]
@@ -221,10 +221,10 @@ public class AbstractValidationControlTests
 
         inBetweenControl1.ValidationErrors.AddError("provider", new ErrorMessage("msg"));
 
-        Assert.AreSame(inBetweenControl1, innerVC.TheValidationContainer);
-        Assert.AreSame(page, outerVC.TheValidationContainer);
-        Assert.AreEqual(1, innerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
-        Assert.AreEqual(0, outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+        Assert.That(innerVC.TheValidationContainer, Is.SameAs(inBetweenControl1));
+        Assert.That(outerVC.TheValidationContainer, Is.SameAs(page));
+        Assert.That(innerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count, Is.EqualTo(1));
+        Assert.That(outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -248,18 +248,18 @@ public class AbstractValidationControlTests
 
         userControl.ValidationErrors.AddError("provider", new ErrorMessage("msg"));
 
-        Assert.AreSame(userControl, innerVC.TheValidationContainer);
-        Assert.AreSame(page, outerVC.TheValidationContainer);
-        Assert.AreEqual(1, innerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
-        Assert.AreEqual(0, outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+        Assert.That(innerVC.TheValidationContainer, Is.SameAs(userControl));
+        Assert.That(outerVC.TheValidationContainer, Is.SameAs(page));
+        Assert.That(innerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count, Is.EqualTo(1));
+        Assert.That(outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count, Is.EqualTo(0));
 
         // test local-relative name resolution
         outerVC.ValidationContainerName = "userControl";
-        Assert.AreEqual(1, outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+        Assert.That(outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count, Is.EqualTo(1));
 
         // test global name resolution
         outerVC.ValidationContainerName = "::userControl";
-        Assert.AreEqual(1, outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count);
+        Assert.That(outerVC.TheValidationContainer.ValidationErrors.GetErrors("provider").Count, Is.EqualTo(1));
     }
 
     private class TestValidationControl : AbstractValidationControl

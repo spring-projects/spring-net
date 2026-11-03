@@ -100,7 +100,7 @@ public class SimpleTriggerObjectTest : TriggerObjectTest
         simpleTrigger.JobDetail = jd;
         simpleTrigger.AfterPropertiesSet();
         base.TestAfterPropertiesSet_JobDetailGiven();
-        Assert.AreSame(jd, simpleTrigger.JobDetail, "job details weren't same");
+        Assert.That(simpleTrigger.JobDetail, Is.SameAs(jd), "job details weren't same");
     }
 
     /// <summary>
@@ -113,6 +113,6 @@ public class SimpleTriggerObjectTest : TriggerObjectTest
         data["foo"] = "bar";
         data["number"] = 123;
         simpleTrigger.JobDataAsMap = data;
-        CollectionAssert.AreEquivalent(data, simpleTrigger.JobDataMap, "Data differed");
+        Assert.That(simpleTrigger.JobDataMap, Is.EquivalentTo(data), "Data differed");
     }
 }

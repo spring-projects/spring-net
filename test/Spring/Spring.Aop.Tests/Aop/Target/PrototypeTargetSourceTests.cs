@@ -51,19 +51,19 @@ public sealed class PrototypeTargetSourceTests
         int initialCount = 10;
         IObjectFactory of = new XmlObjectFactory(new ReadOnlyXmlTestResource("prototypeTargetSourceTests.xml", GetType()));
         ISideEffectObject singleton = (ISideEffectObject) of.GetObject("singleton");
-        Assert.AreEqual(initialCount, singleton.Count);
+        Assert.That(singleton.Count, Is.EqualTo(initialCount));
         singleton.doWork();
-        Assert.AreEqual(initialCount + 1, singleton.Count);
+        Assert.That(singleton.Count, Is.EqualTo(initialCount + 1));
 
         ISideEffectObject prototype = (ISideEffectObject) of.GetObject("prototype");
-        Assert.AreEqual(initialCount, prototype.Count);
+        Assert.That(prototype.Count, Is.EqualTo(initialCount));
         singleton.doWork();
-        Assert.AreEqual(initialCount, prototype.Count);
+        Assert.That(prototype.Count, Is.EqualTo(initialCount));
 
         ISideEffectObject prototypeByName = (ISideEffectObject) of.GetObject("prototypeByName");
-        Assert.AreEqual(initialCount, prototypeByName.Count);
+        Assert.That(prototypeByName.Count, Is.EqualTo(initialCount));
         singleton.doWork();
-        Assert.AreEqual(initialCount, prototypeByName.Count);
+        Assert.That(prototypeByName.Count, Is.EqualTo(initialCount));
     }
 
     [Test]
@@ -78,14 +78,14 @@ public sealed class PrototypeTargetSourceTests
 
         PrototypeTargetSource source = new PrototypeTargetSource();
         source.ObjectFactory = factory;
-        Assert.AreEqual(target.GetType(), source.TargetType, "Wrong TargetType being returned.");
+        Assert.That(source.TargetType, Is.EqualTo(target.GetType()), "Wrong TargetType being returned.");
     }
 
     [Test]
     public void IsStatic()
     {
         PrototypeTargetSource source = new PrototypeTargetSource();
-        Assert.IsFalse(source.IsStatic, "Must not be static.");
+        Assert.That(source.IsStatic, Is.False, "Must not be static.");
     }
 
     [Test]
@@ -113,7 +113,8 @@ public sealed class PrototypeTargetSourceTests
         PrototypeTargetSource source = new PrototypeTargetSource();
         source.TargetObjectName = "foo";
         source.ObjectFactory = factory;
-        Assert.IsTrue(object.ReferenceEquals(source.GetTarget(), target),
+        Assert.That(object.ReferenceEquals(source.GetTarget(), target),
+            Is.True,
             "Initial target source reference not being returned by GetTarget().");
     }
 

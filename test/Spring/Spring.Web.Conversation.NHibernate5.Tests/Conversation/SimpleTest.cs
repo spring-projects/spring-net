@@ -24,6 +24,7 @@ public class SimpleTest
     [Test]
     public void Test()
     {
-        Assert.AreEqual(2, 1 + 1, "2 == 1 + 1");
+        var two = 2;
+        Assert.That(two, Is.EqualTo(1 + 1), "2 == 1 + 1");
     }
 }

@@ -32,34 +32,38 @@ public sealed class TrueTypeFilterTests
         ITypeFilter deserializedVersion
             = (ITypeFilter) SerializationTestUtils.SerializeAndDeserialize(
                 TrueTypeFilter.True);
-        Assert.IsTrue(Object.ReferenceEquals(TrueTypeFilter.True, deserializedVersion),
+        Assert.That(Object.ReferenceEquals(TrueTypeFilter.True, deserializedVersion),
+            Is.True,
             "Singleton instance not being deserialized correctly");
     }
 
     [Test]
     public void IsSerializable()
     {
-        Assert.IsTrue(SerializationTestUtils.IsSerializable(TrueTypeFilter.True),
+        Assert.That(SerializationTestUtils.IsSerializable(TrueTypeFilter.True),
+            Is.True,
             "TrueClassFilter must be serializable.");
     }
 
     [Test]
     public void AlwaysMatchesEvenOnNullArgument()
     {
-        Assert.IsTrue(TrueTypeFilter.True.Matches(null),
+        Assert.That(TrueTypeFilter.True.Matches(null),
+            Is.True,
             "Must always match (return true).");
     }
 
     [Test]
     public void AlwaysMatches()
     {
-        Assert.IsTrue(TrueTypeFilter.True.Matches(GetType()),
+        Assert.That(TrueTypeFilter.True.Matches(GetType()),
+            Is.True,
             "Must always match (return true).");
     }
 
     [Test]
     public void ToStringAlwaysTrue()
     {
-        Assert.AreEqual("TrueTypeFilter.True", TrueTypeFilter.True.ToString());
+        Assert.That(TrueTypeFilter.True.ToString(), Is.EqualTo("TrueTypeFilter.True"));
     }
 }

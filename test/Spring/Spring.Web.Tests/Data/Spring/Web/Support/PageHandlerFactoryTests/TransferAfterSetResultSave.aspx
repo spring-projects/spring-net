@@ -6,7 +6,7 @@
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        NUnit.Framework.Assert.AreEqual(typeof(TransferAfterSetResult), this.PreviousPage.GetType());
-        NUnit.Framework.Assert.AreEqual("someValue", SomeProperty);
+        NUnit.Framework.Assert.That(this.PreviousPage.GetType(), NUnit.Framework.Is.EqualTo(typeof(TransferAfterSetResult)));
+        NUnit.Framework.Assert.That(SomeProperty, NUnit.Framework.Is.EqualTo("someValue"));
     }
 </script>OK

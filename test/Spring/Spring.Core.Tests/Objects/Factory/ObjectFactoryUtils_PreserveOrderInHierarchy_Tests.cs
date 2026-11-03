@@ -34,23 +34,23 @@ public class ObjectFactoryUtils_PreserveOrderInHierarchy_Tests
     public void ObjectNamesIncludingAncestorsPreserveOrderOfRegistration()
     {
         var names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(_factory);
-        Assert.AreEqual(5, names.Count);
-        Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
+        Assert.That(names.Count, Is.EqualTo(5));
+        Assert.That(names, Is.EqualTo(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }));
     }
 
     [Test]
     public void ObjectNamesForTypeIncludingAncestorsPreserveOrderOfRegistration()
     {
         var names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, _expectedtype);
-        Assert.AreEqual(5, names.Count);
-        Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
+        Assert.That(names.Count, Is.EqualTo(5));
+        Assert.That(names, Is.EqualTo(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }));
     }
 
     [Test]
     public void ObjectNamesForTypeIncludingAncestorsPrototypesAndFactoryObjectsPreserveOrderOfRegistration()
     {
         var names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, _expectedtype, false, false);
-        Assert.AreEqual(5, names.Count);
-        Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
+        Assert.That(names.Count, Is.EqualTo(5));
+        Assert.That(names, Is.EqualTo(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }));
     }
 }

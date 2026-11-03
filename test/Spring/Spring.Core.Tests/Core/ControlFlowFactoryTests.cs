@@ -32,7 +32,7 @@ public sealed class ControlFlowFactoryTests
     public void CreateControlFlow()
     {
         IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
-        Assert.IsNotNull(cflow, "The ControlFlowFactory factory class is returning a " +
+        Assert.That(cflow, Is.Not.Null, "The ControlFlowFactory factory class is returning a " +
                                 "null IControlFlow instance (it, obviously, must not)");
     }
 
@@ -41,7 +41,7 @@ public sealed class ControlFlowFactoryTests
     {
         IControlFlow cflow1 = ControlFlowFactory.CreateControlFlow();
         IControlFlow cflow2 = ControlFlowFactory.CreateControlFlow();
-        Assert.IsFalse(Object.ReferenceEquals(cflow1, cflow2), "The ControlFlowFactory " +
+        Assert.That(Object.ReferenceEquals(cflow1, cflow2), Is.False, "The ControlFlowFactory " +
                                                                "factory class is not returning distinct IControlFlow instances (its always " +
                                                                "the same instance)");
     }
@@ -51,7 +51,7 @@ public sealed class ControlFlowFactoryTests
     {
         IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
         bool isUnder = cflow.Under(GetType());
-        Assert.IsTrue(isUnder, string.Format(
+        Assert.That(isUnder, Is.True, string.Format(
             "The IControlFlow implementation created by the ControlFlowFactory factory class " +
             "would appear to have a faulty Under(Type) implementation : [{0}]", cflow.GetType()));
     }
@@ -61,7 +61,7 @@ public sealed class ControlFlowFactoryTests
     {
         IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
         bool isUnder = cflow.Under(typeof(TestObject));
-        Assert.IsFalse(isUnder, string.Format(
+        Assert.That(isUnder, Is.False, string.Format(
             "The IControlFlow implementation created by the ControlFlowFactory factory class " +
             "would appear to have a faulty Under(Type) implementation : [{0}]", cflow.GetType()));
     }
@@ -71,7 +71,7 @@ public sealed class ControlFlowFactoryTests
     {
         IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
         bool isUnder = cflow.Under(GetType(), MethodBase.GetCurrentMethod().Name);
-        Assert.IsTrue(isUnder, string.Format(
+        Assert.That(isUnder, Is.True, string.Format(
             "The IControlFlow implementation created by the ControlFlowFactory factory class " +
             "would appear to have a faulty Under(Type,string) implementation : [{0}]",
             cflow.GetType()));
@@ -82,7 +82,7 @@ public sealed class ControlFlowFactoryTests
     {
         IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
         bool isUnder = cflow.Under(GetType(), "PlayingYouALikeTheFoolYouAre");
-        Assert.IsFalse(isUnder, string.Format(
+        Assert.That(isUnder, Is.False, string.Format(
             "The IControlFlow implementation created by the ControlFlowFactory factory class " +
             "would appear to have a faulty Under(Type,string) implementation : [{0}]",
             cflow.GetType()));
@@ -93,7 +93,7 @@ public sealed class ControlFlowFactoryTests
     {
         IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
         bool isUnder = cflow.UnderToken("Cflow");
-        Assert.IsTrue(isUnder, string.Format(
+        Assert.That(isUnder, Is.True, string.Format(
             "The IControlFlow implementation created by the ControlFlowFactory factory " +
             "class would appear to have a faulty UnderToken(string) implementation : [{0}]",
             cflow.GetType()));
@@ -104,7 +104,7 @@ public sealed class ControlFlowFactoryTests
     {
         IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
         bool isUnder = cflow.UnderToken("GoatsCheeseAndSoda");
-        Assert.IsFalse(isUnder, string.Format(
+        Assert.That(isUnder, Is.False, string.Format(
             "The IControlFlow implementation created by the ControlFlowFactory factory class " +
             "would appear to have a faulty UnderToken(string) implementation : [{0}]",
             cflow.GetType()));

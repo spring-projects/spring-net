@@ -60,9 +60,9 @@ public class TypeNameAutoProxyCreatorTests
         apc.TypeNames = new string[] { "Spring.Objects.Test*", "*MyLocal*" };
 
         object result = apc.PostProcessAfterInitialization(new TestObject(), "testObject");
-        Assert.IsTrue(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.True);
         result = apc.PostProcessAfterInitialization(new MyLocalTestObject(), "myLocalTestObject");
-        Assert.IsTrue(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.True);
     }
 
     [Test]
@@ -72,7 +72,7 @@ public class TypeNameAutoProxyCreatorTests
         apc.TypeNames = new string[] { "Foo*" };
 
         object result = apc.PostProcessAfterInitialization(new TestObject(), "testObject");
-        Assert.IsFalse(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.False);
     }
 
     [Test]
@@ -82,6 +82,6 @@ public class TypeNameAutoProxyCreatorTests
         apc.TypeNames = new string[] { };
 
         object result = apc.PostProcessAfterInitialization(new TestObject(), "testObject");
-        Assert.IsFalse(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.False);
     }
 }

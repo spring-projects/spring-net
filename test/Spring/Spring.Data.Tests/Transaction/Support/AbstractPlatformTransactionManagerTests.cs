@@ -32,17 +32,17 @@ public class AbstractPlatformTransactionManagerTests
     [Test]
     public void VanillaProperties()
     {
-        Assert.AreEqual(TransactionSynchronizationState.Always, _mockTxnMgr.TransactionSynchronization);
-        Assert.IsTrue(!_mockTxnMgr.NestedTransactionsAllowed);
-        Assert.IsTrue(!_mockTxnMgr.RollbackOnCommitFailure);
+        Assert.That(_mockTxnMgr.TransactionSynchronization, Is.EqualTo(TransactionSynchronizationState.Always));
+        Assert.That(!_mockTxnMgr.NestedTransactionsAllowed, Is.True);
+        Assert.That(!_mockTxnMgr.RollbackOnCommitFailure, Is.True);
 
         _mockTxnMgr.NestedTransactionsAllowed = true;
         _mockTxnMgr.RollbackOnCommitFailure = true;
         _mockTxnMgr.TransactionSynchronization = TransactionSynchronizationState.OnActualTransaction;
 
-        Assert.AreEqual(TransactionSynchronizationState.OnActualTransaction, _mockTxnMgr.TransactionSynchronization);
-        Assert.IsTrue(_mockTxnMgr.NestedTransactionsAllowed);
-        Assert.IsTrue(_mockTxnMgr.RollbackOnCommitFailure);
+        Assert.That(_mockTxnMgr.TransactionSynchronization, Is.EqualTo(TransactionSynchronizationState.OnActualTransaction));
+        Assert.That(_mockTxnMgr.NestedTransactionsAllowed, Is.True);
+        Assert.That(_mockTxnMgr.RollbackOnCommitFailure, Is.True);
     }
 
     [Test]
@@ -90,11 +90,11 @@ public class AbstractPlatformTransactionManagerTests
         SetGeneralGetTransactionExpectations();
 
         DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
-        Assert.IsNull(status.Transaction);
-        Assert.IsTrue(!status.IsNewTransaction);
-        Assert.IsTrue(status.NewSynchronization);
-        Assert.IsTrue(!status.ReadOnly);
-        Assert.IsNotNull(status.SuspendedResources);
+        Assert.That(status.Transaction, Is.Null);
+        Assert.That(!status.IsNewTransaction, Is.True);
+        Assert.That(status.NewSynchronization, Is.True);
+        Assert.That(!status.ReadOnly, Is.True);
+        Assert.That(status.SuspendedResources, Is.Not.Null);
         AssertVanillaGetTransactionExpectations();
     }
 
@@ -108,11 +108,11 @@ public class AbstractPlatformTransactionManagerTests
         SetGeneralGetTransactionExpectations();
 
         DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
-        Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
-        Assert.IsTrue(status.IsNewTransaction);
-        Assert.IsTrue(status.NewSynchronization);
-        Assert.IsTrue(!status.ReadOnly);
-        Assert.IsNotNull(status.SuspendedResources);
+        Assert.That(status.Transaction, Is.EqualTo(_mockTxnMgr.Transaction));
+        Assert.That(status.IsNewTransaction, Is.True);
+        Assert.That(status.NewSynchronization, Is.True);
+        Assert.That(!status.ReadOnly, Is.True);
+        Assert.That(status.SuspendedResources, Is.Not.Null);
         AssertVanillaGetTransactionExpectations();
     }
 
@@ -128,14 +128,14 @@ public class AbstractPlatformTransactionManagerTests
         _mockTxnMgr.NestedTransactionsAllowed = true;
 
         DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
-        Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
-        Assert.IsTrue(status.IsNewTransaction);
-        Assert.AreEqual(true, status.NewSynchronization);
-        Assert.IsTrue(!status.ReadOnly);
-        Assert.IsNull(status.SuspendedResources);
+        Assert.That(status.Transaction, Is.EqualTo(_mockTxnMgr.Transaction));
+        Assert.That(status.IsNewTransaction, Is.True);
+        Assert.That(status.NewSynchronization, Is.EqualTo(true));
+        Assert.That(!status.ReadOnly, Is.True);
+        Assert.That(status.SuspendedResources, Is.Null);
 
         AssertVanillaGetTransactionExpectations();
-        Assert.AreEqual(1, _mockTxnMgr.DoBeginCallCount);
+        Assert.That(_mockTxnMgr.DoBeginCallCount, Is.EqualTo(1));
     }
 
     [Test]
@@ -150,14 +150,14 @@ public class AbstractPlatformTransactionManagerTests
         _mockTxnMgr.NestedTransactionsAllowed = true;
 
         DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
-        Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
-        Assert.IsFalse(status.IsNewTransaction);
-        Assert.IsFalse(status.NewSynchronization);
-        Assert.IsTrue(!status.ReadOnly);
-        Assert.IsNull(status.SuspendedResources);
+        Assert.That(status.Transaction, Is.EqualTo(_mockTxnMgr.Transaction));
+        Assert.That(status.IsNewTransaction, Is.False);
+        Assert.That(status.NewSynchronization, Is.False);
+        Assert.That(!status.ReadOnly, Is.True);
+        Assert.That(status.SuspendedResources, Is.Null);
 
         AssertVanillaGetTransactionExpectations();
-        Assert.AreEqual(0, _mockTxnMgr.DoBeginCallCount);
+        Assert.That(_mockTxnMgr.DoBeginCallCount, Is.EqualTo(0));
     }
 
     [Test]
@@ -169,11 +169,11 @@ public class AbstractPlatformTransactionManagerTests
         SetGeneralGetTransactionExpectations();
 
         DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
-        Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
-        Assert.IsTrue(!status.IsNewTransaction);
-        Assert.IsTrue(status.NewSynchronization);
-        Assert.IsTrue(status.ReadOnly);
-        Assert.IsNull(status.SuspendedResources);
+        Assert.That(status.Transaction, Is.EqualTo(_mockTxnMgr.Transaction));
+        Assert.That(!status.IsNewTransaction, Is.True);
+        Assert.That(status.NewSynchronization, Is.True);
+        Assert.That(status.ReadOnly, Is.True);
+        Assert.That(status.SuspendedResources, Is.Null);
         AssertVanillaGetTransactionExpectations();
     }
 
@@ -183,11 +183,11 @@ public class AbstractPlatformTransactionManagerTests
         SetGeneralGetTransactionExpectations();
 
         DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(null);
-        Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
-        Assert.IsFalse(status.IsNewTransaction);
-        Assert.IsTrue(status.NewSynchronization);
-        Assert.IsFalse(status.ReadOnly);
-        Assert.IsNull(status.SuspendedResources);
+        Assert.That(status.Transaction, Is.EqualTo(_mockTxnMgr.Transaction));
+        Assert.That(status.IsNewTransaction, Is.False);
+        Assert.That(status.NewSynchronization, Is.True);
+        Assert.That(status.ReadOnly, Is.False);
+        Assert.That(status.SuspendedResources, Is.Null);
         AssertVanillaGetTransactionExpectations();
     }
 
@@ -195,12 +195,12 @@ public class AbstractPlatformTransactionManagerTests
     public void DefaultNoExistingTransaction()
     {
         DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(null);
-        Assert.IsNotNull(status.Transaction);
-        Assert.IsTrue(status.IsNewTransaction);
-        Assert.IsTrue(status.NewSynchronization);
-        Assert.IsTrue(!status.ReadOnly);
-        Assert.IsNull(status.SuspendedResources);
-        Assert.AreEqual(1, _mockTxnMgr.DoBeginCallCount);
+        Assert.That(status.Transaction, Is.Not.Null);
+        Assert.That(status.IsNewTransaction, Is.True);
+        Assert.That(status.NewSynchronization, Is.True);
+        Assert.That(!status.ReadOnly, Is.True);
+        Assert.That(status.SuspendedResources, Is.Null);
+        Assert.That(_mockTxnMgr.DoBeginCallCount, Is.EqualTo(1));
 
         AssertVanillaGetTransactionExpectations();
     }
@@ -213,12 +213,12 @@ public class AbstractPlatformTransactionManagerTests
         def.ReadOnly = true;
 
         DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
-        Assert.IsNull(status.Transaction);
-        Assert.IsTrue(!status.IsNewTransaction);
-        Assert.IsTrue(status.NewSynchronization);
-        Assert.IsTrue(status.ReadOnly);
-        Assert.IsNull(status.SuspendedResources);
-        Assert.AreEqual(0, _mockTxnMgr.DoBeginCallCount);
+        Assert.That(status.Transaction, Is.Null);
+        Assert.That(!status.IsNewTransaction, Is.True);
+        Assert.That(status.NewSynchronization, Is.True);
+        Assert.That(status.ReadOnly, Is.True);
+        Assert.That(status.SuspendedResources, Is.Null);
+        Assert.That(_mockTxnMgr.DoBeginCallCount, Is.EqualTo(0));
 
         AssertVanillaGetTransactionExpectations();
     }
@@ -230,7 +230,7 @@ public class AbstractPlatformTransactionManagerTests
 
     private void AssertVanillaGetTransactionExpectations()
     {
-        Assert.AreEqual(1, _mockTxnMgr.DoGetTransactionCallCount);
-        Assert.AreEqual(1, _mockTxnMgr.IsExistingTransactionCallCount);
+        Assert.That(_mockTxnMgr.DoGetTransactionCallCount, Is.EqualTo(1));
+        Assert.That(_mockTxnMgr.IsExistingTransactionCallCount, Is.EqualTo(1));
     }
 }

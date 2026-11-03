@@ -34,49 +34,49 @@ public class SemaphoreTest
         semaphore.Acquire();
         thread.Start();
         latch.Acquire();
-        Assert.IsFalse(helper.gone);
+        Assert.That(helper.gone, Is.False);
         semaphore.Release();
         thread.Join();
-        Assert.IsTrue(helper.gone, "not gone");
+        Assert.That(helper.gone, Is.True, "not gone");
     }
 
     [Test]
     public void AquireInSameThrad()
     {
         Semaphore s = new Semaphore(2);
-        Assert.AreEqual(2, s.Permits);
+        Assert.That(s.Permits, Is.EqualTo(2));
         s.Acquire();
         s.Acquire();
-        Assert.AreEqual(0, s.Permits);
+        Assert.That(s.Permits, Is.EqualTo(0));
     }
 
     [Test]
     public void ReleaseMultipleTimesInSameThread()
     {
         Semaphore s = new Semaphore(2);
-        Assert.AreEqual(2, s.Permits);
+        Assert.That(s.Permits, Is.EqualTo(2));
         s.Acquire();
         s.Acquire();
         s.Release(2);
-        Assert.AreEqual(2, s.Permits);
+        Assert.That(s.Permits, Is.EqualTo(2));
     }
 
     [Test]
     public void AttemptWithNegativeMillisInSameThread()
     {
         Semaphore s = new Semaphore(2);
-        Assert.AreEqual(2, s.Permits);
+        Assert.That(s.Permits, Is.EqualTo(2));
         s.Acquire();
-        Assert.IsTrue(s.Attempt(-400));
+        Assert.That(s.Attempt(-400), Is.True);
         s.Release(2);
-        Assert.AreEqual(2, s.Permits);
+        Assert.That(s.Permits, Is.EqualTo(2));
     }
 
     [Test]
     public void ReleaseMultipleBadArgument()
     {
         Semaphore s = new Semaphore(2);
-        Assert.AreEqual(2, s.Permits);
+        Assert.That(s.Permits, Is.EqualTo(2));
         s.Acquire();
         s.Acquire();
         Assert.Throws<ArgumentOutOfRangeException>(() => s.Release(-2));
@@ -86,17 +86,17 @@ public class SemaphoreTest
     public void AttemptInSameThread()
     {
         Semaphore s = new Semaphore(1);
-        Assert.IsTrue(s.Attempt(SHORT_DELAY_MS));
+        Assert.That(s.Attempt(SHORT_DELAY_MS), Is.True);
         s.Release();
-        Assert.IsTrue(s.Attempt(SHORT_DELAY_MS));
+        Assert.That(s.Attempt(SHORT_DELAY_MS), Is.True);
         s.Release();
-        Assert.IsTrue(s.Attempt(SHORT_DELAY_MS));
+        Assert.That(s.Attempt(SHORT_DELAY_MS), Is.True);
         s.Release();
-        Assert.IsTrue(s.Attempt(SHORT_DELAY_MS));
+        Assert.That(s.Attempt(SHORT_DELAY_MS), Is.True);
         s.Release();
-        Assert.IsTrue(s.Attempt(SHORT_DELAY_MS));
+        Assert.That(s.Attempt(SHORT_DELAY_MS), Is.True);
         s.Release();
-        Assert.AreEqual(1, s.Permits);
+        Assert.That(s.Permits, Is.EqualTo(1));
     }
 
     //TODO tests that interrupt a thread.
@@ -117,7 +117,7 @@ public class SemaphoreTest
         s.Release();
         s.Acquire();
         s.Release();
-        Assert.AreEqual(1, s.Permits);
+        Assert.That(s.Permits, Is.EqualTo(1));
     }
 
     [Test]
@@ -146,10 +146,10 @@ public class SemaphoreTest
 
         thread1.Start();
         //TODO investigate...
-        //Assert.IsTrue(s.Attempt(SHORT_DELAY_MS));
+        //Assert.That(s.Attempt(SHORT_DELAY_MS), Is.True);
         s.Attempt(SHORT_DELAY_MS);
         s.Release();
-        //Assert.IsTrue(s.Attempt(SHORT_DELAY_MS));
+        //Assert.That(s.Attempt(SHORT_DELAY_MS), Is.True);
         s.Attempt(SHORT_DELAY_MS);
         s.Release();
         s.Release();
@@ -163,7 +163,7 @@ public class SemaphoreTest
         //hmm should be using UtcNow, the impl in CurrentTimeMillis doesn't use UTC.
         long epochTime = ((DateTime.Now - new DateTime(1970, 1, 1)).Ticks) / TimeSpan.TicksPerMillisecond;
         long delta = epochTime - millis;
-        Assert.IsTrue(delta < 500);
+        Assert.That(delta < 500, Is.True);
     }
 }
 

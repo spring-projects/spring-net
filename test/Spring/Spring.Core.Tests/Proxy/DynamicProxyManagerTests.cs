@@ -97,7 +97,7 @@ public class DynamicProxyManagerTests
         for (int i = 0; i < WORKERS; i++)
         {
             workers[i].Join();
-            Assert.AreEqual(null, workers[i].Exception);
+            Assert.That(workers[i].Exception, Is.EqualTo(null));
         }
     }
 

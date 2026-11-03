@@ -74,21 +74,21 @@ public sealed class ProxyFactoryTests
         pf.AddAdvisor(new DefaultPointcutAdvisor(countingBeforeAdvice));
         object proxy = pf.GetProxy();
         ITestObject to = proxy as ITestObject;
-        Assert.IsNotNull(to);
-        Assert.AreEqual("SOME-NAME", to.Name);
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Name, Is.EqualTo("SOME-NAME"));
         IDoubleClickable doubleClickable = proxy as IDoubleClickable;
         // add event handler through introduction
         doubleClickable.DoubleClick += new EventHandler(OnClick);
         OnClickWasCalled = false;
         doubleClickable.FireDoubleClickEvent();
-        Assert.IsTrue(OnClickWasCalled);
-        Assert.AreEqual(3, countingBeforeAdvice.GetCalls());
+        Assert.That(OnClickWasCalled, Is.True);
+        Assert.That(countingBeforeAdvice.GetCalls(), Is.EqualTo(3));
         // remove event handler through introduction
         doubleClickable.DoubleClick -= new EventHandler(OnClick);
         OnClickWasCalled = false;
         doubleClickable.FireDoubleClickEvent();
-        Assert.IsFalse(OnClickWasCalled);
-        Assert.AreEqual(5, countingBeforeAdvice.GetCalls());
+        Assert.That(OnClickWasCalled, Is.False);
+        Assert.That(countingBeforeAdvice.GetCalls(), Is.EqualTo(5));
     }
 
     private bool OnClickWasCalled = false;
@@ -133,14 +133,14 @@ public sealed class ProxyFactoryTests
         to.Click += new EventHandler(OnClick);
         OnClickWasCalled = false;
         to.OnClick();
-        Assert.IsTrue(OnClickWasCalled);
-        Assert.AreEqual(2, countingBeforeAdvice.GetCalls());
+        Assert.That(OnClickWasCalled, Is.True);
+        Assert.That(countingBeforeAdvice.GetCalls(), Is.EqualTo(2));
         // remove event handler through proxy
         to.Click -= new EventHandler(OnClick);
         OnClickWasCalled = false;
         to.OnClick();
-        Assert.IsFalse(OnClickWasCalled);
-        Assert.AreEqual(4, countingBeforeAdvice.GetCalls());
+        Assert.That(OnClickWasCalled, Is.False);
+        Assert.That(countingBeforeAdvice.GetCalls(), Is.EqualTo(4));
     }
 
     private class TestObject2 : TestObject
@@ -167,24 +167,24 @@ public sealed class ProxyFactoryTests
         ProxyFactory pf = new ProxyFactory(target);
         object proxy = pf.GetProxy();
         ITestObject to = proxy as ITestObject;
-        Assert.IsNotNull(to);
-        Assert.AreEqual("SOME-NAME", to.Name);
+        Assert.That(to, Is.Not.Null);
+        Assert.That(to.Name, Is.EqualTo("SOME-NAME"));
 
         target.EqualsOverrideWasCalled = false;
-        Assert.IsTrue(to.Equals(proxy));
-        Assert.IsTrue(target.EqualsOverrideWasCalled);
+        Assert.That(to.Equals(proxy), Is.True);
+        Assert.That(target.EqualsOverrideWasCalled, Is.True);
 
         target.EqualsOverrideWasCalled = false;
-        Assert.IsTrue(proxy.Equals(to));
-        Assert.IsTrue(target.EqualsOverrideWasCalled);
+        Assert.That(proxy.Equals(to), Is.True);
+        Assert.That(target.EqualsOverrideWasCalled, Is.True);
 
         target.EqualsOverrideWasCalled = false;
-        Assert.IsTrue(target.Equals(to));
-        Assert.IsTrue(target.EqualsOverrideWasCalled);
+        Assert.That(target.Equals(to), Is.True);
+        Assert.That(target.EqualsOverrideWasCalled, Is.True);
 
         target.EqualsOverrideWasCalled = false;
-        Assert.IsTrue(to.Equals(target));
-        Assert.IsTrue(target.EqualsOverrideWasCalled);
+        Assert.That(to.Equals(target), Is.True);
+        Assert.That(target.EqualsOverrideWasCalled, Is.True);
     }
 
     [Test]
@@ -200,8 +200,8 @@ public sealed class ProxyFactoryTests
         pf.AddAdvisor(new DefaultPointcutAdvisor(countingBeforeAdvice));
         object proxy = pf.GetProxy();
         ITestObject to = (ITestObject) proxy;
-        Assert.AreEqual("Adam", to.Name);
-        Assert.AreEqual(1, countingBeforeAdvice.GetCalls());
+        Assert.That(to.Name, Is.EqualTo("Adam"));
+        Assert.That(countingBeforeAdvice.GetCalls(), Is.EqualTo(1));
     }
 
     [Test]
@@ -235,12 +235,12 @@ public sealed class ProxyFactoryTests
         // Can use advised and ProxyFactory interchangeably
         advised.AddAdvice(nop);
         pf.AddAdvisor(advisor);
-        Assert.AreEqual(-1, pf.IndexOf((IInterceptor) null));
-        Assert.AreEqual(-1, pf.IndexOf(new NopInterceptor()));
-        Assert.AreEqual(0, pf.IndexOf(nop));
-        Assert.AreEqual(-1, advised.IndexOf((IAdvisor) null));
-        Assert.AreEqual(1, pf.IndexOf(advisor));
-        Assert.AreEqual(-1, advised.IndexOf(new DefaultPointcutAdvisor(null)));
+        Assert.That(pf.IndexOf((IInterceptor) null), Is.EqualTo(-1));
+        Assert.That(pf.IndexOf(new NopInterceptor()), Is.EqualTo(-1));
+        Assert.That(pf.IndexOf(nop), Is.EqualTo(0));
+        Assert.That(advised.IndexOf((IAdvisor) null), Is.EqualTo(-1));
+        Assert.That(pf.IndexOf(advisor), Is.EqualTo(1));
+        Assert.That(advised.IndexOf(new DefaultPointcutAdvisor(null)), Is.EqualTo(-1));
     }
 
     [Test]
@@ -255,14 +255,14 @@ public sealed class ProxyFactoryTests
         pf.AddAdvisor(advisor);
         ITestObject proxied = (ITestObject) pf.GetProxy();
         proxied.Age = 5;
-        Assert.AreEqual(1, cba.GetCalls());
-        Assert.AreEqual(1, nop.Count);
-        Assert.IsFalse(pf.RemoveAdvisor(null));
-        Assert.IsTrue(pf.RemoveAdvisor(advisor));
-        Assert.AreEqual(5, proxied.Age);
-        Assert.AreEqual(1, cba.GetCalls());
-        Assert.AreEqual(2, nop.Count);
-        Assert.IsFalse(pf.RemoveAdvisor(new DefaultPointcutAdvisor(null)));
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
+        Assert.That(nop.Count, Is.EqualTo(1));
+        Assert.That(pf.RemoveAdvisor(null), Is.False);
+        Assert.That(pf.RemoveAdvisor(advisor), Is.True);
+        Assert.That(proxied.Age, Is.EqualTo(5));
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
+        Assert.That(nop.Count, Is.EqualTo(2));
+        Assert.That(pf.RemoveAdvisor(new DefaultPointcutAdvisor(null)), Is.False);
     }
 
     [Test]
@@ -279,21 +279,21 @@ public sealed class ProxyFactoryTests
         pf.AddAdvice(nop2);
         ITestObject proxied = (ITestObject) pf.GetProxy();
         proxied.Age = 5;
-        Assert.AreEqual(1, cba.GetCalls());
-        Assert.AreEqual(1, nop.Count);
-        Assert.AreEqual(1, nop2.Count);
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
+        Assert.That(nop.Count, Is.EqualTo(1));
+        Assert.That(nop2.Count, Is.EqualTo(1));
         // Removes counting before advisor
         pf.RemoveAdvisor(1);
-        Assert.AreEqual(5, proxied.Age);
-        Assert.AreEqual(1, cba.GetCalls());
-        Assert.AreEqual(2, nop.Count);
-        Assert.AreEqual(2, nop2.Count);
+        Assert.That(proxied.Age, Is.EqualTo(5));
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
+        Assert.That(nop.Count, Is.EqualTo(2));
+        Assert.That(nop2.Count, Is.EqualTo(2));
         // Removes Nop1
         pf.RemoveAdvisor(0);
-        Assert.AreEqual(5, proxied.Age);
-        Assert.AreEqual(1, cba.GetCalls());
-        Assert.AreEqual(2, nop.Count);
-        Assert.AreEqual(3, nop2.Count);
+        Assert.That(proxied.Age, Is.EqualTo(5));
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
+        Assert.That(nop.Count, Is.EqualTo(2));
+        Assert.That(nop2.Count, Is.EqualTo(3));
 
         // Check out of bounds
         try
@@ -316,22 +316,22 @@ public sealed class ProxyFactoryTests
             // Ok
         }
 
-        Assert.AreEqual(5, proxied.Age);
-        Assert.AreEqual(4, nop2.Count);
+        Assert.That(proxied.Age, Is.EqualTo(5));
+        Assert.That(nop2.Count, Is.EqualTo(4));
     }
 
     [Test]
     public void TryRemoveNonProxiedInterface()
     {
         ProxyFactory factory = new ProxyFactory(new TestObject());
-        Assert.IsFalse(factory.RemoveInterface(typeof(IServiceProvider)));
+        Assert.That(factory.RemoveInterface(typeof(IServiceProvider)), Is.False);
     }
 
     [Test]
     public void RemoveProxiedInterface()
     {
         ProxyFactory factory = new ProxyFactory(new TestObject());
-        Assert.IsTrue(factory.RemoveInterface(typeof(ITestObject)));
+        Assert.That(factory.RemoveInterface(typeof(ITestObject)), Is.True);
     }
 
     [Test]
@@ -351,19 +351,19 @@ public sealed class ProxyFactoryTests
         // Replace etc methods on advised should be same as on ProxyFactory
         IAdvised advised = (IAdvised) proxied;
         proxied.Age = 5;
-        Assert.AreEqual(1, cba1.GetCalls());
-        Assert.AreEqual(0, cba2.GetCalls());
-        Assert.AreEqual(1, nop.Count);
-        Assert.IsFalse(advised.ReplaceAdvisor(null, null));
-        Assert.IsFalse(advised.ReplaceAdvisor(null, advisor2));
-        Assert.IsFalse(advised.ReplaceAdvisor(advisor1, null));
-        Assert.IsTrue(advised.ReplaceAdvisor(advisor1, advisor2));
-        Assert.AreEqual(advisor2, pf.Advisors[0]);
-        Assert.AreEqual(5, proxied.Age);
-        Assert.AreEqual(1, cba1.GetCalls());
-        Assert.AreEqual(2, nop.Count);
-        Assert.AreEqual(1, cba2.GetCalls());
-        Assert.IsFalse(pf.ReplaceAdvisor(new DefaultPointcutAdvisor(null), advisor1));
+        Assert.That(cba1.GetCalls(), Is.EqualTo(1));
+        Assert.That(cba2.GetCalls(), Is.EqualTo(0));
+        Assert.That(nop.Count, Is.EqualTo(1));
+        Assert.That(advised.ReplaceAdvisor(null, null), Is.False);
+        Assert.That(advised.ReplaceAdvisor(null, advisor2), Is.False);
+        Assert.That(advised.ReplaceAdvisor(advisor1, null), Is.False);
+        Assert.That(advised.ReplaceAdvisor(advisor1, advisor2), Is.True);
+        Assert.That(pf.Advisors[0], Is.EqualTo(advisor2));
+        Assert.That(proxied.Age, Is.EqualTo(5));
+        Assert.That(cba1.GetCalls(), Is.EqualTo(1));
+        Assert.That(nop.Count, Is.EqualTo(2));
+        Assert.That(cba2.GetCalls(), Is.EqualTo(1));
+        Assert.That(pf.ReplaceAdvisor(new DefaultPointcutAdvisor(null), advisor1), Is.False);
     }
 
     [Test]
@@ -376,7 +376,7 @@ public sealed class ProxyFactoryTests
         advSup.AddAdvisor(advisor1);
         advSup.AddAdvisor(advisor1);
 
-        Assert.AreEqual(1, advSup.Advisors.Count);
+        Assert.That(advSup.Advisors.Count, Is.EqualTo(1));
     }
 
     private class AnonymousClassTimeStamped : ITimeStamped
@@ -430,13 +430,13 @@ public sealed class ProxyFactoryTests
         // Extend to get new interface
         TestObjectSubclass raw = new TestObjectSubclass();
         ProxyFactory factory = new ProxyFactory(raw);
-        Assert.AreEqual(8, factory.Interfaces.Count, "Found correct number of interfaces");
+        Assert.That(factory.Interfaces.Count, Is.EqualTo(8), "Found correct number of interfaces");
         //System.out.println("Proxied interfaces are " + StringUtils.arrayToDelimitedString(factory.getProxiedInterfaces(), ","));
         ITestObject tb = (ITestObject) factory.GetProxy();
-        Assert.IsTrue(tb is IOther, "Picked up secondary interface");
+        Assert.That(tb is IOther, Is.True, "Picked up secondary interface");
 
         raw.Age = 25;
-        Assert.IsTrue(tb.Age == raw.Age);
+        Assert.That(tb.Age == raw.Age, Is.True);
 
         DateTime t = new DateTime(2004, 8, 1);
         TimestampIntroductionInterceptor ti = new TimestampIntroductionInterceptor(t);
@@ -451,7 +451,7 @@ public sealed class ProxyFactoryTests
         Console.WriteLine(StringUtils.CollectionToDelimitedString(factory.Interfaces, "/"));
 
         ITimeStamped ts = (ITimeStamped) factory.GetProxy();
-        Assert.IsTrue(ts.TimeStamp == t);
+        Assert.That(ts.TimeStamp == t, Is.True);
         // Shouldn't fail;
         ((IOther) ts).Absquatulate();
     }
@@ -487,13 +487,13 @@ public sealed class ProxyFactoryTests
         ProxyFactory factory = new ProxyFactory(new TestObject());
         factory.AddAdvice(0, di);
         ITestObject tb = (ITestObject) factory.GetProxy();
-        Assert.IsTrue(factory.AdviceIncluded(di));
-        Assert.IsTrue(!factory.AdviceIncluded(diUnused));
-        Assert.IsTrue(factory.CountAdviceOfType(typeof(NopInterceptor)) == 1);
+        Assert.That(factory.AdviceIncluded(di), Is.True);
+        Assert.That(!factory.AdviceIncluded(diUnused), Is.True);
+        Assert.That(factory.CountAdviceOfType(typeof(NopInterceptor)) == 1, Is.True);
 
         factory.AddAdvice(0, diUnused);
-        Assert.IsTrue(factory.AdviceIncluded(diUnused));
-        Assert.IsTrue(factory.CountAdviceOfType(typeof(NopInterceptor)) == 2);
+        Assert.That(factory.AdviceIncluded(diUnused), Is.True);
+        Assert.That(factory.CountAdviceOfType(typeof(NopInterceptor)) == 2, Is.True);
     }
 
     [Test]
@@ -650,12 +650,12 @@ public sealed class ProxyFactoryTests
 
         // any advice instance is invoked once only
         string result = ((IMultiProxyingTestInterface) outerProxy).TestMethod("arg");
-        Assert.AreEqual(1, testObj.InvocationCounter);
-        Assert.AreEqual("arg|arg", result);
-        Assert.AreEqual(1, di.Count);
+        Assert.That(testObj.InvocationCounter, Is.EqualTo(1));
+        Assert.That(result, Is.EqualTo("arg|arg"));
+        Assert.That(di.Count, Is.EqualTo(1));
 
         // any introduction instance is invoked once only
         ((ICountingIntroduction) outerProxy).Inc();
-        Assert.AreEqual(1, countingMixin.Counter);
+        Assert.That(countingMixin.Counter, Is.EqualTo(1));
     }
 }

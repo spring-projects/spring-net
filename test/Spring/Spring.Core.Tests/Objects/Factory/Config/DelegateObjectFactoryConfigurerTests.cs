@@ -45,7 +45,7 @@ public class DelegateObjectFactoryConfigurerIntegrationTests
         ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(of => of.RegisterSingleton("mofp", mofp)));
 
         ctx.Refresh();
-        Assert.IsTrue(mofp.Called);
+        Assert.That(mofp.Called, Is.True);
     }
 
     [Test]
@@ -60,6 +60,6 @@ public class DelegateObjectFactoryConfigurerIntegrationTests
 
         mofp.Called = false;
         ctx.Refresh();
-        Assert.IsTrue(mofp.Called);
+        Assert.That(mofp.Called, Is.True);
     }
 }

@@ -48,8 +48,8 @@ public sealed class DelegateFactoryObjectTests
         fob.IsSingleton = false;
         fob.AfterPropertiesSet();
         PopHandler popper = (PopHandler) fob.GetObject();
-        Assert.IsNotNull(popper);
-        Assert.AreEqual(fob.MethodName, popper.Method.Name);
+        Assert.That(popper, Is.Not.Null);
+        Assert.That(popper.Method.Name, Is.EqualTo(fob.MethodName));
     }
 
     [Test]
@@ -62,13 +62,13 @@ public sealed class DelegateFactoryObjectTests
         fob.MethodName = "HandlePop";
         fob.AfterPropertiesSet();
         PopHandler popper = (PopHandler) fob.GetObject();
-        Assert.IsNotNull(popper);
-        Assert.AreEqual(fob.MethodName, popper.Method.Name);
+        Assert.That(popper, Is.Not.Null);
+        Assert.That(popper.Method.Name, Is.EqualTo(fob.MethodName));
         string soda = "The Drink Of Champions";
         popper(this, soda);
-        Assert.AreEqual(soda, dude.Soda);
+        Assert.That(dude.Soda, Is.EqualTo(soda));
         PopHandler other = (PopHandler) fob.GetObject();
-        Assert.IsTrue(ReferenceEquals(popper, other));
+        Assert.That(ReferenceEquals(popper, other), Is.True);
     }
 
     [Test]
@@ -84,15 +84,15 @@ public sealed class DelegateFactoryObjectTests
         fob.AfterPropertiesSet();
         PopHandler one = (PopHandler) fob.GetObject();
         PopHandler two = (PopHandler) fob.GetObject();
-        Assert.IsFalse(ReferenceEquals(one, two));
+        Assert.That(ReferenceEquals(one, two), Is.False);
     }
 
     [Test]
     public void ObjectType()
     {
         DelegateFactoryObject fob = new DelegateFactoryObject();
-        Assert.IsNotNull(fob.ObjectType, "Should never be null (should default to typeof(Delegate)) ");
-        Assert.AreEqual(typeof(Delegate), fob.ObjectType, "Not defaulting to typeof(Delegate).");
+        Assert.That(fob.ObjectType, Is.Not.Null, "Should never be null (should default to typeof(Delegate)) ");
+        Assert.That(fob.ObjectType, Is.EqualTo(typeof(Delegate)), "Not defaulting to typeof(Delegate).");
     }
 
     [Test]

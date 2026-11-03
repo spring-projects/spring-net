@@ -54,7 +54,7 @@ public sealed class WebObjectFactoryTests
 
         object o;
         o = wof.GetObject("applicationScopedObject");
-        Assert.IsNotNull(o);
+        Assert.That(o, Is.Not.Null);
 
         AssertGetObjectThrows(typeof(ObjectCreationException), wof, "requestScopedObject");
         AssertGetObjectThrows(typeof(ObjectCreationException), wof, "sessionScopedObject");
@@ -69,7 +69,7 @@ public sealed class WebObjectFactoryTests
         }
         catch (Exception ex)
         {
-            Assert.AreEqual(exceptionType, ex.GetType());
+            Assert.That(ex.GetType(), Is.EqualTo(exceptionType));
         }
     }
 }

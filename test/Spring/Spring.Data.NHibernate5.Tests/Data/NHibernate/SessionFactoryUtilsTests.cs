@@ -46,7 +46,7 @@ namespace Spring.Data.NHibernate
 
             IDbProvider provider = SessionFactoryUtils.GetDbProvider(sessionFactory);
 
-            Assert.AreEqual(typeof(SqlCommand), provider.DbMetadata.CommandType);
+            Assert.That(provider.DbMetadata.CommandType, Is.EqualTo(typeof(SqlCommand)));
         }
     }
 }

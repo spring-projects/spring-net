@@ -47,11 +47,11 @@ public class CreditCardValidatorIntegrationTests
         XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
         object obj = objectFactory.GetObject("ccValidator");
 
-        Assert.IsTrue(obj is CreditCardValidator);
+        Assert.That(obj is CreditCardValidator, Is.True);
         CreditCardValidator validator = obj as CreditCardValidator;
-        Assert.IsNotNull(validator.CardType);
-        Assert.IsTrue(validator.CardType is Amex);
-        Assert.IsTrue(validator.Validate("378282246310005", new ValidationErrors()));
+        Assert.That(validator.CardType, Is.Not.Null);
+        Assert.That(validator.CardType is Amex, Is.True);
+        Assert.That(validator.Validate("378282246310005", new ValidationErrors()), Is.True);
     }
 
     [Test]
@@ -70,9 +70,9 @@ public class CreditCardValidatorIntegrationTests
         XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
         object obj = objectFactory.GetObject("ccValidator");
 
-        Assert.IsTrue(obj is CreditCardValidator);
+        Assert.That(obj is CreditCardValidator, Is.True);
         CreditCardValidator validator = obj as CreditCardValidator;
-        Assert.IsNull(validator.CardType);
+        Assert.That(validator.CardType, Is.Null);
         Assert.Throws<ArgumentException>(() => validator.Validate("378282246310005", new ValidationErrors()));
     }
 
@@ -100,7 +100,7 @@ public class CreditCardValidatorIntegrationTests
         contact.Creditcard = "378282246310";
         bool result = validator.Validate(contact, errors);
 
-        Assert.IsNotNull(errors.GetErrors("validationSummary"));
-        Assert.IsFalse(result);
+        Assert.That(errors.GetErrors("validationSummary"), Is.Not.Null);
+        Assert.That(result, Is.False);
     }
 }

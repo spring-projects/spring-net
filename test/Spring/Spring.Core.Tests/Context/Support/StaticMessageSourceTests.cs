@@ -45,7 +45,7 @@ public sealed class StaticMessageSourceTests
     {
         StaticMessageSource msgSource = new StaticMessageSource();
         msgSource.AddMessage("code", CultureInfo.CurrentUICulture, "{0}");
-        Assert.AreEqual("my message", msgSource.GetMessage("code", "my message"), "message");
+        Assert.That(msgSource.GetMessage("code", "my message"), Is.EqualTo("my message"), "message");
 
         try
         {
@@ -62,8 +62,8 @@ public sealed class StaticMessageSourceTests
     {
         StaticMessageSource msgSource = new StaticMessageSource();
         msgSource.AddMessage("code", CultureInfo.CurrentUICulture, "{0} {1}");
-        Assert.AreEqual("my message",
-            msgSource.GetMessage("code", CultureInfo.CurrentUICulture, new object[] { "my", "message" }),
+        Assert.That(msgSource.GetMessage("code", CultureInfo.CurrentUICulture, new object[] { "my", "message" }),
+            Is.EqualTo("my message"),
             "message");
     }
 
@@ -72,8 +72,8 @@ public sealed class StaticMessageSourceTests
     {
         StaticMessageSource msgSource = new StaticMessageSource();
         msgSource.AddMessage("code1", CultureInfo.CurrentUICulture, "{0} {1}");
-        Assert.AreEqual("StaticMessageSource : ['code1_" + CultureInfo.CurrentUICulture.Name + "' : '{0} {1}']",
-            msgSource.ToString());
+        Assert.That(msgSource.ToString(),
+            Is.EqualTo("StaticMessageSource : ['code1_" + CultureInfo.CurrentUICulture.Name + "' : '{0} {1}']"));
     }
 
 #if !NETCOREAPP
@@ -83,8 +83,8 @@ public sealed class StaticMessageSourceTests
             TestObject value = new TestObject();
             StaticMessageSource msgSource = new StaticMessageSource();
             msgSource.ApplyResources(value, "testObject", CultureInfo.InvariantCulture);
-            Assert.AreEqual("Mark", value.Name, "Name property value not applied.");
-            Assert.AreEqual(35, value.Age, "Age property value not applied.");
+        Assert.That(value.Name, Is.EqualTo("Mark"), "Name property value not applied.");
+        Assert.That(value.Age, Is.EqualTo(35), "Age property value not applied.");
         }
 #endif
 
@@ -94,8 +94,8 @@ public sealed class StaticMessageSourceTests
         TestObject value = new TestObject();
         StaticMessageSource msgSource = new StaticMessageSource();
         msgSource.ApplyResources(null, "testObject", CultureInfo.InvariantCulture);
-        Assert.AreEqual(null, value.Name);
-        Assert.AreEqual(0, value.Age);
+        Assert.That(value.Name, Is.EqualTo(null));
+        Assert.That(value.Age, Is.EqualTo(0));
     }
 
     [Test]
@@ -111,11 +111,11 @@ public sealed class StaticMessageSourceTests
         }
         catch (ArgumentNullException e)
         {
-            Assert.IsNotNull(e);
+            Assert.That(e, Is.Not.Null);
         }
 
-        Assert.AreEqual(null, value.Name);
-        Assert.AreEqual(0, value.Age);
+        Assert.That(value.Name, Is.EqualTo(null));
+        Assert.That(value.Age, Is.EqualTo(0));
     }
 
     [Test]
@@ -127,10 +127,12 @@ public sealed class StaticMessageSourceTests
 
         TestObject retrieved = (TestObject)
             msgSource.GetResourceObject("rick", CultureInfo.InstalledUICulture);
-        Assert.IsNotNull(retrieved,
+        Assert.That(retrieved,
+            Is.Not.Null,
             "Object previously added to StaticMessageSource was not retrieved " +
             "when using same lookup code and CultureInfo.");
-        Assert.IsTrue(ReferenceEquals(value, retrieved),
+        Assert.That(ReferenceEquals(value, retrieved),
+            Is.True,
             "Object returned from StaticMessageSource was not the same one " +
             "that was previously added (it must be).");
     }
@@ -144,10 +146,12 @@ public sealed class StaticMessageSourceTests
 
         TestObject retrieved = (TestObject)
             msgSource.GetResourceObject("rick");
-        Assert.IsNotNull(retrieved,
+        Assert.That(retrieved,
+            Is.Not.Null,
             "Object previously added to StaticMessageSource was not retrieved " +
             "when using same lookup code.");
-        Assert.IsTrue(ReferenceEquals(value, retrieved),
+        Assert.That(ReferenceEquals(value, retrieved),
+            Is.True,
             "Object returned from StaticMessageSource was not the same one " +
             "that was previously added (it must be).");
     }
@@ -158,7 +162,8 @@ public sealed class StaticMessageSourceTests
         StaticMessageSource msgSource = new StaticMessageSource();
         TestObject retrieved = (TestObject)
             msgSource.GetResourceObject("rick");
-        Assert.IsNull(retrieved,
+        Assert.That(retrieved,
+            Is.Null,
             "Getting 'some (?) weird object out of an empty StaticMessageSource");
     }
 
@@ -172,7 +177,8 @@ public sealed class StaticMessageSourceTests
         // assumes object was previously added using CultureInfo.CurrentUICulture
         TestObject retrieved = (TestObject)
             msgSource.GetResourceObject("rick");
-        Assert.IsNull(retrieved,
+        Assert.That(retrieved,
+            Is.Null,
             "Object previously added to StaticMessageSource " +
             "(using CultureInfo.InvariantCulture) was (wrongly) retrieved " +
             "when using same lookup code.");

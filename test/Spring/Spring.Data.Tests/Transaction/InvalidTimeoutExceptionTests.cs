@@ -9,6 +9,6 @@ public class InvalidTimeoutExceptionTests
     public void TimeoutGetter()
     {
         InvalidTimeoutException ex = new InvalidTimeoutException("bad timeout", 2000);
-        Assert.IsTrue(2000 == ex.Timeout);
+        Assert.That(2000 == ex.Timeout, Is.True);
     }
 }

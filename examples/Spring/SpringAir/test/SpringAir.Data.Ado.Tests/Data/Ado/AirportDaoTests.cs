@@ -66,22 +66,22 @@ namespace SpringAir.Data.Ado
         public void GetAllAirports()
         {
             IList airports = dao.GetAllAirports();
-            Assert.IsNotNull(airports, "Must never return a null airport list.");
-            Assert.AreEqual(4, airports.Count);
+            Assert.That(airports, Is.Not.Null, "Must never return a null airport list.");
+            Assert.That(airports.Count, Is.EqualTo(4));
         }
 
         [Test]
         public void GetAirportById()
         {
             Airport airport = dao.GetAirport(0);
-            Assert.IsNotNull(airport, "Failed to retrive an Airport that is definitely in the database.");
+            Assert.That(airport, Is.Not.Null, "Failed to retrive an Airport that is definitely in the database.");
         }
 
         [Test]
         public void GetAirportByCode()
         {
             Airport airport = dao.GetAirport("SFO");
-            Assert.IsNotNull(airport, "Failed to retrive an Airport that is definitely in the database.");
+            Assert.That(airport, Is.Not.Null, "Failed to retrive an Airport that is definitely in the database.");
         }
 
         [Test]

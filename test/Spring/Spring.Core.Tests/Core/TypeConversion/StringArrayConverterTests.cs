@@ -31,8 +31,8 @@ public sealed class StringArrayConverterTests
     public void CanConvertFrom()
     {
         StringArrayConverter vrt = new StringArrayConverter();
-        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
-        Assert.IsFalse(vrt.CanConvertFrom(null));
+        Assert.That(vrt.CanConvertFrom(typeof(string)), Is.True, "Conversion from a string instance must be supported.");
+        Assert.That(vrt.CanConvertFrom(null), Is.False);
     }
 
     [Test]
@@ -41,10 +41,11 @@ public sealed class StringArrayConverterTests
         object[] expected = new object[] { "1", "Foo", "3" };
         StringArrayConverter vrt = new StringArrayConverter();
         object actual = vrt.ConvertFrom("1,Foo,3");
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(typeof(string[]), actual.GetType());
-        Assert.AreEqual(3, ((string[]) actual).Length, "Wrong number of elements in the resulting array.");
-        Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.GetType(), Is.EqualTo(typeof(string[])));
+        Assert.That(((string[]) actual).Length, Is.EqualTo(3), "Wrong number of elements in the resulting array.");
+        Assert.That(ArrayUtils.AreEqual(expected, (string[]) actual),
+            Is.True,
             "Individual array elements not correctly converted.");
     }
 
@@ -54,9 +55,10 @@ public sealed class StringArrayConverterTests
         object[] expected = new object[] { "1 ", " Foo ", " 3" };
         StringArrayConverter vrt = new StringArrayConverter();
         object actual = vrt.ConvertFrom("1 , Foo , 3");
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(typeof(string[]), actual.GetType());
-        Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.GetType(), Is.EqualTo(typeof(string[])));
+        Assert.That(ArrayUtils.AreEqual(expected, (string[]) actual),
+            Is.True,
             "Individual array elements not correctly converted (check the whitespace?).");
     }
 
@@ -86,9 +88,10 @@ public sealed class StringArrayConverterTests
             StringArrayConverter vrt = new StringArrayConverter();
             // France uses the ';' (semi-colon) to separate list items...
             object actual = vrt.ConvertFrom("1,Foo,3");
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(typeof(string[]), actual.GetType());
-            Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
+            Assert.That(actual, Is.Not.Null);
+            Assert.That(actual.GetType(), Is.EqualTo(typeof(string[])));
+            Assert.That(ArrayUtils.AreEqual(expected, (string[]) actual),
+                Is.True,
                 "Individual array elements not correctly converted.");
         }
         finally
@@ -119,9 +122,10 @@ public sealed class StringArrayConverterTests
         const string customSeparator = "#";
         vrt.ListSeparator = customSeparator;
         object actual = vrt.ConvertFrom(string.Format("1{0}Foo{0}3", customSeparator));
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(typeof(string[]), actual.GetType());
-        Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.GetType(), Is.EqualTo(typeof(string[])));
+        Assert.That(ArrayUtils.AreEqual(expected, (string[]) actual),
+            Is.True,
             "Individual array elements not correctly converted.");
     }
 
@@ -132,9 +136,10 @@ public sealed class StringArrayConverterTests
         StringArrayConverter vrt = new StringArrayConverter();
         vrt.ListSeparator = null;
         object actual = vrt.ConvertFrom("1,Foo,3");
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(typeof(string[]), actual.GetType());
-        Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) actual),
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.GetType(), Is.EqualTo(typeof(string[])));
+        Assert.That(ArrayUtils.AreEqual(expected, (string[]) actual),
+            Is.True,
             "Individual array elements not correctly converted.");
     }
 }

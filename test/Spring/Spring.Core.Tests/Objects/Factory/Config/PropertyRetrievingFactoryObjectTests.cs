@@ -31,7 +31,7 @@ public sealed class PropertyRetrievingFactoryObjectTests
     public void Instantiation()
     {
         PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
-        Assert.IsNotNull(fac.Arguments);
+        Assert.That(fac.Arguments, Is.Not.Null);
     }
 
     [Test]
@@ -50,9 +50,9 @@ public sealed class PropertyRetrievingFactoryObjectTests
         PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
         fac.StaticProperty = "Spring.Objects.Factory.Config.PropertyObject.StaticProperty.Age, Spring.Core.Tests";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(int), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(int)));
         object actual = fac.GetObject();
-        Assert.AreEqual(PropertyObject.Age, actual);
+        Assert.That(actual, Is.EqualTo(PropertyObject.Age));
     }
 
     /// <summary>
@@ -65,9 +65,9 @@ public sealed class PropertyRetrievingFactoryObjectTests
         fac.StaticProperty = "Spring.Objects.Factory.Config.PropertyObject.StaticProperty.Item, Spring.Core.Tests";
         fac.Arguments = new object[] { 0 };
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(int), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(int)));
         object actual = fac.GetObject();
-        Assert.AreEqual(PropertyObject.StaticProperty[0], actual);
+        Assert.That(actual, Is.EqualTo(PropertyObject.StaticProperty[0]));
     }
 
     /// <summary>
@@ -80,9 +80,9 @@ public sealed class PropertyRetrievingFactoryObjectTests
         fac.StaticProperty = "Spring.Objects.Factory.Config.PropertyObject.StaticProperty.StaticProperty.Item, Spring.Core.Tests";
         fac.Arguments = new object[] { 0 };
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(int), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(int)));
         object actual = fac.GetObject();
-        Assert.AreEqual(PropertyObject.StaticProperty[0], actual);
+        Assert.That(actual, Is.EqualTo(PropertyObject.StaticProperty[0]));
     }
 
     [Test]
@@ -90,7 +90,7 @@ public sealed class PropertyRetrievingFactoryObjectTests
     {
         PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
         fac.Arguments = null;
-        Assert.IsNotNull(fac.Arguments);
+        Assert.That(fac.Arguments, Is.Not.Null);
     }
 
     [Test]
@@ -99,9 +99,9 @@ public sealed class PropertyRetrievingFactoryObjectTests
         PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
         fac.StaticProperty = "Spring.Objects.Factory.Config.PropertyObject.Age, Spring.Core.Tests";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(int), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(int)));
         object actual = fac.GetObject();
-        Assert.AreEqual(PropertyObject.Age, actual);
+        Assert.That(actual, Is.EqualTo(PropertyObject.Age));
     }
 
     [Test]
@@ -110,9 +110,9 @@ public sealed class PropertyRetrievingFactoryObjectTests
         PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
         fac.StaticProperty = "Spring.Objects.Factory.Config.PropertyObject.Age";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(int), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(int)));
         object actual = fac.GetObject();
-        Assert.AreEqual(PropertyObject.Age, actual);
+        Assert.That(actual, Is.EqualTo(PropertyObject.Age));
     }
 
     [Test]
@@ -123,7 +123,7 @@ public sealed class PropertyRetrievingFactoryObjectTests
         fac.TargetType = typeof(PropertyObject);
         fac.AfterPropertiesSet();
         object actual = fac.GetObject();
-        Assert.AreEqual(PropertyObject.Age, actual);
+        Assert.That(actual, Is.EqualTo(PropertyObject.Age));
     }
 
     [Test]
@@ -136,7 +136,7 @@ public sealed class PropertyRetrievingFactoryObjectTests
         fac.TargetProperty = "Name";
         fac.AfterPropertiesSet();
         object actual = fac.GetObject();
-        Assert.AreEqual(expected.Name, actual);
+        Assert.That(actual, Is.EqualTo(expected.Name));
     }
 
     /// <summary>
@@ -156,7 +156,7 @@ public sealed class PropertyRetrievingFactoryObjectTests
         fac.AfterPropertiesSet();
         object actual = fac.GetObject();
         int expectedAge = 21;
-        Assert.AreEqual(expectedAge, actual);
+        Assert.That(actual, Is.EqualTo(expectedAge));
     }
 
     [Test]
@@ -169,7 +169,7 @@ public sealed class PropertyRetrievingFactoryObjectTests
         fac.Arguments = new object[] { 2 };
         fac.AfterPropertiesSet();
         object actual = fac.GetObject();
-        Assert.AreEqual(expected[2], actual);
+        Assert.That(actual, Is.EqualTo(expected[2]));
     }
 
     [Test]
@@ -211,11 +211,11 @@ public sealed class PropertyRetrievingFactoryObjectTests
         fac.TargetType = typeof(PropertyObject);
         fac.AfterPropertiesSet();
         object actual = fac.GetObject();
-        Assert.AreEqual(PropertyObject.Age, actual);
+        Assert.That(actual, Is.EqualTo(PropertyObject.Age));
 
         PropertyObject.Age = 94;
         object tryTwo = fac.GetObject();
-        Assert.AreEqual(PropertyObject.Age, tryTwo);
+        Assert.That(tryTwo, Is.EqualTo(PropertyObject.Age));
     }
 
     [Test]
@@ -262,10 +262,10 @@ public sealed class PropertyRetrievingFactoryObjectTests
         PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
         fac.StaticProperty = "System.Globalization.CultureInfo.CURRENtUiCultURE, Mscorlib";
         fac.AfterPropertiesSet();
-        Assert.AreEqual(typeof(CultureInfo), fac.ObjectType);
+        Assert.That(fac.ObjectType, Is.EqualTo(typeof(CultureInfo)));
         CultureInfo actual = fac.GetObject() as CultureInfo;
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(CultureInfo.CurrentUICulture, actual);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo(CultureInfo.CurrentUICulture));
     }
 
     [Test]
@@ -277,11 +277,11 @@ public sealed class PropertyRetrievingFactoryObjectTests
         fac.IsSingleton = false;
         fac.AfterPropertiesSet();
         DateTime then = (DateTime) fac.GetObject();
-        Assert.IsNotNull(then);
+        Assert.That((object) then, Is.Not.Null);
         Thread.Sleep(TimeSpan.FromMilliseconds(10));
         DateTime now = (DateTime) fac.GetObject();
-        Assert.IsNotNull(now);
-        Assert.AreNotEqual(then, now);
+        Assert.That((object) now, Is.Not.Null);
+        Assert.That(now, Is.Not.EqualTo(then));
     }
 }
 

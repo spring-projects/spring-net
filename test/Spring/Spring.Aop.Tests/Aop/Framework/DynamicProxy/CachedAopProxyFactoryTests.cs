@@ -133,7 +133,7 @@ public sealed class CachedAopProxyFactoryTests : DefaultAopProxyFactoryTests
 
     private void AssertAopProxyTypeCacheCount(int count)
     {
-        Assert.AreEqual(count, CachedAopProxyFactory.CountCachedTypes);
+        Assert.That(CachedAopProxyFactory.CountCachedTypes, Is.EqualTo(count));
     }
 
     public interface ICommand

@@ -35,8 +35,8 @@ public class PercentFormatterTests
     public void ParseNullOrEmptyValue()
     {
         PercentFormatter fmt = new PercentFormatter();
-        Assert.AreEqual(0, fmt.Parse(null));
-        Assert.IsTrue(fmt.Parse("") is double);
+        Assert.That(fmt.Parse(null), Is.EqualTo(0));
+        Assert.That(fmt.Parse("") is double, Is.True);
     }
 
     [Test]
@@ -51,16 +51,16 @@ public class PercentFormatterTests
     public void FormatUsingDefaults()
     {
         PercentFormatter fmt = new PercentFormatter("en-US");
-        Assert.AreEqual("25.00%", fmt.Format(0.25).Replace(" ", ""));
-        Assert.AreEqual("25.34%", fmt.Format(0.2534).Replace(" ", ""));
+        Assert.That(fmt.Format(0.25).Replace(" ", ""), Is.EqualTo("25.00%"));
+        Assert.That(fmt.Format(0.2534).Replace(" ", ""), Is.EqualTo("25.34%"));
 
         fmt = new PercentFormatter("sr-SP-Latn");
 #if NETFRAMEWORK
-        Assert.AreEqual("25,00%", fmt.Format(0.25));
-        Assert.AreEqual("25,34%", fmt.Format(0.2534));
+        Assert.That(fmt.Format(0.25), Is.EqualTo("25,00%"));
+        Assert.That(fmt.Format(0.2534), Is.EqualTo("25,34%"));
 #else
-        Assert.AreEqual("25,000%", fmt.Format(0.25));
-        Assert.AreEqual("25,340%", fmt.Format(0.2534));
+        Assert.That(fmt.Format(0.25), Is.EqualTo("25,000%"));
+        Assert.That(fmt.Format(0.2534), Is.EqualTo("25,340%"));
 #endif
     }
 
@@ -68,12 +68,12 @@ public class PercentFormatterTests
     public void ParseUsingDefaults()
     {
         PercentFormatter fmt = new PercentFormatter("en-US");
-        Assert.AreEqual(0.25, fmt.Parse("25.00 %"));
-        Assert.AreEqual(0.2534, fmt.Parse("25.34 %"));
+        Assert.That(fmt.Parse("25.00 %"), Is.EqualTo(0.25));
+        Assert.That(fmt.Parse("25.34 %"), Is.EqualTo(0.2534));
 
         fmt = new PercentFormatter("sr-SP-Latn");
-        Assert.AreEqual(0.25, fmt.Parse("25,00%"));
-        Assert.AreEqual(0.2534, fmt.Parse("25,34%"));
+        Assert.That(fmt.Parse("25,00%"), Is.EqualTo(0.25));
+        Assert.That(fmt.Parse("25,34%"), Is.EqualTo(0.2534));
     }
 
     [Test]
@@ -82,13 +82,13 @@ public class PercentFormatterTests
         PercentFormatter fmt = new PercentFormatter("en-US");
         fmt.DecimalDigits = 0;
         fmt.PositivePattern = 1;
-        Assert.AreEqual("25%", fmt.Format(0.25));
-        Assert.AreEqual("25%", fmt.Format(0.2534));
+        Assert.That(fmt.Format(0.25), Is.EqualTo("25%"));
+        Assert.That(fmt.Format(0.2534), Is.EqualTo("25%"));
 
         fmt = new PercentFormatter("sr-SP-Latn");
         fmt.DecimalDigits = 1;
-        Assert.AreEqual("25,0%", fmt.Format(0.25));
-        Assert.AreEqual("25,3%", fmt.Format(0.2534));
+        Assert.That(fmt.Format(0.25), Is.EqualTo("25,0%"));
+        Assert.That(fmt.Format(0.2534), Is.EqualTo("25,3%"));
     }
 
     [Test]
@@ -97,12 +97,12 @@ public class PercentFormatterTests
         PercentFormatter fmt = new PercentFormatter("en-US");
         fmt.DecimalDigits = 0;
         fmt.PositivePattern = 1;
-        Assert.AreEqual(0.25, fmt.Parse("25%"));
-        Assert.AreEqual(0.2534, fmt.Parse("25.34%"));
+        Assert.That(fmt.Parse("25%"), Is.EqualTo(0.25));
+        Assert.That(fmt.Parse("25.34%"), Is.EqualTo(0.2534));
 
         fmt = new PercentFormatter("sr-SP-Latn");
         fmt.DecimalDigits = 1;
-        Assert.AreEqual(0.25, fmt.Parse("25,0%"));
-        Assert.AreEqual(0.253, fmt.Parse("25,3%"));
+        Assert.That(fmt.Parse("25,0%"), Is.EqualTo(0.25));
+        Assert.That(fmt.Parse("25,3%"), Is.EqualTo(0.253));
     }
 }

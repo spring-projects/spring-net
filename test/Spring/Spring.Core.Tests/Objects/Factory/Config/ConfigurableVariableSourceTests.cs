@@ -33,13 +33,13 @@ public sealed class ConfigurableVariableSourceTests
         vs.Variables.Add("Key2", "Value2");
 
         // existing vars
-        Assert.IsTrue(vs.CanResolveVariable("key1")); // case insensitive
-        Assert.AreEqual("Value1", vs.ResolveVariable("key1")); // case insensitive
-        Assert.IsTrue(vs.CanResolveVariable("Key2"));
-        Assert.AreEqual("Value2", vs.ResolveVariable("Key2"));
+        Assert.That(vs.CanResolveVariable("key1"), Is.True); // case insensitive
+        Assert.That(vs.ResolveVariable("key1"), Is.EqualTo("Value1")); // case insensitive
+        Assert.That(vs.CanResolveVariable("Key2"), Is.True);
+        Assert.That(vs.ResolveVariable("Key2"), Is.EqualTo("Value2"));
 
         // non-existant variable
-        Assert.IsFalse(vs.CanResolveVariable("Key3"));
-        Assert.IsNull(vs.ResolveVariable("Key3"));
+        Assert.That(vs.CanResolveVariable("Key3"), Is.False);
+        Assert.That(vs.ResolveVariable("Key3"), Is.Null);
     }
 }

@@ -16,7 +16,7 @@ public class ReflectionUtilsMemberwiseCopyTests
 
         ReflectionUtils.MemberwiseCopy(i1, i2);
 
-        Assert.AreEqual(i1, i2);
+        Assert.That(i2, Is.EqualTo(i1));
     }
 
     [Test]
@@ -33,7 +33,7 @@ public class ReflectionUtilsMemberwiseCopyTests
 
         ReflectionUtils.MemberwiseCopy(i1, i2);
 
-        Assert.AreEqual(i1, i2);
+        Assert.That(i2, Is.EqualTo(i1));
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class ReflectionUtilsMemberwiseCopyTests
 
         ReflectionUtils.MemberwiseCopy(i2, i1);
 
-        Assert.AreEqual(i1, i2);
+        Assert.That(i2, Is.EqualTo(i1));
     }
 
 }

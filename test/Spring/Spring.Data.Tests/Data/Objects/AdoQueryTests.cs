@@ -69,10 +69,10 @@ public class AdoQueryTests : AbstractAdoQueryTests
         IntMappingQueryWithContext queryWithNoContext = new IntMappingQueryWithContext(provider);
         queryWithNoContext.Compile();
         IList list = queryWithNoContext.QueryByNamedParam(null, null);
-        Assert.IsTrue(list.Count != 0);
+        Assert.That(list.Count != 0, Is.True);
         foreach (int count in list)
         {
-            Assert.AreEqual(1, count);
+            Assert.That(count, Is.EqualTo(1));
         }
     }
 
@@ -106,8 +106,8 @@ public class AdoQueryTests : AbstractAdoQueryTests
         protected override object MapRow(IDataReader reader, int rowNum, IDictionary inParams,
             IDictionary callingContext)
         {
-            Assert.IsNull(inParams);
-            Assert.IsNull(callingContext);
+            Assert.That(inParams, Is.Null);
+            Assert.That(callingContext, Is.Null);
             return reader.GetInt32(0);
         }
     }

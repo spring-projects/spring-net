@@ -54,7 +54,7 @@ public class PageTests : TestWebContextTests
     public void NoSharedStateAtConstruction()
     {
         Page page = new Page();
-        Assert.IsNull(page.SharedState);
+        Assert.That(page.SharedState, Is.Null);
     }
 
     [Test]
@@ -69,14 +69,14 @@ public class PageTests : TestWebContextTests
         child.Validators.Add(mockValidator);
 
         child.Validate(mockValidator.ValidationGroup);
-        Assert.IsTrue(mockValidator.WasCalled);
+        Assert.That(mockValidator.WasCalled, Is.True);
 
         child = new Page();
         mockValidator = new MockValidator();
         child.Validators.Add(mockValidator);
 
         child.Validate();
-        Assert.IsTrue(mockValidator.WasCalled);
+        Assert.That(mockValidator.WasCalled, Is.True);
     }
 
     [Test]
@@ -86,22 +86,22 @@ public class PageTests : TestWebContextTests
         IValidator[] validators = new IValidator[] { new RequiredValidator("Name", null), new ConditionValidator("Loan == 0", "Age > 21") };
         Contact contact = new Contact("Goran", 24, 0);
         bool result = page.Validate(contact, validators);
-        Assert.IsTrue(result);
+        Assert.That(result, Is.True);
 
         contact = new Contact(null, 24, 0);
         result = page.Validate(contact, validators);
-        Assert.IsFalse(result);
+        Assert.That(result, Is.False);
 
         contact = new Contact("Goran", 24, 1);
         result = page.Validate(contact, validators);
-        Assert.IsFalse(result);
+        Assert.That(result, Is.False);
     }
 
     [Test]
     public void DefaultsToDefaultWebCultureResolver()
     {
         TestPage page = new TestPage();
-        Assert.AreEqual(typeof(DefaultWebCultureResolver), page.CultureResolver.GetType());
+        Assert.That(page.CultureResolver.GetType(), Is.EqualTo(typeof(DefaultWebCultureResolver)));
     }
 
     [Test]
@@ -113,8 +113,8 @@ public class PageTests : TestWebContextTests
         page.UserCulture = new CultureInfo("de");
 
         page.InitializeCulture();
-        Assert.AreEqual(page.UserCulture, Thread.CurrentThread.CurrentUICulture);
-        Assert.AreEqual(CultureInfo.CreateSpecificCulture(page.UserCulture.Name), Thread.CurrentThread.CurrentCulture);
+        Assert.That(Thread.CurrentThread.CurrentUICulture, Is.EqualTo(page.UserCulture));
+        Assert.That(Thread.CurrentThread.CurrentCulture, Is.EqualTo(CultureInfo.CreateSpecificCulture(page.UserCulture.Name)));
     }
 
     [Test]
@@ -132,7 +132,7 @@ public class PageTests : TestWebContextTests
         {
             string expected = string.Format("No mapping found for the specified destination '{0}'.", RESULTNAME);
             string msg = ae.Message.Substring(0, expected.Length);
-            Assert.AreEqual(expected, msg);
+            Assert.That(msg, Is.EqualTo(expected));
         }
     }
 
@@ -162,6 +162,6 @@ public class PageTests : TestWebContextTests
         TestPage tuc = new TestPage();
         tuc.ModelPersistenceMedium = new DictionaryModelPersistenceMedium();
         tuc.SaveModelToPersistenceMedium(this);
-        Assert.AreEqual(this, tuc.LoadModelFromPersistenceMedium());
+        Assert.That(tuc.LoadModelFromPersistenceMedium(), Is.EqualTo(this));
     }
 }

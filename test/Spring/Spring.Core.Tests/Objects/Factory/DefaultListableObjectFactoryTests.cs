@@ -116,8 +116,8 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("Strategy2", new RootObjectDefinition(typeof(Strategy1)));
 
         Class1 c1 = (Class1) lof.GetObject("Class");
-        Assert.IsNotNull(c1);
-        Assert.AreEqual(typeof(Strategy1), c1.TheStrategy.GetType());
+        Assert.That(c1, Is.Not.Null);
+        Assert.That(c1.TheStrategy.GetType(), Is.EqualTo(typeof(Strategy1)));
     }
 
     [Test(Description = "http://jira.springframework.org/browse/SPRNET-985")]
@@ -134,8 +134,8 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("Strategy2", new RootObjectDefinition(typeof(Strategy1)));
 
         Class2 c2 = (Class2) lof.GetObject("Class");
-        Assert.IsNotNull(c2);
-        Assert.AreEqual(typeof(Strategy1), c2.Strategy.GetType());
+        Assert.That(c2, Is.Not.Null);
+        Assert.That(c2.Strategy.GetType(), Is.EqualTo(typeof(Strategy1)));
     }
 
     [Test(Description = "http://jira.springframework.org/browse/SPRNET-112")]
@@ -147,7 +147,7 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
         lof.RegisterObjectDefinition("factoryObject", def);
         var objs = lof.GetObjects<TestObject>();
-        Assert.AreEqual(1, objs.Count);
+        Assert.That(objs.Count, Is.EqualTo(1));
     }
 
     [Test(Description = "http://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
@@ -161,7 +161,7 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("factoryObject", def);
         lof.RegisterObjectDefinition("target", new RootObjectDefinition(typeof(TestObjectCreator)));
         var objs = lof.GetObjects<TestObject>();
-        Assert.AreEqual(1, objs.Count);
+        Assert.That(objs.Count, Is.EqualTo(1));
     }
 
     [Test(Description = "http://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
@@ -173,7 +173,7 @@ public sealed class DefaultListableObjectFactoryTests
         def.FactoryMethodName = "CreateList<int>";
         lof.RegisterObjectDefinition("foo", def);
         var objs = lof.GetObjectsOfType(typeof(List<int>));
-        Assert.AreEqual(1, objs.Count);
+        Assert.That(objs.Count, Is.EqualTo(1));
     }
 
     [Test(Description = "http://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
@@ -187,7 +187,7 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("factoryObject", def);
         lof.RegisterObjectDefinition("target", new RootObjectDefinition(typeof(TestGenericObject<int, string>)));
         var objs = lof.GetObjectsOfType(typeof(TestGenericObject<string, int>));
-        Assert.AreEqual(1, objs.Count);
+        Assert.That(objs.Count, Is.EqualTo(1));
     }
 
     /// <summary>
@@ -210,9 +210,9 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition(exampleObjectName, exampleObjectDefinition);
 
         object exampleObject = lof.GetObject(exampleObjectName);
-        Assert.IsNotNull(exampleObject);
+        Assert.That(exampleObject, Is.Not.Null);
         object factoryObject = lof.GetObject(factoryObjectName);
-        Assert.IsNotNull(factoryObject);
+        Assert.That(factoryObject, Is.Not.Null);
     }
 
     [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPR-1011")]
@@ -225,7 +225,7 @@ public sealed class DefaultListableObjectFactoryTests
         def.FactoryMethodName = "CreateObject";
         lof.RegisterObjectDefinition("foo", def);
         var objs = lof.GetObjectsOfType(typeof(DBNull));
-        Assert.AreEqual(1, objs.Count,
+        Assert.That(objs.Count, Is.EqualTo(1),
             "Must be looking at the RETURN TYPE of the factory method, " +
             "and hence get one DBNull object back.");
     }
@@ -273,7 +273,7 @@ public sealed class DefaultListableObjectFactoryTests
             lof.GetObject("prototype");
         }
 
-        Assert.AreEqual(1, sing.NumTimesDisposed);
+        Assert.That(sing.NumTimesDisposed, Is.EqualTo(1));
     }
 
     private sealed class DisposableTestObject : TestObject, IDisposable
@@ -300,11 +300,11 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 
         const string errMsg = "Wrong number of IObjectPostProcessors being reported by the ObjectPostProcessorCount property.";
-        Assert.AreEqual(0, lof.ObjectPostProcessorCount, errMsg);
+        Assert.That(lof.ObjectPostProcessorCount, Is.EqualTo(0), errMsg);
         lof.AddObjectPostProcessor(proc1);
-        Assert.AreEqual(1, lof.ObjectPostProcessorCount, errMsg);
+        Assert.That(lof.ObjectPostProcessorCount, Is.EqualTo(1), errMsg);
         lof.AddObjectPostProcessor(proc2);
-        Assert.AreEqual(2, lof.ObjectPostProcessorCount, errMsg);
+        Assert.That(lof.ObjectPostProcessorCount, Is.EqualTo(2), errMsg);
     }
 
     /// <summary>
@@ -322,17 +322,17 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory parent = new DefaultListableObjectFactory(child);
 
         const string errMsg = "Wrong number of IObjectPostProcessors being reported by the ObjectPostProcessorCount property.";
-        Assert.AreEqual(0, child.ObjectPostProcessorCount, errMsg);
-        Assert.AreEqual(0, parent.ObjectPostProcessorCount, errMsg);
+        Assert.That(child.ObjectPostProcessorCount, Is.EqualTo(0), errMsg);
+        Assert.That(parent.ObjectPostProcessorCount, Is.EqualTo(0), errMsg);
         child.AddObjectPostProcessor(proc1);
-        Assert.AreEqual(1, child.ObjectPostProcessorCount, errMsg);
-        Assert.AreEqual(0, parent.ObjectPostProcessorCount, errMsg);
+        Assert.That(child.ObjectPostProcessorCount, Is.EqualTo(1), errMsg);
+        Assert.That(parent.ObjectPostProcessorCount, Is.EqualTo(0), errMsg);
         parent.AddObjectPostProcessor(proc2);
-        Assert.AreEqual(1, child.ObjectPostProcessorCount, errMsg);
-        Assert.AreEqual(1, parent.ObjectPostProcessorCount, errMsg);
+        Assert.That(child.ObjectPostProcessorCount, Is.EqualTo(1), errMsg);
+        Assert.That(parent.ObjectPostProcessorCount, Is.EqualTo(1), errMsg);
         child.AddObjectPostProcessor(proc2);
-        Assert.AreEqual(2, child.ObjectPostProcessorCount, errMsg);
-        Assert.AreEqual(1, parent.ObjectPostProcessorCount, errMsg);
+        Assert.That(child.ObjectPostProcessorCount, Is.EqualTo(2), errMsg);
+        Assert.That(parent.ObjectPostProcessorCount, Is.EqualTo(1), errMsg);
     }
 
     [Test]
@@ -351,8 +351,8 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("toBeProxied", toBeProxied);
 
         object proxy = lof["toBeProxied"];
-        Assert.IsNotNull(proxy);
-        Assert.AreEqual("TheAgony", proxy);
+        Assert.That(proxy, Is.Not.Null);
+        Assert.That(proxy, Is.EqualTo("TheAgony"));
     }
 
     [Test]
@@ -371,10 +371,10 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("notToBeProxied", not);
 
         object foo = lof["notToBeProxied"];
-        Assert.IsNotNull(foo);
-        Assert.AreEqual(typeof(TestObject), foo.GetType());
+        Assert.That(foo, Is.Not.Null);
+        Assert.That(foo.GetType(), Is.EqualTo(typeof(TestObject)));
         TestObject to = (TestObject) foo;
-        Assert.AreEqual("Rick", to.Name);
+        Assert.That(to.Name, Is.EqualTo("Rick"));
     }
 
     private sealed class NullInstantiationAwareObjectPostProcessorStub
@@ -463,13 +463,13 @@ public sealed class DefaultListableObjectFactoryTests
     {
         KnowsIfInstantiated.ClearInstantiationRecord();
         DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
-        Assert.IsTrue(!KnowsIfInstantiated.WasInstantiated, "Singleton appears to be instantiated before the test is even run.");
+        Assert.That(!KnowsIfInstantiated.WasInstantiated, Is.True, "Singleton appears to be instantiated before the test is even run.");
         RootObjectDefinition def = new RootObjectDefinition();
         def.ObjectTypeName = typeof(KnowsIfInstantiated).FullName;
         lof.RegisterObjectDefinition("x1", def);
-        Assert.IsTrue(!KnowsIfInstantiated.WasInstantiated, "Singleton appears to be instantiated before PreInstantiateSingletons() is invoked.");
+        Assert.That(!KnowsIfInstantiated.WasInstantiated, Is.True, "Singleton appears to be instantiated before PreInstantiateSingletons() is invoked.");
         lof.PreInstantiateSingletons();
-        Assert.IsTrue(KnowsIfInstantiated.WasInstantiated, "Singleton was not instantiated by the container (it must be).");
+        Assert.That(KnowsIfInstantiated.WasInstantiated, Is.True, "Singleton was not instantiated by the container (it must be).");
     }
 
     [Test]
@@ -483,13 +483,13 @@ public sealed class DefaultListableObjectFactoryTests
         def.IsLazyInit = true;
         lof.RegisterObjectDefinition("x1", def);
 
-        Assert.IsTrue(!KnowsIfInstantiated.WasInstantiated, "Singleton appears to be instantiated before the test is even run.");
+        Assert.That(!KnowsIfInstantiated.WasInstantiated, Is.True, "Singleton appears to be instantiated before the test is even run.");
         lof.RegisterObjectDefinition("x1", def);
-        Assert.IsTrue(!KnowsIfInstantiated.WasInstantiated, "Singleton appears to be instantiated before PreInstantiateSingletons() is invoked.");
+        Assert.That(!KnowsIfInstantiated.WasInstantiated, Is.True, "Singleton appears to be instantiated before PreInstantiateSingletons() is invoked.");
         lof.PreInstantiateSingletons();
-        Assert.IsFalse(KnowsIfInstantiated.WasInstantiated, "Singleton was instantiated by the container (it must NOT be 'cos LazyInit was set to TRUE).");
+        Assert.That(KnowsIfInstantiated.WasInstantiated, Is.False, "Singleton was instantiated by the container (it must NOT be 'cos LazyInit was set to TRUE).");
         lof.GetObject("x1");
-        Assert.IsTrue(KnowsIfInstantiated.WasInstantiated, "Singleton was not instantiated by the container (it must be).");
+        Assert.That(KnowsIfInstantiated.WasInstantiated, Is.True, "Singleton was not instantiated by the container (it must be).");
     }
 
     [Test]
@@ -504,32 +504,35 @@ public sealed class DefaultListableObjectFactoryTests
 
         DummyFactory.Reset();
 
-        Assert.IsFalse(DummyFactory.WasPrototypeCreated,
+        Assert.That(DummyFactory.WasPrototypeCreated,
+            Is.False,
             "Prototype appears to be instantiated before the test is even run.");
         lof.RegisterObjectDefinition("x1", def);
-        Assert.IsFalse(DummyFactory.WasPrototypeCreated,
+        Assert.That(DummyFactory.WasPrototypeCreated,
+            Is.False,
             "Prototype instantiated after object definition registration (must NOT be).");
         lof.PreInstantiateSingletons();
-        Assert.IsFalse(DummyFactory.WasPrototypeCreated,
+        Assert.That(DummyFactory.WasPrototypeCreated,
+            Is.False,
             "Prototype instantiated after call to PreInstantiateSingletons(); must NOT be.");
         lof.GetObject("x1");
-        Assert.IsTrue(DummyFactory.WasPrototypeCreated, "Prototype was not instantiated.");
+        Assert.That(DummyFactory.WasPrototypeCreated, Is.True, "Prototype was not instantiated.");
     }
 
     [Test]
     public void Empty()
     {
         IListableObjectFactory lof = new DefaultListableObjectFactory();
-        Assert.IsTrue(lof.GetObjectDefinitionNames() != null, "No objects defined --> array != null");
-        Assert.IsTrue(lof.GetObjectDefinitionNames().Count == 0, "No objects defined after no arg constructor");
-        Assert.IsTrue(lof.ObjectDefinitionCount == 0, "No objects defined after no arg constructor");
+        Assert.That(lof.GetObjectDefinitionNames() != null, Is.True, "No objects defined --> array != null");
+        Assert.That(lof.GetObjectDefinitionNames().Count == 0, Is.True, "No objects defined after no arg constructor");
+        Assert.That(lof.ObjectDefinitionCount == 0, Is.True, "No objects defined after no arg constructor");
     }
 
     [Test]
     public void ObjectDefinitionCountIsZeroBeforeAnythingIsRegistered()
     {
         DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
-        Assert.AreEqual(0, lof.ObjectDefinitionCount, "No objects must be defined straight off the bat.");
+        Assert.That(lof.ObjectDefinitionCount, Is.EqualTo(0), "No objects must be defined straight off the bat.");
     }
 
     [Test]
@@ -538,7 +541,7 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
         lof.RegisterObjectDefinition("test", new RootObjectDefinition(typeof(TestObject), null));
         lof.RegisterObjectDefinition("test", new RootObjectDefinition(typeof(NestedTestObject), null));
-        Assert.IsTrue(lof.GetObject("test") is NestedTestObject);
+        Assert.That(lof.GetObject("test") is NestedTestObject, Is.True);
     }
 
     [Test]
@@ -560,7 +563,7 @@ public sealed class DefaultListableObjectFactoryTests
         pvs.Add("myFloat", "1.1");
         lof.RegisterObjectDefinition("testObject", new RootObjectDefinition(typeof(TestObject), pvs));
         TestObject testObject = (TestObject) lof.GetObject("testObject");
-        Assert.IsTrue(testObject.MyFloat == 1.1f);
+        Assert.That(testObject.MyFloat == 1.1f, Is.True);
     }
 
     [Test]
@@ -577,14 +580,14 @@ public sealed class DefaultListableObjectFactoryTests
 
         object singletonObject = new TestObject();
         lof.RegisterSingleton("singletonObject", singletonObject);
-        Assert.IsTrue(lof.IsSingleton("singletonObject"));
+        Assert.That(lof.IsSingleton("singletonObject"), Is.True);
         TestObject test = (TestObject) lof.GetObject("test");
-        Assert.AreEqual(singletonObject, lof.GetObject("singletonObject"));
-        Assert.AreEqual(singletonObject, test.Spouse);
+        Assert.That(lof.GetObject("singletonObject"), Is.EqualTo(singletonObject));
+        Assert.That(test.Spouse, Is.EqualTo(singletonObject));
         var objectsOfType = lof.GetObjectsOfType(typeof(TestObject), false, true);
-        Assert.AreEqual(2, objectsOfType.Count);
-        Assert.IsTrue(objectsOfType.Values.Contains(test));
-        Assert.IsTrue(objectsOfType.Values.Contains(singletonObject));
+        Assert.That(objectsOfType.Count, Is.EqualTo(2));
+        Assert.That(objectsOfType.Values.Contains(test), Is.True);
+        Assert.That(objectsOfType.Values.Contains(singletonObject), Is.True);
     }
 
     [Test]
@@ -595,9 +598,9 @@ public sealed class DefaultListableObjectFactoryTests
         properties.Add("age", "99");
         factory.RegisterObjectDefinition("test", new RootObjectDefinition(typeof(TestObject), properties));
         TestObject obj = new TestObject();
-        Assert.AreEqual(0, obj.Age);
+        Assert.That(obj.Age, Is.EqualTo(0));
         factory.ApplyObjectPropertyValues(obj, "test");
-        Assert.AreEqual(99, obj.Age, "Property values were not applied to the existing instance.");
+        Assert.That(obj.Age, Is.EqualTo(99), "Property values were not applied to the existing instance.");
     }
 
     [Test]
@@ -608,9 +611,9 @@ public sealed class DefaultListableObjectFactoryTests
         properties.Add("age", "99");
         factory.RegisterObjectDefinition("test", new RootObjectDefinition(null, properties));
         TestObject obj = new TestObject();
-        Assert.AreEqual(0, obj.Age);
+        Assert.That(obj.Age, Is.EqualTo(0));
         factory.ApplyObjectPropertyValues(obj, "test");
-        Assert.AreEqual(99, obj.Age, "Property values were not applied to the existing instance.");
+        Assert.That(obj.Age, Is.EqualTo(99), "Property values were not applied to the existing instance.");
     }
 
     [Test]
@@ -626,12 +629,12 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("test", rod);
         object singletonObject = new TestObject();
         lof.RegisterSingleton("singletonObject", singletonObject);
-        Assert.IsTrue(lof.ContainsObject("singletonObject"));
-        Assert.IsTrue(lof.IsSingleton("singletonObject"));
-        Assert.AreEqual(0, lof.GetAliases("singletonObject").Count);
+        Assert.That(lof.ContainsObject("singletonObject"), Is.True);
+        Assert.That(lof.IsSingleton("singletonObject"), Is.True);
+        Assert.That(lof.GetAliases("singletonObject").Count, Is.EqualTo(0));
         DependenciesObject test = (DependenciesObject) lof.GetObject("test");
-        Assert.AreEqual(singletonObject, lof.GetObject("singletonObject"));
-        Assert.AreEqual(singletonObject, test.Spouse);
+        Assert.That(lof.GetObject("singletonObject"), Is.EqualTo(singletonObject));
+        Assert.That(test.Spouse, Is.EqualTo(singletonObject));
     }
 
     [Test]
@@ -652,8 +655,8 @@ public sealed class DefaultListableObjectFactoryTests
         ConstructorDependenciesObject cdo = (ConstructorDependenciesObject) lof.Autowire(typeof(ConstructorDependenciesObject),
             AutoWiringMode.Constructor, true);
         object spouse = lof.GetObject("spouse");
-        Assert.IsTrue(cdo.Spouse1 == spouse);
-        Assert.IsTrue(ObjectFactoryUtils.ObjectOfType(lof, typeof(TestObject)) == spouse);
+        Assert.That(cdo.Spouse1 == spouse, Is.True);
+        Assert.That(ObjectFactoryUtils.ObjectOfType(lof, typeof(TestObject)) == spouse, Is.True);
     }
 
     [Test]
@@ -670,7 +673,7 @@ public sealed class DefaultListableObjectFactoryTests
         DependenciesObject obj = (DependenciesObject) lof.Autowire(typeof(DependenciesObject),
             AutoWiringMode.ByName, true);
         TestObject objRod = (TestObject) lof.GetObject("rod");
-        Assert.AreEqual(obj.Spouse, objRod.Spouse);
+        Assert.That(objRod.Spouse, Is.EqualTo(obj.Spouse));
     }
 
     [Test]
@@ -685,7 +688,7 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("rod", rodDefinition);
         lof.RegisterObjectDefinition("spouse", kerryDefinition); // property name is Spouse (capital S)
         TestObject objRod = (TestObject) lof.GetObject("rod");
-        Assert.IsNull(objRod.Spouse, "Mmm, Spouse property appears to have been autowired by name, even though there is no object in the factory with a name 'Spouse'.");
+        Assert.That(objRod.Spouse, Is.Null, "Mmm, Spouse property appears to have been autowired by name, even though there is no object in the factory with a name 'Spouse'.");
     }
 
     [Test]
@@ -704,7 +707,7 @@ public sealed class DefaultListableObjectFactoryTests
         RootObjectDefinition rod = new RootObjectDefinition(typeof(TestObject));
         lof.RegisterObjectDefinition("Spous", rod);
         DependenciesObject obj = (DependenciesObject) lof.Autowire(typeof(DependenciesObject), AutoWiringMode.ByName, false);
-        Assert.IsNull(obj.Spouse);
+        Assert.That(obj.Spouse, Is.Null);
     }
 
     [Test]
@@ -715,7 +718,7 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("test", rod);
         DependenciesObject obj = (DependenciesObject) lof.Autowire(typeof(DependenciesObject), AutoWiringMode.ByType, true);
         TestObject test = (TestObject) lof.GetObject("test");
-        Assert.AreEqual(obj.Spouse, test);
+        Assert.That(test, Is.EqualTo(obj.Spouse));
     }
 
     [Test]
@@ -730,7 +733,7 @@ public sealed class DefaultListableObjectFactoryTests
     {
         DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
         DependenciesObject obj = (DependenciesObject) lof.Autowire(typeof(DependenciesObject), AutoWiringMode.ByType, false);
-        Assert.IsNull(obj.Spouse);
+        Assert.That(obj.Spouse, Is.Null);
     }
 
     [Test]
@@ -742,8 +745,8 @@ public sealed class DefaultListableObjectFactoryTests
         DependenciesObject existingObj = new DependenciesObject();
         lof.AutowireObjectProperties(existingObj, AutoWiringMode.ByName, true);
         TestObject spouse = (TestObject) lof.GetObject("Spouse");
-        Assert.AreEqual(existingObj.Spouse, spouse);
-        Assert.IsTrue(ObjectFactoryUtils.ObjectOfType(lof, typeof(TestObject)) == spouse);
+        Assert.That(spouse, Is.EqualTo(existingObj.Spouse));
+        Assert.That(ObjectFactoryUtils.ObjectOfType(lof, typeof(TestObject)) == spouse, Is.True);
     }
 
     [Test]
@@ -764,7 +767,7 @@ public sealed class DefaultListableObjectFactoryTests
         lof.RegisterObjectDefinition("Spous", rod);
         DependenciesObject existingObj = new DependenciesObject();
         lof.AutowireObjectProperties(existingObj, AutoWiringMode.ByName, false);
-        Assert.IsNull(existingObj.Spouse);
+        Assert.That(existingObj.Spouse, Is.Null);
     }
 
     [Test]
@@ -776,7 +779,7 @@ public sealed class DefaultListableObjectFactoryTests
         DependenciesObject existingObj = new DependenciesObject();
         lof.AutowireObjectProperties(existingObj, AutoWiringMode.ByType, true);
         TestObject test = (TestObject) lof.GetObject("test");
-        Assert.AreEqual(existingObj.Spouse, test);
+        Assert.That(test, Is.EqualTo(existingObj.Spouse));
     }
 
     [Test]
@@ -801,7 +804,7 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
         DependenciesObject existingObj = new DependenciesObject();
         lof.AutowireObjectProperties(existingObj, AutoWiringMode.ByType, false);
-        Assert.IsNull(existingObj.Spouse);
+        Assert.That(existingObj.Spouse, Is.Null);
     }
 
     [Test]
@@ -810,10 +813,10 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
         RootObjectDefinition rod = new RootObjectDefinition(typeof(TestObject));
         lof.RegisterObjectDefinition("rod", rod);
-        Assert.AreEqual(1, lof.ObjectDefinitionCount);
+        Assert.That(lof.ObjectDefinitionCount, Is.EqualTo(1));
         object registered = lof.Autowire(typeof(NoDependencies), AutoWiringMode.AutoDetect, false);
-        Assert.AreEqual(1, lof.ObjectDefinitionCount);
-        Assert.IsTrue(registered is NoDependencies);
+        Assert.That(lof.ObjectDefinitionCount, Is.EqualTo(1));
+        Assert.That(registered is NoDependencies, Is.True);
     }
 
     [Test]
@@ -824,13 +827,13 @@ public sealed class DefaultListableObjectFactoryTests
         pvs.Add(new PropertyValue("name", "Rod"));
         RootObjectDefinition rood = new RootObjectDefinition(typeof(TestObject), pvs);
         lof.RegisterObjectDefinition("rod", rood);
-        Assert.AreEqual(1, lof.ObjectDefinitionCount);
+        Assert.That(lof.ObjectDefinitionCount, Is.EqualTo(1));
         // Depends on age, name and spouse (TestObject)
         object registered = lof.Autowire(typeof(DependenciesObject), AutoWiringMode.AutoDetect, true);
-        Assert.AreEqual(1, lof.ObjectDefinitionCount);
+        Assert.That(lof.ObjectDefinitionCount, Is.EqualTo(1));
         DependenciesObject kerry = (DependenciesObject) registered;
         TestObject rod = (TestObject) lof.GetObject("rod");
-        Assert.AreSame(rod, kerry.Spouse);
+        Assert.That(kerry.Spouse, Is.SameAs(rod));
     }
 
     [Test]
@@ -841,12 +844,12 @@ public sealed class DefaultListableObjectFactoryTests
         pvs.Add(new PropertyValue("name", "Rod"));
         RootObjectDefinition rood = new RootObjectDefinition(typeof(TestObject), pvs);
         lof.RegisterObjectDefinition("rod", rood);
-        Assert.AreEqual(1, lof.ObjectDefinitionCount);
+        Assert.That(lof.ObjectDefinitionCount, Is.EqualTo(1));
         object registered = lof.Autowire(typeof(ConstructorDependency), AutoWiringMode.AutoDetect, false);
-        Assert.AreEqual(1, lof.ObjectDefinitionCount);
+        Assert.That(lof.ObjectDefinitionCount, Is.EqualTo(1));
         ConstructorDependency kerry = (ConstructorDependency) registered;
         TestObject rod = (TestObject) lof.GetObject("rod");
-        Assert.AreSame(rod, kerry._spouse);
+        Assert.That(kerry._spouse, Is.SameAs(rod));
     }
 
     [Test]
@@ -857,7 +860,7 @@ public sealed class DefaultListableObjectFactoryTests
         pvs.Add(new PropertyValue("name", "Rod"));
         RootObjectDefinition rod = new RootObjectDefinition(typeof(TestObject), pvs);
         lof.RegisterObjectDefinition("rod", rod);
-        Assert.AreEqual(1, lof.ObjectDefinitionCount);
+        Assert.That(lof.ObjectDefinitionCount, Is.EqualTo(1));
         Assert.Throws<UnsatisfiedDependencyException>(() => lof.Autowire(typeof(UnsatisfiedConstructorDependency), AutoWiringMode.AutoDetect, true));
     }
 
@@ -878,7 +881,7 @@ public sealed class DefaultListableObjectFactoryTests
         {
             TestObject obj = (TestObject) lof.GetObject("object" + i);
             TestObject otherObj = (TestObject) lof.GetObject("object" + (i < 99 ? i + 1 : 0));
-            Assert.IsTrue(obj.Spouse == otherObj);
+            Assert.That(obj.Spouse == otherObj, Is.True);
         }
     }
 
@@ -896,9 +899,9 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterObjectDefinition("foo", def);
 
         object foo = fac["foo"];
-        Assert.IsNotNull(foo, "Couldn't pull manually registered instance out of the factory using factory method instantiation.");
+        Assert.That(foo, Is.Not.Null, "Couldn't pull manually registered instance out of the factory using factory method instantiation.");
         MySingleton sing = (MySingleton) foo;
-        Assert.AreEqual(expectedName, sing.Name, "Dependency was not resolved pulling manually registered instance out of the factory using factory method instantiation.");
+        Assert.That(sing.Name, Is.EqualTo(expectedName), "Dependency was not resolved pulling manually registered instance out of the factory using factory method instantiation.");
     }
 
     [Test]
@@ -913,9 +916,9 @@ public sealed class DefaultListableObjectFactoryTests
 
             // verify preconditions
             TestObject to = lof.GetObject("factoryObject", null, null) as TestObject;
-            Assert.IsNotNull(to);
-            Assert.AreEqual(25, to.Age);
-            Assert.AreEqual(DummyFactory.SINGLETON_NAME, to.Name);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Age, Is.EqualTo(25));
+            Assert.That(to.Name, Is.EqualTo(DummyFactory.SINGLETON_NAME));
 
             try
             {
@@ -924,7 +927,7 @@ public sealed class DefaultListableObjectFactoryTests
             }
             catch (ObjectDefinitionStoreException ex)
             {
-                Assert.IsTrue(ex.Message.IndexOf("Cannot specify arguments in the GetObject () method when referring to a factory object definition") > -1);
+                Assert.That(ex.Message.IndexOf("Cannot specify arguments in the GetObject () method when referring to a factory object definition") > -1, Is.True);
             }
 
             try
@@ -934,7 +937,7 @@ public sealed class DefaultListableObjectFactoryTests
             }
             catch (ObjectDefinitionStoreException ex)
             {
-                Assert.IsTrue(ex.Message.IndexOf("Cannot specify arguments in the GetObject () method when referring to a factory object definition") > -1);
+                Assert.That(ex.Message.IndexOf("Cannot specify arguments in the GetObject () method when referring to a factory object definition") > -1, Is.True);
             }
         }
     }
@@ -950,10 +953,10 @@ public sealed class DefaultListableObjectFactoryTests
             lof.RegisterObjectDefinition("prototype", prototype);
 
             TestObject to = lof.GetObject("prototype", new object[] { "Bruno", 26, new NestedTestObject("Home") }) as TestObject;
-            Assert.IsNotNull(to);
-            Assert.AreEqual(26, to.Age);
-            Assert.AreEqual("Bruno", to.Name);
-            Assert.AreEqual("Home", to.Doctor.Company);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Age, Is.EqualTo(26));
+            Assert.That(to.Name, Is.EqualTo("Bruno"));
+            Assert.That(to.Doctor.Company, Is.EqualTo("Home"));
         }
     }
 
@@ -968,9 +971,9 @@ public sealed class DefaultListableObjectFactoryTests
             lof.RegisterObjectDefinition("prototype", prototype);
 
             TestObject to = lof.GetObject("prototype", new object[] { "Mark", 35 }) as TestObject;
-            Assert.IsNotNull(to);
-            Assert.AreEqual(35, to.Age);
-            Assert.AreEqual("Mark", to.Name);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Age, Is.EqualTo(35));
+            Assert.That(to.Name, Is.EqualTo("Mark"));
         }
     }
 
@@ -988,13 +991,13 @@ public sealed class DefaultListableObjectFactoryTests
             try
             {
                 TestObject to2 = lof.GetObject("prototype", new object[] { 35, "Mark" }) as TestObject;
-                Assert.IsNotNull(to2);
-                Assert.AreEqual(35, to2.Age);
-                Assert.AreEqual("Mark", to2.Name);
+                Assert.That(to2, Is.Not.Null);
+                Assert.That(to2.Age, Is.EqualTo(35));
+                Assert.That(to2.Name, Is.EqualTo("Mark"));
             }
             catch (ObjectCreationException ex)
             {
-                Assert.IsTrue(ex.Message.IndexOf("'Object of type 'System.Int32' cannot be converted to type 'System.String'") >= 0);
+                Assert.That(ex.Message.IndexOf("'Object of type 'System.Int32' cannot be converted to type 'System.String'") >= 0, Is.True);
             }
         }
     }
@@ -1010,9 +1013,9 @@ public sealed class DefaultListableObjectFactoryTests
             lof.RegisterObjectDefinition("singleton", singleton);
 
             TestObject to = lof.GetObject("singleton", new object[] { "Mark", 35 }) as TestObject;
-            Assert.IsNotNull(to);
-            Assert.AreEqual(35, to.Age);
-            Assert.AreEqual("Mark", to.Name);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Age, Is.EqualTo(35));
+            Assert.That(to.Name, Is.EqualTo("Mark"));
         }
     }
 
@@ -1030,14 +1033,14 @@ public sealed class DefaultListableObjectFactoryTests
             lof.RegisterObjectDefinition("singleton", singleton);
 
             TestObject to = lof.GetObject("singleton", new object[] { "Mark", 35 }) as TestObject;
-            Assert.IsNotNull(to);
-            Assert.AreEqual(35, to.Age);
-            Assert.AreEqual("Mark", to.Name);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Age, Is.EqualTo(35));
+            Assert.That(to.Name, Is.EqualTo("Mark"));
 
             TestObject to2 = lof.GetObject("singleton") as TestObject;
-            Assert.IsNotNull(to2);
-            Assert.AreEqual(27, to2.Age);
-            Assert.AreEqual("Bruno", to2.Name);
+            Assert.That(to2, Is.Not.Null);
+            Assert.That(to2.Age, Is.EqualTo(27));
+            Assert.That(to2.Name, Is.EqualTo("Bruno"));
         }
     }
 
@@ -1051,10 +1054,10 @@ public sealed class DefaultListableObjectFactoryTests
             lof.RegisterObjectDefinition("prototype", prototype);
 
             TestObject to = lof.CreateObject("prototype", typeof(TestObject), new object[] { "Bruno", 26, new NestedTestObject("Home") }) as TestObject;
-            Assert.IsNotNull(to);
-            Assert.AreEqual(26, to.Age);
-            Assert.AreEqual("Bruno", to.Name);
-            Assert.AreEqual("Home", to.Doctor.Company);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Age, Is.EqualTo(26));
+            Assert.That(to.Name, Is.EqualTo("Bruno"));
+            Assert.That(to.Doctor.Company, Is.EqualTo("Home"));
         }
     }
 
@@ -1068,9 +1071,9 @@ public sealed class DefaultListableObjectFactoryTests
             lof.RegisterObjectDefinition("prototype", prototype);
 
             TestObject to = lof.CreateObject("prototype", typeof(TestObject), new object[] { "Mark", 35 }) as TestObject;
-            Assert.IsNotNull(to);
-            Assert.AreEqual(35, to.Age);
-            Assert.AreEqual("Mark", to.Name);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Age, Is.EqualTo(35));
+            Assert.That(to.Name, Is.EqualTo("Mark"));
         }
     }
 
@@ -1088,13 +1091,13 @@ public sealed class DefaultListableObjectFactoryTests
             try
             {
                 TestObject to2 = lof.CreateObject("prototype", typeof(TestObject), new object[] { 35, "Mark" }) as TestObject;
-                Assert.IsNotNull(to2);
-                Assert.AreEqual(35, to2.Age);
-                Assert.AreEqual("Mark", to2.Name);
+                Assert.That(to2, Is.Not.Null);
+                Assert.That(to2.Age, Is.EqualTo(35));
+                Assert.That(to2.Name, Is.EqualTo("Mark"));
             }
             catch (ObjectCreationException ex)
             {
-                Assert.IsTrue(ex.Message.IndexOf("'Object of type 'System.Int32' cannot be converted to type 'System.String'") >= 0);
+                Assert.That(ex.Message.IndexOf("'Object of type 'System.Int32' cannot be converted to type 'System.String'") >= 0, Is.True);
             }
         }
     }
@@ -1110,9 +1113,9 @@ public sealed class DefaultListableObjectFactoryTests
             lof.RegisterObjectDefinition("singleton", singleton);
 
             TestObject to = lof.CreateObject("singleton", typeof(TestObject), new object[] { "Mark", 35 }) as TestObject;
-            Assert.IsNotNull(to);
-            Assert.AreEqual(35, to.Age);
-            Assert.AreEqual("Mark", to.Name);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Age, Is.EqualTo(35));
+            Assert.That(to.Name, Is.EqualTo("Mark"));
         }
     }
 
@@ -1129,14 +1132,14 @@ public sealed class DefaultListableObjectFactoryTests
             lof.RegisterObjectDefinition("singleton", singleton);
 
             TestObject to = lof.CreateObject("singleton", typeof(TestObject), new object[] { "Mark", 35 }) as TestObject;
-            Assert.IsNotNull(to);
-            Assert.AreEqual(35, to.Age);
-            Assert.AreEqual("Mark", to.Name);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Age, Is.EqualTo(35));
+            Assert.That(to.Name, Is.EqualTo("Mark"));
 
             TestObject to2 = lof.CreateObject("singleton", null, null) as TestObject;
-            Assert.IsNotNull(to2);
-            Assert.AreEqual(27, to2.Age);
-            Assert.AreEqual("Bruno", to2.Name);
+            Assert.That(to2, Is.Not.Null);
+            Assert.That(to2.Age, Is.EqualTo(27));
+            Assert.That(to2.Name, Is.EqualTo("Bruno"));
         }
     }
 
@@ -1153,14 +1156,14 @@ public sealed class DefaultListableObjectFactoryTests
             lof.RegisterObjectDefinition("singleton", singleton);
 
             TestObject to2 = lof.CreateObject("singleton", typeof(TestObject), null) as TestObject;
-            Assert.IsNotNull(to2);
+            Assert.That(to2, Is.Not.Null);
             // no props set
-            Assert.AreEqual(0, to2.Age);
-            Assert.AreEqual(null, to2.Name);
+            Assert.That(to2.Age, Is.EqualTo(0));
+            Assert.That(to2.Name, Is.EqualTo(null));
             // no object postprocessors executed!
-            Assert.AreEqual(null, to2.ObjectName);
-            Assert.AreEqual(null, to2.ObjectFactory);
-            Assert.AreEqual(null, to2.SharedState);
+            Assert.That(to2.ObjectName, Is.EqualTo(null));
+            Assert.That(to2.ObjectFactory, Is.EqualTo(null));
+            Assert.That(to2.SharedState, Is.EqualTo(null));
         }
     }
 
@@ -1180,37 +1183,37 @@ public sealed class DefaultListableObjectFactoryTests
 
             // a call to GetObject() results in a normally configured instance
             TestObject to = lof.GetObject("singleton") as TestObject;
-            Assert.IsNotNull(to);
+            Assert.That(to, Is.Not.Null);
             // props set
-            Assert.AreEqual(27, to.Age);
-            Assert.AreEqual("Bruno", to.Name);
+            Assert.That(to.Age, Is.EqualTo(27));
+            Assert.That(to.Name, Is.EqualTo("Bruno"));
             // object postprocessors executed!
-            Assert.AreEqual("singleton", to.ObjectName);
-            Assert.AreEqual(lof, to.ObjectFactory);
-            Assert.IsNotNull(to.SharedState);
+            Assert.That(to.ObjectName, Is.EqualTo("singleton"));
+            Assert.That(to.ObjectFactory, Is.EqualTo(lof));
+            Assert.That(to.SharedState, Is.Not.Null);
 
             // altough configured as singleton, calling CreateObject prevents the instance from being cached
             // otherwise the container could not guarantee the results of calling GetObject() to other clients.
             TestObject to2 = lof.CreateObject("singleton", typeof(TestObject), null) as TestObject;
-            Assert.IsNotNull(to2);
+            Assert.That(to2, Is.Not.Null);
             // no props set
-            Assert.AreEqual(0, to2.Age);
-            Assert.AreEqual(null, to2.Name);
+            Assert.That(to2.Age, Is.EqualTo(0));
+            Assert.That(to2.Name, Is.EqualTo(null));
             // no object postprocessors executed!
-            Assert.AreEqual(null, to2.ObjectName);
-            Assert.AreEqual(null, to2.ObjectFactory);
-            Assert.AreEqual(null, to2.SharedState);
+            Assert.That(to2.ObjectName, Is.EqualTo(null));
+            Assert.That(to2.ObjectFactory, Is.EqualTo(null));
+            Assert.That(to2.SharedState, Is.EqualTo(null));
 
             // a call to GetObject() results in a normally configured instance
             TestObject to3 = lof.GetObject("singleton") as TestObject;
-            Assert.IsNotNull(to3);
+            Assert.That(to3, Is.Not.Null);
             // props set
-            Assert.AreEqual(27, to3.Age);
-            Assert.AreEqual("Bruno", to3.Name);
+            Assert.That(to3.Age, Is.EqualTo(27));
+            Assert.That(to3.Name, Is.EqualTo("Bruno"));
             // object postprocessors executed!
-            Assert.AreEqual("singleton", to3.ObjectName);
-            Assert.AreEqual(lof, to3.ObjectFactory);
-            Assert.IsNotNull(to3.SharedState);
+            Assert.That(to3.ObjectName, Is.EqualTo("singleton"));
+            Assert.That(to3.ObjectFactory, Is.EqualTo(lof));
+            Assert.That(to3.SharedState, Is.Not.Null);
         }
     }
 
@@ -1227,9 +1230,9 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterObjectDefinition("foo", def);
 
         ITestObject foo = fac["foo"] as ITestObject;
-        Assert.IsNotNull(foo, "Couldn't pull manually registered instance out of the factory.");
-        Assert.AreEqual(expectedName, foo.Name, "Dependency 'name' was not resolved using a named ctor arg.");
-        Assert.AreEqual(expectedAge, foo.Age, "Dependency 'age' was not resolved using a named ctor arg.");
+        Assert.That(foo, Is.Not.Null, "Couldn't pull manually registered instance out of the factory.");
+        Assert.That(foo.Name, Is.EqualTo(expectedName), "Dependency 'name' was not resolved using a named ctor arg.");
+        Assert.That(foo.Age, Is.EqualTo(expectedAge), "Dependency 'age' was not resolved using a named ctor arg.");
     }
 
     [Test]
@@ -1245,9 +1248,9 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterObjectDefinition("foo", def);
 
         ITestObject foo = fac["foo"] as ITestObject;
-        Assert.IsNotNull(foo, "Couldn't pull manually registered instance out of the factory.");
-        Assert.AreEqual(expectedName, foo.Name, "Dependency 'name' was not resolved using a named ctor arg.");
-        Assert.AreEqual(expectedAge, foo.Age, "Dependency 'age' was not resolved using a named ctor arg.");
+        Assert.That(foo, Is.Not.Null, "Couldn't pull manually registered instance out of the factory.");
+        Assert.That(foo.Name, Is.EqualTo(expectedName), "Dependency 'name' was not resolved using a named ctor arg.");
+        Assert.That(foo.Age, Is.EqualTo(expectedAge), "Dependency 'age' was not resolved using a named ctor arg.");
     }
 
     [Test]
@@ -1263,9 +1266,9 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterObjectDefinition("foo", def);
 
         ITestObject foo = fac["foo"] as ITestObject;
-        Assert.IsNotNull(foo, "Couldn't pull manually registered instance out of the factory.");
-        Assert.AreEqual(expectedName, foo.Name, "Dependency 'name' was not resolved an indexed ctor arg.");
-        Assert.AreEqual(expectedAge, foo.Age, "Dependency 'age' was not resolved using a named ctor arg.");
+        Assert.That(foo, Is.Not.Null, "Couldn't pull manually registered instance out of the factory.");
+        Assert.That(foo.Name, Is.EqualTo(expectedName), "Dependency 'name' was not resolved an indexed ctor arg.");
+        Assert.That(foo.Age, Is.EqualTo(expectedAge), "Dependency 'age' was not resolved using a named ctor arg.");
     }
 
     [Test]
@@ -1288,10 +1291,10 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterObjectDefinition("doctor", autowired);
 
         ITestObject foo = fac["foo"] as ITestObject;
-        Assert.IsNotNull(foo, "Couldn't pull manually registered instance out of the factory.");
-        Assert.AreEqual(expectedName, foo.Name, "Dependency 'name' was not resolved an indexed ctor arg.");
-        Assert.AreEqual(expectedAge, foo.Age, "Dependency 'age' was not resolved using a named ctor arg.");
-        Assert.AreEqual(expectedCompany, foo.Doctor.Company, "Dependency 'doctor.Company' was not resolved using autowiring.");
+        Assert.That(foo, Is.Not.Null, "Couldn't pull manually registered instance out of the factory.");
+        Assert.That(foo.Name, Is.EqualTo(expectedName), "Dependency 'name' was not resolved an indexed ctor arg.");
+        Assert.That(foo.Age, Is.EqualTo(expectedAge), "Dependency 'age' was not resolved using a named ctor arg.");
+        Assert.That(foo.Doctor.Company, Is.EqualTo(expectedCompany), "Dependency 'doctor.Company' was not resolved using autowiring.");
     }
 
     [Test]
@@ -1334,11 +1337,11 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterObjectDefinition("a_lawyer", lawyer);
 
         ITestObject foo = fac["foo"] as ITestObject;
-        Assert.IsNotNull(foo, "Couldn't pull manually registered instance out of the factory.");
-        Assert.AreEqual(expectedName, foo.Name, "Dependency 'name' was not resolved an indexed ctor arg.");
-        Assert.AreEqual(expectedAge, foo.Age, "Dependency 'age' was not resolved using a named ctor arg.");
-        Assert.AreEqual(expectedCompany, foo.Doctor.Company, "Dependency 'doctor.Company' was not resolved using autowiring.");
-        Assert.AreEqual(expectedLawyersCompany, foo.Lawyer.Company, "Dependency 'lawyer.Company' was not resolved using another named ctor arg.");
+        Assert.That(foo, Is.Not.Null, "Couldn't pull manually registered instance out of the factory.");
+        Assert.That(foo.Name, Is.EqualTo(expectedName), "Dependency 'name' was not resolved an indexed ctor arg.");
+        Assert.That(foo.Age, Is.EqualTo(expectedAge), "Dependency 'age' was not resolved using a named ctor arg.");
+        Assert.That(foo.Doctor.Company, Is.EqualTo(expectedCompany), "Dependency 'doctor.Company' was not resolved using autowiring.");
+        Assert.That(foo.Lawyer.Company, Is.EqualTo(expectedLawyersCompany), "Dependency 'lawyer.Company' was not resolved using another named ctor arg.");
     }
 
     [Test]
@@ -1359,7 +1362,7 @@ public sealed class DefaultListableObjectFactoryTests
         }
         catch (ObjectCreationException ex)
         {
-            Assert.AreEqual(typeof(ObjectCurrentlyInCreationException), ex.GetBaseException().GetType(),
+            Assert.That(ex.GetBaseException().GetType(), Is.EqualTo(typeof(ObjectCurrentlyInCreationException)),
                 "Circular dependency was set up; should have caught an ObjectCurrentlyInCreationException instance.");
         }
     }
@@ -1381,10 +1384,10 @@ public sealed class DefaultListableObjectFactoryTests
         dlof.RegisterObjectDefinition("factory", factory);
 
         TestObject instance = dlof.GetObject("factory") as TestObject;
-        Assert.IsNotNull(instance);
+        Assert.That(instance, Is.Not.Null);
 
-        Assert.AreEqual("Noone", instance.Name, "Name dependency injected via IConfigurableObjectFactory (instance) failed (was 'Factory singleton').");
-        Assert.AreEqual(9781, instance.Age, "Age dependency injected via IObjectFactory.ConfigureObject(instance) failed (was 25).");
+        Assert.That(instance.Name, Is.EqualTo("Noone"), "Name dependency injected via IConfigurableObjectFactory (instance) failed (was 'Factory singleton').");
+        Assert.That(instance.Age, Is.EqualTo(9781), "Age dependency injected via IObjectFactory.ConfigureObject(instance) failed (was 25).");
     }
 
     [Test]
@@ -1406,10 +1409,10 @@ public sealed class DefaultListableObjectFactoryTests
         dlof.RegisterObjectDefinition("factory", factory);
 
         TestObject instance = dlof.GetObject("factory") as TestObject;
-        Assert.IsNotNull(instance);
+        Assert.That(instance, Is.Not.Null);
 
-        Assert.AreEqual("Noone", instance.Name, "Name dependency injected via IConfigurableObjectFactory (instance) failed (was 'Factory singleton').");
-        Assert.AreEqual(9781, instance.Age, "Age dependency injected via IObjectFactory.ConfigureObject(instance) failed (was 25).");
+        Assert.That(instance.Name, Is.EqualTo("Noone"), "Name dependency injected via IConfigurableObjectFactory (instance) failed (was 'Factory singleton').");
+        Assert.That(instance.Age, Is.EqualTo(9781), "Age dependency injected via IObjectFactory.ConfigureObject(instance) failed (was 25).");
     }
 
     [Test]
@@ -1424,8 +1427,8 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory fac = new DefaultListableObjectFactory();
         fac.RegisterObjectDefinition(instance.GetType().FullName, everyman);
         fac.ConfigureObject(instance, instance.GetType().FullName);
-        Assert.AreEqual("Noone", instance.Name, "Name dependency injected via IObjectFactory.ConfigureObject(instance) failed (was null).");
-        Assert.AreEqual(9781, instance.Age, "Age dependency injected via IObjectFactory.ConfigureObject(instance) failed (was null).");
+        Assert.That(instance.Name, Is.EqualTo("Noone"), "Name dependency injected via IObjectFactory.ConfigureObject(instance) failed (was null).");
+        Assert.That(instance.Age, Is.EqualTo(9781), "Age dependency injected via IObjectFactory.ConfigureObject(instance) failed (was null).");
     }
 
     [Test]
@@ -1440,9 +1443,9 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory fac = new DefaultListableObjectFactory();
         fac.RegisterObjectDefinition("everyman", everyman);
         fac.ConfigureObject(instance, "everyman");
-        Assert.AreEqual(true, instance.InitCompleted, "AfterPropertiesSet() was not invoked by IObjectFactory.ConfigureObject(instance).");
-        Assert.AreEqual("Noone", instance.Name, "Name dependency injected via IObjectFactory.ConfigureObject(instance) failed (was null).");
-        Assert.AreEqual(9781, instance.Age, "Age dependency injected via IObjectFactory.ConfigureObject(instance) failed (was null).");
+        Assert.That(instance.InitCompleted, Is.EqualTo(true), "AfterPropertiesSet() was not invoked by IObjectFactory.ConfigureObject(instance).");
+        Assert.That(instance.Name, Is.EqualTo("Noone"), "Name dependency injected via IObjectFactory.ConfigureObject(instance) failed (was null).");
+        Assert.That(instance.Age, Is.EqualTo(9781), "Age dependency injected via IObjectFactory.ConfigureObject(instance) failed (was null).");
     }
 
     [Test]
@@ -1487,7 +1490,7 @@ public sealed class DefaultListableObjectFactoryTests
             fac.PreInstantiateSingletons();
         }
 
-        Assert.AreEqual(2, GoodDisposable.DisposeCount, "All IDisposable singletons must have their Dispose() method called... one of them bailed, and as a result the rest were (apparently) not Dispose()d.");
+        Assert.That(GoodDisposable.DisposeCount, Is.EqualTo(2), "All IDisposable singletons must have their Dispose() method called... one of them bailed, and as a result the rest were (apparently) not Dispose()d.");
         GoodDisposable.DisposeCount = 0;
     }
 
@@ -1506,7 +1509,7 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterObjectDefinition("force-init", initializer);
 
         fac.GetObject("foo");
-        Assert.IsTrue(StaticInitializer.InitWasCalled, "Boing");
+        Assert.That(StaticInitializer.InitWasCalled, Is.True, "Boing");
     }
 
     /// <summary>
@@ -1547,7 +1550,7 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterObjectDefinition("foo", def);
 
         DerivedTestObject tob = (DerivedTestObject) fac.GetObject("foo");
-        Assert.AreEqual(expectedNickname, tob.Nickname,
+        Assert.That(tob.Nickname, Is.EqualTo(expectedNickname),
             "Property is not being set to the NEWed property on the subclass.");
     }
 
@@ -1559,7 +1562,7 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory fac = new DefaultListableObjectFactory();
         fac.RegisterObjectDefinition("foo", def);
         DerivedFoo foo = (DerivedFoo) fac.GetObject("foo");
-        Assert.AreEqual(typeof(DerivedBar), foo.Bar.GetType());
+        Assert.That(foo.Bar.GetType(), Is.EqualTo(typeof(DerivedBar)));
     }
 
     [Test]
@@ -1583,8 +1586,8 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterObjectDefinition("child", childDef);
 
         TestObject child = (TestObject) fac.GetObject("child");
-        Assert.AreEqual(ExpectedName, child.Name);
-        Assert.AreEqual(ExpectedAge, child.Age);
+        Assert.That(child.Name, Is.EqualTo(ExpectedName));
+        Assert.That(child.Age, Is.EqualTo(ExpectedAge));
     }
 
     [Test]
@@ -1637,7 +1640,7 @@ public sealed class DefaultListableObjectFactoryTests
         fac.RegisterAlias("parent", TheParentsAlias);
 
         IObjectDefinition od = fac.GetObjectDefinition(TheParentsAlias);
-        Assert.IsNotNull(od);
+        Assert.That(od, Is.Not.Null);
     }
 
     [Test]
@@ -1648,11 +1651,11 @@ public sealed class DefaultListableObjectFactoryTests
         DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 
         const string errMsg = "Wrong number of IObjectPostProcessors being reported by the ObjectPostProcessorCount property.";
-        Assert.AreEqual(0, lof.ObjectPostProcessorCount, errMsg);
+        Assert.That(lof.ObjectPostProcessorCount, Is.EqualTo(0), errMsg);
         lof.AddObjectPostProcessor(proc1);
-        Assert.AreEqual(1, lof.ObjectPostProcessorCount, errMsg);
+        Assert.That(lof.ObjectPostProcessorCount, Is.EqualTo(1), errMsg);
         lof.AddObjectPostProcessor(proc1);
-        Assert.AreEqual(1, lof.ObjectPostProcessorCount, errMsg);
+        Assert.That(lof.ObjectPostProcessorCount, Is.EqualTo(1), errMsg);
     }
 
     [Test]
@@ -1661,7 +1664,7 @@ public sealed class DefaultListableObjectFactoryTests
         IConfigurableObjectFactory of = new DefaultListableObjectFactory();
         object testObject = new object();
         object resultObject = of.ConfigureObject(testObject, "non-existing object definition name");
-        Assert.AreSame(testObject, resultObject);
+        Assert.That(resultObject, Is.SameAs(testObject));
     }
 
     private class TestObjectPostProcessor : IObjectPostProcessor
@@ -1694,7 +1697,7 @@ public sealed class DefaultListableObjectFactoryTests
 
         object testObject = "TestObject";
         object resultObject = of.ConfigureObject(testObject, "myObjectDefinition");
-        Assert.AreSame(wrapperObject, resultObject);
+        Assert.That(resultObject, Is.SameAs(wrapperObject));
     }
 
     [Test]
@@ -1706,7 +1709,7 @@ public sealed class DefaultListableObjectFactoryTests
 
         object testObject = "TestObject";
         object resultObject = of.ConfigureObject(testObject, "non-existant definition");
-        Assert.AreSame(testObject, resultObject);
+        Assert.That(resultObject, Is.SameAs(testObject));
     }
 
     [Test]
@@ -1717,7 +1720,7 @@ public sealed class DefaultListableObjectFactoryTests
         parent.RegisterSingleton("parent", new Parent());
         child.RegisterObjectDefinition("child", new RootObjectDefinition(typeof(Child), AutoWiringMode.AutoDetect));
         Child c = (Child) child.GetObject("child");
-        Assert.IsNotNull(c);
+        Assert.That(c, Is.Not.Null);
     }
 
     private class A : IFactoryObject, ISerializable
@@ -1810,8 +1813,8 @@ public sealed class DefaultListableObjectFactoryTests
         of.RegisterObjectDefinition("mod", new RootObjectDefinition(typeof(A)));
 
         var names = of.GetObjectNamesForType(typeof(ISerializable), false, false);
-        Assert.IsNotEmpty((ICollection) names);
-        Assert.AreEqual("&mod", names[0]);
+        Assert.That((ICollection) names, Is.Not.Empty);
+        Assert.That(names[0], Is.EqualTo("&mod"));
     }
 
     [Test, MaxTime(1000)]

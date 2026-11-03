@@ -30,9 +30,9 @@ public class NativeAdoTests
     {
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/nativeAdoTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         ITestObjectDao dao = (ITestObjectDao) ctx["testObjectDao"];
-        Assert.IsNotNull(dao);
+        Assert.That(dao, Is.Not.Null);
         dao.Create("John", 45);
     }
 

@@ -36,6 +36,6 @@ public class SiimpleCtorWiringTests
     {
         XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("simple-constructor-arg.xml", GetType()));
         ConstructorDependenciesObject obj = (ConstructorDependenciesObject) xof.GetObject("rod4");
-        Assert.AreEqual("Kerry2", obj.Spouse1.Name);
+        Assert.That(obj.Spouse1.Name, Is.EqualTo("Kerry2"));
     }
 }

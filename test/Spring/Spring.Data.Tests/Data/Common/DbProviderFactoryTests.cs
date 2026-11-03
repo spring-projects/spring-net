@@ -42,7 +42,7 @@ public class DbProviderFactoryTests
         public override void DoExecute()
         {
             object result = DbProviderFactory.GetDbProvider(providerName);
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
         }
     }
 
@@ -88,16 +88,16 @@ public class DbProviderFactoryTests
     public void AdditionalResourceName()
     {
         IDbProvider provider = DbProviderFactory.GetDbProvider("Test-SqlServer-2.0");
-        Assert.IsNotNull(provider);
+        Assert.That(provider, Is.Not.Null);
     }
 
     [Test]
     public void BadErrorExpression()
     {
         IDbProvider provider = DbProviderFactory.GetDbProvider("Test-SqlServer-2.0-BadErrorCodeExpression");
-        Assert.IsNotNull(provider);
+        Assert.That(provider, Is.Not.Null);
         string errorCode = provider.ExtractError(new Exception("foo"));
-        Assert.AreEqual("156", errorCode);
+        Assert.That(errorCode, Is.EqualTo("156"));
     }
 
 #if !NETCOREAPP
@@ -106,58 +106,58 @@ public class DbProviderFactoryTests
     {
         System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US", false);
         //IApplicationContext ctx = DbProviderFactory.ApplicationContext;
-        //Assert.IsNotNull(ctx);
+        //Assert.That(ctx, Is.Not.Null);
         System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("tr-TR", false);
         IDbProvider provider = DbProviderFactory.GetDbProvider("SqlServer-2.0");
         AssertIsSqlServer2005(provider);
         provider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
         AssertIsSqlServer2005(provider);
-        Assert.IsNull(provider.ConnectionString);
-        Assert.IsNotNull(provider.CreateCommand());
-        Assert.IsNotNull(provider.CreateCommandBuilder());
-        Assert.IsNotNull(provider.CreateConnection());
-        Assert.IsNotNull(provider.CreateDataAdapter());
-        Assert.IsNotNull(provider.CreateParameter());
-        Assert.AreEqual("@Foo", provider.CreateParameterName("Foo"));
+        Assert.That(provider.ConnectionString, Is.Null);
+        Assert.That(provider.CreateCommand(), Is.Not.Null);
+        Assert.That(provider.CreateCommandBuilder(), Is.Not.Null);
+        Assert.That(provider.CreateConnection(), Is.Not.Null);
+        Assert.That(provider.CreateDataAdapter(), Is.Not.Null);
+        Assert.That(provider.CreateParameter(), Is.Not.Null);
+        Assert.That(provider.CreateParameterName("Foo"), Is.EqualTo("@Foo"));
     }
 
     [Test]
     public void DefaultInstanceWithOleDb20()
     {
         IDbProvider provider = DbProviderFactory.GetDbProvider("OleDb-2.0");
-        Assert.AreEqual("OleDb, provider V2.0.0.0 in framework .NET V2", provider.DbMetadata.ProductName);
-        Assert.IsNotNull(provider.CreateCommand());
-        Assert.IsNotNull(provider.CreateCommandBuilder());
-        Assert.IsNotNull(provider.CreateConnection());
-        Assert.IsNotNull(provider.CreateDataAdapter());
-        Assert.IsNotNull(provider.CreateParameter());
-        Assert.AreEqual("?", provider.CreateParameterName("Foo"));
+        Assert.That(provider.DbMetadata.ProductName, Is.EqualTo("OleDb, provider V2.0.0.0 in framework .NET V2"));
+        Assert.That(provider.CreateCommand(), Is.Not.Null);
+        Assert.That(provider.CreateCommandBuilder(), Is.Not.Null);
+        Assert.That(provider.CreateConnection(), Is.Not.Null);
+        Assert.That(provider.CreateDataAdapter(), Is.Not.Null);
+        Assert.That(provider.CreateParameter(), Is.Not.Null);
+        Assert.That(provider.CreateParameterName("Foo"), Is.EqualTo("?"));
     }
 
     [Test]
     public void DefaultInstanceWithMicrosoftOracleClient20()
     {
         IDbProvider provider = DbProviderFactory.GetDbProvider("OracleClient-2.0");
-        Assert.AreEqual("Oracle, Microsoft provider V2.0.0.0", provider.DbMetadata.ProductName);
-        Assert.IsNotNull(provider.CreateCommand());
-        Assert.IsNotNull(provider.CreateCommandBuilder());
-        Assert.IsNotNull(provider.CreateConnection());
-        Assert.IsNotNull(provider.CreateDataAdapter());
-        Assert.IsNotNull(provider.CreateParameter());
-        Assert.AreEqual(":Foo", provider.CreateParameterName("Foo"));
+        Assert.That(provider.DbMetadata.ProductName, Is.EqualTo("Oracle, Microsoft provider V2.0.0.0"));
+        Assert.That(provider.CreateCommand(), Is.Not.Null);
+        Assert.That(provider.CreateCommandBuilder(), Is.Not.Null);
+        Assert.That(provider.CreateConnection(), Is.Not.Null);
+        Assert.That(provider.CreateDataAdapter(), Is.Not.Null);
+        Assert.That(provider.CreateParameter(), Is.Not.Null);
+        Assert.That(provider.CreateParameterName("Foo"), Is.EqualTo(":Foo"));
     }
 
     [Test]
     public void DefaultInstanceWithOleDb40()
     {
         IDbProvider provider = DbProviderFactory.GetDbProvider("OleDb-4.0");
-        Assert.AreEqual("OleDb, provider V4.0.0.0 in framework .NET V4", provider.DbMetadata.ProductName);
-        Assert.IsNotNull(provider.CreateCommand());
-        Assert.IsNotNull(provider.CreateCommandBuilder());
-        Assert.IsNotNull(provider.CreateConnection());
-        Assert.IsNotNull(provider.CreateDataAdapter());
-        Assert.IsNotNull(provider.CreateParameter());
-        Assert.AreEqual("?", provider.CreateParameterName("Foo"));
+        Assert.That(provider.DbMetadata.ProductName, Is.EqualTo("OleDb, provider V4.0.0.0 in framework .NET V4"));
+        Assert.That(provider.CreateCommand(), Is.Not.Null);
+        Assert.That(provider.CreateCommandBuilder(), Is.Not.Null);
+        Assert.That(provider.CreateConnection(), Is.Not.Null);
+        Assert.That(provider.CreateDataAdapter(), Is.Not.Null);
+        Assert.That(provider.CreateParameter(), Is.Not.Null);
+        Assert.That(provider.CreateParameterName("Foo"), Is.EqualTo("?"));
     }
 
     [Test]
@@ -165,13 +165,13 @@ public class DbProviderFactoryTests
     {
         IDbProvider provider = DbProviderFactory.GetDbProvider("SqlServer-4.0");
         AssertIsSqlServer40(provider);
-        Assert.IsNull(provider.ConnectionString);
-        Assert.IsNotNull(provider.CreateCommand());
-        Assert.IsNotNull(provider.CreateCommandBuilder());
-        Assert.IsNotNull(provider.CreateConnection());
-        Assert.IsNotNull(provider.CreateDataAdapter());
-        Assert.IsNotNull(provider.CreateParameter());
-        Assert.AreEqual("@Foo", provider.CreateParameterName("Foo"));
+        Assert.That(provider.ConnectionString, Is.Null);
+        Assert.That(provider.CreateCommand(), Is.Not.Null);
+        Assert.That(provider.CreateCommandBuilder(), Is.Not.Null);
+        Assert.That(provider.CreateConnection(), Is.Not.Null);
+        Assert.That(provider.CreateDataAdapter(), Is.Not.Null);
+        Assert.That(provider.CreateParameter(), Is.Not.Null);
+        Assert.That(provider.CreateParameterName("Foo"), Is.EqualTo("@Foo"));
     }
 
     [Test]
@@ -181,7 +181,7 @@ public class DbProviderFactoryTests
         DbProviderFactory.GetDbProvider("SqlServer-2.0");
         IApplicationContext ctx = DbProviderFactory.ApplicationContext;
         var dbProviderNames = ctx.GetObjectNamesForType(typeof (IDbProvider));
-        Assert.IsTrue(dbProviderNames.Count > 0);
+        Assert.That(dbProviderNames.Count > 0, Is.True);
     }
 #endif
 
@@ -243,10 +243,10 @@ public class DbProviderFactoryTests
     private static void AssertOracleProvider(string providerName, string productName)
     {
         IDbProvider provider = DbProviderFactory.GetDbProvider(providerName);
-        Assert.AreEqual(productName, provider.DbMetadata.ProductName);
+        Assert.That(provider.DbMetadata.ProductName, Is.EqualTo(productName));
 
         var command = provider.CreateCommand();
-        Assert.IsNotNull(command);
+        Assert.That(command, Is.Not.Null);
 
         // check if parameter has readable BindByName property
         var property = command.GetType().GetProperty("BindByName");
@@ -256,11 +256,11 @@ public class DbProviderFactoryTests
             Assert.That(bindByNameValue, Is.EqualTo(provider.DbMetadata.BindByName), "BindByName had wrong value");
         }
 
-        Assert.IsNotNull(provider.CreateCommandBuilder());
-        Assert.IsNotNull(provider.CreateConnection());
-        Assert.IsNotNull(provider.CreateDataAdapter());
-        Assert.IsNotNull(provider.CreateParameter());
-        Assert.AreEqual(":Foo", provider.CreateParameterName("Foo"));
+        Assert.That(provider.CreateCommandBuilder(), Is.Not.Null);
+        Assert.That(provider.CreateConnection(), Is.Not.Null);
+        Assert.That(provider.CreateDataAdapter(), Is.Not.Null);
+        Assert.That(provider.CreateParameter(), Is.Not.Null);
+        Assert.That(provider.CreateParameterName("Foo"), Is.EqualTo(":Foo"));
     }
 
     /*
@@ -270,7 +270,7 @@ public class DbProviderFactoryTests
         DbProviderFactory.DBPROVIDER_ADDITIONAL_RESOURCE_NAME =
             "assembly://Spring.Data.Tests/Spring.Data.Common/AdditionalProviders.xml";
         IDbProvider provider = DbProviderFactory.GetDbProvider("MySqlPersonal");
-        Assert.AreEqual("MySQL, MySQL provider 1.0.7.30072", provider.DbMetadata.ProductName);
+        Assert.That(provider.DbMetadata.ProductName, Is.EqualTo("MySQL, MySQL provider 1.0.7.30072"));
 
     }
 
@@ -278,26 +278,26 @@ public class DbProviderFactoryTests
 
     private void AssertIsSqlServer2005(IDbProvider provider)
     {
-        Assert.AreEqual("Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0",
-            provider.DbMetadata.ProductName);
+        Assert.That(provider.DbMetadata.ProductName,
+            Is.EqualTo("Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0"));
         AssertCommonSqlServerErrorCodes(provider);
     }
 
     private void AssertIsSqlServer40(IDbProvider provider)
     {
-        Assert.AreEqual("Microsoft SQL Server, provider V4.0.0.0 in framework .NET V4.0",
-            provider.DbMetadata.ProductName);
+        Assert.That(provider.DbMetadata.ProductName,
+            Is.EqualTo("Microsoft SQL Server, provider V4.0.0.0 in framework .NET V4.0"));
         AssertCommonSqlServerErrorCodes(provider);
     }
 
     private static void AssertCommonSqlServerErrorCodes(IDbProvider provider)
     {
         ErrorCodes codes = provider.DbMetadata.ErrorCodes;
-        Assert.IsTrue(codes.BadSqlGrammarCodes.Length > 0);
-        Assert.IsTrue(codes.DataIntegrityViolationCodes.Length > 0);
+        Assert.That(codes.BadSqlGrammarCodes.Length > 0, Is.True);
+        Assert.That(codes.DataIntegrityViolationCodes.Length > 0, Is.True);
         // This had better be a Bad SQL Grammar code
-        Assert.IsTrue(Array.IndexOf(codes.BadSqlGrammarCodes, "156") >= 0);
+        Assert.That(Array.IndexOf(codes.BadSqlGrammarCodes, "156") >= 0, Is.True);
         // This had better NOT be
-        Assert.IsFalse(Array.IndexOf(codes.BadSqlGrammarCodes, "1xx56") >= 0);
+        Assert.That(Array.IndexOf(codes.BadSqlGrammarCodes, "1xx56") >= 0, Is.False);
     }
 }

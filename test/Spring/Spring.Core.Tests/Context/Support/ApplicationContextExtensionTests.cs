@@ -41,19 +41,19 @@ public class ApplicationContextExtensionTests
     {
         ContextRegistry.Clear();
         IApplicationContext ctx = ContextRegistry.GetContext();
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
 
         IApplicationContext parentCtx = ContextRegistry.GetContext("Parent");
-        Assert.IsNotNull(parentCtx, "Parent context not registered.");
+        Assert.That(parentCtx, Is.Not.Null, "Parent context not registered.");
 
         TestObject to = (TestObject) ctx.GetObject("Parent");
-        Assert.IsNotNull(to);
-        Assert.IsTrue(TestObjectConfigParser.ParseElementCalled);
+        Assert.That(to, Is.Not.Null);
+        Assert.That(TestObjectConfigParser.ParseElementCalled, Is.True);
 
         TestObject to2 = (TestObject) ctx.GetObject("testObject");
-        Assert.AreEqual(12, to2.Age);
-        Assert.AreEqual("John", to2.Name);
+        Assert.That(to2.Age, Is.EqualTo(12));
+        Assert.That(to2.Name, Is.EqualTo("John"));
 
-        Assert.AreEqual(2, ctx.ObjectDefinitionCount);
+        Assert.That(ctx.ObjectDefinitionCount, Is.EqualTo(2));
     }
 }

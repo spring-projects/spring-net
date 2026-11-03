@@ -74,8 +74,8 @@ public sealed class CacheResultAdviceTests
         // check that the null retVal is cached as well - it might be
         // the result of an expensive webservice/database call etc.
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(1, resultCache.Count);
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -92,12 +92,12 @@ public sealed class CacheResultAdviceTests
         // check that the null retVal is cached as well - it might be
         // the result of an expensive webservice/database call etc.
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(1, binaryFormatterCache.Count);
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(binaryFormatterCache.Count, Is.EqualTo(1));
 
         // cached value should be returned
         object cachedValue = advice.Invoke(mockInvocation);
-        Assert.IsNull(cachedValue, "Should recognize cached value as null-value marker.");
+        Assert.That(cachedValue, Is.Null, "Should recognize cached value as null-value marker.");
     }
 
     [Test]
@@ -113,14 +113,14 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(1, resultCache.Count);
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
 
         // cached value should be returned
         object cachedValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, cachedValue);
-        Assert.AreEqual(1, resultCache.Count);
-        Assert.AreSame(returnValue, cachedValue);
+        Assert.That(cachedValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
+        Assert.That(cachedValue, Is.SameAs(returnValue));
     }
 
     [Test]
@@ -136,17 +136,17 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(1, resultCache.Count);
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
 
         // cached value should be returned
         object cachedValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, cachedValue);
-        Assert.AreNotSame(expectedReturnValue, cachedValue);
-        Assert.AreEqual(expectedReturnValue, resultCache.Get(5));
-        Assert.AreEqual(1, resultCache.Count);
-        Assert.AreSame(returnValue, cachedValue);
-        Assert.AreSame(cachedValue, resultCache.Get(5));
+        Assert.That(cachedValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(cachedValue, Is.Not.SameAs(expectedReturnValue));
+        Assert.That(resultCache.Get(5), Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
+        Assert.That(cachedValue, Is.SameAs(returnValue));
+        Assert.That(resultCache.Get(5), Is.SameAs(cachedValue));
     }
 
     [Test]
@@ -163,19 +163,19 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to result cache and each item to item cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(1, resultCache.Count);
-        Assert.AreEqual(3, itemCache.Count);
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
+        Assert.That(itemCache.Count, Is.EqualTo(3));
 
         // cached value should be returned
         object cachedValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, cachedValue);
-        Assert.AreNotSame(expectedReturnValue, cachedValue);
-        Assert.AreEqual(expectedReturnValue, resultCache.Get(5));
-        Assert.AreEqual(1, resultCache.Count);
-        Assert.AreEqual(3, itemCache.Count);
-        Assert.AreSame(returnValue, cachedValue);
-        Assert.AreSame(cachedValue, resultCache.Get(5));
+        Assert.That(cachedValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(cachedValue, Is.Not.SameAs(expectedReturnValue));
+        Assert.That(resultCache.Get(5), Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
+        Assert.That(itemCache.Count, Is.EqualTo(3));
+        Assert.That(cachedValue, Is.SameAs(returnValue));
+        Assert.That(resultCache.Get(5), Is.SameAs(cachedValue));
     }
 
     [Test]
@@ -191,20 +191,20 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to result cache and each item to item cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(0, resultCache.Count);
-        Assert.AreEqual(3, itemCache.Count);
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(0));
+        Assert.That(itemCache.Count, Is.EqualTo(3));
 
         ExpectAttributeRetrieval(method);
         ExpectCallToProceed(new object[] { "one", "two", "three" });
         ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
 
         object newReturnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, newReturnValue);
-        Assert.AreEqual(0, resultCache.Count);
-        Assert.AreEqual(3, itemCache.Count);
-        Assert.AreEqual("two", itemCache.Get("two"));
-        Assert.AreNotSame(returnValue, newReturnValue);
+        Assert.That(newReturnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(0));
+        Assert.That(itemCache.Count, Is.EqualTo(3));
+        Assert.That(itemCache.Get("two"), Is.EqualTo("two"));
+        Assert.That(newReturnValue, Is.Not.SameAs(returnValue));
     }
 
     [Test]
@@ -220,9 +220,9 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to result cache and each item to item cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(0, resultCache.Count);
-        Assert.AreEqual(6, itemCache.Count);
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(0));
+        Assert.That(itemCache.Count, Is.EqualTo(6));
 
         // and again, but without Proceed() and item cache access...
         ExpectAttributeRetrieval(method);
@@ -231,12 +231,12 @@ public sealed class CacheResultAdviceTests
 
         // new return value should be returned
         object newReturnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, newReturnValue);
-        Assert.AreEqual(0, resultCache.Count);
-        Assert.AreEqual(6, itemCache.Count);
-        Assert.AreEqual("two", itemCache.Get("two"));
-        Assert.AreEqual("two", itemCache.Get("TWO"));
-        Assert.AreNotSame(returnValue, newReturnValue);
+        Assert.That(newReturnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(0));
+        Assert.That(itemCache.Count, Is.EqualTo(6));
+        Assert.That(itemCache.Get("two"), Is.EqualTo("two"));
+        Assert.That(itemCache.Get("TWO"), Is.EqualTo("two"));
+        Assert.That(newReturnValue, Is.Not.SameAs(returnValue));
     }
 
     [Test]
@@ -252,10 +252,10 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to result cache and each item to item cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(2, itemCache.Count);
-        Assert.AreEqual("two", itemCache.Get("two"));
-        Assert.AreEqual("three", itemCache.Get("three"));
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(itemCache.Count, Is.EqualTo(2));
+        Assert.That(itemCache.Get("two"), Is.EqualTo("two"));
+        Assert.That(itemCache.Get("three"), Is.EqualTo("three"));
     }
 
     [Test]
@@ -271,8 +271,8 @@ public sealed class CacheResultAdviceTests
 
         // return value should not be added to cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(0, resultCache.Count);
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -290,10 +290,10 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to result cache and each item to item cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(1, resultCache.Count);
-        Assert.AreEqual(3, itemCache.Count);
-        Assert.AreSame(expectedReturnValue, returnValue);
-        Assert.AreSame(expectedReturnValue, resultCache.Get(5));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
+        Assert.That(itemCache.Count, Is.EqualTo(3));
+        Assert.That(returnValue, Is.SameAs(expectedReturnValue));
+        Assert.That(resultCache.Get(5), Is.SameAs(expectedReturnValue));
 
         // and again, but without Proceed() and item cache access...
         ExpectAttributeRetrieval(method);
@@ -301,11 +301,11 @@ public sealed class CacheResultAdviceTests
 
         // cached value should be returned, cache remains unchanged
         object cachedValue = advice.Invoke(mockInvocation);
-        Assert.AreSame(expectedReturnValue, cachedValue);
-        Assert.AreSame(returnValue, cachedValue);
-        Assert.AreSame(expectedReturnValue, resultCache.Get(5));
-        Assert.AreEqual(1, resultCache.Count);
-        Assert.AreEqual(3, itemCache.Count);
+        Assert.That(cachedValue, Is.SameAs(expectedReturnValue));
+        Assert.That(cachedValue, Is.SameAs(returnValue));
+        Assert.That(resultCache.Get(5), Is.SameAs(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
+        Assert.That(itemCache.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -322,9 +322,9 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to result cache and each item to item cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreSame(expectedReturnValue, returnValue);
-        Assert.AreEqual(1, resultCache.Count);
-        Assert.AreEqual(2, itemCache.Count); // 2 null items result into 1 cached item
+        Assert.That(returnValue, Is.SameAs(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
+        Assert.That(itemCache.Count, Is.EqualTo(2)); // 2 null items result into 1 cached item
 
         // and again, but without Proceed() and item cache access...
         ExpectAttributeRetrieval(method);
@@ -332,11 +332,11 @@ public sealed class CacheResultAdviceTests
 
         // cached value should be returned
         object cachedValue = advice.Invoke(mockInvocation);
-        Assert.AreSame(expectedReturnValue, cachedValue);
-        Assert.AreSame(returnValue, cachedValue);
-        Assert.AreSame(expectedReturnValue, resultCache.Get(5));
-        Assert.AreEqual(1, resultCache.Count);
-        Assert.AreEqual(2, itemCache.Count);
+        Assert.That(cachedValue, Is.SameAs(expectedReturnValue));
+        Assert.That(cachedValue, Is.SameAs(returnValue));
+        Assert.That(resultCache.Get(5), Is.SameAs(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
+        Assert.That(itemCache.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -352,9 +352,9 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(1, resultCache.Count);
-        Assert.AreEqual(returnValue, resultCache.Get("CacheResultWithMethodInfo-5"));
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(1));
+        Assert.That(resultCache.Get("CacheResultWithMethodInfo-5"), Is.EqualTo(returnValue));
     }
 
     [Test]
@@ -370,10 +370,10 @@ public sealed class CacheResultAdviceTests
 
         // return value should be added to result cache and each item to item cache
         object returnValue = advice.Invoke(mockInvocation);
-        Assert.AreEqual(expectedReturnValue, returnValue);
-        Assert.AreEqual(0, resultCache.Count);
-        Assert.AreEqual(3, itemCache.Count);
-        Assert.AreEqual("two", itemCache.Get("CacheResultItemsWithMethodInfo-two"));
+        Assert.That(returnValue, Is.EqualTo(expectedReturnValue));
+        Assert.That(resultCache.Count, Is.EqualTo(0));
+        Assert.That(itemCache.Count, Is.EqualTo(3));
+        Assert.That(itemCache.Get("CacheResultItemsWithMethodInfo-two"), Is.EqualTo("two"));
     }
 
     private void ExpectAttributeRetrieval(MethodInfo method)
@@ -429,7 +429,7 @@ public class EnumerableOnlyResult : IEnumerable
 
     public override bool Equals(object obj)
     {
-        Assert.AreEqual(_args, ((EnumerableOnlyResult) obj)._args);
+        Assert.That(((EnumerableOnlyResult) obj)._args, Is.EqualTo(_args));
         return true;
     }
 

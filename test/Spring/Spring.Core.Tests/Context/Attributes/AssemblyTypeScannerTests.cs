@@ -58,10 +58,10 @@ public class AssemblyTypeScannerTests
         IEnumerable<Type> types = _scanner.Scan();
 
         //Assert.That(types.Any(t => t.Name == "TheConfigurationClass"));
-        //Assert.False(types.Any(t => t.Name == "TheImportedConfigurationClass"));
+        //Assert.That(types.Any(t => t.Name == "TheImportedConfigurationClass"), Is.False);
 
         Assert.That(types, Contains.Item((typeof(TheConfigurationClass))));
-        Assert.False(types.Contains(typeof(TheImportedConfigurationClass)));
+        Assert.That(types.Contains(typeof(TheImportedConfigurationClass)), Is.False);
     }
 
     [Test]

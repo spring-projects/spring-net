@@ -9,13 +9,13 @@ public class XmlApplicationContentArgsTests
     public void Default_CaseSensitivity_isTrue()
     {
         XmlApplicationContextArgs args = new XmlApplicationContextArgs(string.Empty, null, null, null);
-        Assert.True(args.CaseSensitive);
+        Assert.That(args.CaseSensitive, Is.True);
     }
 
     [Test]
     public void Default_AutoRefresh_isTrue()
     {
         XmlApplicationContextArgs args = new XmlApplicationContextArgs(string.Empty, null, null, null);
-        Assert.True(args.Refresh);
+        Assert.That(args.Refresh, Is.True);
     }
 }

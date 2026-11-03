@@ -39,32 +39,32 @@ public class AdvisorAutoProxyCreatorCircularReferencesTests
         CountingAfterReturningAdvisor countingAdvisor = (CountingAfterReturningAdvisor) context.GetObject("testAdvisor");
 
         // direct deps of AutoProxyCreator are not eligable for proxying
-        Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("aapc")));
-        Assert.IsFalse(AopUtils.IsAopProxy(countingAdvisor));
+        Assert.That(AopUtils.IsAopProxy(context.GetObject("aapc")), Is.False);
+        Assert.That(AopUtils.IsAopProxy(countingAdvisor), Is.False);
 
         TestObjectFactoryObject testObjectFactory = (TestObjectFactoryObject) context.GetObject("&testObjectFactory");
-        Assert.IsFalse(AopUtils.IsAopProxy(testObjectFactory));
+        Assert.That(AopUtils.IsAopProxy(testObjectFactory), Is.False);
 
-        Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("someOtherObject")));
+        Assert.That(AopUtils.IsAopProxy(context.GetObject("someOtherObject")), Is.False);
 
         // this one is completely independent
-        Assert.IsTrue(AopUtils.IsAopProxy(context.GetObject("independentObject")));
+        Assert.That(AopUtils.IsAopProxy(context.GetObject("independentObject")), Is.True);
 
         // Asserts SPRNET-1225 - advisor dependencies most not be auto-proxied
         object testObject = context.GetObject("testObjectFactory");
-        Assert.IsFalse(AopUtils.IsAopProxy(testObject));
+        Assert.That(AopUtils.IsAopProxy(testObject), Is.False);
 
         // Asserts SPRNET-1224 - factory product most be cached
         context.GetObject("testObjectFactory");
         testObjectFactory.GetObjectCounter = 0;
         context.GetObject("testObjectFactory");
-        Assert.AreEqual(0, testObjectFactory.GetObjectCounter);
+        Assert.That(testObjectFactory.GetObjectCounter, Is.EqualTo(0));
 
         ICloneable someOtherObject = (ICloneable) context.GetObject("someOtherObject");
         someOtherObject.Clone();
         ICloneable independentObject = (ICloneable) context.GetObject("independentObject");
         independentObject.Clone();
-        Assert.AreEqual(1, countingAdvisor.GetCalls());
+        Assert.That(countingAdvisor.GetCalls(), Is.EqualTo(1));
     }
 }
 
@@ -205,7 +205,7 @@ public class TestObjectFactoryObject : IFactoryObject, IInitializingObject
     public void AfterPropertiesSet()
     {
         _logger.LogTrace("AfterPropertiesSet");
-        Assert.IsNotNull(someOtherObject);
+        Assert.That(someOtherObject, Is.Not.Null);
         testObject = new TestObject();
         initialized = true;
     }

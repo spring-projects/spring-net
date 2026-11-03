@@ -59,13 +59,13 @@ public class ErrorCodeExceptionTranslatorTests
         TestSqlException badSqlEx = new TestSqlException("", "1");
 
         BadSqlGrammarException bsgex = (BadSqlGrammarException) exceptionTranslator.Translate("task", "SQL", badSqlEx);
-        Assert.AreEqual("SQL", bsgex.Sql);
-        Assert.AreEqual(badSqlEx, bsgex.InnerException);
+        Assert.That(bsgex.Sql, Is.EqualTo("SQL"));
+        Assert.That(bsgex.InnerException, Is.EqualTo(badSqlEx));
 
         TestSqlException invResEx = new TestSqlException("", "4");
         InvalidResultSetAccessException irsex = (InvalidResultSetAccessException) exceptionTranslator.Translate("task", "SQL", invResEx);
-        Assert.AreEqual("SQL", irsex.Sql);
-        Assert.AreEqual(invResEx, irsex.InnerException);
+        Assert.That(irsex.Sql, Is.EqualTo("SQL"));
+        Assert.That(irsex.InnerException, Is.EqualTo(invResEx));
 
         CheckTranslation(exceptionTranslator, "5", typeof(DataAccessResourceFailureException));
         CheckTranslation(exceptionTranslator, "544", typeof(DataIntegrityViolationException));
@@ -78,7 +78,7 @@ public class ErrorCodeExceptionTranslatorTests
     {
         TestSqlException sex = new TestSqlException("", errorCode);
         DataAccessException ex = translator.Translate("", "", sex);
-        Assert.IsTrue(exType.IsAssignableFrom(ex.GetType()));
-        Assert.IsTrue(ex.InnerException == sex);
+        Assert.That(exType.IsAssignableFrom(ex.GetType()), Is.True);
+        Assert.That(ex.InnerException == sex, Is.True);
     }
 }

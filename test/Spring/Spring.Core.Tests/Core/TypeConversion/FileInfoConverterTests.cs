@@ -29,8 +29,8 @@ public sealed class FileInfoConverterTests
     public void CanConvertFrom()
     {
         FileInfoConverter vrt = new FileInfoConverter();
-        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)), "Conversion from a string instance must be supported.");
-        Assert.IsFalse(vrt.CanConvertFrom(typeof(int)));
+        Assert.That(vrt.CanConvertFrom(typeof(string)), Is.True, "Conversion from a string instance must be supported.");
+        Assert.That(vrt.CanConvertFrom(typeof(int)), Is.False);
     }
 
     [Test]
@@ -38,8 +38,8 @@ public sealed class FileInfoConverterTests
     {
         FileInfoConverter vrt = new FileInfoConverter();
         object file = vrt.ConvertFrom("././ManAhShoahDoLoveThoseGrits");
-        Assert.IsNotNull(file);
-        Assert.AreEqual(typeof(FileInfo), file.GetType());
+        Assert.That(file, Is.Not.Null);
+        Assert.That(file.GetType(), Is.EqualTo(typeof(FileInfo)));
     }
 
     [Test]
@@ -47,9 +47,9 @@ public sealed class FileInfoConverterTests
     {
         FileInfoConverter converter = new FileInfoConverter();
         object file = converter.ConvertFrom("C:/test/myfile.txt");
-        Assert.IsNotNull(file);
-        Assert.IsTrue(file is FileInfo);
-        Assert.AreEqual(new FileInfo("C:/test/myfile.txt").FullName, ((FileInfo) file).FullName);
+        Assert.That(file, Is.Not.Null);
+        Assert.That(file is FileInfo, Is.True);
+        Assert.That(((FileInfo) file).FullName, Is.EqualTo(new FileInfo("C:/test/myfile.txt").FullName));
     }
 
     [Test]

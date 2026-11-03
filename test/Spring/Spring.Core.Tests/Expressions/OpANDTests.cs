@@ -29,23 +29,23 @@ public class OpANDTests
     public void AndsNumbers()
     {
         OpAND band = new OpAND(new IntLiteralNode("2"), new IntLiteralNode("3"));
-        Assert.AreEqual(2 & 3, band.GetValue(null, null));
+        Assert.That(band.GetValue(null, null), Is.EqualTo(2 & 3));
     }
 
     [Test]
     public void AndsBooleans()
     {
         OpAND band1 = new OpAND(new BooleanLiteralNode("true"), new BooleanLiteralNode("true"));
-        Assert.AreEqual(true, band1.GetValue(null, null));
+        Assert.That(band1.GetValue(null, null), Is.EqualTo(true));
 
         OpAND band2 = new OpAND(new BooleanLiteralNode("true"), new BooleanLiteralNode("false"));
-        Assert.AreEqual(false, band2.GetValue(null, null));
+        Assert.That(band2.GetValue(null, null), Is.EqualTo(false));
     }
 
     [Test(Description = "SPRNET-1381")]
     public void TestShortcircuitAndOperator()
     {
         object boolean = ExpressionEvaluator.GetValue(new Inventor(), "Name != null and Name.Length == 0");
-        Assert.AreEqual(false, boolean);
+        Assert.That(boolean, Is.EqualTo(false));
     }
 }

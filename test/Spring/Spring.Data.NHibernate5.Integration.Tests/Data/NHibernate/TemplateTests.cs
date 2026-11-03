@@ -94,7 +94,7 @@ namespace Spring.Data.NHibernate
             ISessionFactory sessionFactory = ctx["SessionFactory"] as ISessionFactory;
             HibernateTemplate template = new HibernateTemplate(sessionFactory);
             IAdoExceptionTranslator translator = template.AdoExceptionTranslator;
-            Assert.IsNotNull(translator, "ADO.NET exception translator should not be null");
+            Assert.That(translator, Is.Not.Null, "ADO.NET exception translator should not be null");
 
             Assert.That(translator, Is.InstanceOf(typeof(ErrorCodeExceptionTranslator)));
         }
@@ -125,10 +125,10 @@ namespace Spring.Data.NHibernate
         public void SimpleDao()
         {
             ITestObjectDao dao = (ITestObjectDao) ctx["NHTestObjectDao"];
-            Assert.IsNotNull(dao);
+            Assert.That(dao, Is.Not.Null);
             TestObject to = dao.FindByName("Gabriel");
-            Assert.IsNotNull(to);
-            Assert.AreEqual("Gabriel", to.Name);
+            Assert.That(to, Is.Not.Null);
+            Assert.That(to.Name, Is.EqualTo("Gabriel"));
         }
 
         /// <summary>
@@ -160,10 +160,10 @@ namespace Spring.Data.NHibernate
             catch (Exception e)
             {
                 TestObject to = dao.FindByName("Bugs");
-                Assert.IsNull(to);
+                Assert.That(to, Is.Null);
 
                 //just to get rid of compiler warning...
-                Assert.IsNotNull(e);
+                Assert.That(e, Is.Not.Null);
             }
         }
 
@@ -182,20 +182,20 @@ namespace Spring.Data.NHibernate
             toGeorge.Age = 33;
             dao.Create(toGeorge);
             TestObject to = dao.FindByName("George");
-            Assert.IsNotNull(to, "FindByName for George should not return null");
-            Assert.AreEqual("George", to.Name);
-            Assert.AreEqual(33, to.Age);
+            Assert.That(to, Is.Not.Null, "FindByName for George should not return null");
+            Assert.That(to.Name, Is.EqualTo("George"));
+            Assert.That(to.Age, Is.EqualTo(33));
 
             to.Age = 34;
             dao.Update(to);
 
             TestObject to2 = dao.FindByName("George");
-            Assert.AreEqual(34, to2.Age);
+            Assert.That(to2.Age, Is.EqualTo(34));
 
             dao.Delete(to);
 
             TestObject to3 = dao.FindByName("George");
-            Assert.IsNull(to3, "Should not have found TestObject with name George. TestObject = " + to.ToString());
+            Assert.That(to3, Is.Null, "Should not have found TestObject with name George. TestObject = " + to.ToString());
         }
 
         [Test]
@@ -205,8 +205,8 @@ namespace Spring.Data.NHibernate
             TransactionTemplate tt = new TransactionTemplate(transactionManager);
             object result = tt.Execute(new SimpleTransactionCallback(dbProvider, dao));
             TestObject to = result as TestObject;
-            Assert.IsNotNull(to, "FindByName for Gabriel should not return null");
-            Assert.AreEqual("Gabriel", to.Name);
+            Assert.That(to, Is.Not.Null, "FindByName for Gabriel should not return null");
+            Assert.That(to.Name, Is.EqualTo("Gabriel"));
         }
 
         [Test]
@@ -230,8 +230,8 @@ namespace Spring.Data.NHibernate
             }
 
             transactionManager.Commit(status);
-            Assert.IsNotNull(to, "FindByName for Gabriel should not return null");
-            Assert.AreEqual("Gabriel", to.Name);
+            Assert.That(to, Is.Not.Null, "FindByName for Gabriel should not return null");
+            Assert.That(to.Name, Is.EqualTo("Gabriel"));
         }
 
         private class SimpleTransactionCallback : ITransactionCallback

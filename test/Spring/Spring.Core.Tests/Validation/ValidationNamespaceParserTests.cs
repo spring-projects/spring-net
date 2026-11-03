@@ -55,71 +55,71 @@ public sealed class ValidationNamespaceParserTests
         }
 
         IList<IObjectDefinition> defs = registry.GetObjectDefinitions();
-        Assert.AreEqual(9, defs.Count);
+        Assert.That(defs.Count, Is.EqualTo(9));
 
         IObjectDefinition def = registry.GetObjectDefinition("destinationAirportValidator");
-        Assert.IsTrue(def.IsSingleton);
-        Assert.IsTrue(def.IsLazyInit);
-        Assert.IsTrue(typeof(IValidator).IsAssignableFrom(def.ObjectType));
+        Assert.That(def.IsSingleton, Is.True);
+        Assert.That(def.IsLazyInit, Is.True);
+        Assert.That(typeof(IValidator).IsAssignableFrom(def.ObjectType), Is.True);
 
         PropertyValue fastValidateProperty = def.PropertyValues.GetPropertyValue("FastValidate");
-        Assert.IsNotNull(fastValidateProperty);
-        Assert.AreEqual("true", fastValidateProperty.Value);
+        Assert.That(fastValidateProperty, Is.Not.Null);
+        Assert.That(fastValidateProperty.Value, Is.EqualTo("true"));
 
         PropertyValue validatorsProperty = def.PropertyValues.GetPropertyValue("Validators");
-        Assert.IsNotNull(validatorsProperty);
+        Assert.That(validatorsProperty, Is.Not.Null);
         object validatorsObject = validatorsProperty.Value;
-        Assert.AreEqual(typeof(ManagedList), validatorsObject.GetType());
+        Assert.That(validatorsObject.GetType(), Is.EqualTo(typeof(ManagedList)));
         ManagedList validators = (ManagedList) validatorsObject;
-        Assert.AreEqual(4, validators.Count);
+        Assert.That(validators.Count, Is.EqualTo(4));
 
         def = (IObjectDefinition) validators[3];
-        Assert.IsTrue(def.IsSingleton);
-        Assert.IsTrue(def.IsLazyInit);
-        Assert.AreEqual(typeof(RegularExpressionValidator), def.ObjectType);
-        Assert.AreEqual("[A-Z]*", def.PropertyValues.GetPropertyValue("Expression").Value);
+        Assert.That(def.IsSingleton, Is.True);
+        Assert.That(def.IsLazyInit, Is.True);
+        Assert.That(def.ObjectType, Is.EqualTo(typeof(RegularExpressionValidator)));
+        Assert.That(def.PropertyValues.GetPropertyValue("Expression").Value, Is.EqualTo("[A-Z]*"));
 
         def = registry.GetObjectDefinition("simpleAirportValidator");
-        Assert.IsTrue(def.IsSingleton);
-        Assert.IsTrue(def.IsLazyInit);
-        Assert.IsTrue(typeof(IValidator).IsAssignableFrom(def.ObjectType));
+        Assert.That(def.IsSingleton, Is.True);
+        Assert.That(def.IsLazyInit, Is.True);
+        Assert.That(typeof(IValidator).IsAssignableFrom(def.ObjectType), Is.True);
         PropertyValue actionsProperty = def.PropertyValues.GetPropertyValue("Actions");
-        Assert.IsNotNull(actionsProperty);
+        Assert.That(actionsProperty, Is.Not.Null);
         object actionsObject = actionsProperty.Value;
-        Assert.AreEqual(typeof(ManagedList), actionsObject.GetType());
+        Assert.That(actionsObject.GetType(), Is.EqualTo(typeof(ManagedList)));
         ManagedList actions = (ManagedList) actionsObject;
-        Assert.AreEqual(1, actions.Count);
+        Assert.That(actions.Count, Is.EqualTo(1));
 
         IObjectDefinition exceptionActionDefinition = (IObjectDefinition) actions[0];
-        Assert.AreEqual(typeof(ExceptionAction), exceptionActionDefinition.ObjectType);
-        Assert.AreEqual("'new System.InvalidOperationException(\"invalid\")' []", exceptionActionDefinition.ConstructorArgumentValues.GenericArgumentValues[0].ToString());
+        Assert.That(exceptionActionDefinition.ObjectType, Is.EqualTo(typeof(ExceptionAction)));
+        Assert.That(exceptionActionDefinition.ConstructorArgumentValues.GenericArgumentValues[0].ToString(), Is.EqualTo("'new System.InvalidOperationException(\"invalid\")' []"));
         //
 
         def = registry.GetObjectDefinition("airportCodeValidator");
-        Assert.IsTrue(def.IsSingleton);
-        Assert.IsTrue(def.IsLazyInit);
-        Assert.IsTrue(typeof(IValidator).IsAssignableFrom(def.ObjectType));
+        Assert.That(def.IsSingleton, Is.True);
+        Assert.That(def.IsLazyInit, Is.True);
+        Assert.That(typeof(IValidator).IsAssignableFrom(def.ObjectType), Is.True);
         actionsProperty = def.PropertyValues.GetPropertyValue("Actions");
-        Assert.IsNotNull(actionsProperty);
+        Assert.That(actionsProperty, Is.Not.Null);
         actionsObject = actionsProperty.Value;
-        Assert.AreEqual(typeof(ManagedList), actionsObject.GetType());
+        Assert.That(actionsObject.GetType(), Is.EqualTo(typeof(ManagedList)));
         actions = (ManagedList) actionsObject;
-        Assert.AreEqual(4, actions.Count);
+        Assert.That(actions.Count, Is.EqualTo(4));
 
         IObjectDefinition messageDefinition = (IObjectDefinition) actions[1];
-        Assert.AreEqual(typeof(ErrorMessageAction), messageDefinition.ObjectType);
+        Assert.That(messageDefinition.ObjectType, Is.EqualTo(typeof(ErrorMessageAction)));
 
         IObjectDefinition actionDefinition = (IObjectDefinition) actions[2];
-        Assert.AreEqual(typeof(ExpressionAction), actionDefinition.ObjectType);
-        Assert.AreEqual("#now = DateTime.Now", actionDefinition.PropertyValues.GetPropertyValue("Valid").Value);
+        Assert.That(actionDefinition.ObjectType, Is.EqualTo(typeof(ExpressionAction)));
+        Assert.That(actionDefinition.PropertyValues.GetPropertyValue("Valid").Value, Is.EqualTo("#now = DateTime.Now"));
 
         def = registry.GetObjectDefinition("regex");
-        Assert.IsTrue(def.IsSingleton);
-        Assert.IsTrue(def.IsLazyInit);
-        Assert.IsTrue(typeof(IValidator).IsAssignableFrom(def.ObjectType));
+        Assert.That(def.IsSingleton, Is.True);
+        Assert.That(def.IsLazyInit, Is.True);
+        Assert.That(typeof(IValidator).IsAssignableFrom(def.ObjectType), Is.True);
         PropertyValue expressionProperty = def.PropertyValues.GetPropertyValue("Expression");
-        Assert.IsNotNull(expressionProperty);
-        Assert.AreEqual("RegExp", expressionProperty.Value);
+        Assert.That(expressionProperty, Is.Not.Null);
+        Assert.That(expressionProperty.Value, Is.EqualTo("RegExp"));
     }
 
     private XmlDocument GetValidatedXmlResource(string resourceExtension)

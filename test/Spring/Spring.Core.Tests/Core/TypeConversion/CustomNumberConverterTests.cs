@@ -45,8 +45,8 @@ public class CustomNumberConverterTests
     public void CanConvertFromString()
     {
         CustomNumberConverter verter = new CustomNumberConverter(typeof(int), null, true);
-        Assert.IsTrue(verter.CanConvertFrom(typeof(string)));
-        Assert.IsFalse(verter.CanConvertFrom(null));
+        Assert.That(verter.CanConvertFrom(typeof(string)), Is.True);
+        Assert.That(verter.CanConvertFrom(null), Is.False);
     }
 
     [Test]
@@ -54,7 +54,7 @@ public class CustomNumberConverterTests
     {
         CustomNumberConverter verter = new CustomNumberConverter(typeof(int), null, true);
         int actual = (int) verter.ConvertFrom(null, CultureInfo.CurrentUICulture, string.Empty);
-        Assert.AreEqual(0, actual);
+        Assert.That(actual, Is.EqualTo(0));
     }
 
     [Test]
@@ -68,7 +68,7 @@ public class CustomNumberConverterTests
             {
                 CustomNumberConverter verter = new CustomNumberConverter(numType, null, true);
                 object actual = verter.ConvertFrom(null, CultureInfo.CurrentUICulture, expected.ToString());
-                Assert.AreEqual(expected, actual);
+                Assert.That(actual, Is.EqualTo(expected));
             }
             catch (Exception ex)
             {

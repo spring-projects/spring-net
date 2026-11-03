@@ -99,8 +99,8 @@ public class PathMatcherTest
 
     private static void AssertMatches(FileInfo file, int nline, bool trueness, string path, string pattern)
     {
-        Assert.AreEqual(trueness,
-            PathMatcher.Match(pattern, path),
+        Assert.That(PathMatcher.Match(pattern, path),
+            Is.EqualTo(trueness),
             String.Format("\ntest file '{0}', line {1}:\npath '{2}' does {3} match '{4}' (translated to {5})",
                 file.Name, nline, path, trueness ? "not" : "", pattern, PathMatcher.BuildRegex(pattern)));
     }

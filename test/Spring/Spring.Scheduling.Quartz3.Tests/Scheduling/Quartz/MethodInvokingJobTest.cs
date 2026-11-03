@@ -73,7 +73,7 @@ public class MethodInvokingJobTest
         mi.Prepare();
         methodInvokingJob.MethodInvoker = mi;
         methodInvokingJob.Execute(CreateMinimalJobExecutionContext());
-        Assert.AreEqual(1, job.CounterValue, "Job was not invoked once");
+        Assert.That(job.CounterValue, Is.EqualTo(1), "Job was not invoked once");
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class MethodInvokingJobTest
         IJobExecutionContext context = CreateMinimalJobExecutionContext();
         methodInvokingJob.Execute(context);
 
-        Assert.AreEqual(InvocationCountingJob.DefaultReturnValue, context.Result, "result value was not set to context");
+        Assert.That(context.Result, Is.EqualTo(InvocationCountingJob.DefaultReturnValue), "result value was not set to context");
     }
 
     /// <summary>
@@ -116,7 +116,7 @@ public class MethodInvokingJobTest
             // ok
         }
 
-        Assert.AreEqual(1, job.CounterValue, "Job was not invoked once");
+        Assert.That(job.CounterValue, Is.EqualTo(1), "Job was not invoked once");
     }
 
     /// <summary>

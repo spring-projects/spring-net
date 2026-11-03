@@ -29,15 +29,15 @@ public class ComposedCriteriaTests : ComposedCriteria
     public void IsSatisfiedWithNoCriteria()
     {
         ComposedCriteriaTests composedCriteria = new ComposedCriteriaTests();
-        Assert.IsTrue(composedCriteria.IsSatisfied("foo"));
+        Assert.That(composedCriteria.IsSatisfied("foo"), Is.True);
     }
 
     [Test]
     public void SatifiesMyUpperCaseCriteria()
     {
         ComposedCriteriaTests composedCriteria = new ComposedCriteriaTests(new MyUpperCaseCriteria());
-        Assert.IsTrue(composedCriteria.IsSatisfied("HELLO"));
-        Assert.IsFalse(composedCriteria.IsSatisfied("hello"));
+        Assert.That(composedCriteria.IsSatisfied("HELLO"), Is.True);
+        Assert.That(composedCriteria.IsSatisfied("hello"), Is.False);
     }
 
     [Test]
@@ -46,9 +46,9 @@ public class ComposedCriteriaTests : ComposedCriteria
         ComposedCriteriaTests composedCriteria = new ComposedCriteriaTests();
         composedCriteria.Add(new MyUpperCaseCriteria());
         composedCriteria.Add(new MyStringCriteria());
-        Assert.IsTrue(composedCriteria.IsSatisfied("HELLO"));
-        Assert.IsFalse(composedCriteria.IsSatisfied("GOODBYE"));
-        Assert.IsTrue(composedCriteria.Criteria.Count == 2);
+        Assert.That(composedCriteria.IsSatisfied("HELLO"), Is.True);
+        Assert.That(composedCriteria.IsSatisfied("GOODBYE"), Is.False);
+        Assert.That(composedCriteria.Criteria.Count == 2, Is.True);
     }
 
     internal class MyUpperCaseCriteria : ICriteria

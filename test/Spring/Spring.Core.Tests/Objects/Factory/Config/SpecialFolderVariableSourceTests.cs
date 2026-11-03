@@ -31,16 +31,16 @@ public sealed class SpecialFolderVariableSourceTests
         SpecialFolderVariableSource vs = new SpecialFolderVariableSource();
 
         // existing vars
-        Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            vs.ResolveVariable("ApplicationData"));
-        Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
-            vs.ResolveVariable("desktopDirectory"));
-        Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-            vs.ResolveVariable("programFiles"));
-        Assert.AreEqual(Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-            vs.ResolveVariable("personal"));
+        Assert.That(vs.ResolveVariable("ApplicationData"),
+            Is.EqualTo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)));
+        Assert.That(vs.ResolveVariable("desktopDirectory"),
+            Is.EqualTo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)));
+        Assert.That(vs.ResolveVariable("programFiles"),
+            Is.EqualTo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)));
+        Assert.That(vs.ResolveVariable("personal"),
+            Is.EqualTo(Environment.GetFolderPath(Environment.SpecialFolder.Personal)));
 
         // non-existant variable
-        Assert.IsNull(vs.ResolveVariable("dummy"));
+        Assert.That(vs.ResolveVariable("dummy"), Is.Null);
     }
 }

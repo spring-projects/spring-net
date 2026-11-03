@@ -42,8 +42,8 @@ public class EmailValidatorIntegrationTests
         XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
         object obj = objectFactory.GetObject("emailValidator");
 
-        Assert.IsTrue(obj is IValidator);
+        Assert.That(obj is IValidator, Is.True);
         IValidator validator = obj as IValidator;
-        Assert.IsTrue(validator.Validate("goran@goran.com", new ValidationErrors()));
+        Assert.That(validator.Validate("goran@goran.com", new ValidationErrors()), Is.True);
     }
 }

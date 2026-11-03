@@ -105,7 +105,7 @@ public class StoredProcedureTests
         BindingFlags BINDING_FLAGS = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static |
                                      BindingFlags.IgnoreCase;
         object rsp = dict["Test"];
-        Assert.IsNotNull(rsp);
+        Assert.That(rsp, Is.Not.Null);
 
         Type closedType = rsp.GetType();
         foreach (Type parameter in closedType.GetGenericArguments())
@@ -122,18 +122,18 @@ public class StoredProcedureTests
             Console.WriteLine("arg type= " + type);
         }
 
-        Assert.AreEqual(1, genericArgumentType.Length);
+        Assert.That(genericArgumentType.Length, Is.EqualTo(1));
         //Type closedGenericType = openType.MakeGenericType(genericArgumentType);
 
         PropertyInfo propertyInfo = closedType.GetProperty("Name", BINDING_FLAGS);
-        Assert.IsNotNull(propertyInfo);
+        Assert.That(propertyInfo, Is.Not.Null);
         object returnValue = propertyInfo.GetValue(rsp, null);
 
-        Assert.AreEqual("Test", returnValue.ToString());
+        Assert.That(returnValue.ToString(), Is.EqualTo("Test"));
 
         PropertyInfo extractorPropInfo = closedType.GetProperty("RowMapper", BINDING_FLAGS);
 
-        Assert.IsNotNull(extractorPropInfo);
+        Assert.That(extractorPropInfo, Is.Not.Null);
 
         object rowmapper = extractorPropInfo.GetValue(rsp, null);
 
@@ -166,12 +166,12 @@ public class StoredProcedureTests
         IDictionary outParams = vsp.ExecStoreProc("Jack");
 
         IList<TestObject> testObjectList = testObjectList = outParams["testObjectRowMapper"] as IList<TestObject>;
-        Assert.IsNotNull(testObjectList);
-        Assert.AreEqual(1, testObjectList.Count);
+        Assert.That(testObjectList, Is.Not.Null);
+        Assert.That(testObjectList.Count, Is.EqualTo(1));
 
         IList<Vacation> vacationList = outParams["vacationRowMapper"] as IList<Vacation>;
-        Assert.IsNotNull(vacationList);
-        Assert.AreEqual(2, vacationList.Count);
+        Assert.That(vacationList, Is.Not.Null);
+        Assert.That(vacationList.Count, Is.EqualTo(2));
     }
 }
 

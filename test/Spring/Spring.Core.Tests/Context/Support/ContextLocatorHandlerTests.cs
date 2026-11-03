@@ -56,8 +56,8 @@ public sealed class ContextHandlerTests
 
         ContextHandler ctxHandler = new ContextHandler();
         IApplicationContext ctx = (IApplicationContext) ctxHandler.Create(null, null, configurationElement);
-        Assert.AreEqual(ctx, ContextRegistry.GetContext());
-        Assert.AreEqual(1, ContextRegistry.GetContext().ObjectDefinitionCount);
+        Assert.That(ContextRegistry.GetContext(), Is.EqualTo(ctx));
+        Assert.That(ContextRegistry.GetContext().ObjectDefinitionCount, Is.EqualTo(1));
     }
 
     [Test]
@@ -77,7 +77,7 @@ public sealed class ContextHandlerTests
         }
         catch (ConfigurationException cfgex)
         {
-            Assert.IsInstanceOf(typeof(ObjectDefinitionStoreException), cfgex.InnerException);
+            Assert.That(cfgex.InnerException, Is.InstanceOf(typeof(ObjectDefinitionStoreException)));
         }
     }
 
@@ -98,7 +98,7 @@ public sealed class ContextHandlerTests
         }
         catch (ConfigurationException cfgex)
         {
-            Assert.IsInstanceOf(typeof(ObjectDefinitionStoreException), cfgex.InnerException);
+            Assert.That(cfgex.InnerException, Is.InstanceOf(typeof(ObjectDefinitionStoreException)));
         }
     }
 
@@ -134,7 +134,7 @@ public sealed class ContextHandlerTests
         CreateConfigurationElement(xmlData);
         ContextHandler ctxHandler = new ContextHandler();
         IApplicationContext ctx = (IApplicationContext) ctxHandler.Create(null, null, configurationElement);
-        Assert.AreEqual(typeof(XmlApplicationContext), ctx.GetType(),
+        Assert.That(ctx.GetType(), Is.EqualTo(typeof(XmlApplicationContext)),
             "Default type is not the XmlApplicationContext type; it must be.");
     }
 
@@ -167,28 +167,28 @@ public sealed class ContextHandlerTests
         IApplicationContext ctx
             = (IApplicationContext) ConfigurationUtils.GetSection("spring2/context");
 
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         IApplicationContext parentCtx = ContextRegistry.GetContext("Parent");
-        Assert.IsNotNull(parentCtx, "Parent context not registered.");
-        Assert.AreEqual("Parent", parentCtx.Name, "Parent's DisplayName property not picked up from config file.");
+        Assert.That(parentCtx, Is.Not.Null, "Parent context not registered.");
+        Assert.That(parentCtx.Name, Is.EqualTo("Parent"), "Parent's DisplayName property not picked up from config file.");
         IApplicationContext childCtx = ContextRegistry.GetContext("Child");
-        Assert.IsNotNull(childCtx, "Child context not registered.");
-        Assert.AreEqual("Child", childCtx.Name, "Child's DisplayName property not picked up from config file.");
-        Assert.AreEqual("Parent", childCtx.ParentContext.Name);
+        Assert.That(childCtx, Is.Not.Null, "Child context not registered.");
+        Assert.That(childCtx.Name, Is.EqualTo("Child"), "Child's DisplayName property not picked up from config file.");
+        Assert.That(childCtx.ParentContext.Name, Is.EqualTo("Parent"));
         IApplicationContext grandchildCtx = ContextRegistry.GetContext("Grandchild");
-        Assert.IsNotNull(grandchildCtx, "Grandchild context not registered.");
-        Assert.AreEqual("Grandchild", grandchildCtx.Name, "Grandchild's DisplayName property not picked up from config file.");
-        Assert.AreEqual("Child", grandchildCtx.ParentContext.Name);
+        Assert.That(grandchildCtx, Is.Not.Null, "Grandchild context not registered.");
+        Assert.That(grandchildCtx.Name, Is.EqualTo("Grandchild"), "Grandchild's DisplayName property not picked up from config file.");
+        Assert.That(grandchildCtx.ParentContext.Name, Is.EqualTo("Child"));
 
         // ensure proper objects have been loaded into the correct context...
-        Assert.IsTrue(parentCtx.ContainsObjectDefinition("Parent"), "Parent context object not present (must be).");
-        Assert.IsFalse(parentCtx.ContainsObjectDefinition("Child"), "Wrong (child context) object present in Parent context.");
+        Assert.That(parentCtx.ContainsObjectDefinition("Parent"), Is.True, "Parent context object not present (must be).");
+        Assert.That(parentCtx.ContainsObjectDefinition("Child"), Is.False, "Wrong (child context) object present in Parent context.");
 
-        Assert.IsTrue(childCtx.ContainsObjectDefinition("Child"), "Child context object not present (must be).");
-        Assert.IsFalse(childCtx.ContainsObjectDefinition("Parent"), "Wrong (parent context) object present in Child context.");
+        Assert.That(childCtx.ContainsObjectDefinition("Child"), Is.True, "Child context object not present (must be).");
+        Assert.That(childCtx.ContainsObjectDefinition("Parent"), Is.False, "Wrong (parent context) object present in Child context.");
 
-        Assert.IsTrue(grandchildCtx.ContainsObjectDefinition("Grandchild"), "Grandchild context object not present (must be).");
-        Assert.IsFalse(grandchildCtx.ContainsObjectDefinition("Child"), "Wrong (parent context) object present in Grandchild context.");
-        Assert.IsFalse(grandchildCtx.ContainsObjectDefinition("Parent"), "Wrong (parent context) object present in Grandchild context.");
+        Assert.That(grandchildCtx.ContainsObjectDefinition("Grandchild"), Is.True, "Grandchild context object not present (must be).");
+        Assert.That(grandchildCtx.ContainsObjectDefinition("Child"), Is.False, "Wrong (parent context) object present in Grandchild context.");
+        Assert.That(grandchildCtx.ContainsObjectDefinition("Parent"), Is.False, "Wrong (parent context) object present in Grandchild context.");
     }
 }

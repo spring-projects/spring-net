@@ -73,7 +73,7 @@ public sealed class ListFactoryObjectTests
     [Test]
     public void ObjectTypeReallyIsIList()
     {
-        Assert.AreEqual(typeof(IList), new ListFactoryObject().ObjectType);
+        Assert.That(new ListFactoryObject().ObjectType, Is.EqualTo(typeof(IList)));
     }
 
     [Test]
@@ -87,13 +87,13 @@ public sealed class ListFactoryObjectTests
         lfo.AfterPropertiesSet();
 
         IList list = (IList) lfo.GetObject();
-        Assert.IsNotNull(list);
-        Assert.AreEqual(source.Count, list.Count);
+        Assert.That(list, Is.Not.Null);
+        Assert.That(list.Count, Is.EqualTo(source.Count));
         for (int i = 0; i < list.Count; ++i)
         {
             TestObject dude = (TestObject) list[i];
             TestObject originalDude = (TestObject) source[i];
-            Assert.IsTrue(object.ReferenceEquals(dude, originalDude));
+            Assert.That(object.ReferenceEquals(dude, originalDude), Is.True);
         }
     }
 }

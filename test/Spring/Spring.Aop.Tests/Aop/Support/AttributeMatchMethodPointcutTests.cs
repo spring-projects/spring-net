@@ -66,7 +66,7 @@ public sealed class AttributeMatchMethodPointcutTests
         AttributeMatchMethodPointcut cut = new AttributeMatchMethodPointcut();
         cut.Attribute = typeof(MarkupAttribute);
         bool matches = cut.Matches(typeof(WithMarkup).GetMethod("Bing"), null);
-        Assert.IsTrue(matches, "Method was decorated with the target attribute, so this must match.");
+        Assert.That(matches, Is.True, "Method was decorated with the target attribute, so this must match.");
     }
 
     [Test]
@@ -75,7 +75,7 @@ public sealed class AttributeMatchMethodPointcutTests
         AttributeMatchMethodPointcut cut = new AttributeMatchMethodPointcut();
         cut.Attribute = typeof(MarkupAttribute);
         bool matches = cut.Matches(typeof(InheritedWithMarkup).GetMethod("Bing"), null);
-        Assert.IsTrue(matches, "Inherited method was decorated with the target attribute, so this must match.");
+        Assert.That(matches, Is.True, "Inherited method was decorated with the target attribute, so this must match.");
     }
 
     [Test]
@@ -84,7 +84,7 @@ public sealed class AttributeMatchMethodPointcutTests
         AttributeMatchMethodPointcut cut = new AttributeMatchMethodPointcut();
         cut.Attribute = typeof(MarkupAttribute);
         bool matches = cut.Matches(typeof(WithMarkup).GetMethod("RiloKiley"), null);
-        Assert.IsFalse(matches, "Method was not decorated with the target attribute, so this must not match.");
+        Assert.That(matches, Is.False, "Method was not decorated with the target attribute, so this must not match.");
     }
 
     [Test]
@@ -93,7 +93,7 @@ public sealed class AttributeMatchMethodPointcutTests
         AttributeMatchMethodPointcut cut = new AttributeMatchMethodPointcut();
         cut.Attribute = typeof(MarkupAttribute);
         bool matches = cut.Matches(typeof(InheritedWithMarkup).GetMethod("RiloKiley"), null);
-        Assert.IsFalse(matches, "Inherited method was not decorated with the target attribute, so this must not match.");
+        Assert.That(matches, Is.False, "Inherited method was not decorated with the target attribute, so this must not match.");
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public sealed class AttributeMatchMethodPointcutTests
         cut.Attribute = typeof(MarkupAttribute);
         cut.CheckInterfaces = false;
         bool matches = cut.Matches(typeof(ImplementingClass).GetMethod("OtherTestMethod"), null);
-        Assert.IsFalse(matches, "Implementing method was not decorated with the target attribute, so this must not match since CheckInterfaces is false.");
+        Assert.That(matches, Is.False, "Implementing method was not decorated with the target attribute, so this must not match since CheckInterfaces is false.");
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public sealed class AttributeMatchMethodPointcutTests
         cut.Attribute = typeof(MarkupAttribute);
         cut.CheckInterfaces = true;
         bool matches = cut.Matches(typeof(ImplementingClass).GetMethod("OtherTestMethod"), null);
-        Assert.IsTrue(matches, "Implementing method was not decorated with the target attribute, " +
+        Assert.That(matches, Is.True, "Implementing method was not decorated with the target attribute, " +
                                "but the method from the interface was, so this must match.");
     }
 
@@ -135,7 +135,7 @@ public sealed class AttributeMatchMethodPointcutTests
         cut.Attribute = typeof(MarkupAttribute);
         cut.CheckInterfaces = true;
         bool matches = cut.Matches(typeof(ImplementingClass).GetMethod("TestMethod", new Type[] { }), null);
-        Assert.IsTrue(matches, "Implementing method was not decorated with the target attribute, but the" +
+        Assert.That(matches, Is.True, "Implementing method was not decorated with the target attribute, but the" +
                                " method from an indirectly implemented interface was, so this must match.");
     }
 
@@ -149,7 +149,7 @@ public sealed class AttributeMatchMethodPointcutTests
         cut.Attribute = typeof(MarkupAttribute);
         cut.CheckInterfaces = true;
         bool matches = cut.Matches(typeof(ImplementingClass).GetMethod("TestMethod", new Type[] { typeof(string) }), null);
-        Assert.IsFalse(matches, "Overloaded method from an implemented interface is not decorated with" +
+        Assert.That(matches, Is.False, "Overloaded method from an implemented interface is not decorated with" +
                                 " the attribute, so should not match.");
     }
 
@@ -164,7 +164,7 @@ public sealed class AttributeMatchMethodPointcutTests
         cut.Attribute = typeof(MarkupAttribute);
         cut.CheckInterfaces = true;
         bool matches = cut.Matches(typeof(InheritedImplementingClass).GetMethod("TestMethod", new Type[] { }), null);
-        Assert.IsTrue(matches, "Implementing method from subclass was not decorated with the target attribute " +
+        Assert.That(matches, Is.True, "Implementing method from subclass was not decorated with the target attribute " +
                                "but the method from an indirectly implemented interface was, so this must match.");
     }
 
@@ -183,7 +183,7 @@ public sealed class AttributeMatchMethodPointcutTests
         {
             if (mi.Name.IndexOf('.') == -1) continue;
             bool matches = cut.Matches(mi, null);
-            Assert.IsTrue(matches, "Explicitly implemented method must match");
+            Assert.That(matches, Is.True, "Explicitly implemented method must match");
         }
     }
 

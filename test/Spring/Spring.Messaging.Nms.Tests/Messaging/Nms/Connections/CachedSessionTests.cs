@@ -47,9 +47,9 @@ public class CachedSessionTests
         targetSession.TransactionRolledBack();
         targetSession.TransactionStarted();
 
-        Assert.IsTrue(committedWasRaised);
-        Assert.IsTrue(rolledBackWasRaised);
-        Assert.IsTrue(startedWasRaised);
+        Assert.That(committedWasRaised, Is.True);
+        Assert.That(rolledBackWasRaised, Is.True);
+        Assert.That(startedWasRaised, Is.True);
     }
 
     private CachedSession CreateCachedSession(ISession targetSession)

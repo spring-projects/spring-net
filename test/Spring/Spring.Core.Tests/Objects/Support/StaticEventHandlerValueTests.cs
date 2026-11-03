@@ -31,9 +31,9 @@ public sealed class StaticEventHandlerValueTests
         PingSource source = new PingSource();
         StaticEventHandlerValue wirer
             = new StaticEventHandlerValue(source, "OnPing");
-        Assert.IsNotNull(wirer.Source);
-        Assert.AreEqual("OnPing", wirer.MethodName);
-        Assert.IsTrue(wirer.ToString().IndexOf(wirer.MethodName) > 0);
+        Assert.That(wirer.Source, Is.Not.Null);
+        Assert.That(wirer.MethodName, Is.EqualTo("OnPing"));
+        Assert.That(wirer.ToString().IndexOf(wirer.MethodName) > 0, Is.True);
     }
 
     [Test]
@@ -46,8 +46,8 @@ public sealed class StaticEventHandlerValueTests
         Type sink = typeof(StaticPingListener);
         wirer.Wire(source, sink);
         source.OnPing();
-        Assert.IsTrue(StaticPingListener.GotPing, "The event handler did not get notified when the event was raised.");
-        Assert.AreEqual(1, StaticPingListener.PingCount, "The event handler was not get notified exactly once when the event was raised exactly once.");
+        Assert.That(StaticPingListener.GotPing, Is.True, "The event handler did not get notified when the event was raised.");
+        Assert.That(StaticPingListener.PingCount, Is.EqualTo(1), "The event handler was not get notified exactly once when the event was raised exactly once.");
     }
 
     [Test]

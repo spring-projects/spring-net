@@ -44,18 +44,18 @@ public sealed class ControlFlowPointcutTests
         factory.AddAdvisor(new DefaultPointcutAdvisor(cflow, nop));
 
         // not advised, not under One...
-        Assert.AreEqual(target.GetAge(), proxied.GetAge());
-        Assert.AreEqual(0, nop.Count, "Whoops, appear to be advising when not under One's cflow.");
+        Assert.That(proxied.GetAge(), Is.EqualTo(target.GetAge()));
+        Assert.That(nop.Count, Is.EqualTo(0), "Whoops, appear to be advising when not under One's cflow.");
 
         // will be advised...
         One one = new One();
-        Assert.AreEqual(27, one.GetAge(proxied));
-        Assert.AreEqual(1, nop.Count, "Not advising when under One's cflow (must be).");
+        Assert.That(one.GetAge(proxied), Is.EqualTo(27));
+        Assert.That(nop.Count, Is.EqualTo(1), "Not advising when under One's cflow (must be).");
 
         // won't be advised...
-        Assert.AreEqual(target.GetAge(), new One().NoMatch(proxied));
-        Assert.AreEqual(1, nop.Count, "Whoops, appear to be advising when under One's cflow scope, BUT NOT under a target method's cflow scope.");
-        Assert.AreEqual(3, cflow.EvaluationCount, "Pointcut not invoked the correct number of times.");
+        Assert.That(new One().NoMatch(proxied), Is.EqualTo(target.GetAge()));
+        Assert.That(nop.Count, Is.EqualTo(1), "Whoops, appear to be advising when under One's cflow scope, BUT NOT under a target method's cflow scope.");
+        Assert.That(cflow.EvaluationCount, Is.EqualTo(3), "Pointcut not invoked the correct number of times.");
     }
 
     private sealed class One
@@ -104,18 +104,18 @@ public sealed class ControlFlowPointcutTests
 
         // Not advised, not under One
         target.SetAge(16);
-        Assert.AreEqual(0, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(0));
 
         // Not advised; under One but not a setter
-        Assert.AreEqual(16, new One().GetAge(proxied));
-        Assert.AreEqual(0, nop.Count);
+        Assert.That(new One().GetAge(proxied), Is.EqualTo(16));
+        Assert.That(nop.Count, Is.EqualTo(0));
 
         // Won't be advised
         new One().Set(proxied);
-        Assert.AreEqual(1, nop.Count);
+        Assert.That(nop.Count, Is.EqualTo(1));
 
         // We saved most evaluations
-        Assert.AreEqual(1, cflow.EvaluationCount);
+        Assert.That(cflow.EvaluationCount, Is.EqualTo(1));
     }
 
     [Test]
@@ -123,9 +123,9 @@ public sealed class ControlFlowPointcutTests
     {
         ControlFlowPointcut cut = new ControlFlowPointcut(typeof(One));
         cut.Matches(null, null, null); // args are ingored in this impl...
-        Assert.AreEqual(1, cut.EvaluationCount);
+        Assert.That(cut.EvaluationCount, Is.EqualTo(1));
         cut.Matches(null, null, null); // args are ingored in this impl...
-        Assert.AreEqual(2, cut.EvaluationCount);
+        Assert.That(cut.EvaluationCount, Is.EqualTo(2));
     }
 
     [Test]
@@ -135,9 +135,9 @@ public sealed class ControlFlowPointcutTests
         ControlFlowPointcut cut = new ControlFlowPointcut(oneType);
         MethodInfo method = oneType.GetMethod("GetAge");
         cut.Matches(method, oneType, null);
-        Assert.AreEqual(1, cut.EvaluationCount);
+        Assert.That(cut.EvaluationCount, Is.EqualTo(1));
         cut.Matches(method, oneType, null);
-        Assert.AreEqual(2, cut.EvaluationCount);
+        Assert.That(cut.EvaluationCount, Is.EqualTo(2));
     }
 
     [Test]
@@ -146,12 +146,15 @@ public sealed class ControlFlowPointcutTests
         Type oneType = typeof(One);
         ControlFlowPointcut cut = new ControlFlowPointcut(oneType);
         ITypeFilter filter = cut.TypeFilter;
-        Assert.IsTrue(filter.Matches(oneType),
+        Assert.That(filter.Matches(oneType),
+            Is.True,
             "Must always match regardless of the supplied argument Type.");
-        Assert.IsTrue(filter.Matches(GetType()),
+        Assert.That(filter.Matches(GetType()),
+            Is.True,
             "Must always match even if the supplied argument Type is not " +
             "a match for the Type supplied in the ctor.");
-        Assert.IsTrue(filter.Matches(null), // args are ingored in this impl...
+        Assert.That(filter.Matches(null),
+            Is.True,
             "Must always match even if the supplied argument Type is null");
     }
 
@@ -162,12 +165,15 @@ public sealed class ControlFlowPointcutTests
         ControlFlowPointcut cut = new ControlFlowPointcut(oneType);
         IMethodMatcher filter = cut.MethodMatcher;
         MethodInfo method = oneType.GetMethod("GetAge");
-        Assert.IsTrue(filter.Matches(method, oneType),
+        Assert.That(filter.Matches(method, oneType),
+            Is.True,
             "Must always match regardless of the supplied arguments.");
-        Assert.IsTrue(filter.Matches(method, GetType()),
+        Assert.That(filter.Matches(method, GetType()),
+            Is.True,
             "Must always match even if the supplied argument method and Type are not " +
             "a match for the name and Type supplied in the ctor.");
-        Assert.IsTrue(filter.Matches(null, null), // args are ingored in this impl...
+        Assert.That(filter.Matches(null, null),
+            Is.True,
             "Must always match even if the supplied arguments are null");
     }
 
@@ -176,7 +182,8 @@ public sealed class ControlFlowPointcutTests
     {
         ControlFlowPointcut cut = new ControlFlowPointcut(GetType());
         IMethodMatcher filter = cut.MethodMatcher;
-        Assert.IsTrue(filter.Matches(null, null, null), // args are ingored in this impl...
+        Assert.That(filter.Matches(null, null, null),
+            Is.True,
             "Must match - under cflow of Type specified in ctor");
     }
 
@@ -186,7 +193,8 @@ public sealed class ControlFlowPointcutTests
         ControlFlowPointcut cut = new ControlFlowPointcut(
             GetType(), "DynamicMethodMatchWithTypeAndMethodNameSpecifiedInCtor");
         IMethodMatcher filter = cut.MethodMatcher;
-        Assert.IsTrue(filter.Matches(null, null, null), // args are ingored in this impl...
+        Assert.That(filter.Matches(null, null, null),
+            Is.True,
             "Must match - under cflow of Type specified in ctor");
     }
 
@@ -195,7 +203,8 @@ public sealed class ControlFlowPointcutTests
     {
         ControlFlowPointcut cut = new ControlFlowPointcut(GetType(), "KiloRiley");
         IMethodMatcher filter = cut.MethodMatcher;
-        Assert.IsFalse(filter.Matches(null, null, null), // args are ingored in this impl...
+        Assert.That(filter.Matches(null, null, null),
+            Is.False,
             "Must not match - under cflow of Type specified in ctor, but no match on method name.");
     }
 

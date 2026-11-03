@@ -45,7 +45,7 @@ public class PropertyOrFieldNodeTests
         PropertyOrFieldNode pofNode = new PropertyOrFieldNode();
         pofNode.Text = "StringProp";
 
-        Assert.AreEqual(new DateTime(2008, 1, 1), ((IExpression) pofNode).GetValue(new DerivedClass()));
+        Assert.That(((IExpression) pofNode).GetValue(new DerivedClass()), Is.EqualTo(new DateTime(2008, 1, 1)));
     }
 
 #if !NETCOREAPP
@@ -58,11 +58,11 @@ public class PropertyOrFieldNodeTests
             BaseClass ouc = new BaseClass();
             TestTransparentProxyFactory tpf = new TestTransparentProxyFactory(null, typeof(ITestObject), null);
             object tpo = tpf.GetTransparentProxy();
-            Assert.IsTrue( tpo is ITestObject );
+        Assert.That(tpo is ITestObject, Is.True);
             ITestObject itpo = tpo as ITestObject;
-            Assert.IsNotNull(itpo);
+        Assert.That(itpo, Is.Not.Null);
             pofNode.SetValue( ouc, null, itpo);
-            Assert.AreSame( tpo, ouc.ObjectProp );
+        Assert.That(ouc.ObjectProp, Is.SameAs(tpo));
         }
 #endif
 }

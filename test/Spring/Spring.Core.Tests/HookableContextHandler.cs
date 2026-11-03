@@ -16,6 +16,7 @@
 
 using System.Configuration;
 using System.Xml;
+using NUnit.Framework;
 using Spring.Context.Support;
 
 namespace Spring;
@@ -40,7 +41,7 @@ public class HookableContextHandler : IConfigurationSectionHandler
         /// </summary>
         public Guard(CreateContextFromSectionHandler sectionHandler)
         {
-            NUnit.Framework.Assert.IsNotNull(sectionHandler);
+            Assert.That(sectionHandler, Is.Not.Null);
             _prevInst = SetSectionHandler(sectionHandler);
         }
 

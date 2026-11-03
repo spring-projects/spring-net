@@ -68,6 +68,6 @@ public sealed class LogLevelConverterTests
     [Test]
     public void CanConvertFromString()
     {
-        Assert.IsTrue(converter.CanConvertFrom(typeof(string)));
+        Assert.That(converter.CanConvertFrom(typeof(string)), Is.True);
     }
 }

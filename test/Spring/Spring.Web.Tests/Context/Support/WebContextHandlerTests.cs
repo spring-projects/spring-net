@@ -46,7 +46,7 @@ public class WebContextHandlerTests
 
         Object actualContext = webContextHandler.Create(null, null, CreateConfigurationElement(xmlData));
 
-        Assert.AreSame(expectedContext, actualContext);
+        Assert.That(actualContext, Is.SameAs(expectedContext));
     }
 
     private XmlNode CreateConfigurationElement(string xmlData)

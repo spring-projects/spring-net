@@ -32,7 +32,7 @@ public sealed class DefensiveEventRaiserTests
         Soda bru = new Soda();
         bru.Pop += new PopHandler(dude.HandlePopWithException);
         bru.OnPop("Iron Brew", new DefensiveEventRaiser());
-        Assert.AreEqual("Iron Brew", dude.Soda); // should have got through before exception was thrown
+        Assert.That(dude.Soda, Is.EqualTo("Iron Brew")); // should have got through before exception was thrown
     }
 
     [Test]
@@ -56,9 +56,9 @@ public sealed class DefensiveEventRaiserTests
 
         IEventExceptionsCollector exceptions = bru.OnPop("Iron Brew", eventRaiser);
 
-        Assert.AreEqual(1, exceptions.Exceptions.Count);
-        Assert.IsTrue(firstCall);
-        Assert.IsTrue(secondCall);
-        Assert.IsTrue(thirdCall);
+        Assert.That(exceptions.Exceptions.Count, Is.EqualTo(1));
+        Assert.That(firstCall, Is.True);
+        Assert.That(secondCall, Is.True);
+        Assert.That(thirdCall, Is.True);
     }
 }

@@ -36,29 +36,29 @@ public class SimpleMessageListenerContainerTests : AbstractDependencyInjectionSp
         SimpleMessageListenerContainer container =
             (SimpleMessageListenerContainer) applicationContext["SimpleMessageListenerContainer"];
         SimpleMessageListener listener = applicationContext["SimpleMessageListener"] as SimpleMessageListener;
-        Assert.IsNotNull(container);
-        Assert.IsNotNull(listener);
+        Assert.That(container, Is.Not.Null);
+        Assert.That(listener, Is.Not.Null);
 
         NmsTemplate nmsTemplate = (NmsTemplate) applicationContext["NmsTemplate"] as NmsTemplate;
-        Assert.IsNotNull(nmsTemplate);
+        Assert.That(nmsTemplate, Is.Not.Null);
 
-        Assert.AreEqual(0, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(0));
         nmsTemplate.ConvertAndSend("Hello World 1");
 
         int waitInMillis = 2000;
         Thread.Sleep(waitInMillis);
-        Assert.AreEqual(1, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(1));
 
         container.Stop();
         Console.WriteLine("container stopped.");
         nmsTemplate.ConvertAndSend("Hello World 2");
         Thread.Sleep(waitInMillis);
-        Assert.AreEqual(1, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(1));
 
         container.Start();
         Console.WriteLine("container started.");
         Thread.Sleep(waitInMillis);
-        Assert.AreEqual(2, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(2));
 
         container.Shutdown();
 

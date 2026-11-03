@@ -65,14 +65,14 @@ public sealed class LookupMethodOverrideTests
     public void Matches_TotallyDifferentMethodName()
     {
         LookupMethodOverride methodOverride = new LookupMethodOverride("Bingo", "foo");
-        Assert.IsFalse(methodOverride.Matches(typeof(Feeder).GetMethod("GetGrub")));
+        Assert.That(methodOverride.Matches(typeof(Feeder).GetMethod("GetGrub")), Is.False);
     }
 
     [Test]
     public void Matches_MatchingMethodName()
     {
         LookupMethodOverride methodOverride = new LookupMethodOverride("GetGrub", "foo");
-        Assert.IsTrue(methodOverride.Matches(typeof(Feeder).GetMethod("GetGrub")));
+        Assert.That(methodOverride.Matches(typeof(Feeder).GetMethod("GetGrub")), Is.True);
     }
 
     [Test]
@@ -86,7 +86,7 @@ public sealed class LookupMethodOverrideTests
     public void ToStringWorks()
     {
         LookupMethodOverride methodOverride = new LookupMethodOverride("GetGrub", "foo");
-        Assert.AreEqual(typeof(LookupMethodOverride).Name + " for method 'GetGrub'; will return object 'foo'.", methodOverride.ToString());
+        Assert.That(methodOverride.ToString(), Is.EqualTo(typeof(LookupMethodOverride).Name + " for method 'GetGrub'; will return object 'foo'."));
     }
 
     private sealed class Feeder

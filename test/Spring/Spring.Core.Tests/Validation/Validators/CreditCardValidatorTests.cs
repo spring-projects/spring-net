@@ -30,10 +30,10 @@ public sealed class CreditCardValidatorTests
     {
         CreditCardValidator validator = new CreditCardValidator();
         validator.CardType = new Amex();
-        Assert.IsTrue(validator.Validate("378282246310005", new ValidationErrors()));
-        Assert.IsFalse(validator.Validate("444444444", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate(" ", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate("", new ValidationErrors()));
-        Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
+        Assert.That(validator.Validate("378282246310005", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate("444444444", new ValidationErrors()), Is.False);
+        Assert.That(validator.Validate(" ", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate("", new ValidationErrors()), Is.True);
+        Assert.That(validator.Validate(null, new ValidationErrors()), Is.True);
     }
 }

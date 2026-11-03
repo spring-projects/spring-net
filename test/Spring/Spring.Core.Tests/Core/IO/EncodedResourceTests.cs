@@ -33,8 +33,8 @@ public class EncodedResourceTests
         EncodedResource er1 = new EncodedResource(testResource, Encoding.ASCII, true);
         EncodedResource er2 = new EncodedResource(testResource, Encoding.UTF8, false);
 
-        Assert.AreEqual(testResource.GetHashCode(), er1.GetHashCode());
-        Assert.AreEqual(er1.GetHashCode(), er2.GetHashCode());
+        Assert.That(er1.GetHashCode(), Is.EqualTo(testResource.GetHashCode()));
+        Assert.That(er2.GetHashCode(), Is.EqualTo(er1.GetHashCode()));
     }
 
     [Test]
@@ -42,8 +42,8 @@ public class EncodedResourceTests
     {
         EncodedResource r = new EncodedResource(new StringResource("test"));
         StreamReader reader = (StreamReader) r.OpenReader();
-        Assert.AreEqual(Encoding.UTF8.EncodingName, reader.CurrentEncoding.EncodingName);
-        Assert.AreEqual("test", reader.ReadToEnd());
+        Assert.That(reader.CurrentEncoding.EncodingName, Is.EqualTo(Encoding.UTF8.EncodingName));
+        Assert.That(reader.ReadToEnd(), Is.EqualTo("test"));
     }
 
     [Test]
@@ -55,12 +55,12 @@ public class EncodedResourceTests
         resourceData = (byte[]) ArrayUtils.Concat(utf32.GetPreamble(), resourceData);
         EncodedResource r = new EncodedResource(new InputStreamResource(new MemoryStream(resourceData), "description"), Encoding.UTF8, true);
         StreamReader reader = (StreamReader) r.OpenReader();
-        Assert.AreEqual(Encoding.UTF8.EncodingName, reader.CurrentEncoding.EncodingName);
+        Assert.That(reader.CurrentEncoding.EncodingName, Is.EqualTo(Encoding.UTF8.EncodingName));
         string actual = reader.ReadToEnd();
-        Assert.AreEqual("\uFEFF" + expected, actual);
-// interestingly the line below is *not* true!
-//            Assert.AreEqual(utf32.GetString(resourceData), actual);
-        Assert.AreEqual(utf32, reader.CurrentEncoding);
+        Assert.That(actual, Is.EqualTo("\uFEFF" + expected));
+        // interestingly the line below is *not* true!
+        //            Assert.That(actual, Is.EqualTo(utf32.GetString(resourceData)));
+        Assert.That(reader.CurrentEncoding, Is.EqualTo(utf32));
     }
 
     [Test]
@@ -71,11 +71,11 @@ public class EncodedResourceTests
         byte[] resourceData = GetBytes(expected, utf32);
         EncodedResource r = new EncodedResource(new InputStreamResource(new MemoryStream(resourceData), "description"), Encoding.UTF8, false);
         StreamReader reader = (StreamReader) r.OpenReader();
-        Assert.AreEqual(Encoding.UTF8.EncodingName, reader.CurrentEncoding.EncodingName);
+        Assert.That(reader.CurrentEncoding.EncodingName, Is.EqualTo(Encoding.UTF8.EncodingName));
         string actual = reader.ReadToEnd();
-//            Assert.AreEqual("\uFFFD\uFFFD\0\0t\0\0\0e\0\0\0s\0\0\0t\0\0\0", actual);
-        Assert.AreEqual(Encoding.UTF8.GetString(resourceData), actual);
-        Assert.AreEqual(Encoding.UTF8.EncodingName, reader.CurrentEncoding.EncodingName);
+        //            Assert.That(actual, Is.EqualTo("\uFFFD\uFFFD\0\0t\0\0\0e\0\0\0s\0\0\0t\0\0\0"));
+        Assert.That(actual, Is.EqualTo(Encoding.UTF8.GetString(resourceData)));
+        Assert.That(reader.CurrentEncoding.EncodingName, Is.EqualTo(Encoding.UTF8.EncodingName));
     }
 
     /// <summary>

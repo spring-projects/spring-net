@@ -39,77 +39,77 @@ public sealed class StaticSetTests
     public void Xor()
     {
         ISet actual = Set.ExclusiveOr(one, two);
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(3, actual.Count);
-        Assert.IsTrue(actual.ContainsAll(new object[] { "Foo", 2, 3 }));
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.Count, Is.EqualTo(3));
+        Assert.That(actual.ContainsAll(new object[] { "Foo", 2, 3 }), Is.True);
         CheckThatOriginalsHaveNotBeenModified();
 
-        Assert.IsNull(Set.ExclusiveOr(null, null));
+        Assert.That(Set.ExclusiveOr(null, null), Is.Null);
 
         actual = Set.ExclusiveOr(null, two);
-        Assert.AreEqual(two, actual);
+        Assert.That(actual, Is.EqualTo(two));
 
         actual = Set.ExclusiveOr(one, null);
-        Assert.AreEqual(one, actual);
+        Assert.That(actual, Is.EqualTo(one));
     }
 
     [Test]
     public void Minus()
     {
         ISet actual = Set.Minus(one, two);
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(2, actual.Count);
-        Assert.IsTrue(actual.ContainsAll(new object[] { "Foo", 2 }));
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.Count, Is.EqualTo(2));
+        Assert.That(actual.ContainsAll(new object[] { "Foo", 2 }), Is.True);
         CheckThatOriginalsHaveNotBeenModified();
 
-        Assert.IsNull(Set.Minus(null, two));
+        Assert.That(Set.Minus(null, two), Is.Null);
     }
 
     [Test]
     public void Union()
     {
         ISet actual = Set.Union(one, two);
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(4, actual.Count);
-        Assert.IsTrue(actual.ContainsAll(new object[] { 1, "Foo", 2, 3 }));
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.Count, Is.EqualTo(4));
+        Assert.That(actual.ContainsAll(new object[] { 1, "Foo", 2, 3 }), Is.True);
         CheckThatOriginalsHaveNotBeenModified();
 
-        Assert.IsNull(Set.Union(null, null));
+        Assert.That(Set.Union(null, null), Is.Null);
 
         actual = Set.Union(null, two);
-        Assert.AreEqual(two, actual);
+        Assert.That(actual, Is.EqualTo(two));
 
         actual = Set.Union(one, null);
-        Assert.AreEqual(one, actual);
+        Assert.That(actual, Is.EqualTo(one));
     }
 
     [Test]
     public void Intersect()
     {
         ISet actual = Set.Intersect(one, two);
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(1, actual.Count);
-        Assert.IsTrue(actual.Contains(1));
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.Count, Is.EqualTo(1));
+        Assert.That(actual.Contains(1), Is.True);
         CheckThatOriginalsHaveNotBeenModified();
 
-        Assert.IsNull(Set.Intersect(null, null));
+        Assert.That(Set.Intersect(null, null), Is.Null);
 
         actual = Set.Intersect(null, two);
-        Assert.AreEqual(0, actual.Count);
+        Assert.That(actual.Count, Is.EqualTo(0));
 
         actual = Set.Intersect(one, null);
-        Assert.AreEqual(0, actual.Count);
+        Assert.That(actual.Count, Is.EqualTo(0));
     }
 
     private void CheckThatOriginalsHaveNotBeenModified()
     {
-        Assert.IsNotNull(one, "Set operation modified the original sets.");
-        Assert.AreEqual(3, one.Count, "Set operation modified the original sets.");
-        Assert.IsTrue(one.ContainsAll(new object[] { 1, "Foo", 2 }), "Set operation modified the original sets.");
+        Assert.That(one, Is.Not.Null, "Set operation modified the original sets.");
+        Assert.That(one.Count, Is.EqualTo(3), "Set operation modified the original sets.");
+        Assert.That(one.ContainsAll(new object[] { 1, "Foo", 2 }), Is.True, "Set operation modified the original sets.");
 
-        Assert.IsNotNull(two, "Set operation modified the original sets.");
-        Assert.AreEqual(2, two.Count, "Set operation modified the original sets.");
-        Assert.IsTrue(two.ContainsAll(new object[] { 1, 3 }), "Set operation modified the original sets.");
+        Assert.That(two, Is.Not.Null, "Set operation modified the original sets.");
+        Assert.That(two.Count, Is.EqualTo(2), "Set operation modified the original sets.");
+        Assert.That(two.ContainsAll(new object[] { 1, 3 }), Is.True, "Set operation modified the original sets.");
     }
 
     private ISet one;

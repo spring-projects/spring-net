@@ -54,9 +54,9 @@ public class CaseInsensitiveHashtableTests
         CaseInsensitiveHashtable storiginal = new CaseInsensitiveHashtable();
         storiginal.Add("key", "value");
         CaseInsensitiveHashtable st = (CaseInsensitiveHashtable) SerializeDeserializeObject(storiginal);
-        Assert.AreNotSame(storiginal, st);
-        Assert.AreEqual("value", st["KEY"]);
-        Assert.AreEqual(1, st.Count);
+        Assert.That(st, Is.Not.SameAs(storiginal));
+        Assert.That(st["KEY"], Is.EqualTo("value"));
+        Assert.That(st.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -66,9 +66,9 @@ public class CaseInsensitiveHashtableTests
 
         object key = new object();
         st.Add(key, "value");
-        Assert.AreEqual(1, st.Count);
-        Assert.AreEqual("value", st[key]);
-        Assert.IsNull(st[new object()]);
+        Assert.That(st.Count, Is.EqualTo(1));
+        Assert.That(st[key], Is.EqualTo("value"));
+        Assert.That(st[new object()], Is.Null);
     }
 
     [Test]
@@ -76,10 +76,10 @@ public class CaseInsensitiveHashtableTests
     {
         CaseInsensitiveHashtable st = new CaseInsensitiveHashtable();
         st.Add("key", "value");
-        Assert.AreEqual("value", st["KEY"]);
+        Assert.That(st["KEY"], Is.EqualTo("value"));
         st["KeY"] = "value2";
-        Assert.AreEqual(1, st.Count);
-        Assert.AreEqual("value2", st["key"]);
+        Assert.That(st.Count, Is.EqualTo(1));
+        Assert.That(st["key"], Is.EqualTo("value2"));
 
         try
         {
@@ -111,10 +111,10 @@ public class CaseInsensitiveHashtableTests
         ht["key2"] = "value2";
 
         CaseInsensitiveHashtable st = new CaseInsensitiveHashtable(ht, CultureInfo.InvariantCulture);
-        Assert.AreEqual(2, st.Count);
+        Assert.That(st.Count, Is.EqualTo(2));
         ht.Remove("key");
-        Assert.AreEqual(1, ht.Count);
-        Assert.AreEqual(2, st.Count);
+        Assert.That(ht.Count, Is.EqualTo(1));
+        Assert.That(st.Count, Is.EqualTo(2));
     }
 
     /// <summary>

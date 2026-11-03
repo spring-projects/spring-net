@@ -55,16 +55,16 @@ public sealed class RegistryVariableSourceTests
         rvs.Key = key;
 
         // existing vars
-        Assert.AreEqual("Aleks Seovic", rvs.ResolveVariable("name"));
-        Assert.AreEqual(Environment.GetEnvironmentVariable("COMPUTERNAME") + " is the name of my computer",
-            rvs.ResolveVariable("computer_name"));
-        Assert.AreEqual("32", rvs.ResolveVariable("age"));
+        Assert.That(rvs.ResolveVariable("name"), Is.EqualTo("Aleks Seovic"));
+        Assert.That(rvs.ResolveVariable("computer_name"),
+            Is.EqualTo(Environment.GetEnvironmentVariable("COMPUTERNAME") + " is the name of my computer"));
+        Assert.That(rvs.ResolveVariable("age"), Is.EqualTo("32"));
         // multi_sz
-        Assert.AreEqual("Marija,Ana,Nadja", rvs.ResolveVariable("family"));
+        Assert.That(rvs.ResolveVariable("family"), Is.EqualTo("Marija,Ana,Nadja"));
         // binary
-        Assert.AreEqual(null, rvs.ResolveVariable("bday"));
+        Assert.That(rvs.ResolveVariable("bday"), Is.EqualTo(null));
 
         // non-existant variable
-        Assert.IsNull(rvs.ResolveVariable("xyz"));
+        Assert.That(rvs.ResolveVariable("xyz"), Is.Null);
     }
 }

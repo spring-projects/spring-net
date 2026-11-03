@@ -49,10 +49,10 @@ namespace Spring.Data.NHibernate.Support
 
             ConfigSectionSessionScopeSettings settings = new ConfigSectionSessionScopeSettings(this.GetType(), (IVariableSource) null);
 
-            Assert.AreEqual(expectedSessionFactory, settings.SessionFactory);
-            Assert.AreEqual(expectedEntityInterceptor, settings.EntityInterceptor);
-            Assert.AreEqual(expectedSingleSession, settings.SingleSession);
-            Assert.AreEqual(expectedDefaultFlushMode, settings.DefaultFlushMode);
+            Assert.That(settings.SessionFactory, Is.EqualTo(expectedSessionFactory));
+            Assert.That(settings.EntityInterceptor, Is.EqualTo(expectedEntityInterceptor));
+            Assert.That(settings.SingleSession, Is.EqualTo(expectedSingleSession));
+            Assert.That(settings.DefaultFlushMode, Is.EqualTo(expectedDefaultFlushMode));
         }
 
         [Test]
@@ -85,10 +85,10 @@ namespace Spring.Data.NHibernate.Support
 
             ConfigSectionSessionScopeSettings settings = new ConfigSectionSessionScopeSettings(this.GetType(), variableSource);
 
-            Assert.AreEqual(expectedSessionFactory, settings.SessionFactory);
-            Assert.AreEqual(expectedEntityInterceptor, settings.EntityInterceptor);
-            Assert.AreEqual(expectedSingleSession, settings.SingleSession);
-            Assert.AreEqual(expectedDefaultFlushMode, settings.DefaultFlushMode);
+            Assert.That(settings.SessionFactory, Is.EqualTo(expectedSessionFactory));
+            Assert.That(settings.EntityInterceptor, Is.EqualTo(expectedEntityInterceptor));
+            Assert.That(settings.SingleSession, Is.EqualTo(expectedSingleSession));
+            Assert.That(settings.DefaultFlushMode, Is.EqualTo(expectedDefaultFlushMode));
         }
     }
 }

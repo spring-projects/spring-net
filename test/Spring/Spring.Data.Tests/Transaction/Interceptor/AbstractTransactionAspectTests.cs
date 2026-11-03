@@ -65,7 +65,7 @@ public abstract class AbstractTransactionAspectTests
         }
         catch (UnexpectedRollbackException thrown)
         {
-            Assert.IsTrue(thrown == ex);
+            Assert.That(thrown == ex, Is.True);
         }
     }
 
@@ -88,7 +88,7 @@ public abstract class AbstractTransactionAspectTests
 
         ITestObject ito = (ITestObject) Advised(to, ptm, tas);
 
-        Assert.AreEqual("test description", ito.GetDescription());
+        Assert.That(ito.GetDescription(), Is.EqualTo("test description"));
 
         A.CallTo(() => ptm.Commit(status)).MustHaveHappenedOnceExactly();
     }
@@ -148,11 +148,11 @@ public abstract class AbstractTransactionAspectTests
         {
             if (rollbackException && shouldRollback)
             {
-                Assert.AreEqual(tex, e);
+                Assert.That(e, Is.EqualTo(tex));
             }
             else
             {
-                Assert.AreEqual(exception, e);
+                Assert.That(e, Is.EqualTo(exception));
             }
         }
 

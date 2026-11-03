@@ -32,11 +32,11 @@ public sealed class ConfigSectionVariableSourceTests
         vs.SectionName = "DaoConfiguration";
 
         // existing vars
-        Assert.AreEqual("1000", vs.ResolveVariable("maxResults"));
-        Assert.AreEqual("1000", vs.ResolveVariable("MAXResults"));
+        Assert.That(vs.ResolveVariable("maxResults"), Is.EqualTo("1000"));
+        Assert.That(vs.ResolveVariable("MAXResults"), Is.EqualTo("1000"));
 
         // non-existant variable
-        Assert.IsNull(vs.ResolveVariable("dummy"));
+        Assert.That(vs.ResolveVariable("dummy"), Is.Null);
     }
 
     [Test]
@@ -46,15 +46,15 @@ public sealed class ConfigSectionVariableSourceTests
         vs.SectionNames = new string[] { "DaoConfiguration", "DatabaseConfiguration" };
 
         // existing vars
-        Assert.AreEqual("1000", vs.ResolveVariable("maxResults"));
-        Assert.AreEqual("1000", vs.ResolveVariable("MAXResults"));
-        Assert.AreEqual(@"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;",
-            vs.ResolveVariable("connection.string"));
-        Assert.AreEqual(@"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;",
-            vs.ResolveVariable("Connection.String"));
+        Assert.That(vs.ResolveVariable("maxResults"), Is.EqualTo("1000"));
+        Assert.That(vs.ResolveVariable("MAXResults"), Is.EqualTo("1000"));
+        Assert.That(vs.ResolveVariable("connection.string"),
+            Is.EqualTo(@"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;"));
+        Assert.That(vs.ResolveVariable("Connection.String"),
+            Is.EqualTo(@"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;"));
 
         // non-existant variable
-        Assert.IsNull(vs.ResolveVariable("dummy"));
+        Assert.That(vs.ResolveVariable("dummy"), Is.Null);
     }
 
     [Test]
@@ -62,8 +62,8 @@ public sealed class ConfigSectionVariableSourceTests
     {
         ConfigSectionVariableSource vs = new ConfigSectionVariableSource();
         vs.SectionName = "applicationSettings/MyApp.Properties.Settings";
-        Assert.AreEqual("1000", vs.ResolveVariable("maxResults"));
-        Assert.AreEqual(@"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;",
-            vs.ResolveVariable("connection.string"));
+        Assert.That(vs.ResolveVariable("maxResults"), Is.EqualTo("1000"));
+        Assert.That(vs.ResolveVariable("connection.string"),
+            Is.EqualTo(@"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;"));
     }
 }

@@ -32,20 +32,22 @@ public sealed class EmptyTargetSourceTests
         ITargetSource deserializedVersion
             = (ITargetSource) SerializationTestUtils.SerializeAndDeserialize(
                 EmptyTargetSource.Empty);
-        Assert.IsTrue(Object.ReferenceEquals(EmptyTargetSource.Empty, deserializedVersion),
+        Assert.That(Object.ReferenceEquals(EmptyTargetSource.Empty, deserializedVersion),
+            Is.True,
             "Singleton instance not being deserialized correctly");
     }
 
     [Test]
     public void IsSerializable()
     {
-        Assert.IsTrue(SerializationTestUtils.IsSerializable(EmptyTargetSource.Empty),
+        Assert.That(SerializationTestUtils.IsSerializable(EmptyTargetSource.Empty),
+            Is.True,
             "EmptyTargetSource.Empty must be serializable.");
     }
 
     [Test]
     public void IsStatic()
     {
-        Assert.IsTrue(EmptyTargetSource.Empty.IsStatic, "Must be static.");
+        Assert.That(EmptyTargetSource.Empty.IsStatic, Is.True, "Must be static.");
     }
 }

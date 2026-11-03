@@ -37,14 +37,14 @@ public class TypeResolverTests
     public void ResolveLocalAssemblyType()
     {
         Type t = GetTypeResolver().Resolve("Spring.Objects.TestObject");
-        Assert.AreEqual(typeof(TestObject), t);
+        Assert.That(t, Is.EqualTo(typeof(TestObject)));
     }
 
     [Test]
     public void ResolveWithPartialAssemblyName()
     {
         Type t = GetTypeResolver().Resolve("System.Data.IDbConnection, System.Data");
-        Assert.AreEqual(typeof(IDbConnection), t);
+        Assert.That(t, Is.EqualTo(typeof(IDbConnection)));
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public class TypeResolverTests
     public void ResolveLocalAssemblyTypeWithFullAssemblyQualifiedName()
     {
         Type t = GetTypeResolver().Resolve(typeof(TestObject).AssemblyQualifiedName);
-        Assert.AreEqual(typeof(TestObject), t);
+        Assert.That(t, Is.EqualTo(typeof(TestObject)));
     }
 
     [Test]
@@ -82,6 +82,6 @@ public class TypeResolverTests
     {
         string stringType = typeof(string).AssemblyQualifiedName;
         Type t = GetTypeResolver().Resolve(stringType);
-        Assert.AreEqual(typeof(string), t);
+        Assert.That(t, Is.EqualTo(typeof(string)));
     }
 }

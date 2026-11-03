@@ -45,8 +45,8 @@ public class ObjectNameAutoProxyCreatorTests
     public void NoProxy()
     {
         ITestObject testObject = (ITestObject) ctx.GetObject("noproxy");
-        Assert.IsFalse(AopUtils.IsAopProxy(testObject), testObject + " is not an AOP proxy");
-        Assert.AreEqual("noproxy", testObject.Name);
+        Assert.That(AopUtils.IsAopProxy(testObject), Is.False, testObject + " is not an AOP proxy");
+        Assert.That(testObject.Name, Is.EqualTo("noproxy"));
     }
 
     [Test]
@@ -54,7 +54,7 @@ public class ObjectNameAutoProxyCreatorTests
     {
         ITestObject testObject = (ITestObject) ctx.GetObject("testObject");
         ProxyAssertions(testObject, 1);
-        Assert.AreEqual("SimpleTestObject", testObject.Name);
+        Assert.That(testObject.Name, Is.EqualTo("SimpleTestObject"));
     }
 
     [Test]
@@ -62,7 +62,7 @@ public class ObjectNameAutoProxyCreatorTests
     {
         ITestObject testObject = (ITestObject) ctx.GetObject("doubleProxy");
         ProxyAssertions(testObject, 1);
-        Assert.AreEqual("doubleProxy", testObject.Name);
+        Assert.That(testObject.Name, Is.EqualTo("doubleProxy"));
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class ObjectNameAutoProxyCreatorTests
     {
         ITestObject testObject = (ITestObject) ctx.GetObject("SmithFamilyMember");
         ProxyAssertions(testObject, 1);
-        Assert.AreEqual("John Smith", testObject.Name);
+        Assert.That(testObject.Name, Is.EqualTo("John Smith"));
     }
 
     [Test]
@@ -78,7 +78,7 @@ public class ObjectNameAutoProxyCreatorTests
     {
         ITestObject testObject = (ITestObject) ctx.GetObject("twoWildcardsTestObject");
         ProxyAssertions(testObject, 1);
-        Assert.AreEqual("Damjan Tomic", testObject.Name);
+        Assert.That(testObject.Name, Is.EqualTo("Damjan Tomic"));
     }
 
     [Test]
@@ -92,36 +92,36 @@ public class ObjectNameAutoProxyCreatorTests
     public void FrozenProxy()
     {
         ITestObject testObject = (ITestObject) ctx.GetObject("frozen");
-        Assert.IsTrue(((IAdvised) testObject).IsFrozen);
+        Assert.That(((IAdvised) testObject).IsFrozen, Is.True);
     }
 
     [Test]
     public void Introduction()
     {
         object obj = ctx.GetObject("introductionUsingDecorator");
-        Assert.IsNotNull(obj as IIsModified);
+        Assert.That(obj as IIsModified, Is.Not.Null);
         ITestObject testObject = (ITestObject) obj;
         NopInterceptor nop = (NopInterceptor) ctx.GetObject("introductionNopInterceptor");
-        Assert.AreEqual(0, nop.Count);
-        Assert.IsTrue(AopUtils.IsCompositionAopProxy(testObject), testObject + " is not an Composition AOP Proxy");
+        Assert.That(nop.Count, Is.EqualTo(0));
+        Assert.That(AopUtils.IsCompositionAopProxy(testObject), Is.True, testObject + " is not an Composition AOP Proxy");
         int age = 5;
         testObject.Age = age;
-        Assert.AreEqual(age, testObject.Age);
-        Assert.IsNotNull(testObject as IIsModified);
-        Assert.IsTrue(((IIsModified) testObject).IsModified);
-        Assert.AreEqual(3, nop.Count);
-        Assert.AreEqual("introductionUsingDecorator", testObject.Name);
+        Assert.That(testObject.Age, Is.EqualTo(age));
+        Assert.That(testObject as IIsModified, Is.Not.Null);
+        Assert.That(((IIsModified) testObject).IsModified, Is.True);
+        Assert.That(nop.Count, Is.EqualTo(3));
+        Assert.That(testObject.Name, Is.EqualTo("introductionUsingDecorator"));
     }
 
     private void ProxyAssertions(ITestObject testObject, int nopInterceptorCount)
     {
         NopInterceptor nop = (NopInterceptor) ctx.GetObject("nopInterceptor");
-        Assert.AreEqual(0, nop.Count);
-        Assert.IsTrue(AopUtils.IsCompositionAopProxy(testObject), testObject + " is not an AOP Proxy");
+        Assert.That(nop.Count, Is.EqualTo(0));
+        Assert.That(AopUtils.IsCompositionAopProxy(testObject), Is.True, testObject + " is not an AOP Proxy");
         int age = 5;
         testObject.Age = age;
-        Assert.AreEqual(age, testObject.Age);
-        Assert.AreEqual(2 * nopInterceptorCount, nop.Count);
+        Assert.That(testObject.Age, Is.EqualTo(age));
+        Assert.That(nop.Count, Is.EqualTo(2 * nopInterceptorCount));
     }
 
     [Test]
@@ -129,23 +129,23 @@ public class ObjectNameAutoProxyCreatorTests
     {
         ITestObject testObject = (ITestObject) ctx.GetObject("decoratorProxy");
         DecoratorProxyAssertions(testObject);
-        Assert.AreEqual("decoratorProxy", testObject.Name);
+        Assert.That(testObject.Name, Is.EqualTo("decoratorProxy"));
     }
 
     private void DecoratorProxyAssertions(ITestObject testObject)
     {
         CountingBeforeAdvice cba = (CountingBeforeAdvice) ctx.GetObject("countingBeforeAdvice");
         NopInterceptor nop = (NopInterceptor) ctx.GetObject("nopInterceptor");
-        Assert.AreEqual(0, cba.GetCalls());
-        Assert.AreEqual(0, nop.Count);
-        Assert.IsTrue(AopUtils.IsDecoratorAopProxy(testObject), testObject + " is not an AOP Proxy");
+        Assert.That(cba.GetCalls(), Is.EqualTo(0));
+        Assert.That(nop.Count, Is.EqualTo(0));
+        Assert.That(AopUtils.IsDecoratorAopProxy(testObject), Is.True, testObject + " is not an AOP Proxy");
         //extra advice calls are due to test IsDecoratorAopProxy and call to .GetType in impl
-        Assert.AreEqual(1, nop.Count);
-        Assert.AreEqual(1, cba.GetCalls());
+        Assert.That(nop.Count, Is.EqualTo(1));
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
         int age = 5;
         testObject.Age = age;
-        Assert.AreEqual(age, testObject.Age);
-        Assert.AreEqual(3, nop.Count);
-        Assert.AreEqual(3, cba.GetCalls());
+        Assert.That(testObject.Age, Is.EqualTo(age));
+        Assert.That(nop.Count, Is.EqualTo(3));
+        Assert.That(cba.GetCalls(), Is.EqualTo(3));
     }
 }

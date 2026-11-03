@@ -65,7 +65,7 @@ public class DefaultIntroductionAdvisorTests
         DefaultIntroductionAdvisor a2 = new DefaultIntroductionAdvisor(to2);
         bool result = a1.Equals(a2);
 
-        Assert.IsTrue(result);
+        Assert.That(result, Is.True);
     }
 
     [Test]

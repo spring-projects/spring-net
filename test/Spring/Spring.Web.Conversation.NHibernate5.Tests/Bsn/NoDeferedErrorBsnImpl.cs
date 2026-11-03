@@ -62,11 +62,11 @@ public class ConnectionReleaseModeIssueBsnImpl : IConnectionReleaseModeIssueBsn
     {
         ISession sessionNoConv = this.SessionFactory.GetCurrentSession();
         SPCMasterEnt masterEnt2 = sessionNoConv.Get<SPCMasterEnt>(2);
-        Assert.AreEqual(1, masterEnt2.SPCDetailEntList.Count, "masterEnt2.SPCDetailEntList.Count");
+        Assert.That(masterEnt2.SPCDetailEntList.Count, Is.EqualTo(1), "masterEnt2.SPCDetailEntList.Count");
 
         SPCMasterEnt masterEnt3 = sessionNoConv.Get<SPCMasterEnt>(3);
-        Assert.AreEqual(1, masterEnt3.SPCDetailEntList.Count, "masterEnt3.SPCDetailEntList.Count");
+        Assert.That(masterEnt3.SPCDetailEntList.Count, Is.EqualTo(1), "masterEnt3.SPCDetailEntList.Count");
 
-        Assert.AreEqual(1, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
+        Assert.That(ConnectionCreationTrackingDbProvider.Count, Is.EqualTo(1), "ConnectionCreationTrackingDbProvider.Count");
     }
 }

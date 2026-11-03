@@ -49,9 +49,9 @@ public class TestTxIsolationLevelTests
         IApplicationContext ctx =
             new XmlApplicationContext(
                 "assembly://Spring.Data.Integration.Tests/Spring.Data/TestTxIsolationLevel.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         testObjectManager = ctx["testObjectManager"] as ITestObjectManager;
-        Assert.IsNotNull(testObjectManager);
+        Assert.That(testObjectManager, Is.Not.Null);
     }
 
     [Test]

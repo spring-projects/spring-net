@@ -37,17 +37,17 @@ public sealed class TypeRegistryTests
         TypeRegistry.RegisterType("Foo", typeof(Foo));
         TypeRegistry.RegisterType("Bar", "Spring.Objects.Factory.Bar, Spring.Core.Tests");
 
-        Assert.AreEqual(TypeRegistry.ResolveType("Foo"), typeof(Foo));
-        Assert.AreEqual(TypeRegistry.ResolveType("Bar"), typeof(Bar));
+        Assert.That(TypeRegistry.ResolveType("Foo"), Is.EqualTo(typeof(Foo)));
+        Assert.That(TypeRegistry.ResolveType("Bar"), Is.EqualTo(typeof(Bar)));
 
         IApplicationContext ctx =
             new XmlApplicationContext("assembly://Spring.Core.Tests/Spring.Core.TypeResolution/aliasedObjects.xml");
 
         Foo foo = ctx.GetObject("aliasedType") as Foo;
-        Assert.IsNotNull(foo);
-        Assert.IsNotNull(foo.Bar);
-        Assert.AreEqual(foo.Bar, typeof(Bar));
-        Assert.IsTrue(typeof(IBar).IsAssignableFrom(foo.Bar));
+        Assert.That(foo, Is.Not.Null);
+        Assert.That(foo.Bar, Is.Not.Null);
+        Assert.That(foo.Bar, Is.EqualTo(typeof(Bar)));
+        Assert.That(typeof(IBar).IsAssignableFrom(foo.Bar), Is.True);
     }
 
     [Test]
@@ -114,7 +114,7 @@ public sealed class TypeRegistryTests
     public void ReturnsNullIfNoTypeAliasRegistered()
     {
         Type type = TypeRegistry.ResolveType("panko");
-        Assert.IsNull(type, "Must return null if no Type is registered under the supplied alias.");
+        Assert.That(type, Is.Null, "Must return null if no Type is registered under the supplied alias.");
     }
 
     [Test]
@@ -126,582 +126,582 @@ public sealed class TypeRegistryTests
         TypeRegistry.RegisterType(Alias, GetType());
 
         Type type = TypeRegistry.ResolveType(Alias);
-        Assert.AreEqual(GetType(), type, "Overriding Type was not registered.");
+        Assert.That(type, Is.EqualTo(GetType()), "Overriding Type was not registered.");
     }
 
     [Test]
     public void ResolveIntegerByName()
     {
-        Assert.AreEqual(typeof(int),
-            TypeRegistry.ResolveType("int"));
+        Assert.That(TypeRegistry.ResolveType("int"),
+            Is.EqualTo(typeof(int)));
     }
 
     [Test]
     public void ResolveChar()
     {
-        Assert.AreEqual(typeof(char),
-            TypeRegistry.ResolveType(TypeRegistry.CharAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.CharAlias),
+            Is.EqualTo(typeof(char)));
     }
 
     [Test]
     public void ResolveInteger()
     {
-        Assert.AreEqual(typeof(int),
-            TypeRegistry.ResolveType(TypeRegistry.Int32Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int32Alias),
+            Is.EqualTo(typeof(int)));
     }
 
     [Test]
     public void ResolveDecimal()
     {
-        Assert.AreEqual(typeof(decimal),
-            TypeRegistry.ResolveType(TypeRegistry.DecimalAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DecimalAlias),
+            Is.EqualTo(typeof(decimal)));
     }
 
     [Test]
     public void ResolveUnsignedIntegerByName()
     {
-        Assert.AreEqual(typeof(uint),
-            TypeRegistry.ResolveType("uint"));
+        Assert.That(TypeRegistry.ResolveType("uint"),
+            Is.EqualTo(typeof(uint)));
     }
 
     [Test]
     public void ResolveUnsignedInteger()
     {
-        Assert.AreEqual(typeof(uint),
-            TypeRegistry.ResolveType(TypeRegistry.UInt32Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.UInt32Alias),
+            Is.EqualTo(typeof(uint)));
     }
 
     [Test]
     public void ResolveFloatByName()
     {
-        Assert.AreEqual(typeof(float),
-            TypeRegistry.ResolveType("float"));
+        Assert.That(TypeRegistry.ResolveType("float"),
+            Is.EqualTo(typeof(float)));
     }
 
     [Test]
     public void ResolveFloat()
     {
-        Assert.AreEqual(typeof(float),
-            TypeRegistry.ResolveType(TypeRegistry.FloatAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.FloatAlias),
+            Is.EqualTo(typeof(float)));
     }
 
     [Test]
     public void ResolveDoubleByName()
     {
-        Assert.AreEqual(typeof(double),
-            TypeRegistry.ResolveType("double"));
+        Assert.That(TypeRegistry.ResolveType("double"),
+            Is.EqualTo(typeof(double)));
     }
 
     [Test]
     public void ResolveDouble()
     {
-        Assert.AreEqual(typeof(double),
-            TypeRegistry.ResolveType(TypeRegistry.DoubleAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DoubleAlias),
+            Is.EqualTo(typeof(double)));
     }
 
     [Test]
     public void ResolveLongByName()
     {
-        Assert.AreEqual(typeof(long),
-            TypeRegistry.ResolveType("long"));
+        Assert.That(TypeRegistry.ResolveType("long"),
+            Is.EqualTo(typeof(long)));
     }
 
     [Test]
     public void ResolveLong()
     {
-        Assert.AreEqual(typeof(long),
-            TypeRegistry.ResolveType(TypeRegistry.Int64Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int64Alias),
+            Is.EqualTo(typeof(long)));
     }
 
     [Test]
     public void ResolveUnsignedLongByName()
     {
-        Assert.AreEqual(typeof(ulong),
-            TypeRegistry.ResolveType("ulong"));
+        Assert.That(TypeRegistry.ResolveType("ulong"),
+            Is.EqualTo(typeof(ulong)));
     }
 
     [Test]
     public void ResolveUnsignedLong()
     {
-        Assert.AreEqual(typeof(ulong),
-            TypeRegistry.ResolveType(TypeRegistry.UInt64Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.UInt64Alias),
+            Is.EqualTo(typeof(ulong)));
     }
 
     [Test]
     public void ResolveShortByName()
     {
-        Assert.AreEqual(typeof(short),
-            TypeRegistry.ResolveType("short"));
+        Assert.That(TypeRegistry.ResolveType("short"),
+            Is.EqualTo(typeof(short)));
     }
 
     [Test]
     public void ResolveShort()
     {
-        Assert.AreEqual(typeof(short),
-            TypeRegistry.ResolveType(TypeRegistry.Int16Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int16Alias),
+            Is.EqualTo(typeof(short)));
     }
 
     [Test]
     public void ResolveUnsignedShortByName()
     {
-        Assert.AreEqual(typeof(ushort),
-            TypeRegistry.ResolveType("ushort"));
+        Assert.That(TypeRegistry.ResolveType("ushort"),
+            Is.EqualTo(typeof(ushort)));
     }
 
     [Test]
     public void ResolveUnsignedShort()
     {
-        Assert.AreEqual(typeof(ushort),
-            TypeRegistry.ResolveType(TypeRegistry.UInt16Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.UInt16Alias),
+            Is.EqualTo(typeof(ushort)));
     }
 
     [Test]
     public void ResolveDate()
     {
-        Assert.AreEqual(typeof(DateTime),
-            TypeRegistry.ResolveType(TypeRegistry.DateAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DateAlias),
+            Is.EqualTo(typeof(DateTime)));
     }
 
     [Test]
     public void ResolveBool()
     {
-        Assert.AreEqual(typeof(bool),
-            TypeRegistry.ResolveType(TypeRegistry.BoolAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.BoolAlias),
+            Is.EqualTo(typeof(bool)));
     }
 
     [Test]
     public void ResolveIntegerByVBName()
     {
-        Assert.AreEqual(typeof(int),
-            TypeRegistry.ResolveType("Integer"));
+        Assert.That(TypeRegistry.ResolveType("Integer"),
+            Is.EqualTo(typeof(int)));
     }
 
     [Test]
     public void ResolveVBInteger()
     {
-        Assert.AreEqual(typeof(int),
-            TypeRegistry.ResolveType(TypeRegistry.Int32AliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int32AliasVB),
+            Is.EqualTo(typeof(int)));
     }
 
     [Test]
     public void ResolveVBDecimal()
     {
-        Assert.AreEqual(typeof(decimal),
-            TypeRegistry.ResolveType(TypeRegistry.DecimalAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DecimalAliasVB),
+            Is.EqualTo(typeof(decimal)));
     }
 
     [Test]
     public void ResolveSingleByName()
     {
-        Assert.AreEqual(typeof(float),
-            TypeRegistry.ResolveType("Single"));
+        Assert.That(TypeRegistry.ResolveType("Single"),
+            Is.EqualTo(typeof(float)));
     }
 
     [Test]
     public void ResolveSingle()
     {
-        Assert.AreEqual(typeof(float),
-            TypeRegistry.ResolveType(TypeRegistry.SingleAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.SingleAlias),
+            Is.EqualTo(typeof(float)));
     }
 
     [Test]
     public void ResolveVBDouble()
     {
-        Assert.AreEqual(typeof(double),
-            TypeRegistry.ResolveType(TypeRegistry.DoubleAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DoubleAliasVB),
+            Is.EqualTo(typeof(double)));
     }
 
     [Test]
     public void ResolveVBLong()
     {
-        Assert.AreEqual(typeof(long),
-            TypeRegistry.ResolveType(TypeRegistry.Int64AliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int64AliasVB),
+            Is.EqualTo(typeof(long)));
     }
 
     [Test]
     public void ResolveVBShort()
     {
-        Assert.AreEqual(typeof(short),
-            TypeRegistry.ResolveType(TypeRegistry.Int16AliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int16AliasVB),
+            Is.EqualTo(typeof(short)));
     }
 
     [Test]
     public void ResolveVBDate()
     {
-        Assert.AreEqual(typeof(DateTime),
-            TypeRegistry.ResolveType(TypeRegistry.DateAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DateAliasVB),
+            Is.EqualTo(typeof(DateTime)));
     }
 
     [Test]
     public void ResolveVBBool()
     {
-        Assert.AreEqual(typeof(bool),
-            TypeRegistry.ResolveType(TypeRegistry.BoolAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.BoolAliasVB),
+            Is.EqualTo(typeof(bool)));
     }
 
     [Test]
     public void ResolveString()
     {
-        Assert.AreEqual(typeof(string),
-            TypeRegistry.ResolveType(TypeRegistry.StringAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.StringAlias),
+            Is.EqualTo(typeof(string)));
     }
 
     [Test]
     public void ResolveVBString()
     {
-        Assert.AreEqual(typeof(string),
-            TypeRegistry.ResolveType(TypeRegistry.StringAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.StringAliasVB),
+            Is.EqualTo(typeof(string)));
     }
 
     [Test]
     public void ResolveStringArray()
     {
-        Assert.AreEqual(typeof(string[]),
-            TypeRegistry.ResolveType(TypeRegistry.StringArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.StringArrayAlias),
+            Is.EqualTo(typeof(string[])));
     }
 
     [Test]
     public void ResolveVBStringArray()
     {
-        Assert.AreEqual(typeof(string[]),
-            TypeRegistry.ResolveType(TypeRegistry.StringArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.StringArrayAliasVB),
+            Is.EqualTo(typeof(string[])));
     }
 
     [Test]
     public void ResolveObject()
     {
-        Assert.AreEqual(typeof(object),
-            TypeRegistry.ResolveType(TypeRegistry.ObjectAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.ObjectAlias),
+            Is.EqualTo(typeof(object)));
     }
 
     [Test]
     public void ResolveVBObject()
     {
-        Assert.AreEqual(typeof(object),
-            TypeRegistry.ResolveType(TypeRegistry.ObjectAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.ObjectAliasVB),
+            Is.EqualTo(typeof(object)));
     }
 
     [Test]
     public void ResolveObjectArray()
     {
-        Assert.AreEqual(typeof(object[]),
-            TypeRegistry.ResolveType(TypeRegistry.ObjectArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.ObjectArrayAlias),
+            Is.EqualTo(typeof(object[])));
     }
 
     [Test]
     public void ResolveVBObjectArray()
     {
-        Assert.AreEqual(typeof(object[]),
-            TypeRegistry.ResolveType(TypeRegistry.ObjectArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.ObjectArrayAliasVB),
+            Is.EqualTo(typeof(object[])));
     }
 
     [Test]
     public void ResolveCharArray()
     {
-        Assert.AreEqual(typeof(char[]),
-            TypeRegistry.ResolveType(TypeRegistry.CharArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.CharArrayAlias),
+            Is.EqualTo(typeof(char[])));
     }
 
     [Test]
     public void ResolveVBCharArray()
     {
-        Assert.AreEqual(typeof(char[]),
-            TypeRegistry.ResolveType(TypeRegistry.CharArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.CharArrayAliasVB),
+            Is.EqualTo(typeof(char[])));
     }
 
     [Test]
     public void ResolveInt32Array()
     {
-        Assert.AreEqual(typeof(int[]),
-            TypeRegistry.ResolveType(TypeRegistry.Int32ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int32ArrayAlias),
+            Is.EqualTo(typeof(int[])));
     }
 
     [Test]
     public void ResolveVBInt32Array()
     {
-        Assert.AreEqual(typeof(int[]),
-            TypeRegistry.ResolveType(TypeRegistry.Int32ArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int32ArrayAliasVB),
+            Is.EqualTo(typeof(int[])));
     }
 
     [Test]
     public void ResolveInt16Array()
     {
-        Assert.AreEqual(typeof(short[]),
-            TypeRegistry.ResolveType(TypeRegistry.Int16ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int16ArrayAlias),
+            Is.EqualTo(typeof(short[])));
     }
 
     [Test]
     public void ResolveVBInt16Array()
     {
-        Assert.AreEqual(typeof(short[]),
-            TypeRegistry.ResolveType(TypeRegistry.Int16ArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int16ArrayAliasVB),
+            Is.EqualTo(typeof(short[])));
     }
 
     [Test]
     public void ResolveInt64Array()
     {
-        Assert.AreEqual(typeof(long[]),
-            TypeRegistry.ResolveType(TypeRegistry.Int64ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int64ArrayAlias),
+            Is.EqualTo(typeof(long[])));
     }
 
     [Test]
     public void ResolveVBInt64Array()
     {
-        Assert.AreEqual(typeof(long[]),
-            TypeRegistry.ResolveType(TypeRegistry.Int64ArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.Int64ArrayAliasVB),
+            Is.EqualTo(typeof(long[])));
     }
 
     [Test]
     public void ResolveUInt16Array()
     {
-        Assert.AreEqual(typeof(ushort[]),
-            TypeRegistry.ResolveType(TypeRegistry.UInt16ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.UInt16ArrayAlias),
+            Is.EqualTo(typeof(ushort[])));
     }
 
     [Test]
     public void ResolveUInt32Array()
     {
-        Assert.AreEqual(typeof(uint[]),
-            TypeRegistry.ResolveType(TypeRegistry.UInt32ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.UInt32ArrayAlias),
+            Is.EqualTo(typeof(uint[])));
     }
 
     [Test]
     public void ResolveUInt64Array()
     {
-        Assert.AreEqual(typeof(ulong[]),
-            TypeRegistry.ResolveType(TypeRegistry.UInt64ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.UInt64ArrayAlias),
+            Is.EqualTo(typeof(ulong[])));
     }
 
     [Test]
     public void ResolveBoolArray()
     {
-        Assert.AreEqual(typeof(bool[]),
-            TypeRegistry.ResolveType(TypeRegistry.BoolArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.BoolArrayAlias),
+            Is.EqualTo(typeof(bool[])));
     }
 
     [Test]
     public void ResolveVBBoolArray()
     {
-        Assert.AreEqual(typeof(bool[]),
-            TypeRegistry.ResolveType(TypeRegistry.BoolArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.BoolArrayAliasVB),
+            Is.EqualTo(typeof(bool[])));
     }
 
     [Test]
     public void ResolveDateArray()
     {
-        Assert.AreEqual(typeof(DateTime[]),
-            TypeRegistry.ResolveType(TypeRegistry.DateTimeArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DateTimeArrayAlias),
+            Is.EqualTo(typeof(DateTime[])));
     }
 
     [Test]
     public void ResolveVBDateArray()
     {
-        Assert.AreEqual(typeof(DateTime[]),
-            TypeRegistry.ResolveType(TypeRegistry.DateTimeArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DateTimeArrayAliasVB),
+            Is.EqualTo(typeof(DateTime[])));
     }
 
     [Test]
     public void ResolveFloatArray()
     {
-        Assert.AreEqual(typeof(float[]),
-            TypeRegistry.ResolveType(TypeRegistry.FloatArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.FloatArrayAlias),
+            Is.EqualTo(typeof(float[])));
     }
 
     [Test]
     public void ResolveVBSingleArray()
     {
-        Assert.AreEqual(typeof(float[]),
-            TypeRegistry.ResolveType(TypeRegistry.SingleArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.SingleArrayAliasVB),
+            Is.EqualTo(typeof(float[])));
     }
 
     [Test]
     public void ResolveDoubleArray()
     {
-        Assert.AreEqual(typeof(double[]),
-            TypeRegistry.ResolveType(TypeRegistry.DoubleArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DoubleArrayAlias),
+            Is.EqualTo(typeof(double[])));
     }
 
     [Test]
     public void ResolveVBDoubleArray()
     {
-        Assert.AreEqual(typeof(double[]),
-            TypeRegistry.ResolveType(TypeRegistry.DoubleArrayAliasVB));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.DoubleArrayAliasVB),
+            Is.EqualTo(typeof(double[])));
     }
 
     [Test]
     public void ResolveNullableChar()
     {
-        Assert.AreEqual(typeof(char?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableCharAlias));
-        Assert.AreEqual(typeof(Nullable<char>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableCharAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableCharAlias),
+            Is.EqualTo(typeof(char?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableCharAlias),
+            Is.EqualTo(typeof(Nullable<char>)));
     }
 
     [Test]
     public void ResolveNullableInteger()
     {
-        Assert.AreEqual(typeof(int?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableInt32Alias));
-        Assert.AreEqual(typeof(Nullable<int>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableInt32Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableInt32Alias),
+            Is.EqualTo(typeof(int?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableInt32Alias),
+            Is.EqualTo(typeof(Nullable<int>)));
     }
 
     [Test]
     public void ResolveNullableDecimal()
     {
-        Assert.AreEqual(typeof(decimal?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableDecimalAlias));
-        Assert.AreEqual(typeof(Nullable<decimal>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableDecimalAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableDecimalAlias),
+            Is.EqualTo(typeof(decimal?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableDecimalAlias),
+            Is.EqualTo(typeof(Nullable<decimal>)));
     }
 
     [Test]
     public void ResolveNullableUnsignedInteger()
     {
-        Assert.AreEqual(typeof(uint?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableUInt32Alias));
-        Assert.AreEqual(typeof(Nullable<uint>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableUInt32Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableUInt32Alias),
+            Is.EqualTo(typeof(uint?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableUInt32Alias),
+            Is.EqualTo(typeof(Nullable<uint>)));
     }
 
     [Test]
     public void ResolveNullableFloat()
     {
-        Assert.AreEqual(typeof(float?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableFloatAlias));
-        Assert.AreEqual(typeof(Nullable<float>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableFloatAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableFloatAlias),
+            Is.EqualTo(typeof(float?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableFloatAlias),
+            Is.EqualTo(typeof(Nullable<float>)));
     }
 
     [Test]
     public void ResolveNullableDouble()
     {
-        Assert.AreEqual(typeof(double?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableDoubleAlias));
-        Assert.AreEqual(typeof(Nullable<double>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableDoubleAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableDoubleAlias),
+            Is.EqualTo(typeof(double?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableDoubleAlias),
+            Is.EqualTo(typeof(Nullable<double>)));
     }
 
     [Test]
     public void ResolveNullableLong()
     {
-        Assert.AreEqual(typeof(long?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableInt64Alias));
-        Assert.AreEqual(typeof(Nullable<long>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableInt64Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableInt64Alias),
+            Is.EqualTo(typeof(long?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableInt64Alias),
+            Is.EqualTo(typeof(Nullable<long>)));
     }
 
     [Test]
     public void ResolveNullableUnsignedLong()
     {
-        Assert.AreEqual(typeof(ulong?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableUInt64Alias));
-        Assert.AreEqual(typeof(Nullable<ulong>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableUInt64Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableUInt64Alias),
+            Is.EqualTo(typeof(ulong?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableUInt64Alias),
+            Is.EqualTo(typeof(Nullable<ulong>)));
     }
 
     [Test]
     public void ResolveNullableShort()
     {
-        Assert.AreEqual(typeof(short?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableInt16Alias));
-        Assert.AreEqual(typeof(Nullable<short>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableInt16Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableInt16Alias),
+            Is.EqualTo(typeof(short?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableInt16Alias),
+            Is.EqualTo(typeof(Nullable<short>)));
     }
 
     [Test]
     public void ResolveNullableUnsignedShort()
     {
-        Assert.AreEqual(typeof(ushort?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableUInt16Alias));
-        Assert.AreEqual(typeof(Nullable<ushort>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableUInt16Alias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableUInt16Alias),
+            Is.EqualTo(typeof(ushort?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableUInt16Alias),
+            Is.EqualTo(typeof(Nullable<ushort>)));
     }
 
     [Test]
     public void ResolveNullableBool()
     {
-        Assert.AreEqual(typeof(bool?),
-            TypeRegistry.ResolveType(TypeRegistry.NullableBoolAlias));
-        Assert.AreEqual(typeof(Nullable<bool>),
-            TypeRegistry.ResolveType(TypeRegistry.NullableBoolAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableBoolAlias),
+            Is.EqualTo(typeof(bool?)));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableBoolAlias),
+            Is.EqualTo(typeof(Nullable<bool>)));
     }
 
     [Test]
     public void ResolveNullableCharArray()
     {
-        Assert.AreEqual(typeof(char?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableCharArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableCharArrayAlias),
+            Is.EqualTo(typeof(char?[])));
     }
 
     [Test]
     public void ResolveNullableInt32Array()
     {
-        Assert.AreEqual(typeof(int?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableInt32ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableInt32ArrayAlias),
+            Is.EqualTo(typeof(int?[])));
     }
 
     [Test]
     public void ResolveNullableDecimalArray()
     {
-        Assert.AreEqual(typeof(decimal?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableDecimalArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableDecimalArrayAlias),
+            Is.EqualTo(typeof(decimal?[])));
     }
 
     [Test]
     public void ResolveNullableInt16Array()
     {
-        Assert.AreEqual(typeof(short?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableInt16ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableInt16ArrayAlias),
+            Is.EqualTo(typeof(short?[])));
     }
 
     [Test]
     public void ResolveNullableInt64Array()
     {
-        Assert.AreEqual(typeof(long?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableInt64ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableInt64ArrayAlias),
+            Is.EqualTo(typeof(long?[])));
     }
 
     [Test]
     public void ResolveNullableUInt16Array()
     {
-        Assert.AreEqual(typeof(ushort?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableUInt16ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableUInt16ArrayAlias),
+            Is.EqualTo(typeof(ushort?[])));
     }
 
     [Test]
     public void ResolveNullableUInt32Array()
     {
-        Assert.AreEqual(typeof(uint?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableUInt32ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableUInt32ArrayAlias),
+            Is.EqualTo(typeof(uint?[])));
     }
 
     [Test]
     public void ResolveNullableUInt64Array()
     {
-        Assert.AreEqual(typeof(ulong?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableUInt64ArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableUInt64ArrayAlias),
+            Is.EqualTo(typeof(ulong?[])));
     }
 
     [Test]
     public void ResolveNullableBoolArray()
     {
-        Assert.AreEqual(typeof(bool?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableBoolArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableBoolArrayAlias),
+            Is.EqualTo(typeof(bool?[])));
     }
 
     [Test]
     public void ResolveNullableFloatArray()
     {
-        Assert.AreEqual(typeof(float?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableFloatArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableFloatArrayAlias),
+            Is.EqualTo(typeof(float?[])));
     }
 
     [Test]
     public void ResolveNullableDoubleArray()
     {
-        Assert.AreEqual(typeof(double?[]),
-            TypeRegistry.ResolveType(TypeRegistry.NullableDoubleArrayAlias));
+        Assert.That(TypeRegistry.ResolveType(TypeRegistry.NullableDoubleArrayAlias),
+            Is.EqualTo(typeof(double?[])));
     }
 }
 

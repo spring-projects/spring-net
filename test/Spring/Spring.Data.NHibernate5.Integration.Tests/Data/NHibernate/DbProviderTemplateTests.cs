@@ -39,7 +39,7 @@ namespace Spring.Data.NHibernate
             ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/dbProviderTemplateTests.xml");
 
             userCredentialsDbProvider = ctx["DbProvider"] as UserCredentialsDbProvider;
-            Assert.IsNotNull(userCredentialsDbProvider);
+            Assert.That(userCredentialsDbProvider, Is.Not.Null);
         }
 
         [Test]

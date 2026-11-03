@@ -76,7 +76,7 @@ public class AttributeAutoProxyCreatorTests
     public void DefaultsToNotCheckInherited()
     {
         AttributeAutoProxyCreator apc = new AttributeAutoProxyCreator();
-        Assert.IsFalse(apc.CheckInherited);
+        Assert.That(apc.CheckInherited, Is.False);
     }
 
     [Test]
@@ -86,7 +86,7 @@ public class AttributeAutoProxyCreatorTests
         apc.AttributeTypes = new Type[] { typeof(ApcTestAttribute) };
 
         object result = apc.PostProcessAfterInitialization(new AttributedApcTestObject(), "testObject");
-        Assert.IsTrue(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.True);
     }
 
     [Test]
@@ -96,7 +96,7 @@ public class AttributeAutoProxyCreatorTests
         apc.AttributeTypes = new Type[] { typeof(ApcTestAttribute) };
         apc.CheckInherited = true;
         object result = apc.PostProcessAfterInitialization(new DerivedAttributedApcTestObject(), "testObject");
-        Assert.IsTrue(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.True);
     }
 
     [Test]
@@ -106,7 +106,7 @@ public class AttributeAutoProxyCreatorTests
         apc.AttributeTypes = new Type[] { typeof(ApcTestAttribute) };
         apc.CheckInherited = false;
         object result = apc.PostProcessAfterInitialization(new DerivedAttributedApcTestObject(), "testObject");
-        Assert.IsFalse(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.False);
     }
 
     [Test]
@@ -116,7 +116,7 @@ public class AttributeAutoProxyCreatorTests
         apc.AttributeTypes = new Type[] { typeof(ApcTestAttribute) };
 
         object result = apc.PostProcessAfterInitialization(new TestObject(), "testObject");
-        Assert.IsFalse(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.False);
     }
 
     [Test]
@@ -128,7 +128,7 @@ public class AttributeAutoProxyCreatorTests
 
         // does not check method level attributes!
         object result = apc.PostProcessAfterInitialization(new DerivedAttributedApcTestObject(), "testObject");
-        Assert.IsFalse(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.False);
     }
 
     [Test]
@@ -138,6 +138,6 @@ public class AttributeAutoProxyCreatorTests
         apc.AttributeTypes = new Type[0];
 
         object result = apc.PostProcessAfterInitialization(new ApcTestObject(), "testObject");
-        Assert.IsFalse(AopUtils.IsAopProxy(result));
+        Assert.That(AopUtils.IsAopProxy(result), Is.False);
     }
 }

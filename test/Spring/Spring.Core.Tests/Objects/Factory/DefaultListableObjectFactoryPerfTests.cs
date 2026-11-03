@@ -112,11 +112,11 @@ public class BeanFactoryTask : AsyncTestTask
     {
         InitializeFactory();
         FFoo foo = (FFoo) factory.GetObject("foo");
-        Assert.AreEqual(5, foo.i);
-        Assert.AreEqual("test", foo.s);
-        Assert.AreSame(foo.bar.tee, foo.copy.tee);
-        Assert.AreEqual(5, foo.bar.i);
-        Assert.AreEqual("test", foo.bar.Tee.S);
+        Assert.That(foo.i, Is.EqualTo(5));
+        Assert.That(foo.s, Is.EqualTo("test"));
+        Assert.That(foo.copy.tee, Is.SameAs(foo.bar.tee));
+        Assert.That(foo.bar.i, Is.EqualTo(5));
+        Assert.That(foo.bar.Tee.S, Is.EqualTo("test"));
     }
 
     private void InitializeFactory()

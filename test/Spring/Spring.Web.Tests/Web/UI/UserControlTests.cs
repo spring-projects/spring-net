@@ -67,7 +67,7 @@ public class UserControlTests : TestWebContextTests
         ConditionValidator v1 = new ConditionValidator("#page == #this.Page", null);
         ConditionValidator v2 = new ConditionValidator("#usercontrol == #this", null);
 
-        Assert.IsTrue(c1.Validate(c1, v1, v2));
+        Assert.That(c1.Validate(c1, v1, v2), Is.True);
     }
 
     [Test]
@@ -83,6 +83,6 @@ public class UserControlTests : TestWebContextTests
         TestUserControl tuc = new TestUserControl();
         tuc.ModelPersistenceMedium = new DictionaryModelPersistenceMedium();
         tuc.SaveModelToPersistenceMedium(this);
-        Assert.AreEqual(this, tuc.LoadModelFromPersistenceMedium());
+        Assert.That(tuc.LoadModelFromPersistenceMedium(), Is.EqualTo(this));
     }
 }

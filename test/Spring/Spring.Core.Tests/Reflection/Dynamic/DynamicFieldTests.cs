@@ -71,15 +71,15 @@ public class DynamicFieldTests
     public void TestInstanceFields()
     {
         IDynamicField name = Create(typeof(Inventor).GetField("Name"));
-        Assert.AreEqual(tesla.Name, name.GetValue(tesla));
+        Assert.That(name.GetValue(tesla), Is.EqualTo(tesla.Name));
         name.SetValue(tesla, "Tesla, Nikola");
-        Assert.AreEqual("Tesla, Nikola", tesla.Name);
-        Assert.AreEqual("Tesla, Nikola", name.GetValue(tesla));
+        Assert.That(tesla.Name, Is.EqualTo("Tesla, Nikola"));
+        Assert.That(name.GetValue(tesla), Is.EqualTo("Tesla, Nikola"));
 
         MyStruct myYearHolder = new MyStruct();
         myYearHolder.Year = 2004;
         IDynamicField year = Create(typeof(MyStruct).GetField("year", BINDANY));
-        Assert.AreEqual(2004, year.GetValue(myYearHolder));
+        Assert.That(year.GetValue(myYearHolder), Is.EqualTo(2004));
     }
 
     [Test]
@@ -97,7 +97,7 @@ public class DynamicFieldTests
         myField.SetValue(null, "here we go...");
 
         IDynamicField myConst = Create(typeof(MyStaticClass).GetField("MyConst"));
-        Assert.AreEqual(3456, myConst.GetValue(null));
+        Assert.That(myConst.GetValue(null), Is.EqualTo(3456));
         try
         {
             myConst.SetValue(null, 7890);
@@ -107,7 +107,7 @@ public class DynamicFieldTests
         IDynamicField myReadonlyField = Create(typeof(MyStaticClass).GetField("myReadonlyField"));
         string s2 = (string) myReadonlyField.GetValue(null);
         string s1 = MyStaticClass.myReadonlyField;
-        Assert.AreEqual(s1, s2);
+        Assert.That(s2, Is.EqualTo(s1));
     }
 
     [Test]
@@ -120,7 +120,7 @@ public class DynamicFieldTests
 
         string u2 = (string) myPrivateReadonlyField2.GetValue(null);
         string u1 = "hahaha";
-        Assert.AreEqual(u1, u2);
+        Assert.That(u2, Is.EqualTo(u1));
     }
 
     [Test]
@@ -140,7 +140,7 @@ public class DynamicFieldTests
     {
         // static readonly
         IDynamicField maxValue = Create(typeof(DateTime).GetField("MaxValue"));
-        Assert.AreEqual(DateTime.MaxValue, maxValue.GetValue(null));
+        Assert.That(maxValue.GetValue(null), Is.EqualTo(DateTime.MaxValue));
         try
         {
             maxValue.SetValue(null, DateTime.Now);
@@ -149,7 +149,7 @@ public class DynamicFieldTests
 
         // const
         IDynamicField int64max = Create(typeof(Int64).GetField("MaxValue", BindingFlags.Public | BindingFlags.Static));
-        Assert.AreEqual(Int64.MaxValue, int64max.GetValue(null));
+        Assert.That(int64max.GetValue(null), Is.EqualTo(Int64.MaxValue));
         try
         {
             int64max.SetValue(null, 0);
@@ -159,7 +159,7 @@ public class DynamicFieldTests
         // pure static
         IDynamicField myField = Create(typeof(MyStaticStruct).GetField("staticYear"));
         myField.SetValue(null, 2008);
-        Assert.AreEqual(2008, myField.GetValue(null));
+        Assert.That(myField.GetValue(null), Is.EqualTo(2008));
     }
 
     private DateTime start, stop;

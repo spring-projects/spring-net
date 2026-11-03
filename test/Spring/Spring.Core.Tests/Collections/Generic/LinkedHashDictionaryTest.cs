@@ -41,25 +41,25 @@ public class LinkedHashDictionaryTest
     [Test]
     public void CanAddEntries()
     {
-        Assert.IsTrue(_testDictionary.ContainsKey(0));
-        Assert.IsTrue(_testDictionary.ContainsKey(1));
-        Assert.IsTrue(_testDictionary.ContainsKey(2));
-        Assert.IsTrue(_testDictionary.ContainsKey(3));
-        Assert.IsTrue(_testDictionary.ContainsKey(4));
+        Assert.That(_testDictionary.ContainsKey(0), Is.True);
+        Assert.That(_testDictionary.ContainsKey(1), Is.True);
+        Assert.That(_testDictionary.ContainsKey(2), Is.True);
+        Assert.That(_testDictionary.ContainsKey(3), Is.True);
+        Assert.That(_testDictionary.ContainsKey(4), Is.True);
     }
 
     [Test]
     public void AddAtExistingIndexOverwritesEntry()
     {
         _testDictionary.Add(1, "b2");
-        Assert.AreEqual("b2", _testDictionary[1]);
+        Assert.That(_testDictionary[1], Is.EqualTo("b2"));
     }
 
     [Test]
     public void CanAccessValuesByIndex()
     {
-        Assert.AreEqual("a", _testDictionary[0]);
-        Assert.AreEqual("b", _testDictionary[1]);
+        Assert.That(_testDictionary[0], Is.EqualTo("a"));
+        Assert.That(_testDictionary[1], Is.EqualTo("b"));
     }
 
     /// <summary>
@@ -69,12 +69,12 @@ public class LinkedHashDictionaryTest
     public void CanRetreiveKeys()
     {
         int[] keys = _testDictionary.Keys.ToArray();
-        Assert.AreEqual(5, keys.Length);
-        Assert.AreEqual(0, keys[0]);
-        Assert.AreEqual(1, keys[1]);
-        Assert.AreEqual(2, keys[2]);
-        Assert.AreEqual(3, keys[3]);
-        Assert.AreEqual(4, keys[4]);
+        Assert.That(keys.Length, Is.EqualTo(5));
+        Assert.That(keys[0], Is.EqualTo(0));
+        Assert.That(keys[1], Is.EqualTo(1));
+        Assert.That(keys[2], Is.EqualTo(2));
+        Assert.That(keys[3], Is.EqualTo(3));
+        Assert.That(keys[4], Is.EqualTo(4));
     }
 
     [Test]
@@ -82,14 +82,14 @@ public class LinkedHashDictionaryTest
     {
         _testDictionary.Remove(3);
         _testDictionary.Remove(2);
-        Assert.AreEqual(3, _testDictionary.Count);
+        Assert.That(_testDictionary.Count, Is.EqualTo(3));
 
         _testDictionary.Remove(1);
-        Assert.AreEqual(2, _testDictionary.Count);
+        Assert.That(_testDictionary.Count, Is.EqualTo(2));
 
         _testDictionary.Remove(4);
         _testDictionary.Remove(0);
-        Assert.AreEqual(0, _testDictionary.Count);
-        Assert.AreEqual(0, _testDictionary.Keys.Count);
+        Assert.That(_testDictionary.Count, Is.EqualTo(0));
+        Assert.That(_testDictionary.Keys.Count, Is.EqualTo(0));
     }
 }

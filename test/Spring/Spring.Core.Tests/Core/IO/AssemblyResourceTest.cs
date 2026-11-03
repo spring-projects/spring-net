@@ -85,8 +85,8 @@ public class AssemblyResourceTest
     public void CreateInvalidAssemblyResource()
     {
         IResource res = new AssemblyResource("assembly://Spring.Core.Tests/Xyz/InvalidResource.txt");
-        Assert.IsFalse(res.Exists, "Exists should return false");
-        Assert.IsNull(res.InputStream, "Stream should be null");
+        Assert.That(res.Exists, Is.False, "Exists should return false");
+        Assert.That(res.InputStream, Is.Null, "Stream should be null");
     }
 
     [Test]
@@ -199,7 +199,7 @@ public class AssemblyResourceTest
             string content = r.ReadToEnd();
             using (StreamReader reader = new StreamReader(res2.InputStream))
             {
-                Assert.AreEqual(content, reader.ReadToEnd(), "Resource content is not as expected");
+                Assert.That(reader.ReadToEnd(), Is.EqualTo(content), "Resource content is not as expected");
             }
         }
     }
@@ -223,10 +223,10 @@ public class AssemblyResourceTest
     /// <param name="expectedContent">the expected value of the line.</param>
     private void AssertResourceContent(IResource res, string expectedContent)
     {
-        Assert.IsTrue(res.Exists);
+        Assert.That(res.Exists, Is.True);
         using (StreamReader reader = new StreamReader(res.InputStream))
         {
-            Assert.AreEqual(expectedContent, reader.ReadLine(), "Resource content is not as expected");
+            Assert.That(reader.ReadLine(), Is.EqualTo(expectedContent), "Resource content is not as expected");
         }
     }
 }

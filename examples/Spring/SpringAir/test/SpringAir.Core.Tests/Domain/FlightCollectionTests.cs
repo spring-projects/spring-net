@@ -42,7 +42,7 @@ namespace SpringAir.Domain
 			FlightCollection flights = new FlightCollection();
 			flights.Add(new Flight());
 			flights.Add(new Flight());
-            Assert.AreEqual(2, flights.Count);
+            Assert.That(flights.Count, Is.EqualTo(2));
 
 		}
 
@@ -55,8 +55,8 @@ namespace SpringAir.Domain
             flights.Add(firstFlight);
             flights.Add(new Flight());
             Flight f1 = flights[0];
-            Assert.IsNotNull(f1);
-            Assert.AreEqual("1", f1.FlightNumber);
+            Assert.That(f1, Is.Not.Null);
+            Assert.That(f1.FlightNumber, Is.EqualTo("1"));
         }
 
 	}

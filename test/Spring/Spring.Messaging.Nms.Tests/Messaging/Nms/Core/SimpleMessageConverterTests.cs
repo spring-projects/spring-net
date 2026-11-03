@@ -51,7 +51,7 @@ public class SimpleMessageConverterTests
         A.CallTo(() => message.Text).Returns(content).Once();
 
         IMessage msg = converter.ToMessage(content, session);
-        Assert.AreEqual(content, converter.FromMessage(msg));
+        Assert.That(converter.FromMessage(msg), Is.EqualTo(content));
     }
 
     [Test]
@@ -65,7 +65,7 @@ public class SimpleMessageConverterTests
         A.CallTo(() => message.Content).Returns(content).Once();
 
         IMessage msg = converter.ToMessage(content, session);
-        Assert.AreEqual(content.Length, ((byte[]) converter.FromMessage(msg)).Length);
+        Assert.That(((byte[]) converter.FromMessage(msg)).Length, Is.EqualTo(content.Length));
         A.CallTo(() => message.Content).WithAnyArguments().MustHaveHappened();
     }
 
@@ -83,7 +83,7 @@ public class SimpleMessageConverterTests
         //can't seem to mock indexer...
 
         IMessage msg = converter.ToMessage(content, session);
-        Assert.AreEqual(content, converter.FromMessage(msg));
+        Assert.That(converter.FromMessage(msg), Is.EqualTo(content));
     }
 
     [Test]
@@ -97,7 +97,7 @@ public class SimpleMessageConverterTests
         A.CallTo(() => message.Body).Returns(content).Once();
 
         IMessage msg = converter.ToMessage(content, session);
-        Assert.AreEqual(content, converter.FromMessage(message));
+        Assert.That(converter.FromMessage(message), Is.EqualTo(content));
     }
 
     [Test]
@@ -117,7 +117,7 @@ public class SimpleMessageConverterTests
     {
         IObjectMessage message = A.Fake<IObjectMessage>();
         IMessage msg = converter.ToMessage(message, session);
-        Assert.AreSame(message, msg);
+        Assert.That(msg, Is.SameAs(message));
     }
 
     [Test]
@@ -125,7 +125,7 @@ public class SimpleMessageConverterTests
     {
         IMessage message = A.Fake<IMessage>();
         Object msg = converter.FromMessage(message);
-        Assert.AreSame(message, msg);
+        Assert.That(msg, Is.SameAs(message));
     }
 
     [Test]

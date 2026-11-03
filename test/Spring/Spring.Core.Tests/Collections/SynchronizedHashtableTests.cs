@@ -32,11 +32,11 @@ public class SynchronizedHashtableTests
     {
         SynchronizedHashtable st = new SynchronizedHashtable();
         st.Add("key", "value");
-        Assert.AreEqual("value", st["key"]);
+        Assert.That(st["key"], Is.EqualTo("value"));
         st["key"] = "value2";
-        Assert.AreEqual("value2", st["key"]);
+        Assert.That(st["key"], Is.EqualTo("value2"));
         st["key2"] = "value3";
-        Assert.AreEqual("value3", st["key2"]);
+        Assert.That(st["key2"], Is.EqualTo("value3"));
 
         try
         {
@@ -47,7 +47,7 @@ public class SynchronizedHashtableTests
         {
         }
 
-        Assert.AreEqual(2, st.Count);
+        Assert.That(st.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -58,10 +58,10 @@ public class SynchronizedHashtableTests
         ht["key2"] = "value2";
 
         SynchronizedHashtable st = new SynchronizedHashtable(ht, false);
-        Assert.AreEqual(2, st.Count);
+        Assert.That(st.Count, Is.EqualTo(2));
         ht.Remove("key");
-        Assert.AreEqual(1, ht.Count);
-        Assert.AreEqual(2, st.Count);
+        Assert.That(ht.Count, Is.EqualTo(1));
+        Assert.That(st.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class SynchronizedHashtableTests
         SynchronizedHashtable st = new SynchronizedHashtable();
         st.Add("key", "value");
         st.Add("KEY", "value");
-        Assert.AreEqual(2, st.Count);
+        Assert.That(st.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -78,10 +78,10 @@ public class SynchronizedHashtableTests
     {
         SynchronizedHashtable st = new SynchronizedHashtable(true);
         st.Add("key", "value");
-        Assert.AreEqual("value", st["KEY"]);
+        Assert.That(st["KEY"], Is.EqualTo("value"));
         st["KeY"] = "value2";
-        Assert.AreEqual(1, st.Count);
-        Assert.AreEqual("value2", st["key"]);
+        Assert.That(st.Count, Is.EqualTo(1));
+        Assert.That(st["key"], Is.EqualTo("value2"));
 
         try
         {
@@ -113,10 +113,10 @@ public class SynchronizedHashtableTests
         ht["key2"] = "value2";
 
         SynchronizedHashtable st = SynchronizedHashtable.Wrap(ht);
-        Assert.AreEqual(2, st.Count);
+        Assert.That(st.Count, Is.EqualTo(2));
         ht.Remove("key");
-        Assert.AreEqual(1, ht.Count);
-        Assert.AreEqual(1, st.Count);
+        Assert.That(ht.Count, Is.EqualTo(1));
+        Assert.That(st.Count, Is.EqualTo(1));
     }
 
     /// <summary>

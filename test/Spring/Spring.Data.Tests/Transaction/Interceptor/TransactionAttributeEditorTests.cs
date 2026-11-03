@@ -12,7 +12,7 @@ public class TransactionAttributeEditorTests
         TransactionAttributeEditor editor = new TransactionAttributeEditor();
         editor.SetAsText(null);
         ITransactionAttribute ta = editor.Value;
-        Assert.IsNull(ta);
+        Assert.That(ta, Is.Null);
     }
 
     [Test]
@@ -21,7 +21,7 @@ public class TransactionAttributeEditorTests
         TransactionAttributeEditor editor = new TransactionAttributeEditor();
         editor.SetAsText(String.Empty);
         ITransactionAttribute ta = editor.Value;
-        Assert.IsNull(ta);
+        Assert.That(ta, Is.Null);
     }
 
     [Test]
@@ -30,10 +30,10 @@ public class TransactionAttributeEditorTests
         TransactionAttributeEditor editor = new TransactionAttributeEditor();
         editor.SetAsText("PROPAGATION_REQUIRED");
         ITransactionAttribute ta = editor.Value;
-        Assert.IsTrue(ta != null);
-        Assert.IsTrue(ta.PropagationBehavior == TransactionPropagation.Required);
-        Assert.IsTrue(ta.TransactionIsolationLevel == IsolationLevel.ReadCommitted);
-        Assert.IsFalse(ta.ReadOnly);
+        Assert.That(ta != null, Is.True);
+        Assert.That(ta.PropagationBehavior == TransactionPropagation.Required, Is.True);
+        Assert.That(ta.TransactionIsolationLevel == IsolationLevel.ReadCommitted, Is.True);
+        Assert.That(ta.ReadOnly, Is.False);
     }
 
     [Test]
@@ -49,9 +49,9 @@ public class TransactionAttributeEditorTests
         TransactionAttributeEditor editor = new TransactionAttributeEditor();
         editor.SetAsText("PROPAGATION_REQUIRED, ISOLATION_READUNCOMMITTED");
         ITransactionAttribute ta = editor.Value;
-        Assert.IsTrue(ta != null);
-        Assert.IsTrue(ta.PropagationBehavior == TransactionPropagation.Required);
-        Assert.IsTrue(ta.TransactionIsolationLevel == IsolationLevel.ReadUncommitted);
+        Assert.That(ta != null, Is.True);
+        Assert.That(ta.PropagationBehavior == TransactionPropagation.Required, Is.True);
+        Assert.That(ta.TransactionIsolationLevel == IsolationLevel.ReadUncommitted, Is.True);
     }
 
     [Test]
@@ -68,15 +68,15 @@ public class TransactionAttributeEditorTests
         TransactionAttributeEditor editor = new TransactionAttributeEditor( );
         editor.SetAsText( "PROPAGATION_MANDATORY,ISOLATION_REPEATABLEREAD,timeout_10,-DataException,+RemotingException" );
         ITransactionAttribute ta = editor.Value;
-        Assert.IsNotNull( ta );
-        Assert.IsTrue( ta.PropagationBehavior == TransactionPropagation.Mandatory );
-        Assert.IsTrue( ta.TransactionIsolationLevel == IsolationLevel.RepeatableRead );
-        Assert.IsTrue( ta.TransactionTimeout == 10 );
-        Assert.IsFalse( ta.ReadOnly );
-        Assert.IsTrue( ta.RollbackOn(new SystemException( ) ) );
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(ta.PropagationBehavior == TransactionPropagation.Mandatory, Is.True);
+        Assert.That(ta.TransactionIsolationLevel == IsolationLevel.RepeatableRead, Is.True);
+        Assert.That(ta.TransactionTimeout == 10, Is.True);
+        Assert.That(ta.ReadOnly, Is.False);
+        Assert.That(ta.RollbackOn(new SystemException()), Is.True);
         // Check for our bizarre customized rollback rules
-        Assert.IsTrue( ta.RollbackOn(new DataException( ) ) );
-        Assert.IsTrue( !ta.RollbackOn(new System.Runtime.Remoting.RemotingException( ) ) );
+        Assert.That(ta.RollbackOn(new DataException()), Is.True);
+        Assert.That(!ta.RollbackOn(new System.Runtime.Remoting.RemotingException()), Is.True);
     }
 
     [Test]
@@ -85,15 +85,15 @@ public class TransactionAttributeEditorTests
         TransactionAttributeEditor editor = new TransactionAttributeEditor( );
         editor.SetAsText( "+DataException,readOnly,ISOLATION_READCOMMITTED,-RemotingException,PROPAGATION_SUPPORTS" );
         ITransactionAttribute ta = editor.Value;
-        Assert.IsNotNull( ta );
-        Assert.IsTrue( ta.PropagationBehavior == TransactionPropagation.Supports );
-        Assert.IsTrue( ta.TransactionIsolationLevel == IsolationLevel.ReadCommitted );
-        Assert.IsTrue( ta.TransactionTimeout == -1 );
-        Assert.IsTrue( ta.ReadOnly );
-        Assert.IsTrue( ta.RollbackOn( new SystemException( ) ) );
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(ta.PropagationBehavior == TransactionPropagation.Supports, Is.True);
+        Assert.That(ta.TransactionIsolationLevel == IsolationLevel.ReadCommitted, Is.True);
+        Assert.That(ta.TransactionTimeout == -1, Is.True);
+        Assert.That(ta.ReadOnly, Is.True);
+        Assert.That(ta.RollbackOn(new SystemException()), Is.True);
         // Check for our bizarre customized rollback rules
-        Assert.IsFalse( ta.RollbackOn(new DataException( ) ) );
-        Assert.IsTrue( ta.RollbackOn(new System.Runtime.Remoting.RemotingException( ) ) );
+        Assert.That(ta.RollbackOn(new DataException()), Is.False);
+        Assert.That(ta.RollbackOn(new System.Runtime.Remoting.RemotingException()), Is.True);
     }
 #endif
 
@@ -109,19 +109,19 @@ public class TransactionAttributeEditorTests
         TransactionAttributeEditor editor = new TransactionAttributeEditor();
         editor.SetAsText(source.ToString());
         ITransactionAttribute ta = editor.Value;
-        Assert.AreEqual(source, ta);
-        Assert.AreEqual(ta.PropagationBehavior, TransactionPropagation.Supports);
-        Assert.AreEqual(ta.TransactionIsolationLevel, IsolationLevel.RepeatableRead);
-        Assert.AreEqual(ta.TransactionTimeout, 10);
-        Assert.IsTrue(ta.ReadOnly);
-        Assert.IsTrue(ta.RollbackOn(new SystemException()));
+        Assert.That(ta, Is.EqualTo(source));
+        Assert.That(ta.PropagationBehavior, Is.EqualTo(TransactionPropagation.Supports));
+        Assert.That(ta.TransactionIsolationLevel, Is.EqualTo(IsolationLevel.RepeatableRead));
+        Assert.That(ta.TransactionTimeout, Is.EqualTo(10));
+        Assert.That(ta.ReadOnly, Is.True);
+        Assert.That(ta.RollbackOn(new SystemException()), Is.True);
         //mlp 3/17 changed rollback to rollback on all exceptions.
-        Assert.IsTrue(ta.RollbackOn(new ApplicationException()));
+        Assert.That(ta.RollbackOn(new ApplicationException()), Is.True);
 
         source.TransactionTimeout = 9;
-        Assert.IsFalse(ta == source);
+        Assert.That(ta == source, Is.False);
         source.TransactionTimeout = 10;
-        Assert.AreEqual(ta, source);
+        Assert.That(source, Is.EqualTo(ta));
     }
 
     [Test]
@@ -138,18 +138,18 @@ public class TransactionAttributeEditorTests
         TransactionAttributeEditor editor = new TransactionAttributeEditor();
         editor.SetAsText(source.ToString());
         ITransactionAttribute ta = editor.Value;
-        Assert.AreEqual(source, ta);
-        Assert.AreEqual(ta.PropagationBehavior, TransactionPropagation.Supports);
-        Assert.AreEqual(ta.TransactionIsolationLevel, IsolationLevel.RepeatableRead);
-        Assert.AreEqual(ta.TransactionTimeout, 10);
-        Assert.IsTrue(ta.ReadOnly);
-        Assert.IsTrue(ta.RollbackOn(new ArgumentException()));
-        Assert.IsFalse(ta.RollbackOn(new IllegalTransactionStateException()));
+        Assert.That(ta, Is.EqualTo(source));
+        Assert.That(ta.PropagationBehavior, Is.EqualTo(TransactionPropagation.Supports));
+        Assert.That(ta.TransactionIsolationLevel, Is.EqualTo(IsolationLevel.RepeatableRead));
+        Assert.That(ta.TransactionTimeout, Is.EqualTo(10));
+        Assert.That(ta.ReadOnly, Is.True);
+        Assert.That(ta.RollbackOn(new ArgumentException()), Is.True);
+        Assert.That(ta.RollbackOn(new IllegalTransactionStateException()), Is.False);
 
         source.ClearRollbackRules();
-        Assert.IsFalse(ta == source);
+        Assert.That(ta == source, Is.False);
         source.AddRollbackRule(new RollbackRuleAttribute("ArgumentException"));
         source.AddRollbackRule(new NoRollbackRuleAttribute("IllegalTransactionStateException"));
-        Assert.AreEqual(ta, source);
+        Assert.That(source, Is.EqualTo(ta));
     }
 }

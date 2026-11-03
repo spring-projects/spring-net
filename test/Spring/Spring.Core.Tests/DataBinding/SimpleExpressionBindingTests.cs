@@ -39,7 +39,7 @@ public class SimpleExpressionBindingTests
             textBox.Text = string.Empty;
             BindToNullable_TestEntity entity = new BindToNullable_TestEntity();
             new SimpleExpressionBinding("Text", "SortOrder").BindSourceToTarget(textBox, entity, null);
-            Assert.IsNull(entity.SortOrder);
+        Assert.That(entity.SortOrder, Is.Null);
         }
 #endif
 

@@ -30,7 +30,7 @@ public sealed class MethodReturnTypeCriteriaTests
     {
         MethodReturnTypeCriteria criteria = new MethodReturnTypeCriteria(typeof(bool));
         MethodInfo method = GetType().GetMethod("SomeKindOfWonderful", BindingFlags.NonPublic | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
     }
 
     private bool SomeKindOfWonderful()
@@ -43,13 +43,13 @@ public sealed class MethodReturnTypeCriteriaTests
     {
         MethodReturnTypeCriteria criteria = new MethodReturnTypeCriteria();
         MethodInfo method = GetType().GetMethod("IsSatisfied");
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
     }
 
     [Test]
     public void IsNotSatisfiedWithNull()
     {
         MethodReturnTypeCriteria criteria = new MethodReturnTypeCriteria();
-        Assert.IsFalse(criteria.IsSatisfied(null));
+        Assert.That(criteria.IsSatisfied(null), Is.False);
     }
 }

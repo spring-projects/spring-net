@@ -36,8 +36,8 @@ public sealed class SerializationTestUtils
     public void WithNonSerializableObject()
     {
         TestObject o = new TestObject();
-        Assert.IsFalse(o is ISerializable);
-        Assert.IsFalse(IsSerializable(o));
+        Assert.That(o is ISerializable, Is.False);
+        Assert.That(IsSerializable(o), Is.False);
         Assert.Throws<SerializationException>(() => TrySerialization(o));
     }
 
@@ -46,12 +46,12 @@ public sealed class SerializationTestUtils
     {
         IPerson p = new SerializablePerson();
         p.Age = 12;
-        Assert.IsTrue(p is ISerializable);
+        Assert.That(p is ISerializable, Is.True);
         TrySerialization(p);
-        Assert.IsTrue(IsSerializable(p));
+        Assert.That(IsSerializable(p), Is.True);
         IPerson p2 = (IPerson) SerializeAndDeserialize(p);
-        Assert.IsTrue(p != p2);
-        Assert.AreEqual(12, p2.Age);
+        Assert.That(p != p2, Is.True);
+        Assert.That(p2.Age, Is.EqualTo(12));
     }
 
     /// <summary>

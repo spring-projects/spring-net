@@ -30,7 +30,7 @@ public sealed class MethodInvokerTests
     public void Instantiation()
     {
         MethodInvoker vkr = new MethodInvoker();
-        Assert.IsNotNull(vkr.Arguments);
+        Assert.That(vkr.Arguments, Is.Not.Null);
     }
 
     [Test]
@@ -39,8 +39,8 @@ public sealed class MethodInvokerTests
         MethodInvoker vkr = new MethodInvoker();
         vkr.AddNamedArgument("age", 10);
         vkr.NamedArguments = null;
-        Assert.IsNotNull(vkr.NamedArguments);
-        Assert.AreEqual(0, vkr.NamedArguments.Count);
+        Assert.That(vkr.NamedArguments, Is.Not.Null);
+        Assert.That(vkr.NamedArguments.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -56,10 +56,10 @@ public sealed class MethodInvokerTests
     {
         MethodInvoker vkr = new MethodInvoker();
         vkr.Arguments = null;
-        Assert.IsNotNull(vkr.Arguments); // should always be the empty object array, never null
-        Assert.AreEqual(0, vkr.Arguments.Length);
+        Assert.That(vkr.Arguments, Is.Not.Null); // should always be the empty object array, never null
+        Assert.That(vkr.Arguments.Length, Is.EqualTo(0));
         vkr.Arguments = new string[] { "Chank Pop" };
-        Assert.AreEqual(1, vkr.Arguments.Length);
+        Assert.That(vkr.Arguments.Length, Is.EqualTo(1));
     }
 
     [Test]
@@ -71,9 +71,9 @@ public sealed class MethodInvokerTests
         mi.Arguments = new object[] { "27" };
         mi.Prepare();
         object actual = mi.Invoke();
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(typeof(int), actual.GetType());
-        Assert.AreEqual(27, (int) actual);
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.GetType(), Is.EqualTo(typeof(int)));
+        Assert.That((int) actual, Is.EqualTo(27));
     }
 
     [Test]
@@ -84,8 +84,8 @@ public sealed class MethodInvokerTests
         mi.TargetMethod = "CreateInstance<Spring.Objects.TestObject>";
         mi.Prepare();
         object actual = mi.Invoke();
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(typeof(TestObject), actual.GetType());
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual.GetType(), Is.EqualTo(typeof(TestObject)));
     }
 
     [Test]
@@ -99,7 +99,7 @@ public sealed class MethodInvokerTests
         vkr.Arguments = new object[] { 10 };
         vkr.Prepare();
         object actual = vkr.Invoke();
-        Assert.AreEqual(98, actual);
+        Assert.That(actual, Is.EqualTo(98));
     }
 
     [Test]
@@ -113,7 +113,7 @@ public sealed class MethodInvokerTests
         vkr.Arguments = new object[] { 10 };
         vkr.Prepare();
         object actual = vkr.Invoke();
-        Assert.AreEqual(98, actual);
+        Assert.That(actual, Is.EqualTo(98));
     }
 
     [Test]
@@ -127,7 +127,7 @@ public sealed class MethodInvokerTests
         vkr.AddNamedArgument("years", 10);
         vkr.Prepare();
         object actual = vkr.Invoke();
-        Assert.AreEqual(98, actual);
+        Assert.That(actual, Is.EqualTo(98));
     }
 
     [Test]
@@ -143,7 +143,7 @@ public sealed class MethodInvokerTests
         vkr.Arguments = new object[] { maximumAge };
         vkr.Prepare();
         object actual = vkr.Invoke();
-        Assert.AreEqual(maximumAge, actual);
+        Assert.That(actual, Is.EqualTo(maximumAge));
     }
 
     [Test]
@@ -161,8 +161,8 @@ public sealed class MethodInvokerTests
         vkr.Arguments = new object[] { maximumAge };
         vkr.Prepare();
         object actual = vkr.Invoke();
-        Assert.AreEqual(maximumAge, actual);
-        Assert.AreEqual(expectedStatus, foo.Status);
+        Assert.That(actual, Is.EqualTo(maximumAge));
+        Assert.That(foo.Status, Is.EqualTo(expectedStatus));
     }
 
     [Test]
@@ -191,7 +191,7 @@ public sealed class MethodInvokerTests
         vkr.AddNamedArgument("YEarS", 10);
         vkr.Prepare();
         object actual = vkr.Invoke();
-        Assert.AreEqual(98, actual);
+        Assert.That(actual, Is.EqualTo(98));
     }
 
     [Test]
@@ -220,18 +220,20 @@ public sealed class MethodInvokerTests
         vkr.AddNamedArgument("years", 200);
         vkr.Prepare();
         object actual = vkr.Invoke();
-        Assert.IsFalse(98.Equals(actual), "The first named argument setter is sticking; must allow itslf to be overwritten.");
-        Assert.AreEqual(288, actual, "The second named argument was not applied (it must be).");
+        Assert.That(98.Equals(actual), Is.False, "The first named argument setter is sticking; must allow itslf to be overwritten.");
+        Assert.That(actual, Is.EqualTo(288), "The second named argument was not applied (it must be).");
     }
 
     [Test]
     public void PreparedArgumentsIsNeverNull()
     {
         MyMethodInvoker vkr = new MyMethodInvoker();
-        Assert.IsNotNull(vkr.GetPreparedArguments(),
+        Assert.That(vkr.GetPreparedArguments(),
+            Is.Not.Null,
             "PreparedArguments is null even before Prepare() is called; must NEVER be null.");
         vkr.NullOutPreparedArguments();
-        Assert.IsNotNull(vkr.GetPreparedArguments(),
+        Assert.That(vkr.GetPreparedArguments(),
+            Is.Not.Null,
             "PreparedArguments should revert to the empty object[] when set to null; must NEVER be null.");
     }
 

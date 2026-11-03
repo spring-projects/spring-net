@@ -16,7 +16,7 @@ public class DictionaryVariableSourceTests
 
         foreach (KeyValuePair<string, string> dv in dvs)
         {
-            Assert.AreEqual("theValue", dv.Value);
+            Assert.That(dv.Value, Is.EqualTo("theValue"));
         }
     }
 
@@ -26,7 +26,7 @@ public class DictionaryVariableSourceTests
         DictionaryVariableSource caseInsensitive = new DictionaryVariableSource();
         caseInsensitive.Add("key1", "value1");
 
-        Assert.True(caseInsensitive.CanResolveVariable("KEY1"));
+        Assert.That(caseInsensitive.CanResolveVariable("KEY1"), Is.True);
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class DictionaryVariableSourceTests
         DictionaryVariableSource caseSensitive = new DictionaryVariableSource(false);
         caseSensitive.Add("KEY1", "value1");
 
-        Assert.False(caseSensitive.CanResolveVariable("key1"));
+        Assert.That(caseSensitive.CanResolveVariable("key1"), Is.False);
     }
 
     [Test]
@@ -43,8 +43,8 @@ public class DictionaryVariableSourceTests
     {
         DictionaryVariableSource dvs = new DictionaryVariableSource(new string[] { "key1", "value1", "key2", "value2" });
 
-        Assert.AreEqual("value1", dvs.ResolveVariable("key1"));
-        Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
+        Assert.That(dvs.ResolveVariable("key1"), Is.EqualTo("value1"));
+        Assert.That(dvs.ResolveVariable("key2"), Is.EqualTo("value2"));
     }
 
     [Test]
@@ -67,8 +67,8 @@ public class DictionaryVariableSourceTests
         dvs.Add("key1", "lowercasevalue");
         dvs.Add("KEY1", "uppercasevalue");
 
-        Assert.AreEqual("lowercasevalue", dvs.ResolveVariable("key1"));
-        Assert.AreEqual("uppercasevalue", dvs.ResolveVariable("KEY1"));
+        Assert.That(dvs.ResolveVariable("key1"), Is.EqualTo("lowercasevalue"));
+        Assert.That(dvs.ResolveVariable("KEY1"), Is.EqualTo("uppercasevalue"));
     }
 
     [Test]
@@ -80,8 +80,8 @@ public class DictionaryVariableSourceTests
 
         DictionaryVariableSource dvs = new DictionaryVariableSource(dict);
 
-        Assert.AreEqual("value1", dvs.ResolveVariable("KEY1"));
-        Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
+        Assert.That(dvs.ResolveVariable("KEY1"), Is.EqualTo("value1"));
+        Assert.That(dvs.ResolveVariable("key2"), Is.EqualTo("value2"));
     }
 
     [Test]
@@ -93,8 +93,8 @@ public class DictionaryVariableSourceTests
 
         DictionaryVariableSource dvs = new DictionaryVariableSource(dict);
 
-        Assert.AreEqual("value1", dvs.ResolveVariable("key1"));
-        Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
+        Assert.That(dvs.ResolveVariable("key1"), Is.EqualTo("value1"));
+        Assert.That(dvs.ResolveVariable("key2"), Is.EqualTo("value2"));
     }
 
     [Test]
@@ -106,8 +106,8 @@ public class DictionaryVariableSourceTests
 
         DictionaryVariableSource dvs = new DictionaryVariableSource(dict, false);
 
-        Assert.AreEqual("lowecasevalue", dvs.ResolveVariable("key1"));
-        Assert.AreEqual("uppercasevalue", dvs.ResolveVariable("KEY1"));
+        Assert.That(dvs.ResolveVariable("key1"), Is.EqualTo("lowecasevalue"));
+        Assert.That(dvs.ResolveVariable("KEY1"), Is.EqualTo("uppercasevalue"));
     }
 
     [Test]
@@ -117,8 +117,8 @@ public class DictionaryVariableSourceTests
         dvs.Add("key1", "value1");
         dvs.Add("KEY2", "value2");
 
-        Assert.AreEqual("value1", dvs.ResolveVariable("KEY1"));
-        Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
+        Assert.That(dvs.ResolveVariable("KEY1"), Is.EqualTo("value1"));
+        Assert.That(dvs.ResolveVariable("key2"), Is.EqualTo("value2"));
     }
 
     [Test]

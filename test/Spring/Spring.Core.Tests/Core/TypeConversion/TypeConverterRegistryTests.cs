@@ -30,28 +30,28 @@ public sealed class TypeConverterRegistryTests
     public void GetConverterForEnums()
     {
         TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(DayOfWeek));
-        Assert.IsTrue(converter is EnumConverter);
+        Assert.That(converter is EnumConverter, Is.True);
     }
 
     [Test]
     public void GetConverterForLogLevel()
     {
         TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(Microsoft.Extensions.Logging.LogLevel));
-        Assert.IsTrue(converter is LogLevelConverter);
+        Assert.That(converter is LogLevelConverter, Is.True);
     }
 
     [Test]
     public void GetInternalConverter()
     {
         TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(int));
-        Assert.IsTrue(converter is Int32Converter);
+        Assert.That(converter is Int32Converter, Is.True);
     }
 
     [Test]
     public void GetSpringConverter()
     {
         TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(string[]));
-        Assert.IsTrue(converter is StringArrayConverter);
+        Assert.That(converter is StringArrayConverter, Is.True);
     }
 
     [Test]

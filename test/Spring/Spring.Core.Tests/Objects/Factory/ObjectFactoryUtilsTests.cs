@@ -49,9 +49,9 @@ public sealed class ObjectFactoryUtilsTests
     public void CountObjectsIncludingAncestors()
     {
         // leaf count...
-        Assert.AreEqual(1, _factory.ObjectDefinitionCount);
+        Assert.That(_factory.ObjectDefinitionCount, Is.EqualTo(1));
         // count minus duplicate...
-        Assert.AreEqual(6, ObjectFactoryUtils.CountObjectsIncludingAncestors(_factory),
+        Assert.That(ObjectFactoryUtils.CountObjectsIncludingAncestors(_factory), Is.EqualTo(6),
             "Should count 6 objects, not " + ObjectFactoryUtils.CountObjectsIncludingAncestors(_factory));
     }
 
@@ -59,7 +59,7 @@ public sealed class ObjectFactoryUtilsTests
     public void ObjectNamesIncludingAncestors()
     {
         var names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(_factory);
-        Assert.AreEqual(6, names.Count);
+        Assert.That(names.Count, Is.EqualTo(6));
     }
 
     [Test]
@@ -67,11 +67,11 @@ public sealed class ObjectFactoryUtilsTests
     {
         var names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, typeof(ITestObject));
         // includes 2 TestObjects from IFactoryObjects (DummyFactory definitions)
-        Assert.AreEqual(4, names.Count);
-        Assert.IsTrue(names.Contains("test"));
-        Assert.IsTrue(names.Contains("test3"));
-        Assert.IsTrue(names.Contains("testFactory1"));
-        Assert.IsTrue(names.Contains("testFactory2"));
+        Assert.That(names.Count, Is.EqualTo(4));
+        Assert.That(names.Contains("test"), Is.True);
+        Assert.That(names.Contains("test3"), Is.True);
+        Assert.That(names.Contains("testFactory1"), Is.True);
+        Assert.That(names.Contains("testFactory2"), Is.True);
     }
 
     [Test]
@@ -84,11 +84,11 @@ public sealed class ObjectFactoryUtilsTests
 
         var names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(child, typeof(ArrayList));
         // "excludeLocalObject" matches on the parent, but not the local object definition
-        Assert.AreEqual(0, names.Count);
+        Assert.That(names.Count, Is.EqualTo(0));
 
         names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(child, typeof(ArrayList), true, true);
         // "excludeLocalObject" matches on the parent, but not the local object definition
-        Assert.AreEqual(0, names.Count);
+        Assert.That(names.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -97,7 +97,7 @@ public sealed class ObjectFactoryUtilsTests
         StaticListableObjectFactory lof = new StaticListableObjectFactory();
         lof.AddObject("t1", new TestObject());
         lof.AddObject("t2", new TestObject());
-        Assert.IsTrue(ObjectFactoryUtils.CountObjectsIncludingAncestors(lof) == 2);
+        Assert.That(ObjectFactoryUtils.CountObjectsIncludingAncestors(lof) == 2, Is.True);
     }
 
     [Test]
@@ -108,32 +108,32 @@ public sealed class ObjectFactoryUtilsTests
         object testFactory1 = _factory.GetObject("testFactory1");
 
         IDictionary<string, object> objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(_factory, typeof(ITestObject), true, false);
-        Assert.AreEqual(3, objects.Count);
-        Assert.AreEqual(test3, objects["test3"]);
-        Assert.AreEqual(test, objects["test"]);
-        Assert.AreEqual(testFactory1, objects["testFactory1"]);
+        Assert.That(objects.Count, Is.EqualTo(3));
+        Assert.That(objects["test3"], Is.EqualTo(test3));
+        Assert.That(objects["test"], Is.EqualTo(test));
+        Assert.That(objects["testFactory1"], Is.EqualTo(testFactory1));
         objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(_factory, typeof(ITestObject), false, false);
-        Assert.AreEqual(2, objects.Count);
-        Assert.AreEqual(test, objects["test"]);
-        Assert.AreEqual(testFactory1, objects["testFactory1"]);
+        Assert.That(objects.Count, Is.EqualTo(2));
+        Assert.That(objects["test"], Is.EqualTo(test));
+        Assert.That(objects["testFactory1"], Is.EqualTo(testFactory1));
         objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(_factory, typeof(ITestObject), false, true);
-        Assert.AreEqual(2, objects.Count);
-        Assert.AreEqual(test, objects["test"]);
-        Assert.AreEqual(testFactory1, objects["testFactory1"]);
+        Assert.That(objects.Count, Is.EqualTo(2));
+        Assert.That(objects["test"], Is.EqualTo(test));
+        Assert.That(objects["testFactory1"], Is.EqualTo(testFactory1));
         objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(_factory, typeof(ITestObject), true, true);
-        Assert.AreEqual(4, objects.Count);
-        Assert.AreEqual(test3, objects["test3"]);
-        Assert.AreEqual(test, objects["test"]);
-        Assert.AreEqual(testFactory1, objects["testFactory1"]);
-        Assert.IsTrue(objects["testFactory2"] is ITestObject);
+        Assert.That(objects.Count, Is.EqualTo(4));
+        Assert.That(objects["test3"], Is.EqualTo(test3));
+        Assert.That(objects["test"], Is.EqualTo(test));
+        Assert.That(objects["testFactory1"], Is.EqualTo(testFactory1));
+        Assert.That(objects["testFactory2"] is ITestObject, Is.True);
         objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(_factory, typeof(DummyFactory), true, true);
-        Assert.AreEqual(2, objects.Count);
-        Assert.AreEqual(_factory.GetObject("&testFactory1"), objects["&testFactory1"]);
-        Assert.AreEqual(_factory.GetObject("&testFactory2"), objects["&testFactory2"]);
+        Assert.That(objects.Count, Is.EqualTo(2));
+        Assert.That(objects["&testFactory1"], Is.EqualTo(_factory.GetObject("&testFactory1")));
+        Assert.That(objects["&testFactory2"], Is.EqualTo(_factory.GetObject("&testFactory2")));
         objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(_factory, typeof(IFactoryObject), true, true);
-        Assert.AreEqual(2, objects.Count);
-        Assert.AreEqual(_factory.GetObject("&testFactory1"), objects["&testFactory1"]);
-        Assert.AreEqual(_factory.GetObject("&testFactory2"), objects["&testFactory2"]);
+        Assert.That(objects.Count, Is.EqualTo(2));
+        Assert.That(objects["&testFactory1"], Is.EqualTo(_factory.GetObject("&testFactory1")));
+        Assert.That(objects["&testFactory2"], Is.EqualTo(_factory.GetObject("&testFactory2")));
     }
 
     [Test]
@@ -154,7 +154,7 @@ public sealed class ObjectFactoryUtilsTests
 
         IDictionary<string, object> objectEntries = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(child, typeof(ArrayList), true, true);
         // "excludeLocalObject" matches on the parent, but not the local object definition
-        Assert.AreEqual(0, objectEntries.Count);
+        Assert.That(objectEntries.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -163,7 +163,7 @@ public sealed class ObjectFactoryUtilsTests
         StaticListableObjectFactory lof = new StaticListableObjectFactory();
         lof.AddObject("foo", new object());
         IDictionary<string, object> objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(lof, typeof(ITestObject), true, false);
-        Assert.IsTrue(objects.Count == 0);
+        Assert.That(objects.Count == 0, Is.True);
     }
 
     [Test]
@@ -182,26 +182,27 @@ public sealed class ObjectFactoryUtilsTests
         lof.AddObject("t4", t4);
         t4.AfterPropertiesSet(); // StaticListableObjectFactory does support lifecycle calls.
         IDictionary<string, object> objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(lof, typeof(ITestObject), true, false);
-        Assert.AreEqual(2, objects.Count);
-        Assert.AreEqual(t1, objects["t1"]);
-        Assert.AreEqual(t2, objects["t2"]);
+        Assert.That(objects.Count, Is.EqualTo(2));
+        Assert.That(objects["t1"], Is.EqualTo(t1));
+        Assert.That(objects["t2"], Is.EqualTo(t2));
         objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(lof, typeof(ITestObject), false, true);
-        Assert.AreEqual(3, objects.Count);
-        Assert.AreEqual(t1, objects["t1"]);
-        Assert.AreEqual(t2, objects["t2"]);
-        Assert.AreEqual(t3.GetObject(), objects["t3"]);
+        Assert.That(objects.Count, Is.EqualTo(3));
+        Assert.That(objects["t1"], Is.EqualTo(t1));
+        Assert.That(objects["t2"], Is.EqualTo(t2));
+        Assert.That(objects["t3"], Is.EqualTo(t3.GetObject()));
         objects = ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(lof, typeof(ITestObject), true, true);
-        Assert.AreEqual(4, objects.Count);
-        Assert.AreEqual(t1, objects["t1"]);
-        Assert.AreEqual(t2, objects["t2"]);
-        Assert.AreEqual(t3.GetObject(), objects["t3"]);
-        Assert.IsTrue(objects["t4"] is TestObject);
+        Assert.That(objects.Count, Is.EqualTo(4));
+        Assert.That(objects["t1"], Is.EqualTo(t1));
+        Assert.That(objects["t2"], Is.EqualTo(t2));
+        Assert.That(objects["t3"], Is.EqualTo(t3.GetObject()));
+        Assert.That(objects["t4"] is TestObject, Is.True);
     }
 
     [Test]
     public void IsFactoryDereferenceWithNonFactoryObjectName()
     {
-        Assert.IsFalse(ObjectFactoryUtils.IsFactoryDereference("roob"),
+        Assert.That(ObjectFactoryUtils.IsFactoryDereference("roob"),
+            Is.False,
             "Name that didn't start with the factory object prefix is being reported " +
             "(incorrectly) as a factory object dereference.");
     }
@@ -209,7 +210,8 @@ public sealed class ObjectFactoryUtilsTests
     [Test]
     public void IsFactoryDereferenceWithNullName()
     {
-        Assert.IsFalse(ObjectFactoryUtils.IsFactoryDereference(null),
+        Assert.That(ObjectFactoryUtils.IsFactoryDereference(null),
+            Is.False,
             "Null name that (obviously) didn't start with the factory object prefix is being reported " +
             "(incorrectly) as a factory object dereference.");
     }
@@ -217,7 +219,8 @@ public sealed class ObjectFactoryUtilsTests
     [Test]
     public void IsFactoryDereferenceWithEmptyName()
     {
-        Assert.IsFalse(ObjectFactoryUtils.IsFactoryDereference(string.Empty),
+        Assert.That(ObjectFactoryUtils.IsFactoryDereference(string.Empty),
+            Is.False,
             "String.Empty name that (obviously) didn't start with the factory object prefix is being reported " +
             "(incorrectly) as a factory object dereference.");
     }
@@ -225,8 +228,9 @@ public sealed class ObjectFactoryUtilsTests
     [Test]
     public void IsFactoryDereferenceWithJustTheFactoryObjectPrefixCharacter()
     {
-        Assert.IsFalse(ObjectFactoryUtils.IsFactoryDereference(
+        Assert.That(ObjectFactoryUtils.IsFactoryDereference(
                 ObjectFactoryUtils.FactoryObjectPrefix),
+            Is.False,
             "Name that consisted solely of the factory object prefix is being reported " +
             "(incorrectly) as a factory object dereference.");
     }
@@ -234,8 +238,9 @@ public sealed class ObjectFactoryUtilsTests
     [Test]
     public void IsFactoryDereferenceSunnyDay()
     {
-        Assert.IsTrue(ObjectFactoryUtils.IsFactoryDereference(
+        Assert.That(ObjectFactoryUtils.IsFactoryDereference(
                 ObjectFactoryUtils.FactoryObjectPrefix + "roob"),
+            Is.True,
             "Name that did start with the factory object prefix is not being reported " +
             "(incorrectly) as a factory object dereference.");
     }

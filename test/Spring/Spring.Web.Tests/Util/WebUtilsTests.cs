@@ -50,30 +50,30 @@ public sealed class WebUtilsTests
     public void GetPageNameSunnyDay()
     {
         string pageName = WebUtils.GetPageName("foo.aspx");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
         pageName = WebUtils.GetPageName("~/foo.aspx");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
         pageName = WebUtils.GetPageName("~/Bingo/foo.aspx");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
         pageName = WebUtils.GetPageName("/Bingo/foo.aspx");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
         pageName = WebUtils.GetPageName("Bingo/foo.aspx");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
         pageName = WebUtils.GetPageName("~/Bingo/Rope/foo.aspx");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
         pageName = WebUtils.GetPageName("/Bingo/Rope/foo.aspx");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
         pageName = WebUtils.GetPageName("Bingo/Rope/foo.aspx");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
         pageName = WebUtils.GetPageName("http://www.madeleine.org/Bingo/Rope/foo.aspx");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
     }
 
     [Test]
     public void GetPageNameWherePageHasOddExtension()
     {
         string pageName = WebUtils.GetPageName("foo.odd");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
     }
 
     /// <summary>
@@ -84,117 +84,117 @@ public sealed class WebUtilsTests
     public void GetPageNameWherePageHasNoExtension()
     {
         string pageName = WebUtils.GetPageName("foo");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
         pageName = WebUtils.GetPageName("http://www.madeleine.org/Bingo/Rope/foo");
-        Assert.AreEqual(ExpectedPageName, pageName);
+        Assert.That(pageName, Is.EqualTo(ExpectedPageName));
     }
 
     [Test]
     public void CreateAbsolutePath_EmptyApplicationPathAndNullRelativePath_ReturnsRootPath()
     {
-        Assert.AreEqual("/", WebUtils.CreateAbsolutePath("", null));
+        Assert.That(WebUtils.CreateAbsolutePath("", null), Is.EqualTo("/"));
     }
 
     [Test]
     public void CreateAbsolutePath_RootApplicationPathAndNullRelativePath_ReturnsRootPath()
     {
-        Assert.AreEqual("/", WebUtils.CreateAbsolutePath("/", null));
+        Assert.That(WebUtils.CreateAbsolutePath("/", null), Is.EqualTo("/"));
     }
 
     [Test]
     public void CreateAbsolutePath_NullRelativePath_ReturnsApplicationPath()
     {
-        Assert.AreEqual("/MyApp/", WebUtils.CreateAbsolutePath("/MyApp", null));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp", null), Is.EqualTo("/MyApp/"));
     }
 
     [Test]
     public void CreateAbsolutePath_EmptyRelativePath_ReturnsApplicationPath()
     {
-        Assert.AreEqual("/MyApp/", WebUtils.CreateAbsolutePath("/MyApp", string.Empty));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp", string.Empty), Is.EqualTo("/MyApp/"));
     }
 
     [Test]
     public void CreateAbsolutePath_NullApplicationPath_ReturnsRelativePath()
     {
-        Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath(null, "/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath(null, "/MyPath"), Is.EqualTo("/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_NullApplicationPathAndAppRootRelativePath_ReturnsRelativePath()
     {
-        Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath(null, "~/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath(null, "~/MyPath"), Is.EqualTo("/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_EmptyApplicationPath_ReturnsRelativePath()
     {
-        Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath(string.Empty, "/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath(string.Empty, "/MyPath"), Is.EqualTo("/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_EmptyApplicationPathAndAppRootRelativePath_ReturnsRelativePath()
     {
-        Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath(string.Empty, "~/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath(string.Empty, "~/MyPath"), Is.EqualTo("/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_RootApplicationPath_ReturnsRelativePath()
     {
-        Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath("/", "/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/", "/MyPath"), Is.EqualTo("/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_RootApplicationPathAndAppRootRelativePath_ReturnsRelativePath()
     {
-        Assert.AreEqual("/MyPath", WebUtils.CreateAbsolutePath("/", "~/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/", "~/MyPath"), Is.EqualTo("/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_ApplicationPathAndRelativePath_ReturnsConcatenatedPath()
     {
-        Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp", "MyPath"), Is.EqualTo("/MyApp/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_ApplicationPathAndAppRootRelativePath_ReturnsConcatenatedPath()
     {
-        Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "~/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp", "~/MyPath"), Is.EqualTo("/MyApp/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_ApplicationPathWithTrailingSlashAndRelativePath_ReturnsConcatenatedPath()
     {
-        Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp/", "MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp/", "MyPath"), Is.EqualTo("/MyApp/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_ApplicationPathWithTrailingSlashAndAppRootRelativePath_ReturnsConcatenatedPath()
     {
-        Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp/", "~/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp/", "~/MyPath"), Is.EqualTo("/MyApp/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_WhenRelativePathBeginsWithApplicationPath_ReturnsConcatenatedPath()
     {
-        Assert.AreEqual("/MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "/MyApp/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp", "/MyApp/MyPath"), Is.EqualTo("/MyApp/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_WhenRelativePathIsHttpQualifiedUrl_ReturnsRelativePath()
     {
-        Assert.AreEqual("http://MyApp/MyPath", WebUtils.CreateAbsolutePath(null, "http://MyApp/MyPath"));
-        Assert.AreEqual("http://MyApp/MyPath", WebUtils.CreateAbsolutePath("/", "http://MyApp/MyPath"));
-        Assert.AreEqual("http://MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "http://MyApp/MyPath"));
-        Assert.AreEqual("http://MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp/", "http://MyApp/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath(null, "http://MyApp/MyPath"), Is.EqualTo("http://MyApp/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/", "http://MyApp/MyPath"), Is.EqualTo("http://MyApp/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp", "http://MyApp/MyPath"), Is.EqualTo("http://MyApp/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp/", "http://MyApp/MyPath"), Is.EqualTo("http://MyApp/MyPath"));
     }
 
     [Test]
     public void CreateAbsolutePath_WhenRelativePathIsHttpsQualifiedUrl_ReturnsRelativePath()
     {
-        Assert.AreEqual("https://MyApp/MyPath", WebUtils.CreateAbsolutePath(null, "https://MyApp/MyPath"));
-        Assert.AreEqual("https://MyApp/MyPath", WebUtils.CreateAbsolutePath("/", "https://MyApp/MyPath"));
-        Assert.AreEqual("https://MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp", "https://MyApp/MyPath"));
-        Assert.AreEqual("https://MyApp/MyPath", WebUtils.CreateAbsolutePath("/MyApp/", "https://MyApp/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath(null, "https://MyApp/MyPath"), Is.EqualTo("https://MyApp/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/", "https://MyApp/MyPath"), Is.EqualTo("https://MyApp/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp", "https://MyApp/MyPath"), Is.EqualTo("https://MyApp/MyPath"));
+        Assert.That(WebUtils.CreateAbsolutePath("/MyApp/", "https://MyApp/MyPath"), Is.EqualTo("https://MyApp/MyPath"));
     }
 
     [Test]
@@ -237,31 +237,31 @@ public sealed class WebUtilsTests
 
     private void CombineVirtualPathsSuite(string appPath)
     {
-        Assert.AreEqual("/myotherdir/mypath", WebUtils.CombineVirtualPaths("/myotherdir", "mypath"));
-        Assert.AreEqual("/mypath", WebUtils.CombineVirtualPaths("/irrelevantdir", "/mypath")); // note: that's the difference from CreateAbsolutePath()
-        Assert.AreEqual(appPath + "mypath", WebUtils.CombineVirtualPaths("/irrelevantdir", "~/mypath"));
-        Assert.AreEqual(appPath + "some/~/mypath", WebUtils.CombineVirtualPaths("/mydir", "~/some/~/mypath"));
-        Assert.AreEqual("/mydir/some/~/mypath", WebUtils.CombineVirtualPaths("/mydir", "some/~/mypath"));
-        Assert.AreEqual("/myotherdir/mypath/my.file", WebUtils.CombineVirtualPaths("/myotherdir/some.file", "mypath/my.file"));
-        Assert.AreEqual(appPath + "mypath/my.file", WebUtils.CombineVirtualPaths("/myotherdir/some.file", "~/mypath/my.file"));
+        Assert.That(WebUtils.CombineVirtualPaths("/myotherdir", "mypath"), Is.EqualTo("/myotherdir/mypath"));
+        Assert.That(WebUtils.CombineVirtualPaths("/irrelevantdir", "/mypath"), Is.EqualTo("/mypath")); // note: that's the difference from CreateAbsolutePath()
+        Assert.That(WebUtils.CombineVirtualPaths("/irrelevantdir", "~/mypath"), Is.EqualTo(appPath + "mypath"));
+        Assert.That(WebUtils.CombineVirtualPaths("/mydir", "~/some/~/mypath"), Is.EqualTo(appPath + "some/~/mypath"));
+        Assert.That(WebUtils.CombineVirtualPaths("/mydir", "some/~/mypath"), Is.EqualTo("/mydir/some/~/mypath"));
+        Assert.That(WebUtils.CombineVirtualPaths("/myotherdir/some.file", "mypath/my.file"), Is.EqualTo("/myotherdir/mypath/my.file"));
+        Assert.That(WebUtils.CombineVirtualPaths("/myotherdir/some.file", "~/mypath/my.file"), Is.EqualTo(appPath + "mypath/my.file"));
     }
 
     [Test]
     public void GetRelativePath()
     {
         // case-insensitive
-        Assert.AreEqual("/Mypath", WebUtils.GetRelativePath("/mydir/", "/myDir/Mypath"));
-        Assert.AreEqual("/mYpath", WebUtils.GetRelativePath("/Mydir", "/mYdir/mYpath"));
-        Assert.AreEqual("/myotherdir/mypath", WebUtils.GetRelativePath("/mydir", "/myotherdir/mypath"));
+        Assert.That(WebUtils.GetRelativePath("/mydir/", "/myDir/Mypath"), Is.EqualTo("/Mypath"));
+        Assert.That(WebUtils.GetRelativePath("/Mydir", "/mYdir/mYpath"), Is.EqualTo("/mYpath"));
+        Assert.That(WebUtils.GetRelativePath("/mydir", "/myotherdir/mypath"), Is.EqualTo("/myotherdir/mypath"));
     }
 
     [Test]
     public void GetNormalizedVirtualPath()
     {
-        Assert.AreEqual(null, WebUtils.GetNormalizedVirtualPath(null));
-        Assert.AreEqual(String.Empty, WebUtils.GetNormalizedVirtualPath(String.Empty));
-        Assert.AreEqual("~test.aspx", WebUtils.GetNormalizedVirtualPath("~test.aspx"));
-        Assert.AreEqual("/test.aspx", WebUtils.GetNormalizedVirtualPath("~/test.aspx"));
-        Assert.AreEqual("/Complex.Path/~/test.aspx", WebUtils.GetNormalizedVirtualPath("~/Complex.Path/~/test.aspx"));
+        Assert.That(WebUtils.GetNormalizedVirtualPath(null), Is.EqualTo(null));
+        Assert.That(WebUtils.GetNormalizedVirtualPath(String.Empty), Is.Empty);
+        Assert.That(WebUtils.GetNormalizedVirtualPath("~test.aspx"), Is.EqualTo("~test.aspx"));
+        Assert.That(WebUtils.GetNormalizedVirtualPath("~/test.aspx"), Is.EqualTo("/test.aspx"));
+        Assert.That(WebUtils.GetNormalizedVirtualPath("~/Complex.Path/~/test.aspx"), Is.EqualTo("/Complex.Path/~/test.aspx"));
     }
 }

@@ -58,7 +58,7 @@ public sealed class ParameterValidationAdviceTests
 
         advice.Before(method, args, target);
         method.Invoke(target, args);
-        Assert.AreEqual("NIKOLA TESLA", inventor.Name);
+        Assert.That(inventor.Name, Is.EqualTo("NIKOLA TESLA"));
     }
 
     [Test]

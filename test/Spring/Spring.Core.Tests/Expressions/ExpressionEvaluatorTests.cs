@@ -68,7 +68,7 @@ public sealed class ExpressionEvaluatorTests
         public override void DoExecute()
         {
             object result = exp.GetValue(rootContext, variables);
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
     }
 
@@ -176,9 +176,9 @@ public sealed class ExpressionEvaluatorTests
     public void MembersDontGetSerializedByDefault()
     {
         SerializationTestExpression exp = new SerializationTestExpression(5);
-        Assert.AreEqual(5, exp.TestValue);
+        Assert.That(exp.TestValue, Is.EqualTo(5));
         SerializationTestExpression exp2 = (SerializationTestExpression) SerializeDeserializeExpression(exp);
-        Assert.AreEqual(0, exp2.TestValue);
+        Assert.That(exp2.TestValue, Is.EqualTo(0));
     }
 
     /// <summary>
@@ -194,11 +194,11 @@ public sealed class ExpressionEvaluatorTests
     {
         IExpression exp = Expression.Parse("date('08-24-1974', 'MM-dd-yyyy')");
 
-        Assert.AreEqual(new DateTime(1974, 8, 24), exp.GetValue(null));
+        Assert.That(exp.GetValue(null), Is.EqualTo(new DateTime(1974, 8, 24)));
 
         exp = SerializeDeserializeExpression(exp);
 
-        Assert.AreEqual(new DateTime(1974, 8, 24), exp.GetValue(null));
+        Assert.That(exp.GetValue(null), Is.EqualTo(new DateTime(1974, 8, 24)));
     }
 
     private static IExpression SerializeDeserializeExpression(IExpression exp)
@@ -247,21 +247,21 @@ public sealed class ExpressionEvaluatorTests
     public void TestConstantRead()
     {
         object value = ExpressionEvaluator.GetValue(null, "Society.ByteConst == 1");
-        Assert.AreEqual(true, value);
+        Assert.That(value, Is.EqualTo(true));
     }
 
     [Test]
     public void TestBitwiseXOR()
     {
         object value = ExpressionEvaluator.GetValue(null, "'123' + 1");
-        Assert.AreEqual("1231", value);
+        Assert.That(value, Is.EqualTo("1231"));
     }
 
     [Test]
     public void TestMixedAddition()
     {
         object value = ExpressionEvaluator.GetValue(null, "'123' + 1");
-        Assert.AreEqual("1231", value);
+        Assert.That(value, Is.EqualTo("1231"));
     }
 
     [Test(Description = "SPRNET-1507 - Test 1")]
@@ -272,7 +272,7 @@ public sealed class ExpressionEvaluatorTests
         dynamicObject.IssueId = "1507";
 
         object value = ExpressionEvaluator.GetValue(dynamicObject, "IssueId");
-        Assert.AreEqual("1507", value);
+        Assert.That(value, Is.EqualTo("1507"));
     }
 
     [Test(Description = "SPRNET-1507 - Test 2")]
@@ -287,9 +287,9 @@ public sealed class ExpressionEvaluatorTests
         }
         catch (InvalidPropertyException ex)
         {
-            Assert.AreEqual(
-                "'PropertyName' node cannot be resolved for the specified context [System.Dynamic.ExpandoObject].",
-                ex.Message);
+            Assert.That(
+                ex.Message,
+                Is.EqualTo("'PropertyName' node cannot be resolved for the specified context [System.Dynamic.ExpandoObject]."));
         }
     }
 
@@ -297,7 +297,7 @@ public sealed class ExpressionEvaluatorTests
     public void DateTests()
     {
         string dateLiteral = (string) ExpressionEvaluator.GetValue(null, "'date'");
-        Assert.AreEqual("date", dateLiteral);
+        Assert.That(dateLiteral, Is.EqualTo("date"));
     }
 
     [Test(Description = "http://jira.springframework.org/browse/SPRNET-944")]
@@ -328,7 +328,7 @@ public sealed class ExpressionEvaluatorTests
         }
         catch (RecognitionException ex)
         {
-            Assert.AreEqual("Syntax Error on line 1, column 6: expecting ''', found '<EOF>' in expression" + Environment.NewLine + "''date'", ex.Message);
+            Assert.That(ex.Message, Is.EqualTo("Syntax Error on line 1, column 6: expecting ''', found '<EOF>' in expression" + Environment.NewLine + "''date'"));
         }
     }
 
@@ -357,8 +357,8 @@ public sealed class ExpressionEvaluatorTests
     public void GetNullOrEmptyExpression()
     {
         DateTime now = DateTime.Now;
-        Assert.AreEqual(ExpressionEvaluator.GetValue(now, null), now);
-        Assert.AreEqual(ExpressionEvaluator.GetValue(now, ""), now);
+        Assert.That(now, Is.EqualTo(ExpressionEvaluator.GetValue(now, null)));
+        Assert.That(now, Is.EqualTo(ExpressionEvaluator.GetValue(now, "")));
     }
 
     /// <summary>
@@ -376,15 +376,15 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestNullLiteral()
     {
-        Assert.IsNull(ExpressionEvaluator.GetValue(null, "null"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'xyz' == null"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "null != 'xyz'"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "null"), Is.Null);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'xyz' == null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null != 'xyz'"), Is.True);
     }
 
     [Test]
     public void TestUnicode()
     {
-        Assert.AreEqual("\u6f22\u5b57", ExpressionEvaluator.GetValue(null, "'\u6f22\u5b57'"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "'\u6f22\u5b57'"), Is.EqualTo("\u6f22\u5b57"));
     }
 
     /// <summary>
@@ -393,10 +393,10 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestStringLiterals()
     {
-        Assert.AreEqual("literal string", ExpressionEvaluator.GetValue(null, "'literal string'"));
-        Assert.AreEqual("literal 'string", ExpressionEvaluator.GetValue(null, "'literal ''string'"));
-        Assert.AreEqual(string.Empty, ExpressionEvaluator.GetValue(null, "''"));
-        Assert.AreEqual("escaped \t string \n", ExpressionEvaluator.GetValue(null, "'escaped \t string \n'"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "'literal string'"), Is.EqualTo("literal string"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "'literal ''string'"), Is.EqualTo("literal 'string"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "''"), Is.Empty);
+        Assert.That(ExpressionEvaluator.GetValue(null, "'escaped \t string \n'"), Is.EqualTo("escaped \t string \n"));
         //Debug.Write(ExpressionEvaluator.GetValue(null, "'escaped\tstring\nsecond line\n\nfourth line'"));
     }
 
@@ -407,16 +407,16 @@ public sealed class ExpressionEvaluatorTests
     public void TestIntLiterals()
     {
         object int32 = ExpressionEvaluator.GetValue(null, Int32.MaxValue.ToString());
-        Assert.AreEqual(int32, Int32.MaxValue);
-        Assert.IsTrue(int32 is Int32);
-        Assert.AreEqual(32, ExpressionEvaluator.GetValue(null, "0x20"));
+        Assert.That(int32, Is.EqualTo(Int32.MaxValue));
+        Assert.That(int32 is Int32, Is.True);
+        Assert.That(ExpressionEvaluator.GetValue(null, "0x20"), Is.EqualTo(32));
 
-        Assert.AreEqual(Int64.MaxValue.ToString(), ExpressionEvaluator.GetValue(null, Int64.MaxValue.ToString() + ".ToString()"));
-        Assert.AreEqual(Int64.MaxValue.ToString(), ExpressionEvaluator.GetValue(null, "long.MaxValue.ToString()"));
+        Assert.That(ExpressionEvaluator.GetValue(null, Int64.MaxValue.ToString() + ".ToString()"), Is.EqualTo(Int64.MaxValue.ToString()));
+        Assert.That(ExpressionEvaluator.GetValue(null, "long.MaxValue.ToString()"), Is.EqualTo(Int64.MaxValue.ToString()));
 
         object int64 = ExpressionEvaluator.GetValue(null, Int64.MaxValue.ToString());
-        Assert.AreEqual(int64, Int64.MaxValue);
-        Assert.IsTrue(int64 is Int64);
+        Assert.That(int64, Is.EqualTo(Int64.MaxValue));
+        Assert.That(int64 is Int64, Is.True);
     }
 
     /// <summary>
@@ -426,13 +426,13 @@ public sealed class ExpressionEvaluatorTests
     public void TestHexLiterals()
     {
         IExpression exp = Expression.Parse("0x20");
-        Assert.AreEqual(32, exp.GetValue());
-        Assert.AreEqual(32, exp.GetValue());
-        Assert.AreEqual(255, ExpressionEvaluator.GetValue(null, "0xFF"));
-        Assert.AreEqual(Int32.MaxValue, ExpressionEvaluator.GetValue(null, "0x7FFFFFFF"));
-        Assert.AreEqual(Int64.MaxValue, ExpressionEvaluator.GetValue(null, "0x7FFFFFFFFFFFFFFF"));
-        Assert.AreEqual(Int32.MinValue, ExpressionEvaluator.GetValue(null, "0x80000000"));
-        Assert.AreEqual(Int64.MinValue, ExpressionEvaluator.GetValue(null, "0x8000000000000000"));
+        Assert.That(exp.GetValue(), Is.EqualTo(32));
+        Assert.That(exp.GetValue(), Is.EqualTo(32));
+        Assert.That(ExpressionEvaluator.GetValue(null, "0xFF"), Is.EqualTo(255));
+        Assert.That(ExpressionEvaluator.GetValue(null, "0x7FFFFFFF"), Is.EqualTo(Int32.MaxValue));
+        Assert.That(ExpressionEvaluator.GetValue(null, "0x7FFFFFFFFFFFFFFF"), Is.EqualTo(Int64.MaxValue));
+        Assert.That(ExpressionEvaluator.GetValue(null, "0x80000000"), Is.EqualTo(Int32.MinValue));
+        Assert.That(ExpressionEvaluator.GetValue(null, "0x8000000000000000"), Is.EqualTo(Int64.MinValue));
     }
 
     /// <summary>
@@ -447,19 +447,19 @@ public sealed class ExpressionEvaluatorTests
         object d = ExpressionEvaluator.GetValue(null, "1.797693E+308");
         object dec = ExpressionEvaluator.GetValue(null, "1000.00m");
 
-        Assert.IsTrue(s is Double);
-        Assert.IsTrue(d is Double);
-        Assert.IsTrue(dec is Decimal);
+        Assert.That(s is Double, Is.True);
+        Assert.That(d is Double, Is.True);
+        Assert.That(dec is Decimal, Is.True);
 
-        Assert.AreEqual(s, 3.402823E+38);
-        Assert.AreEqual(d, 1.797693E+308);
+        Assert.That(s, Is.EqualTo(3.402823E+38));
+        Assert.That(d, Is.EqualTo(1.797693E+308));
 
-        Assert.AreEqual(5.25F, ExpressionEvaluator.GetValue(null, "5.25f"));
-        Assert.AreEqual(0.75d, ExpressionEvaluator.GetValue(null, "0.75D"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "5.25f"), Is.EqualTo(5.25F));
+        Assert.That(ExpressionEvaluator.GetValue(null, "0.75D"), Is.EqualTo(0.75d));
 
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "1000 == 1e3 and 1e+4 != 1000"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "100 < 1000.00m and 10000.00 > 1000"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "100 < 1000.00 and 10000.00m > 1e2"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "1000 == 1e3 and 1e+4 != 1000"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "100 < 1000.00m and 10000.00 > 1000"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "100 < 1000.00 and 10000.00m > 1e2"), Is.True);
     }
 
     /// <summary>
@@ -468,8 +468,8 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestBooleanLiterals()
     {
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false"), Is.False);
     }
 
     /// <summary>
@@ -479,14 +479,14 @@ public sealed class ExpressionEvaluatorTests
     public void TestDateLiterals()
     {
         IExpression exp = Expression.Parse("date('1974/08/24')");
-        Assert.AreEqual(new DateTime(1974, 8, 24), exp.GetValue());
-        Assert.AreEqual(new DateTime(1974, 8, 24), exp.GetValue());
-        Assert.AreEqual(new DateTime(1974, 8, 24), ExpressionEvaluator.GetValue(null, "date('1974-08-24')"));
-        Assert.AreEqual(new DateTime(1974, 8, 24), ExpressionEvaluator.GetValue(null, "date('08-24-1974', 'MM-dd-yyyy')"));
-        Assert.AreEqual(new DateTime(1974, 8, 24), ExpressionEvaluator.GetValue(null, "date('08/24/1974', 'MM/dd/yyyy')"));
-        Assert.AreEqual(new DateTime(1974, 8, 24, 12, 35, 6), ExpressionEvaluator.GetValue(null, "date('1974-08-24 12:35:06Z', 'u')"));
-        Assert.AreEqual(1974, ExpressionEvaluator.GetValue(null, "date('1974/08/24').Year"));
-        Assert.AreEqual(2005, ExpressionEvaluator.GetValue(null, "date('1974/08/24').AddYears(31).Year"));
+        Assert.That(exp.GetValue(), Is.EqualTo(new DateTime(1974, 8, 24)));
+        Assert.That(exp.GetValue(), Is.EqualTo(new DateTime(1974, 8, 24)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('1974-08-24')"), Is.EqualTo(new DateTime(1974, 8, 24)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('08-24-1974', 'MM-dd-yyyy')"), Is.EqualTo(new DateTime(1974, 8, 24)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('08/24/1974', 'MM/dd/yyyy')"), Is.EqualTo(new DateTime(1974, 8, 24)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('1974-08-24 12:35:06Z', 'u')"), Is.EqualTo(new DateTime(1974, 8, 24, 12, 35, 6)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('1974/08/24').Year"), Is.EqualTo(1974));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('1974/08/24').AddYears(31).Year"), Is.EqualTo(2005));
     }
 
     /// <summary>
@@ -495,15 +495,15 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestSimplePropertyAccess()
     {
-        Assert.AreEqual(DateTime.Today, ExpressionEvaluator.GetValue(null, "DateTime.Today"));
-        Assert.AreEqual("Nikola Tesla", ExpressionEvaluator.GetValue(tesla, "Name"));
-        Assert.AreEqual("Idvor", ExpressionEvaluator.GetValue(pupin, "PlaceOfBirth.City"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "DateTime.Today"), Is.EqualTo(DateTime.Today));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "Name"), Is.EqualTo("Nikola Tesla"));
+        Assert.That(ExpressionEvaluator.GetValue(pupin, "PlaceOfBirth.City"), Is.EqualTo("Idvor"));
         ExpressionEvaluator.SetValue(tesla, "PlaceOfBirth.Country", "Croatia");
-        Assert.AreEqual("Croatia", ExpressionEvaluator.GetValue(tesla, "PlaceOfBirth.Country"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "PlaceOfBirth.Country"), Is.EqualTo("Croatia"));
         ExpressionEvaluator.SetValue(pupin, "Name", "Michael Pupin");
-        Assert.AreEqual("Michael Pupin", ExpressionEvaluator.GetValue(pupin, "Name"));
-        Assert.AreEqual(new DateTime(1856, 7, 9), ExpressionEvaluator.GetValue(tesla, "DOB"));
-        Assert.AreEqual(1856, ExpressionEvaluator.GetValue(tesla, "DOB.Year"));
+        Assert.That(ExpressionEvaluator.GetValue(pupin, "Name"), Is.EqualTo("Michael Pupin"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "DOB"), Is.EqualTo(new DateTime(1856, 7, 9)));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "DOB.Year"), Is.EqualTo(1856));
     }
 
     /// <summary>
@@ -512,14 +512,14 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void SimplePropertyAccessIsCaseInsensitive()
     {
-        Assert.AreEqual("Nikola Tesla", ExpressionEvaluator.GetValue(tesla, "nAme"));
-        Assert.AreEqual("Idvor", ExpressionEvaluator.GetValue(pupin, "Placeofbirth.city"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "nAme"), Is.EqualTo("Nikola Tesla"));
+        Assert.That(ExpressionEvaluator.GetValue(pupin, "Placeofbirth.city"), Is.EqualTo("Idvor"));
         ExpressionEvaluator.SetValue(tesla, "PlaceOfBirth.CountRY", "Croatia");
-        Assert.AreEqual("Croatia", ExpressionEvaluator.GetValue(tesla, "Placeofbirth.COUNtry"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "Placeofbirth.COUNtry"), Is.EqualTo("Croatia"));
         ExpressionEvaluator.SetValue(pupin, "NAME", "Michael Pupin");
-        Assert.AreEqual("Michael Pupin", ExpressionEvaluator.GetValue(pupin, "name"));
-        Assert.AreEqual(new DateTime(1856, 7, 9), ExpressionEvaluator.GetValue(tesla, "dob"));
-        Assert.AreEqual(1856, ExpressionEvaluator.GetValue(tesla, "DOb.YEar"));
+        Assert.That(ExpressionEvaluator.GetValue(pupin, "name"), Is.EqualTo("Michael Pupin"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "dob"), Is.EqualTo(new DateTime(1856, 7, 9)));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "DOb.YEar"), Is.EqualTo(1856));
     }
 
     /// <summary>
@@ -533,17 +533,17 @@ public sealed class ExpressionEvaluatorTests
         // test read
         o = new ShadowingTestsMostSpezializedClass();
         o.SomeValue = "SomeString";
-        Assert.AreEqual("SomeString", ExpressionEvaluator.GetValue(o, "SomeValue"));
+        Assert.That(ExpressionEvaluator.GetValue(o, "SomeValue"), Is.EqualTo("SomeString"));
 
         // test write
         o = new ShadowingTestsMostSpezializedClass();
         ExpressionEvaluator.SetValue(o, "SomeValue", "SomeOtherString");
-        Assert.AreEqual("SomeOtherString", o.SomeValue);
+        Assert.That(o.SomeValue, Is.EqualTo("SomeOtherString"));
 
         // test readonly shadowed
         o = new ShadowingTestsMostSpezializedClass();
         ((ShadowingTestsBaseClass) o).ReadonlyShadowedValue = "SomeString1";
-        Assert.AreEqual("SomeString1", ExpressionEvaluator.GetValue(o, "ReadonlyShadowedValue"));
+        Assert.That(ExpressionEvaluator.GetValue(o, "ReadonlyShadowedValue"), Is.EqualTo("SomeString1"));
         try
         {
             ExpressionEvaluator.SetValue(o, "ReadonlyShadowedValue", "SomeString2");
@@ -553,12 +553,12 @@ public sealed class ExpressionEvaluatorTests
         {
         }
 
-        Assert.AreEqual("SomeString1", ExpressionEvaluator.GetValue(o, "ReadonlyShadowedValue"));
+        Assert.That(ExpressionEvaluator.GetValue(o, "ReadonlyShadowedValue"), Is.EqualTo("SomeString1"));
 
         // test writeonly shadowed
         o = new ShadowingTestsMostSpezializedClass();
         ExpressionEvaluator.SetValue(o, "WriteonlyShadowedValue", "SomeString3");
-        Assert.AreEqual("SomeString3", ((ShadowingTestsBaseClass) o).WriteonlyShadowedValue);
+        Assert.That(((ShadowingTestsBaseClass) o).WriteonlyShadowedValue, Is.EqualTo("SomeString3"));
         try
         {
             ExpressionEvaluator.GetValue(o, "WriteonlyShadowedValue");
@@ -578,44 +578,44 @@ public sealed class ExpressionEvaluatorTests
         TypeRegistry.RegisterType("Society", typeof(Society));
 
         // arrays and lists
-        Assert.AreEqual("Induction motor", ExpressionEvaluator.GetValue(tesla, "Inventions[3]"));
-        Assert.AreEqual("Nikola Tesla", ExpressionEvaluator.GetValue(ieee, "Members[0].Name"));
-        Assert.AreEqual("Wireless communication", ExpressionEvaluator.GetValue(ieee, "Members[0].Inventions[6]"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "Inventions[3]"), Is.EqualTo("Induction motor"));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Members[0].Name"), Is.EqualTo("Nikola Tesla"));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Members[0].Inventions[6]"), Is.EqualTo("Wireless communication"));
 
         // maps
-        Assert.AreEqual(pupin, ExpressionEvaluator.GetValue(ieee, "Officers['president']"));
-        Assert.AreEqual("Idvor", ExpressionEvaluator.GetValue(ieee, "Officers['president'].PlaceOfBirth.City"));
-        Assert.AreEqual(tesla, ExpressionEvaluator.GetValue(ieee, "Officers['advisors'][0]"));
-        Assert.AreEqual("Polyphase alternating-current system",
-            ExpressionEvaluator.GetValue(ieee, "Officers['advisors'][0].Inventions[2]"));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers['president']"), Is.EqualTo(pupin));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers['president'].PlaceOfBirth.City"), Is.EqualTo("Idvor"));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers['advisors'][0]"), Is.EqualTo(tesla));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers['advisors'][0].Inventions[2]"),
+            Is.EqualTo("Polyphase alternating-current system"));
 
         // maps with non-literal parameters
         Dictionary<string, object> vars = new Dictionary<string, object>();
         vars["prez"] = "president";
-        Assert.AreEqual(pupin, ExpressionEvaluator.GetValue(ieee, "Officers[#prez]", vars));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers[#prez]", vars), Is.EqualTo(pupin));
 
-        Assert.AreEqual(pupin, ExpressionEvaluator.GetValue(ieee, "Officers[Society.President]"));
-        Assert.AreEqual("Idvor", ExpressionEvaluator.GetValue(ieee, "Officers[Society.President].PlaceOfBirth.City"));
-        Assert.AreEqual(tesla, ExpressionEvaluator.GetValue(ieee, "Officers[Society.Advisors][0]"));
-        Assert.AreEqual("Polyphase alternating-current system",
-            ExpressionEvaluator.GetValue(ieee, "Officers[Society.Advisors][0].Inventions[2]"));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers[Society.President]"), Is.EqualTo(pupin));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers[Society.President].PlaceOfBirth.City"), Is.EqualTo("Idvor"));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers[Society.Advisors][0]"), Is.EqualTo(tesla));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers[Society.Advisors][0].Inventions[2]"),
+            Is.EqualTo("Polyphase alternating-current system"));
 
         // try to set some values
         ExpressionEvaluator.SetValue(ieee, "Officers['advisors'][0].PlaceOfBirth.Country", "Croatia");
-        Assert.AreEqual("Croatia", ExpressionEvaluator.GetValue(tesla, "PlaceOfBirth.Country"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "PlaceOfBirth.Country"), Is.EqualTo("Croatia"));
         ExpressionEvaluator.SetValue(ieee, "Officers['president'].Name", "Michael Pupin");
-        Assert.AreEqual("Michael Pupin", ExpressionEvaluator.GetValue(pupin, "Name"));
+        Assert.That(ExpressionEvaluator.GetValue(pupin, "Name"), Is.EqualTo("Michael Pupin"));
         ExpressionEvaluator.SetValue(ieee, "Officers['advisors']", new Inventor[] { pupin, tesla });
-        Assert.AreEqual(pupin, ExpressionEvaluator.GetValue(ieee, "Officers['advisors'][0]"));
-        Assert.AreEqual(tesla, ExpressionEvaluator.GetValue(ieee, "Officers['advisors'][1]"));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers['advisors'][0]"), Is.EqualTo(pupin));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Officers['advisors'][1]"), Is.EqualTo(tesla));
 
         // generic indexer
         Bar bar = new Bar();
         Foo foo = new Foo();
         IExpression exp = Expression.Parse("[1]");
-        Assert.AreEqual(2, exp.GetValue(bar));
-        Assert.AreEqual(2, exp.GetValue(bar));
-        Assert.AreEqual("test_1", ExpressionEvaluator.GetValue(foo, "[1, 'test']"));
+        Assert.That(exp.GetValue(bar), Is.EqualTo(2));
+        Assert.That(exp.GetValue(bar), Is.EqualTo(2));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "[1, 'test']"), Is.EqualTo("test_1"));
     }
 
     /// <summary>
@@ -636,20 +636,20 @@ public sealed class ExpressionEvaluatorTests
         Guid guid = Guid.NewGuid();
 
         TypeRegistry.RegisterType("Guid", typeof(Guid));
-        Assert.AreEqual(guid.ToString(), ExpressionEvaluator.GetValue(guid, "ToString()"));
-        Assert.AreEqual(guid.ToString("n"), ExpressionEvaluator.GetValue(guid, "ToString('n')"));
-        Assert.AreEqual(16, ExpressionEvaluator.GetValue(null, "Guid.NewGuid().ToByteArray().Length"));
+        Assert.That(ExpressionEvaluator.GetValue(guid, "ToString()"), Is.EqualTo(guid.ToString()));
+        Assert.That(ExpressionEvaluator.GetValue(guid, "ToString('n')"), Is.EqualTo(guid.ToString("n")));
+        Assert.That(ExpressionEvaluator.GetValue(null, "Guid.NewGuid().ToByteArray().Length"), Is.EqualTo(16));
 
-        Assert.AreEqual(2005 - tesla.DOB.Year,
-            ExpressionEvaluator.GetValue(ieee, "Members[0].GetAge(date('2005-01-01'))"));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, "Members[0].GetAge(date('2005-01-01'))"),
+            Is.EqualTo(2005 - tesla.DOB.Year));
     }
 
     [Test]
     public void TestMethodEvaluationOnDifferentContextType()
     {
         IExpression expression = Expression.Parse("ToString('dummy', null)");
-        Assert.AreEqual("dummy", expression.GetValue(0m, null));
-        Assert.AreEqual("dummy", expression.GetValue(0, null));
+        Assert.That(expression.GetValue(0m, null), Is.EqualTo("dummy"));
+        Assert.That(expression.GetValue(0, null), Is.EqualTo("dummy"));
     }
 
     [Test]
@@ -659,9 +659,9 @@ public sealed class ExpressionEvaluatorTests
         MethodInvokationCases testContext = new MethodInvokationCases();
         Dictionary<string, object> args = new Dictionary<string, object>();
         args["var1"] = "myString";
-        Assert.AreEqual("myString", expression.GetValue(testContext, args));
+        Assert.That(expression.GetValue(testContext, args), Is.EqualTo("myString"));
         args["var1"] = 12;
-        Assert.AreEqual(12, expression.GetValue(testContext, args));
+        Assert.That(expression.GetValue(testContext, args), Is.EqualTo(12));
     }
 
     /// <summary>
@@ -681,14 +681,14 @@ public sealed class ExpressionEvaluatorTests
     {
         IList placesOfBirth = (IList) ExpressionEvaluator.GetValue(ieee, "Members.!{PlaceOfBirth.City}");
 
-        Assert.AreEqual(2, placesOfBirth.Count);
-        Assert.AreEqual("Smiljan", placesOfBirth[0]);
-        Assert.AreEqual("Idvor", placesOfBirth[1]);
+        Assert.That(placesOfBirth.Count, Is.EqualTo(2));
+        Assert.That(placesOfBirth[0], Is.EqualTo("Smiljan"));
+        Assert.That(placesOfBirth[1], Is.EqualTo("Idvor"));
 
         IList names = (IList) ExpressionEvaluator.GetValue(ieee, "Officers['advisors'].!{Name}");
-        Assert.AreEqual(2, names.Count);
-        Assert.AreEqual("Nikola Tesla", names[0]);
-        Assert.AreEqual("Mihajlo Pupin", names[1]);
+        Assert.That(names.Count, Is.EqualTo(2));
+        Assert.That(names[0], Is.EqualTo("Nikola Tesla"));
+        Assert.That(names[1], Is.EqualTo("Mihajlo Pupin"));
     }
 
     /// <summary>
@@ -700,22 +700,22 @@ public sealed class ExpressionEvaluatorTests
         IList memberSelection =
             (IList) ExpressionEvaluator.GetValue(ieee, "Members.?{PlaceOfBirth.City == 'Smiljan'}");
 
-        Assert.AreEqual(1, memberSelection.Count);
-        Assert.AreEqual("Nikola Tesla", ((Inventor) memberSelection[0]).Name);
+        Assert.That(memberSelection.Count, Is.EqualTo(1));
+        Assert.That(((Inventor) memberSelection[0]).Name, Is.EqualTo("Nikola Tesla"));
 
         IList serbianOfficers =
             (IList) ExpressionEvaluator.GetValue(ieee, "Officers['advisors'].?{Nationality == 'Serbian'}");
-        Assert.AreEqual(2, serbianOfficers.Count);
-        Assert.AreEqual("Nikola Tesla", ((Inventor) serbianOfficers[0]).Name);
-        Assert.AreEqual("Mihajlo Pupin", ((Inventor) serbianOfficers[1]).Name);
+        Assert.That(serbianOfficers.Count, Is.EqualTo(2));
+        Assert.That(((Inventor) serbianOfficers[0]).Name, Is.EqualTo("Nikola Tesla"));
+        Assert.That(((Inventor) serbianOfficers[1]).Name, Is.EqualTo("Mihajlo Pupin"));
 
         Inventor first =
             (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers['advisors'].^{Nationality == 'Serbian'}");
-        Assert.AreEqual("Nikola Tesla", first.Name);
+        Assert.That(first.Name, Is.EqualTo("Nikola Tesla"));
 
         Inventor last =
             (Inventor) ExpressionEvaluator.GetValue(ieee, "Officers['advisors'].${Nationality == 'Serbian'}");
-        Assert.AreEqual("Mihajlo Pupin", last.Name);
+        Assert.That(last.Name, Is.EqualTo("Mihajlo Pupin"));
     }
 
     /// <summary>
@@ -726,12 +726,12 @@ public sealed class ExpressionEvaluatorTests
     {
         IExpression exp = Expression.Parse("T(DateTime)");
         exp.GetValue();
-        Assert.AreEqual(typeof(DateTime), exp.GetValue());
+        Assert.That(exp.GetValue(), Is.EqualTo(typeof(DateTime)));
 
-        Assert.AreEqual(typeof(DateTime), ExpressionEvaluator.GetValue(null, "T(System.DateTime)"));
-        Assert.AreEqual(typeof(DateTime[]), ExpressionEvaluator.GetValue(null, "T(System.DateTime[], mscorlib)"));
-        Assert.AreEqual(typeof(ExpressionEvaluator), ExpressionEvaluator.GetValue(null, "T(Spring.Expressions.ExpressionEvaluator, Spring.Core)"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(tesla, "T(System.DateTime) == DOB.GetType()"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.DateTime)"), Is.EqualTo(typeof(DateTime)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.DateTime[], mscorlib)"), Is.EqualTo(typeof(DateTime[])));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(Spring.Expressions.ExpressionEvaluator, Spring.Core)"), Is.EqualTo(typeof(ExpressionEvaluator)));
+        Assert.That((bool) ExpressionEvaluator.GetValue(tesla, "T(System.DateTime) == DOB.GetType()"), Is.True);
     }
 
     /// <summary>
@@ -740,10 +740,10 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestTypeNodeWithArrays()
     {
-        Assert.AreEqual(typeof(DateTime[]), ExpressionEvaluator.GetValue(null, "T(System.DateTime[])"));
-        Assert.AreEqual(typeof(DateTime[,]), ExpressionEvaluator.GetValue(null, "T(System.DateTime[,])"));
-        Assert.AreEqual(typeof(DateTime[]), ExpressionEvaluator.GetValue(null, "T(System.DateTime[], mscorlib)"));
-        Assert.AreEqual(typeof(DateTime[,]), ExpressionEvaluator.GetValue(null, "T(System.DateTime[,], mscorlib)"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.DateTime[])"), Is.EqualTo(typeof(DateTime[])));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.DateTime[,])"), Is.EqualTo(typeof(DateTime[,])));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.DateTime[], mscorlib)"), Is.EqualTo(typeof(DateTime[])));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.DateTime[,], mscorlib)"), Is.EqualTo(typeof(DateTime[,])));
     }
 
     /// <summary>
@@ -752,7 +752,7 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestTypeNodeWithAssemblyQualifiedName()
     {
-        Assert.AreEqual(typeof(ExpressionEvaluator), ExpressionEvaluator.GetValue(null, string.Format("T({0})", typeof(ExpressionEvaluator).AssemblyQualifiedName)));
+        Assert.That(ExpressionEvaluator.GetValue(null, string.Format("T({0})", typeof(ExpressionEvaluator).AssemblyQualifiedName)), Is.EqualTo(typeof(ExpressionEvaluator)));
     }
 
     /// <summary>
@@ -761,10 +761,10 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestTypeNodeWithGenericAssemblyQualifiedName()
     {
-//            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[System.Int32], mscorlib)"));
-//            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]], mscorlib)"));
-        Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[int]], mscorlib)"));
-        Assert.AreEqual(typeof(System.Collections.Generic.Dictionary<string, bool>), ExpressionEvaluator.GetValue(null, "T(System.Collections.Generic.Dictionary`2[System.String,System.Boolean],mscorlib)"));
+        //            Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[System.Int32], mscorlib)"), Is.EqualTo(typeof(int?)));
+        //            Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]], mscorlib)"), Is.EqualTo(typeof(int?)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[int]], mscorlib)"), Is.EqualTo(typeof(int?)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Collections.Generic.Dictionary`2[System.String,System.Boolean],mscorlib)"), Is.EqualTo(typeof(System.Collections.Generic.Dictionary<string, bool>)));
     }
 
     [Test]
@@ -780,7 +780,7 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestTypeNodeWithAliasedGenericArguments()
     {
-        Assert.AreEqual(typeof(System.Collections.Generic.Dictionary<string, bool>), ExpressionEvaluator.GetValue(null, "T(System.Collections.Generic.Dictionary`2[string,bool],mscorlib)"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Collections.Generic.Dictionary`2[string,bool],mscorlib)"), Is.EqualTo(typeof(System.Collections.Generic.Dictionary<string, bool>)));
     }
 
     /// <summary>
@@ -789,7 +789,7 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestTypeNodeWithGenericAssemblyQualifiedArrayName()
     {
-        Assert.AreEqual(typeof(int?[,]), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]][,], mscorlib)"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]][,], mscorlib)"), Is.EqualTo(typeof(int?[,])));
     }
 
     /// <summary>
@@ -801,30 +801,30 @@ public sealed class ExpressionEvaluatorTests
         TypeRegistry.RegisterType(typeof(Inventor));
 
         IExpression exp = Expression.Parse("new System.DateTime(2004, 8, 14)");
-        Assert.AreEqual(1000, ExpressionEvaluator.GetValue(null, "new Decimal(1000)"));
-        Assert.AreEqual(new DateTime(2004, 8, 14), exp.GetValue(null));
-        Assert.AreEqual(new DateTime(2004, 8, 14), exp.GetValue("xyz"));
-        Assert.AreEqual(new DateTime(1974, 8, 24),
-            ExpressionEvaluator.GetValue(null, "new DateTime(2004, 8, 14).AddDays(10).AddYears(-30)"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "new Decimal(1000)"), Is.EqualTo(1000));
+        Assert.That(exp.GetValue(null), Is.EqualTo(new DateTime(2004, 8, 14)));
+        Assert.That(exp.GetValue("xyz"), Is.EqualTo(new DateTime(2004, 8, 14)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "new DateTime(2004, 8, 14).AddDays(10).AddYears(-30)"),
+            Is.EqualTo(new DateTime(1974, 8, 24)));
 
         // test named arguments
         Inventor ana =
             (Inventor)
             ExpressionEvaluator.GetValue(null,
                 "new Inventor(Name = 'Ana Maria Seovic', DOB = date('2004-08-14'), Nationality = 'American')");
-        Assert.AreEqual("Ana Maria Seovic", ana.Name);
-        Assert.AreEqual(new DateTime(2004, 8, 14), ana.DOB);
-        Assert.AreEqual("American", ana.Nationality);
+        Assert.That(ana.Name, Is.EqualTo("Ana Maria Seovic"));
+        Assert.That(ana.DOB, Is.EqualTo(new DateTime(2004, 8, 14)));
+        Assert.That(ana.Nationality, Is.EqualTo("American"));
 
         Inventor aleks =
             (Inventor)
             ExpressionEvaluator.GetValue(null,
                 "new Inventor('Aleksandar Seovic', date('1974-08-24'), 'Serbian', Inventions = {'SPELL'})");
-        Assert.AreEqual("Aleksandar Seovic", aleks.Name);
-        Assert.AreEqual(new DateTime(1974, 8, 24), aleks.DOB);
-        Assert.AreEqual("Serbian", aleks.Nationality);
-        Assert.AreEqual(1, aleks.Inventions.Length);
-        Assert.AreEqual("SPELL", aleks.Inventions[0]);
+        Assert.That(aleks.Name, Is.EqualTo("Aleksandar Seovic"));
+        Assert.That(aleks.DOB, Is.EqualTo(new DateTime(1974, 8, 24)));
+        Assert.That(aleks.Nationality, Is.EqualTo("Serbian"));
+        Assert.That(aleks.Inventions.Length, Is.EqualTo(1));
+        Assert.That(aleks.Inventions[0], Is.EqualTo("SPELL"));
     }
 
     /// <summary>
@@ -843,16 +843,16 @@ public sealed class ExpressionEvaluatorTests
     public void TestExpressionList()
     {
         TypeRegistry.RegisterType("Inventor", typeof(Inventor));
-        Assert.AreEqual(3,
-            ExpressionEvaluator.GetValue(ieee.Members,
-                "(Add(new Inventor('Aleksandar Seovic', date('1974-08-24'), 'Serbian')); Count)"));
-        Assert.AreEqual(3,
-            ExpressionEvaluator.GetValue(ieee,
-                "Members.(Add(new Inventor('Ana Maria Seovic', date('2004-08-14'), 'Serbian')); RemoveAt(1); Count)"));
-        Assert.AreEqual("Aleksandar Seovic",
-            ExpressionEvaluator.GetValue(ieee.Members,
-                "([1].PlaceOfBirth.City = 'Beograd'; [1].PlaceOfBirth.Country = 'Serbia'; [1].Name)"));
-        Assert.AreEqual("Beograd", ((Inventor) ieee.Members[1]).PlaceOfBirth.City);
+        Assert.That(ExpressionEvaluator.GetValue(ieee.Members,
+                "(Add(new Inventor('Aleksandar Seovic', date('1974-08-24'), 'Serbian')); Count)"),
+            Is.EqualTo(3));
+        Assert.That(ExpressionEvaluator.GetValue(ieee,
+                "Members.(Add(new Inventor('Ana Maria Seovic', date('2004-08-14'), 'Serbian')); RemoveAt(1); Count)"),
+            Is.EqualTo(3));
+        Assert.That(ExpressionEvaluator.GetValue(ieee.Members,
+                "([1].PlaceOfBirth.City = 'Beograd'; [1].PlaceOfBirth.Country = 'Serbia'; [1].Name)"),
+            Is.EqualTo("Aleksandar Seovic"));
+        Assert.That(((Inventor) ieee.Members[1]).PlaceOfBirth.City, Is.EqualTo("Beograd"));
     }
 
     /// <summary>
@@ -862,16 +862,16 @@ public sealed class ExpressionEvaluatorTests
     public void TestAssignNode()
     {
         Inventor inventor = new Inventor();
-        Assert.AreEqual("Aleksandar Seovic", ExpressionEvaluator.GetValue(inventor, "Name = 'Aleksandar Seovic'"));
-        Assert.AreEqual(new DateTime(1974, 8, 24),
-            ExpressionEvaluator.GetValue(inventor, "DOB = date('1974-08-24')"));
-        Assert.AreEqual("Serbian", ExpressionEvaluator.GetValue(inventor, "Nationality = 'Serbian'"));
-        Assert.AreEqual("Ana Maria Seovic",
-            ExpressionEvaluator.GetValue(inventor,
-                "(DOB = date('2004-08-14'); Name = 'Ana Maria Seovic')"));
-        Assert.AreEqual(new DateTime(2004, 8, 14), inventor.DOB);
+        Assert.That(ExpressionEvaluator.GetValue(inventor, "Name = 'Aleksandar Seovic'"), Is.EqualTo("Aleksandar Seovic"));
+        Assert.That(ExpressionEvaluator.GetValue(inventor, "DOB = date('1974-08-24')"),
+            Is.EqualTo(new DateTime(1974, 8, 24)));
+        Assert.That(ExpressionEvaluator.GetValue(inventor, "Nationality = 'Serbian'"), Is.EqualTo("Serbian"));
+        Assert.That(ExpressionEvaluator.GetValue(inventor,
+                "(DOB = date('2004-08-14'); Name = 'Ana Maria Seovic')"),
+            Is.EqualTo("Ana Maria Seovic"));
+        Assert.That(inventor.DOB, Is.EqualTo(new DateTime(2004, 8, 14)));
         ExpressionEvaluator.GetValue(ieee, "Officers['vp'] = Members[0]");
-        Assert.AreEqual("Nikola Tesla", ((Inventor) ieee.Officers["vp"]).Name);
+        Assert.That(((Inventor) ieee.Officers["vp"]).Name, Is.EqualTo("Nikola Tesla"));
     }
 
     /// <summary>
@@ -880,13 +880,13 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestDefaultNode()
     {
-        Assert.AreEqual("default", ExpressionEvaluator.GetValue(null, "null ?? 'default'"));
-        Assert.AreEqual(1, ExpressionEvaluator.GetValue(null, "null ?? 2 * 2 - 3"));
-        Assert.AreEqual("Nikola Tesla", ExpressionEvaluator.GetValue(tesla, "null ?? #root.Name"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "null ?? 'default'"), Is.EqualTo("default"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "null ?? 2 * 2 - 3"), Is.EqualTo(1));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "null ?? #root.Name"), Is.EqualTo("Nikola Tesla"));
 
-        Assert.AreEqual("default", ExpressionEvaluator.GetValue(null, "'default' ?? 'xyz'"));
-        Assert.AreEqual(1, ExpressionEvaluator.GetValue(null, "2 * 2 - 3 ?? 5"));
-        Assert.AreEqual("Nikola Tesla", ExpressionEvaluator.GetValue(tesla, "#root.Name ?? 'Pupin'"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "'default' ?? 'xyz'"), Is.EqualTo("default"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "2 * 2 - 3 ?? 5"), Is.EqualTo(1));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "#root.Name ?? 'Pupin'"), Is.EqualTo("Nikola Tesla"));
     }
 
     /// <summary>
@@ -897,18 +897,18 @@ public sealed class ExpressionEvaluatorTests
     {
         Dictionary<string, object> vars = new Dictionary<string, object>();
         vars["newName"] = "Aleksandar Seovic";
-        Assert.AreEqual("Ana Maria Seovic",
-            ExpressionEvaluator.GetValue(null, "#newName = 'Ana Maria Seovic'", vars));
-        Assert.AreEqual("Ana Maria Seovic", ExpressionEvaluator.GetValue(tesla, "Name = #newName", vars));
-        Assert.AreEqual("Nikola Tesla",
-            ExpressionEvaluator.GetValue(tesla, "(#oldName = Name; Name = 'Nikola Tesla')", vars));
-        Assert.AreEqual("Nikola Tesla", ((Inventor) ExpressionEvaluator.GetValue(tesla, "#this", vars)).Name);
-        Assert.AreEqual("Nikola Tesla",
-            ExpressionEvaluator.GetValue(tesla, "(Nationality = 'Srbin'; #this).Name", vars));
-        Assert.AreEqual("Nikola Tesla", tesla.Name);
-        Assert.AreEqual("Srbin", tesla.Nationality);
-        Assert.AreEqual("Ana Maria Seovic", vars["oldName"]);
-        Assert.AreEqual(tesla, ExpressionEvaluator.GetValue(tesla, "#root", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "#newName = 'Ana Maria Seovic'", vars),
+            Is.EqualTo("Ana Maria Seovic"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "Name = #newName", vars), Is.EqualTo("Ana Maria Seovic"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "(#oldName = Name; Name = 'Nikola Tesla')", vars),
+            Is.EqualTo("Nikola Tesla"));
+        Assert.That(((Inventor) ExpressionEvaluator.GetValue(tesla, "#this", vars)).Name, Is.EqualTo("Nikola Tesla"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "(Nationality = 'Srbin'; #this).Name", vars),
+            Is.EqualTo("Nikola Tesla"));
+        Assert.That(tesla.Name, Is.EqualTo("Nikola Tesla"));
+        Assert.That(tesla.Nationality, Is.EqualTo("Srbin"));
+        Assert.That(vars["oldName"], Is.EqualTo("Ana Maria Seovic"));
+        Assert.That(ExpressionEvaluator.GetValue(tesla, "#root", vars), Is.EqualTo(tesla));
     }
 
     /// <summary>
@@ -938,10 +938,10 @@ public sealed class ExpressionEvaluatorTests
         IExpression exp = Expression.Parse("true ? 'trueExp' : 'falseExp'");
         exp.GetValue();
 
-        Assert.AreEqual("trueExp", exp.GetValue());
-        Assert.AreEqual("falseExp", ExpressionEvaluator.GetValue(null, "false ? 'trueExp' : 'falseExp'"));
-        Assert.AreEqual("trueExp", ExpressionEvaluator.GetValue(null, "(true ? 'trueExp' : 'falseExp')"));
-        Assert.AreEqual("falseExp", ExpressionEvaluator.GetValue(null, "(false ? 'trueExp' : 'falseExp')"));
+        Assert.That(exp.GetValue(), Is.EqualTo("trueExp"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "false ? 'trueExp' : 'falseExp'"), Is.EqualTo("falseExp"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "(true ? 'trueExp' : 'falseExp')"), Is.EqualTo("trueExp"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "(false ? 'trueExp' : 'falseExp')"), Is.EqualTo("falseExp"));
 
         ExpressionEvaluator.SetValue(ieee, "Name", "IEEE");
         Dictionary<string, object> vars = new Dictionary<string, object>();
@@ -950,8 +950,8 @@ public sealed class ExpressionEvaluatorTests
             @"IsMember(#queryName)
                     ? #queryName + ' is a member of the ' + Name + ' Society'
                     : #queryName + ' is not a member of ' + Name + ' Society'";
-        Assert.AreEqual("Nikola Tesla is a member of the IEEE Society",
-            ExpressionEvaluator.GetValue(ieee, expression, vars));
+        Assert.That(ExpressionEvaluator.GetValue(ieee, expression, vars),
+            Is.EqualTo("Nikola Tesla is a member of the IEEE Society"));
     }
 
     /// <summary>
@@ -960,12 +960,12 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestLogicalOrOperator()
     {
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true or true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false or false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true or false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "false or true"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true or true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false or false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true or false"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false or true"), Is.True);
         string expression = @"IsMember('Nikola Tesla') or IsMember('Albert Einstien')";
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(ieee, expression));
+        Assert.That((bool) ExpressionEvaluator.GetValue(ieee, expression), Is.True);
     }
 
     /// <summary>
@@ -974,9 +974,9 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestBitwiseOrOperator()
     {
-        Assert.AreEqual(1 | 2, ExpressionEvaluator.GetValue(null, "1 or 2"));
-        Assert.AreEqual(1 | -2, ExpressionEvaluator.GetValue(null, "1 or -2"));
-        Assert.AreEqual(RegexOptions.IgnoreCase | RegexOptions.Compiled, ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase or T(System.Text.RegularExpressions.RegexOptions).Compiled"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1 or 2"), Is.EqualTo(1 | 2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1 or -2"), Is.EqualTo(1 | -2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase or T(System.Text.RegularExpressions.RegexOptions).Compiled"), Is.EqualTo(RegexOptions.IgnoreCase | RegexOptions.Compiled));
     }
 
     /// <summary>
@@ -985,12 +985,12 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestLogicalAndOperator()
     {
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true and true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false and false"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "true and false"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false and true"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and true"), Is.False);
         string expression = @"IsMember('Nikola Tesla') and IsMember('Mihajlo Pupin')";
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(ieee, expression));
+        Assert.That((bool) ExpressionEvaluator.GetValue(ieee, expression), Is.True);
     }
 
     /// <summary>
@@ -999,11 +999,11 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestBitwiseAndOperator()
     {
-        Assert.AreEqual(1 & 3, ExpressionEvaluator.GetValue(null, "1 and 3"));
-        Assert.AreEqual(1 & -1, ExpressionEvaluator.GetValue(null, "1 and -1"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1 and 3"), Is.EqualTo(1 & 3));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1 and -1"), Is.EqualTo(1 & -1));
         Dictionary<string, object> vars = new Dictionary<string, object>();
         vars["ALL"] = (RegexOptions) 0xFFFF;
-        Assert.AreEqual(RegexOptions.IgnoreCase, ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase and #ALL", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase and #ALL", vars), Is.EqualTo(RegexOptions.IgnoreCase));
     }
 
     /// <summary>
@@ -1012,11 +1012,11 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestLogicalNotOperator()
     {
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!true"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!false"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!true"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!false"), Is.True);
         string expression = @"IsMember('Nikola Tesla') and !IsMember('Mihajlo Pupin')";
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(ieee, expression));
-        Assert.AreEqual(~RegexOptions.Compiled, ExpressionEvaluator.GetValue(null, "!T(System.Text.RegularExpressions.RegexOptions).Compiled"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(ieee, expression), Is.False);
+        Assert.That(ExpressionEvaluator.GetValue(null, "!T(System.Text.RegularExpressions.RegexOptions).Compiled"), Is.EqualTo(~RegexOptions.Compiled));
     }
 
     /// <summary>
@@ -1025,11 +1025,11 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestXorOperator()
     {
-        Assert.AreEqual(1 ^ 3, ExpressionEvaluator.GetValue(null, "1 xor 3"));
-        Assert.AreEqual(1 ^ -1, ExpressionEvaluator.GetValue(null, "1 xor -1"));
-        Assert.AreEqual(true ^ false, ExpressionEvaluator.GetValue(null, "true xor false"));
-        Assert.AreEqual(true ^ true, ExpressionEvaluator.GetValue(null, "true xor true"));
-        Assert.AreEqual(RegexOptions.IgnoreCase ^ RegexOptions.Compiled, ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase xor T(System.Text.RegularExpressions.RegexOptions).Compiled"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1 xor 3"), Is.EqualTo(1 ^ 3));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1 xor -1"), Is.EqualTo(1 ^ -1));
+        Assert.That(ExpressionEvaluator.GetValue(null, "true xor false"), Is.EqualTo(true ^ false));
+        Assert.That(ExpressionEvaluator.GetValue(null, "true xor true"), Is.EqualTo(true ^ true));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase xor T(System.Text.RegularExpressions.RegexOptions).Compiled"), Is.EqualTo(RegexOptions.IgnoreCase ^ RegexOptions.Compiled));
     }
 
     /// <summary>
@@ -1039,45 +1039,45 @@ public sealed class ExpressionEvaluatorTests
     public void TestLogicalOperatorPresedance()
     {
         // NOT over AND
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!false and false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!false and true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!true and false"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!true and true"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!false and false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!false and true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!true and false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!true and true"), Is.False);
 
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!(false and false)"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!(false and true)"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!(true and false)"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!(true and true)"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(false and false)"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(false and true)"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(true and false)"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(true and true)"), Is.False);
 
         // NOT over OR
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!false or false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!false or true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!true or false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!true or true"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!false or false"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!false or true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!true or false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!true or true"), Is.True);
 
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!(false or false)"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!(false or true)"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!(true or false)"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!(true or true)"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(false or false)"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(false or true)"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(true or false)"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(true or true)"), Is.False);
 
         // AND over OR
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false and false or false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "false and false or true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false and true or false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "false and true or true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "true and false or false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true and false or true"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true and true or false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true and true or true"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and false or false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and false or true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and true or false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and true or true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and false or false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and false or true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and true or false"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and true or true"), Is.True);
 
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false and (false or false)"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false and (false or true)"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false and (true or false)"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false and (true or true)"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "true and (false or false)"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true and (false or true)"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true and (true or false)"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true and (true or true)"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and (false or false)"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and (false or true)"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and (true or false)"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false and (true or true)"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and (false or false)"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and (false or true)"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and (true or false)"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true and (true or true)"), Is.True);
     }
 
     /// <summary>
@@ -1087,43 +1087,43 @@ public sealed class ExpressionEvaluatorTests
     public void TestEqualityOperator()
     {
         // Null
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "null == null"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null == 'xyz'"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "123 == null"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null == 123"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null == null"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null == 'xyz'"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "123 == null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null == 123"), Is.False);
 
         // Bool
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "false == false"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true == true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false == true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "true == false"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false == false"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true == true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false == true"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true == false"), Is.False);
 
         // Int
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "2 == 2"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "-5 == -5"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "2 == -5"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "-5 == 2"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2 == 2"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "-5 == -5"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2 == -5"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "-5 == 2"), Is.False);
 
         // String
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'test' == 'test'"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'Test' == 'test'"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'test' == 'Test'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'test' == 'test'"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Test' == 'test'"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'test' == 'Test'"), Is.False);
 
         // DateTime
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') == date('1974-08-24')"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today == DateTime.Today"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today == date('1974-08-24')"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') == DateTime.Today"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') == date('1974-08-24')"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today == DateTime.Today"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today == date('1974-08-24')"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') == DateTime.Today"), Is.False);
 
         // Enums
         Foo foo = new Foo(FooType.One);
         TypeRegistry.RegisterType("FooType", typeof(FooType));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(foo, "Type == FooType.One"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(foo, "Type == 'One'"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(foo, "Type == 'Two'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(foo, "FooType.One == Type"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(foo, "'One' == Type"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(foo, "'Two' == Type"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(foo, "Type == FooType.One"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(foo, "Type == 'One'"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(foo, "Type == 'Two'"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(foo, "FooType.One == Type"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(foo, "'One' == Type"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(foo, "'Two' == Type"), Is.False);
     }
 
     /// <summary>
@@ -1133,28 +1133,28 @@ public sealed class ExpressionEvaluatorTests
     public void TestInqualityOperator()
     {
         // Null
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null != null"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "123 != null"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "null != 'xyz'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null != null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "123 != null"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null != 'xyz'"), Is.True);
 
         // Bool
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false != false"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "true != true"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "false != true"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false != false"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true != true"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false != true"), Is.True);
 
         // Int
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "2 != 2.0"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "-5.0 != -5"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "2.0 != -5"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2 != 2.0"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "-5.0 != -5"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2.0 != -5"), Is.True);
 
         // String
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'test' != 'test'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'Test' != 'test'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'test' != 'test'"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Test' != 'test'"), Is.True);
 
         // DateTime
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') != date('1974-08-24')"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today != DateTime.Today"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today != date('1974-08-24')"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') != date('1974-08-24')"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today != DateTime.Today"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today != date('1974-08-24')"), Is.True);
     }
 
     /// <summary>
@@ -1164,28 +1164,28 @@ public sealed class ExpressionEvaluatorTests
     public void TestLessThanOperator()
     {
         // Null
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null < null"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "123 < null"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "null < 'xyz'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null < null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "123 < null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null < 'xyz'"), Is.True);
 
         // Bool
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "false < true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "true < true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "true < false"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false < true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true < true"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true < false"), Is.False);
 
         // Int
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "2 < 2.0"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "-5.0 < 2"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "2 < -5.0"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2 < 2.0"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "-5.0 < 2"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2 < -5.0"), Is.False);
 
         // String
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'test' < 'test'"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'Test' < 'test'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'test' < 'test'"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Test' < 'test'"), Is.False);
 
         // DateTime
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') < date('1974-08-24')"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') < DateTime.Today"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today < date('1974-08-24')"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') < date('1974-08-24')"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') < DateTime.Today"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today < date('1974-08-24')"), Is.False);
     }
 
     /// <summary>
@@ -1195,28 +1195,28 @@ public sealed class ExpressionEvaluatorTests
     public void TestLessThanOrEqualOperator()
     {
         // Null
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "null <= null"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "123 <= null"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "null <= 'xyz'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null <= null"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "123 <= null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null <= 'xyz'"), Is.True);
 
         // Bool
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "false <= true"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true <= true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "true <= false"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false <= true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true <= true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true <= false"), Is.False);
 
         // Int
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "2 <= 2.0"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "-5.0 <= 2"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "2.0 <= -5"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2 <= 2.0"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "-5.0 <= 2"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2.0 <= -5"), Is.False);
 
         // String
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'test' <= 'test'"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'Test' <= 'test'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'test' <= 'test'"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Test' <= 'test'"), Is.False);
 
         // DateTime
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') <= date('1974-08-24')"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') <= DateTime.Today"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today <= date('1974-08-24')"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') <= date('1974-08-24')"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') <= DateTime.Today"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today <= date('1974-08-24')"), Is.False);
     }
 
     /// <summary>
@@ -1226,28 +1226,28 @@ public sealed class ExpressionEvaluatorTests
     public void TestGreaterThanOperator()
     {
         // Null
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null > null"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "123 > null"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null > 'xyz'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null > null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "123 > null"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null > 'xyz'"), Is.False);
 
         // Bool
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false > true"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "true > true"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true > false"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false > true"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true > true"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true > false"), Is.True);
 
         // Int
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "2 > 2.0"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "-5.0 > 2"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "2 > -5.0"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2 > 2.0"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "-5.0 > 2"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2 > -5.0"), Is.True);
 
         // String
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'test' > 'test'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'Test' > 'test'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'test' > 'test'"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Test' > 'test'"), Is.True);
 
         // DateTime
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') > date('1974-08-24')"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') > DateTime.Today"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today > date('1974-08-24')"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') > date('1974-08-24')"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') > DateTime.Today"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today > date('1974-08-24')"), Is.True);
     }
 
     /// <summary>
@@ -1257,28 +1257,28 @@ public sealed class ExpressionEvaluatorTests
     public void TestGreaterThanOrEqualOperator()
     {
         // Null
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "null >= null"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "123 >= null"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null >= 'xyz'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null >= null"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "123 >= null"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null >= 'xyz'"), Is.False);
 
         // Bool
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "false >= true"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true >= true"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "true >= false"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "false >= true"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true >= true"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "true >= false"), Is.True);
 
         // Int
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "2.0 >= 2"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "-5 >= 2.0"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "2.0 >= -5"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2.0 >= 2"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "-5 >= 2.0"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "2.0 >= -5"), Is.True);
 
         // String
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'test' >= 'test'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'Test' >= 'test'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'test' >= 'test'"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Test' >= 'test'"), Is.True);
 
         // DateTime
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') >= date('1974-08-24')"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') >= DateTime.Today"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today >= date('1974-08-24')"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') >= date('1974-08-24')"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "date('1974-08-24') >= DateTime.Today"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "DateTime.Today >= date('1974-08-24')"), Is.True);
     }
 
     /// <summary>
@@ -1287,12 +1287,13 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestInOperator()
     {
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null in null"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "3 in {1, 2, 3, 4, 5}"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!(3 in {1, 2, 3, 4, 5})"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'xyz' in new string[] {'abc', 'xyz'}"));
-        Assert.IsTrue(
-            (bool) ExpressionEvaluator.GetValue(null, "'xyz' in #{'abc' : 'Value 1', 'xyz' : DateTime.Today}"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null in null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "3 in {1, 2, 3, 4, 5}"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(3 in {1, 2, 3, 4, 5})"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'xyz' in new string[] {'abc', 'xyz'}"), Is.True);
+        Assert.That(
+            (bool) ExpressionEvaluator.GetValue(null, "'xyz' in #{'abc' : 'Value 1', 'xyz' : DateTime.Today}"),
+            Is.True);
     }
 
     /// <summary>
@@ -1304,15 +1305,16 @@ public sealed class ExpressionEvaluatorTests
         TypeRegistry.RegisterType(typeof(IList));
         TypeRegistry.RegisterType(typeof(IDictionary));
 
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null is null"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "5 is null"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null is int"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "5 is int"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "!(5 is int)"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "{1, 2, 3, 4, 5} is IList"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "new string[] {'abc', 'xyz'} is T(string[])"));
-        Assert.IsTrue(
-            (bool) ExpressionEvaluator.GetValue(null, "#{'abc' : 'Value 1', 'xyz' : DateTime.Today} is IDictionary"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null is null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "5 is null"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null is int"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "5 is int"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(5 is int)"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "{1, 2, 3, 4, 5} is IList"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "new string[] {'abc', 'xyz'} is T(string[])"), Is.True);
+        Assert.That(
+            (bool) ExpressionEvaluator.GetValue(null, "#{'abc' : 'Value 1', 'xyz' : DateTime.Today} is IDictionary"),
+            Is.True);
     }
 
     /// <summary>
@@ -1321,18 +1323,20 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestBetweenOperator()
     {
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "null between {1, 5}"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "0 between {1, 5}"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "1 between {1, 5}"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "3 between {1, 5}"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "5 between {1, 5}"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "6 between {1, 5}"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "!(6 between {1, 5})"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'efg' between {'abc', 'xyz'}"));
-        Assert.IsTrue(
-            (bool) ExpressionEvaluator.GetValue(null, "DateTime.Today between {DateTime.Today, DateTime.Now}"));
-        Assert.IsFalse(
-            (bool) ExpressionEvaluator.GetValue(null, "DateTime.Today between {DateTime.Now, DateTime.Now}"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "null between {1, 5}"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "0 between {1, 5}"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "1 between {1, 5}"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "3 between {1, 5}"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "5 between {1, 5}"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "6 between {1, 5}"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "!(6 between {1, 5})"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'efg' between {'abc', 'xyz'}"), Is.True);
+        Assert.That(
+            (bool) ExpressionEvaluator.GetValue(null, "DateTime.Today between {DateTime.Today, DateTime.Now}"),
+            Is.True);
+        Assert.That(
+            (bool) ExpressionEvaluator.GetValue(null, "DateTime.Today between {DateTime.Now, DateTime.Now}"),
+            Is.False);
     }
 #if !MONO
     /// <summary>
@@ -1341,13 +1345,13 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestLikeOperator()
     {
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'A' like '?'"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'Abc' like '?'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'Abc' like '[A-Z]b?'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'Abc' like '*'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'Aleksandar' like 'Aleks*'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'Ana Maria Seovic' like '*Maria*'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, "'Marija Seovic' like '*Seovic'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'A' like '?'"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Abc' like '?'"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Abc' like '[A-Z]b?'"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Abc' like '*'"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Aleksandar' like 'Aleks*'"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Ana Maria Seovic' like '*Maria*'"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Marija Seovic' like '*Seovic'"), Is.True);
     }
 #endif
     /// <summary>
@@ -1359,15 +1363,15 @@ public sealed class ExpressionEvaluatorTests
         string emailCheck =
             @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
 
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(emailCheck, "'A' matches #this"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(emailCheck, "'aleks@seovic.com' matches #this"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(emailCheck, "'@seovic.com' matches #this"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(emailCheck, "'seovic.com' matches #this"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(emailCheck, "'aleks' matches #this"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(emailCheck, "'aleks@' matches #this"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(emailCheck, "'aleks@seovic' matches #this"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "'5.0067' matches '^-?\\d+(\\.\\d{2})?$'"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(null, @"'5.00' matches '^-?\d+(\.\d{2})?$'"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(emailCheck, "'A' matches #this"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(emailCheck, "'aleks@seovic.com' matches #this"), Is.True);
+        Assert.That((bool) ExpressionEvaluator.GetValue(emailCheck, "'@seovic.com' matches #this"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(emailCheck, "'seovic.com' matches #this"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(emailCheck, "'aleks' matches #this"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(emailCheck, "'aleks@' matches #this"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(emailCheck, "'aleks@seovic' matches #this"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "'5.0067' matches '^-?\\d+(\\.\\d{2})?$'"), Is.False);
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, @"'5.00' matches '^-?\d+(\.\d{2})?$'"), Is.True);
     }
 
     /// <summary>
@@ -1398,21 +1402,21 @@ public sealed class ExpressionEvaluatorTests
     public void TestAddOperator()
     {
         // numbers
-        Assert.AreEqual(2, ExpressionEvaluator.GetValue(null, "1 + 1"));
-        Assert.AreEqual(2, ExpressionEvaluator.GetValue(null, "1e0 + 1"));
-        Assert.AreEqual(0, ExpressionEvaluator.GetValue(null, "-1e0 + 1"));
-        Assert.AreEqual(-2, ExpressionEvaluator.GetValue(null, "-1e0 + -1"));
-        Assert.AreEqual(Decimal.Parse("2.0", NumberFormatInfo.InvariantInfo),
-            ExpressionEvaluator.GetValue(null, "1.0m + 1.0"));
-        Assert.AreEqual(9, ExpressionEvaluator.GetValue(null, "2.0 + 3e0 + 4"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1 + 1"), Is.EqualTo(2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1e0 + 1"), Is.EqualTo(2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "-1e0 + 1"), Is.EqualTo(0));
+        Assert.That(ExpressionEvaluator.GetValue(null, "-1e0 + -1"), Is.EqualTo(-2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1.0m + 1.0"),
+            Is.EqualTo(Decimal.Parse("2.0", NumberFormatInfo.InvariantInfo)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "2.0 + 3e0 + 4"), Is.EqualTo(9));
 
         // strings
-        Assert.AreEqual("test string", ExpressionEvaluator.GetValue(null, "'test' + ' ' + 'string'"));
-        Assert.AreEqual("test 2", ExpressionEvaluator.GetValue(null, "'test' + ' ' + 2"));
-        Assert.AreEqual("test " + DateTime.Today.ToString(),
-            ExpressionEvaluator.GetValue(null, "'test' + ' ' + DateTime.Today"));
-        Assert.AreEqual("test", ExpressionEvaluator.GetValue(null, "'test' + #this")); // can concat null
-        Assert.AreEqual("test", ExpressionEvaluator.GetValue(null, "#this+'test'")); // can concat null
+        Assert.That(ExpressionEvaluator.GetValue(null, "'test' + ' ' + 'string'"), Is.EqualTo("test string"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "'test' + ' ' + 2"), Is.EqualTo("test 2"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "'test' + ' ' + DateTime.Today"),
+            Is.EqualTo("test " + DateTime.Today.ToString()));
+        Assert.That(ExpressionEvaluator.GetValue(null, "'test' + #this"), Is.EqualTo("test")); // can concat null
+        Assert.That(ExpressionEvaluator.GetValue(null, "#this+'test'"), Is.EqualTo("test")); // can concat null
 
         // dates
         DateTime anaDOB = new DateTime(2004, 8, 14);
@@ -1421,10 +1425,10 @@ public sealed class ExpressionEvaluatorTests
         IDictionary<string, object> vars = new Dictionary<string, object>();
         vars["ts"] = diff;
 
-        Assert.AreEqual(anaDOB, ExpressionEvaluator.GetValue(null, "date('1974-08-24') + #ts", vars));
-        Assert.AreEqual(new DateTime(1974, 8, 29), ExpressionEvaluator.GetValue(null, "date('1974-08-24') + 5"));
-        Assert.AreEqual(new DateTime(1974, 8, 29),
-            ExpressionEvaluator.GetValue(null, "date('1974-08-24') + '5.0:0'"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('1974-08-24') + #ts", vars), Is.EqualTo(anaDOB));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('1974-08-24') + 5"), Is.EqualTo(new DateTime(1974, 8, 29)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('1974-08-24') + '5.0:0'"),
+            Is.EqualTo(new DateTime(1974, 8, 29)));
     }
 
     /// <summary>
@@ -1443,12 +1447,12 @@ public sealed class ExpressionEvaluatorTests
     public void TestSubtractOperator()
     {
         // numbers
-        Assert.AreEqual(2, ExpressionEvaluator.GetValue(null, "3 - 1"));
-        Assert.AreEqual(-2, ExpressionEvaluator.GetValue(null, "1 - 3"));
-        Assert.AreEqual(4, ExpressionEvaluator.GetValue(null, "1 - -3"));
-        Assert.AreEqual(Decimal.Parse("-9000.00", NumberFormatInfo.InvariantInfo),
-            ExpressionEvaluator.GetValue(null, "1000.00m - 1e4"));
-        Assert.AreEqual(-5, ExpressionEvaluator.GetValue(null, "2.0 - 3e0 - 4"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "3 - 1"), Is.EqualTo(2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1 - 3"), Is.EqualTo(-2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1 - -3"), Is.EqualTo(4));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1000.00m - 1e4"),
+            Is.EqualTo(Decimal.Parse("-9000.00", NumberFormatInfo.InvariantInfo)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "2.0 - 3e0 - 4"), Is.EqualTo(-5));
 
         // dates
         DateTime anaDOB = new DateTime(2004, 8, 14);
@@ -1457,11 +1461,11 @@ public sealed class ExpressionEvaluatorTests
         Dictionary<string, object> vars = new Dictionary<string, object>();
         vars["ts"] = diff;
 
-        Assert.AreEqual(aleksDOB, ExpressionEvaluator.GetValue(null, "date('2004-08-14') - #ts", vars));
-        Assert.AreEqual(diff, ExpressionEvaluator.GetValue(null, "date('2004-08-14') - date('1974-08-24')"));
-        Assert.AreEqual(new DateTime(1974, 8, 19), ExpressionEvaluator.GetValue(null, "date('1974-08-24') - 5"));
-        Assert.AreEqual(new DateTime(1974, 8, 19),
-            ExpressionEvaluator.GetValue(null, "date('1974-08-24') - '5.0:0'"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('2004-08-14') - #ts", vars), Is.EqualTo(aleksDOB));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('2004-08-14') - date('1974-08-24')"), Is.EqualTo(diff));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('1974-08-24') - 5"), Is.EqualTo(new DateTime(1974, 8, 19)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "date('1974-08-24') - '5.0:0'"),
+            Is.EqualTo(new DateTime(1974, 8, 19)));
     }
 
     /// <summary>
@@ -1479,12 +1483,12 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestMultiplyOperator()
     {
-        Assert.AreEqual(4, ExpressionEvaluator.GetValue(null, "2 * 2"));
-        Assert.AreEqual(-6, ExpressionEvaluator.GetValue(null, "2 * -3"));
-        Assert.AreEqual(6, ExpressionEvaluator.GetValue(null, "-2 * -3"));
-        Assert.AreEqual(Decimal.Parse("1000000.00", NumberFormatInfo.InvariantInfo),
-            ExpressionEvaluator.GetValue(null, "1000.00m * 1e3"));
-        Assert.AreEqual(24, ExpressionEvaluator.GetValue(null, "2.0 * 3e0 * 4"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "2 * 2"), Is.EqualTo(4));
+        Assert.That(ExpressionEvaluator.GetValue(null, "2 * -3"), Is.EqualTo(-6));
+        Assert.That(ExpressionEvaluator.GetValue(null, "-2 * -3"), Is.EqualTo(6));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1000.00m * 1e3"),
+            Is.EqualTo(Decimal.Parse("1000000.00", NumberFormatInfo.InvariantInfo)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "2.0 * 3e0 * 4"), Is.EqualTo(24));
     }
 
     /// <summary>
@@ -1502,12 +1506,12 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestDivideOperator()
     {
-        Assert.AreEqual(1, ExpressionEvaluator.GetValue(null, "2 / 2"));
-        Assert.AreEqual(-2, ExpressionEvaluator.GetValue(null, "6 / -3"));
-        Assert.AreEqual(2, ExpressionEvaluator.GetValue(null, "-6 / -3"));
-        Assert.AreEqual(Decimal.Parse("1.00", NumberFormatInfo.InvariantInfo),
-            ExpressionEvaluator.GetValue(null, "1000.00m / 1e3"));
-        Assert.AreEqual(1, ExpressionEvaluator.GetValue(null, "8.0 / 4e0 / 2"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "2 / 2"), Is.EqualTo(1));
+        Assert.That(ExpressionEvaluator.GetValue(null, "6 / -3"), Is.EqualTo(-2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "-6 / -3"), Is.EqualTo(2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1000.00m / 1e3"),
+            Is.EqualTo(Decimal.Parse("1.00", NumberFormatInfo.InvariantInfo)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "8.0 / 4e0 / 2"), Is.EqualTo(1));
     }
 
     /// <summary>
@@ -1525,12 +1529,12 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestModulusOperator()
     {
-        Assert.AreEqual(0, ExpressionEvaluator.GetValue(null, "2 % 2"));
-        Assert.AreEqual(2, ExpressionEvaluator.GetValue(null, "6 % -4"));
-        Assert.AreEqual(-1, ExpressionEvaluator.GetValue(null, "-6 % -5"));
-        Assert.AreEqual(Decimal.Parse("5.00", NumberFormatInfo.InvariantInfo),
-            ExpressionEvaluator.GetValue(null, "1005.00m % 1e3"));
-        Assert.AreEqual(1, ExpressionEvaluator.GetValue(null, "8.0 % 5e0 % 2"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "2 % 2"), Is.EqualTo(0));
+        Assert.That(ExpressionEvaluator.GetValue(null, "6 % -4"), Is.EqualTo(2));
+        Assert.That(ExpressionEvaluator.GetValue(null, "-6 % -5"), Is.EqualTo(-1));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1005.00m % 1e3"),
+            Is.EqualTo(Decimal.Parse("5.00", NumberFormatInfo.InvariantInfo)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "8.0 % 5e0 % 2"), Is.EqualTo(1));
     }
 
     /// <summary>
@@ -1548,11 +1552,11 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestPowerOperator()
     {
-        Assert.AreEqual(8, ExpressionEvaluator.GetValue(null, "2 ^ +3"));
-        Assert.AreEqual(16, ExpressionEvaluator.GetValue(null, "-2 ^ 4"));
-        Assert.AreEqual(-32, ExpressionEvaluator.GetValue(null, "-2 ^ 5"));
-        Assert.AreEqual(.0625, ExpressionEvaluator.GetValue(null, "4 ^ -2"));
-        Assert.AreEqual(2, ExpressionEvaluator.GetValue(null, "+4 ^ .5"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "2 ^ +3"), Is.EqualTo(8));
+        Assert.That(ExpressionEvaluator.GetValue(null, "-2 ^ 4"), Is.EqualTo(16));
+        Assert.That(ExpressionEvaluator.GetValue(null, "-2 ^ 5"), Is.EqualTo(-32));
+        Assert.That(ExpressionEvaluator.GetValue(null, "4 ^ -2"), Is.EqualTo(.0625));
+        Assert.That(ExpressionEvaluator.GetValue(null, "+4 ^ .5"), Is.EqualTo(2));
     }
 
     /// <summary>
@@ -1588,10 +1592,10 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestOperatorPrecedence()
     {
-        Assert.AreEqual(-3, ExpressionEvaluator.GetValue(null, "1+2-3*8/2/2"));
-        Assert.AreEqual(-45, ExpressionEvaluator.GetValue(null, "1+2-3*8^2/2/2"));
-        Assert.AreEqual(0, ExpressionEvaluator.GetValue(null, "1+2-3*8/2^2/2"));
-        Assert.AreEqual(-4.5, ExpressionEvaluator.GetValue(null, "1+(2-3*8)/2.0/2"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1+2-3*8/2/2"), Is.EqualTo(-3));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1+2-3*8^2/2/2"), Is.EqualTo(-45));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1+2-3*8/2^2/2"), Is.EqualTo(0));
+        Assert.That(ExpressionEvaluator.GetValue(null, "1+(2-3*8)/2.0/2"), Is.EqualTo(-4.5));
     }
 
     /// <summary>
@@ -1612,19 +1616,19 @@ public sealed class ExpressionEvaluatorTests
     {
         ContextRegistry.RegisterContext(
             new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml"));
-        Assert.AreEqual(typeof(TestObject), ExpressionEvaluator.GetValue(null, "@(goran)").GetType());
+        Assert.That(ExpressionEvaluator.GetValue(null, "@(goran)").GetType(), Is.EqualTo(typeof(TestObject)));
 
         IApplicationContext ctx =
             new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml");
         ctx.Name = "myContext";
         ContextRegistry.RegisterContext(ctx);
 
-        Assert.AreEqual(typeof(TestObject),
-            ExpressionEvaluator.GetValue(null, "@(myContext:goran)").GetType());
+        Assert.That(ExpressionEvaluator.GetValue(null, "@(myContext:goran)").GetType(),
+            Is.EqualTo(typeof(TestObject)));
 
         // string literals allowed for contextname
-        Assert.AreEqual(typeof(TestObject),
-            ExpressionEvaluator.GetValue(null, "@('myContext':goran)").GetType());
+        Assert.That(ExpressionEvaluator.GetValue(null, "@('myContext':goran)").GetType(),
+            Is.EqualTo(typeof(TestObject)));
     }
 
     /// <summary>
@@ -1651,8 +1655,8 @@ public sealed class ExpressionEvaluatorTests
         TestObjectContainer testObjectContainer =
             ExpressionEvaluator.GetValue(null, "@(testObjectContainer_lazy)") as TestObjectContainer;
 
-        Assert.IsNotNull(testObject);
-        Assert.AreSame(testObject, testObjectContainer.TestObject);
+        Assert.That(testObject, Is.Not.Null);
+        Assert.That(testObjectContainer.TestObject, Is.SameAs(testObject));
     }
 
     /// <summary>
@@ -1666,10 +1670,9 @@ public sealed class ExpressionEvaluatorTests
         ctx.Name = @"my.Context/bla\";
         ContextRegistry.RegisterContext(ctx);
 
-        Assert.AreEqual(typeof(TestObject),
-            ExpressionEvaluator.GetValue(null, @"@(my.Context/bla\:goran)").GetType());
-//            Assert.AreEqual(typeof(TestObject),
-//                            ExpressionEvaluator.GetValue(null, "@(my\\.Context:goran)").GetType());
+        Assert.That(ExpressionEvaluator.GetValue(null, @"@(my.Context/bla\:goran)").GetType(),
+            Is.EqualTo(typeof(TestObject)));
+//            Assert.That(//                            ExpressionEvaluator.GetValue(null, "@(my\\.Context:goran)").GetType(), Is.EqualTo(typeof(TestObject)));
     }
 
     /// <summary>
@@ -1681,22 +1684,22 @@ public sealed class ExpressionEvaluatorTests
         TypeRegistry.RegisterType("WebMethod", typeof(WebMethodAttribute));
         TypeRegistry.RegisterType("TransactionOption", typeof(TransactionOption));
 
-        Assert.IsInstanceOf(typeof(SerializableAttribute),
-            ExpressionEvaluator.GetValue(null, "@[System.Serializable]"));
-        Assert.IsInstanceOf(typeof(SerializableAttribute),
-            ExpressionEvaluator.GetValue(null, "@[System.Serializable()]"));
-        Assert.IsInstanceOf(typeof(WebMethodAttribute), ExpressionEvaluator.GetValue(null, "@[WebMethod]"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "@[System.Serializable]"),
+            Is.InstanceOf(typeof(SerializableAttribute)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "@[System.Serializable()]"),
+            Is.InstanceOf(typeof(SerializableAttribute)));
+        Assert.That(ExpressionEvaluator.GetValue(null, "@[WebMethod]"), Is.InstanceOf(typeof(WebMethodAttribute)));
 
         WebMethodAttribute webMethod = (WebMethodAttribute) ExpressionEvaluator.GetValue(null, "@[WebMethod(true)]");
-        Assert.IsTrue(webMethod.EnableSession);
+        Assert.That(webMethod.EnableSession, Is.True);
 
         webMethod = (WebMethodAttribute)
             ExpressionEvaluator.GetValue(
                 null,
                 "@[WebMethod(false, CacheDuration = 60, Description = 'my web method', TransactionOption = TransactionOption.Required)]");
-        Assert.AreEqual(60, webMethod.CacheDuration);
-        Assert.AreEqual("my web method", webMethod.Description);
-        Assert.AreEqual(TransactionOption.Required, webMethod.TransactionOption);
+        Assert.That(webMethod.CacheDuration, Is.EqualTo(60));
+        Assert.That(webMethod.Description, Is.EqualTo("my web method"));
+        Assert.That(webMethod.TransactionOption, Is.EqualTo(TransactionOption.Required));
     }
 
     [Test]
@@ -1706,12 +1709,12 @@ public sealed class ExpressionEvaluatorTests
         Dictionary<string, object> vars = new Dictionary<string, object>();
         vars["sqrt"] = new DoubleFunction(Sqrt);
         double result = (double) ExpressionEvaluator.GetValue(null, "#sqrt(64)", vars);
-        Assert.AreEqual(8, result);
+        Assert.That(result, Is.EqualTo(8));
 
         vars = new Dictionary<string, object>();
         vars["max"] = new DoubleFunctionTwoArgs(Max);
         result = (double) ExpressionEvaluator.GetValue(null, "#max(5,25)", vars);
-        Assert.AreEqual(25, result);
+        Assert.That(result, Is.EqualTo(25));
     }
 
     private delegate double DoubleFunction(double arg);
@@ -1737,23 +1740,23 @@ public sealed class ExpressionEvaluatorTests
         TypeRegistry.RegisterType(typeof(Math));
 
         // simple function
-        Assert.AreEqual(4,
-            ExpressionEvaluator.GetValue(null, "(#add = {|x, y| $x + $y}; #add(2, 2))", new Dictionary<string, object>()));
-        Assert.AreEqual(25,
-            ExpressionEvaluator.GetValue(null, "(#max = {|x, y| $x > $y ? $x : $y }; #max(5,25))",
-                new Dictionary<string, object>()));
+        Assert.That(ExpressionEvaluator.GetValue(null, "(#add = {|x, y| $x + $y}; #add(2, 2))", new Dictionary<string, object>()),
+            Is.EqualTo(4));
+        Assert.That(ExpressionEvaluator.GetValue(null, "(#max = {|x, y| $x > $y ? $x : $y }; #max(5,25))",
+                new Dictionary<string, object>()),
+            Is.EqualTo(25));
 
         // recursive function
-        Assert.AreEqual(120,
-            ExpressionEvaluator.GetValue(null,
+        Assert.That(ExpressionEvaluator.GetValue(null,
                 "(#fact = {|n| $n <= 1 ? 1 : $n * #fact($n-1) }; #fact(5))",
-                new Dictionary<string, object>()));
+                new Dictionary<string, object>()),
+            Is.EqualTo(120));
 
         // function invoked within projection expression
         string expr = "(#upper = {|txt| $txt.ToUpper() }; !{ #upper(Name) })";
         IList upperNames = (IList) ExpressionEvaluator.GetValue(ieee.Members, expr, new Dictionary<string, object>());
-        Assert.AreEqual("NIKOLA TESLA", upperNames[0]);
-        Assert.AreEqual("MIHAJLO PUPIN", upperNames[1]);
+        Assert.That(upperNames[0], Is.EqualTo("NIKOLA TESLA"));
+        Assert.That(upperNames[1], Is.EqualTo("MIHAJLO PUPIN"));
 
         // function that delegates to a function passed as a parameter
         Dictionary<string, object> vars = new Dictionary<string, object>();
@@ -1767,24 +1770,24 @@ public sealed class ExpressionEvaluatorTests
                                 #result = { #delegate(#sqrt, 4), #d(#fact, 5), #delegate({|n| $n ^ 2 }, 5) }
                             )";
         IList results = (IList) ExpressionEvaluator.GetValue(null, expr2, vars);
-        Assert.AreEqual(2, results[0]);
-        Assert.AreEqual(120, results[1]);
-        Assert.AreEqual(25, results[2]);
+        Assert.That(results[0], Is.EqualTo(2));
+        Assert.That(results[1], Is.EqualTo(120));
+        Assert.That(results[2], Is.EqualTo(25));
 
         // function assignment
-        Assert.AreEqual(120,
-            ExpressionEvaluator.GetValue(null,
+        Assert.That(ExpressionEvaluator.GetValue(null,
                 "(#fact = {|n| $n <= 1 ? 1 : $n * #fact($n-1) }; #f = #fact; #f(5))",
-                new Dictionary<string, object>()));
+                new Dictionary<string, object>()),
+            Is.EqualTo(120));
     }
 
     [Test]
     public void TestCountAggregator()
     {
         int[] arr = new int[] { 24, 8, 14, 8 };
-        Assert.AreEqual(4, ExpressionEvaluator.GetValue(arr, "count()"));
-        Assert.AreEqual(3, ExpressionEvaluator.GetValue(null, "{1, 5, -3}.count()"));
-        Assert.AreEqual(0, ExpressionEvaluator.GetValue(null, "count()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr, "count()"), Is.EqualTo(4));
+        Assert.That(ExpressionEvaluator.GetValue(null, "{1, 5, -3}.count()"), Is.EqualTo(3));
+        Assert.That(ExpressionEvaluator.GetValue(null, "count()"), Is.EqualTo(0));
     }
 
     [Test]
@@ -1793,7 +1796,7 @@ public sealed class ExpressionEvaluatorTests
         // Test for the purposes of creating documentation example.
         Dictionary<string, object> vars = new Dictionary<string, object>();
         vars["EvenSum"] = new IntEvenSumCollectionProcessor();
-        Assert.AreEqual(6, ExpressionEvaluator.GetValue(null, "{1, 2, 3, 4}.EvenSum()", vars));
+        Assert.That(ExpressionEvaluator.GetValue(null, "{1, 2, 3, 4}.EvenSum()", vars), Is.EqualTo(6));
     }
 
     private class IntEvenSumCollectionProcessor : ICollectionProcessor
@@ -1827,13 +1830,13 @@ public sealed class ExpressionEvaluatorTests
     public void TestSumAggregator()
     {
         int[] arr = new int[] { 24, 8, 14, 8 };
-        Assert.AreEqual(54, ExpressionEvaluator.GetValue(arr, "sum()"));
-        Assert.AreEqual(13, ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.sum()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr, "sum()"), Is.EqualTo(54));
+        Assert.That(ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.sum()"), Is.EqualTo(13));
 
         object[] arr2 = new object[] { 5, 5.8, 12.2, 1 };
         object result = ExpressionEvaluator.GetValue(arr2, "sum()");
-        Assert.IsInstanceOf(typeof(double), result);
-        Assert.AreEqual(24, result);
+        Assert.That(result, Is.InstanceOf(typeof(double)));
+        Assert.That(result, Is.EqualTo(24));
     }
 
     [Test]
@@ -1847,14 +1850,14 @@ public sealed class ExpressionEvaluatorTests
     public void TestAverageAggregator()
     {
         int[] arr = new int[] { 24, 8, 16, 8 };
-        Assert.AreEqual(14, ExpressionEvaluator.GetValue(arr, "average()"));
-        Assert.AreEqual(3, ExpressionEvaluator.GetValue(null, "{1, 5, -4, 10}.average()"));
-        Assert.AreEqual(3.5, ExpressionEvaluator.GetValue(null, "{1, 5, -2, 10}.average()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr, "average()"), Is.EqualTo(14));
+        Assert.That(ExpressionEvaluator.GetValue(null, "{1, 5, -4, 10}.average()"), Is.EqualTo(3));
+        Assert.That(ExpressionEvaluator.GetValue(null, "{1, 5, -2, 10}.average()"), Is.EqualTo(3.5));
 
         object[] arr2 = new object[] { 5, 5.8, 12.2, 1 };
         object result = ExpressionEvaluator.GetValue(arr2, "average()");
-        Assert.IsInstanceOf(typeof(double), result);
-        Assert.AreEqual(6, result);
+        Assert.That(result, Is.InstanceOf(typeof(double)));
+        Assert.That(result, Is.EqualTo(6));
     }
 
     [Test]
@@ -1868,15 +1871,15 @@ public sealed class ExpressionEvaluatorTests
     public void TestMinAggregator()
     {
         int[] arr = new int[] { 24, 8, 14, 8 };
-        Assert.AreEqual(8, ExpressionEvaluator.GetValue(arr, "min()"));
-        Assert.AreEqual(-3, ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.min()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr, "min()"), Is.EqualTo(8));
+        Assert.That(ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.min()"), Is.EqualTo(-3));
 
         object[] arr2 = new object[] { 5, 5.8, 12.2, 1 };
         object result = ExpressionEvaluator.GetValue(arr2, "min()");
-        Assert.IsInstanceOf(typeof(int), result);
-        Assert.AreEqual(1, result);
+        Assert.That(result, Is.InstanceOf(typeof(int)));
+        Assert.That(result, Is.EqualTo(1));
 
-        Assert.IsNull(ExpressionEvaluator.GetValue(ObjectUtils.EmptyObjects, "min()"));
+        Assert.That(ExpressionEvaluator.GetValue(ObjectUtils.EmptyObjects, "min()"), Is.Null);
     }
 
     [Test]
@@ -1897,15 +1900,15 @@ public sealed class ExpressionEvaluatorTests
     public void TestMaxAggregator()
     {
         int[] arr = new int[] { 24, 8, 14, 8 };
-        Assert.AreEqual(24, ExpressionEvaluator.GetValue(arr, "max()"));
-        Assert.AreEqual(10, ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.max()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr, "max()"), Is.EqualTo(24));
+        Assert.That(ExpressionEvaluator.GetValue(null, "{1, 5, -3, 10}.max()"), Is.EqualTo(10));
 
         object[] arr2 = new object[] { 5, 5.8, 12.2, 1 };
         object result = ExpressionEvaluator.GetValue(arr2, "max()");
-        Assert.IsInstanceOf(typeof(double), result);
-        Assert.AreEqual(12.2, result);
+        Assert.That(result, Is.InstanceOf(typeof(double)));
+        Assert.That(result, Is.EqualTo(12.2));
 
-        Assert.IsNull(ExpressionEvaluator.GetValue(ObjectUtils.EmptyObjects, "max()"));
+        Assert.That(ExpressionEvaluator.GetValue(ObjectUtils.EmptyObjects, "max()"), Is.Null);
     }
 
     [Test]
@@ -1926,23 +1929,23 @@ public sealed class ExpressionEvaluatorTests
     public void TestSortProcessor()
     {
         int[] arr = new int[] { 24, 8, 14, 6 };
-        Assert.AreEqual(new int[] { 6, 8, 14, 24 }, ExpressionEvaluator.GetValue(arr, "sort()"));
-        Assert.AreEqual(new int[] { 6, 8, 14, 24 }, ExpressionEvaluator.GetValue(arr, "sort(true)"));
-        Assert.AreEqual(new int[] { 24, 14, 8, 6 }, ExpressionEvaluator.GetValue(arr, "sort(false)"));
+        Assert.That(ExpressionEvaluator.GetValue(arr, "sort()"), Is.EqualTo(new int[] { 6, 8, 14, 24 }));
+        Assert.That(ExpressionEvaluator.GetValue(arr, "sort(true)"), Is.EqualTo(new int[] { 6, 8, 14, 24 }));
+        Assert.That(ExpressionEvaluator.GetValue(arr, "sort(false)"), Is.EqualTo(new int[] { 24, 14, 8, 6 }));
 
         string[] arr2 = new string[] { "abc", "xyz", "stuv", "efg", "dcb" };
-        Assert.AreEqual(new string[] { "abc", "dcb", "efg", "stuv", "xyz" },
-            ExpressionEvaluator.GetValue(arr2, "sort()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr2, "sort()"),
+            Is.EqualTo(new string[] { "abc", "dcb", "efg", "stuv", "xyz" }));
 
         DateTime[] arr3 = new DateTime[] { DateTime.Today, DateTime.MaxValue, DateTime.MinValue };
-        Assert.AreEqual(new DateTime[] { DateTime.MinValue, DateTime.Today, DateTime.MaxValue },
-            ExpressionEvaluator.GetValue(arr3, "sort()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr3, "sort()"),
+            Is.EqualTo(new DateTime[] { DateTime.MinValue, DateTime.Today, DateTime.MaxValue }));
 
-        Assert.AreEqual(new object[] { -3.3, 1.2, 5.5 }, ExpressionEvaluator.GetValue(null, "{1.2, 5.5, -3.3}.sort()"));
-        Assert.IsNull(ExpressionEvaluator.GetValue(null, "sort()"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "{1.2, 5.5, -3.3}.sort()"), Is.EqualTo(new object[] { -3.3, 1.2, 5.5 }));
+        Assert.That(ExpressionEvaluator.GetValue(null, "sort()"), Is.Null);
 
         ISet set = new ListSet(arr);
-        Assert.AreEqual(new int[] { 6, 8, 14, 24 }, ExpressionEvaluator.GetValue(set, "sort()"));
+        Assert.That(ExpressionEvaluator.GetValue(set, "sort()"), Is.EqualTo(new int[] { 6, 8, 14, 24 }));
     }
 
     [Test(Description = "sort supports any ICollection containing elements of uniform type")]
@@ -1956,25 +1959,25 @@ public sealed class ExpressionEvaluatorTests
     public void TestNonNullProcessor()
     {
         string[] arr2 = new string[] { "abc", "xyz", null, "abc", "def", null };
-        Assert.AreEqual(new string[] { "abc", "xyz", "abc", "def" },
-            ExpressionEvaluator.GetValue(arr2, "nonNull()"));
-        Assert.AreEqual(new string[] { "abc", "abc", "def", "xyz" },
-            ExpressionEvaluator.GetValue(arr2, "nonNull().sort()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr2, "nonNull()"),
+            Is.EqualTo(new string[] { "abc", "xyz", "abc", "def" }));
+        Assert.That(ExpressionEvaluator.GetValue(arr2, "nonNull().sort()"),
+            Is.EqualTo(new string[] { "abc", "abc", "def", "xyz" }));
     }
 
     [Test]
     public void TestDistinctProcessor()
     {
         int[] arr = new int[] { 24, 8, 8, 6, 24, 6, 8, 6 };
-        Assert.AreEqual(new int[] { 6, 8, 24 }, ExpressionEvaluator.GetValue(arr, "distinct().sort()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr, "distinct().sort()"), Is.EqualTo(new int[] { 6, 8, 24 }));
 
         string[] arr2 = new string[] { "abc", "xyz", "abc", "def", null, "def" };
-        Assert.AreEqual(new string[] { null, "abc", "def", "xyz" },
-            ExpressionEvaluator.GetValue(arr2, "distinct(true).sort()"));
-        Assert.AreEqual(new string[] { "abc", "def", "xyz" },
-            ExpressionEvaluator.GetValue(arr2, "distinct(false).sort()"));
-        Assert.AreEqual(new string[] { "abc", "def", "xyz" },
-            ExpressionEvaluator.GetValue(arr2, "distinct().sort()"));
+        Assert.That(ExpressionEvaluator.GetValue(arr2, "distinct(true).sort()"),
+            Is.EqualTo(new string[] { null, "abc", "def", "xyz" }));
+        Assert.That(ExpressionEvaluator.GetValue(arr2, "distinct(false).sort()"),
+            Is.EqualTo(new string[] { "abc", "def", "xyz" }));
+        Assert.That(ExpressionEvaluator.GetValue(arr2, "distinct().sort()"),
+            Is.EqualTo(new string[] { "abc", "def", "xyz" }));
     }
 
     [Test]
@@ -1996,11 +1999,11 @@ public sealed class ExpressionEvaluatorTests
     {
         object[] arr = new object[] { "0", 1, 1.1m, "1.1", 1.1f };
         decimal[] result = (decimal[]) ExpressionEvaluator.GetValue(arr, "convert(decimal)");
-        Assert.AreEqual(0.0m, result[0]);
-        Assert.AreEqual(1.0m, result[1]);
-        Assert.AreEqual(1.1m, result[2]);
-        Assert.AreEqual(1.1m, result[3]);
-        Assert.AreEqual(1.1m, result[4]);
+        Assert.That(result[0], Is.EqualTo(0.0m));
+        Assert.That(result[1], Is.EqualTo(1.0m));
+        Assert.That(result[2], Is.EqualTo(1.1m));
+        Assert.That(result[3], Is.EqualTo(1.1m));
+        Assert.That(result[4], Is.EqualTo(1.1m));
     }
 
     [Test]
@@ -2008,7 +2011,7 @@ public sealed class ExpressionEvaluatorTests
     {
         object[] arr = new object[] { "0", 1, 2.1m, "3", 4.1f };
         object[] result = new ArrayList((ICollection) ExpressionEvaluator.GetValue(arr, "reverse()")).ToArray();
-        Assert.AreEqual(new object[] { 4.1f, "3", 2.1m, 1, "0" }, result);
+        Assert.That(result, Is.EqualTo(new object[] { 4.1f, "3", 2.1m, 1, "0" }));
     }
 
     /// <summary>
@@ -2021,7 +2024,7 @@ public sealed class ExpressionEvaluatorTests
         vars["tesla"] = tesla;
         vars["pupin"] = pupin;
         ExpressionEvaluator.SetValue(null, "#tesla.Name", vars, "Tesla, Nikola");
-        Assert.AreEqual("Tesla, Nikola", tesla.Name);
+        Assert.That(tesla.Name, Is.EqualTo("Tesla, Nikola"));
     }
 
     /// <summary>
@@ -2062,8 +2065,8 @@ public sealed class ExpressionEvaluatorTests
     public void TestNullableTypes()
     {
         Foo foo = new Foo();
-        Assert.IsNull(ExpressionEvaluator.GetValue(foo, "NullableDate"));
-        Assert.IsNull(ExpressionEvaluator.GetValue(foo, "NullableInt"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "NullableDate"), Is.Null);
+        Assert.That(ExpressionEvaluator.GetValue(foo, "NullableInt"), Is.Null);
 
         ExpressionEvaluator.SetValue(foo, "NullableDate", DateTime.Today);
         ExpressionEvaluator.SetValue(foo, "NullableDate", null);
@@ -2074,20 +2077,20 @@ public sealed class ExpressionEvaluatorTests
         ExpressionEvaluator.SetValue(foo, "NullableInt", "5");
         ExpressionEvaluator.SetValue(foo, "NullableInt", 1);
 
-        Assert.IsInstanceOf(typeof(DateTime?), ExpressionEvaluator.GetValue(foo, "NullableDate"));
-        Assert.IsInstanceOf(typeof(Int32?), ExpressionEvaluator.GetValue(foo, "NullableInt"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "NullableDate"), Is.InstanceOf(typeof(DateTime?)));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "NullableInt"), Is.InstanceOf(typeof(Int32?)));
 
-        Assert.AreEqual(DateTime.Today, ExpressionEvaluator.GetValue(foo, "NullableDate"));
-        Assert.AreEqual(1, ExpressionEvaluator.GetValue(foo, "NullableInt"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "NullableDate"), Is.EqualTo(DateTime.Today));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "NullableInt"), Is.EqualTo(1));
 
         int? test = 1;
-        Assert.IsInstanceOf(typeof(Int32?), ExpressionEvaluator.GetValue(test, "#root"));
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(test, "#root != null"));
-        Assert.AreEqual(1, ExpressionEvaluator.GetValue(test, "#root"));
+        Assert.That(ExpressionEvaluator.GetValue(test, "#root"), Is.InstanceOf(typeof(Int32?)));
+        Assert.That((bool) ExpressionEvaluator.GetValue(test, "#root != null"), Is.True);
+        Assert.That(ExpressionEvaluator.GetValue(test, "#root"), Is.EqualTo(1));
 
         test = null;
-        Assert.IsTrue((bool) ExpressionEvaluator.GetValue(test, "#root == null"));
-        Assert.IsNull(ExpressionEvaluator.GetValue(test, "#root"));
+        Assert.That((bool) ExpressionEvaluator.GetValue(test, "#root == null"), Is.True);
+        Assert.That(ExpressionEvaluator.GetValue(test, "#root"), Is.Null);
     }
 
     /// <summary>
@@ -2101,7 +2104,7 @@ public sealed class ExpressionEvaluatorTests
     public void TestMethodResolutionWithNullArguments()
     {
         DateTime today = DateTime.Today;
-        Assert.AreEqual(today.ToString("d"), ExpressionEvaluator.GetValue(today, "ToString('d')"));
+        Assert.That(ExpressionEvaluator.GetValue(today, "ToString('d')"), Is.EqualTo(today.ToString("d")));
 
         TypeRegistry.RegisterType(typeof(TypeRegistry));
         try
@@ -2161,20 +2164,20 @@ public sealed class ExpressionEvaluatorTests
     public void TestMethodResolutionWithParamArray()
     {
         Foo foo = new Foo();
-        Assert.AreEqual("a|b|c", foo.MethodWithArrayArgument(new string[] { "a", "b", "c" }));
-        Assert.AreEqual("a||c", foo.MethodWithArrayArgument(new string[] { "a", null, "c" }));
-        Assert.AreEqual("a|b|c", foo.MethodWithParamArray("a", "b", "c"));
-        Assert.AreEqual("a||c", foo.MethodWithParamArray("a", null, "c"));
+        Assert.That(foo.MethodWithArrayArgument(new string[] { "a", "b", "c" }), Is.EqualTo("a|b|c"));
+        Assert.That(foo.MethodWithArrayArgument(new string[] { "a", null, "c" }), Is.EqualTo("a||c"));
+        Assert.That(foo.MethodWithParamArray("a", "b", "c"), Is.EqualTo("a|b|c"));
+        Assert.That(foo.MethodWithParamArray("a", null, "c"), Is.EqualTo("a||c"));
 
-        Assert.AreEqual("a|b|c", ExpressionEvaluator.GetValue(foo, "MethodWithArrayArgument(new string[] { 'a', 'b', 'c' })"));
-        Assert.AreEqual("a||c", ExpressionEvaluator.GetValue(foo, "MethodWithArrayArgument(new string[] { 'a', null, 'c' })"));
-        Assert.AreEqual("a|b|c", ExpressionEvaluator.GetValue(foo, "MethodWithParamArray('a', 'b', 'c')"));
-        Assert.AreEqual("a||c", ExpressionEvaluator.GetValue(foo, "MethodWithParamArray('a', null, 'c')"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "MethodWithArrayArgument(new string[] { 'a', 'b', 'c' })"), Is.EqualTo("a|b|c"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "MethodWithArrayArgument(new string[] { 'a', null, 'c' })"), Is.EqualTo("a||c"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "MethodWithParamArray('a', 'b', 'c')"), Is.EqualTo("a|b|c"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "MethodWithParamArray('a', null, 'c')"), Is.EqualTo("a||c"));
 
-        Assert.AreEqual("a|b|c", ExpressionEvaluator.GetValue(foo, "MethodWithParamArray(false, 'a', 'b', 'c')"));
-        Assert.AreEqual("a||c", ExpressionEvaluator.GetValue(foo, "MethodWithParamArray(false, 'a', null, 'c')"));
-        Assert.AreEqual("A|B|C", ExpressionEvaluator.GetValue(foo, "MethodWithParamArray(true, 'a', 'b', 'c')"));
-        Assert.AreEqual("A||C", ExpressionEvaluator.GetValue(foo, "MethodWithParamArray(true, 'a', null, 'c')"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "MethodWithParamArray(false, 'a', 'b', 'c')"), Is.EqualTo("a|b|c"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "MethodWithParamArray(false, 'a', null, 'c')"), Is.EqualTo("a||c"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "MethodWithParamArray(true, 'a', 'b', 'c')"), Is.EqualTo("A|B|C"));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "MethodWithParamArray(true, 'a', null, 'c')"), Is.EqualTo("A||C"));
     }
 
     [Test]
@@ -2185,10 +2188,10 @@ public sealed class ExpressionEvaluatorTests
         Foo foo = new Foo();
 
         // ensure no one changed our test class
-        Assert.AreEqual("ExactMatch", foo.MethodWithSimilarArguments(1, (Bar[]) args["bars"]));
-        Assert.AreEqual("AssignableMatch", foo.MethodWithSimilarArguments(1, (ICollection) args["bars"]));
+        Assert.That(foo.MethodWithSimilarArguments(1, (Bar[]) args["bars"]), Is.EqualTo("ExactMatch"));
+        Assert.That(foo.MethodWithSimilarArguments(1, (ICollection) args["bars"]), Is.EqualTo("AssignableMatch"));
 
-        Assert.AreEqual("ExactMatch", ExpressionEvaluator.GetValue(foo, "MethodWithSimilarArguments(1, #bars)", args));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "MethodWithSimilarArguments(1, #bars)", args), Is.EqualTo("ExactMatch"));
     }
 
     /// <summary>
@@ -2208,7 +2211,7 @@ public sealed class ExpressionEvaluatorTests
             result = (int) ExpressionEvaluator.GetValue(foo, expression);
         });
 
-        Assert.AreEqual(expectedResult, result);
+        Assert.That(result, Is.EqualTo(expectedResult));
     }
 
     [Test]
@@ -2219,10 +2222,10 @@ public sealed class ExpressionEvaluatorTests
         Foo foo = new Foo();
 
         // ensure no one changed our test class
-        Assert.AreEqual("ExactMatch", foo[(Bar[]) args["bars"]]);
-        Assert.AreEqual("AssignableMatch", foo[(ICollection) args["bars"]]);
+        Assert.That(foo[(Bar[]) args["bars"]], Is.EqualTo("ExactMatch"));
+        Assert.That(foo[(ICollection) args["bars"]], Is.EqualTo("AssignableMatch"));
 
-        Assert.AreEqual("ExactMatch", ExpressionEvaluator.GetValue(foo, "#root[#bars]", args));
+        Assert.That(ExpressionEvaluator.GetValue(foo, "#root[#bars]", args), Is.EqualTo("ExactMatch"));
     }
 
     [Test]
@@ -2240,17 +2243,17 @@ public sealed class ExpressionEvaluatorTests
         }
         catch (InvalidOperationException) { }
 
-        Assert.IsNotNull(ExpressionEvaluator.GetValue(null, "new Foo(1, #bars)", args));
+        Assert.That(ExpressionEvaluator.GetValue(null, "new Foo(1, #bars)", args), Is.Not.Null);
     }
 
     [Test]
     public void TestCtorResolutionWithParamArray()
     {
         TypeRegistry.RegisterType(typeof(Foo));
-        Assert.IsNotNull(ExpressionEvaluator.GetValue(null, "new Foo('a', 'b', 'c')"));
-        Assert.IsNotNull(ExpressionEvaluator.GetValue(null, "new Foo('a', null, 'c')"));
-        Assert.IsNotNull(ExpressionEvaluator.GetValue(null, "new Foo(false, 'a', 'b', 'c')"));
-        Assert.IsNotNull(ExpressionEvaluator.GetValue(null, "new Foo(false, 'a', null, 'c')"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "new Foo('a', 'b', 'c')"), Is.Not.Null);
+        Assert.That(ExpressionEvaluator.GetValue(null, "new Foo('a', null, 'c')"), Is.Not.Null);
+        Assert.That(ExpressionEvaluator.GetValue(null, "new Foo(false, 'a', 'b', 'c')"), Is.Not.Null);
+        Assert.That(ExpressionEvaluator.GetValue(null, "new Foo(false, 'a', null, 'c')"), Is.Not.Null);
     }
 
     /// <summary>
@@ -2263,15 +2266,15 @@ public sealed class ExpressionEvaluatorTests
     [Test(Description = "Test to reproduce SPRNET-470")]
     public void TestPropertyAccessForTypes()
     {
-        Assert.AreEqual(Int32.MaxValue, ExpressionEvaluator.GetValue(null, "Int32.MaxValue"));
-        Assert.AreEqual(Int32.MaxValue, ExpressionEvaluator.GetValue(null, "T(System.Int32).MaxValue"));
-        Assert.AreEqual(typeof(Int32).FullName, ExpressionEvaluator.GetValue(null, "Int32.FullName"));
-        Assert.AreEqual(typeof(Int32).FullName, ExpressionEvaluator.GetValue(null, "T(System.Int32).FullName"));
-        Assert.IsFalse((bool) ExpressionEvaluator.GetValue(null, "Int32.IsSubclassOf(Int64)"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "Int32.MaxValue"), Is.EqualTo(Int32.MaxValue));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Int32).MaxValue"), Is.EqualTo(Int32.MaxValue));
+        Assert.That(ExpressionEvaluator.GetValue(null, "Int32.FullName"), Is.EqualTo(typeof(Int32).FullName));
+        Assert.That(ExpressionEvaluator.GetValue(null, "T(System.Int32).FullName"), Is.EqualTo(typeof(Int32).FullName));
+        Assert.That((bool) ExpressionEvaluator.GetValue(null, "Int32.IsSubclassOf(Int64)"), Is.False);
 
         TypeRegistry.RegisterType(typeof(FooType));
-        Assert.AreEqual(FooType.One, ExpressionEvaluator.GetValue(null, "FooType.One"));
-        Assert.AreEqual(typeof(FooType).FullName, ExpressionEvaluator.GetValue(null, "FooType.FullName"));
+        Assert.That(ExpressionEvaluator.GetValue(null, "FooType.One"), Is.EqualTo(FooType.One));
+        Assert.That(ExpressionEvaluator.GetValue(null, "FooType.FullName"), Is.EqualTo(typeof(FooType).FullName));
     }
 
     /// <summary>
@@ -2286,7 +2289,7 @@ public sealed class ExpressionEvaluatorTests
     public void TestSetEnumTypePropertyOrFieldFromNumeric()
     {
         //object val = Convert.ChangeType((Int16) 1, typeof(Int32));
-        //Assert.AreEqual( typeof(Int32), val.GetType() );
+        //Assert.That(val.GetType(), Is.EqualTo(typeof(Int32)));
 
         IExpression expField = Expression.Parse("SampleEnumField");
         IExpression expProperty = Expression.Parse("SampleEnumProperty");
@@ -2297,32 +2300,32 @@ public sealed class ExpressionEvaluatorTests
 
         // test field set operations
         expField.SetValue(o, TestEnumTypePropertyClass.ESampleEnumType.Trunk);
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
+        Assert.That(o.SampleEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         expField.SetValue(o, (short) 1);
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
+        Assert.That(o.SampleEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         expField.SetValue(o, 1);
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
+        Assert.That(o.SampleEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         expField.SetValue(o, (long) 1);
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
+        Assert.That(o.SampleEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         // test property set operations
         expProperty.SetValue(o, TestEnumTypePropertyClass.ESampleEnumType.Trunk);
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
+        Assert.That(o.SampleEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         expProperty.SetValue(o, (short) 1);
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
+        Assert.That(o.SampleEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         expProperty.SetValue(o, 1);
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
+        Assert.That(o.SampleEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         expProperty.SetValue(o, (long) 1);
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
+        Assert.That(o.SampleEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         expProperty.SetValue(o, "Trunk");
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
+        Assert.That(o.SampleEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         try
         {
@@ -2331,7 +2334,7 @@ public sealed class ExpressionEvaluatorTests
         }
         catch (TypeMismatchException e)
         {
-            Assert.IsTrue(e.Message.StartsWith("Cannot convert property value of type [System.Double]"));
+            Assert.That(e.Message.StartsWith("Cannot convert property value of type [System.Double]"), Is.True);
         }
 
         try
@@ -2341,17 +2344,17 @@ public sealed class ExpressionEvaluatorTests
         }
         catch (TypeMismatchException e)
         {
-            Assert.IsTrue(e.Message.StartsWith("Cannot convert property value of type [System.Single]"));
+            Assert.That(e.Message.StartsWith("Cannot convert property value of type [System.Single]"), Is.True);
         }
 
         // test get operations
         object val = expField.GetValue(o);
-        Assert.AreEqual(typeof(TestEnumTypePropertyClass.ESampleEnumType), val.GetType());
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, val);
+        Assert.That(val.GetType(), Is.EqualTo(typeof(TestEnumTypePropertyClass.ESampleEnumType)));
+        Assert.That(val, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         val = expProperty.GetValue(o);
-        Assert.AreEqual(typeof(TestEnumTypePropertyClass.ESampleEnumType), val.GetType());
-        Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, val);
+        Assert.That(val.GetType(), Is.EqualTo(typeof(TestEnumTypePropertyClass.ESampleEnumType)));
+        Assert.That(val, Is.EqualTo(TestEnumTypePropertyClass.ESampleEnumType.Trunk));
 
         // test bitwise combined enum set
         try
@@ -2362,8 +2365,9 @@ public sealed class ExpressionEvaluatorTests
         }
         catch (TypeMismatchException ex)
         {
-            Assert.IsTrue(
-                ex.Message.StartsWith("Cannot convert property value of type [System.Int32] to required type"));
+            Assert.That(
+                ex.Message.StartsWith("Cannot convert property value of type [System.Int32] to required type"),
+                Is.True);
         }
 
         try
@@ -2374,16 +2378,17 @@ public sealed class ExpressionEvaluatorTests
         }
         catch (TypeMismatchException ex)
         {
-            Assert.IsTrue(
-                ex.Message.StartsWith("Cannot convert property value of type [System.Int32] to required type"));
+            Assert.That(
+                ex.Message.StartsWith("Cannot convert property value of type [System.Int32] to required type"),
+                Is.True);
         }
 
         expFlagsField.SetValue(o,
             TestEnumTypePropertyClass.ESampleFlagsEnumType.SOME |
             TestEnumTypePropertyClass.ESampleFlagsEnumType.SOMEOTHER);
-        Assert.AreEqual(
-            TestEnumTypePropertyClass.ESampleFlagsEnumType.SOME |
-            TestEnumTypePropertyClass.ESampleFlagsEnumType.SOMEOTHER, o.SampleFlagsEnumField);
+        Assert.That(
+            o.SampleFlagsEnumField, Is.EqualTo(TestEnumTypePropertyClass.ESampleFlagsEnumType.SOME |
+            TestEnumTypePropertyClass.ESampleFlagsEnumType.SOMEOTHER));
     }
 
     /// <summary>
@@ -2404,14 +2409,14 @@ public sealed class ExpressionEvaluatorTests
         Sample d2 = new Sample("A", "B", "Z");
 
         Sample tmp1 = (Sample) e.GetValue(d1);
-        Assert.AreEqual("A", tmp1.O);
-        Assert.AreEqual("B", tmp1.T);
-        Assert.AreEqual("C", tmp1.H);
+        Assert.That(tmp1.O, Is.EqualTo("A"));
+        Assert.That(tmp1.T, Is.EqualTo("B"));
+        Assert.That(tmp1.H, Is.EqualTo("C"));
 
         Sample tmp2 = (Sample) e.GetValue(d2);
-        Assert.AreEqual("A", tmp2.O);
-        Assert.AreEqual("B", tmp2.T);
-        Assert.AreEqual("Z", tmp2.H);
+        Assert.That(tmp2.O, Is.EqualTo("A"));
+        Assert.That(tmp2.T, Is.EqualTo("B"));
+        Assert.That(tmp2.H, Is.EqualTo("Z"));
     }
 
     /// <summary>
@@ -2426,8 +2431,8 @@ public sealed class ExpressionEvaluatorTests
     {
         IExpression e = Expression.Parse("#root");
 
-        Assert.AreEqual("RootA", e.GetValue("RootA"));
-        Assert.AreEqual("RootB", e.GetValue("RootB"));
+        Assert.That(e.GetValue("RootA"), Is.EqualTo("RootA"));
+        Assert.That(e.GetValue("RootB"), Is.EqualTo("RootB"));
     }
 
     /// <summary>
@@ -2481,43 +2486,43 @@ public sealed class ExpressionEvaluatorTests
     public void TestArrayConstructor()
     {
         object obj = ExpressionEvaluator.GetValue(null, "new int[] {3, 4, 5, 6}");
-        Assert.IsNotNull(obj);
-        Assert.IsInstanceOf(typeof(int[]), obj);
+        Assert.That(obj, Is.Not.Null);
+        Assert.That(obj, Is.InstanceOf(typeof(int[])));
         int[] intarray = (int[]) obj;
-        Assert.AreEqual(4, intarray.Length);
+        Assert.That(intarray.Length, Is.EqualTo(4));
         for (int i = 0; i < intarray.Length; i++)
         {
-            Assert.AreEqual(i + 3, intarray[i]);
+            Assert.That(intarray[i], Is.EqualTo(i + 3));
         }
 
         obj = ExpressionEvaluator.GetValue(null, "new long[5]");
-        Assert.IsNotNull(obj);
-        Assert.IsInstanceOf(typeof(long[]), obj);
+        Assert.That(obj, Is.Not.Null);
+        Assert.That(obj, Is.InstanceOf(typeof(long[])));
         long[] longarray = obj as long[];
-        Assert.AreEqual(5, longarray.Length);
+        Assert.That(longarray.Length, Is.EqualTo(5));
         for (int i = 0; i < longarray.Length; i++)
         {
-            Assert.AreEqual(0, longarray[i]);
+            Assert.That(longarray[i], Is.EqualTo(0));
         }
 
         obj = ExpressionEvaluator.GetValue(null, "new double[4, 5]");
-        Assert.IsNotNull(obj);
-        Assert.IsInstanceOf(typeof(double[,]), obj);
+        Assert.That(obj, Is.Not.Null);
+        Assert.That(obj, Is.InstanceOf(typeof(double[,])));
         double[,] twodimarray = obj as double[,];
-        Assert.AreEqual(4 * 5, twodimarray.Length);
+        Assert.That(twodimarray.Length, Is.EqualTo(4 * 5));
         for (int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 5; j++)
             {
-                Assert.AreEqual(0.0, twodimarray[i, j]);
+                Assert.That(twodimarray[i, j], Is.EqualTo(0.0));
             }
         }
 
         obj = ExpressionEvaluator.GetValue(null, "new int[Int32.Parse('11')]");
-        Assert.IsNotNull(obj);
-        Assert.IsInstanceOf(typeof(int[]), obj);
+        Assert.That(obj, Is.Not.Null);
+        Assert.That(obj, Is.InstanceOf(typeof(int[])));
         intarray = obj as int[];
-        Assert.AreEqual(11, intarray.Length);
+        Assert.That(intarray.Length, Is.EqualTo(11));
     }
 
     [Test]
@@ -2528,19 +2533,19 @@ public sealed class ExpressionEvaluatorTests
         // case #root == #this - ToString() will be applied to #this
         exp = Expression.Parse("long.Parse(ToString())");
         object result = exp.GetValue(100);
-        Assert.AreEqual((long) 100, result);
+        Assert.That(result, Is.EqualTo((long) 100));
 
         // case #root != #this in Projection - ToString() will be applied to #this
         exp = Expression.Parse("(ToString(); #noop ={|val| $val}; !{#noop(ToString()) } )");
         result = exp.GetValue(new int[] { 100, 200 }, new Dictionary<string, object>());
-        Assert.AreEqual(new string[] { "100", "200" }, result);
+        Assert.That(result, Is.EqualTo(new string[] { "100", "200" }));
 
         // case #root != #this in Selection - ToString() will be applied to #this
         exp = Expression.Parse("(#noop ={|val| $val}; ?{#noop(ToString()=='100')} )");
         result = exp.GetValue(new int[] { 100, 200 }, new Dictionary<string, object>());
         IList list = new ArrayList();
         list.Add(100);
-        Assert.AreEqual(list, result);
+        Assert.That(result, Is.EqualTo(list));
     }
 
     [Test]
@@ -2562,21 +2567,21 @@ public sealed class ExpressionEvaluatorTests
         }
         catch (NotWritablePropertyException) { }
 
-        Assert.AreEqual("_privateField", ExpressionEvaluator.GetValue(cases, "_privateField"));
-        Assert.AreEqual("_protectedField", ExpressionEvaluator.GetValue(cases, "_protectedField"));
-        Assert.AreEqual("_publicField", ExpressionEvaluator.GetValue(cases, "_publicField"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "_privateField"), Is.EqualTo("_privateField"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "_protectedField"), Is.EqualTo("_protectedField"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "_publicField"), Is.EqualTo("_publicField"));
 
-        Assert.AreEqual("PrivateProperty", ExpressionEvaluator.GetValue(cases, "PrivateProperty"));
-        Assert.AreEqual("ProtectedProperty", ExpressionEvaluator.GetValue(cases, "ProtectedProperty"));
-        Assert.AreEqual("PublicProperty", ExpressionEvaluator.GetValue(cases, "PublicProperty"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "PrivateProperty"), Is.EqualTo("PrivateProperty"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "ProtectedProperty"), Is.EqualTo("ProtectedProperty"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "PublicProperty"), Is.EqualTo("PublicProperty"));
 
-        Assert.AreEqual("PrivateIndexer", ExpressionEvaluator.GetValue(cases, "#root[1]"));
-        Assert.AreEqual("ProtectedIndexer", ExpressionEvaluator.GetValue(cases, "#root[1.0]"));
-        Assert.AreEqual("PublicIndexer", ExpressionEvaluator.GetValue(cases, "#root['']"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "#root[1]"), Is.EqualTo("PrivateIndexer"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "#root[1.0]"), Is.EqualTo("ProtectedIndexer"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "#root['']"), Is.EqualTo("PublicIndexer"));
 
-        Assert.AreEqual("PrivateMethod", ExpressionEvaluator.GetValue(cases, "GetPrivateMethod()"));
-        Assert.AreEqual("ProtectedMethod", ExpressionEvaluator.GetValue(cases, "GetProtectedMethod()"));
-        Assert.AreEqual("PublicMethod", ExpressionEvaluator.GetValue(cases, "GetPublicMethod()"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "GetPrivateMethod()"), Is.EqualTo("PrivateMethod"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "GetProtectedMethod()"), Is.EqualTo("ProtectedMethod"));
+        Assert.That(ExpressionEvaluator.GetValue(cases, "GetPublicMethod()"), Is.EqualTo("PublicMethod"));
     }
 
     internal class AccessVisibilityCases
@@ -2588,8 +2593,8 @@ public sealed class ExpressionEvaluatorTests
 
         public AccessVisibilityCases()
         {
-            Assert.IsTrue(_privateReadonlyField != string.Empty);
-            Assert.IsTrue(_privateField != string.Empty);
+            Assert.That(_privateReadonlyField != string.Empty, Is.True);
+            Assert.That(_privateField != string.Empty, Is.True);
         }
 
         private string PrivateReadonlyProperty { get { return "PrivateReadonlyProperty"; } }
@@ -2616,35 +2621,35 @@ public sealed class ExpressionEvaluatorTests
     public void TestUnionOperator()
     {
         object o = ExpressionEvaluator.GetValue(null, "{1,2,3} + {3,4,5}");
-        Assert.IsInstanceOf(typeof(ISet), o);
+        Assert.That(o, Is.InstanceOf(typeof(ISet)));
         ISet union = (ISet) o;
-        Assert.AreEqual(5, union.Count);
-        Assert.IsTrue(union.Contains(1));
-        Assert.IsTrue(union.Contains(3));
-        Assert.IsTrue(union.Contains(5));
+        Assert.That(union.Count, Is.EqualTo(5));
+        Assert.That(union.Contains(1), Is.True);
+        Assert.That(union.Contains(3), Is.True);
+        Assert.That(union.Contains(5), Is.True);
 
         o = ExpressionEvaluator.GetValue(null, "{1,2,3} + {3,4,5} + {'ivan', 'gox', 'damjao', 5}");
-        Assert.IsInstanceOf(typeof(ISet), o);
+        Assert.That(o, Is.InstanceOf(typeof(ISet)));
         union = (ISet) o;
-        Assert.AreEqual(8, union.Count);
-        Assert.IsTrue(union.Contains(1));
-        Assert.IsTrue(union.Contains("ivan"));
+        Assert.That(union.Count, Is.EqualTo(8));
+        Assert.That(union.Contains(1), Is.True);
+        Assert.That(union.Contains("ivan"), Is.True);
 
         ISet testset = new ListSet();
         testset.AddAll(new int[] { 1, 2, 3, 5, 8 });
         o = ExpressionEvaluator.GetValue(testset, "#this + {1, 2, 13, 15}");
-        Assert.IsInstanceOf(typeof(ISet), o);
+        Assert.That(o, Is.InstanceOf(typeof(ISet)));
         union = (ISet) o;
-        Assert.AreEqual(7, union.Count);
-        Assert.IsTrue(union.Contains(1));
-        Assert.IsTrue(union.Contains(15));
+        Assert.That(union.Count, Is.EqualTo(7));
+        Assert.That(union.Contains(1), Is.True);
+        Assert.That(union.Contains(15), Is.True);
 
         o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} + #{1:'ivan', 5:'five'}");
-        Assert.IsInstanceOf(typeof(IDictionary), o);
+        Assert.That(o, Is.InstanceOf(typeof(IDictionary)));
         IDictionary result = (IDictionary) o;
-        Assert.AreEqual(4, result.Count);
-        Assert.AreEqual("one", result[1]);
-        Assert.AreEqual("five", result[5]);
+        Assert.That(result.Count, Is.EqualTo(4));
+        Assert.That(result[1], Is.EqualTo("one"));
+        Assert.That(result[5], Is.EqualTo("five"));
     }
 
     [Test]
@@ -2657,38 +2662,38 @@ public sealed class ExpressionEvaluatorTests
     public void TestIntersectionOperator()
     {
         object o = ExpressionEvaluator.GetValue(null, "{111, 'ivan', 23, 24} * {111, 11, 'ivan'}");
-        Assert.IsInstanceOf(typeof(ISet), o);
+        Assert.That(o, Is.InstanceOf(typeof(ISet)));
         ISet intersection = (ISet) o;
-        Assert.AreEqual(2, intersection.Count);
-        Assert.IsTrue(intersection.Contains(111));
-        Assert.IsTrue(intersection.Contains("ivan"));
+        Assert.That(intersection.Count, Is.EqualTo(2));
+        Assert.That(intersection.Contains(111), Is.True);
+        Assert.That(intersection.Contains("ivan"), Is.True);
 
         o = ExpressionEvaluator.GetValue(null, "{24, 25, 'aaa' + 'bb'} * {date('2007/2/5').day * 5, 24 - 1}");
-        Assert.IsInstanceOf(typeof(ISet), o);
+        Assert.That(o, Is.InstanceOf(typeof(ISet)));
         intersection = (ISet) o;
-        Assert.AreEqual(1, intersection.Count);
-        Assert.IsTrue(intersection.Contains(25));
+        Assert.That(intersection.Count, Is.EqualTo(1));
+        Assert.That(intersection.Contains(25), Is.True);
 
         ISet testset = new ListSet();
         testset.AddAll(new int[] { 1, 2, 3, 5, 8 });
         o = ExpressionEvaluator.GetValue(testset, "#this * #{1:'one', 10:'ten'}");
-        Assert.IsInstanceOf(typeof(ISet), o);
+        Assert.That(o, Is.InstanceOf(typeof(ISet)));
         intersection = (ISet) o;
-        Assert.AreEqual(1, intersection.Count);
-        Assert.IsTrue(intersection.Contains(1));
+        Assert.That(intersection.Count, Is.EqualTo(1));
+        Assert.That(intersection.Contains(1), Is.True);
 
         o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} * #{1:'ivan', 5:'five'}");
-        Assert.IsInstanceOf(typeof(IDictionary), o);
+        Assert.That(o, Is.InstanceOf(typeof(IDictionary)));
         IDictionary result = (IDictionary) o;
-        Assert.AreEqual(1, result.Count);
-        Assert.AreEqual("one", result[1]);
+        Assert.That(result.Count, Is.EqualTo(1));
+        Assert.That(result[1], Is.EqualTo("one"));
 
         o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} * {1, 2, 5, 7}");
-        Assert.IsInstanceOf(typeof(IDictionary), o);
+        Assert.That(o, Is.InstanceOf(typeof(IDictionary)));
         result = (IDictionary) o;
-        Assert.AreEqual(2, result.Count);
-        Assert.AreEqual("one", result[1]);
-        Assert.AreEqual("two", result[2]);
+        Assert.That(result.Count, Is.EqualTo(2));
+        Assert.That(result[1], Is.EqualTo("one"));
+        Assert.That(result[2], Is.EqualTo("two"));
     }
 
     [Test]
@@ -2701,35 +2706,35 @@ public sealed class ExpressionEvaluatorTests
     public void TestDifferenceOperator()
     {
         object o = ExpressionEvaluator.GetValue(null, "{111, 11} - {14, 12, 11}");
-        Assert.IsInstanceOf(typeof(ISet), o);
+        Assert.That(o, Is.InstanceOf(typeof(ISet)));
         ISet diff = (ISet) o;
-        Assert.AreEqual(1, diff.Count);
-        Assert.IsTrue(diff.Contains(111));
+        Assert.That(diff.Count, Is.EqualTo(1));
+        Assert.That(diff.Contains(111), Is.True);
 
         o = ExpressionEvaluator.GetValue(null, "{111, 11} - {14, 12, 11} - {111}");
-        Assert.IsInstanceOf(typeof(ISet), o);
+        Assert.That(o, Is.InstanceOf(typeof(ISet)));
         diff = (ISet) o;
-        Assert.AreEqual(0, diff.Count);
+        Assert.That(diff.Count, Is.EqualTo(0));
 
         ISet testset = new ListSet();
         testset.AddAll(new int[] { 1, 2, 3, 5, 8 });
         o = ExpressionEvaluator.GetValue(testset, "#this - #{1:'one', 10:'ten'}");
-        Assert.IsInstanceOf(typeof(ISet), o);
+        Assert.That(o, Is.InstanceOf(typeof(ISet)));
         diff = (ISet) o;
-        Assert.AreEqual(4, diff.Count);
-        Assert.IsFalse(diff.Contains(1));
+        Assert.That(diff.Count, Is.EqualTo(4));
+        Assert.That(diff.Contains(1), Is.False);
 
         o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} - #{1:'ivan', 5:'five'}");
-        Assert.IsInstanceOf(typeof(IDictionary), o);
+        Assert.That(o, Is.InstanceOf(typeof(IDictionary)));
         IDictionary result = (IDictionary) o;
-        Assert.AreEqual(2, result.Count);
-        Assert.IsNull(result[1]);
-        Assert.AreEqual("three", result[3]);
+        Assert.That(result.Count, Is.EqualTo(2));
+        Assert.That(result[1], Is.Null);
+        Assert.That(result[3], Is.EqualTo("three"));
 
         o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} - {1, 2, 3, 5, 7}");
-        Assert.IsInstanceOf(typeof(IDictionary), o);
+        Assert.That(o, Is.InstanceOf(typeof(IDictionary)));
         result = (IDictionary) o;
-        Assert.AreEqual(0, result.Count);
+        Assert.That(result.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -2822,19 +2827,19 @@ public sealed class ExpressionEvaluatorTests
     public void TestInheritedMethodInvocation()
     {
         DerivedSingleMethodTestClass testClass = new DerivedSingleMethodTestClass();
-        Assert.AreEqual("Hello World", ExpressionEvaluator.GetValue(testClass, "#root.GetString()"));
+        Assert.That(ExpressionEvaluator.GetValue(testClass, "#root.GetString()"), Is.EqualTo("Hello World"));
     }
 
     [Test]
     public void TestStaticInheritedMethodInvocation()
     {
-        Assert.AreEqual("Hello Static World from SingleMethodTestClass", DerivedSingleMethodTestClass.StaticMethod());
-        Assert.AreEqual("Hello Static World from SingleMethodTestClass", ExpressionEvaluator.GetValue(null, string.Format("T({0}).StaticMethod()", typeof(DerivedSingleMethodTestClass).FullName)));
+        Assert.That(DerivedSingleMethodTestClass.StaticMethod(), Is.EqualTo("Hello Static World from SingleMethodTestClass"));
+        Assert.That(ExpressionEvaluator.GetValue(null, string.Format("T({0}).StaticMethod()", typeof(DerivedSingleMethodTestClass).FullName)), Is.EqualTo("Hello Static World from SingleMethodTestClass"));
 
-        Assert.AreEqual("SingleMethodTestClass.ShadowedStaticMethod", SingleMethodTestClass.ShadowedStaticMethod());
-        Assert.AreEqual("DerivedSingleMethodTestClass.ShadowedStaticMethod", DerivedSingleMethodTestClass.ShadowedStaticMethod());
-        Assert.AreEqual("SingleMethodTestClass.ShadowedStaticMethod", ExpressionEvaluator.GetValue(null, string.Format("T({0}).ShadowedStaticMethod()", typeof(SingleMethodTestClass).FullName)));
-        Assert.AreEqual("DerivedSingleMethodTestClass.ShadowedStaticMethod", ExpressionEvaluator.GetValue(null, string.Format("T({0}).ShadowedStaticMethod()", typeof(DerivedSingleMethodTestClass).FullName)));
+        Assert.That(SingleMethodTestClass.ShadowedStaticMethod(), Is.EqualTo("SingleMethodTestClass.ShadowedStaticMethod"));
+        Assert.That(DerivedSingleMethodTestClass.ShadowedStaticMethod(), Is.EqualTo("DerivedSingleMethodTestClass.ShadowedStaticMethod"));
+        Assert.That(ExpressionEvaluator.GetValue(null, string.Format("T({0}).ShadowedStaticMethod()", typeof(SingleMethodTestClass).FullName)), Is.EqualTo("SingleMethodTestClass.ShadowedStaticMethod"));
+        Assert.That(ExpressionEvaluator.GetValue(null, string.Format("T({0}).ShadowedStaticMethod()", typeof(DerivedSingleMethodTestClass).FullName)), Is.EqualTo("DerivedSingleMethodTestClass.ShadowedStaticMethod"));
     }
 
     private static void DumpNode(AST rootNode, int level)

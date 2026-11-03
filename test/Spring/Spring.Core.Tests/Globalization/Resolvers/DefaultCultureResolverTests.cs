@@ -30,7 +30,7 @@ public sealed class DefaultCultureResolverTests
     public void ResolveCultureYieldsThreadsCultureAfterInitialization()
     {
         DefaultCultureResolver resolver = new DefaultCultureResolver();
-        Assert.AreEqual(Thread.CurrentThread.CurrentUICulture, resolver.ResolveCulture(),
+        Assert.That(resolver.ResolveCulture(), Is.EqualTo(Thread.CurrentThread.CurrentUICulture),
             "Not defaulting to the culture of the current thread.");
     }
 
@@ -38,7 +38,7 @@ public sealed class DefaultCultureResolverTests
     public void DefaultCultureIsNullAfterInitialization()
     {
         DefaultCultureResolver resolver = new DefaultCultureResolver();
-        Assert.IsNull(resolver.DefaultCulture, "Must be null until explicitly set.");
+        Assert.That(resolver.DefaultCulture, Is.Null, "Must be null until explicitly set.");
     }
 
     [Test]
@@ -46,7 +46,7 @@ public sealed class DefaultCultureResolverTests
     {
         DefaultCultureResolver resolver = new DefaultCultureResolver();
         resolver.DefaultCulture = CultureInfo.InvariantCulture;
-        Assert.AreEqual(CultureInfo.InvariantCulture, resolver.ResolveCulture(),
+        Assert.That(resolver.ResolveCulture(), Is.EqualTo(CultureInfo.InvariantCulture),
             "Not returning the DefaultCulture (it must if the DefaultCulture " +
             "property has been set explicitly).");
     }
@@ -56,11 +56,11 @@ public sealed class DefaultCultureResolverTests
     {
         DefaultCultureResolver resolver = new DefaultCultureResolver();
         resolver.DefaultCulture = CultureInfo.InvariantCulture;
-        Assert.AreEqual(CultureInfo.InvariantCulture, resolver.ResolveCulture(),
+        Assert.That(resolver.ResolveCulture(), Is.EqualTo(CultureInfo.InvariantCulture),
             "Not returning the DefaultCulture (it must if the DefaultCulture " +
             "property has been set explicitly).");
         resolver.DefaultCulture = null;
-        Assert.AreEqual(Thread.CurrentThread.CurrentUICulture, resolver.ResolveCulture(),
+        Assert.That(resolver.ResolveCulture(), Is.EqualTo(Thread.CurrentThread.CurrentUICulture),
             "Not falling back to the culture of the current thread after " +
             "DefaultCulture property is nulled out (it must).");
     }

@@ -31,7 +31,7 @@ public class TypeConversionUtilsTests
     public void NullAbleTest()
     {
         object o = TypeConversionUtils.ConvertValueIfNecessary(typeof(DateTime?), "", "bla");
-        Assert.IsNull(o);
+        Assert.That(o, Is.Null);
     }
 
     [Test]
@@ -46,8 +46,7 @@ public class TypeConversionUtilsTests
     [SetCulture("en-US")]
     public void ConvertValueForDecimalMarkWithCommaFails()
     {
-        TestDelegate testDelegate = () => TypeConversionUtils.ConvertValueIfNecessary(typeof(Double), "1,2", "foo");
-        Assert.Throws<TypeMismatchException>(testDelegate);
+        Assert.Throws<TypeMismatchException>(() => TypeConversionUtils.ConvertValueIfNecessary(typeof(Double), "1,2", "foo"));
     }
 
     [Test]

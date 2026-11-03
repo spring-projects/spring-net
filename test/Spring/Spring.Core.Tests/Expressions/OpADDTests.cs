@@ -31,7 +31,7 @@ public class OpADDTests
         add.addChild(new StringLiteralNode("20"));
         add.addChild(new StringLiteralNode("30"));
         object result = add.GetValue(null, null);
-        Assert.AreEqual("2030", result);
+        Assert.That(result, Is.EqualTo("2030"));
     }
 
     [Test]
@@ -41,6 +41,6 @@ public class OpADDTests
         add.addChild(new IntLiteralNode("20"));
         add.addChild(new IntLiteralNode("30"));
         object result = add.GetValue(null, null);
-        Assert.AreEqual(50, result);
+        Assert.That(result, Is.EqualTo(50));
     }
 }

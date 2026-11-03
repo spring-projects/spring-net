@@ -72,7 +72,7 @@ public class FilteringFormatterTests
         A.CallTo(() => formatter.DoFilterValueToFormat(outputValue)).Returns(filteredOutputValue);
         A.CallTo(() => underlyingFormatter.Format(filteredOutputValue)).Returns(inputText);
 
-        Assert.AreSame(outputValue, formatter.Parse(inputText));
-        Assert.AreEqual(inputText, formatter.Format(outputValue));
+        Assert.That(formatter.Parse(inputText), Is.SameAs(outputValue));
+        Assert.That(formatter.Format(outputValue), Is.EqualTo(inputText));
     }
 }

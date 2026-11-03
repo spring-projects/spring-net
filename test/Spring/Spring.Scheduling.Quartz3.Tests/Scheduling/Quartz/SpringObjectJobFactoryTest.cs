@@ -49,7 +49,7 @@ public class SpringObjectJobFactoryTest
         TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof(NoOpJob), trigger);
 
         IJob job = factory.NewJob(bundle, null);
-        Assert.IsNotNull(job, "Created job was null");
+        Assert.That(job, Is.Not.Null, "Created job was null");
     }
 
     /// <summary>
@@ -67,9 +67,9 @@ public class SpringObjectJobFactoryTest
         factory.SchedulerContext = new SchedulerContext(items);
         InjectableJob job = (InjectableJob) factory.NewJob(bundle, null);
 
-        Assert.IsNotNull(job, "Created job was null");
-        Assert.AreEqual("bar", job.Foo, "string injection failed");
-        Assert.AreEqual(123, job.Number, "integer injection failed");
+        Assert.That(job, Is.Not.Null, "Created job was null");
+        Assert.That(job.Foo, Is.EqualTo("bar"), "string injection failed");
+        Assert.That(job.Number, Is.EqualTo(123), "integer injection failed");
     }
 
     /// <summary>
@@ -85,9 +85,9 @@ public class SpringObjectJobFactoryTest
         TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof(InjectableJob), trigger);
 
         InjectableJob job = (InjectableJob) factory.NewJob(bundle, null);
-        Assert.IsNotNull(job, "Created job was null");
-        Assert.AreEqual(123, job.Number, "integer injection failed");
-        Assert.IsNull(job.Foo, "foo was injected when it was not supposed to    ");
+        Assert.That(job, Is.Not.Null, "Created job was null");
+        Assert.That(job.Number, Is.EqualTo(123), "integer injection failed");
+        Assert.That(job.Foo, Is.Null, "foo was injected when it was not supposed to    ");
     }
 }
 

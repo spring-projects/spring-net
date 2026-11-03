@@ -54,7 +54,7 @@ public class BaseCacheAttributeTests
     public void CacheNameIsSet()
     {
         att.CacheName = "MyCache";
-        Assert.AreEqual("MyCache", att.CacheName);
+        Assert.That(att.CacheName, Is.EqualTo("MyCache"));
     }
 
     [Test]
@@ -62,7 +62,7 @@ public class BaseCacheAttributeTests
     {
         att.Key = "TestProperty";
         string result = att.KeyExpression.GetValue(this) as string;
-        Assert.AreEqual("OK", result);
+        Assert.That(result, Is.EqualTo("OK"));
     }
 
     [Test]
@@ -70,14 +70,14 @@ public class BaseCacheAttributeTests
     {
         att.Condition = "TestProperty";
         string result = att.ConditionExpression.GetValue(this) as string;
-        Assert.AreEqual("OK", result);
+        Assert.That(result, Is.EqualTo("OK"));
     }
 
     [Test]
     public void AllowsForExtendedTimeSpanConverterSyntax()
     {
         att.TimeToLive = "5ms";
-        Assert.AreEqual(new TimeSpan(0, 0, 0, 0, 5), att.TimeToLiveTimeSpan);
+        Assert.That(att.TimeToLiveTimeSpan, Is.EqualTo(new TimeSpan(0, 0, 0, 0, 5)));
     }
 
     [Test]

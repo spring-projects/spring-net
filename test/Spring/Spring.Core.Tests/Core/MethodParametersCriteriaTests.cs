@@ -32,7 +32,7 @@ public sealed class MethodParametersCriteriaTests
     public void IsNotSatisfiedWithNull()
     {
         MethodParametersCriteria criteria = new MethodParametersCriteria();
-        Assert.IsFalse(criteria.IsSatisfied(null), "Was satisified with null.");
+        Assert.That(criteria.IsSatisfied(null), Is.False, "Was satisified with null.");
     }
 
     [Test]
@@ -40,7 +40,7 @@ public sealed class MethodParametersCriteriaTests
     {
         MethodParametersCriteria criteria = new MethodParametersCriteria();
         MethodInfo method = GetType().GetMethod("Foo");
-        Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes no parameters by default.");
+        Assert.That(criteria.IsSatisfied(method), Is.True, "Was not satisified with a method that takes no parameters by default.");
     }
 
     [Test]
@@ -49,7 +49,7 @@ public sealed class MethodParametersCriteriaTests
         MethodParametersCriteria criteria = new MethodParametersCriteria(
             new Type[] { typeof(object), typeof(object), typeof(TestObject) });
         MethodInfo method = GetType().GetMethod("BoJangles");
-        Assert.IsFalse(criteria.IsSatisfied(method), "Was satisified with a method that only matches on the final parameter.");
+        Assert.That(criteria.IsSatisfied(method), Is.False, "Was satisified with a method that only matches on the final parameter.");
     }
 
     [Test]
@@ -58,10 +58,10 @@ public sealed class MethodParametersCriteriaTests
         MethodParametersCriteria criteria = new MethodParametersCriteria(
             new Type[] { typeof(string), typeof(DBNull), typeof(TestObject) });
         MethodInfo method = GetType().GetMethod("BoJangles");
-        Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes a whole buncha parameters.");
+        Assert.That(criteria.IsSatisfied(method), Is.True, "Was not satisified with a method that takes a whole buncha parameters.");
 
         method = GetType().GetMethod("BadBobbyBoJangles");
-        Assert.IsFalse(criteria.IsSatisfied(method), "Was satisified with a (bad) method that takes a whole buncha parameters.");
+        Assert.That(criteria.IsSatisfied(method), Is.False, "Was satisified with a (bad) method that takes a whole buncha parameters.");
     }
 
     [Test]
@@ -72,7 +72,7 @@ public sealed class MethodParametersCriteriaTests
         MethodParametersCriteria criteria
             = new MethodParametersCriteria(new Type[] { typeof(TestObject) });
         MethodInfo method = GetType().GetMethod("Diddly");
-        Assert.IsFalse(criteria.IsSatisfied(method), "Was not satisified with a method that takes a base class as a parameter.");
+        Assert.That(criteria.IsSatisfied(method), Is.False, "Was not satisified with a method that takes a base class as a parameter.");
     }
 
     [Test]
@@ -80,7 +80,7 @@ public sealed class MethodParametersCriteriaTests
     {
         MethodParametersCriteria criteria = new MethodParametersCriteria(new Type[] { typeof(int), typeof(string[]) });
         MethodInfo method = GetType().GetMethod("ParamsParameters");
-        Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes a parameter array ('params') as a parameter.");
+        Assert.That(criteria.IsSatisfied(method), Is.True, "Was not satisified with a method that takes a parameter array ('params') as a parameter.");
     }
 
     // some methods for testing signatures...

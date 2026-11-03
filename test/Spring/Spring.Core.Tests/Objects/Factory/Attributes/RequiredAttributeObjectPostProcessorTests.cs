@@ -45,9 +45,9 @@ public class RequiredAttributeObjectPostProcessorTests
         catch (ObjectCreationException ex)
         {
             string message = ex.InnerException.Message;
-            Assert.IsTrue(message.IndexOf("Property") > -1);
-            Assert.IsTrue(message.IndexOf("Age") > -1);
-            Assert.IsTrue(message.IndexOf("testObject") > -1);
+            Assert.That(message.IndexOf("Property") > -1, Is.True);
+            Assert.That(message.IndexOf("Age") > -1, Is.True);
+            Assert.That(message.IndexOf("testObject") > -1, Is.True);
         }
     }
 
@@ -64,11 +64,11 @@ public class RequiredAttributeObjectPostProcessorTests
         catch (ObjectCreationException ex)
         {
             string message = ex.InnerException.Message;
-            Assert.IsTrue(message.IndexOf("Properties") > -1);
-            Assert.IsTrue(message.IndexOf("Age") > -1);
-            Assert.IsTrue(message.IndexOf("FavoriteColor") > -1);
-            Assert.IsTrue(message.IndexOf("JobTitle") > -1);
-            Assert.IsTrue(message.IndexOf("testObject") > -1);
+            Assert.That(message.IndexOf("Properties") > -1, Is.True);
+            Assert.That(message.IndexOf("Age") > -1, Is.True);
+            Assert.That(message.IndexOf("FavoriteColor") > -1, Is.True);
+            Assert.That(message.IndexOf("JobTitle") > -1, Is.True);
+            Assert.That(message.IndexOf("testObject") > -1, Is.True);
         }
     }
 
@@ -79,8 +79,8 @@ public class RequiredAttributeObjectPostProcessorTests
             new XmlApplicationContext(false,
                 "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/RequiredWithAllRequiredPropertiesProvided.xml");
         RequiredTestObject to = (RequiredTestObject) ctx.GetObject("testObject");
-        Assert.AreEqual(24, to.Age);
-        Assert.AreEqual("Blue", to.GetFavoriteColor());
+        Assert.That(to.Age, Is.EqualTo(24));
+        Assert.That(to.GetFavoriteColor(), Is.EqualTo("Blue"));
     }
 
     [Test]
@@ -91,7 +91,7 @@ public class RequiredAttributeObjectPostProcessorTests
             if (pi.Name.Equals("Age"))
             {
                 object[] attribs = pi.GetCustomAttributes(typeof(RequiredAttribute), true);
-                Assert.Greater(attribs.Length, 0);
+                Assert.That(attribs.Length, Is.GreaterThan(0));
             }
         }
     }
@@ -109,9 +109,9 @@ public class RequiredAttributeObjectPostProcessorTests
         catch (ObjectCreationException ex)
         {
             string message = ex.InnerException.Message;
-            Assert.IsTrue(message.IndexOf("Property") > -1);
-            Assert.IsTrue(message.IndexOf("Name") > -1);
-            Assert.IsTrue(message.IndexOf("testObject") > -1);
+            Assert.That(message.IndexOf("Property") > -1, Is.True);
+            Assert.That(message.IndexOf("Name") > -1, Is.True);
+            Assert.That(message.IndexOf("testObject") > -1, Is.True);
         }
     }
 }

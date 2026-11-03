@@ -43,29 +43,29 @@ public class ObjectNameGenerationTests
 
         string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
         DependenciesObject topLevel1 = (DependenciesObject) objectFactory.GetObject(targetName);
-        Assert.IsNotNull(topLevel1);
+        Assert.That(topLevel1, Is.Not.Null);
 
         targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "1";
         DependenciesObject topLevel2 = (DependenciesObject) objectFactory.GetObject(targetName);
-        Assert.IsNotNull(topLevel1);
+        Assert.That(topLevel1, Is.Not.Null);
 
         targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "2";
         DependenciesObject topLevel3 = (DependenciesObject) objectFactory.GetObject(targetName);
-        Assert.IsNotNull(topLevel1);
+        Assert.That(topLevel1, Is.Not.Null);
 
         string childClassName = typeof(TestObject).FullName;
         TestObject child1 = (TestObject) topLevel1.Spouse;
-        Assert.IsNotNull(child1);
-        Assert.IsTrue(child1.ObjectName.IndexOf(childClassName) != -1);
+        Assert.That(child1, Is.Not.Null);
+        Assert.That(child1.ObjectName.IndexOf(childClassName) != -1, Is.True);
 
         TestObject child2 = (TestObject) topLevel2.Spouse;
-        Assert.IsNotNull(child2);
-        Assert.IsTrue(child2.ObjectName.IndexOf(childClassName) != -1);
+        Assert.That(child2, Is.Not.Null);
+        Assert.That(child2.ObjectName.IndexOf(childClassName) != -1, Is.True);
 
         TestObject child3 = (TestObject) topLevel3.Spouse;
-        Assert.IsNotNull(child3);
-        Assert.IsTrue(child3.ObjectName.IndexOf(childClassName) != -1);
+        Assert.That(child3, Is.Not.Null);
+        Assert.That(child3.ObjectName.IndexOf(childClassName) != -1, Is.True);
 
-        Assert.AreNotEqual(child1.ObjectName, child2.ObjectName);
+        Assert.That(child2.ObjectName, Is.Not.EqualTo(child1.ObjectName));
     }
 }

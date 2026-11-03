@@ -46,11 +46,11 @@ public sealed class MethodReplacerTests
         factory.RegisterObjectDefinition("replacer", replacerDef);
         INewsFeedManager manager = (INewsFeedManager) factory["manager"];
         NewsFeed feed1 = manager.CreateNewsFeed();
-        Assert.IsNotNull(feed1, "The CreateNewsFeed() method is not being replaced.");
-        Assert.AreEqual(NewsFeedFactory.DefaultName, feed1.Name);
+        Assert.That(feed1, Is.Not.Null, "The CreateNewsFeed() method is not being replaced.");
+        Assert.That(feed1.Name, Is.EqualTo(NewsFeedFactory.DefaultName));
         NewsFeed feed2 = manager.CreateNewsFeed();
         // NewsFeedFactory always yields a new NewsFeed (see class definition below)...
-        Assert.IsFalse(ReferenceEquals(feed1, feed2));
+        Assert.That(ReferenceEquals(feed1, feed2), Is.False);
     }
 
     [Test]
@@ -66,11 +66,11 @@ public sealed class MethodReplacerTests
         factory.RegisterObjectDefinition("replacer", replacerDef);
         ProtectedReturnsNullNewsFeedManagerWithVirtualMethod manager = (ProtectedReturnsNullNewsFeedManagerWithVirtualMethod) factory["manager"];
         NewsFeed feed1 = manager.GrabNewsFeed();
-        Assert.IsNotNull(feed1, "The protected CreateNewsFeed() method is not being replaced.");
-        Assert.AreEqual(NewsFeedFactory.DefaultName, feed1.Name);
+        Assert.That(feed1, Is.Not.Null, "The protected CreateNewsFeed() method is not being replaced.");
+        Assert.That(feed1.Name, Is.EqualTo(NewsFeedFactory.DefaultName));
         NewsFeed feed2 = manager.GrabNewsFeed();
         // NewsFeedFactory always yields a new NewsFeed (see class definition below)...
-        Assert.IsFalse(ReferenceEquals(feed1, feed2));
+        Assert.That(ReferenceEquals(feed1, feed2), Is.False);
     }
 
     [Test]
@@ -89,11 +89,11 @@ public sealed class MethodReplacerTests
         factory.RegisterObjectDefinition("replacer", replacerDef);
         NewsFeedManagerWith_Replace_MethodThatTakesArguments manager = (NewsFeedManagerWith_Replace_MethodThatTakesArguments) factory["manager"];
         NewsFeed feed1 = manager.CreateNewsFeed("So sad... to be all alone in the world");
-        Assert.IsNotNull(feed1, "The CreateNewsFeed() method is not being replaced.");
-        Assert.AreEqual("So sad... to be all alone in the world", feed1.Name);
+        Assert.That(feed1, Is.Not.Null, "The CreateNewsFeed() method is not being replaced.");
+        Assert.That(feed1.Name, Is.EqualTo("So sad... to be all alone in the world"));
         NewsFeed feed2 = manager.CreateNewsFeed("Oh Muzzy!");
         // NewsFeedFactory always yields a new NewsFeed (see class definition below)...
-        Assert.IsFalse(ReferenceEquals(feed1, feed2));
+        Assert.That(ReferenceEquals(feed1, feed2), Is.False);
     }
 
     [Test]
@@ -112,11 +112,11 @@ public sealed class MethodReplacerTests
         factory.RegisterObjectDefinition("replacer", replacerDef);
         NewsFeedManagerWith_Replace_MethodThatTakesArguments manager = (NewsFeedManagerWith_Replace_MethodThatTakesArguments) factory["manager"];
         NewsFeed feed1 = manager.CreateNewsFeed("So sad... to be all alone in the world");
-        Assert.IsNotNull(feed1, "The CreateNewsFeed() method is not being replaced.");
-        Assert.AreEqual("So sad... to be all alone in the world", feed1.Name);
+        Assert.That(feed1, Is.Not.Null, "The CreateNewsFeed() method is not being replaced.");
+        Assert.That(feed1.Name, Is.EqualTo("So sad... to be all alone in the world"));
         NewsFeed feed2 = manager.CreateNewsFeed("Oh Muzzy!");
         // NewsFeedFactory always yields a new NewsFeed (see class definition below)...
-        Assert.IsFalse(ReferenceEquals(feed1, feed2));
+        Assert.That(ReferenceEquals(feed1, feed2), Is.False);
     }
 
     [Test]
@@ -179,17 +179,17 @@ public sealed class MethodReplacerTests
 
         INewsFeedManager newsFeedManager = manager;
         NewsFeed feed1 = newsFeedManager.CreateNewsFeed();
-        Assert.IsNotNull(feed1, "The CreateNewsFeed() method is not being replaced.");
+        Assert.That(feed1, Is.Not.Null, "The CreateNewsFeed() method is not being replaced.");
         NewsFeed feed2 = newsFeedManager.CreateNewsFeed();
         // assert that the object (prototype) is definitely being looked up each time...
-        Assert.IsFalse(ReferenceEquals(feed1, feed2));
+        Assert.That(ReferenceEquals(feed1, feed2), Is.False);
 
         ITestObjectFactory toFactory = manager;
         ITestObject to1 = toFactory.CreateTestObject();
-        Assert.IsNotNull(to1, "The CreateTestObject() method is not being replaced.");
+        Assert.That(to1, Is.Not.Null, "The CreateTestObject() method is not being replaced.");
         ITestObject to2 = toFactory.CreateTestObject();
         // assert that the object (prototype) is definitely being looked up each time...
-        Assert.IsFalse(ReferenceEquals(to1, to2));
+        Assert.That(ReferenceEquals(to1, to2), Is.False);
     }
 
     /// <summary>
@@ -216,17 +216,17 @@ public sealed class MethodReplacerTests
 
         INewsFeedManager newsFeedManager = manager;
         NewsFeed feed1 = newsFeedManager.CreateNewsFeed();
-        Assert.IsNotNull(feed1, "The CreateNewsFeed() method is not being replaced.");
+        Assert.That(feed1, Is.Not.Null, "The CreateNewsFeed() method is not being replaced.");
         NewsFeed feed2 = newsFeedManager.CreateNewsFeed();
         // assert that the object (prototype) is definitely being looked up each time...
-        Assert.IsFalse(ReferenceEquals(feed1, feed2));
+        Assert.That(ReferenceEquals(feed1, feed2), Is.False);
 
         ITestObjectFactory toFactory = manager;
         ITestObject to1 = toFactory.CreateTestObject();
-        Assert.IsNotNull(to1, "The CreateTestObject() method is not being replaced.");
+        Assert.That(to1, Is.Not.Null, "The CreateTestObject() method is not being replaced.");
         ITestObject to2 = toFactory.CreateTestObject();
         // assert that the object (prototype) is definitely being looked up each time...
-        Assert.IsFalse(ReferenceEquals(to1, to2));
+        Assert.That(ReferenceEquals(to1, to2), Is.False);
     }
 
     /// <summary>
@@ -249,10 +249,10 @@ public sealed class MethodReplacerTests
             factory.RegisterObjectDefinition("feed", feedDef);
             INewsFeedManager manager = (INewsFeedManager) factory["manager"];
             NewsFeed feed1 = manager.CreateNewsFeed();
-            Assert.IsNotNull(feed1, "The CreateNewsFeed() method is not being replaced.");
+            Assert.That(feed1, Is.Not.Null, "The CreateNewsFeed() method is not being replaced.");
             NewsFeed feed2 = manager.CreateNewsFeed();
             // assert that the object (prototype) is definitely being looked up each time...
-            Assert.IsFalse(ReferenceEquals(feed1, feed2));
+            Assert.That(ReferenceEquals(feed1, feed2), Is.False);
         }
         catch (Exception ex)
         {
@@ -285,12 +285,12 @@ public sealed class MethodReplacerTests
         factory.RegisterObjectDefinition("manager", managerDef);
         factory.RegisterObjectDefinition("feed", feedDef);
         ReturnsNullNewsFeedManager manager = (ReturnsNullNewsFeedManager) factory["manager"];
-        Assert.AreEqual("Bingo", manager.Name);
+        Assert.That(manager.Name, Is.EqualTo("Bingo"));
         NewsFeed feed1 = manager.CreateNewsFeed();
-        Assert.IsNotNull(feed1, "The CreateNewsFeed() method is not being replaced.");
+        Assert.That(feed1, Is.Not.Null, "The CreateNewsFeed() method is not being replaced.");
         NewsFeed feed2 = manager.CreateNewsFeed();
         // assert that the object (prototype) is definitely being looked up each time...
-        Assert.IsFalse(ReferenceEquals(feed1, feed2));
+        Assert.That(ReferenceEquals(feed1, feed2), Is.False);
     }
 
     [Test]
@@ -308,10 +308,10 @@ public sealed class MethodReplacerTests
         factory.RegisterObjectDefinition("feed", feedDef);
         INewsFeedManager manager = (INewsFeedManager) factory["manager"];
         NewsFeed feed1 = manager.CreateNewsFeed();
-        Assert.IsNotNull(feed1, "The CreateNewsFeed() method is not being replaced.");
+        Assert.That(feed1, Is.Not.Null, "The CreateNewsFeed() method is not being replaced.");
         NewsFeed feed2 = manager.CreateNewsFeed();
         // assert that the object (prototype) is definitely being looked up each time...
-        Assert.IsFalse(ReferenceEquals(feed1, feed2));
+        Assert.That(ReferenceEquals(feed1, feed2), Is.False);
     }
 
     /// <summary>
@@ -332,10 +332,10 @@ public sealed class MethodReplacerTests
         factory.RegisterObjectDefinition("feed", feedDef);
         ProtectedReturnsNullNewsFeedManagerWithVirtualMethod manager = (ProtectedReturnsNullNewsFeedManagerWithVirtualMethod) factory["manager"];
         NewsFeed feed1 = manager.GrabNewsFeed();
-        Assert.IsNotNull(feed1, "The CreateNewsFeed() method is not being replaced.");
+        Assert.That(feed1, Is.Not.Null, "The CreateNewsFeed() method is not being replaced.");
         NewsFeed feed2 = manager.GrabNewsFeed();
         // assert that the object (prototype) is definitely being looked up each time...
-        Assert.IsFalse(ReferenceEquals(feed1, feed2));
+        Assert.That(ReferenceEquals(feed1, feed2), Is.False);
     }
 
     [Test]

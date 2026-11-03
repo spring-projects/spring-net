@@ -106,7 +106,7 @@ public class MessageTemplateTests
             return null;
         });
 
-        Assert.AreEqual(priority, MsgPriority.Normal);
+        Assert.That(priority, Is.EqualTo(MsgPriority.Normal));
         AssertCloseProducerSessionConnection(mockProducer);
     }
 
@@ -184,9 +184,9 @@ public class MessageTemplateTests
                 return null;
             });
 
-            Assert.AreSame(mockSession, ConnectionFactoryUtils.GetTransactionalSession(scf, null, false));
+            Assert.That(ConnectionFactoryUtils.GetTransactionalSession(scf, null, false), Is.SameAs(mockSession));
             var session = ConnectionFactoryUtils.GetTransactionalSession(scf, scf.CreateConnection(), false);
-            Assert.AreSame(mockSession, session);
+            Assert.That(session, Is.SameAs(mockSession));
 
             //In Java this test was doing 'double-duty' and testing TransactionAwareConnectionFactoryProxy, which has
             //not been implemented in .NET
@@ -198,7 +198,7 @@ public class MessageTemplateTests
             });
 
             IList synchs = TransactionSynchronizationManager.Synchronizations;
-            Assert.AreEqual(1, synchs.Count);
+            Assert.That(synchs.Count, Is.EqualTo(1));
             ITransactionSynchronization synch = (ITransactionSynchronization) synchs[0];
             synch.BeforeCommit(false);
             synch.BeforeCompletion();
@@ -208,12 +208,12 @@ public class MessageTemplateTests
         finally
         {
             TransactionSynchronizationManager.ClearSynchronization();
-            //Assert.IsTrue(TransactionSynchronizationManager.ResourceDictionary.Count == 0);
-            //Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
+            //Assert.That(TransactionSynchronizationManager.ResourceDictionary.Count == 0, Is.True);
+            //Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.False);
             scf.Dispose();
         }
 
-        Assert.IsTrue(TransactionSynchronizationManager.ResourceDictionary.Count == 0);
+        Assert.That(TransactionSynchronizationManager.ResourceDictionary.Count == 0, Is.True);
 
         A.CallTo(() => mockConnection.Start()).MustHaveHappenedTwiceExactly();
 

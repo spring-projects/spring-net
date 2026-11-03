@@ -58,14 +58,14 @@ public class DistributedTxMessageListenerContainerTests : AbstractDependencyInje
     public void SendAndAsyncReceiveWithExceptionHandling()
     {
         MessageQueueTemplate q = applicationContext["queueTemplate"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
 
         MessageQueueTemplate retryQ = applicationContext["retryQueueTemplate"] as MessageQueueTemplate;
-        Assert.IsNotNull(retryQ);
+        Assert.That(retryQ, Is.Not.Null);
 
         q.ConvertAndSend("Goodbye World 1");
 
-        Assert.AreEqual(0, listener.MessageCount, "PRECONDITION FAILURE: Unable to send the message!");
+        Assert.That(listener.MessageCount, Is.EqualTo(0), "PRECONDITION FAILURE: Unable to send the message!");
 
         distributedTxMessageListenerContainer.Start();
 
@@ -76,10 +76,10 @@ public class DistributedTxMessageListenerContainerTests : AbstractDependencyInje
         Thread.Sleep(2500);
 
         object msg = retryQ.ReceiveAndConvert();
-        Assert.IsNotNull(msg);
+        Assert.That(msg, Is.Not.Null);
         string textMsg = msg as string;
-        Assert.IsNotNull(textMsg);
-        Assert.AreEqual("Goodbye World 1", textMsg);
+        Assert.That(textMsg, Is.Not.Null);
+        Assert.That(textMsg, Is.EqualTo("Goodbye World 1"));
     }
 
     [Test]
@@ -93,14 +93,14 @@ public class DistributedTxMessageListenerContainerTests : AbstractDependencyInje
         int expectedMessageCount = MESSAGE_COUNT; // +(MESSAGE_COUNT * EXCEPTION_QUEUE_RETRY_COUNT);
 
         MessageQueueTemplate q = applicationContext["queueTemplate"] as MessageQueueTemplate;
-        Assert.IsNotNull(q);
+        Assert.That(q, Is.Not.Null);
 
         for (int i = 0; i < MESSAGE_COUNT; i++)
         {
             q.ConvertAndSend(String.Format("Hello World {0}", (i + 1)));
         }
 
-        Assert.AreEqual(0, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(0));
 
         distributedTxMessageListenerContainer.Start();
 
@@ -124,7 +124,7 @@ public class DistributedTxMessageListenerContainerTests : AbstractDependencyInje
         System.Diagnostics.Debug.WriteLine("elapsed time = " + timer.ElapsedMilliseconds);
         */
 
-        Assert.AreEqual(expectedMessageCount, listener.MessageCount);
+        Assert.That(listener.MessageCount, Is.EqualTo(expectedMessageCount));
 
         distributedTxMessageListenerContainer.Stop();
         distributedTxMessageListenerContainer.Shutdown();
@@ -133,10 +133,10 @@ public class DistributedTxMessageListenerContainerTests : AbstractDependencyInje
         MessageQueueTemplate responseQ = applicationContext["responseQueueTemplate"] as MessageQueueTemplate;
         responseQ.ReceiveTimeout = new System.TimeSpan(0, 0, 2);
 
-        Assert.IsNotNull(responseQ);
+        Assert.That(responseQ, Is.Not.Null);
         for (int i = 0; i < MESSAGE_COUNT; i++)
         {
-            Assert.IsNotNull(responseQ.ReceiveAndConvert());
+            Assert.That(responseQ.ReceiveAndConvert(), Is.Not.Null);
         }
     }
 

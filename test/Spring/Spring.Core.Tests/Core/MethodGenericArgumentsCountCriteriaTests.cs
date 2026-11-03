@@ -30,9 +30,9 @@ public sealed class MethodGenericArgumentsCountCriteriaTests
     public void Instantiation()
     {
         MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
-        Assert.AreEqual(0, criteria.ExpectedGenericArgumentCount);
+        Assert.That(criteria.ExpectedGenericArgumentCount, Is.EqualTo(0));
         criteria = new MethodGenericArgumentsCountCriteria(10);
-        Assert.AreEqual(10, criteria.ExpectedGenericArgumentCount);
+        Assert.That(criteria.ExpectedGenericArgumentCount, Is.EqualTo(10));
     }
 
     [Test]
@@ -53,22 +53,22 @@ public sealed class MethodGenericArgumentsCountCriteriaTests
     {
         MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
         MethodInfo method = GetType().GetMethod("NoGenericArgument", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
 
         criteria = new MethodGenericArgumentsCountCriteria(1);
         method = GetType().GetMethod("OneGenericArgument", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
 
         criteria = new MethodGenericArgumentsCountCriteria(2);
         method = GetType().GetMethod("TwoGenericArguments", BindingFlags.Public | BindingFlags.Instance);
-        Assert.IsTrue(criteria.IsSatisfied(method));
+        Assert.That(criteria.IsSatisfied(method), Is.True);
     }
 
     [Test]
     public void IsNotSatisfiedWithNull()
     {
         MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
-        Assert.IsFalse(criteria.IsSatisfied(null));
+        Assert.That(criteria.IsSatisfied(null), Is.False);
     }
 
     // some methods for testing signatures...

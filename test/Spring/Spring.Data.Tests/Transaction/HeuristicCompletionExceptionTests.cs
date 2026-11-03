@@ -9,27 +9,27 @@ public class HeuristicCompletionExceptionTests
     public void TransactionOutcomeStateGetter()
     {
         HeuristicCompletionException ex = new HeuristicCompletionException(TransactionOutcomeState.Unknown, new Exception());
-        Assert.IsTrue(TransactionOutcomeState.Unknown == ex.OutcomeState);
+        Assert.That(TransactionOutcomeState.Unknown == ex.OutcomeState, Is.True);
     }
 
     [Test]
     public void TransactionOutcomeStateGetterCommittted()
     {
         HeuristicCompletionException ex = new HeuristicCompletionException(TransactionOutcomeState.Committed, new Exception());
-        Assert.IsTrue(TransactionOutcomeState.Committed == ex.OutcomeState);
+        Assert.That(TransactionOutcomeState.Committed == ex.OutcomeState, Is.True);
     }
 
     [Test]
     public void TransactionOutcomeStateGetterMixed()
     {
         HeuristicCompletionException ex = new HeuristicCompletionException(TransactionOutcomeState.Mixed, new Exception());
-        Assert.IsTrue(TransactionOutcomeState.Mixed == ex.OutcomeState);
+        Assert.That(TransactionOutcomeState.Mixed == ex.OutcomeState, Is.True);
     }
 
     [Test]
     public void TransactionOutcomeStateGetterRolledback()
     {
         HeuristicCompletionException ex = new HeuristicCompletionException(TransactionOutcomeState.Rolledback, new Exception());
-        Assert.IsTrue(TransactionOutcomeState.Rolledback == ex.OutcomeState);
+        Assert.That(TransactionOutcomeState.Rolledback == ex.OutcomeState, Is.True);
     }
 }

@@ -45,19 +45,19 @@ public class TypeMapperTests
     [Test]
     public void FromTypeTestsForDictionary()
     {
-        Assert.AreEqual("Hashtable", tm.FromType(typeof(Hashtable)));
+        Assert.That(tm.FromType(typeof(Hashtable)), Is.EqualTo("Hashtable"));
     }
 
     [Test]
     public void ToTypeForDictionary()
     {
-        Assert.AreEqual(typeof(Hashtable), tm.ToType("Hashtable"));
+        Assert.That(tm.ToType("Hashtable"), Is.EqualTo(typeof(Hashtable)));
     }
 
     [Test]
     public void FromTypeForNonRegisteredType()
     {
-        Assert.AreEqual("TestObject", tm.FromType(typeof(TestObject)));
+        Assert.That(tm.FromType(typeof(TestObject)), Is.EqualTo("TestObject"));
     }
 
     [Test]
@@ -66,7 +66,7 @@ public class TypeMapperTests
         tm.DefaultNamespace = "Spring.Objects";
         tm.DefaultAssemblyName = "Spring.Core.Tests";
         Type resolvedTyped = tm.ToType("TestObject");
-        Assert.AreEqual(typeof(TestObject), resolvedTyped);
+        Assert.That(resolvedTyped, Is.EqualTo(typeof(TestObject)));
     }
 
     [Test]
@@ -81,7 +81,7 @@ public class TypeMapperTests
         tm.UseAssemblyQualifiedName = true;
         string typeAsString = tm.FromType(typeof(TestObject));
         Type resolvedTyped = tm.ToType(typeAsString);
-        Assert.AreEqual(typeof(TestObject), resolvedTyped);
+        Assert.That(resolvedTyped, Is.EqualTo(typeof(TestObject)));
     }
 
     [Test]
@@ -90,8 +90,8 @@ public class TypeMapperTests
         tm.IdTypeMapping.Add("1", typeof(TestObject));
         tm.AfterPropertiesSet();
         string typeAsString = tm.FromType(typeof(TestObject));
-        Assert.AreEqual("1", typeAsString);
+        Assert.That(typeAsString, Is.EqualTo("1"));
         Type resolvedType = tm.ToType("1");
-        Assert.AreEqual(typeof(TestObject), resolvedType);
+        Assert.That(resolvedType, Is.EqualTo(typeof(TestObject)));
     }
 }

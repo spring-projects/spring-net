@@ -66,8 +66,8 @@ public sealed class ProxyFactoryObjectTests
         }
         catch (Exception ex)
         {
-            Assert.AreEqual(expectedException, ex, "exception matches");
-            Assert.AreEqual(1, test1.ExceptionMethodCallCount);
+            Assert.That(ex, Is.EqualTo(expectedException), "exception matches");
+            Assert.That(test1.ExceptionMethodCallCount, Is.EqualTo(1));
         }
     }
 
@@ -75,7 +75,7 @@ public sealed class ProxyFactoryObjectTests
     public void IsCompositionProxy()
     {
         ITestObject test1 = (ITestObject) factory.GetObject("test1");
-        Assert.IsTrue(AopUtils.IsCompositionAopProxy(test1), "test1 is a composition proxy");
+        Assert.That(AopUtils.IsCompositionAopProxy(test1), Is.True, "test1 is a composition proxy");
     }
 
     [Test]
@@ -87,14 +87,14 @@ public sealed class ProxyFactoryObjectTests
 
         // We have a counting before advice here
         CountingBeforeAdvice cba = (CountingBeforeAdvice) bf.GetObject("countingBeforeAdvice");
-        Assert.AreEqual(0, cba.GetCalls());
+        Assert.That(cba.GetCalls(), Is.EqualTo(0));
 
         ITestObject tb = (ITestObject) bf.GetObject("directTarget");
-        Assert.IsTrue(tb.Name.Equals("Adam"));
-        Assert.AreEqual(1, cba.GetCalls());
+        Assert.That(tb.Name.Equals("Adam"), Is.True);
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
 
         ProxyFactoryObject pfb = (ProxyFactoryObject) bf.GetObject("&directTarget");
-        Assert.IsTrue(typeof(ITestObject).IsAssignableFrom(pfb.ObjectType), "Has correct object type");
+        Assert.That(typeof(ITestObject).IsAssignableFrom(pfb.ObjectType), Is.True, "Has correct object type");
     }
 
     [Test]
@@ -104,9 +104,9 @@ public sealed class ProxyFactoryObjectTests
             new ReadOnlyXmlTestResource("proxyFactoryTargetSourceTests.xml",
                 GetType()));
         ITestObject tb = (ITestObject) bf.GetObject("viaTargetSource");
-        Assert.IsTrue(tb.Name.Equals("Adam"));
+        Assert.That(tb.Name.Equals("Adam"), Is.True);
         ProxyFactoryObject pfb = (ProxyFactoryObject) bf.GetObject("&viaTargetSource");
-        Assert.IsTrue(typeof(ITestObject).IsAssignableFrom(pfb.ObjectType), "Has correct object type");
+        Assert.That(typeof(ITestObject).IsAssignableFrom(pfb.ObjectType), Is.True, "Has correct object type");
     }
 
     [Test]
@@ -116,7 +116,7 @@ public sealed class ProxyFactoryObjectTests
             new XmlObjectFactory(new ReadOnlyXmlTestResource("proxyFactoryTargetSourceTests.xml", GetType()));
         bf.GetObject("noTarget");
         IFactoryObject pfb = (ProxyFactoryObject) bf.GetObject("&noTarget");
-        Assert.IsTrue(typeof(ITestObject).IsAssignableFrom(pfb.ObjectType), "Has correct object type");
+        Assert.That(typeof(ITestObject).IsAssignableFrom(pfb.ObjectType), Is.True, "Has correct object type");
     }
 
     /// <summary>
@@ -128,23 +128,23 @@ public sealed class ProxyFactoryObjectTests
     {
         ITestObject test1 = (ITestObject) factory.GetObject("test1");
         ITestObject test1_1 = (ITestObject) factory.GetObject("test1");
-        Assert.AreEqual(test1, test1_1, "Singleton instances ==");
+        Assert.That(test1_1, Is.EqualTo(test1), "Singleton instances ==");
         test1.Age = 25;
-        Assert.AreEqual(test1.Age, test1_1.Age);
+        Assert.That(test1_1.Age, Is.EqualTo(test1.Age));
         test1.Age = 250;
-        Assert.AreEqual(test1.Age, test1_1.Age);
+        Assert.That(test1_1.Age, Is.EqualTo(test1.Age));
         IAdvised pc1 = (IAdvised) test1;
         IAdvised pc2 = (IAdvised) test1_1;
-        Assert.AreEqual(pc1.Advisors, pc2.Advisors);
+        Assert.That(pc2.Advisors, Is.EqualTo(pc1.Advisors));
         int oldLength = pc1.Advisors.Count;
         NopInterceptor di = new NopInterceptor();
         pc1.AddAdvice(1, di);
-        Assert.AreEqual(pc1.Advisors, pc2.Advisors);
-        Assert.AreEqual(oldLength + 1, pc2.Advisors.Count, "Now have one more advisor");
-        Assert.AreEqual(di.Count, 0);
+        Assert.That(pc2.Advisors, Is.EqualTo(pc1.Advisors));
+        Assert.That(pc2.Advisors.Count, Is.EqualTo(oldLength + 1), "Now have one more advisor");
+        Assert.That(di.Count, Is.EqualTo(0));
         test1.Age = (5);
-        Assert.AreEqual(test1_1.Age, test1.Age);
-        Assert.AreEqual(3, di.Count);
+        Assert.That(test1.Age, Is.EqualTo(test1_1.Age));
+        Assert.That(di.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -152,8 +152,8 @@ public sealed class ProxyFactoryObjectTests
     {
         ITestObject test2 = (ITestObject) factory.GetObject("prototype");
         ITestObject test2_1 = (ITestObject) factory.GetObject("prototype");
-        Assert.IsTrue(test2 != test2_1, "Prototype instances !=");
-        Assert.IsTrue(TestObject.Equals(test2, test2_1), "Prototype instances equal");
+        Assert.That(test2 != test2_1, Is.True, "Prototype instances !=");
+        Assert.That(TestObject.Equals(test2, test2_1), Is.True, "Prototype instances equal");
     }
 
     [Test]
@@ -165,22 +165,22 @@ public sealed class ProxyFactoryObjectTests
 
         // Check it works without AOP
         ISideEffectObject raw = (ISideEffectObject) objectFactory.GetObject("prototypeTarget");
-        Assert.AreEqual(INITIAL_COUNT, raw.Count);
+        Assert.That(raw.Count, Is.EqualTo(INITIAL_COUNT));
         raw.doWork();
-        Assert.AreEqual(INITIAL_COUNT + 1, raw.Count);
+        Assert.That(raw.Count, Is.EqualTo(INITIAL_COUNT + 1));
         raw = (ISideEffectObject) objectFactory.GetObject("prototypeTarget");
-        Assert.AreEqual(INITIAL_COUNT, raw.Count);
+        Assert.That(raw.Count, Is.EqualTo(INITIAL_COUNT));
 
         // Now try with advised instances
         ISideEffectObject prototype2FirstInstance = (ISideEffectObject) objectFactory.GetObject("prototype");
-        Assert.AreEqual(INITIAL_COUNT, prototype2FirstInstance.Count);
+        Assert.That(prototype2FirstInstance.Count, Is.EqualTo(INITIAL_COUNT));
         prototype2FirstInstance.doWork();
-        Assert.AreEqual(INITIAL_COUNT + 1, prototype2FirstInstance.Count);
+        Assert.That(prototype2FirstInstance.Count, Is.EqualTo(INITIAL_COUNT + 1));
 
         ISideEffectObject prototype2SecondInstance = (ISideEffectObject) objectFactory.GetObject("prototype");
-        Assert.IsFalse(prototype2FirstInstance == prototype2SecondInstance, "Prototypes are not ==");
-        Assert.AreEqual(INITIAL_COUNT, prototype2SecondInstance.Count);
-        Assert.AreEqual(INITIAL_COUNT + 1, prototype2FirstInstance.Count);
+        Assert.That(prototype2FirstInstance == prototype2SecondInstance, Is.False, "Prototypes are not ==");
+        Assert.That(prototype2SecondInstance.Count, Is.EqualTo(INITIAL_COUNT));
+        Assert.That(prototype2FirstInstance.Count, Is.EqualTo(INITIAL_COUNT + 1));
     }
 
     /// <summary> Test invoker is automatically added to manipulate target</summary>
@@ -191,7 +191,7 @@ public sealed class ProxyFactoryObjectTests
         TestObject target = (TestObject) factory.GetObject("test");
         target.Name = name;
         ITestObject autoInvoker = (ITestObject) factory.GetObject("autoInvoker");
-        Assert.IsTrue(autoInvoker.Name.Equals(name));
+        Assert.That(autoInvoker.Name.Equals(name), Is.True);
     }
 
     [Test]
@@ -202,12 +202,12 @@ public sealed class ProxyFactoryObjectTests
         string dummy = to.Name;
 
         IAdvised config = (IAdvised) to;
-        Assert.AreEqual(1, config.Advisors.Count, "Object should have only one advisors");
+        Assert.That(config.Advisors.Count, Is.EqualTo(1), "Object should have only one advisors");
 
         Exception ex = new NotSupportedException("Invoke");
         // Add evil interceptor to head of list
         config.AddAdvice(0, new EvilMethodInterceptor(ex));
-        Assert.AreEqual(2, config.Advisors.Count, "The advisor count is wrong after adding an advisor programmatically.");
+        Assert.That(config.Advisors.Count, Is.EqualTo(2), "The advisor count is wrong after adding an advisor programmatically.");
 
         try
         {
@@ -217,7 +217,7 @@ public sealed class ProxyFactoryObjectTests
         }
         catch (Exception thrown)
         {
-            Assert.AreEqual(thrown, ex, "The thrown exception is not the one we were looking for.");
+            Assert.That(ex, Is.EqualTo(thrown), "The thrown exception is not the one we were looking for.");
         }
     }
 
@@ -246,14 +246,14 @@ public sealed class ProxyFactoryObjectTests
         // add to front of introduction chain
         int oldCount = config.Introductions.Count;
         config.AddIntroduction(0, advisor);
-        Assert.IsTrue(config.Introductions.Count == oldCount + 1);
+        Assert.That(config.Introductions.Count == oldCount + 1, Is.True);
 
         ITimeStamped ts2 = (ITimeStamped) factory.GetObject("test1");
-        Assert.IsTrue(ts2.TimeStamp == new DateTime(time));
+        Assert.That(ts2.TimeStamp == new DateTime(time), Is.True);
 
         // Can remove
         config.RemoveIntroduction(advisor);
-        Assert.IsTrue(config.Introductions.Count == oldCount);
+        Assert.That(config.Introductions.Count == oldCount, Is.True);
 
         // Existing reference will still work
         object o = ts2.TimeStamp;
@@ -272,17 +272,17 @@ public sealed class ProxyFactoryObjectTests
         // Now check non-effect of removing interceptor that isn't there
         oldCount = config.Advisors.Count;
         config.RemoveAdvice(new DebugAdvice());
-        Assert.IsTrue(config.Advisors.Count == oldCount);
+        Assert.That(config.Advisors.Count == oldCount, Is.True);
 
         ITestObject it = (ITestObject) ts2;
         DebugAdvice debugInterceptor = new DebugAdvice();
         config.AddAdvice(0, debugInterceptor);
         object foo = it.Spouse;
-        Assert.AreEqual(1, debugInterceptor.Count);
+        Assert.That(debugInterceptor.Count, Is.EqualTo(1));
         config.RemoveAdvice(debugInterceptor);
         foo = it.Spouse;
         // not invoked again
-        Assert.IsTrue(debugInterceptor.Count == 1);
+        Assert.That(debugInterceptor.Count == 1, Is.True);
     }
 
     /// <summary> Try adding and removing interfaces and interceptors on prototype.
@@ -310,14 +310,14 @@ public sealed class ProxyFactoryObjectTests
         // add to front of introduction chain
         int oldCount = config.Introductions.Count;
         config.AddIntroduction(0, advisor);
-        Assert.IsTrue(config.Introductions.Count == oldCount + 1);
+        Assert.That(config.Introductions.Count == oldCount + 1, Is.True);
 
         ITimeStamped ts2 = (ITimeStamped) factory.GetObject("test2");
-        Assert.IsTrue(ts2.TimeStamp == new DateTime(time));
+        Assert.That(ts2.TimeStamp == new DateTime(time), Is.True);
 
         // Can remove
         config.RemoveIntroduction(advisor);
-        Assert.IsTrue(config.Introductions.Count == oldCount);
+        Assert.That(config.Introductions.Count == oldCount, Is.True);
 
         // Existing reference will still work
         object o = ts2.TimeStamp;
@@ -338,16 +338,16 @@ public sealed class ProxyFactoryObjectTests
 
         oldCount = config.Advisors.Count;
         config.RemoveAdvice(new DebugAdvice());
-        Assert.IsTrue(config.Advisors.Count == oldCount);
+        Assert.That(config.Advisors.Count == oldCount, Is.True);
 
         DebugAdvice debugInterceptor = new DebugAdvice();
         config.AddAdvice(0, debugInterceptor);
         object foo = it.Spouse;
-        Assert.AreEqual(1, debugInterceptor.Count);
+        Assert.That(debugInterceptor.Count, Is.EqualTo(1));
         config.RemoveAdvice(debugInterceptor);
         foo = it.Spouse;
         // not invoked again
-        Assert.IsTrue(debugInterceptor.Count == 1);
+        Assert.That(debugInterceptor.Count == 1, Is.True);
     }
 
     /// <summary>
@@ -362,10 +362,10 @@ public sealed class ProxyFactoryObjectTests
         object name = it.Age;
         NopInterceptor di = new NopInterceptor();
         pc.AddAdvice(0, di);
-        Assert.AreEqual(0, di.Count);
+        Assert.That(di.Count, Is.EqualTo(0));
         it.Age = 25;
-        Assert.AreEqual(25, it.Age);
-        Assert.AreEqual(2, di.Count);
+        Assert.That(it.Age, Is.EqualTo(25));
+        Assert.That(di.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -373,16 +373,16 @@ public sealed class ProxyFactoryObjectTests
     {
         ITestObject tb = (ITestObject) factory.GetObject("pointcuts");
         PointcutForVoid.Reset();
-        Assert.IsTrue((PointcutForVoid.methodNames.Count == 0), "No methods intercepted");
+        Assert.That((PointcutForVoid.methodNames.Count == 0), Is.True, "No methods intercepted");
         object o = tb.Age;
-        Assert.IsTrue((PointcutForVoid.methodNames.Count == 0), "Not void: shouldn't have intercepted");
+        Assert.That((PointcutForVoid.methodNames.Count == 0), Is.True, "Not void: shouldn't have intercepted");
         tb.Age = 1;
         o = tb.Age;
         tb.Name = "Tristan";
         tb.ToString();
-        Assert.AreEqual(2, PointcutForVoid.methodNames.Count, "Recorded wrong number of invocations");
-        Assert.AreEqual("set_Age", PointcutForVoid.methodNames[0]);
-        Assert.AreEqual("set_Name", PointcutForVoid.methodNames[1]);
+        Assert.That(PointcutForVoid.methodNames.Count, Is.EqualTo(2), "Recorded wrong number of invocations");
+        Assert.That(PointcutForVoid.methodNames[0], Is.EqualTo("set_Age"));
+        Assert.That(PointcutForVoid.methodNames[1], Is.EqualTo("set_Name"));
     }
 
 #if !NETCOREAPP
@@ -392,12 +392,12 @@ public sealed class ProxyFactoryObjectTests
             IObjectFactory f = new XmlObjectFactory(new ReadOnlyXmlTestResource("throwsAdvice.xml", GetType()));
             var th = (Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.MyThrowsHandler) f.GetObject("throwsAdvice");
             CountingBeforeAdvice cba = (CountingBeforeAdvice) f.GetObject("countingBeforeAdvice");
-            Assert.AreEqual(0, cba.GetCalls());
-            Assert.AreEqual(0, th.GetCalls());
+        Assert.That(cba.GetCalls(), Is.EqualTo(0));
+        Assert.That(th.GetCalls(), Is.EqualTo(0));
             var echo = (Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.IEcho) f.GetObject("throwsAdvised");
             echo.A = 12;
-            Assert.AreEqual(1, cba.GetCalls());
-            Assert.AreEqual(0, th.GetCalls());
+        Assert.That(cba.GetCalls(), Is.EqualTo(1));
+        Assert.That(th.GetCalls(), Is.EqualTo(0));
             Exception expected = new Exception();
             try
             {
@@ -406,11 +406,11 @@ public sealed class ProxyFactoryObjectTests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(expected, ex);
+            Assert.That(ex, Is.EqualTo(expected));
             }
 
-            // No throws handler method: count should still be 0
-            Assert.AreEqual(0, th.GetCalls());
+        // No throws handler method: count should still be 0
+        Assert.That(th.GetCalls(), Is.EqualTo(0));
 
             // Handler knows how to handle this exception
             expected = new System.Web.HttpException();
@@ -421,11 +421,11 @@ public sealed class ProxyFactoryObjectTests
             }
             catch (System.Web.HttpException ex)
             {
-                Assert.AreEqual(expected, ex);
+            Assert.That(ex, Is.EqualTo(expected));
             }
 
-            // One match
-            Assert.AreEqual(1, th.GetCalls("HttpException"));
+        // One match
+        Assert.That(th.GetCalls("HttpException"), Is.EqualTo(1));
         }
 #endif
 
@@ -438,19 +438,19 @@ public sealed class ProxyFactoryObjectTests
     public void GlobalsCanAddAspectInterfaces()
     {
         IAddedGlobalInterface agi = (IAddedGlobalInterface) factory.GetObject("autoInvoker");
-        Assert.IsTrue(agi.GlobalsAdded == -1);
+        Assert.That(agi.GlobalsAdded == -1, Is.True);
 
         ProxyFactoryObject pfb = (ProxyFactoryObject) factory.GetObject("&validGlobals");
         pfb.GetObject(); // for creation
-        Assert.AreEqual(2, pfb.Advisors.Count, "Proxy should have 1 global and 1 explicit advisor");
-        Assert.AreEqual(1, pfb.Introductions.Count, "Proxy should have 1 global introduction");
+        Assert.That(pfb.Advisors.Count, Is.EqualTo(2), "Proxy should have 1 global and 1 explicit advisor");
+        Assert.That(pfb.Introductions.Count, Is.EqualTo(1), "Proxy should have 1 global introduction");
 
         agi.GlobalsAdded = ((IAdvised) agi).Introductions.Count;
-        Assert.IsTrue(agi.GlobalsAdded == 1);
+        Assert.That(agi.GlobalsAdded == 1, Is.True);
 
         IApplicationEventListener l = (IApplicationEventListener) factory.GetObject("validGlobals");
         agi = (IAddedGlobalInterface) l;
-        Assert.IsTrue(agi.GlobalsAdded == -1);
+        Assert.That(agi.GlobalsAdded == -1, Is.True);
         Assert.Throws<InvalidCastException>(() => factory.GetObject<IAddedGlobalInterface>("test1"));
     }
 
@@ -470,7 +470,7 @@ public sealed class ProxyFactoryObjectTests
 
         ICommand one = (ICommand) fac.GetObject();
         ICommand two = (ICommand) fac.GetObject();
-        Assert.IsFalse(ReferenceEquals(one, two));
+        Assert.That(ReferenceEquals(one, two), Is.False);
     }
 
     [Test]
@@ -489,7 +489,7 @@ public sealed class ProxyFactoryObjectTests
 
         ICommand one = (ICommand) fac.GetObject();
         ICommand two = (ICommand) fac.GetObject();
-        Assert.IsTrue(ReferenceEquals(one, two));
+        Assert.That(ReferenceEquals(one, two), Is.True);
     }
 
     private ProxyFactoryObject CreateFrozenProxyFactory()
@@ -551,11 +551,11 @@ public sealed class ProxyFactoryObjectTests
 
         ICommand one = (ICommand) fac.GetObject();
         ICommand two = (ICommand) fac.GetObject();
-        Assert.IsTrue(ReferenceEquals(one, two));
+        Assert.That(ReferenceEquals(one, two), Is.True);
         one.Execute();
-        Assert.AreEqual(1, advice.Count);
+        Assert.That(advice.Count, Is.EqualTo(1));
         two.Execute();
-        Assert.AreEqual(2, advice.Count);
+        Assert.That(advice.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -599,12 +599,12 @@ public sealed class ProxyFactoryObjectTests
             fac.InterceptorNames = new string[] { "advice", "prototype" };
             fac.ObjectFactory = ctx;
 
-            Assert.AreEqual(0, InstantiationCountingCommand.NumberOfInstantiations,
+            Assert.That(InstantiationCountingCommand.NumberOfInstantiations, Is.EqualTo(0),
                 "Prototype target instance is being (needlessly) created during PFO initialization.");
             fac.GetObject();
-            Assert.AreEqual(1, InstantiationCountingCommand.NumberOfInstantiations, "Expected 1 inst");
+            Assert.That(InstantiationCountingCommand.NumberOfInstantiations, Is.EqualTo(1), "Expected 1 inst");
             fac.GetObject();
-            Assert.AreEqual(2, InstantiationCountingCommand.NumberOfInstantiations);
+            Assert.That(InstantiationCountingCommand.NumberOfInstantiations, Is.EqualTo(2));
         }
         finally
         {
@@ -631,11 +631,11 @@ public sealed class ProxyFactoryObjectTests
             fac.InterceptorNames = new string[] { "advice", "prototype" };
             fac.ObjectFactory = ctx;
 
-            Assert.AreEqual(0, InstantiationCountingCommand.NumberOfInstantiations, "First Call");
+            Assert.That(InstantiationCountingCommand.NumberOfInstantiations, Is.EqualTo(0), "First Call");
             fac.GetObject();
-            Assert.AreEqual(1, InstantiationCountingCommand.NumberOfInstantiations, "Second Call");
+            Assert.That(InstantiationCountingCommand.NumberOfInstantiations, Is.EqualTo(1), "Second Call");
             fac.GetObject();
-            Assert.AreEqual(1, InstantiationCountingCommand.NumberOfInstantiations, "Third Call");
+            Assert.That(InstantiationCountingCommand.NumberOfInstantiations, Is.EqualTo(1), "Third Call");
         }
 
         finally
@@ -688,13 +688,13 @@ public sealed class ProxyFactoryObjectTests
         fac.ObjectFactory = factory;
 
         IAdvised advised = fac.GetObject() as IAdvised;
-        Assert.IsNotNull(advised);
+        Assert.That(advised, Is.Not.Null);
 
         ICommand cmd = fac.GetObject() as ICommand;
-        Assert.IsNotNull(cmd);
+        Assert.That(cmd, Is.Not.Null);
 
         DoesntImplementAnyInterfaces obj = fac.GetObject() as DoesntImplementAnyInterfaces;
-        Assert.IsNull(obj);
+        Assert.That(obj, Is.Null);
     }
 
     [Test]
@@ -755,10 +755,10 @@ public sealed class ProxyFactoryObjectTests
             new ReadOnlyXmlTestResource("proxyFactoryTargetSourceTests.xml",
                 GetType()));
         ITestObject tb = (ITestObject) bf.GetObject("viaTargetSource");
-        Assert.IsTrue(tb.Name.Equals("Adam"));
+        Assert.That(tb.Name.Equals("Adam"), Is.True);
         ProxyFactoryObject pfb = (ProxyFactoryObject) bf.GetObject("&viaTargetSource");
-        Assert.IsTrue(typeof(ITestObject).IsAssignableFrom(pfb.ObjectType), "Has correct object type");
-        Assert.AreEqual(typeof(SingletonTargetSource), pfb.TargetSource.GetType(), "Incorrect target source, expected singleton");
+        Assert.That(typeof(ITestObject).IsAssignableFrom(pfb.ObjectType), Is.True, "Has correct object type");
+        Assert.That(pfb.TargetSource.GetType(), Is.EqualTo(typeof(SingletonTargetSource)), "Incorrect target source, expected singleton");
     }
 
 #if !NETCOREAPP
@@ -779,10 +779,10 @@ public sealed class ProxyFactoryObjectTests
                 fac.Target = command;
 
                 IAdvised advised = fac.GetObject() as IAdvised;
-                Assert.IsNotNull(advised);
+            Assert.That(advised, Is.Not.Null);
 
                 ICommand cmd = fac.GetObject() as ICommand;
-                Assert.IsNotNull(cmd);
+            Assert.That(cmd, Is.Not.Null);
 
                 cmd.Execute();
             }
@@ -854,8 +854,8 @@ public sealed class ProxyFactoryObjectTests
         for (int i = 0; i < 20; i++)
         {
             ITestObject o = proxyFactory.GetObject() as ITestObject;
-            Assert.IsNotNull(o);
-            Assert.AreNotSame(prevTestObject, o);
+            Assert.That(o, Is.Not.Null);
+            Assert.That(o, Is.Not.SameAs(prevTestObject));
             prevTestObject = o;
             Thread.Sleep(0);
         }
@@ -868,7 +868,7 @@ public sealed class ProxyFactoryObjectTests
         Type testObjectType1 = factoryObject.GetObject().GetType();
         Type testObjectType2 = factoryObject.GetObject().GetType();
 
-        Assert.AreSame(testObjectType1, testObjectType2);
+        Assert.That(testObjectType2, Is.SameAs(testObjectType1));
     }
 
     [Test]
@@ -880,7 +880,7 @@ public sealed class ProxyFactoryObjectTests
         factoryObject.Interfaces = new Type[] { };
         Type testObjectType2 = factoryObject.GetObject().GetType();
 
-        Assert.AreNotSame(testObjectType1, testObjectType2);
+        Assert.That(testObjectType2, Is.Not.SameAs(testObjectType1));
     }
 
     public class WorkerThread

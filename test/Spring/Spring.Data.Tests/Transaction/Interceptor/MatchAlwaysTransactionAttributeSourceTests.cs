@@ -18,14 +18,14 @@ public class MatchAlwaysTransactionAttributeSourceTests
     {
         MatchAlwaysTransactionAttributeSource tas = new MatchAlwaysTransactionAttributeSource();
         ITransactionAttribute ta = tas.ReturnTransactionAttribute(typeof(Object).GetMethod("GetHashCode"), null);
-        Assert.IsNotNull(ta);
-        Assert.IsTrue(TransactionPropagation.Required == ta.PropagationBehavior);
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(TransactionPropagation.Required == ta.PropagationBehavior, Is.True);
         tas.TransactionAttribute = new DefaultTransactionAttribute(TransactionPropagation.Supports);
         ta =
             tas.ReturnTransactionAttribute(typeof(DataException).GetType().GetMethod("GetHashCode"),
                 typeof(DataException));
-        Assert.IsNotNull(ta);
-        Assert.IsTrue(TransactionPropagation.Supports == ta.PropagationBehavior);
+        Assert.That(ta, Is.Not.Null);
+        Assert.That(TransactionPropagation.Supports == ta.PropagationBehavior, Is.True);
     }
 
     [Test]
@@ -37,7 +37,7 @@ public class MatchAlwaysTransactionAttributeSourceTests
                 "assembly://Spring.Data.Tests/Spring.Transaction.Interceptor/MatchAlwaysTransactionAttributeSourceTests.xml");
         MatchAlwaysTransactionAttributeSource tas =
             (MatchAlwaysTransactionAttributeSource) ctx.GetObject("MatchAlwaysTransactionAttributeSource");
-        Assert.AreEqual(TransactionPropagation.RequiresNew,
-            tas.ReturnTransactionAttribute(null, null).PropagationBehavior);
+        Assert.That(tas.ReturnTransactionAttribute(null, null).PropagationBehavior,
+            Is.EqualTo(TransactionPropagation.RequiresNew));
     }
 }

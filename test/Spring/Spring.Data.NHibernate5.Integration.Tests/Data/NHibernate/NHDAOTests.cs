@@ -61,7 +61,7 @@ namespace Spring.Data.NHibernate
             {
                 IAccountManager mgr = null;
                 mgr = ctx["accountManager"] as IAccountManager;
-                Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType());
+                Assert.That(mgr, Is.Not.Null, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType());
                 mgr.DoTransfer(transferAmount, transferAmount);
             }
         }
@@ -73,11 +73,11 @@ namespace Spring.Data.NHibernate
             IAccountManager mgr = null;
             try
             {
-                Assert.IsNotNull(ctx, "Application Context is null");
+                Assert.That(ctx, Is.Not.Null, "Application Context is null");
                 mgr = ctx["accountManager"] as IAccountManager;
-                Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType().ToString());
+                Assert.That(mgr, Is.Not.Null, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType().ToString());
                 mgr.DoTransfer(transferAmount, transferAmount);
-                Assert.IsTrue(ContainsNewData(transferAmount));
+                Assert.That(ContainsNewData(transferAmount), Is.True);
             }
             catch (Exception e)
             {
@@ -85,7 +85,7 @@ namespace Spring.Data.NHibernate
                 {
                     Console.WriteLine(e.Message);
                     Console.WriteLine(e.StackTrace);
-                    Assert.IsTrue(DoesNotContainNewData(transferAmount));
+                    Assert.That(DoesNotContainNewData(transferAmount), Is.True);
                 }
             }
         }

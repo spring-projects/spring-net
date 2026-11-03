@@ -115,7 +115,7 @@ public class SimpleLoggingAdviceTests
 
         TestableSimpleLoggingAdvice loggingAdvice = new TestableSimpleLoggingAdvice(true);
         loggingAdvice.LogLevel = LogLevel.Debug;
-        Assert.IsTrue(loggingAdvice.CallIsInterceptorEnabled(methodInvocation, log));
+        Assert.That(loggingAdvice.CallIsInterceptorEnabled(methodInvocation, log), Is.True);
         loggingAdvice.CallInvokeUnderLog(methodInvocation, log);
 
         log.VerifyLogMustHaveHappened(LogLevel.Debug, "Entering ToString");

@@ -226,8 +226,8 @@ public class NmsTransactionManagerTests
     [TearDown]
     public void TearDown()
     {
-        Assert.IsTrue(TransactionSynchronizationManager.ResourceDictionary.Count == 0);
-        Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
+        Assert.That(TransactionSynchronizationManager.ResourceDictionary.Count == 0, Is.True);
+        Assert.That(TransactionSynchronizationManager.SynchronizationActive, Is.False);
     }
 }
 
@@ -242,7 +242,7 @@ internal class AssertSessionCallback : ISessionCallback
 
     public object DoInNms(ISession session)
     {
-        Assert.IsTrue(this.session == session);
+        Assert.That(this.session == session, Is.True);
         return null;
     }
 }
@@ -258,7 +258,7 @@ internal class AssertNotSameSessionCallback : ISessionCallback
 
     public object DoInNms(ISession session)
     {
-        Assert.IsTrue(this.session != session);
+        Assert.That(this.session != session, Is.True);
         return null;
     }
 }

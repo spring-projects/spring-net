@@ -36,13 +36,13 @@ public sealed class TypeAliasesSectionHandlerTests
 	<alias name='fiona.apple' type='Spring.Objects.TestObject, Spring.Core.Tests'/>
 </typeAliases>";
 
-        Assert.IsNull(TypeRegistry.ResolveType("fiona.apple"), "TypeRegistry already contains an alias for the type being tested (it must not).");
+        Assert.That(TypeRegistry.ResolveType("fiona.apple"), Is.Null, "TypeRegistry already contains an alias for the type being tested (it must not).");
 
         TypeAliasesSectionHandler handler = new TypeAliasesSectionHandler();
         handler.Create(null, null, BuildConfigurationSection(xml));
 
         Type type = TypeRegistry.ResolveType("fiona.apple");
-        Assert.AreEqual(typeof(TestObject), type, "The type alias was not registered by the TypeAliasesSectionHandler.");
+        Assert.That(type, Is.EqualTo(typeof(TestObject)), "The type alias was not registered by the TypeAliasesSectionHandler.");
     }
 
     [Test]

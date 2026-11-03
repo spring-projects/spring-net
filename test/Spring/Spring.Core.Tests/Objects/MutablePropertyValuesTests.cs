@@ -56,16 +56,16 @@ public sealed class MutablePropertyValuesTests
         root.Add(new PropertyValue("Name", "Fiona Apple"));
         root.Add(new PropertyValue("Age", 24));
         MutablePropertyValues props = new MutablePropertyValues(root);
-        Assert.AreEqual(2, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(2));
     }
 
     [Test]
     public void InstantiationWithNulls()
     {
         MutablePropertyValues props = new MutablePropertyValues((Dictionary<string, object>) null);
-        Assert.AreEqual(0, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(0));
         MutablePropertyValues props2 = new MutablePropertyValues((IPropertyValues) null);
-        Assert.AreEqual(0, props2.PropertyValues.Count);
+        Assert.That(props2.PropertyValues.Count, Is.EqualTo(0));
     }
 
     [Test]
@@ -73,7 +73,7 @@ public sealed class MutablePropertyValuesTests
     {
         MutablePropertyValues props = new MutablePropertyValues();
         props.AddAll(new PropertyValue[] { new PropertyValue("Name", "Fiona Apple"), new PropertyValue("Age", 24) });
-        Assert.AreEqual(2, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -83,7 +83,7 @@ public sealed class MutablePropertyValuesTests
         props.Add(new PropertyValue("Name", "Fiona Apple"));
         props.Add(new PropertyValue("Age", 24));
         props.AddAll((List<PropertyValue>) null);
-        Assert.AreEqual(2, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -92,9 +92,9 @@ public sealed class MutablePropertyValuesTests
         MutablePropertyValues props = new MutablePropertyValues();
         props.Add(new PropertyValue("Name", "Fiona Apple"));
         props.Add(new PropertyValue("Age", 24));
-        Assert.AreEqual(2, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(2));
         props.Remove("name");
-        Assert.AreEqual(1, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -104,9 +104,9 @@ public sealed class MutablePropertyValuesTests
         PropertyValue propName = new PropertyValue("Name", "Fiona Apple");
         props.Add(propName);
         props.Add(new PropertyValue("Age", 24));
-        Assert.AreEqual(2, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(2));
         props.Remove(propName);
-        Assert.AreEqual(1, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -116,7 +116,7 @@ public sealed class MutablePropertyValuesTests
         props.Add(new PropertyValue("Name", "Fiona Apple"));
         props.Add(new PropertyValue("Age", 24));
         // must be case insensitive to be CLS compliant...
-        Assert.IsTrue(props.Contains("nAmE"));
+        Assert.That(props.Contains("nAmE"), Is.True);
     }
 
     [Test]
@@ -127,7 +127,7 @@ public sealed class MutablePropertyValuesTests
         map.Add("Name", "Fiona Apple");
         map.Add("Age", 24);
         props.AddAll(map);
-        Assert.AreEqual(2, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(2));
     }
 
     [Test]
@@ -136,7 +136,7 @@ public sealed class MutablePropertyValuesTests
         MutablePropertyValues props = new MutablePropertyValues();
         props.Add(new PropertyValue("Name", "Fiona Apple"));
         props.AddAll((IDictionary<string, object>) null);
-        Assert.AreEqual(1, props.PropertyValues.Count);
+        Assert.That(props.PropertyValues.Count, Is.EqualTo(1));
     }
 
     [Test]
@@ -152,17 +152,17 @@ public sealed class MutablePropertyValuesTests
         // change the name... this is the change we'll be looking for
         newProps.SetPropertyValueAt(new PropertyValue(propName.Name, "Naomi Woolf"), 0);
         IPropertyValues changes = newProps.ChangesSince(props);
-        Assert.AreEqual(1, changes.PropertyValues.Count);
+        Assert.That(changes.PropertyValues.Count, Is.EqualTo(1));
         // the name was changed, so its the name property that should be in the changed list
-        Assert.IsTrue(changes.Contains("name"));
+        Assert.That(changes.Contains("name"), Is.True);
 
         newProps.Add(new PropertyValue("Commentator", "Naomi Woolf"));
         changes = newProps.ChangesSince(props);
-        Assert.AreEqual(2, changes.PropertyValues.Count);
+        Assert.That(changes.PropertyValues.Count, Is.EqualTo(2));
         // the Commentator was added, so its the Commentator property that should be in the changed list
-        Assert.IsTrue(changes.Contains("commentator"));
+        Assert.That(changes.Contains("commentator"), Is.True);
         // the name was changed, so its the name property that should be in the changed list
-        Assert.IsTrue(changes.Contains("name"));
+        Assert.That(changes.Contains("name"), Is.True);
     }
 
     [Test]
@@ -175,6 +175,6 @@ public sealed class MutablePropertyValuesTests
         props.Remove("name");
         // get all of the changes between self and self again (there should be none);
         IPropertyValues changes = props.ChangesSince(props);
-        Assert.AreEqual(0, changes.PropertyValues.Count);
+        Assert.That(changes.PropertyValues.Count, Is.EqualTo(0));
     }
 }

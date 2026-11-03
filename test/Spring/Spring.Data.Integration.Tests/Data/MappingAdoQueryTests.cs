@@ -45,9 +45,9 @@ public class MappingAdoQueryTests
     public void CreateDbProvider()
     {
         ctx = new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/adoTemplateTests.xml");
-        Assert.IsNotNull(ctx);
+        Assert.That(ctx, Is.Not.Null);
         dbProvider = ctx["DbProvider"] as IDbProvider;
-        Assert.IsNotNull(dbProvider);
+        Assert.That(dbProvider, Is.Not.Null);
 
         DeleteTestData();
         PopulateTestData();
@@ -78,6 +78,6 @@ public class MappingAdoQueryTests
         IDictionary inParams = new Hashtable();
         inParams.Add("@Name", "Jack");
         IList testObjectList = testObjectQuery.QueryByNamedParam(inParams);
-        Assert.AreEqual(1, testObjectList.Count);
+        Assert.That(testObjectList.Count, Is.EqualTo(1));
     }
 }

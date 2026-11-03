@@ -54,8 +54,8 @@ public sealed class CacheParameterAdviceTests
 
         // parameter value should be added to cache
         advice.AfterReturning(null, method, args, null);
-        Assert.AreEqual(1, cache.Count);
-        Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
+        Assert.That(cache.Count, Is.EqualTo(1));
+        Assert.That(cache.Get("Nikola Tesla"), Is.EqualTo(args[0]));
     }
 
     [Test]
@@ -68,8 +68,8 @@ public sealed class CacheParameterAdviceTests
 
         // parameter value should be added to cache
         advice.AfterReturning(null, method, args, null);
-        Assert.AreEqual(1, cache.Count);
-        Assert.AreEqual(args[0], cache.Get("Save-Nikola Tesla"));
+        Assert.That(cache.Count, Is.EqualTo(1));
+        Assert.That(cache.Get("Save-Nikola Tesla"), Is.EqualTo(args[0]));
     }
 
     [Test]
@@ -83,9 +83,9 @@ public sealed class CacheParameterAdviceTests
 
         // parameter value should be added to both cache
         advice.AfterReturning(null, method, args, null);
-        Assert.AreEqual(2, cache.Count);
-        Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
-        Assert.AreEqual(args[0], cache.Get("Serbian"));
+        Assert.That(cache.Count, Is.EqualTo(2));
+        Assert.That(cache.Get("Nikola Tesla"), Is.EqualTo(args[0]));
+        Assert.That(cache.Get("Serbian"), Is.EqualTo(args[0]));
     }
 
     [Test]
@@ -96,7 +96,7 @@ public sealed class CacheParameterAdviceTests
 
         // parameter value should not be added to cache
         advice.AfterReturning(null, method, args, null);
-        Assert.AreEqual(0, cache.Count);
+        Assert.That(cache.Count, Is.EqualTo(0));
     }
 
     private void ExpectCacheInstanceRetrieval(string cacheName, ICache cacheToReturn)

@@ -194,7 +194,7 @@ public class SchedulerFactoryObjectTest
     {
         factory.AfterPropertiesSet();
         IScheduler sched = (IScheduler) factory.GetObject();
-        Assert.IsNotNull(sched, "scheduler was null");
+        Assert.That(sched, Is.Not.Null, "scheduler was null");
     }
 
     /// <summary>
@@ -255,7 +255,7 @@ quartz.jobStore.dataSource = default" + Environment.NewLine +
 
         m_InitSchedulerFactory.Invoke(factory, new object[] { factoryToPass });
 
-        Assert.AreEqual(ConnectionStringValue, factoryToPass.Properties[ConnectionStringKey]);
+        Assert.That(factoryToPass.Properties[ConnectionStringKey], Is.EqualTo(ConnectionStringValue));
     }
 }
 

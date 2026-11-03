@@ -30,6 +30,6 @@ public class ValidationErrorsTests
     public void DefaultsToSpanValidationErrorsRenderer()
     {
         ValidationError vs = new ValidationError();
-        Assert.AreEqual(typeof(SpanValidationErrorsRenderer), vs.Renderer.GetType());
+        Assert.That(vs.Renderer.GetType(), Is.EqualTo(typeof(SpanValidationErrorsRenderer)));
     }
 }

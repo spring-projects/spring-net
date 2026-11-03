@@ -35,8 +35,8 @@ public sealed class PropertyValueTests
     public void Instantiation()
     {
         PropertyValue val = new PropertyValue("Age", 12);
-        Assert.AreEqual("Age", val.Name);
-        Assert.AreEqual(12, val.Value);
+        Assert.That(val.Name, Is.EqualTo("Age"));
+        Assert.That(val.Value, Is.EqualTo(12));
     }
 
     [Test]
@@ -56,16 +56,17 @@ public sealed class PropertyValueTests
     {
         PropertyValue one = new PropertyValue("Age", 12);
         PropertyValue two = new PropertyValue("Age", 12);
-        Assert.AreEqual(one, two);
-        Assert.AreEqual(one.GetHashCode(), two.GetHashCode());
-        Assert.AreEqual(one, one);
-        Assert.IsFalse(one.Equals("Foo"));
+        Assert.That(two, Is.EqualTo(one));
+        Assert.That(two.GetHashCode(), Is.EqualTo(one.GetHashCode()));
+        var sameInstance = one;
+        Assert.That(one, Is.EqualTo(sameInstance));
+        Assert.That(one.Equals("Foo"), Is.False);
     }
 
     [Test]
     public void TestToString()
     {
         PropertyValue one = new PropertyValue("Age", 12);
-        Assert.AreEqual("PropertyValue: name='Age'; value=[12].", one.ToString());
+        Assert.That(one.ToString(), Is.EqualTo("PropertyValue: name='Age'; value=[12]."));
     }
 }

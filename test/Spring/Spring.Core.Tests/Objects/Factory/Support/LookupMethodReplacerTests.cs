@@ -66,6 +66,6 @@ public sealed class LookupMethodReplacerTests
         MethodInfo method = (MethodInfo) MethodBase.GetCurrentMethod();
 
         object lookup = replacer.Implement(this, method, new object[] { });
-        Assert.AreSame(expectedLookup, lookup);
+        Assert.That(lookup, Is.SameAs(expectedLookup));
     }
 }

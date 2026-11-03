@@ -51,8 +51,8 @@ namespace SpringAir.Domain
 			StringReader sr = new StringReader (sw.ToString());
 			FlightSuggestions suggestionsAfter = (FlightSuggestions) s.Deserialize (sr);
 
-			Assert.AreEqual(2, suggestionsAfter.OutboundFlights.Count);
-			Assert.AreEqual(1, suggestionsAfter.ReturnFlights.Count);
+            Assert.That(suggestionsAfter.OutboundFlights.Count, Is.EqualTo(2));
+            Assert.That(suggestionsAfter.ReturnFlights.Count, Is.EqualTo(1));
 		}
     }
 }

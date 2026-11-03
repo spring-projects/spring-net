@@ -84,16 +84,16 @@ public class RetryAdviceTests
 
     private static void AssertSleepsAndReset(TestSleepHandler testSleepHandler, int numFailures, bool isDelay)
     {
-        Assert.AreEqual(numFailures, testSleepHandler.CalledTimeSpans.Count);
+        Assert.That(testSleepHandler.CalledTimeSpans.Count, Is.EqualTo(numFailures));
         for (int i = 0; i < numFailures; i++)
         {
             if (isDelay)
             {
-                Assert.AreEqual(TimeSpan.FromSeconds(1), testSleepHandler.CalledTimeSpans[i]);
+                Assert.That(testSleepHandler.CalledTimeSpans[i], Is.EqualTo(TimeSpan.FromSeconds(1)));
             }
             else
             {
-                Assert.AreEqual(TimeSpan.FromSeconds(1 * (i + 1) + 0.5), testSleepHandler.CalledTimeSpans[i]);
+                Assert.That(testSleepHandler.CalledTimeSpans[i], Is.EqualTo(TimeSpan.FromSeconds(1 * (i + 1) + 0.5)));
             }
         }
 
@@ -143,7 +143,7 @@ public class RetryAdviceTests
         retryAdvice.AfterPropertiesSet();
         factory.AddAdvice(retryAdvice);
         ITestRemoteService rs = factory.GetProxy() as ITestRemoteService;
-        Assert.IsNotNull(rs);
+        Assert.That(rs, Is.Not.Null);
         return rs;
     }
 }

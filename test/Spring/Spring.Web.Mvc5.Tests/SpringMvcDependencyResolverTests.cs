@@ -49,7 +49,7 @@ public class SpringMvcDependencyResolverTests
         _resolver.ApplicationContextName = "named";
         var service = _resolver.GetService(typeof(NamedContextController));
 
-        Assert.NotNull(service);
+        Assert.That(service, Is.Not.Null);
     }
 
     [Test]
@@ -58,7 +58,7 @@ public class SpringMvcDependencyResolverTests
         Assume.That(_resolver.ApplicationContextName, Is.Empty, "Resolver should not have a named-context set for this test!");
 
         var service = _resolver.GetService<FirstContainerRegisteredController>();
-        Assert.NotNull(service);
+        Assert.That(service, Is.Not.Null);
     }
 
     [Test]

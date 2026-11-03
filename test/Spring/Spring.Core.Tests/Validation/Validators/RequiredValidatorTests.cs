@@ -32,7 +32,7 @@ public sealed class RequiredValidatorTests
         RequiredValidator validator = new RequiredValidator();
         validator.Test = Expression.Parse("null");
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -40,7 +40,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator("0", null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -48,7 +48,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator(Expression.Parse("100"), null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsTrue(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.True);
     }
 
     [Test]
@@ -57,7 +57,7 @@ public sealed class RequiredValidatorTests
         RequiredValidator validator = new RequiredValidator();
         validator.Test = Expression.Parse("-100");
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsTrue(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.True);
     }
 
     [Test]
@@ -65,7 +65,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator("''", null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -73,7 +73,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator(Expression.Parse("'    '"), null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -82,7 +82,7 @@ public sealed class RequiredValidatorTests
         RequiredValidator validator = new RequiredValidator();
         validator.Test = Expression.Parse("'some non-empty string'");
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsTrue(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.True);
     }
 
     [Test]
@@ -90,7 +90,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator("DateTime.Today", null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsTrue(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.True);
     }
 
     [Test]
@@ -98,7 +98,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator(Expression.Parse("DateTime.MinValue"), null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -107,7 +107,7 @@ public sealed class RequiredValidatorTests
         RequiredValidator validator = new RequiredValidator();
         validator.Test = Expression.Parse("DateTime.MaxValue");
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -115,7 +115,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator("0.00F", null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -123,7 +123,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator(Expression.Parse("5.25F"), null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsTrue(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.True);
     }
 
     [Test]
@@ -131,7 +131,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator("0.00D", null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -139,7 +139,7 @@ public sealed class RequiredValidatorTests
     {
         RequiredValidator validator = new RequiredValidator("5.25D", null);
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsTrue(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.True);
     }
 
     [Test]
@@ -148,7 +148,7 @@ public sealed class RequiredValidatorTests
         RequiredValidator validator = new RequiredValidator();
         validator.Test = Expression.Parse("char.MinValue");
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -157,7 +157,7 @@ public sealed class RequiredValidatorTests
         RequiredValidator validator = new RequiredValidator();
         validator.Test = Expression.Parse("' '.ToCharArray()[0]");
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsFalse(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.False);
     }
 
     [Test]
@@ -166,7 +166,7 @@ public sealed class RequiredValidatorTests
         RequiredValidator validator = new RequiredValidator();
         validator.Test = Expression.Parse("'xyz'.ToCharArray()[1]");
         IValidationErrors errors = new ValidationErrors();
-        Assert.IsTrue(validator.Validate(null, errors));
+        Assert.That(validator.Validate(null, errors), Is.True);
     }
 
     [Test]
@@ -177,7 +177,7 @@ public sealed class RequiredValidatorTests
 
         bool valid = validator.Validate(new object(), null, errors);
 
-        Assert.IsTrue(valid, "Validation should succeed when required validator is not evaluated.");
-        Assert.AreEqual(0, errors.GetErrors("errors").Count);
+        Assert.That(valid, Is.True, "Validation should succeed when required validator is not evaluated.");
+        Assert.That(errors.GetErrors("errors").Count, Is.EqualTo(0));
     }
 }

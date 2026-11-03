@@ -31,7 +31,7 @@ public class RegularExpressionEventNameCriteriaTests
     {
         RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria("Click");
         EventInfo evt = typeof(TestObject).GetEvent("Click");
-        Assert.IsTrue(criteria.IsSatisfied(evt));
+        Assert.That(criteria.IsSatisfied(evt), Is.True);
     }
 
     [Test]
@@ -39,14 +39,14 @@ public class RegularExpressionEventNameCriteriaTests
     {
         RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria("BingoBango");
         EventInfo evt = typeof(TestObject).GetEvent("Click");
-        Assert.IsFalse(criteria.IsSatisfied(evt));
+        Assert.That(criteria.IsSatisfied(evt), Is.False);
     }
 
     [Test]
     public void IsNotSatisfiedWithNull()
     {
         RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria("Click");
-        Assert.IsFalse(criteria.IsSatisfied(null));
+        Assert.That(criteria.IsSatisfied(null), Is.False);
     }
 
     [Test]
@@ -54,6 +54,6 @@ public class RegularExpressionEventNameCriteriaTests
     {
         RegularExpressionEventNameCriteria criteria = new RegularExpressionEventNameCriteria();
         EventInfo evt = typeof(TestObject).GetEvent("Click");
-        Assert.IsTrue(criteria.IsSatisfied(evt));
+        Assert.That(criteria.IsSatisfied(evt), Is.True);
     }
 }

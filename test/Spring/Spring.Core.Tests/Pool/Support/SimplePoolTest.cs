@@ -130,11 +130,11 @@ public sealed class SimplePoolTests
     {
         A.CallTo(() => factory.ValidateObject(null)).WithAnyArguments().Returns(true);
 
-        Assert.AreEqual(0, pool.NumActive, "active wrong");
-        Assert.AreEqual(1, pool.NumIdle, "idle wrong");
+        Assert.That(pool.NumActive, Is.EqualTo(0), "active wrong");
+        Assert.That(pool.NumIdle, Is.EqualTo(1), "idle wrong");
         pool.BorrowObject();
-        Assert.AreEqual(1, pool.NumActive, "active wrong");
-        Assert.AreEqual(0, pool.NumIdle, "idle wrong");
+        Assert.That(pool.NumActive, Is.EqualTo(1), "active wrong");
+        Assert.That(pool.NumIdle, Is.EqualTo(0), "idle wrong");
 
         A.CallTo(() => factory.ActivateObject(null)).WithAnyArguments().MustHaveHappened();
     }
@@ -207,15 +207,15 @@ public sealed class SimplePoolTests
         Helper helper = new Helper(latch, sync, pool);
         Thread thread = new Thread(new ThreadStart(helper.UsePool));
         thread.Start();
-        Assert.AreEqual(n, pool.NumActive);
-        Assert.AreEqual(0, pool.NumIdle);
+        Assert.That(pool.NumActive, Is.EqualTo(n));
+        Assert.That(pool.NumIdle, Is.EqualTo(0));
         object released = objects[n - 1];
         pool.ReturnObject(released);
         latch.Acquire();
-        Assert.AreEqual(n, pool.NumActive);
-        Assert.AreEqual(0, pool.NumIdle);
-        Assert.IsNotNull(helper.gotFromPool, "helper did not get from pool");
-        Assert.AreSame(released, helper.gotFromPool, "got unexpected object");
+        Assert.That(pool.NumActive, Is.EqualTo(n));
+        Assert.That(pool.NumIdle, Is.EqualTo(0));
+        Assert.That(helper.gotFromPool, Is.Not.Null, "helper did not get from pool");
+        Assert.That(helper.gotFromPool, Is.SameAs(released), "got unexpected object");
     }
 }
 
@@ -372,7 +372,7 @@ public sealed class StessSimplePool
             run.Acquire();
 
             foreach (Client client in clients)
-                Assert.IsTrue(client.runned, "\nclient " + clients.IndexOf(client) + " not runned");
+                Assert.That(client.runned, Is.True, "\nclient " + clients.IndexOf(client) + " not runned");
         }
 
         public static string Do(int poolSize, int clientSize, int executionTime, int repeat, int creationTime)

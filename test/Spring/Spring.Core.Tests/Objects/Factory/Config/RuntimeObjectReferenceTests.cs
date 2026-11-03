@@ -29,7 +29,8 @@ public sealed class RuntimeObjectReferenceTests
     public void InstantiationIsImplictlyNotToParent()
     {
         RuntimeObjectReference ror = new RuntimeObjectReference("foo");
-        Assert.IsFalse(ror.IsToParent,
+        Assert.That(ror.IsToParent,
+            Is.False,
             "IsToParent property must default to false if not " +
             "using the explicit variant of the ctor.");
     }

@@ -38,7 +38,7 @@ public class SystemUtilsTests
 
     public void AssertThreadName()
     {
-        Assert.AreEqual(threadName, SystemUtils.ThreadId);
+        Assert.That(SystemUtils.ThreadId, Is.EqualTo(threadName));
     }
 
     [Test]

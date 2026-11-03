@@ -48,11 +48,12 @@ public sealed class ChildObjectDefinitionTests
     {
         const string expectedParentName = "foo";
         ChildObjectDefinition def = new ChildObjectDefinition(expectedParentName);
-        Assert.AreEqual(expectedParentName, def.ParentName,
+        Assert.That(def.ParentName, Is.EqualTo(expectedParentName),
             "ParentName property not initialized correctly by ctor.");
-        Assert.IsNotNull(def.PropertyValues,
+        Assert.That(def.PropertyValues,
+            Is.Not.Null,
             "PropertyValues must be init'd to a non-null collection if not explicitly supplied.");
-        Assert.AreEqual(0, def.PropertyValues.PropertyValues.Count,
+        Assert.That(def.PropertyValues.PropertyValues.Count, Is.EqualTo(0),
             "PropertyValues must be init'd to an empty collection if not explicitly supplied.");
     }
 }

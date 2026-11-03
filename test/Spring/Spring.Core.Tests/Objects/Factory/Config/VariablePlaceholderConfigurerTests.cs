@@ -93,8 +93,8 @@ public class VariablePlaceholderConfigurerTests
         ac.Refresh();
 
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
-        Assert.AreEqual(1000, tb1.Age);
-        Assert.AreEqual("Aleks Seovic", tb1.Name);
+        Assert.That(tb1.Age, Is.EqualTo(1000));
+        Assert.That(tb1.Name, Is.EqualTo("Aleks Seovic"));
     }
 
     [Test]
@@ -119,8 +119,8 @@ public class VariablePlaceholderConfigurerTests
         ac.Refresh();
 
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
-        Assert.AreEqual(35, tb1.Age);
-        Assert.AreEqual("Erich", tb1.Name);
+        Assert.That(tb1.Age, Is.EqualTo(35));
+        Assert.That(tb1.Name, Is.EqualTo("Erich"));
     }
 
     [Test]
@@ -138,7 +138,7 @@ public class VariablePlaceholderConfigurerTests
         vphc.PostProcessObjectFactory(of);
 
         RootObjectDefinition rod = (RootObjectDefinition) of.GetObjectDefinition("tb1");
-        Assert.AreEqual("Hello FirstName LastName!", rod.PropertyValues.GetPropertyValue("Greeting").Value);
+        Assert.That(rod.PropertyValues.GetPropertyValue("Greeting").Value, Is.EqualTo("Hello FirstName LastName!"));
     }
 
     [Test]
@@ -156,7 +156,7 @@ public class VariablePlaceholderConfigurerTests
         vphc.PostProcessObjectFactory(of);
 
         RootObjectDefinition rod = (RootObjectDefinition) of.GetObjectDefinition("tb1");
-        Assert.AreEqual("nickname-value", rod.PropertyValues.GetPropertyValue("NameProperty").Value);
+        Assert.That(rod.PropertyValues.GetPropertyValue("NameProperty").Value, Is.EqualTo("nickname-value"));
     }
 
     [Test]
@@ -177,8 +177,8 @@ public class VariablePlaceholderConfigurerTests
         ac.Refresh();
 
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
-        Assert.AreEqual("name-value", tb1.Name);
-        Assert.AreEqual("nickname-value", tb1.Nickname);
+        Assert.That(tb1.Name, Is.EqualTo("name-value"));
+        Assert.That(tb1.Nickname, Is.EqualTo("nickname-value"));
     }
 
     [Test]
@@ -198,8 +198,8 @@ public class VariablePlaceholderConfigurerTests
 
         vphc.PostProcessObjectFactory(of);
         RootObjectDefinition rod = (RootObjectDefinition) of.GetObjectDefinition("tb1");
-        Assert.AreEqual("name-value", rod.PropertyValues.GetPropertyValue("NameProperty").Value);
-        Assert.AreEqual(null, rod.PropertyValues.GetPropertyValue("NickNameProperty").Value);
+        Assert.That(rod.PropertyValues.GetPropertyValue("NameProperty").Value, Is.EqualTo("name-value"));
+        Assert.That(rod.PropertyValues.GetPropertyValue("NickNameProperty").Value, Is.EqualTo(null));
     }
 
     [Test]
@@ -220,8 +220,8 @@ public class VariablePlaceholderConfigurerTests
         ac.Refresh();
 
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
-        Assert.AreEqual(string.Empty, tb1.Name);
-        Assert.AreEqual(null, tb1.Nickname);
+        Assert.That(tb1.Name, Is.Empty);
+        Assert.That(tb1.Nickname, Is.EqualTo(null));
     }
 
     [Test]
@@ -246,7 +246,7 @@ public class VariablePlaceholderConfigurerTests
         }
         catch (ObjectDefinitionStoreException ex)
         {
-            Assert.IsTrue(ex.Message.IndexOf("nickname") > -1);
+            Assert.That(ex.Message.IndexOf("nickname") > -1, Is.True);
         }
     }
 
@@ -268,8 +268,8 @@ public class VariablePlaceholderConfigurerTests
         ac.Refresh();
 
         TestObject tb1 = (TestObject) ac.GetObject("tb1");
-        Assert.AreEqual("Erich", tb1.Name);
-        Assert.AreEqual("${nickname}", tb1.Nickname);
+        Assert.That(tb1.Name, Is.EqualTo("Erich"));
+        Assert.That(tb1.Nickname, Is.EqualTo("${nickname}"));
     }
 
     [Test]

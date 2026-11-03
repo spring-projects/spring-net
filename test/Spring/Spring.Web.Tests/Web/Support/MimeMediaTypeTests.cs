@@ -28,28 +28,28 @@ public class MimeMediaTypeTests
     [Test]
     public void CreateInstance()
     {
-        Assert.AreEqual(MimeMediaType.Application.Octet, new MimeMediaType());
+        Assert.That(new MimeMediaType(), Is.EqualTo(MimeMediaType.Application.Octet));
         MimeMediaType mt = new MimeMediaType("ApPlicatioN");
-        Assert.AreEqual("application", mt.ContentType);
-        Assert.AreEqual("*", mt.SubType);
+        Assert.That(mt.ContentType, Is.EqualTo("application"));
+        Assert.That(mt.SubType, Is.EqualTo("*"));
 
-        Assert.AreEqual("*", new MimeMediaType("ApPlicatioN", null).SubType);
-        Assert.AreEqual("*", new MimeMediaType("ApPlicatioN", "").SubType);
-        Assert.AreEqual("bla", new MimeMediaType("ApPlicatioN", "bla").SubType);
+        Assert.That(new MimeMediaType("ApPlicatioN", null).SubType, Is.EqualTo("*"));
+        Assert.That(new MimeMediaType("ApPlicatioN", "").SubType, Is.EqualTo("*"));
+        Assert.That(new MimeMediaType("ApPlicatioN", "bla").SubType, Is.EqualTo("bla"));
     }
 
     [Test]
     public void ToStringReturnsMimeTypeString()
     {
-        Assert.AreEqual("application/subtype", new MimeMediaType("ApPlicatioN", "SubType").ToString());
+        Assert.That(new MimeMediaType("ApPlicatioN", "SubType").ToString(), Is.EqualTo("application/subtype"));
     }
 
     [Test]
     public void Parse()
     {
         MimeMediaType mt = MimeMediaType.Parse("text/html");
-        Assert.AreEqual("text", mt.ContentType);
-        Assert.AreEqual("html", mt.SubType);
+        Assert.That(mt.ContentType, Is.EqualTo("text"));
+        Assert.That(mt.SubType, Is.EqualTo("html"));
 
         try
         {
@@ -96,19 +96,19 @@ public class MimeMediaTypeTests
     public void Equals()
     {
         MimeMediaType mt = MimeMediaType.Parse("text/html");
-        Assert.AreEqual(MimeMediaType.Text.Html, mt);
-        Assert.AreEqual(MimeMediaType.Parse("text/html"), mt);
+        Assert.That(mt, Is.EqualTo(MimeMediaType.Text.Html));
+        Assert.That(mt, Is.EqualTo(MimeMediaType.Parse("text/html")));
 
-        Assert.AreNotEqual(MimeMediaType.Parse("text/xml"), mt);
+        Assert.That(mt, Is.Not.EqualTo(MimeMediaType.Parse("text/xml")));
     }
 
     [Test]
     public void GetHashcode()
     {
         MimeMediaType mt = MimeMediaType.Parse("text/html");
-        Assert.AreEqual(MimeMediaType.Text.Html.GetHashCode(), mt.GetHashCode());
-        Assert.AreEqual(MimeMediaType.Parse("text/html").GetHashCode(), mt.GetHashCode());
+        Assert.That(mt.GetHashCode(), Is.EqualTo(MimeMediaType.Text.Html.GetHashCode()));
+        Assert.That(mt.GetHashCode(), Is.EqualTo(MimeMediaType.Parse("text/html").GetHashCode()));
 
-        Assert.AreNotEqual(MimeMediaType.Parse("text/xml").GetHashCode(), mt.GetHashCode());
+        Assert.That(mt.GetHashCode(), Is.Not.EqualTo(MimeMediaType.Parse("text/xml").GetHashCode()));
     }
 }

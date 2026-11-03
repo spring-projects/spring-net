@@ -30,11 +30,11 @@ public class WebObjectDefinitionTests
     {
         RootWebObjectDefinition rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
         rwod.IsSingleton = true;
-        Assert.IsFalse(rwod.IsPage);
-        Assert.IsTrue(rwod.IsSingleton);
-        Assert.IsFalse(rwod.IsPrototype);
-        Assert.AreEqual(ObjectScope.Singleton, ((IWebObjectDefinition) rwod).Scope);
-        Assert.AreEqual(ObjectScope.Application, ((IWebObjectDefinition) rwod).Scope);
+        Assert.That(rwod.IsPage, Is.False);
+        Assert.That(rwod.IsSingleton, Is.True);
+        Assert.That(rwod.IsPrototype, Is.False);
+        Assert.That(((IWebObjectDefinition) rwod).Scope, Is.EqualTo(ObjectScope.Singleton));
+        Assert.That(((IWebObjectDefinition) rwod).Scope, Is.EqualTo(ObjectScope.Application));
     }
 
     [Test]
@@ -42,19 +42,19 @@ public class WebObjectDefinitionTests
     {
         RootWebObjectDefinition rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
         rwod.IsSingleton = false;
-        Assert.IsFalse(rwod.IsPage);
-        Assert.IsFalse(rwod.IsSingleton);
-        Assert.IsTrue(rwod.IsPrototype);
-        Assert.AreEqual(ObjectScope.Prototype, ((IWebObjectDefinition) rwod).Scope);
+        Assert.That(rwod.IsPage, Is.False);
+        Assert.That(rwod.IsSingleton, Is.False);
+        Assert.That(rwod.IsPrototype, Is.True);
+        Assert.That(((IWebObjectDefinition) rwod).Scope, Is.EqualTo(ObjectScope.Prototype));
     }
 
 //        [Test]
 //        public void UnderstandsObjectScopeForPages()
 //        {
 //            RootWebObjectDefinition rwod = new RootWebObjectDefinition("pagename.aspx", new MutablePropertyValues());            
-//            Assert.IsTrue(rwod.IsPage);
-//            Assert.IsFalse(rwod.IsSingleton);
-//            Assert.IsTrue(rwod.IsPrototype);
-//            Assert.AreEqual(ObjectScope.Prototype, ((IWebObjectDefinition)rwod).Scope);
+//            Assert.That(rwod.IsPage, Is.True);
+//            Assert.That(rwod.IsSingleton, Is.False);
+//            Assert.That(rwod.IsPrototype, Is.True);
+//            Assert.That(((IWebObjectDefinition)rwod).Scope, Is.EqualTo(ObjectScope.Prototype));
 //        }
 }

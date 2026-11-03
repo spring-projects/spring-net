@@ -453,13 +453,13 @@ public sealed class ObjectWrapperTests
         Honey darwin = new Honey(new string[] { "dickens", "of gaunt" });
         wrapper.WrappedInstance = darwin;
         string alias = (string) wrapper.GetPropertyValue("AlsoKnownAs[1]");
-        Assert.AreEqual("of gaunt", alias);
+        Assert.That(alias, Is.EqualTo("of gaunt"));
 
         alias = (string) wrapper.GetPropertyValue("[1]");
-        Assert.AreEqual("of gaunt", alias, "indexer on object not working.");
+        Assert.That(alias, Is.EqualTo("of gaunt"), "indexer on object not working.");
         wrapper.SetPropertyValue("Item[1]", "of foobar");
         alias = (string) wrapper.GetPropertyValue("[1]");
-        Assert.AreEqual("of foobar", alias, "indexer on object not working.");
+        Assert.That(alias, Is.EqualTo("of foobar"), "indexer on object not working.");
     }
 
     [Test]
@@ -476,10 +476,10 @@ public sealed class ObjectWrapperTests
 
         //This is 'new' Spring.Expressions notation, i.e. not "Item[i]" but plain [i].
         string name = (string) wrapper.GetPropertyValue("[0]");
-        Assert.AreEqual("Master Shake", name);
+        Assert.That(name, Is.EqualTo("Master Shake"));
         wrapper.SetPropertyValue("[0]", "Carl");
         name = (string) wrapper.GetPropertyValue("[0]");
-        Assert.AreEqual("Carl", name);
+        Assert.That(name, Is.EqualTo("Carl"));
 
         //Try with Custom Indexer Name.
         favNames = new ArrayList();
@@ -491,7 +491,7 @@ public sealed class ObjectWrapperTests
         wrapper.WrappedInstance = ap;
 
         name = (string) wrapper.GetPropertyValue("FavoriteName[0]");
-        Assert.AreEqual("Master Shake", name);
+        Assert.That(name, Is.EqualTo("Master Shake"));
     }
 
     [Test]
@@ -526,7 +526,7 @@ public sealed class ObjectWrapperTests
     {
         ObjectWrapper wrapper = GetWrapper(new TestObject());
         Type propertyType = wrapper.GetPropertyType("name");
-        Assert.AreEqual(typeof(string), propertyType);
+        Assert.That(propertyType, Is.EqualTo(typeof(string)));
     }
 
     [Test]
@@ -534,7 +534,7 @@ public sealed class ObjectWrapperTests
     {
         ObjectWrapper wrapper = GetWrapper(new TestObject());
         Type propertyType = wrapper.GetPropertyType("FileModeEnum");
-        Assert.AreEqual(typeof(FileMode), propertyType);
+        Assert.That(propertyType, Is.EqualTo(typeof(FileMode)));
     }
 
     [Test]
@@ -544,7 +544,7 @@ public sealed class ObjectWrapperTests
         target.Spouse = new TestObject("Fiona", 28);
         ObjectWrapper wrapper = GetWrapper(target);
         Type propertyType = wrapper.GetPropertyType("spouse.age");
-        Assert.AreEqual(typeof(int), propertyType);
+        Assert.That(propertyType, Is.EqualTo(typeof(int)));
     }
 
     [Test]
@@ -586,7 +586,7 @@ public sealed class ObjectWrapperTests
     {
         Honey to = new Honey(new string[] { "wee", "jakey", "ned" });
         ObjectWrapper wrapper = GetWrapper(to);
-        Assert.AreEqual('j', wrapper.GetPropertyValue("AlsoKnownAs[1][0]"));
+        Assert.That(wrapper.GetPropertyValue("AlsoKnownAs[1][0]"), Is.EqualTo('j'));
     }
 
     /// <summary>
@@ -615,7 +615,7 @@ public sealed class ObjectWrapperTests
     public void InstantiateWithOkType()
     {
         IObjectWrapper wrapper = GetWrapper(typeof(TestObject));
-        Assert.IsNotNull(wrapper.WrappedInstance);
+        Assert.That(wrapper.WrappedInstance, Is.Not.Null);
     }
 
     [Test]
@@ -627,8 +627,8 @@ public sealed class ObjectWrapperTests
         IObjectWrapper wrapper = GetWrapper(to);
         wrapper.SetPropertyValue("Doctor.Company", doctorCompany);
         wrapper.SetPropertyValue("Lawyer.Company", lawyerCompany);
-        Assert.AreEqual(doctorCompany, to.Doctor.Company);
-        Assert.AreEqual(lawyerCompany, to.Lawyer.Company);
+        Assert.That(to.Doctor.Company, Is.EqualTo(doctorCompany));
+        Assert.That(to.Lawyer.Company, Is.EqualTo(lawyerCompany));
     }
 
     [Test]
@@ -637,7 +637,7 @@ public sealed class ObjectWrapperTests
         GetterObject go = new GetterObject();
         IObjectWrapper wrapper = GetWrapper(go);
         wrapper.SetPropertyValue("Name", "tom");
-        Assert.IsTrue(go.Name.Equals("tom"), "Expected name to be set to 'tom'");
+        Assert.That(go.Name.Equals("tom"), Is.True, "Expected name to be set to 'tom'");
     }
 
     [Test]
@@ -669,11 +669,11 @@ public sealed class ObjectWrapperTests
         t.Age = age;
         t.Name = name;
         IObjectWrapper wrapper = GetWrapper(t);
-        Assert.IsTrue(t.Age.Equals(age), "Age is not set correctly");
-        Assert.IsTrue(name.Equals(t.Name), "Name is not set correctly");
+        Assert.That(t.Age.Equals(age), Is.True, "Age is not set correctly");
+        Assert.That(name.Equals(t.Name), Is.True, "Name is not set correctly");
         wrapper.SetPropertyValues(new MutablePropertyValues());
-        Assert.IsTrue(t.Age.Equals(age), "Age is not set correctly");
-        Assert.IsTrue(name.Equals(t.Name), "Name is not set correctly");
+        Assert.That(t.Age.Equals(age), Is.True, "Age is not set correctly");
+        Assert.That(name.Equals(t.Name), Is.True, "Name is not set correctly");
     }
 
     /// <summary>
@@ -692,9 +692,9 @@ public sealed class ObjectWrapperTests
         pvs.Add(new PropertyValue("Name", newName));
         pvs.Add(new PropertyValue("Touchy", newTouchy));
         wrapper.SetPropertyValues(pvs);
-        Assert.IsTrue(t.Name.Equals(newName), "Validly set property must stick");
-        Assert.IsTrue(t.Touchy.Equals(newTouchy), "Validly set property must stick");
-        Assert.IsTrue(t.Age == newAge, "Validly set property must stick");
+        Assert.That(t.Name.Equals(newName), Is.True, "Validly set property must stick");
+        Assert.That(t.Touchy.Equals(newTouchy), Is.True, "Validly set property must stick");
+        Assert.That(t.Age == newAge, Is.True, "Validly set property must stick");
     }
 
     [Test]
@@ -708,9 +708,9 @@ public sealed class ObjectWrapperTests
         wrapper.SetPropertyValue("Age", newAge);
         wrapper.SetPropertyValue(new PropertyValue("Name", newName));
         wrapper.SetPropertyValue(new PropertyValue("Touchy", newTouchy));
-        Assert.IsTrue(t.Name.Equals(newName), "Validly set property must stick");
-        Assert.IsTrue(t.Touchy.Equals(newTouchy), "Validly set property must stick");
-        Assert.IsTrue(t.Age == newAge, "Validly set property must stick");
+        Assert.That(t.Name.Equals(newName), Is.True, "Validly set property must stick");
+        Assert.That(t.Touchy.Equals(newTouchy), Is.True, "Validly set property must stick");
+        Assert.That(t.Age == newAge, Is.True, "Validly set property must stick");
     }
 
     [Test]
@@ -729,10 +729,10 @@ public sealed class ObjectWrapperTests
         }
         catch (PropertyAccessExceptionsException ex)
         {
-            Assert.IsTrue(ex.ExceptionCount == 1, "Must contain 2 exceptions");
+            Assert.That(ex.ExceptionCount == 1, Is.True, "Must contain 2 exceptions");
             // Test validly set property matches
-            Assert.IsTrue(t.Name.Equals(newName), "Validly set property must stick");
-            Assert.IsTrue(t.Age == 0, "Invalidly set property must retain old value");
+            Assert.That(t.Name.Equals(newName), Is.True, "Validly set property must stick");
+            Assert.That(t.Age == 0, Is.True, "Invalidly set property must retain old value");
         }
         catch (Exception ex)
         {
@@ -748,7 +748,7 @@ public sealed class ObjectWrapperTests
         IObjectWrapper wrapper = GetWrapper(t);
         TypeConverterRegistry.RegisterConverter(typeof(string), new TestStringArrayConverter());
         wrapper.SetPropertyValue("Name", new string[] { "a", "b" });
-        Assert.AreEqual("-a,b-", t.Name);
+        Assert.That(t.Name, Is.EqualTo("-a,b-"));
     }
 
     [Test]
@@ -758,8 +758,8 @@ public sealed class ObjectWrapperTests
         IObjectWrapper wrapper = GetWrapper(to);
         TypeConverterRegistry.RegisterConverter(typeof(TestObject), new TestObjectArrayConverter());
         wrapper.SetPropertyValue("Array", new string[] { "a", "b" });
-        Assert.AreEqual("a", to.Array[0].Name);
-        Assert.AreEqual("b", to.Array[1].Name);
+        Assert.That(to.Array[0].Name, Is.EqualTo("a"));
+        Assert.That(to.Array[1].Name, Is.EqualTo("b"));
     }
 
     [Test]
@@ -768,9 +768,9 @@ public sealed class ObjectWrapperTests
         PrimitiveArrayObject to = new PrimitiveArrayObject();
         IObjectWrapper wrapper = GetWrapper(to);
         wrapper.SetPropertyValue("Array", new String[] { "1", "2" });
-        Assert.AreEqual(2, to.Array.Length);
-        Assert.AreEqual(1, to.Array[0]);
-        Assert.AreEqual(2, to.Array[1]);
+        Assert.That(to.Array.Length, Is.EqualTo(2));
+        Assert.That(to.Array[0], Is.EqualTo(1));
+        Assert.That(to.Array[1], Is.EqualTo(2));
     }
 
     [Test]
@@ -779,9 +779,9 @@ public sealed class ObjectWrapperTests
         PrimitiveArrayObject to = new PrimitiveArrayObject();
         IObjectWrapper wrapper = GetWrapper(to);
         wrapper.SetPropertyValue("Array", "1,2");
-        Assert.AreEqual(2, to.Array.Length);
-        Assert.AreEqual(1, to.Array[0]);
-        Assert.AreEqual(2, to.Array[1]);
+        Assert.That(to.Array.Length, Is.EqualTo(2));
+        Assert.That(to.Array[0], Is.EqualTo(1));
+        Assert.That(to.Array[1], Is.EqualTo(2));
     }
 
     [Test]
@@ -792,9 +792,9 @@ public sealed class ObjectWrapperTests
         ObjectWrapper wrapper = GetWrapper(to);
         to.Age = newAge;
         object owAge = wrapper.GetPropertyValue("Age");
-        Assert.IsTrue(owAge is Int32, "Age is an integer");
+        Assert.That(owAge is Int32, Is.True, "Age is an integer");
         int owi = (int) owAge;
-        Assert.IsTrue(owi == newAge, "Object wrapper must pick up changes");
+        Assert.That(owi == newAge, Is.True, "Object wrapper must pick up changes");
     }
 
     [Test]
@@ -808,8 +808,8 @@ public sealed class ObjectWrapperTests
         wrapper.WrappedInstance = to2;
 
         wrapper.SetPropertyValue("Age", 14);
-        Assert.IsTrue(to2.Age == 14, "2nd changed");
-        Assert.IsTrue(to.Age == 11, "1st didn't change");
+        Assert.That(to2.Age == 14, Is.True, "2nd changed");
+        Assert.That(to.Age == 11, Is.True, "1st didn't change");
     }
 
     [Test]
@@ -821,7 +821,7 @@ public sealed class ObjectWrapperTests
         wrapper.WrappedInstance = to2;
 
         wrapper.SetPropertyValue("Age", 14);
-        Assert.IsTrue(to2.Age == 14);
+        Assert.That(to2.Age == 14, Is.True);
     }
 
     [Test]
@@ -846,7 +846,7 @@ public sealed class ObjectWrapperTests
         TestObject foo = new TestObject();
         IObjectWrapper wrapper = GetWrapper(foo);
         string happyPlace = (string) wrapper.GetPropertyValue("HappyPlace");
-        Assert.AreEqual(TestObject.DefaultHappyPlace, happyPlace,
+        Assert.That(happyPlace, Is.EqualTo(TestObject.DefaultHappyPlace),
             "Failed to read the value of a property with 'protected' access.");
     }
 
@@ -858,7 +858,7 @@ public sealed class ObjectWrapperTests
         const string expectedHappyPlace = "The Rockies! Brrr...";
         wrapper.SetPropertyValue(new PropertyValue("HappyPlace", expectedHappyPlace));
         string happyPlace = (string) wrapper.GetPropertyValue("HappyPlace");
-        Assert.AreEqual(expectedHappyPlace, happyPlace,
+        Assert.That(happyPlace, Is.EqualTo(expectedHappyPlace),
             "Failed to read / write the value of a property with 'protected' access.");
     }
 
@@ -868,7 +868,8 @@ public sealed class ObjectWrapperTests
         TestObject foo = new TestObject();
         IObjectWrapper wrapper = GetWrapper(foo);
         string[] contents = (string[]) wrapper.GetPropertyValue("SamsoniteSuitcase");
-        Assert.IsTrue(ArrayUtils.AreEqual(TestObject.DefaultContentsOfTheSuitcase, contents),
+        Assert.That(ArrayUtils.AreEqual(TestObject.DefaultContentsOfTheSuitcase, contents),
+            Is.True,
             "Failed to read the value of a property with 'private' access.");
     }
 
@@ -880,7 +881,8 @@ public sealed class ObjectWrapperTests
         string[] expectedContents = new string[] { "Lloyd's Soul", "Harry's John Denver Records" };
         wrapper.SetPropertyValue(new PropertyValue("SamsoniteSuitcase", expectedContents));
         string[] contents = (string[]) wrapper.GetPropertyValue("SamsoniteSuitcase");
-        Assert.IsTrue(ArrayUtils.AreEqual(expectedContents, contents),
+        Assert.That(ArrayUtils.AreEqual(expectedContents, contents),
+            Is.True,
             "Failed to read / write the value of a property with 'private' access.");
     }
 
@@ -893,13 +895,13 @@ public sealed class ObjectWrapperTests
         kerry.Spouse = rod;
         IObjectWrapper wrapper = GetWrapper(rod);
         int KA = (int) wrapper.GetPropertyValue("Spouse.Age");
-        Assert.IsTrue(KA == 35, "Expected kerry's age to be 35");
+        Assert.That(KA == 35, Is.True, "Expected kerry's age to be 35");
 
         int RA = (int) wrapper.GetPropertyValue("Spouse.Spouse.Age");
-        Assert.IsTrue(RA == 31, "Expected rod's age to be 31");
+        Assert.That(RA == 31, Is.True, "Expected rod's age to be 31");
 
         ITestObject spousesSpouse = (ITestObject) wrapper.GetPropertyValue("Spouse.Spouse");
-        Assert.IsTrue(rod == spousesSpouse, "spousesSpouse == initial point");
+        Assert.That(rod == spousesSpouse, Is.True, "spousesSpouse == initial point");
     }
 
     [Test]
@@ -918,11 +920,11 @@ public sealed class ObjectWrapperTests
         IObjectWrapper wrapper = GetWrapper(rod);
         wrapper.SetPropertyValue("Spouse", kerry);
 
-        Assert.AreEqual(rod.Spouse, kerry, "nested set did not work");
+        Assert.That(kerry, Is.EqualTo(rod.Spouse), "nested set did not work");
         wrapper.SetPropertyValue("Spouse.Spouse", rod);
-        Assert.AreEqual(rod, rod.Spouse.Spouse, "Nested set did not work.");
+        Assert.That(rod.Spouse.Spouse, Is.EqualTo(rod), "Nested set did not work.");
         wrapper.SetPropertyValue("Spouse.Age", 100);
-        Assert.AreEqual(100, kerry.Age, "Nested setting of primitive property did not work.");
+        Assert.That(kerry.Age, Is.EqualTo(100), "Nested setting of primitive property did not work.");
     }
 
     [Test]
@@ -932,7 +934,7 @@ public sealed class ObjectWrapperTests
         ITestObject snow = new TestObject("Snow", 2500);
         IObjectWrapper wrapper = GetWrapper(bigby);
         wrapper.SetPropertyValue("Spouse", snow);
-        Assert.AreEqual(snow, bigby.Spouse);
+        Assert.That(bigby.Spouse, Is.EqualTo(snow));
     }
 
     [Test]
@@ -966,7 +968,7 @@ public sealed class ObjectWrapperTests
         ITestObject snow = new TestObject("Snow", 2500);
         IObjectWrapper wrapper = GetWrapper(bigby);
         wrapper.SetPropertyValue("spouse", snow);
-        Assert.AreEqual(snow, bigby.Spouse,
+        Assert.That(bigby.Spouse, Is.EqualTo(snow),
             "Property setting is not case insensitive with regard to the property name (and for CLS compliance it should be).");
     }
 
@@ -976,19 +978,21 @@ public sealed class ObjectWrapperTests
         PropsTest pt = new PropsTest();
         IObjectWrapper wrapper = GetWrapper(pt);
         wrapper.SetPropertyValue("IntArray", new int[] { 4, 5, 2, 3 });
-        Assert.IsTrue(pt.intArray.Length == 4, "intArray length = 4");
-        Assert.IsTrue(pt.intArray[0] == 4 && pt.intArray[1] == 5 && pt.intArray[2] == 2 && pt.intArray[3] == 3,
+        Assert.That(pt.intArray.Length == 4, Is.True, "intArray length = 4");
+        Assert.That(pt.intArray[0] == 4 && pt.intArray[1] == 5 && pt.intArray[2] == 2 && pt.intArray[3] == 3,
+            Is.True,
             "correct values");
         wrapper.SetPropertyValue("IntArray", new String[] { "4", "5", "2", "3" });
-        Assert.IsTrue(pt.intArray.Length == 4, "intArray length = 4");
-        Assert.IsTrue(pt.intArray[0] == 4 && pt.intArray[1] == 5 && pt.intArray[2] == 2 && pt.intArray[3] == 3,
+        Assert.That(pt.intArray.Length == 4, Is.True, "intArray length = 4");
+        Assert.That(pt.intArray[0] == 4 && pt.intArray[1] == 5 && pt.intArray[2] == 2 && pt.intArray[3] == 3,
+            Is.True,
             "correct values");
         wrapper.SetPropertyValue("IntArray", 1);
-        Assert.IsTrue(pt.intArray.Length == 1, "intArray length = 1");
-        Assert.IsTrue(pt.intArray[0] == 1, "correct values");
+        Assert.That(pt.intArray.Length == 1, Is.True, "intArray length = 1");
+        Assert.That(pt.intArray[0] == 1, Is.True, "correct values");
         wrapper.SetPropertyValue("IntArray", new String[] { "1" });
-        Assert.IsTrue(pt.intArray.Length == 1, "intArray length = 1");
-        Assert.IsTrue(pt.intArray[0] == 1, "correct values");
+        Assert.That(pt.intArray.Length == 1, Is.True, "intArray length = 1");
+        Assert.That(pt.intArray[0] == 1, Is.True, "correct values");
     }
 
     [Test]
@@ -997,11 +1001,11 @@ public sealed class ObjectWrapperTests
         ObjectWrapper wrapper = GetWrapper();
         TestObject t = new TestObject("Tony", 50);
         wrapper.WrappedInstance = t;
-        Assert.AreEqual(t.Age, wrapper.GetPropertyValue("Age"), "Object wrapper returns wrong property value");
+        Assert.That(wrapper.GetPropertyValue("Age"), Is.EqualTo(t.Age), "Object wrapper returns wrong property value");
 
         TestObject u = new TestObject("Udo", 30);
         wrapper.WrappedInstance = u;
-        Assert.AreEqual(u.Age, wrapper.GetPropertyValue("Age"), "Object wrapper returns cached property value");
+        Assert.That(wrapper.GetPropertyValue("Age"), Is.EqualTo(u.Age), "Object wrapper returns cached property value");
     }
 
     [Test]
@@ -1011,13 +1015,13 @@ public sealed class ObjectWrapperTests
         TestObject t = new TestObject("Tony", 50);
         t.Spouse = new TestObject("Sue", 40);
         wrapper.WrappedInstance = t;
-        Assert.AreEqual(t.Spouse.Age, wrapper.GetPropertyValue("Spouse.Age"),
+        Assert.That(wrapper.GetPropertyValue("Spouse.Age"), Is.EqualTo(t.Spouse.Age),
             "Object wrapper returns wrong nested property value");
 
         TestObject u = new TestObject("Udo", 30);
         u.Spouse = new TestObject("Vera", 20);
         wrapper.WrappedInstance = u;
-        Assert.AreEqual(u.Spouse.Age, wrapper.GetPropertyValue("Spouse.Age"),
+        Assert.That(wrapper.GetPropertyValue("Spouse.Age"), Is.EqualTo(u.Spouse.Age),
             "Object wrapper returns cached nested property value");
     }
 
@@ -1028,10 +1032,10 @@ public sealed class ObjectWrapperTests
         ObjectWrapper wrapper = GetWrapper(pt);
 
         wrapper.SetPropertyValue("StringArray", "foo,fi,fi,fum");
-        Assert.IsTrue(pt.stringArray.Length == 4, "StringArray length = 4");
-        Assert.IsTrue(
+        Assert.That(pt.stringArray.Length == 4, Is.True, "StringArray length = 4");
+        Assert.That(
             pt.stringArray[0].Equals("foo") && pt.stringArray[1].Equals("fi") && pt.stringArray[2].Equals("fi") &&
-            pt.stringArray[3].Equals("fum"), "in correct values of string array");
+            pt.stringArray[3].Equals("fum"), Is.True, "in correct values of string array");
     }
 
     internal class DateTimeTestObject
@@ -1053,7 +1057,7 @@ public sealed class ObjectWrapperTests
 
         wrapper.SetPropertyValue("TriggerDateTime", "1991-10-10");
 
-        Assert.AreEqual(1991, ((DateTime) wrapper.GetPropertyValue("TriggerDateTime")).Year);
+        Assert.That(((DateTime) wrapper.GetPropertyValue("TriggerDateTime")).Year, Is.EqualTo(1991));
     }
 
     internal class CultureTestObject
@@ -1075,8 +1079,8 @@ public sealed class ObjectWrapperTests
 
         wrapper.SetPropertyValue("Cult", "es-ES");
 
-        Assert.AreEqual("es-ES",
-            ((CultureInfo) wrapper.GetPropertyValue("Cult")).Name);
+        Assert.That(((CultureInfo) wrapper.GetPropertyValue("Cult")).Name,
+            Is.EqualTo("es-ES"));
     }
 
     internal class URITestObject
@@ -1097,8 +1101,8 @@ public sealed class ObjectWrapperTests
         ObjectWrapper wrapper = GetWrapper(o);
 
         wrapper.SetPropertyValue("ResourceIdentifier", "http://www.springframework.net");
-        Assert.AreEqual("www.springframework.net",
-            ((Uri) wrapper.GetPropertyValue("ResourceIdentifier")).Host);
+        Assert.That(((Uri) wrapper.GetPropertyValue("ResourceIdentifier")).Host,
+            Is.EqualTo("www.springframework.net"));
     }
 
     [Test]
@@ -1107,7 +1111,7 @@ public sealed class ObjectWrapperTests
         PrimitiveArrayObject to = new PrimitiveArrayObject();
         IObjectWrapper wrapper = GetWrapper(to);
         to.Array = new int[] { 1, 2, 3, 4, 5 };
-        Assert.AreEqual(1, (int) wrapper.GetPropertyValue("Array[0]"));
+        Assert.That((int) wrapper.GetPropertyValue("Array[0]"), Is.EqualTo(1));
     }
 
     [Test]
@@ -1126,7 +1130,7 @@ public sealed class ObjectWrapperTests
         IObjectWrapper wrapper = GetWrapper(to);
         to.Array = new int[] { 1, 2, 3, 4, 5 };
         wrapper.SetPropertyValue("Array[2]", 6);
-        Assert.AreEqual(6, to.Array[2]);
+        Assert.That(to.Array[2], Is.EqualTo(6));
     }
 
     [Test]
@@ -1186,7 +1190,7 @@ public sealed class ObjectWrapperTests
         ListTestObject to = new ListTestObject();
         IObjectWrapper wrapper = GetWrapper(to);
         to.List = new ArrayList(new int[] { 1, 2, 3, 4, 5 });
-        Assert.AreEqual(1, (int) wrapper.GetPropertyValue("List[0]"));
+        Assert.That((int) wrapper.GetPropertyValue("List[0]"), Is.EqualTo(1));
     }
 
     [Test]
@@ -1195,7 +1199,7 @@ public sealed class ObjectWrapperTests
         ListTestObject to = new ListTestObject();
         IObjectWrapper wrapper = GetWrapper(to);
         to.ArrayList = new ArrayList(new int[] { 1, 2, 3, 4, 5 });
-        Assert.AreEqual(1, (int) wrapper.GetPropertyValue("ArrayList[0]"));
+        Assert.That((int) wrapper.GetPropertyValue("ArrayList[0]"), Is.EqualTo(1));
     }
 
     [Test]
@@ -1214,7 +1218,7 @@ public sealed class ObjectWrapperTests
         IObjectWrapper wrapper = GetWrapper(to);
         to.List = new ArrayList(new int[] { 1, 2, 3, 4, 5 });
         wrapper.SetPropertyValue("List[0]", 6);
-        Assert.AreEqual(6, to.List[0]);
+        Assert.That(to.List[0], Is.EqualTo(6));
     }
 
     [Test]
@@ -1252,10 +1256,10 @@ public sealed class ObjectWrapperTests
         IObjectWrapper wrapper = GetWrapper(to);
         to.List = new ArrayList(new int[] { 1, 2, 3, 4, 5 });
         wrapper.SetPropertyValue("List[6]", 6);
-        Assert.AreEqual(6, to.List[6]);
-        Assert.IsNull(to.List[5]);
+        Assert.That(to.List[6], Is.EqualTo(6));
+        Assert.That(to.List[5], Is.Null);
         wrapper.SetPropertyValue("List[7]", 7);
-        Assert.AreEqual(7, to.List[7]);
+        Assert.That(to.List[7], Is.EqualTo(7));
     }
 
     /// <summary>
@@ -1297,7 +1301,7 @@ public sealed class ObjectWrapperTests
         IObjectWrapper wrapper = GetWrapper(to);
         to.Dictionary = new Hashtable();
         to.Dictionary.Add("key1", "value1");
-        Assert.AreEqual("value1", (string) wrapper.GetPropertyValue("Dictionary['key1']"));
+        Assert.That((string) wrapper.GetPropertyValue("Dictionary['key1']"), Is.EqualTo("value1"));
     }
 
     [Test]
@@ -1306,7 +1310,7 @@ public sealed class ObjectWrapperTests
         DictionaryTestObject to = new DictionaryTestObject();
         IObjectWrapper wrapper = GetWrapper(to);
         to.Dictionary = new Hashtable();
-        Assert.IsNull(wrapper.GetPropertyValue("Dictionary['notthere']"));
+        Assert.That(wrapper.GetPropertyValue("Dictionary['notthere']"), Is.Null);
     }
 
     [Test]
@@ -1316,7 +1320,7 @@ public sealed class ObjectWrapperTests
         IObjectWrapper wrapper = GetWrapper(to);
         to.Dictionary = new Hashtable();
         wrapper.SetPropertyValue("Dictionary['key1']", "value1");
-        Assert.AreEqual("value1", to.Dictionary["key1"]);
+        Assert.That(to.Dictionary["key1"], Is.EqualTo("value1"));
     }
 
     [Test]
@@ -1329,7 +1333,7 @@ public sealed class ObjectWrapperTests
         IDictionary elements = new Hashtable();
         elements.Add("Weekend", "News");
         wrapper.SetPropertyValue("PeriodictabLE", elements);
-        Assert.AreEqual(3, to.PeriodicTable.Count);
+        Assert.That(to.PeriodicTable.Count, Is.EqualTo(3));
     }
 
     internal class SetTestObject
@@ -1358,7 +1362,7 @@ public sealed class ObjectWrapperTests
         to.AddComputerName("JCN");
         ObjectWrapper wrapper = GetWrapper(to);
         wrapper.SetPropertyValue("Computers", new HybridSet(new string[] { "Trusty SNES" }));
-        Assert.AreEqual(3, to.Computers.Count);
+        Assert.That(to.Computers.Count, Is.EqualTo(3));
     }
 
     [Test]
@@ -1417,7 +1421,7 @@ public sealed class ObjectWrapperTests
         EnumTestObject o = new EnumTestObject();
         ObjectWrapper wrapper = GetWrapper(o);
         wrapper.SetPropertyValue("FileMode", FileMode.Create);
-        Assert.AreEqual(FileMode.Create, (FileMode) wrapper.GetPropertyValue("FileMode"));
+        Assert.That((FileMode) wrapper.GetPropertyValue("FileMode"), Is.EqualTo(FileMode.Create));
     }
 
     [Test]
@@ -1426,7 +1430,7 @@ public sealed class ObjectWrapperTests
         ObjectWithTypeProperty to = new ObjectWithTypeProperty();
         IObjectWrapper wrapper = GetWrapper(to);
         wrapper.SetPropertyValue("Type", "System.DateTime");
-        Assert.AreEqual(typeof(DateTime), to.Type);
+        Assert.That(to.Type, Is.EqualTo(typeof(DateTime)));
     }
 
     [Test]
@@ -1468,7 +1472,7 @@ public sealed class ObjectWrapperTests
         values.Add("JeepersCreepersWhereDidYaGetThosePeepers", "OhThisWeirdBatGuySoldEmToMe...");
         // the unknown and ridiculously named property should fail
         wrapper.SetPropertyValues(values, true);
-        Assert.AreEqual(19, to.Age, "The single good property in the property values should have been set though...");
+        Assert.That(to.Age, Is.EqualTo(19), "The single good property in the property values should have been set though...");
     }
 
     [Test]
@@ -1490,7 +1494,7 @@ public sealed class ObjectWrapperTests
         values.Add("ObjectNumber", 123);
         values.Add("Age", 19);
         wrapper.SetPropertyValues(values, true);
-        Assert.AreEqual(19, to.Age, "The single good property in the property values should have been set though...");
+        Assert.That(to.Age, Is.EqualTo(19), "The single good property in the property values should have been set though...");
     }
 
     [Test]
@@ -1500,11 +1504,11 @@ public sealed class ObjectWrapperTests
         TestObject to = new TestObject();
         ObjectWrapper wrapper = GetWrapper(to);
         wrapper.SetPropertyValue("Hats", expected);
-        Assert.IsNotNull(to.Hats);
-        Assert.AreEqual(expected.Length, to.Hats.Length);
+        Assert.That(to.Hats, Is.Not.Null);
+        Assert.That(to.Hats.Length, Is.EqualTo(expected.Length));
         for (int i = 0; i < expected.Length; ++i)
         {
-            Assert.AreEqual(expected[i], to.Hats[i]);
+            Assert.That(to.Hats[i], Is.EqualTo(expected[i]));
         }
     }
 
@@ -1512,12 +1516,12 @@ public sealed class ObjectWrapperTests
     public void TestToString()
     {
         ObjectWrapper wrapper = GetWrapper();
-        Assert.IsTrue(wrapper.ToString().IndexOf("Exception encountered") >= 0);
+        Assert.That(wrapper.ToString().IndexOf("Exception encountered") >= 0, Is.True);
         wrapper.WrappedInstance = new WanPropsClass();
         string expected = string.Format(
             "{0}: wrapping class [{1}]; IsWan={2}",
             wrapper.GetType().Name, wrapper.WrappedType.FullName, "{True}");
-        Assert.AreEqual(expected, wrapper.ToString());
+        Assert.That(wrapper.ToString(), Is.EqualTo(expected));
     }
 
     [Test]
@@ -1549,7 +1553,7 @@ public sealed class ObjectWrapperTests
         o.Datum.Doctor = new NestedTestObject("Modlin");
         ObjectWrapper wrapper = GetWrapper(o);
         PropertyInfo info = wrapper.GetPropertyInfo("Datum.Doctor.Company");
-        Assert.IsNotNull(info);
+        Assert.That(info, Is.Not.Null);
     }
 
     [Test(Description = "SPRNET-198")]

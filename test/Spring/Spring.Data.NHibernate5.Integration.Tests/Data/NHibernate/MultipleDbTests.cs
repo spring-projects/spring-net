@@ -54,9 +54,9 @@ namespace Spring.Data.NHibernate
             float transferAmount = 114;
             IAccountManager mgr = null;
 
-            Assert.IsNotNull(ctx, "Application Context is null");
+            Assert.That(ctx, Is.Not.Null, "Application Context is null");
             mgr = ctx["accountManager"] as IAccountManager;
-            Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType());
+            Assert.That(mgr, Is.Not.Null, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType());
             mgr.DoTransfer(transferAmount, transferAmount);
         }
 

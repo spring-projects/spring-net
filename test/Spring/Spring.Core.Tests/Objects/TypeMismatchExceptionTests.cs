@@ -30,20 +30,20 @@ public sealed class TypeMismatchExceptionTests
     public void InstantiationSupplyingPropertyChangeArgsType()
     {
         TypeMismatchException ex = new TypeMismatchException(new PropertyChangeEventArgs("Doctor", new NestedTestObject("Foo"), new TestObject("Hershey", 12)), typeof(INestedTestObject));
-        Assert.AreEqual("typeMismatch", ex.ErrorCode);
+        Assert.That(ex.ErrorCode, Is.EqualTo("typeMismatch"));
     }
 
     [Test]
     public void InstantiationSupplyingPropertyChangeArgsTypeAndRootException()
     {
         TypeMismatchException ex = new TypeMismatchException(new PropertyChangeEventArgs("Doctor", new NestedTestObject("Foo"), new TestObject("Hershey", 12)), typeof(INestedTestObject), null);
-        Assert.AreEqual("typeMismatch", ex.ErrorCode);
+        Assert.That(ex.ErrorCode, Is.EqualTo("typeMismatch"));
     }
 
     [Test]
     public void InstantiationSupplyingNullPropertyChangeArgsAndNullType()
     {
         TypeMismatchException ex = new TypeMismatchException(null, null, null);
-        Assert.AreEqual("typeMismatch", ex.ErrorCode);
+        Assert.That(ex.ErrorCode, Is.EqualTo("typeMismatch"));
     }
 }

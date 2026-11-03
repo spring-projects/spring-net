@@ -22,7 +22,7 @@ public class CollectionValidatorTests
     public void DefaultsToFastValidateIsFalse()
     {
         CollectionValidator cg = new CollectionValidator();
-        Assert.IsFalse(cg.FastValidate);
+        Assert.That(cg.FastValidate, Is.False);
     }
 
     [Test]
@@ -43,7 +43,7 @@ public class CollectionValidatorTests
         validator.Validators.Add(req);
         validator.Validators.Add(reg);
 
-        Assert.IsTrue(validator.Validate(persons, new ValidationErrors()));
+        Assert.That(validator.Validate(persons, new ValidationErrors()), Is.True);
     }
 
     [Test]
@@ -87,12 +87,12 @@ public class CollectionValidatorTests
         setPersons.AddAll(listPersons);
         IValidationErrors ve = new ValidationErrors();
 
-        Assert.IsTrue(validator.Validate(listPersons, ve));
-        Assert.IsTrue(ve.IsEmpty);
-        Assert.IsTrue(validator.Validate(dictPersons, ve));
-        Assert.IsTrue(ve.IsEmpty);
-        Assert.IsTrue(validator.Validate(setPersons, ve));
-        Assert.IsTrue(ve.IsEmpty);
+        Assert.That(validator.Validate(listPersons, ve), Is.True);
+        Assert.That(ve.IsEmpty, Is.True);
+        Assert.That(validator.Validate(dictPersons, ve), Is.True);
+        Assert.That(ve.IsEmpty, Is.True);
+        Assert.That(validator.Validate(setPersons, ve), Is.True);
+        Assert.That(ve.IsEmpty, Is.True);
     }
 
     [Test]
@@ -127,8 +127,8 @@ public class CollectionValidatorTests
 
         IValidationErrors ve = new ValidationErrors();
 
-        Assert.IsFalse(validator.Validate(persons, ve));
-        Assert.IsFalse(ve.IsEmpty);
+        Assert.That(validator.Validate(persons, ve), Is.False);
+        Assert.That(ve.IsEmpty, Is.False);
     }
 
     [Test]
@@ -157,10 +157,10 @@ public class CollectionValidatorTests
 
         validator.Context = Expression.Parse("Members");
 
-        Assert.IsTrue(validator.Validate(soc, new ValidationErrors()));
+        Assert.That(validator.Validate(soc, new ValidationErrors()), Is.True);
 
         validator.Context = null;
-        Assert.IsTrue(validator.Validate(soc.Members, new ValidationErrors()));
+        Assert.That(validator.Validate(soc.Members, new ValidationErrors()), Is.True);
     }
 
     [Test]
@@ -203,10 +203,10 @@ public class CollectionValidatorTests
 
         IValidationErrors err1 = new ValidationErrors();
 
-        Assert.IsTrue(validator.Validate(soc, err1));
+        Assert.That(validator.Validate(soc, err1), Is.True);
 
         soc.Members.Add(new TestObject("foo", 30));
         soc.Members.Add(new TestObject("bar", 30));
-        Assert.IsFalse(validator.Validate(soc, err1));
+        Assert.That(validator.Validate(soc, err1), Is.False);
     }
 }

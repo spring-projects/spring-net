@@ -11,7 +11,7 @@ namespace Tests.EvaluationEngine
         {
             var primeEvaluationEngine = new PrimeEvaluationEngine();
 
-            Assert.IsFalse(primeEvaluationEngine.IsPrime(-1));
+            Assert.That(primeEvaluationEngine.IsPrime(-1), Is.False);
         }
     }
 }
