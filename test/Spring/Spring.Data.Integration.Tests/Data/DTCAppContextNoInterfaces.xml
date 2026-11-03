@@ -2,15 +2,23 @@
 <objects xmlns='http://www.springframework.net'
          xmlns:d="http://www.springframework.net/database">
 
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
+            </list>
+        </property>
+    </object>
+
     <!-- Available Catalogs: CreditsAndDebits, Credits, Debits -->
     <!-- Database Providers -->
     <d:provider id="DbProvider"
                 provider="SqlServer-2.0"
-                connectionString="Data Source=SPRINGQA;Initial Catalog=Credits;Integrated Security=false;User Id=springqa;Password=springqa;Pooling=False" />
+                connectionString="${SPRING_TEST_SQLSERVER_CS_CREDITS}" />
 
     <d:provider id="DebitDbProvider"
                 provider="SqlServer-2.0"
-                connectionString="Data Source=SPRINGQA;Initial Catalog=Debits;Integrated Security=false;User Id=springqa;Password=springqa;Pooling=False" />
+                connectionString="${SPRING_TEST_SQLSERVER_CS_DEBITS}" />
 
 
     <!-- Transaction Manager -->

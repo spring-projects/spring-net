@@ -20,6 +20,7 @@ using System.Transactions;
 using NUnit.Framework;
 using Spring.Data.Common;
 using Spring.Data.Core;
+using Spring.IntegrationTests;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
@@ -36,7 +37,7 @@ public class NestedTxScopeTests
     public void TxTemplate()
     {
         IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
-        dbProvider.ConnectionString = @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+        dbProvider.ConnectionString = SqlServerTestEnvironment.GetConnectionString("CreditsAndDebits");
         //IPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager();
         //IPlatformTransactionManager tm = new TxScopeTransactionManager();
         IPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
@@ -84,7 +85,7 @@ public class NestedTxScopeTests
             using (SqlConnection cn2005 = new SqlConnection())
             {
                 cn2005.ConnectionString =
-                    @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+                    SqlServerTestEnvironment.GetConnectionString("CreditsAndDebits");
                 SqlCommand cmd = new SqlCommand(updateSql1, cn2005);
                 cn2005.Open();
                 cmd.ExecuteNonQuery();
@@ -108,7 +109,7 @@ public class NestedTxScopeTests
                               System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier);
             using (SqlConnection cn2005 = new SqlConnection())
             {
-                cn2005.ConnectionString = @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+                cn2005.ConnectionString = SqlServerTestEnvironment.GetConnectionString("CreditsAndDebits");
                 SqlCommand cmd = new SqlCommand(updateSql2, cn2005);
                 cn2005.Open();
                 cmd.ExecuteNonQuery();
@@ -144,7 +145,7 @@ public class NestedTxScopeTests
 
         using (SqlConnection cn2005 = new SqlConnection())
         {
-            cn2005.ConnectionString = @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+            cn2005.ConnectionString = SqlServerTestEnvironment.GetConnectionString("CreditsAndDebits");
             SqlCommand cmd = new SqlCommand(updateSql2, cn2005);
             cn2005.Open();
             cmd.ExecuteNonQuery();

@@ -16,6 +16,7 @@
 
 using System.Data;
 using System.Data.SqlClient;
+using Spring.IntegrationTests;
 
 namespace Spring.Data.Northwind;
 
@@ -24,7 +25,7 @@ public class NativeAdoShipperDao : IShipperDao
 {
     public Shipper Create(string name, string phone)
     {
-        string connectionString = "Data Source=SPRINGQA;Initial Catalog=Northwind;Persist Security Info=True;User ID=springqa;Password=springqa";
+        string connectionString = SqlServerTestEnvironment.GetConnectionString("Northwind");
         int id = 0;
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
@@ -55,7 +56,7 @@ public class NativeAdoShipperDao : IShipperDao
 
     public Shipper CreateShorter(string name, string phone)
     {
-        string connectionString = "Data Source=SPRINGQA;Initial Catalog=Northwind;Persist Security Info=True;User ID=springqa";
+        string connectionString = SqlServerTestEnvironment.GetConnectionString("Northwind");
         int id = 0;
         using (SqlConnection connection = new SqlConnection(connectionString))
         {

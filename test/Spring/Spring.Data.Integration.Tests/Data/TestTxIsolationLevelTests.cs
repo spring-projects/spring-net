@@ -19,6 +19,7 @@ using System.Transactions;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
+using Spring.IntegrationTests;
 using Spring.Objects;
 
 namespace Spring.Data;
@@ -71,7 +72,7 @@ public class TestTxIsolationLevelTests
             using (SqlConnection cn2005 = new SqlConnection())
             {
                 cn2005.ConnectionString =
-                    @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+                    SqlServerTestEnvironment.GetConnectionString("CreditsAndDebits");
                 SqlCommand cmd = new SqlCommand(updateSql2, cn2005);
                 cn2005.Open();
                 Console.WriteLine("Isolation level = " + System.Transactions.Transaction.Current.IsolationLevel);

@@ -6,13 +6,14 @@
         <property name="VariableSources">
             <list>
                 <object type="Spring.ProviderNameSource, Spring.Data.Integration.Tests" />
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
             </list>
         </property>
     </object>
 
     <db:provider id="DbProvider"
                  provider="${providerName}"
-                 connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False" />
+                 connectionString="${SPRING_TEST_SQLSERVER_CS_SPRING}" />
 
     <object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data">
         <property name="DbProvider" ref="DbProvider" />

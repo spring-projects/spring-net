@@ -20,6 +20,7 @@ using System.Reflection;
 using NUnit.Framework;
 using Spring.Data.Common;
 using Spring.Data.Generic;
+using Spring.IntegrationTests;
 using Spring.Objects;
 
 namespace Spring.Data.Objects.Generic;
@@ -38,7 +39,7 @@ public class StoredProcedureTests
     {
         _dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
         _dbProvider.ConnectionString =
-            @"Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False";
+            SqlServerTestEnvironment.GetConnectionString("Spring");
 
         IDbCommand command = _dbProvider.CreateCommand();
         command.Connection = _dbProvider.CreateConnection();

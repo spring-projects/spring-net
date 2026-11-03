@@ -2,9 +2,17 @@
 <objects xmlns='http://www.springframework.net'
          xmlns:d="http://www.springframework.net/database">
 
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
+            </list>
+        </property>
+    </object>
+
     <d:provider id="DbProvider"
                 provider="System.Data.SqlClient"
-                connectionString="Data Source=SPRINGQA;Initial Catalog=Spring;User ID=springqa; Password=springqa" />
+                connectionString="${SPRING_TEST_SQLSERVER_CS_SPRING}" />
 
     <object name="LoggingAdvice" type="Spring.Aspects.Logging.SimpleLoggingAdvice, Spring.Aop">
         <property name="logUniqueIdentifier" value="true" />

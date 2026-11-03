@@ -47,9 +47,7 @@ public class DTCTests
     }
 
     [Test]
-#if NETCOREAPP
-        [Ignore("Not supported on .NET Core")]
-#endif
+    [Explicit("Requires MSDTC: the two connections (Credits and Debits databases) enlist in one distributed transaction, which a SQL Server container cannot take part in")]
     public void DeclarativeWithAttributes()
     {
         IAccountManager mgr = ctx["accountManager"] as IAccountManager;
