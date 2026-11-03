@@ -37,3 +37,23 @@ jobs:
       - name: Run './build.cmd ci'
         run: ./build.sh ci
 
+  # The SQL Server backed integration tests. Each test assembly starts its own SQL Server container with Testcontainers,
+  # which needs only the Docker daemon that ubuntu-latest provides.
+  integration-linux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0
+      - uses: actions/checkout@v7
+      - name: Run './build.sh Compile IntegrationTest'
+        run: ./build.sh Compile IntegrationTest
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: integration-test-results
+          path: artifacts/TestResults
+          if-no-files-found: ignore
+
