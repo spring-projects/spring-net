@@ -31,12 +31,13 @@
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Quartz" Version="3.12.0" />
     <PackageVersion Include="System.CodeDom" Version="5.0.0" />
-    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
     <PackageVersion Include="System.Data.SQLite.Core" Version="1.0.119" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageVersion Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageVersion Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
     <PackageVersion Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageVersion Include="System.Runtime.Serialization.Formatters" Version="10.0.0" />
     <PackageVersion Include="log4net" Version="3.3.2" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,18 @@
-Changes (3.0.x to next release)
+Changes (3.1 to 4.0)
+========================
+
+1. The assemblies' version is 4.0.0.0 (3.1 shipped 3.1.0.0). Code compiled against 3.x has to
+   be recompiled. On .NET Framework, binding redirects to 4.0.0.0 work only if the code uses no
+   API that 4.0 removed or changed.
+
+2. .NET Framework 4.7.2 is the lowest supported .NET Framework (was 4.6.2). The tests run on
+   .NET Framework 4.7.2 and .NET 10.
+
+3. The System.Configuration.ConfigurationManager dependency floor was raised to 8.0.1 (was
+   4.7.0). 4.7.0 pulled in System.Drawing.Common 4.7.0, which has a critical advisory
+   (GHSA-rxg9-xrhp-64gj).
+
+Changes (3.0.x to 3.1)
 ========================
 
 1. Logging moved from Common.Logging to Microsoft.Extensions.Logging. Configure logging by

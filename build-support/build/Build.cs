@@ -29,7 +29,7 @@ partial class Build : FalloutBuild
 
     [Parameter("Build EMS")] readonly bool BuildEms = false;
 
-    [Parameter("Version")] readonly string ProjectVersion = "3.1.0";
+    [Parameter("Version")] readonly string ProjectVersion = "4.0.0";
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;

@@ -19,7 +19,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
 
     <LangVersion>latest</LangVersion>
-    <TargetFullFrameworkVersion>net462</TargetFullFrameworkVersion>
+    <TargetFullFrameworkVersion>net472</TargetFullFrameworkVersion>
 
     <IsPackable>false</IsPackable>
 
@@ -31,6 +31,11 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>None</AnalysisMode>
   </PropertyGroup>
+
+  <!-- BinaryFormatter was removed from the shared framework in .NET 9; the tests still round-trip [Serializable] types through it. -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
+    <PackageReference Include="System.Runtime.Serialization.Formatters" />
+  </ItemGroup>
 
   <ItemGroup>
     <Using Include="Microsoft.Extensions.Logging.ILogger" Alias="ILog" />

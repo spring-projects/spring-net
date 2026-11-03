@@ -53,7 +53,7 @@ published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wro
 
 ## SUPPORTED .NET FRAMEWORK VERSIONS
 
-Spring.NET 3.0.0 supports .NET 4.6.2 and .NET Standard 2.0 and later.
+Spring.NET 4.0.0 supports .NET Framework 4.7.2 and .NET Standard 2.0 and later.
 
 ## KNOWN ISSUES
 

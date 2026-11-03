@@ -40,7 +40,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
 
     <LangVersion>latest</LangVersion>
-    <TargetFullFrameworkVersion>net462</TargetFullFrameworkVersion>
+    <TargetFullFrameworkVersion>net472</TargetFullFrameworkVersion>
 
     <ImplicitUsings>enable</ImplicitUsings>
 
