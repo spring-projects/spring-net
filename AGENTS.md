@@ -81,3 +81,47 @@ Key mechanics (defined in `src/Directory.Build.props` and `test/Directory.Build.
 ## Website
 
 `website/` is a Gatsby 5 + React + TypeScript site (package manager: **yarn**). Local dev: `yarn install && yarn start`. The full build is `./build.sh website` (Fallout target; also builds the DocBook reference docs, which require Java on PATH). Deployed to GitHub Pages by `.github/workflows/website.yml` on pushes to `main`.
+
+Gatsby 5 constraints on dependency updates:
+
+- Three transitive advisories can't be fixed while the site is on Gatsby 5. Dismiss them; don't force versions.
+  - `sharp` 0.32: Gatsby's plugins call `sharp.simd()`, which was removed in 0.33.
+  - `file-type` 16: the fixed version is ESM-only, and `gatsby-source-filesystem` `require()`s it.
+  - `@parcel/reporter-dev-server` 2.8.3: parcel core 2.8.3's engine check rejects the fix.
+- `gatsby build` on Node ≥ 22.7 needs `msgpackr` ≥ 1.11.2 and `ordered-binary` ≥ 1.6.
+- `resolutions` in `website/package.json` hold the express-related transitive packages at patched versions. Update them; don't drop them.
+
+## Agent hazards
+
+These facts have cost real debugging time. They apply to every agent and human working here.
+
+- **Line endings and encodings.** Working trees can be CRLF (`* text=auto`, and files older than the normalization). Never rewrite a tracked file with `sed -i` or another whole-file shell rewrite: the diff turns into every line. Use an editor or the Edit tool. `WebConversationStateTest.cs` is UTF-16, so grep and ripgrep sweeps miss its content.
+- **Direct project builds need a configuration.** `dotnet build <csproj>` without `-c Debug` (or `Release`) writes to `build/<Project>/` instead of `build/<Configuration>/<Project>/`, because `OutputPath` is computed before `Configuration` defaults. Tests then run stale DLLs. Solution builds are unaffected.
+- **Examples.**
+  - `CompileExamples` uses the full-framework MSBuild, which must be 18+ (VS 2026) for the SDK that `global.json` resolves. Without it, run `./build.cmd ci --skip CompileExamples` and check an example with `dotnet build <example>.sln -c Release`.
+  - Four example solutions include the `src/Spring` projects directly and rebuild them into `build/$(Configuration)/`. Any MSBuild property that `Build.cs` passes to the compile and pack calls must also go to the examples call.
+- **Culture-dependent tests.** `DateTimeFormatterTests` fails on a machine whose regional settings override the en-US formats. That failure isn't a regression.
+- **Fallout versions.** `fallout.globaltool` in `.config/dotnet-tools.json` and `Fallout.Common` in `Directory.Packages.props` move in lockstep, and Dependabot only updates the latter. Fallout's NuGet 11.0.x line is abandoned and unlisted. Never upgrade to it.
+
+## Delegating work to agents
+
+Claude Code subagent definitions are in `.claude/agents/`. The orchestrating session owns design, decisions and integration. An agent gets a written packet and returns a report.
+
+| Agent | Model | Use for |
+|---|---|---|
+| `spring-grunt` | Sonnet, medium | Mechanical, fully specified work: version bumps from a table, retargets, listed renames or deletions, scripted runs. |
+| `spring-implementer` | Sonnet, high | Design-bearing code plus its tests. The packet makes every API, compatibility, dependency and security decision; the agent stops on one the packet leaves open. |
+| `spring-reviewer` | Opus, high | Read-only validation of every packet that touches `src/`, and of external PRs before merge. |
+| `spring-ci-triage` | Sonnet, medium | Red CI runs and Dependabot PRs. Read-only. |
+| `Explore` (built in) | — | Read-only searches where only the conclusion matters. |
+
+A packet states:
+
+- the base sha and the branch (agents that write run in their own worktree);
+- the scope and the files the agent must not edit;
+- the decisions already made;
+- the acceptance criteria;
+- the verification commands;
+- the commit attribution line.
+
+Agents have this file in context through `CLAUDE.md` and don't Read it again. Keep briefs and reports compact: ask for counts, summaries and failing tails, not file dumps.

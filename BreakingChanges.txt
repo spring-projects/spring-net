@@ -1,4 +1,11 @@
-Changes (3.0.x to next release)
+Changes (3.1 to 4.0)
+========================
+
+1. The assemblies' version is 4.0.0.0 (3.1 shipped 3.1.0.0). Code compiled against 3.x has to
+   be recompiled. On .NET Framework, binding redirects to 4.0.0.0 work only if the code uses no
+   API that 4.0 removed or changed.
+
+Changes (3.0.x to 3.1)
 ========================
 
 1. Logging moved from Common.Logging to Microsoft.Extensions.Logging. Configure logging by
