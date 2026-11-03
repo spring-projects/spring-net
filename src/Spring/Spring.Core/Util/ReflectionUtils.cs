@@ -1287,7 +1287,8 @@ public sealed class ReflectionUtils
     /// <summary>
     /// Declarative security attributes cannot be rebuilt from their <see cref="CustomAttributeData"/>, so
     /// <see cref="GetCustomAttributes(MemberInfo)"/> hands out the attribute instances for them. The base type is
-    /// matched by name because System.Security.Permissions is not part of modern .NET's shared framework.
+    /// matched by name so the check compiles without referencing <c>SecurityAttribute</c>, which modern .NET
+    /// marks obsolete (SYSLIB0003).
     /// </summary>
     private static bool IsDeclarativeSecurityAttribute(Type attributeType)
     {
