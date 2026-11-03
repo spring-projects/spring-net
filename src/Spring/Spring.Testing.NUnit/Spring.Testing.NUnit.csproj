@@ -4,6 +4,7 @@
     <!-- NUnit 5 ships net462, net8.0 and net10.0 builds and nothing for netstandard2.0, so this package cannot keep that target. -->
     <TargetFrameworks>net10.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide NUnit integration in Spring.Net</Description>
+    <PackageTags>$(PackageTags);testing;nunit;unit-testing</PackageTags>
     <NoWarn>1587, 1591, 219, 162, 618</NoWarn>
   </PropertyGroup>
 

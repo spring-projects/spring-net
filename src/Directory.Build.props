@@ -23,7 +23,8 @@
     <PackageIconUrl>https://springframework.net/images/SpringSource_Leaves32x32.png</PackageIconUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://www.springframework.net/</PackageProjectUrl>
-    <PackageTags>Library</PackageTags>
+    <!-- Each project appends its own terms: <PackageTags>$(PackageTags);aop</PackageTags> -->
+    <PackageTags>spring;springframework;ioc;di</PackageTags>
 
     <NeutralLanguage>en-US</NeutralLanguage>
 
@@ -65,6 +66,15 @@
 
   <ItemGroup>
     <None Include="..\..\SpringSource_Leaves32x32.png" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+
+  <!-- A README.md next to the project file becomes the package's readme on nuget.org. -->
+  <PropertyGroup Condition=" Exists('$(MSBuildProjectDirectory)\README.md') ">
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" Exists('$(MSBuildProjectDirectory)\README.md') ">
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

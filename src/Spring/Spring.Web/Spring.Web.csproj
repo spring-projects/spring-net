@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <Description>Interfaces and classes that provide web application support in Spring.Net</Description>
+    <PackageTags>$(PackageTags);aspnet;webforms;web</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

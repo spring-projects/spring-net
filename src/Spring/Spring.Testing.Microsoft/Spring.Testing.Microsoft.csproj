@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion);$(TargetModernFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide Microsoft Unit Testing integration in Spring.Net</Description>
+    <PackageTags>$(PackageTags);testing;mstest;unit-testing</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />

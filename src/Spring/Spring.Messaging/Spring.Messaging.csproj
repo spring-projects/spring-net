@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion);$(TargetModernFrameworkVersion)</TargetFrameworks>
-    <Description>Interfaces and classes that provide MSMQ 3.0 support in Spring.Net</Description>
+    <Description>Interfaces and classes that provide MSMQ support in Spring.Net</Description>
+    <PackageTags>$(PackageTags);msmq;messaging</PackageTags>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' != '.NETFramework' ">
     <PackageReference Include="Experimental.System.Messaging.Signed" />
