@@ -23,17 +23,28 @@ public class SimpleMessageListener : IMessageListener
 {
     private static readonly ILogger<SimpleMessageListener> LOG = LogManager.GetLogger<SimpleMessageListener>();
 
+    private readonly SemaphoreSlim received = new(0);
+
     private int messageCount;
 
     public int MessageCount
     {
-        get { return messageCount; }
+        get { return Volatile.Read(ref messageCount); }
+    }
+
+    /// <summary>
+    /// Waits until a message has been delivered that no earlier call has consumed.
+    /// </summary>
+    /// <returns><c>true</c> if a message arrived within <paramref name="timeout"/>.</returns>
+    public bool WaitForMessage(TimeSpan timeout)
+    {
+        return received.Wait(timeout);
     }
 
     public void OnMessage(IMessage message)
     {
-        messageCount++;
-        LOG.LogDebug("Message listener count = {MessageCount}", messageCount);
+        int count = Interlocked.Increment(ref messageCount);
+        LOG.LogDebug("Message listener count = {MessageCount}", count);
         ITextMessage textMessage = message as ITextMessage;
         if (textMessage != null)
         {
@@ -43,5 +54,7 @@ public class SimpleMessageListener : IMessageListener
         {
             LOG.LogWarning("Can not process message of type {MessageType}", message.GetType());
         }
+
+        received.Release();
     }
 }

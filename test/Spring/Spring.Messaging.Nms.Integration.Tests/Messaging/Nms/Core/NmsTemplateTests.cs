@@ -37,15 +37,15 @@ public class NmsTemplateTests : AbstractDependencyInjectionSpringContextTests
         this.PopulateProtectedVariables = true;
     }
 
-#if NETFRAMEWORK
     [Test]
     public void ConnectionThrowException()
     {
+        // The host name never resolves (the .invalid top-level domain is reserved for that, RFC 6761), so this fails the
+        // same way whatever runs on the machine, unlike a closed port on localhost.
         var cf = new Apache.NMS.ActiveMQ.ConnectionFactory();
-        cf.BrokerUri = new Uri("tcp://localaaahost:61616");
+        cf.BrokerUri = new Uri("tcp://spring-net-no-such-broker.invalid:61616");
         Assert.Throws<NMSConnectionException>(() => cf.CreateConnection());
     }
-#endif
 
     [Test]
     public void ConvertAndSend()

@@ -26,6 +26,10 @@ public partial class Build
         "Spring.Scheduling.Quartz3.Integration.Tests",
     ];
 
+    // The integration test project that provisions its own ActiveMQ broker with Testcontainers (test/Shared/ActiveMqTestEnvironment.cs).
+    // It needs a running Docker daemon, or a broker named by the SPRING_TEST_ACTIVEMQ_BROKER_URI environment variable.
+    const string NmsIntegrationTestProject = "Spring.Messaging.Nms.Integration.Tests";
+
     // Projects that target net472 only (no net10.0 build to run on Linux).
     static readonly string[] WindowsOnlyIntegrationTestProjects =
     [
@@ -33,6 +37,8 @@ public partial class Build
     ];
 
     static bool IsSqlServerIntegrationTestProject(Project project) => SqlServerIntegrationTestProjects.Contains(project.Name);
+
+    static bool IsNmsIntegrationTestProject(Project project) => project.Name == NmsIntegrationTestProject;
 
     Target Test => _ => _
         .DependsOn(Restore)
@@ -44,11 +50,12 @@ public partial class Build
                 // merely contain ".Test", and a Microsoft.Testing.Platform run of a project without tests is an error.
                 .Where(x => x.Name.EndsWith(".Tests"))
                 // Integration tests need infrastructure, so they run only when asked for: --test-full for all of them, or one
-                // flag for the projects behind it. (The four SQL Server projects also have the IntegrationTest target.)
+                // flag for the projects behind it. (The four SQL Server projects and the NMS project also have the IntegrationTest
+                // target.)
                 .Where(x => !x.Name.Contains(".Integration")
                             || TestFull
                             || (TestIntegrationData && IsSqlServerIntegrationTestProject(x))
-                            || (TestIntegrationNms && x.Name == "Spring.Messaging.Nms.Integration.Tests"))
+                            || (TestIntegrationNms && IsNmsIntegrationTestProject(x)))
                 .Where(x => !x.Name.Contains("Spring.Web.Conversation.NHibernate5.Tests") || TestFull)
                 .Where(x => !x.Name.Contains("Spring.Messaging.Tests") || TestIntegrationMsMq || TestFull)
                 .Where(x => !x.Name.Contains("Spring.Testing.Microsoft.Test") || EnvironmentInfo.IsWin)
@@ -59,16 +66,16 @@ public partial class Build
             RunTestProjects(testTargets);
         });
 
-    // Runs the four SQL Server backed integration test projects. Each starts its own SQL Server container, so a Docker
-    // daemon must be running (or SPRING_TEST_SQLSERVER must name a server). Unlike CI-only targets this one is meant to be
-    // run locally: ./build.cmd IntegrationTest
+    // Runs the four SQL Server backed integration test projects and the ActiveMQ backed NMS one. Each starts its own container,
+    // so a Docker daemon must be running (or SPRING_TEST_SQLSERVER and SPRING_TEST_ACTIVEMQ_BROKER_URI must name a server and a
+    // broker). Unlike CI-only targets this one is meant to be run locally: ./build.cmd IntegrationTest
     Target IntegrationTest => _ => _
         .DependsOn(Restore)
         .After(Compile)
         .Executes(() =>
         {
             var testTargets = GetActiveProjects()
-                .Where(IsSqlServerIntegrationTestProject)
+                .Where(x => IsSqlServerIntegrationTestProject(x) || IsNmsIntegrationTestProject(x))
                 .Where(x => !WindowsOnlyIntegrationTestProjects.Contains(x.Name) || EnvironmentInfo.IsWin);
 
             RunTestProjects(testTargets);
@@ -80,8 +87,10 @@ public partial class Build
 
         // Microsoft.Testing.Platform runs the modules of a multi-targeted project (net10.0 and net472) at the same time. Against
         // a server named by SPRING_TEST_SQLSERVER they would drop and recreate the same databases under each other, so they run
-        // one after the other then. With a container per module (the default) there is nothing to share.
+        // one after the other then. The same goes for a broker named by SPRING_TEST_ACTIVEMQ_BROKER_URI, whose queues the modules
+        // would share. With a container per module (the default) there is nothing to share.
         var maxParallelModules = string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("SPRING_TEST_SQLSERVER"))
+                                 && string.IsNullOrWhiteSpace(System.Environment.GetEnvironmentVariable("SPRING_TEST_ACTIVEMQ_BROKER_URI"))
             ? System.Environment.ProcessorCount
             : 1;
 
