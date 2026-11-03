@@ -11,6 +11,10 @@
     <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Testcontainers.MsSql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Shared\SqlServerTestEnvironment.cs" Link="SqlServerTestEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Transactions" />
