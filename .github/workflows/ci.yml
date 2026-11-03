@@ -20,20 +20,20 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Run './build.cmd ci'
         run: ./build.cmd ci
 
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Run './build.cmd ci'
         run: ./build.sh ci
 
