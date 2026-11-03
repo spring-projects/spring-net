@@ -182,7 +182,7 @@ public class ExceptionHandlerAspectIntegrationTests
         LogExceptionHandler exHandler = new LogExceptionHandler();
         exHandler.ConstraintExpressionText = "#e is T(System.ArithmeticException)";
         exHandler.LogName = "adviceHandler";
-        exHandler.ActionExpressionText = "#log.Fatal('Request Timeout occured', #e)";
+        exHandler.ActionExpressionText = "'Request Timeout occured'";
 
         ExecuteLoggingHandlerInList(exHandler, "Request Timeout");
     }
