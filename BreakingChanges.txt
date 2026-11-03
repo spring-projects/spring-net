@@ -31,6 +31,23 @@ Changes (3.1 to 4.0)
    4.0." The matching examples (Calculator, EmsQuickStart, WcfQuickStart and
    Web.Extensions.Example) were removed too.
 
+5. Dependency floors were raised: Microsoft.Extensions.Logging.Abstractions 8.0.3,
+   Microsoft.Bcl.HashCode 6.0.0, Microsoft.Win32.Registry 5.0.0, System.CodeDom 8.0.0,
+   NHibernate 5.7.1, Quartz 3.22.9, and Microsoft.AspNet.Mvc and Microsoft.AspNet.WebApi.WebHost
+   5.3.0. On .NET Framework, applications that use Spring.Web.Mvc5 need the standard binding
+   redirects for System.Web.Mvc, System.Web.Http, System.Web.Http.WebHost and
+   System.Net.Http.Formatting to the 5.3 assemblies (Visual Studio generates these for projects
+   with AutoGenerateBindingRedirects, and the Mvc/WebApi NuGet packages add them to web.config).
+
+6. On .NET Framework, Spring.Core no longer depends on the System.Configuration.ConfigurationManager,
+   System.CodeDom and Microsoft.Win32.Registry packages (nor on Microsoft.CSharp and
+   System.Reflection.Emit, which were already netstandard2.0-only). The framework provides those
+   APIs. Spring.Messaging likewise uses the framework's System.Messaging on .NET Framework
+   instead of Experimental.System.Messaging.Signed. The packages are still referenced for the
+   netstandard2.0 target.
+
+7. Spring.Aop no longer depends on Antlr3.Runtime.
+
 Changes (3.0.x to 3.1)
 ========================
 

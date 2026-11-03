@@ -3,39 +3,40 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Antlr3.Runtime" Version="3.5.1" />
     <PackageVersion Include="Apache.NMS" Version="2.2.0" />
-    <PackageVersion Include="Apache.NMS.ActiveMQ" Version="2.1.1" />
-    <PackageVersion Include="BenchmarkDotNet" Version="0.15.2" />
+    <PackageVersion Include="Apache.NMS.ActiveMQ" Version="2.3.0" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0.1" />
     <PackageVersion Include="Experimental.System.Messaging.Signed" Version="1.0.0" />
     <PackageVersion Include="Fallout.Common" Version="10.4.0" />
-    <PackageVersion Include="FakeItEasy" Version="8.3.0" />
+    <PackageVersion Include="FakeItEasy" Version="9.0.1" />
     <PackageVersion Include="FakeItEasy.Analyzer.CSharp" Version="6.1.1" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.4.3" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.4.3" />
-    <PackageVersion Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
-    <PackageVersion Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
-    <PackageVersion Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+    <PackageVersion Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+    <PackageVersion Include="Microsoft.AspNet.WebApi.WebHost" Version="5.3.0" />
+    <PackageVersion Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageVersion Include="Microsoft.Win32.Registry" Version="4.7.0" />
-    <PackageVersion Include="NHibernate" Version="5.6.0" />
+    <PackageVersion Include="Microsoft.Win32.Registry" Version="5.0.0" />
+    <PackageVersion Include="NHibernate" Version="5.7.1" />
     <PackageVersion Include="NUnit" Version="3.14.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageVersion Include="Quartz" Version="3.12.0" />
-    <PackageVersion Include="System.CodeDom" Version="5.0.0" />
+    <PackageVersion Include="Quartz" Version="3.22.9" />
+    <PackageVersion Include="System.CodeDom" Version="8.0.0" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
     <PackageVersion Include="System.Data.SQLite.Core" Version="1.0.119" />
-    <PackageVersion Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageVersion Include="System.Data.SqlClient" Version="4.9.1" />
     <PackageVersion Include="System.Reflection.Emit" Version="4.7.0" />
     <PackageVersion Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
-    <PackageVersion Include="System.Resources.Extensions" Version="8.0.0" />
-    <PackageVersion Include="System.Runtime.Serialization.Formatters" Version="10.0.0" />
-    <PackageVersion Include="log4net" Version="3.3.2" />
+    <PackageVersion Include="System.Resources.Extensions" Version="10.0.14" />
+    <PackageVersion Include="System.Runtime.Serialization.Formatters" Version="10.0.14" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.14" />
+    <PackageVersion Include="log4net" Version="3.5.0" />
   </ItemGroup>
 </Project>
