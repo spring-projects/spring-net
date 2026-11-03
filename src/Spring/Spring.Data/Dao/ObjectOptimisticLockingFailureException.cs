@@ -86,6 +86,9 @@ public class ObjectOptimisticLockingFailureException : OptimisticLockingFailureE
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected ObjectOptimisticLockingFailureException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }
@@ -120,6 +123,9 @@ public class ObjectOptimisticLockingFailureException : OptimisticLockingFailureE
     /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
     /// <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
     /// <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is a null reference (<see langword="Nothing"/> in Visual Basic).</exception>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("persistentClass", persistentClass);

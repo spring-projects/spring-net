@@ -16,7 +16,6 @@
 
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using AopAlliance.Aop;
 using Spring.Util;
 
@@ -63,6 +62,9 @@ public abstract class AbstractRegularExpressionMethodPointcut
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected AbstractRegularExpressionMethodPointcut(
         SerializationInfo info, StreamingContext context)
     {
@@ -136,7 +138,9 @@ public abstract class AbstractRegularExpressionMethodPointcut
     }
 
     /// <inheritdoc />
-    [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("Patterns", _patterns);

@@ -43,6 +43,9 @@ public abstract class UnaryOperator : BaseNode
     /// <summary>
     /// Create a new instance from SerializationInfo
     /// </summary>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected UnaryOperator(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

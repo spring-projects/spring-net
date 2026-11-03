@@ -20,13 +20,6 @@ using Spring.Messaging.Core;
 using Spring.Messaging.Support.Converters;
 using Spring.Util;
 
-#if NETSTANDARD
-using Experimental.System.Messaging;
-
-#else
-using System.Messaging;
-#endif
-
 namespace Spring.Messaging.Listener;
 
 /// <summary>

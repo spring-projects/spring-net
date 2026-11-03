@@ -58,6 +58,9 @@ public class DeadlockLoserDataAccessException : PessimisticLockingFailureExcepti
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected DeadlockLoserDataAccessException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

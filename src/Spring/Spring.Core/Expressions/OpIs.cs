@@ -35,6 +35,9 @@ public class OpIs : BinaryOperator
     /// <summary>
     /// Create a new instance from SerializationInfo
     /// </summary>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected OpIs(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

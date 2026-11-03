@@ -88,6 +88,9 @@ public class InvalidTimeoutException : TransactionUsageException, ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected InvalidTimeoutException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {
@@ -95,6 +98,9 @@ public class InvalidTimeoutException : TransactionUsageException, ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("timeout", _timeout);

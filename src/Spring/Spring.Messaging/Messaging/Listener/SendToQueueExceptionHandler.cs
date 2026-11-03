@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-#if NETSTANDARD
-using Experimental.System.Messaging;
-#else
-using System.Messaging;
-#endif
 using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Listener;

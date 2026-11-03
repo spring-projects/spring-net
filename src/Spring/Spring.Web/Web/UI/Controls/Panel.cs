@@ -15,7 +15,6 @@
  */
 
 using System.ComponentModel;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using Spring.Context;
@@ -35,9 +34,7 @@ namespace Spring.Web.UI.Controls;
 [PersistChildren(true),
  ToolboxData("<{0}:Panel runat=\"server\" Width=\"125px\" Height=\"50px\"> </{0}:Panel>"),
  ParseChildren(false),
- Designer("System.Web.UI.Design.WebControls.PanelContainerDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"),
- AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal),
- AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
+ Designer("System.Web.UI.Design.WebControls.PanelContainerDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
 public class Panel : System.Web.UI.WebControls.Panel, ISupportsWebDependencyInjection
 {
     // this helper class intercepts the first call to the child controls

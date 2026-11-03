@@ -48,6 +48,9 @@ public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerial
     /// </summary>
     /// <param name="info">Serialization data.</param>
     /// <param name="context">Serialization context.</param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected BaseCompositionAopProxy(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }
@@ -55,6 +58,9 @@ public abstract class BaseCompositionAopProxy : AdvisedProxy, IAopProxy, ISerial
     ///<summary>
     ///Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"></see> with the data needed to serialize the target object.
     ///</summary>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
     {
         base.GetObjectData(info, context);

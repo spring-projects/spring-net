@@ -701,6 +701,9 @@ public class PriorityQueue : AbstractQueue, ISerializable
     /// </serialData>
     /// <param name="serializationInfo">the stream</param>
     /// <param name="context">the context</param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public virtual void GetObjectData(SerializationInfo serializationInfo, StreamingContext context)
     {
         Type thisType = this.GetType();
@@ -726,6 +729,9 @@ public class PriorityQueue : AbstractQueue, ISerializable
     /// </summary>
     /// <param name="serializationInfo">the stream</param>
     /// <param name="context">the context</param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected PriorityQueue(SerializationInfo serializationInfo, StreamingContext context)
     {
         Type thisType = this.GetType();

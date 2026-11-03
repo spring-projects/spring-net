@@ -57,6 +57,9 @@ public abstract class NodeWithArguments : BaseNode
     /// <summary>
     /// Create a new instance from SerializationInfo
     /// </summary>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected NodeWithArguments(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

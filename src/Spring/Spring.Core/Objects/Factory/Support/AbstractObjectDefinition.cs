@@ -870,6 +870,9 @@ public abstract class AbstractObjectDefinition : ObjectMetadataAttributeAccessor
         return buffer.ToString();
     }
 
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected AbstractObjectDefinition(SerializationInfo info, StreamingContext context)
     {
         constructorArgumentValues = (ConstructorArgumentValues) info.GetValue("constructorArgumentValues", typeof(ConstructorArgumentValues));
@@ -899,6 +902,9 @@ public abstract class AbstractObjectDefinition : ObjectMetadataAttributeAccessor
         factoryObjectName = info.GetString("factoryObjectName");
     }
 
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("constructorArgumentValues", constructorArgumentValues);

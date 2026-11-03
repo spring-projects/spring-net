@@ -59,6 +59,9 @@ public abstract class UncategorizedDataAccessException : NonTransientDataAccessE
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected UncategorizedDataAccessException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

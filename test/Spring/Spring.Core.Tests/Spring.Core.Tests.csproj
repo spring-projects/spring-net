@@ -39,7 +39,6 @@
     <Compile Remove="Globalization\AbstractLocalizerTests.cs" />
     <Compile Remove="Globalization\Localizers\ResourceSetLocalizerTests.cs" />
     <Compile Remove="Objects\TestTransparentProxyFactory.cs" />
-    <Compile Remove="SecurityTemplate.cs" />
     <Compile Remove="Threading\CallContextStorageTests.cs" />
     <Compile Remove="Util\ObjectUtilsTests.cs" />
   </ItemGroup>

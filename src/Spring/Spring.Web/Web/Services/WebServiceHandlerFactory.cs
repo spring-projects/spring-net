@@ -15,7 +15,6 @@
  */
 
 using System.Reflection;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using System.Web.Services;
@@ -42,7 +41,6 @@ namespace Spring.Web.Services;
 /// to find web service object in the Spring context.
 /// </remarks>
 /// <author>Aleksandar Seovic</author>
-[PermissionSet(SecurityAction.InheritanceDemand, Unrestricted = true)]
 public class WebServiceHandlerFactory : System.Web.Services.Protocols.WebServiceHandlerFactory, IHttpHandlerFactory
 {
 #if !MONO_2_0
@@ -61,8 +59,6 @@ public class WebServiceHandlerFactory : System.Web.Services.Protocols.WebService
     /// <returns>instance of the configured page object</returns>
     IHttpHandler IHttpHandlerFactory.GetHandler(HttpContext context, string requestType, string url, string path)
     {
-        new AspNetHostingPermission(AspNetHostingPermissionLevel.Minimal).Demand();
-
         IConfigurableApplicationContext appContext =
             WebApplicationContext.GetContext(url) as IConfigurableApplicationContext;
 

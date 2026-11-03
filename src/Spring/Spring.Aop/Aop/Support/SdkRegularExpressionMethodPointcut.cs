@@ -66,6 +66,9 @@ public class SdkRegularExpressionMethodPointcut : AbstractRegularExpressionMetho
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected SdkRegularExpressionMethodPointcut(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

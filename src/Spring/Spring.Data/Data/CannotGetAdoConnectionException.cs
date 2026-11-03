@@ -53,5 +53,8 @@ public class CannotGetAdoConnectionException : InvalidDataAccessResourceUsageExc
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected CannotGetAdoConnectionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 }

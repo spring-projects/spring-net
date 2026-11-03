@@ -246,6 +246,9 @@ public class RootObjectDefinition : AbstractObjectDefinition
     {
     }
 
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected RootObjectDefinition(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

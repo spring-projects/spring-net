@@ -63,7 +63,7 @@ public class TargetAopProxyMethodBuilder : AbstractAopProxyMethodBuilder
         base.DeclareLocals(il, method);
         target = il.DeclareLocal(typeof(object));
 
-#if DEBUG && !NETSTANDARD
+#if DEBUG && NETFRAMEWORK
         target.SetLocalSymInfo("target");
 #endif
     }

@@ -174,6 +174,9 @@ public class AdvisedSupport : ProxyConfig, IAdvised
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected AdvisedSupport(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
@@ -196,6 +199,9 @@ public class AdvisedSupport : ProxyConfig, IAdvised
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         base.GetObjectData(info, context);
@@ -279,6 +285,7 @@ public class AdvisedSupport : ProxyConfig, IAdvised
     /// <value>
     /// <c>true</c> if this instance can be serialized, <c>false</c> otherwise.
     /// </value>
+#pragma warning disable SYSLIB0050 // Type.IsSerializable is what this property reports on, and has no replacement.
     public virtual bool IsSerializable
     {
         get
@@ -310,6 +317,7 @@ public class AdvisedSupport : ProxyConfig, IAdvised
             return true;
         }
     }
+#pragma warning restore SYSLIB0050
 
     /// <summary>
     /// Returns the collection of interface <see cref="System.Type"/>s

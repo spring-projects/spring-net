@@ -15,7 +15,6 @@
  */
 
 using System.Collections.Specialized;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.Profile;
 
@@ -25,8 +24,6 @@ namespace Spring.Web.Providers;
 ///
 /// </summary>
 /// <author>Erich Eichinger</author>
-[AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
-[AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 public class ConfigurableSqlProfileProvider : SqlProfileProvider, IProfileProvider
 {
     private bool initialized = false;

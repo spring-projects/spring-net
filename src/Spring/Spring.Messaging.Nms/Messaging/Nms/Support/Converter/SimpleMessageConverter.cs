@@ -62,7 +62,9 @@ public class SimpleMessageConverter : IMessageConverter
         {
             return CreateMessageForMap((IDictionary) objectToConvert, session);
         }
+#pragma warning disable SYSLIB0050 // Type.IsSerializable gates the BinaryFormatter path below and has no replacement.
         else if (objectToConvert != null && objectToConvert.GetType().IsSerializable)
+#pragma warning restore SYSLIB0050
         {
             return
                 CreateMessageForSerializable(objectToConvert, session);

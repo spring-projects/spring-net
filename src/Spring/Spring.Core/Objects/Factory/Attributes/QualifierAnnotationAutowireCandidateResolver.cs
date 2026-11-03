@@ -81,6 +81,9 @@ public class QualifierAnnotationAutowireCandidateResolver : IAutowireCandidateRe
         }
     }
 
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected QualifierAnnotationAutowireCandidateResolver(SerializationInfo info, StreamingContext context)
     {
         _objectFactory = (IObjectFactory) info.GetValue("objectFactory", typeof(IObjectFactory));
@@ -95,6 +98,9 @@ public class QualifierAnnotationAutowireCandidateResolver : IAutowireCandidateRe
         }
     }
 
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("objectFactory", _objectFactory);

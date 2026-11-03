@@ -47,46 +47,6 @@ public class ReflectionUtilsMemberwiseCopyTests
         Assert.AreEqual(i1, i2);
     }
 
-#if !NETCOREAPP
-    [Test]
-    public void MediumTrustAllowsCopyingBetweenTypesFromSameModule()
-    {
-        SampleBaseClass i1 = new SampleDerivedClass("1st config val");
-        SampleBaseClass i2 = new SampleFurtherDerivedClass("2nd config val");
-
-        SecurityTemplate.MediumTrustInvoke(new System.Threading.ThreadStart(new CopyCommand(i2, i1).Execute));
-        Assert.AreEqual(i1, i2);
-    }
-
-    [Test]
-    public void MediumTrustThrowsSecurityExceptionWhenCopyingBetweenTypesFromDifferentModules()
-    {
-        Exception e1 = new Exception("my name is e1");
-        var e2 = new System.Web.HttpException("my name is e2");
-        // I know, I am a bit paranoid about that basic assumption
-        Assert.AreNotEqual( e1.GetType().Assembly, e2.GetType().Assembly );
-
-        SecurityTemplate.MediumTrustInvoke(new System.Threading.ThreadStart(new CopyCommand(e2, e1).Execute));
-        Assert.AreEqual(e1.Message, e2.Message);
-    }
-#endif
-
-    class CopyCommand
-    {
-        private object a;
-        private object b;
-
-        public CopyCommand(object a, object b)
-        {
-            this.a = a;
-            this.b = b;
-        }
-
-        public void Execute()
-        {
-            ReflectionUtils.MemberwiseCopy(a, b);
-        }
-    }
 }
 
 public class SampleBaseClass

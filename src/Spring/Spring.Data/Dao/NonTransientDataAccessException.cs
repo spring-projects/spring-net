@@ -59,6 +59,9 @@ public abstract class NonTransientDataAccessException : DataAccessException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected NonTransientDataAccessException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

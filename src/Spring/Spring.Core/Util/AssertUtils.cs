@@ -90,7 +90,7 @@ public static class AssertUtils
         Type targetType = null;
         if (RemotingServices.IsTransparentProxy(target))
         {
-#if !NETSTANDARD
+#if NETFRAMEWORK
                 System.Runtime.Remoting.Proxies.RealProxy rp = RemotingServices.GetRealProxy(target);
                 IRemotingTypeInfo rti = rp as IRemotingTypeInfo;
                 if (rti != null)

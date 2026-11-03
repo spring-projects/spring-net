@@ -15,8 +15,6 @@
  */
 
 using System.Collections;
-using System.Security;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using Microsoft.Extensions.Logging;
@@ -88,20 +86,8 @@ public abstract class AbstractHandlerFactory : IHttpHandlerFactory
 
     static AbstractHandlerFactory()
     {
-        PrivilegedCommand cmd = new PrivilegedCommand();
-        SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), new SecurityCritical.PrivilegedCallback(cmd.Execute));
-        s_simpleHandlerFactory = cmd.Result;
-    }
-
-    private class PrivilegedCommand
-    {
-        public IHttpHandlerFactory Result = null;
-
-        public void Execute()
-        {
-            Type simpleHandlerFactoryType = typeof(IHttpHandler).Assembly.GetType("System.Web.UI.SimpleHandlerFactory");
-            Result = (IHttpHandlerFactory) Activator.CreateInstance(simpleHandlerFactoryType, true);
-        }
+        Type simpleHandlerFactoryType = typeof(IHttpHandler).Assembly.GetType("System.Web.UI.SimpleHandlerFactory");
+        s_simpleHandlerFactory = (IHttpHandlerFactory) Activator.CreateInstance(simpleHandlerFactoryType, true);
     }
 
     /// <summary>

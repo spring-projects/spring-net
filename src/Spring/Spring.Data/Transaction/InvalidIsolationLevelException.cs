@@ -59,6 +59,9 @@ public class InvalidIsolationLevelException : TransactionUsageException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected InvalidIsolationLevelException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

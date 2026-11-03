@@ -74,6 +74,9 @@ public sealed class SingletonTargetSource : ITargetSource, ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     private SingletonTargetSource(SerializationInfo info, StreamingContext context)
     {
         target = info.GetValue("Target", typeof(object));
@@ -126,6 +129,9 @@ public sealed class SingletonTargetSource : ITargetSource, ISerializable
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("TargetTypeName", targetType?.AssemblyQualifiedName);

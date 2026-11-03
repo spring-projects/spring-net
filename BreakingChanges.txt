@@ -62,6 +62,32 @@ Changes (3.1 to 4.0)
 
 7. Spring.Aop no longer depends on Antlr3.Runtime.
 
+8. The libraries now include a net10.0 build (Spring.Core, Spring.Aop, Spring.Data,
+   Spring.Data.NHibernate5, Spring.Messaging, Spring.Messaging.Nms and Spring.Scheduling.Quartz3
+   target netstandard2.0, net472 and net10.0). NuGet picks lib/net10.0 on .NET 10, where
+   .NET 10 applications used the netstandard2.0 build before. Applications on .NET 8 and .NET 9
+   keep getting the netstandard2.0 build. Spring.Testing.NUnit and Spring.Testing.Microsoft stay
+   netstandard2.0 and net472 for now.
+   - Partial-trust (medium-trust) hosting is no longer supported. Code runs with the caller's
+     trust only: the ExecutePrivileged wrappers and the permission demands are gone.
+   - Code access security is gone. SecurityPermission demands, the SecurityCritical and
+     SecurityTreatAsSafe helpers, PermissionSet asserts, and the AspNetHostingPermission,
+     DirectoryServicesPermission and PermissionSet attributes were removed from Spring.Core,
+     Spring.Aop and Spring.Web. They were no-ops in full trust, and the framework deprecates
+     them (SYSLIB0003). Spring.NET no longer supports partially trusted callers or a sandboxed
+     AppDomain: DynamicReflectionManager no longer falls back to a Spring-owned module when a
+     security demand fails, and serialization no longer demands SerializationFormatter.
+   - Legacy serialization is obsolete on .NET 10. [Serializable], ISerializable, the
+     (SerializationInfo, StreamingContext) constructors and GetObjectData are all still there and
+     unchanged on .NET Framework and netstandard2.0. In the net10.0 build, those constructors
+     and GetObjectData overrides carry [Obsolete] with diagnostic SYSLIB0051, as the BCL's own
+     do, so code that derives from a Spring exception and chains to base(info, context) now gets
+     SYSLIB0051 when it compiles against net10.0 (an error under TreatWarningsAsErrors; suppress
+     or annotate the constructor the same way).
+   - ReflectionUtils.GetCustomAttributes still returns live attribute instances for declarative
+     security attributes. It now recognises them by the name of their base type instead of
+     typeof(SecurityAttribute).
+
 Changes (3.0.x to 3.1)
 ========================
 

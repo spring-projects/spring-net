@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion);$(TargetModernFrameworkVersion)</TargetFrameworks>
     <Description>Core functionality for Spring.Net IoC container</Description>
     <NoWarn>219, 162, 618, 1591</NoWarn>
   </PropertyGroup>
@@ -12,7 +12,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+  <ItemGroup Condition=" '$(TargetFrameworkIdentifier)' != '.NETFramework' ">
     <Compile Remove="Threading\CallContextStorage.cs" />
   </ItemGroup>
 
@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.Bcl.HashCode" />
   </ItemGroup>
 
+  <!-- netstandard2.0 only: .NET Framework ships these assemblies and net10.0 has them in the shared framework. -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="Microsoft.CSharp" />
     <PackageReference Include="Microsoft.Win32.Registry" />
@@ -50,6 +51,10 @@
     <EmbeddedResource Include="Objects\Factory\Xml\spring-objects-2.0.xsd" />
     <EmbeddedResource Include="Validation\Config\spring-validation-1.3.xsd" />
     <EmbeddedResource Include="Validation\Config\spring-validation-1.1.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Obsoletions.cs" Link="Obsoletions.cs" />
   </ItemGroup>
 
 </Project>

@@ -217,7 +217,7 @@ public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwar
             return obj;
         }
 
-#if NETSTANDARD
+#if !NETFRAMEWORK
             var isTransparentProxy = false;
 #else
         var isTransparentProxy = System.Runtime.Remoting.RemotingServices.IsTransparentProxy(obj);

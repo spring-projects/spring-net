@@ -65,6 +65,9 @@ public class ConcurrencyFailureException : TransientDataAccessException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected ConcurrencyFailureException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

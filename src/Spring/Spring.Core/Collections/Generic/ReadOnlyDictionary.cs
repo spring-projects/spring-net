@@ -409,6 +409,9 @@ public class ReadOnlyDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDict
     /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"></see> to populate with data.</param>
     /// <param name="context">The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext"></see>) for this serialization.</param>
     /// <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         ISerializable serializable = dict as ISerializable;

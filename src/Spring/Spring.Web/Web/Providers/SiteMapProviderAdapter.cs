@@ -15,7 +15,6 @@
  */
 
 using System.Collections.Specialized;
-using System.Security.Permissions;
 using System.Web;
 using Spring.Context.Support;
 
@@ -31,8 +30,6 @@ namespace Spring.Web.Providers;
 /// </p>
 /// </remarks>
 /// <author>Damjan Tomic</author>
-[AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
-[AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 public class SiteMapProviderAdapter : SiteMapProvider, ISiteMapProvider
 {
     /// <summary>

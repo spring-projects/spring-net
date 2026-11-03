@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion);$(TargetModernFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide AOP support in Spring.Net</Description>
   </PropertyGroup>
 
@@ -16,6 +16,10 @@
   <ItemGroup>
     <None Include="Aop\Config\spring-aop-1.1.xsx" DependentUpon="spring-aop-1.1.xsd" />
     <EmbeddedResource Include="Aop\Config\spring-aop-1.1.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Obsoletions.cs" Link="Obsoletions.cs" />
   </ItemGroup>
 
 </Project>

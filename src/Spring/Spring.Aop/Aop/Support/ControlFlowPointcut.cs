@@ -75,6 +75,9 @@ public class ControlFlowPointcut : IPointcut, ITypeFilter, IMethodMatcher, ISeri
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     private ControlFlowPointcut(SerializationInfo info, StreamingContext context)
     {
         var type = info.GetString("Type");
@@ -84,6 +87,9 @@ public class ControlFlowPointcut : IPointcut, ITypeFilter, IMethodMatcher, ISeri
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("Type", _type?.AssemblyQualifiedName);

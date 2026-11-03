@@ -79,6 +79,9 @@ public class HibernateQueryException : InvalidDataAccessResourceUsageException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected HibernateQueryException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }

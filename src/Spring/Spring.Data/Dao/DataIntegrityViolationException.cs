@@ -64,6 +64,9 @@ public class DataIntegrityViolationException : NonTransientDataAccessException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected DataIntegrityViolationException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

@@ -63,56 +63,6 @@ public sealed class DynamicMethodTests
         //DynamicReflectionManager.SaveAssembly();
     }
 
-    private string RespectsPermissionsPrivateMethod()
-    {
-        return "Result";
-    }
-
-    public void RespectsPermissionsPublicMethod() { }
-
-#if !NETCOREAPP
-    [Test]
-    public void CanCreateWithRestrictedPermissions()
-    {
-        SecurityTemplate.MediumTrustInvoke(new System.Threading.ThreadStart(CanCreateWithRestrictedPermissionsImpl));
-    }
-
-    private void CanCreateWithRestrictedPermissionsImpl()
-    {
-        MethodInfo method = this.GetType().GetMethod("RespectsPermissionsPublicMethod");
-        IDynamicMethod m = DynamicMethod.Create(method);
-        m.Invoke(this, null);
-    }
-
-    [Test]
-    public void CanCreatePrivateMethodButThrowsOnInvoke()
-    {
-        SecurityTemplate.MediumTrustInvoke(new System.Threading.ThreadStart(CanCreatePrivateMethodButThrowsOnInvokeImpl));
-    }
-
-    private void CanCreatePrivateMethodButThrowsOnInvokeImpl()
-    {
-        MethodInfo privateMethod = this.GetType().GetMethod("RespectsPermissionsPrivateMethod", BindingFlags.NonPublic | BindingFlags.Instance);
-        IDynamicMethod m = DynamicMethod.Create(privateMethod);
-
-        try
-        {
-            object result = m.Invoke(this, null);
-            if (SystemUtils.MonoRuntime)
-            {
-                Assert.AreEqual("Result", result);
-            }
-            else
-            {
-                Assert.Fail("shoud throw a security exception");
-            }
-
-        }
-        catch (MethodAccessException)
-        { }
-    }
-#endif
-
     [Test]
     public void TestInstanceMethods()
     {

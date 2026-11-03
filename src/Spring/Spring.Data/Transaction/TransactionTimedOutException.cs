@@ -40,6 +40,9 @@ public class TransactionTimedOutException : TransactionException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected TransactionTimedOutException(
         SerializationInfo info, StreamingContext context) : base(info, context)
     {

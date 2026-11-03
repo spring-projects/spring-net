@@ -17,8 +17,6 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Security;
-using System.Security.Permissions;
 using System.Web.UI;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
@@ -49,35 +47,13 @@ internal class ControlAccessor
 
     static ControlAccessor()
     {
-        SafeField fldControls = null;
-        MethodInfo fnClear = null;
+        s_miClear = GetMethod("Clear");
+        ControlsArrayField = new SafeField(typeof(ControlCollection).GetField("_controls", BindingFlags.Instance | BindingFlags.NonPublic));
 
-        SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
-        {
-            fnClear = GetMethod("Clear");
-            fldControls = new SafeField(typeof(ControlCollection).GetField("_controls", BindingFlags.Instance | BindingFlags.NonPublic));
-        });
-
-        s_miClear = fnClear;
-        ControlsArrayField = fldControls;
-
-        CreateControlCollectionDelegate fnBaseCreateControlCollection = null;
-        AddedControlDelegate fnBaseAddedControl = null;
-        RemovedControlDelegate fnBaseRemovedControl = null;
-        VoidMethodDelegate fnBaseClearNamingContainer = null;
-
-        SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
-        {
-            fnBaseCreateControlCollection = (CreateControlCollectionDelegate) Delegate.CreateDelegate(typeof(CreateControlCollectionDelegate), GetMethod("CreateControlCollection"));
-            fnBaseAddedControl = (AddedControlDelegate) Delegate.CreateDelegate(typeof(AddedControlDelegate), GetMethod("AddedControl"));
-            fnBaseRemovedControl = (RemovedControlDelegate) Delegate.CreateDelegate(typeof(RemovedControlDelegate), GetMethod("RemovedControl"));
-            fnBaseClearNamingContainer = (VoidMethodDelegate) Delegate.CreateDelegate(typeof(VoidMethodDelegate), GetMethod("ClearNamingContainer"));
-        });
-
-        BaseCreateControlCollection = fnBaseCreateControlCollection;
-        BaseAddedControl = fnBaseAddedControl;
-        BaseRemovedControl = fnBaseRemovedControl;
-        BaseClearNamingContainer = fnBaseClearNamingContainer;
+        BaseCreateControlCollection = (CreateControlCollectionDelegate) Delegate.CreateDelegate(typeof(CreateControlCollectionDelegate), GetMethod("CreateControlCollection"));
+        BaseAddedControl = (AddedControlDelegate) Delegate.CreateDelegate(typeof(AddedControlDelegate), GetMethod("AddedControl"));
+        BaseRemovedControl = (RemovedControlDelegate) Delegate.CreateDelegate(typeof(RemovedControlDelegate), GetMethod("RemovedControl"));
+        BaseClearNamingContainer = (VoidMethodDelegate) Delegate.CreateDelegate(typeof(VoidMethodDelegate), GetMethod("ClearNamingContainer"));
     }
 
     private static MethodInfo GetMethod(string name)
@@ -187,48 +163,38 @@ internal class ControlAccessor
 
     private static GetControlsDelegate GetGetControlsDelegate()
     {
-        GetControlsDelegate handler = null;
         FieldInfo controls = GetField("_controls");
 
-        SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
-        {
-            System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("get_Controls", typeof(ControlCollection), new Type[] { typeof(Control) }, typeof(Control).Module, true);
-            ILGenerator il = dm.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Ldfld, controls);
-            il.Emit(OpCodes.Ret);
-            handler = (GetControlsDelegate) dm.CreateDelegate(typeof(GetControlsDelegate));
-        });
-        return handler;
+        System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("get_Controls", typeof(ControlCollection), new Type[] { typeof(Control) }, typeof(Control).Module, true);
+        ILGenerator il = dm.GetILGenerator();
+        il.Emit(OpCodes.Ldarg_0);
+        il.Emit(OpCodes.Ldfld, controls);
+        il.Emit(OpCodes.Ret);
+        return (GetControlsDelegate) dm.CreateDelegate(typeof(GetControlsDelegate));
     }
 
     private static SetControlsDelegate GetSetControlsDelegate()
     {
-        SetControlsDelegate handler = null;
         FieldInfo controls = GetField("_controls");
         FieldInfo occasionalFields = GetField("_occasionalFields");
         MethodInfo ensureOccasionalFields = GetMethod("EnsureOccasionalFields");
 
-        SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
-        {
-            System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("set_Controls ", null, new Type[] { typeof(Control), typeof(ControlCollection) }, typeof(Control).Module, true);
-            ILGenerator il = dm.GetILGenerator();
-            Label occFieldsNull = il.DefineLabel();
-            Label setControls = il.DefineLabel();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Ldfld, occasionalFields);
-            il.Emit(OpCodes.Brfalse_S, occFieldsNull);
-            il.MarkLabel(setControls);
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Stfld, controls);
-            il.Emit(OpCodes.Ret);
-            il.MarkLabel(occFieldsNull);
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Call, ensureOccasionalFields);
-            il.Emit(OpCodes.Br, setControls);
-            handler = (SetControlsDelegate) dm.CreateDelegate(typeof(SetControlsDelegate));
-        });
-        return handler;
+        System.Reflection.Emit.DynamicMethod dm = new System.Reflection.Emit.DynamicMethod("set_Controls ", null, new Type[] { typeof(Control), typeof(ControlCollection) }, typeof(Control).Module, true);
+        ILGenerator il = dm.GetILGenerator();
+        Label occFieldsNull = il.DefineLabel();
+        Label setControls = il.DefineLabel();
+        il.Emit(OpCodes.Ldarg_0);
+        il.Emit(OpCodes.Ldfld, occasionalFields);
+        il.Emit(OpCodes.Brfalse_S, occFieldsNull);
+        il.MarkLabel(setControls);
+        il.Emit(OpCodes.Ldarg_0);
+        il.Emit(OpCodes.Ldarg_1);
+        il.Emit(OpCodes.Stfld, controls);
+        il.Emit(OpCodes.Ret);
+        il.MarkLabel(occFieldsNull);
+        il.Emit(OpCodes.Ldarg_0);
+        il.Emit(OpCodes.Call, ensureOccasionalFields);
+        il.Emit(OpCodes.Br, setControls);
+        return (SetControlsDelegate) dm.CreateDelegate(typeof(SetControlsDelegate));
     }
 }

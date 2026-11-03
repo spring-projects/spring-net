@@ -19,7 +19,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
 using Spring.Util;
@@ -114,6 +113,9 @@ public class AdvisedProxy : IAdvised, ISerializable
     /// </summary>
     /// <param name="info">Serialization data.</param>
     /// <param name="context">Serialization context.</param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected AdvisedProxy(SerializationInfo info, StreamingContext context)
     {
         m_advised = (IAdvised) info.GetValue("advised", typeof(IAdvised));
@@ -129,7 +131,9 @@ public class AdvisedProxy : IAdvised, ISerializable
     /// </summary>
     /// <param name="info">Serialization data.</param>
     /// <param name="context">Serialization context.</param>
-    [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("advised", m_advised);

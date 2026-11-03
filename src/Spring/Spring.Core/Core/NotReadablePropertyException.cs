@@ -98,6 +98,9 @@ public class NotReadablePropertyException : InvalidPropertyException
     /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
     /// that contains contextual information about the source or destination.
     /// </param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected NotReadablePropertyException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

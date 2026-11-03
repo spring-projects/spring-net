@@ -104,7 +104,11 @@ public class UrlResource : AbstractResource
             _resourcePath = null;
         }
 
+        // UrlResource.WebRequest is public API that hands out a System.Net.WebRequest, and file: URIs are only served by
+        // WebRequest (HttpClient does not handle them), so SYSLIB0014 has no replacement here.
+#pragma warning disable SYSLIB0014
         _webRequest = WebRequest.Create(_uri);
+#pragma warning restore SYSLIB0014
     }
 
     /// <summary>

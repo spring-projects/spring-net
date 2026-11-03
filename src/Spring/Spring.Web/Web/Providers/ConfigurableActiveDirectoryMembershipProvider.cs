@@ -23,10 +23,6 @@ namespace Spring.Web.Providers;
     /// A spring configurable version of <see cref="ActiveDirectoryMembershipProvider"/>
     /// </summary>
     /// <author>Erich Eichinger</author>
-    [DirectoryServicesPermission(SecurityAction.InheritanceDemand, Unrestricted = true)]
-    [DirectoryServicesPermission(SecurityAction.LinkDemand, Unrestricted = true)]
-    [AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
-    [AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
     public class ConfigurableActiveDirectoryMembershipProvider : ActiveDirectoryMembershipProvider, IMembershipProvider
     {
         private string connectionStringName;

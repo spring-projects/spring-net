@@ -123,26 +123,6 @@ public class DynamicFieldTests
         Assert.AreEqual(u1, u2);
     }
 
-#if !NETCOREAPP
-    [Test, Ignore("TODO: this works as expected when run using TD.NET & R# (in VS2k8), but fails with nant/NET 2.0 ?!?")]
-    public void CannotReadPrivateReadOnlyFieldIfNoReflectionPermission()
-    {
-        FieldInfo fieldInfo = typeof(MyStaticClass).GetField("myPrivateReadonlyField", BindingFlags.Static | BindingFlags.NonPublic);
-        try
-        {
-            SecurityTemplate.MediumTrustInvoke( delegate
-            {
-                IDynamicField myPrivateReadonlyField2 = Create(fieldInfo);
-            });
-            Assert.Fail("private field must not be accessible in medium trust: " + fieldInfo);
-        }
-        catch (System.Security.SecurityException sex)
-        {
-            Assert.IsTrue( sex.Message.IndexOf("ReflectionPermission") > -1 );
-        }
-    }
-#endif
-
     [Test]
     public void CannotSetStaticReadOnlyField()
     {

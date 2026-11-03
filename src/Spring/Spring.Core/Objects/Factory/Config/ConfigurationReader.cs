@@ -347,7 +347,11 @@ public sealed class ConfigurationReader
             try
             {
                 XmlDocument machineConfig = new XmlDocument();
+                // Machine.config only exists on .NET Framework. Modern .NET throws PlatformNotSupportedException here (SYSLIB0019),
+                // which is caught below and falls back to the built-in handlers, exactly as netstandard2.0 does today.
+#pragma warning disable SYSLIB0019
                 machineConfig.Load(RuntimeEnvironment.SystemConfigurationFile);
+#pragma warning restore SYSLIB0019
                 xmlConfig = machineConfig.SelectSingleNode(sectionHandlerPath);
                 if (xmlConfig == null)
                 {

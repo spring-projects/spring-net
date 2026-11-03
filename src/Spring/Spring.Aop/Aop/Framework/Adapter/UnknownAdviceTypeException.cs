@@ -76,6 +76,9 @@ public class UnknownAdviceTypeException : ArgumentException
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected UnknownAdviceTypeException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

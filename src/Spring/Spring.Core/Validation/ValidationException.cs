@@ -119,6 +119,9 @@ public class ValidationException : Exception
     /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
     /// that contains contextual information about the source or destination.
     /// </param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected ValidationException(
         SerializationInfo info, StreamingContext context)
         : base(info, context)
@@ -137,6 +140,9 @@ public class ValidationException : Exception
     /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
     /// that contains contextual information about the source or destination.
     /// </param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         base.GetObjectData(info, context);

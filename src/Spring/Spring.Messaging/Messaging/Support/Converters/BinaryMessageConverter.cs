@@ -16,13 +16,6 @@
 
 using System.Runtime.Serialization.Formatters;
 
-#if NETSTANDARD
-using Experimental.System.Messaging;
-
-#else
-using System.Messaging;
-#endif
-
 namespace Spring.Messaging.Support.Converters;
 
 /// <summary>
@@ -55,6 +48,7 @@ public class BinaryMessageConverter : IMessageConverter
     /// Gets or sets the type format used in the <see cref="BinaryMessageFormatter"/>
     /// </summary>
     /// <value>The type format.</value>
+#pragma warning disable SYSLIB0050 // FormatterTypeStyle is part of this class's public API and of BinaryMessageFormatter; there is no replacement.
     public FormatterTypeStyle TypeFormat
     {
         get
@@ -66,11 +60,13 @@ public class BinaryMessageConverter : IMessageConverter
             binaryMessageFormatter.TypeFormat = value;
         }
     }
+#pragma warning restore SYSLIB0050
 
     /// <summary>
     /// Gets or sets the top object format used in the <see cref="BinaryMessageFormatter"/>
     /// </summary>
     /// <value>The top object format.</value>
+#pragma warning disable SYSLIB0050 // FormatterAssemblyStyle is part of this class's public API and of BinaryMessageFormatter; there is no replacement.
     public FormatterAssemblyStyle TopObjectFormat
     {
         get { return binaryMessageFormatter.TopObjectFormat; }
@@ -79,6 +75,7 @@ public class BinaryMessageConverter : IMessageConverter
             binaryMessageFormatter.TopObjectFormat = value;
         }
     }
+#pragma warning restore SYSLIB0050
 
     /// <summary>
     /// Convert the given object to a Message using the <see cref="BinaryMessageFormatter"/>

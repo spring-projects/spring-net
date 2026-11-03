@@ -18,7 +18,6 @@ using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Security.Permissions;
 using System.Text;
 using System.Runtime.CompilerServices;
 
@@ -1251,7 +1250,7 @@ public sealed class ReflectionUtils
                 bool hasSecurityAttribute = false;
                 foreach (CustomAttributeData cad in attrsData)
                 {
-                    if (typeof(SecurityAttribute).IsAssignableFrom(cad.Constructor.DeclaringType))
+                    if (IsDeclarativeSecurityAttribute(cad.Constructor.DeclaringType))
                     {
                         hasSecurityAttribute = true;
                         break;
@@ -1283,6 +1282,25 @@ public sealed class ReflectionUtils
         }
 
         return attributes;
+    }
+
+    /// <summary>
+    /// Declarative security attributes cannot be rebuilt from their <see cref="CustomAttributeData"/>, so
+    /// <see cref="GetCustomAttributes(MemberInfo)"/> hands out the attribute instances for them. The base type is
+    /// matched by name so the check compiles without referencing <c>SecurityAttribute</c>, which modern .NET
+    /// marks obsolete (SYSLIB0003).
+    /// </summary>
+    private static bool IsDeclarativeSecurityAttribute(Type attributeType)
+    {
+        for (Type type = attributeType; type != null; type = type.BaseType)
+        {
+            if (type.FullName == "System.Security.Permissions.SecurityAttribute")
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -1612,37 +1630,28 @@ public sealed class ReflectionUtils
             }
 
             FieldInfo[] fields = GetFields(type);
-            Action callback = () =>
+            DynamicMethod dm = new DynamicMethod(type.FullName + ".ShallowCopy", null, new Type[] { typeof(object), typeof(object) }, type.Module, true);
+            ILGenerator ilGen = dm.GetILGenerator();
+            ilGen.DeclareLocal(type);
+            ilGen.DeclareLocal(type);
+            ilGen.Emit(OpCodes.Ldarg_0);
+            ilGen.Emit(OpCodes.Castclass, type);
+            ilGen.Emit(OpCodes.Stloc_0);
+            ilGen.Emit(OpCodes.Ldarg_1);
+            ilGen.Emit(OpCodes.Castclass, type);
+            ilGen.Emit(OpCodes.Stloc_1);
+
+            foreach (FieldInfo field in fields)
             {
-                DynamicMethod dm = new DynamicMethod(type.FullName + ".ShallowCopy", null, new Type[] { typeof(object), typeof(object) }, type.Module, true);
-                ILGenerator ilGen = dm.GetILGenerator();
-                ilGen.DeclareLocal(type);
-                ilGen.DeclareLocal(type);
-                ilGen.Emit(OpCodes.Ldarg_0);
-                ilGen.Emit(OpCodes.Castclass, type);
-                ilGen.Emit(OpCodes.Stloc_0);
-                ilGen.Emit(OpCodes.Ldarg_1);
-                ilGen.Emit(OpCodes.Castclass, type);
-                ilGen.Emit(OpCodes.Stloc_1);
+                ilGen.Emit(OpCodes.Ldloc_1);
+                ilGen.Emit(OpCodes.Ldloc_0);
+                ilGen.Emit(OpCodes.Ldfld, field);
+                ilGen.Emit(OpCodes.Stfld, field);
+            }
 
-                foreach (FieldInfo field in fields)
-                {
-                    ilGen.Emit(OpCodes.Ldloc_1);
-                    ilGen.Emit(OpCodes.Ldloc_0);
-                    ilGen.Emit(OpCodes.Ldfld, field);
-                    ilGen.Emit(OpCodes.Stfld, field);
-                }
+            ilGen.Emit(OpCodes.Ret);
 
-                ilGen.Emit(OpCodes.Ret);
-
-                handler = (MemberwiseCopyHandler) dm.CreateDelegate(typeof(MemberwiseCopyHandler));
-            };
-
-#if NETSTANDARD
-                callback();
-#else
-            SecurityCritical.ExecutePrivileged(new System.Security.PermissionSet(PermissionState.Unrestricted), callback);
-#endif
+            handler = (MemberwiseCopyHandler) dm.CreateDelegate(typeof(MemberwiseCopyHandler));
 
             s_handlerCache[type] = handler;
         }

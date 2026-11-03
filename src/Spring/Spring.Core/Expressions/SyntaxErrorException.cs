@@ -73,6 +73,9 @@ internal class SyntaxErrorException : RecognitionException, ISerializable
     /// <summary>
     /// TODO
     /// </summary>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     protected SyntaxErrorException(SerializationInfo info, StreamingContext context) : base(info.GetString("Message"))
     {
         base.line = info.GetInt32("Line");
@@ -85,6 +88,9 @@ internal class SyntaxErrorException : RecognitionException, ISerializable
     /// </summary>
     /// <param name="info"></param>
     /// <param name="context"></param>
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         // since RecognitionException does not implement .ctor(SerializationInfo info, StreamingContext context)

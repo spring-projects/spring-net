@@ -71,6 +71,9 @@ public class AttributeMatchMethodPointcutAdvisor
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     private AttributeMatchMethodPointcutAdvisor(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
@@ -79,6 +82,9 @@ public class AttributeMatchMethodPointcutAdvisor
     }
 
     /// <inheritdoc />
+#if NET
+    [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
+#endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         base.GetObjectData(info, context);
