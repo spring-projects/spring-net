@@ -27,7 +27,6 @@ namespace Spring.Data.NHibernate
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
     [TestFixture]
-    [Ignore("Trouble running on Appveyor")]
     public class MultipleDbTests
     {
         private IApplicationContext ctx;
@@ -53,8 +52,8 @@ namespace Spring.Data.NHibernate
             ctx?.Dispose();
         }
 
-        // TODO: this test fails - check out why
         [Test]
+        [Explicit("Requires MSDTC: the two session factories open two connections that enlist in one TransactionScope, which promotes it to a distributed transaction")]
         public void MultipleDBAccess()
         {
             float transferAmount = 114;
@@ -67,6 +66,7 @@ namespace Spring.Data.NHibernate
         }
 
         [Test]
+        [Ignore("4.0: HibernateTemplate.Save throws 'Write operations are not allowed in read-only mode (FlushMode.NEVER)' in a SessionScope session under TxScopeTransactionManager")]
         public void MultipleDBAccessUsingMultipleSessionScopes()
         {
             SessionScope scope1 = new SessionScope((ISessionFactory) ctx["SessionFactory1"], false);

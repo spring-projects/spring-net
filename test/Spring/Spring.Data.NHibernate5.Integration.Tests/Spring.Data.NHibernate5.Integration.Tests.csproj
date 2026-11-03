@@ -13,6 +13,10 @@
   <ItemGroup>
     <PackageReference Include="log4net" />
     <PackageReference Include="System.Data.SqlClient" />
+    <PackageReference Include="Testcontainers.MsSql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Shared\SqlServerTestEnvironment.cs" Link="SqlServerTestEnvironment.cs" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="System.Transactions" />
