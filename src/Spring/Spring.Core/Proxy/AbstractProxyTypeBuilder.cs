@@ -663,7 +663,6 @@ public abstract class AbstractProxyTypeBuilder : IProxyTypeBuilder, IProxyTypeGe
     /// Allow null target to be proxied.
     /// (See Spring AOP framework which avoid calls to the target object
     /// by intercepting all methods. Think "dynamic mock")
-    /// (See 'Spring.Web.Services.WebServiceProxyFactory' implementation for another example)
     /// </li>
     /// </ul>
     /// </p>
