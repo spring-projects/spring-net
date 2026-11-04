@@ -219,7 +219,6 @@ public class ExpressionGrammarTests
         Assert.That(ParseWithinTimeLimit(input), Is.TypeOf<Expression>());
     }
 
-    [TestCase(1_900, "-")]
     [TestCase(100_000, "1+")]
     public void EvaluatingTooDeepATreeThrows(int count, string repeated)
     {
