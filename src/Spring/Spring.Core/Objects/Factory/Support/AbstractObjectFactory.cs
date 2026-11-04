@@ -71,11 +71,6 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
     private readonly Dictionary<string, object> factoryObjectProductCache = new Dictionary<string, object>();
 
     /// <summary>
-    /// Disposable object instances: object name --> disposable instance
-    /// </summary>
-    private readonly Dictionary<string, object> disposableObjects = new Dictionary<string, object>();
-
-    /// <summary>
     /// root object definitons: object name --> Root Object Definition
     /// </summary>
     protected ConcurrentDictionary<string, RootObjectDefinition> mergedObjectDefinitions = new ConcurrentDictionary<string, RootObjectDefinition>();
@@ -2266,16 +2261,20 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
         }
     }
 
+    /// <summary>
+    /// Hook called after a singleton has been created, so that a derived factory can
+    /// track it for destruction.
+    /// </summary>
+    /// <remarks>
+    /// The base implementation does nothing: this factory destroys its singletons in
+    /// <see cref="DestroySingleton"/> (called from <see cref="Dispose"/>), which builds the
+    /// destruction adapter at that point. It keeps no reference to the instance in between.
+    /// </remarks>
+    /// <param name="name">The name of the object.</param>
+    /// <param name="instance">The created instance.</param>
+    /// <param name="od">The merged definition of the object.</param>
     protected virtual void RegisterDisposableObjectIfNecessary(string name, object instance, RootObjectDefinition od)
     {
-        if (od.IsSingleton && RequiresDestruction(instance, od))
-        {
-            // Register a DisposableObject implementation that performs all destruction
-            // work for the given object: DestructionAwareObjectPostProcessors,
-            // DisposableObject interface, custom destroy method.
-            RegisterDisposableObject(name,
-                new DisposableObjectAdapter(instance, name, od, objectPostProcessors));
-        }
     }
 
     /// <summary>
@@ -2669,19 +2668,18 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
     }
 
     /// <summary>
-    /// Registers the disposable object.
+    /// Does nothing.
     /// </summary>
+    /// <remarks>
+    /// The factory never disposed the objects registered here: singletons are destroyed by
+    /// <see cref="DestroySingleton"/>, and the registered instances were only kept alive, which
+    /// pinned destroyed singletons for the lifetime of the factory.
+    /// </remarks>
     /// <param name="objectName">Name of the instance.</param>
     /// <param name="instance">The instance.</param>
-    /// Add the given instance to the list of disposable beans in this registry.
-    /// Disposable beans usually correspond to registered singletons,
-    /// matching the instance name but potentially being a different instance
-    /// (for example, a DisposableBean adapter for a singleton that does not
-    /// naturally implement <see cref="IDisposable"/>).
+    [Obsolete("The factory never disposed objects registered here; singletons are destroyed by DestroySingleton. This method does nothing and will be removed.")]
     public void RegisterDisposableObject(string objectName, IDisposable instance)
     {
-        if (disposableObjects.ContainsKey(objectName)) return;
-        disposableObjects.Add(objectName, instance);
     }
 
     /// <summary>

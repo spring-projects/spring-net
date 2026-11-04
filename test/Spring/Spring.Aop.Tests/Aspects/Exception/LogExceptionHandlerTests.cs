@@ -355,6 +355,70 @@ public class LogExceptionHandlerTests
     }
 
     [Test]
+    public void TwoDslLogStatementsEachKeepTheirOwnExceptionsAndMessageAndLeaveTheTemplateUnchanged()
+    {
+        var template = new LogExceptionHandler
+        {
+            LogName = "configured.category",
+            LogLevel = LogLevel.Warning,
+            LogMessageOnly = true
+        };
+        var advice = new ExceptionHandlerAdvice();
+        advice.ExceptionHandlerDictionary.Add("log", template);
+        advice.ExceptionHandlers.Add("on exception name ArithmeticException log 'A'");
+        advice.ExceptionHandlers.Add("on exception name ArgumentException log 'B'");
+        ITestObject proxy = CreateProxy(advice);
+
+        Assert.Throws<ArithmeticException>(() => proxy.Exceptional(new ArithmeticException()));
+
+        LogEntry arithmetic = loggerFactory.Entries.Single();
+        Assert.That(arithmetic.Message, Is.EqualTo("A"));
+        Assert.That(arithmetic.Category, Is.EqualTo("configured.category"));
+        Assert.That(arithmetic.Level, Is.EqualTo(LogLevel.Warning));
+        Assert.That(arithmetic.Exception, Is.Null);
+
+        loggerFactory.Entries.Clear();
+        Assert.Throws<ArgumentException>(() => proxy.Exceptional(new ArgumentException()));
+
+        LogEntry argument = loggerFactory.Entries.Single();
+        Assert.That(argument.Message, Is.EqualTo("B"));
+        Assert.That(argument.Category, Is.EqualTo("configured.category"));
+        Assert.That(argument.Level, Is.EqualTo(LogLevel.Warning));
+
+        Assert.That(advice.ExceptionHandlers, Has.Count.EqualTo(2));
+        Assert.That(advice.ExceptionHandlers[0], Is.Not.SameAs(advice.ExceptionHandlers[1]));
+        Assert.That(advice.ExceptionHandlers[0], Is.Not.SameAs(template));
+        Assert.That(template.ActionExpressionText, Is.Null);
+        Assert.That(template.ConstraintExpressionText, Is.Null);
+        Assert.That(template.SourceExceptionNames, Is.Empty);
+    }
+
+    [Test]
+    public void CloneCopiesTheSettingsAndGivesTheCopyItsOwnExceptionLists()
+    {
+        var original = new LogExceptionHandler(["ArithmeticException"])
+        {
+            LogName = "configured.category",
+            LogLevel = LogLevel.Error,
+            LogMessageOnly = true,
+            ActionExpressionText = "'A'"
+        };
+        original.SourceExceptionTypes.Add(typeof(ArithmeticException));
+
+        var clone = (LogExceptionHandler) original.Clone();
+        clone.SourceExceptionNames.Add("ArgumentException");
+        clone.SourceExceptionTypes.Add(typeof(ArgumentException));
+
+        Assert.That(clone, Is.Not.SameAs(original));
+        Assert.That(clone.LogName, Is.EqualTo("configured.category"));
+        Assert.That(clone.LogLevel, Is.EqualTo(LogLevel.Error));
+        Assert.That(clone.LogMessageOnly, Is.True);
+        Assert.That(clone.ActionExpressionText, Is.EqualTo("'A'"));
+        Assert.That(original.SourceExceptionNames, Is.EqualTo(new[] { "ArithmeticException" }));
+        Assert.That(original.SourceExceptionTypes, Is.EqualTo(new[] { typeof(ArithmeticException) }));
+    }
+
+    [Test]
     public void ExplicitHandlerInAdviceListLogsAndLetsLaterHandlersRun()
     {
         var handler = new LogExceptionHandler

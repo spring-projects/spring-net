@@ -143,6 +143,24 @@ Changes (3.1 to 4.0)
      instead of overflowing it.
    - Spring.Core depends on System.Memory explicitly on .NET Framework and .NET Standard 2.0.
 
+12. AbstractObjectFactory.RegisterDisposableObject is obsolete and does nothing. It never caused disposal:
+   the factory destroys its singletons itself, in DestroySingleton, which builds the destruction adapter at
+   that point. The instances registered here were only stored, and for the base factory that pinned every
+   singleton that needed destruction, with its definition, for the lifetime of the factory, even after the
+   singleton had been destroyed. Remove calls to it. A singleton that implements IDisposable or has a
+   destroy method is already destroyed when the factory is disposed.
+   The protected virtual RegisterDisposableObjectIfNecessary is kept, and its base implementation does nothing.
+
+13. The handler templates in ExceptionHandlerAdvice.ExceptionHandlerDictionary are now copied for each DSL
+   statement when they are ICloneable, as every AbstractExceptionHandler now is, instead of being shared and
+   overwritten. Before, two statements with the same action ('log', for example) were one handler instance
+   listed twice, carrying the exception names of both statements and the constraint and action of the last one,
+   so both logged the second message. Each statement now has its own copy, and the advice no longer modifies
+   the template. Code that read the template back after configuration to see the last statement's settings must
+   look at ExceptionHandlers instead. A custom IExceptionHandler template that is not ICloneable is still shared.
+   AbstractExceptionHandler gained ICloneable and a virtual Clone method; a subclass with a mutable
+   reference-typed field of its own should override Clone to copy it.
+
 Changes (3.0.x to 3.1)
 ========================
 

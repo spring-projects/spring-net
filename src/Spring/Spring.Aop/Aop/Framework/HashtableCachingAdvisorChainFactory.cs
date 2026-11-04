@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -28,12 +29,12 @@ namespace Spring.Aop.Framework;
 [Serializable]
 public sealed class HashtableCachingAdvisorChainFactory : IAdvisorChainFactory
 {
-    [NonSerialized] private Dictionary<MethodInfo, IList<object>> methodCache = new Dictionary<MethodInfo, IList<object>>();
+    [NonSerialized] private ConcurrentDictionary<MethodInfo, IList<object>> methodCache = new ConcurrentDictionary<MethodInfo, IList<object>>();
 
     [OnDeserializing]
     private void OnDeserializing(StreamingContext c)
     {
-        methodCache = new Dictionary<MethodInfo, IList<object>>();
+        methodCache = new ConcurrentDictionary<MethodInfo, IList<object>>();
     }
 
     /// <summary>
@@ -56,19 +57,15 @@ public sealed class HashtableCachingAdvisorChainFactory : IAdvisorChainFactory
     /// </returns>
     public IList<object> GetInterceptors(IAdvised advised, object proxy, MethodInfo method, Type targetType)
     {
-        if (!methodCache.TryGetValue(method, out var interceptors))
+        if (methodCache.TryGetValue(method, out var interceptors))
         {
-            lock (methodCache)
-            {
-                if (!methodCache.TryGetValue(method, out interceptors))
-                {
-                    interceptors = AdvisorChainFactoryUtils.CalculateInterceptors(advised, proxy, method, targetType);
-                    methodCache[method] = interceptors;
-                }
-            }
+            return interceptors;
         }
 
-        return interceptors;
+        // Two threads may compute the same chain; the result is deterministic, so the
+        // first one stored wins and both callers return that instance.
+        interceptors = AdvisorChainFactoryUtils.CalculateInterceptors(advised, proxy, method, targetType);
+        return methodCache.GetOrAdd(method, interceptors);
     }
 
     /// <summary>
