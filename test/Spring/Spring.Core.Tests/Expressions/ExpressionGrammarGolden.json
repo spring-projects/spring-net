@@ -339,7 +339,7 @@
   ],
   [
     "a?b",
-    "ERROR 4 Syntax Error on line 1, column 4: expecting \"EOF\", found '<EOF>'",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))",
     "ERROR 4 Syntax Error on line 1, column 4: expecting \"COLON\", found ''",
     "(Expression|4|expression (PropertyOrFieldNode|33|a))"
@@ -983,7 +983,7 @@
   ],
   [
     "new a",
-    "ERROR 6 Syntax Error on line 1, column 6: expecting \"EOF\", found '<EOF>'",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
     "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"LBRACKET\", found ''",
     "ERROR 6 Syntax Error on line 1, column 6: expecting \"LBRACKET\", found ''"
@@ -997,7 +997,7 @@
   ],
   [
     "new a.b",
-    "ERROR 8 Syntax Error on line 1, column 8: expecting \"EOF\", found '<EOF>'",
+    "ERROR 8 Syntax Error on line 1, column 8: unexpected end of expression",
     "ERROR 8 Syntax Error on line 1, column 8: unexpected end of expression",
     "ERROR 8 Syntax Error on line 1, column 8: expecting \"LBRACKET\", found ''",
     "ERROR 8 Syntax Error on line 1, column 8: expecting \"LBRACKET\", found ''"

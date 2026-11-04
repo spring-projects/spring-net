@@ -27,15 +27,15 @@ namespace Spring.Expressions;
 public class SyntaxErrorException : Exception, ISerializable
 {
     private readonly string _expression;
-    private readonly int line;
-    private readonly int column;
+    private readonly int _line;
+    private readonly int _column;
 
     ///<summary>
     /// The line of the error, which is always 1: the columns are those of the whole expression
     ///</summary>
     public int Line
     {
-        get { return line; }
+        get { return _line; }
     }
 
     ///<summary>
@@ -43,7 +43,7 @@ public class SyntaxErrorException : Exception, ISerializable
     ///</summary>
     public int Column
     {
-        get { return column; }
+        get { return _column; }
     }
 
     ///<summary>
@@ -75,8 +75,8 @@ public class SyntaxErrorException : Exception, ISerializable
     public SyntaxErrorException(string message, int line, int column, string expression)
         : base(message)
     {
-        this.line = line;
-        this.column = column;
+        _line = line;
+        _column = column;
         _expression = expression;
     }
 
@@ -86,11 +86,11 @@ public class SyntaxErrorException : Exception, ISerializable
 #if NET
     [Obsolete(Obsoletions.LegacyFormatterImplMessage, DiagnosticId = Obsoletions.LegacyFormatterImplDiagId, UrlFormat = Obsoletions.SharedUrlFormat)]
 #endif
-    protected SyntaxErrorException(SerializationInfo info, StreamingContext context) : base(info.GetString("Message"))
+    protected SyntaxErrorException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
-        this.line = info.GetInt32("Line");
-        this.column = info.GetInt32("Column");
-        this._expression = info.GetString("Expression");
+        _line = info.GetInt32("Line");
+        _column = info.GetInt32("Column");
+        _expression = info.GetString("Expression");
     }
 
     /// <summary>
@@ -103,10 +103,9 @@ public class SyntaxErrorException : Exception, ISerializable
 #endif
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
-        // Message is the text without the position, which the constructor gets again
-        info.AddValue("Line", this.line);
-        info.AddValue("Column", this.column);
-        info.AddValue("Message", base.Message);
-        info.AddValue("Expression", this._expression);
+        base.GetObjectData(info, context);
+        info.AddValue("Line", _line);
+        info.AddValue("Column", _column);
+        info.AddValue("Expression", _expression);
     }
 }

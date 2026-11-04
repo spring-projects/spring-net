@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Runtime.Serialization;
 using System.Text;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -111,6 +112,39 @@ public class ExpressionGrammarTests
         Assert.That(e.Column, Is.EqualTo(column));
         Assert.That(e.Message, Does.StartWith($"Syntax Error on line 1, column {column}: {message} in expression"));
         Assert.That(e.Expression, Is.EqualTo(input));
+    }
+
+    [TestCase("a?b", 4)]
+    [TestCase("new a", 6)]
+    [TestCase("new a.b", 8)]
+    public void IncompleteExpressionsReportTheEndOfTheInput(string input, int column)
+    {
+        var e = Assert.Throws<SyntaxErrorException>(() => Expression.Parse(input));
+        Assert.That(e.Message, Does.StartWith($"Syntax Error on line 1, column {column}: unexpected end of expression in expression"));
+    }
+
+    [Test]
+    public void SyntaxErrorsKeepTheirStateWhenSerialized()
+    {
+        var original = Assert.Throws<SyntaxErrorException>(() => Expression.Parse("a ~"));
+
+#pragma warning disable SYSLIB0050 // what is tested
+        var info = new SerializationInfo(typeof(SyntaxErrorException), new FormatterConverter());
+        ((ISerializable) original).GetObjectData(info, default);
+#pragma warning restore SYSLIB0050
+        var copy = (SyntaxErrorException) Activator.CreateInstance(
+            typeof(SyntaxErrorException),
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            null,
+            new object[] { info, default(StreamingContext) },
+            null);
+
+        Assert.That(copy.Line, Is.EqualTo(original.Line));
+        Assert.That(copy.Column, Is.EqualTo(original.Column));
+        Assert.That(copy.Expression, Is.EqualTo(original.Expression));
+        Assert.That(copy.Message, Is.EqualTo(original.Message));
+        Assert.That(copy.HResult, Is.EqualTo(original.HResult));
+        Assert.That(copy.StackTrace, Is.EqualTo(original.StackTrace));
     }
 
     [TestCase("foo", "(PropertyOrFieldNode|33|foo)")]

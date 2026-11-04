@@ -69,7 +69,7 @@ internal static partial class ExpressionGrammar
 
         // The parser doesn't return why it failed: at this depth it can be the limit on nesting
         var expected = rule == Rule.Lambda && offset == SkipSpaces(input.AsSpan(), 0) ? "LAMBDA"
-            : rule == Rule.Expression && depth == 0 && afterOperand ? "EOF"
+            : rule == Rule.Expression && depth == 0 && afterOperand && offset < input.Length ? "EOF"
             : null;
 
         throw CreateSyntaxError(input, offset, expected, depth >= SuspiciousDepth);
