@@ -2262,12 +2262,12 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
     }
 
     /// <summary>
-    /// Hook called after a singleton has been created, so that a derived factory can
+    /// Hook called after each object has been created, so that a derived factory can
     /// track it for destruction.
     /// </summary>
     /// <remarks>
-    /// The base implementation only validates the destroy method of the object, so that an invalid
-    /// one fails the creation of the object rather than the shutdown of the factory, and resolves an
+    /// The base implementation acts on singletons only, and only validates the destroy method of the
+    /// object, so that an invalid one fails the creation of the object rather than the shutdown of the factory, and resolves an
     /// inferred one. It keeps no reference to the instance: this factory destroys its singletons in
     /// <see cref="DestroySingleton"/> (called from <see cref="Dispose"/>), which builds the
     /// destruction adapter at that point.

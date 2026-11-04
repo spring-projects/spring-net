@@ -161,7 +161,9 @@ Changes (3.1 to 4.0)
    the template. Code that read the template back after configuration to see the last statement's settings must
    look at ExceptionHandlers instead. A custom IExceptionHandler template that is not ICloneable is still shared.
    AbstractExceptionHandler gained ICloneable and a virtual Clone method; a subclass with a mutable
-   reference-typed field of its own should override Clone to copy it.
+   reference-typed field of its own should override Clone to copy it. A subclass that already declares its
+   own public Clone() gets warning CS0114 and should mark it override, or the advice copies its templates
+   with the base implementation.
 
 Changes (3.0.x to 3.1)
 ========================

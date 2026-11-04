@@ -29,12 +29,19 @@ namespace Spring.Aop.Framework;
 [Serializable]
 public sealed class HashtableCachingAdvisorChainFactory : IAdvisorChainFactory
 {
-    [NonSerialized] private ConcurrentDictionary<MethodInfo, IList<object>> methodCache = new ConcurrentDictionary<MethodInfo, IList<object>>();
+    [NonSerialized] private ConcurrentDictionary<MethodInfo, IList<object>> methodCache = CreateMethodCache();
 
     [OnDeserializing]
     private void OnDeserializing(StreamingContext c)
     {
-        methodCache = new ConcurrentDictionary<MethodInfo, IList<object>>();
+        methodCache = CreateMethodCache();
+    }
+
+    // Every proxy has one of these. The default concurrency level allocates a lock per core; reads are
+    // lock-free either way, and writes only happen while the cache fills, so a single lock is enough.
+    private static ConcurrentDictionary<MethodInfo, IList<object>> CreateMethodCache()
+    {
+        return new ConcurrentDictionary<MethodInfo, IList<object>>(concurrencyLevel: 1, capacity: 1);
     }
 
     /// <summary>
