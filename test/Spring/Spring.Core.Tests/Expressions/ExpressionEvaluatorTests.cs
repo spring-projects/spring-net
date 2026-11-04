@@ -16,15 +16,10 @@
 
 using System.Collections;
 using System.Diagnostics;
-using System.EnterpriseServices;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization.Formatters.Soap;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web.Services;
 using NUnit.Framework;
 using Spring.Collections;
 using Spring.Context;
@@ -105,138 +100,6 @@ public sealed class ExpressionEvaluatorTests
     public void TearDown()
     {
         //DynamicCodeManager.SaveAssembly();
-    }
-
-    /// <summary>
-    /// GetObjectData() is not overridden on purpose !!!
-    /// </summary>
-    [Serializable]
-    private class SerializationTestExpression : BaseNode
-    {
-        private int testValue = 0;
-
-        public int TestValue
-        {
-            get { return testValue; }
-        }
-
-        public SerializationTestExpression(int testValue)
-        {
-            this.testValue = testValue;
-        }
-
-        protected SerializationTestExpression(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    /// <summary>
-    /// Tests serialization + deserialization of all BaseNode derived types
-    /// </summary>
-    [Test]
-    public void AllExpressionNodeTypesAreSerializable()
-    {
-        Type[] possibleTypes = typeof(BaseNode).Assembly.GetTypes();
-
-        BinaryFormatter formatter = new BinaryFormatter();
-
-        // look for all BaseNode derived types defined in assembly Spring.Core
-        for (int i = 0; i < possibleTypes.Length; i++)
-        {
-            Type t = possibleTypes[i];
-            if (t != typeof(BaseNode)
-                && typeof(BaseNode).IsAssignableFrom(t)
-                && (!t.IsAbstract)
-               )
-            {
-                //Console.WriteLine("testing " + t.FullName);
-
-                // create using for public default ctor
-                IExpression exp = (IExpression) Activator.CreateInstance(t, true);
-                // serialize and deserialize it
-                exp = SerializeDeserializeExpression(exp);
-                exp = SerializeDeserializeExpressionUsingSoap(exp);
-            }
-        }
-    }
-
-    /// <summary>
-    /// <see cref="SpringAST"/> implements <see cref="ISerializable"/>.
-    /// Thus members in derived classes won't get automatically serialized.
-    /// </summary>
-    [Test]
-    public void MembersDontGetSerializedByDefault()
-    {
-        SerializationTestExpression exp = new SerializationTestExpression(5);
-        Assert.That(exp.TestValue, Is.EqualTo(5));
-        SerializationTestExpression exp2 = (SerializationTestExpression) SerializeDeserializeExpression(exp);
-        Assert.That(exp2.TestValue, Is.EqualTo(0));
-    }
-
-    /// <summary>
-    /// This test ensures, that the default node-type is serializable.
-    /// </summary>
-    /// <remarks>
-    /// date() is parsed into DateLiteralNode( down:&lt;default node type&gt; ).
-    /// </remarks>
-    [Test]
-    public void ExpressionDateLiteralNodeMaintainsStateAfterSerialization()
-    {
-        IExpression exp = Expression.Parse("date('08-24-1974', 'MM-dd-yyyy')");
-
-        Assert.That(exp.GetValue(null), Is.EqualTo(new DateTime(1974, 8, 24)));
-
-        exp = SerializeDeserializeExpression(exp);
-
-        Assert.That(exp.GetValue(null), Is.EqualTo(new DateTime(1974, 8, 24)));
-    }
-
-    private static IExpression SerializeDeserializeExpression(IExpression exp)
-    {
-        byte[] data;
-        BinaryFormatter formatter = new BinaryFormatter();
-        using (MemoryStream ms = new MemoryStream())
-        {
-            formatter.Serialize(ms, exp);
-            ms.Flush();
-            data = ms.ToArray();
-        }
-
-        using (MemoryStream ms = new MemoryStream(data))
-        {
-            exp = (IExpression) formatter.Deserialize(ms);
-        }
-
-        return exp;
-    }
-
-    private static IExpression SerializeDeserializeExpressionUsingSoap(IExpression exp)
-    {
-        string xml;
-        SoapFormatter formatter = new SoapFormatter();
-        using (MemoryStream ms = new MemoryStream())
-        {
-            formatter.Serialize(ms, exp);
-            ms.Position = 0;
-            byte[] b = new byte[ms.Length];
-            ms.Read(b, 0, (int) ms.Length);
-            xml = Encoding.ASCII.GetString(b, 0, b.Length);
-        }
-
-        using (StringReader sr = new StringReader(xml))
-        {
-            byte[] b = Encoding.ASCII.GetBytes(xml);
-            Stream stream = new MemoryStream(b);
-            exp = (IExpression) formatter.Deserialize(stream);
-        }
-
-        return exp;
     }
 
     [Test]
@@ -1334,7 +1197,6 @@ public sealed class ExpressionEvaluatorTests
             (bool) ExpressionEvaluator.GetValue(null, "DateTime.Today between {DateTime.Now, DateTime.Now}"),
             Is.False);
     }
-#if !MONO
     /// <summary>
     /// Tests LIKE operator.
     /// </summary>
@@ -1349,7 +1211,6 @@ public sealed class ExpressionEvaluatorTests
         Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Ana Maria Seovic' like '*Maria*'"), Is.True);
         Assert.That((bool) ExpressionEvaluator.GetValue(null, "'Marija Seovic' like '*Seovic'"), Is.True);
     }
-#endif
     /// <summary>
     /// Tests MATCHES operator.
     /// </summary>
@@ -1677,25 +1538,10 @@ public sealed class ExpressionEvaluatorTests
     [Test]
     public void TestAttribute()
     {
-        TypeRegistry.RegisterType("WebMethod", typeof(WebMethodAttribute));
-        TypeRegistry.RegisterType("TransactionOption", typeof(TransactionOption));
-
         Assert.That(ExpressionEvaluator.GetValue(null, "@[System.Serializable]"),
             Is.InstanceOf(typeof(SerializableAttribute)));
         Assert.That(ExpressionEvaluator.GetValue(null, "@[System.Serializable()]"),
             Is.InstanceOf(typeof(SerializableAttribute)));
-        Assert.That(ExpressionEvaluator.GetValue(null, "@[WebMethod]"), Is.InstanceOf(typeof(WebMethodAttribute)));
-
-        WebMethodAttribute webMethod = (WebMethodAttribute) ExpressionEvaluator.GetValue(null, "@[WebMethod(true)]");
-        Assert.That(webMethod.EnableSession, Is.True);
-
-        webMethod = (WebMethodAttribute)
-            ExpressionEvaluator.GetValue(
-                null,
-                "@[WebMethod(false, CacheDuration = 60, Description = 'my web method', TransactionOption = TransactionOption.Required)]");
-        Assert.That(webMethod.CacheDuration, Is.EqualTo(60));
-        Assert.That(webMethod.Description, Is.EqualTo("my web method"));
-        Assert.That(webMethod.TransactionOption, Is.EqualTo(TransactionOption.Required));
     }
 
     [Test]

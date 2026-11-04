@@ -32,7 +32,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
     <Compile Remove="Context\Attributes\FailAssemblyObjectDefinitionScannerTests.cs" />
     <Compile Remove="Context\Support\ApplicationContextAwareProcessorTests.cs" />
-    <Compile Remove="Expressions\ExpressionEvaluatorTests.cs" />
+    <Compile Remove="Expressions\ExpressionEvaluatorSerializationTests.cs" />
     <Compile Remove="Globalization\AbstractLocalizerTests.cs" />
     <Compile Remove="Globalization\Localizers\ResourceSetLocalizerTests.cs" />
     <Compile Remove="Objects\TestTransparentProxyFactory.cs" />
