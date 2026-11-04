@@ -18,6 +18,34 @@ These decide what is accepted, so they stay:
 - The relational and power operators don't chain.
 - The line of an error is always 1, and its column counts a tab as moving to the next multiple of 8.
 
+## Nesting limits
+
+- **Parser:** about 2,000 levels of nested parentheses, calls or prefix operators (`-`, `+`, `!`) are accepted.
+  A deeper input fails with a `SyntaxErrorException` ("nested too deeply"). A small thread stack can make the parser stop
+  sooner, with the same exception.
+- **Evaluation:** binary operators in a chain (`1+1+1+...`) parse without that limit, but the tree they make is as deep as the
+  chain is long. `BaseNode.GetValue` and `SetValue` call `RuntimeHelpers.EnsureSufficientExecutionStack()`, so evaluating a tree
+  too deep for the stack of the current thread throws `InsufficientExecutionStackException` instead of ending the process.
+- **Property paths** (`a.a.a...`) are not recursive when evaluated: a path of 160,000 nodes parses and evaluates in linear time.
+
+Largest nesting that parses and evaluates on a thread with the given stack size, and the exception one level deeper throws
+(Release build, measured on 2026-11-04). The numbers depend on the runtime and the JIT, so read them as orders of magnitude:
+
+| Runtime | Stack | `1+1+...` (chain) | `((...1...))` (parentheses) | `a.a.a...` (path) |
+|---|---|---|---|---|
+| .NET 10 | 256 KB | 134 (`InsufficientExecutionStackException`) | 31 (`SyntaxErrorException`) | 160,000, no limit |
+| .NET 10 | 1 MB | 953 (`InsufficientExecutionStackException`) | 223 (`SyntaxErrorException`) | 160,000, no limit |
+| .NET Framework 4.8 | 256 KB | 665 (`InsufficientExecutionStackException`) | 47 (`SyntaxErrorException`) | 160,000, no limit |
+| .NET Framework 4.8 | 1 MB | 2,712 (`InsufficientExecutionStackException`) | 175 (`SyntaxErrorException`) | 160,000, no limit |
+
+With a 64 MB stack, parentheses and prefix operators reach the limit of 1,999 levels of the parser on both runtimes, and a
+chain of binary operators reaches about 70,000 on .NET 10.
+
+The check costs something on .NET Framework 4.8. Measured on 2026-11-04 with BenchmarkDotNet, for the evaluation alone
+(`ExpressionBenchmark.GetValuePrepared`), it adds about 10% to a small expression (120 vs 109 ns), 3% to a medium one
+(2.54 vs 2.46 µs) and 14% to a large one (5.62 vs 4.94 µs), with the same allocations. It stays because without it an
+expression that is too deep ends the process.
+
 ## PEG vs LL(2)
 
 A PEG choice can backtrack where ANTLR committed to an alternative after looking at two tokens. These keep the same language:

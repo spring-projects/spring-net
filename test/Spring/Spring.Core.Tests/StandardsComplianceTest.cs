@@ -75,7 +75,6 @@ public abstract class StandardsComplianceTest
     {
         foreach (Type t in a.GetTypes())
         {
-
             if ((t.IsPublic || t.IsNestedPublic)
                 && IsCheckedType(t))
             {

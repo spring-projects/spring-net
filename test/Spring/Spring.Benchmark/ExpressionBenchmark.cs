@@ -27,7 +27,7 @@ public class ExpressionBenchmark
         + " + (Address.Zip in {'75001', '75002'} and !(Name == null) xor Friends[0].Name is T(string) ? 1 : 2)"
         + " + (#sum = {|a, b| $a + $b}; #sum(1, 2))";
 
-    private readonly Person root = new()
+    private readonly Person _root = new()
     {
         Name = "Alice",
         Age = 34,
@@ -40,9 +40,9 @@ public class ExpressionBenchmark
         },
     };
 
-    private readonly Dictionary<string, object> variables = new();
-    private string expression;
-    private IExpression prepared;
+    private readonly Dictionary<string, object> _variables = new();
+    private string _expression;
+    private IExpression _prepared;
 
     [Params("Small", "Medium", "Large")]
     public string Size { get; set; }
@@ -50,33 +50,33 @@ public class ExpressionBenchmark
     [GlobalSetup]
     public void Setup()
     {
-        expression = Size switch
+        _expression = Size switch
         {
             "Small" => Small,
             "Medium" => Medium,
             _ => Large,
         };
 
-        prepared = Expression.Parse(expression);
+        _prepared = Expression.Parse(_expression);
     }
 
     /// <summary>Parsing alone.</summary>
     [Benchmark]
-    public object Parse() => Expression.Parse(expression);
+    public object Parse() => Expression.Parse(_expression);
 
     /// <summary><see cref="ExpressionEvaluator"/> parses its expression on each call, without a cache.</summary>
     [Benchmark]
-    public object GetValueUncached() => ExpressionEvaluator.GetValue(root, expression, variables);
+    public object GetValueUncached() => ExpressionEvaluator.GetValue(_root, _expression, _variables);
 
     /// <summary>What the documentation recommends: parse once, evaluate many times.</summary>
     [Benchmark]
     public object ParseThenGetValue100()
     {
-        var parsed = Expression.Parse(expression);
+        var parsed = Expression.Parse(_expression);
         object value = null;
         for (var i = 0; i < 100; i++)
         {
-            value = parsed.GetValue(root, variables);
+            value = parsed.GetValue(_root, _variables);
         }
 
         return value;
@@ -84,7 +84,7 @@ public class ExpressionBenchmark
 
     /// <summary>The evaluation alone, which doesn't depend on the parser.</summary>
     [Benchmark]
-    public object GetValuePrepared() => prepared.GetValue(root, variables);
+    public object GetValuePrepared() => _prepared.GetValue(_root, _variables);
 }
 
 /// <summary>
@@ -93,7 +93,7 @@ public class ExpressionBenchmark
 [MemoryDiagnoser]
 public class ObjectWrapperBenchmark
 {
-    private readonly ObjectWrapper wrapper = new(new Person
+    private readonly ObjectWrapper _wrapper = new(new Person
     {
         Name = "Alice",
         Friends = new ArrayList { new Person(), new Person { Address = new Address { City = "Nice" } } },
@@ -101,11 +101,11 @@ public class ObjectWrapperBenchmark
 
     /// <summary>Only reads a name, without the parser.</summary>
     [Benchmark]
-    public object SimpleProperty() => wrapper.GetPropertyValue("Name");
+    public object SimpleProperty() => _wrapper.GetPropertyValue("Name");
 
     /// <summary>Takes the primary expression parsing path.</summary>
     [Benchmark]
-    public object PropertyPath() => wrapper.GetPropertyValue("Friends[1].Address.City");
+    public object PropertyPath() => _wrapper.GetPropertyValue("Friends[1].Address.City");
 }
 
 public class Person
