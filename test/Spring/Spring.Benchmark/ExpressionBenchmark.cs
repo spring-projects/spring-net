@@ -7,7 +7,7 @@ namespace Spring.Benchmark;
 
 /// <summary>
 /// The expression language, from parsing alone to the layers above it. Only uses the public API, so that the same file
-/// builds against any version of Spring.Core: see PARLOT_PORT.md for how to compare two of them.
+/// builds against any version of Spring.Core, to compare two of them.
 /// </summary>
 [MemoryDiagnoser]
 public class ExpressionBenchmark
