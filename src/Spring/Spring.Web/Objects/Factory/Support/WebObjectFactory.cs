@@ -340,8 +340,8 @@ public class WebObjectFactory : DefaultListableObjectFactory
     }
 
     /// <summary>
-    /// We need this override so that Web Scoped Singletons are not registered in general
-    /// DisposalObjectRegister
+    /// Skips the base implementation for 'request'- and 'session'-scoped objects, which are
+    /// disposed at the end of their request or session rather than by this factory.
     /// </summary>
     /// <param name="name"></param>
     /// <param name="instance"></param>

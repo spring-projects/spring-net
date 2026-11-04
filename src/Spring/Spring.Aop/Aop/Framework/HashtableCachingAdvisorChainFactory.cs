@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -28,12 +29,19 @@ namespace Spring.Aop.Framework;
 [Serializable]
 public sealed class HashtableCachingAdvisorChainFactory : IAdvisorChainFactory
 {
-    [NonSerialized] private Dictionary<MethodInfo, IList<object>> methodCache = new Dictionary<MethodInfo, IList<object>>();
+    [NonSerialized] private ConcurrentDictionary<MethodInfo, IList<object>> methodCache = CreateMethodCache();
 
     [OnDeserializing]
     private void OnDeserializing(StreamingContext c)
     {
-        methodCache = new Dictionary<MethodInfo, IList<object>>();
+        methodCache = CreateMethodCache();
+    }
+
+    // Every proxy has one of these. The default concurrency level allocates a lock per core; reads are
+    // lock-free either way, and writes only happen while the cache fills, so a single lock is enough.
+    private static ConcurrentDictionary<MethodInfo, IList<object>> CreateMethodCache()
+    {
+        return new ConcurrentDictionary<MethodInfo, IList<object>>(concurrencyLevel: 1, capacity: 1);
     }
 
     /// <summary>
@@ -56,19 +64,15 @@ public sealed class HashtableCachingAdvisorChainFactory : IAdvisorChainFactory
     /// </returns>
     public IList<object> GetInterceptors(IAdvised advised, object proxy, MethodInfo method, Type targetType)
     {
-        if (!methodCache.TryGetValue(method, out var interceptors))
+        if (methodCache.TryGetValue(method, out var interceptors))
         {
-            lock (methodCache)
-            {
-                if (!methodCache.TryGetValue(method, out interceptors))
-                {
-                    interceptors = AdvisorChainFactoryUtils.CalculateInterceptors(advised, proxy, method, targetType);
-                    methodCache[method] = interceptors;
-                }
-            }
+            return interceptors;
         }
 
-        return interceptors;
+        // Two threads may compute the same chain; the result is deterministic, so the
+        // first one stored wins and both callers return that instance.
+        interceptors = AdvisorChainFactoryUtils.CalculateInterceptors(advised, proxy, method, targetType);
+        return methodCache.GetOrAdd(method, interceptors);
     }
 
     /// <summary>

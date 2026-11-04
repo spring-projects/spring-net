@@ -116,6 +116,14 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
     /// LogExceptionHandler, in that only 'user friendly' properties such as LogName, etc., need to be configured
     /// and not 'user unfriendly' properties such as ConstraintExpressionText and ActionExpressionText.
     /// </summary>
+    /// <remarks>
+    /// A registered handler is a template: for each DSL statement with that action, the advice copies the
+    /// template and sets the statement's exception names, constraint and action on the copy, so the template
+    /// itself is never changed. A template is copied through <see cref="ICloneable"/>, which every
+    /// <see cref="Spring.Aspects.AbstractExceptionHandler"/> implements. A custom <see cref="IExceptionHandler"/>
+    /// that is not <see cref="ICloneable"/> is used as it is, shared by every statement with that action, and
+    /// is modified by each of them.
+    /// </remarks>
     /// <value>The exception handler dictionary.</value>
     public ExceptionHandlerTable ExceptionHandlerDictionary
     {
@@ -319,7 +327,7 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
             IExceptionHandler handler;
             if (exceptionHandlerTable.ContainsKey("log"))
             {
-                handler = exceptionHandlerTable["log"];
+                handler = CopyTemplate(exceptionHandlerTable["log"]);
                 AddExceptionNames(parsedAdviceExpression, handler);
             }
             else
@@ -336,7 +344,7 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
             IExceptionHandler handler;
             if (exceptionHandlerTable.Contains("translate"))
             {
-                handler = exceptionHandlerTable["translate"];
+                handler = CopyTemplate(exceptionHandlerTable["translate"]);
                 AddExceptionNames(parsedAdviceExpression, handler);
             }
             else
@@ -353,7 +361,7 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
             IExceptionHandler handler;
             if (exceptionHandlerTable.Contains("wrap"))
             {
-                handler = exceptionHandlerTable["wrap"];
+                handler = CopyTemplate(exceptionHandlerTable["wrap"]);
                 AddExceptionNames(parsedAdviceExpression, handler);
             }
             else
@@ -370,7 +378,7 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
             IExceptionHandler handler;
             if (exceptionHandlerTable.Contains("replace"))
             {
-                handler = exceptionHandlerTable["replace"];
+                handler = CopyTemplate(exceptionHandlerTable["replace"]);
                 AddExceptionNames(parsedAdviceExpression, handler);
             }
             else
@@ -387,7 +395,7 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
             IExceptionHandler handler;
             if (exceptionHandlerTable.Contains("swallow"))
             {
-                handler = exceptionHandlerTable["swallow"];
+                handler = CopyTemplate(exceptionHandlerTable["swallow"]);
                 AddExceptionNames(parsedAdviceExpression, handler);
             }
             else
@@ -403,7 +411,7 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
             IExceptionHandler handler;
             if (exceptionHandlerTable.Contains("return"))
             {
-                handler = exceptionHandlerTable["return"];
+                handler = CopyTemplate(exceptionHandlerTable["return"]);
                 AddExceptionNames(parsedAdviceExpression, handler);
             }
             else
@@ -420,7 +428,7 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
             IExceptionHandler handler;
             if (exceptionHandlerTable.Contains("execute"))
             {
-                handler = exceptionHandlerTable["execute"];
+                handler = CopyTemplate(exceptionHandlerTable["execute"]);
                 AddExceptionNames(parsedAdviceExpression, handler);
             }
             else
@@ -438,6 +446,11 @@ public class ExceptionHandlerAdvice : AbstractExceptionHandlerAdvice
         }
 
         return null;
+    }
+
+    private static IExceptionHandler CopyTemplate(IExceptionHandler template)
+    {
+        return template is ICloneable cloneable ? (IExceptionHandler) cloneable.Clone() : template;
     }
 
     /// <summary>

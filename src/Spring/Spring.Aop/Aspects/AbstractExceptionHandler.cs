@@ -23,8 +23,13 @@ namespace Spring.Aspects;
 /// <summary>
 /// An abstract base class providing all necessary functionality for typical IExceptionHandler implementations.
 /// </summary>
+/// <remarks>
+/// <see cref="Clone"/> makes a copy with its own exception name and exception type lists, so that a handler
+/// can serve as a template that is copied for each use. A subclass that adds a mutable reference-typed field
+/// must override <see cref="Clone"/> to copy it too.
+/// </remarks>
 /// <author>Mark Pollack</author>
-public abstract class AbstractExceptionHandler : IExceptionHandler
+public abstract class AbstractExceptionHandler : IExceptionHandler, ICloneable
 {
     /// <summary>
     /// The logging instance
@@ -152,6 +157,22 @@ public abstract class AbstractExceptionHandler : IExceptionHandler
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Creates a copy of this handler.
+    /// </summary>
+    /// <remarks>
+    /// The copy has its own <see cref="SourceExceptionNames"/> and <see cref="SourceExceptionTypes"/> lists, so
+    /// adding to them does not change this handler. The logger is shared.
+    /// </remarks>
+    /// <returns>A copy of this handler.</returns>
+    public virtual object Clone()
+    {
+        var clone = (AbstractExceptionHandler) MemberwiseClone();
+        clone.sourceExceptionNames = sourceExceptionNames != null ? new ArrayList(sourceExceptionNames) : null;
+        clone.sourceExceptionTypes = sourceExceptionTypes != null ? new ArrayList(sourceExceptionTypes) : null;
+        return clone;
     }
 
     /// <summary>
