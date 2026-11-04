@@ -3,9 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns:nms="http://www.springframework.net/nms">
 
+    <!-- The broker's URI comes from the environment: the test assembly's [SetUpFixture] starts the broker and sets it. -->
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" />
+            </list>
+        </property>
+    </object>
+
     <!-- the default ConnectionFactory -->
     <object id="nmsConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
-        <constructor-arg index="0" value="tcp://localhost:61616" />
+        <constructor-arg index="0" value="${SPRING_TEST_ACTIVEMQ_BROKER_URI}" />
     </object>
 
 
@@ -14,7 +23,7 @@
         <property name="SessionCacheSize" value="10" />
         <property name="TargetConnectionFactory">
             <object type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ">
-                <constructor-arg index="0" value="tcp://localhost:61616" />
+                <constructor-arg index="0" value="${SPRING_TEST_ACTIVEMQ_BROKER_URI}" />
             </object>
         </property>
     </object>
