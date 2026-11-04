@@ -51,6 +51,27 @@ public sealed class SingletonDestructionTests
         }
     }
 
+    public sealed class TwoParameterDestroyMethodSingleton
+    {
+        public void Cleanup(bool first, bool second)
+        {
+        }
+    }
+
+    [Test]
+    public void AnUnsupportedDestroyMethodFailsTheCreationOfTheSingleton()
+    {
+        DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
+        RootObjectDefinition definition = new RootObjectDefinition(typeof(TwoParameterDestroyMethodSingleton));
+        definition.DestroyMethodName = "Cleanup";
+        factory.RegisterObjectDefinition("invalid", definition);
+
+        // the factory keeps no destruction adapter, but it still validates the destroy method up front
+        ObjectCreationException e = Assert.Throws<ObjectCreationException>(() => factory.GetObject("invalid"));
+        Assert.That(e.Message, Does.Contain("Invalid destruction signature"));
+        Assert.That(e.InnerException, Is.TypeOf<ObjectDefinitionValidationException>());
+    }
+
     private static void RegisterSingletons(DefaultListableObjectFactory factory)
     {
         factory.RegisterObjectDefinition("disposable", new RootObjectDefinition(typeof(DisposableSingleton)));

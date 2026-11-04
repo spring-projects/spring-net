@@ -2266,15 +2266,25 @@ public abstract class AbstractObjectFactory : IConfigurableObjectFactory
     /// track it for destruction.
     /// </summary>
     /// <remarks>
-    /// The base implementation does nothing: this factory destroys its singletons in
+    /// The base implementation only validates the destroy method of the object, so that an invalid
+    /// one fails the creation of the object rather than the shutdown of the factory, and resolves an
+    /// inferred one. It keeps no reference to the instance: this factory destroys its singletons in
     /// <see cref="DestroySingleton"/> (called from <see cref="Dispose"/>), which builds the
-    /// destruction adapter at that point. It keeps no reference to the instance in between.
+    /// destruction adapter at that point.
     /// </remarks>
     /// <param name="name">The name of the object.</param>
     /// <param name="instance">The created instance.</param>
     /// <param name="od">The merged definition of the object.</param>
+    /// <exception cref="ObjectDefinitionValidationException">
+    /// The destroy method of the object has a signature that is not supported.
+    /// </exception>
     protected virtual void RegisterDisposableObjectIfNecessary(string name, object instance, RootObjectDefinition od)
     {
+        if (od.IsSingleton && RequiresDestruction(instance, od))
+        {
+            // the adapter validates the destroy method in its constructor; it isn't kept
+            _ = new DisposableObjectAdapter(instance, name, od, objectPostProcessors);
+        }
     }
 
     /// <summary>

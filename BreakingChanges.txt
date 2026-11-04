@@ -149,7 +149,9 @@ Changes (3.1 to 4.0)
    singleton that needed destruction, with its definition, for the lifetime of the factory, even after the
    singleton had been destroyed. Remove calls to it. A singleton that implements IDisposable or has a
    destroy method is already destroyed when the factory is disposed.
-   The protected virtual RegisterDisposableObjectIfNecessary is kept, and its base implementation does nothing.
+   The protected virtual RegisterDisposableObjectIfNecessary is kept. Its base implementation now only
+   validates the destroy method, so an unsupported one still fails the creation of the object, and keeps no
+   reference to the instance.
 
 13. The handler templates in ExceptionHandlerAdvice.ExceptionHandlerDictionary are now copied for each DSL
    statement when they are ICloneable, as every AbstractExceptionHandler now is, instead of being shared and
