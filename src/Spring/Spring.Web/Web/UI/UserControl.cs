@@ -892,7 +892,7 @@ public class UserControl : System.Web.UI.UserControl, IApplicationContextAware, 
         set
         {
             localizer = value;
-            if (localizer.ResourceCache is NullResourceCache)
+            if (localizer != null && localizer.ResourceCache is NullResourceCache)
             {
                 localizer.ResourceCache = new AspNetResourceCache();
             }

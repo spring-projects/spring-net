@@ -41,6 +41,7 @@ namespace Spring.Objects.Factory.Support;
 public class WebObjectFactory : DefaultListableObjectFactory
 {
     private static bool s_eventHandlersRegistered = false;
+    private static readonly object s_eventHandlersRegistrationLock = new object();
     private readonly static string OBJECTTABLEKEY = "spring.objects";
 
     private delegate IDictionary ObjectDictionaryCreationHandler();
@@ -71,7 +72,7 @@ public class WebObjectFactory : DefaultListableObjectFactory
     {
         if (!s_eventHandlersRegistered)
         {
-            lock (typeof(WebObjectFactory))
+            lock (s_eventHandlersRegistrationLock)
             {
                 if (s_eventHandlersRegistered) return;
 
