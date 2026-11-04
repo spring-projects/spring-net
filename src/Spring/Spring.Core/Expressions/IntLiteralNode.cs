@@ -67,15 +67,7 @@ public class IntLiteralNode : BaseNode
             {
                 if (nodeValue == null)
                 {
-                    string n = this.getText();
-                    try
-                    {
-                        nodeValue = Int32.Parse(n);
-                    }
-                    catch (OverflowException)
-                    {
-                        nodeValue = Int64.Parse(n);
-                    }
+                    nodeValue = IntegerLiteral.ParseDecimal(this.getText());
                 }
             }
         }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace Spring.Expressions;
@@ -60,15 +59,7 @@ public class HexLiteralNode : BaseNode
             {
                 if (nodeValue == null)
                 {
-                    string n = this.getText();
-                    try
-                    {
-                        nodeValue = Int32.Parse(n.Substring(2), NumberStyles.HexNumber);
-                    }
-                    catch (OverflowException)
-                    {
-                        nodeValue = Int64.Parse(n.Substring(2), NumberStyles.HexNumber);
-                    }
+                    nodeValue = IntegerLiteral.ParseHex(this.getText());
                 }
             }
         }
