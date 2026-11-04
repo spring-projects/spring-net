@@ -20,7 +20,6 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Expressions;
-using Spring.Expressions.Parser.antlr;
 using Spring.Util;
 using StringUtils = Spring.Util.StringUtils;
 
@@ -170,11 +169,7 @@ public class ObjectWrapper : IObjectWrapper
             IExpression propertyExpression = GetPropertyExpression(propertyName);
             return GetPropertyValue(propertyExpression);
         }
-        catch (RecognitionException e)
-        {
-            throw new InvalidPropertyException("Failed to parse property name '" + propertyName + "'.", e);
-        }
-        catch (TokenStreamRecognitionException e)
+        catch (SyntaxErrorException e)
         {
             throw new InvalidPropertyException("Failed to parse property name '" + propertyName + "'.", e);
         }
@@ -215,11 +210,7 @@ public class ObjectWrapper : IObjectWrapper
             IExpression propertyExpression = GetPropertyExpression(propertyName);
             SetPropertyValue(propertyExpression, val);
         }
-        catch (RecognitionException e)
-        {
-            throw new InvalidPropertyException("Failed to parse property name '" + propertyName + "'.", e);
-        }
-        catch (TokenStreamRecognitionException e)
+        catch (SyntaxErrorException e)
         {
             throw new InvalidPropertyException("Failed to parse property name '" + propertyName + "'.", e);
         }
@@ -418,11 +409,7 @@ public class ObjectWrapper : IObjectWrapper
 
             throw new FatalObjectException($"'{propertyOrFieldName}' is not a valid property or field expression.");
         }
-        catch (RecognitionException e)
-        {
-            throw new FatalObjectException($"Failed to parse property or field name '{propertyOrFieldName}'.", e);
-        }
-        catch (TokenStreamRecognitionException e)
+        catch (SyntaxErrorException e)
         {
             throw new FatalObjectException($"Failed to parse property or field name '{propertyOrFieldName}'.", e);
         }

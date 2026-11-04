@@ -119,6 +119,30 @@ Changes (3.1 to 4.0)
    - Before: ActionExpressionText="#log.Fatal('msg', #e)"
    - After:  ActionExpressionText="'msg'" LogLevel="Critical"
 
+11. The expression language is parsed by a parser generated with Parlot at build time, without a
+   runtime dependency on it, instead of the ANTLR 2 runtime that Spring.Core embedded:
+   - The namespaces Spring.Expressions.Parser.antlr, .antlr.debug, .antlr.collections and
+     .antlr.collections.impl are gone, with all their public types.
+   - Spring.Expressions.SpringAST has no base class any more, and getFirstChild, getNextSibling, addChild,
+     setFirstChild and setNextSibling use SpringAST instead of the AST interface. It lost the protected down and
+     right fields, ICloneable and Clone, SpringAST(IToken) and initialize(IToken), and the helpers it inherited
+     from BaseAST: EqualsList, EqualsListPartial, EqualsTree, EqualsTreePartial, findAll, findAllPartial, ToTree,
+     xmlSerialize, xmlSerializeNode, xmlSerializeRootOpen, xmlSerializeRootClose, encode, decode and
+     setVerboseStringConversion.
+   - Syntax errors are still Spring.Expressions.SyntaxErrorException, which is now public and derives from
+     Exception: catch it instead of RecognitionException or TokenStreamRecognitionException.
+   - An error can report a later position than it did, at the token that could not be read, and its
+     message can be different. The expressions accepted and their trees are the same, except that a
+     QualifiedIdentifier has no child nodes any more (getText() returns the same value). The serialized form of
+     a parsed expression is the same.
+   - U+FFFF in an expression is now an invalid char. ANTLR took it for the end of the input and silently dropped
+     what followed.
+   - A nested expression too deep for the stack of the thread, or 2,000 levels of parentheses or prefix
+     operators, is a SyntaxErrorException instead of a stack overflow.
+   - Evaluating a tree too deep for the stack of the thread throws InsufficientExecutionStackException
+     instead of overflowing it.
+   - Spring.Core depends on System.Memory explicitly on .NET Framework and .NET Standard 2.0.
+
 Changes (3.0.x to 3.1)
 ========================
 

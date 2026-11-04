@@ -75,8 +75,6 @@ public abstract class StandardsComplianceTest
     {
         foreach (Type t in a.GetTypes())
         {
-            // TODO: make antlr compliant
-            if (t.FullName.IndexOf(".antlr.") > -1) continue;
 
             if ((t.IsPublic || t.IsNestedPublic)
                 && IsCheckedType(t))

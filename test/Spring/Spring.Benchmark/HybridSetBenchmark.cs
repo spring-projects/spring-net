@@ -20,7 +20,7 @@ using Spring.Objects.Factory.Support;
 
 namespace Spring.Benchmark;
 
-[ClrJob, CoreJob]
+[Config(typeof(FrameworkAndCoreConfig))]
 [MemoryDiagnoser]
 public class HybridSetBenchmark
 {

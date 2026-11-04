@@ -16,7 +16,6 @@
 
 using System.Runtime.Serialization;
 using Spring.Core.TypeResolution;
-using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions;
 
@@ -85,7 +84,7 @@ public class TypeNode : BaseNode
 //                    tmp = type.AssemblyQualifiedName;
 //                }
 //            }
-        AST node = this.getFirstChild();
+        SpringAST node = this.getFirstChild();
         while (node != null)
         {
             tmp += node.getText();

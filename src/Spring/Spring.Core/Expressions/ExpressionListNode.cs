@@ -15,7 +15,6 @@
  */
 
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions;
 
@@ -54,7 +53,7 @@ public class ExpressionListNode : BaseNode
     {
         object result = context;
 
-        AST node = this.getFirstChild();
+        SpringAST node = this.getFirstChild();
         while (node != null)
         {
             result = GetValue(((BaseNode) node), context, evalContext);

@@ -1,6 +1,5 @@
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser.antlr;
-using Spring.Expressions.Parser.antlr.collections;
+using System.Text;
 
 namespace Spring.Expressions;
 
@@ -8,34 +7,17 @@ namespace Spring.Expressions;
 /// For internal purposes only. Use <see cref="BaseNode"/> for expression node implementations.
 /// </summary>
 /// <remarks>
-/// This class is only required to enable serialization of parsed Spring expressions since antlr.CommonAST
-/// unfortunately is not marked as [Serializable].<br/>
+/// A node of a parsed expression: its first child, its next sibling, a token type and a text.<br/>
 /// <br/>
 /// <b>Note:</b>Since SpringAST implements <see cref="ISerializable"/>, deriving classes
 /// have to explicitely override <see cref="GetObjectData"/> if they need to persist additional
 /// data during serialization.
 /// </remarks>
 [Serializable]
-public class SpringAST : Parser.antlr.BaseAST, ISerializable
+public class SpringAST : ISerializable
 {
-    internal class SpringASTCreator : Parser.antlr.ASTNodeCreator
-    {
-        public override Parser.antlr.collections.AST Create()
-        {
-            return new SpringAST();
-        }
-
-        public override string ASTNodeTypeName
-        {
-            get { return typeof(SpringAST).FullName; }
-        }
-    }
-
-    /// <summary>
-    /// The global SpringAST node factory
-    /// </summary>
-    internal static readonly SpringASTCreator Creator = new SpringASTCreator();
-
+    private SpringAST down;
+    private SpringAST right;
     private string text;
     private int ttype;
 
@@ -47,35 +29,18 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
     }
 
     /// <summary>
-    /// Create an instance from a token
-    /// </summary>
-    public SpringAST(IToken token)
-    {
-        initialize(token);
-    }
-
-    /// <summary>
     /// initialize this instance from an AST
     /// </summary>
-    public override void initialize(AST t)
+    public virtual void initialize(SpringAST t)
     {
         this.setText(t.getText());
         this.Type = t.Type;
     }
 
     /// <summary>
-    /// initialize this instance from an IToken
-    /// </summary>
-    public override void initialize(IToken tok)
-    {
-        this.setText(tok.getText());
-        this.Type = tok.Type;
-    }
-
-    /// <summary>
     /// initialize this instance from a token type number and a text
     /// </summary>
-    public override void initialize(int t, string txt)
+    public virtual void initialize(int t, string txt)
     {
         this.Type = t;
         this.setText(txt);
@@ -84,10 +49,18 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
     /// <summary>
     /// gets or sets the token type of this node
     /// </summary>
-    public override int Type
+    public virtual int Type
     {
         get { return this.ttype; }
         set { this.ttype = value; }
+    }
+
+    /// <summary>
+    /// sets the token type of this node
+    /// </summary>
+    public virtual void setType(int ttype)
+    {
+        this.Type = ttype;
     }
 
     /// <summary>
@@ -102,7 +75,7 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
     /// <summary>
     /// sets the text of this node
     /// </summary>
-    public override void setText(string txt)
+    public virtual void setText(string txt)
     {
         this.text = txt;
     }
@@ -110,9 +83,142 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
     /// <summary>
     /// gets the text of this node
     /// </summary>
-    public override string getText()
+    public virtual string getText()
     {
         return this.text;
+    }
+
+    /// <summary>
+    /// adds a node to the end of the children of this node
+    /// </summary>
+    public virtual void addChild(SpringAST node)
+    {
+        if (node == null)
+        {
+            return;
+        }
+
+        var t = this.down;
+        if (t == null)
+        {
+            this.down = node;
+            return;
+        }
+
+        while (t.right != null)
+        {
+            t = t.right;
+        }
+
+        t.right = node;
+    }
+
+    /// <summary>
+    /// gets the first child of this node
+    /// </summary>
+    public virtual SpringAST getFirstChild()
+    {
+        return this.down;
+    }
+
+    /// <summary>
+    /// sets the first child of this node
+    /// </summary>
+    public virtual void setFirstChild(SpringAST c)
+    {
+        this.down = c;
+    }
+
+    /// <summary>
+    /// gets the next sibling of this node
+    /// </summary>
+    public virtual SpringAST getNextSibling()
+    {
+        return this.right;
+    }
+
+    /// <summary>
+    /// sets the next sibling of this node
+    /// </summary>
+    public virtual void setNextSibling(SpringAST n)
+    {
+        this.right = n;
+    }
+
+    /// <summary>
+    /// removes the children of this node
+    /// </summary>
+    public virtual void removeChildren()
+    {
+        this.down = null;
+    }
+
+    /// <summary>
+    /// gets the number of children of this node, 0 for a leaf
+    /// </summary>
+    public int getNumberOfChildren()
+    {
+        var n = 0;
+        for (var t = this.down; t != null; t = t.right)
+        {
+            n++;
+        }
+
+        return n;
+    }
+
+    /// <summary>
+    /// whether <paramref name="obj"/> is a node of the same class, token type and text, whatever its children
+    /// </summary>
+    public override bool Equals(object obj)
+    {
+        return obj != null && this.GetType() == obj.GetType() && Equals((SpringAST) obj);
+    }
+
+    /// <summary>
+    /// whether <paramref name="t"/> has the same token type and text, whatever its children
+    /// </summary>
+    public virtual bool Equals(SpringAST t)
+    {
+        return t != null && object.Equals(this.getText(), t.getText()) && this.Type == t.Type;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    /// <summary>
+    /// returns the text of this node
+    /// </summary>
+    public override string ToString()
+    {
+        return getText();
+    }
+
+    /// <summary>
+    /// prints this node, its children and its next siblings in LISP notation
+    /// </summary>
+    public virtual string ToStringList()
+    {
+        var builder = new StringBuilder();
+        for (var t = this; t != null; t = t.right)
+        {
+            builder.Append(t.ToStringTree());
+        }
+
+        return builder.ToString();
+    }
+
+    /// <summary>
+    /// prints this node and its children in LISP notation
+    /// </summary>
+    public virtual string ToStringTree()
+    {
+        return this.down == null
+            ? " " + ToString()
+            : " ( " + ToString() + this.down.ToStringList() + " )";
     }
 
     /// <summary>
@@ -123,8 +229,8 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
 #endif
     protected SpringAST(SerializationInfo info, StreamingContext context)
     {
-        base.down = (BaseAST) info.GetValue("down", typeof(BaseAST));
-        base.right = (BaseAST) info.GetValue("right", typeof(BaseAST));
+        this.down = (SpringAST) info.GetValue("down", typeof(SpringAST));
+        this.right = (SpringAST) info.GetValue("right", typeof(SpringAST));
         this.ttype = info.GetInt32("ttype");
         this.text = info.GetString("text");
     }
@@ -137,8 +243,8 @@ public class SpringAST : Parser.antlr.BaseAST, ISerializable
 #endif
     public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
     {
-        info.AddValue("down", base.down, typeof(SpringAST));
-        info.AddValue("right", base.right, typeof(SpringAST));
+        info.AddValue("down", this.down, typeof(SpringAST));
+        info.AddValue("right", this.right, typeof(SpringAST));
         info.AddValue("ttype", this.Type, typeof(int));
         info.AddValue("text", this.Text, typeof(string));
     }

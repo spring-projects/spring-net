@@ -17,9 +17,6 @@
 using System.Collections;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Spring.Expressions.Parser;
-using Spring.Expressions.Parser.antlr;
-using Spring.Expressions.Parser.antlr.collections;
 using Spring.Core;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
@@ -63,77 +60,6 @@ public class Expression : BaseNode
         internal static readonly string ExpressionExtensions = RESERVEDPREFIX + "ExpressionExtensions";
     }
 
-    private class ASTNodeCreator : Parser.antlr.ASTNodeCreator
-    {
-        private readonly SafeConstructor ctor;
-        private readonly string name;
-
-        public ASTNodeCreator(ConstructorInfo ctor)
-        {
-            this.ctor = new SafeConstructor(ctor);
-            this.name = ctor.DeclaringType.FullName;
-        }
-
-        public override AST Create()
-        {
-            return (AST) ctor.Invoke(new object[0]);
-        }
-
-        public override string ASTNodeTypeName
-        {
-            get { return name; }
-        }
-    }
-
-    private class SpringASTFactory : ASTFactory
-    {
-        private static readonly Type BASENODE_TYPE;
-        private static readonly Hashtable Typename2Creator;
-
-        static SpringASTFactory()
-        {
-            BASENODE_TYPE = typeof(SpringAST);
-
-            Typename2Creator = new Hashtable();
-            foreach (Type type in typeof(SpringASTFactory).Assembly.GetTypes())
-            {
-                if (BASENODE_TYPE.IsAssignableFrom(type) && !type.IsAbstract)
-                {
-                    ConstructorInfo ctor = type.GetConstructor(System.Type.EmptyTypes);
-                    if (ctor != null)
-                    {
-                        ASTNodeCreator creator = new ASTNodeCreator(ctor);
-                        Typename2Creator[creator.ASTNodeTypeName] = creator;
-                    }
-                }
-            }
-
-            Typename2Creator[BASENODE_TYPE.FullName] = SpringAST.Creator;
-        }
-
-        public SpringASTFactory() : base(BASENODE_TYPE)
-        {
-            base.defaultASTNodeTypeObject_ = BASENODE_TYPE;
-            base.typename2creator_ = Typename2Creator;
-        }
-    }
-
-    private class SpringExpressionParser : ExpressionParser
-    {
-        public SpringExpressionParser(TokenStream lexer)
-            : base(lexer)
-        {
-            base.astFactory = new SpringASTFactory();
-            base.initialize();
-        }
-    }
-
-    static Expression()
-    {
-        // Ensure antlr is loaded (fixes GAC issues)!
-        Assembly antlrAss = typeof(Parser.antlr.LLkParser).Assembly;
-    }
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Expression"/> class
     /// by parsing specified expression string.
@@ -143,19 +69,7 @@ public class Expression : BaseNode
     {
         if (StringUtils.HasText(expression))
         {
-            ExpressionLexer lexer = new ExpressionLexer(new StringReader(expression));
-            ExpressionParser parser = new SpringExpressionParser(lexer);
-
-            try
-            {
-                parser.expr();
-            }
-            catch (TokenStreamRecognitionException ex)
-            {
-                throw new SyntaxErrorException(ex.recog.Message, ex.recog.getLine(), ex.recog.getColumn(), expression);
-            }
-
-            return (IExpression) parser.getAST();
+            return ExpressionGrammar.ParseExpression(expression);
         }
         else
         {
@@ -402,19 +316,7 @@ public class Expression : BaseNode
 
     private static LambdaExpressionNode ParseLambda(string lambdaExpression)
     {
-        ExpressionLexer lexer = new ExpressionLexer(new StringReader(lambdaExpression));
-        ExpressionParser parser = new SpringExpressionParser(lexer);
-
-        try
-        {
-            parser.lambda();
-        }
-        catch (TokenStreamRecognitionException ex)
-        {
-            throw new SyntaxErrorException(ex.recog.Message, ex.recog.getLine(), ex.recog.getColumn(), lambdaExpression);
-        }
-
-        return (LambdaExpressionNode) parser.getAST();
+        return ExpressionGrammar.ParseLambda(lambdaExpression);
     }
 
     /// <summary>
@@ -426,19 +328,7 @@ public class Expression : BaseNode
     {
         if (StringUtils.HasText(expression))
         {
-            ExpressionLexer lexer = new ExpressionLexer(new StringReader(expression));
-            ExpressionParser parser = new SpringExpressionParser(lexer);
-
-            try
-            {
-                parser.primaryExpression();
-            }
-            catch (TokenStreamRecognitionException ex)
-            {
-                throw new SyntaxErrorException(ex.recog.Message, ex.recog.getLine(), ex.recog.getColumn(), expression);
-            }
-
-            return (IExpression) parser.getAST();
+            return ExpressionGrammar.ParsePrimary(expression);
         }
         else
         {
@@ -455,19 +345,7 @@ public class Expression : BaseNode
     {
         if (StringUtils.HasText(expression))
         {
-            ExpressionLexer lexer = new ExpressionLexer(new StringReader(expression));
-            ExpressionParser parser = new SpringExpressionParser(lexer);
-
-            try
-            {
-                parser.property();
-            }
-            catch (TokenStreamRecognitionException ex)
-            {
-                throw new SyntaxErrorException(ex.recog.Message, ex.recog.getLine(), ex.recog.getColumn(), expression);
-            }
-
-            return (IExpression) parser.getAST();
+            return ExpressionGrammar.ParseProperty(expression);
         }
         else
         {
@@ -506,7 +384,7 @@ public class Expression : BaseNode
 
         if (this.getNumberOfChildren() > 0)
         {
-            AST node = this.getFirstChild();
+            SpringAST node = this.getFirstChild();
             while (node != null)
             {
                 result = GetValue(((BaseNode) node), result, evalContext);
@@ -532,7 +410,7 @@ public class Expression : BaseNode
 
         if (this.getNumberOfChildren() > 0)
         {
-            AST node = this.getFirstChild();
+            SpringAST node = this.getFirstChild();
 
             for (int i = 0; i < this.getNumberOfChildren() - 1; i++)
             {
@@ -567,7 +445,7 @@ public class Expression : BaseNode
         if (this.getNumberOfChildren() > 0)
         {
             object target = context;
-            AST node = this.getFirstChild();
+            SpringAST node = this.getFirstChild();
 
             for (int i = 0; i < this.getNumberOfChildren() - 1; i++)
             {

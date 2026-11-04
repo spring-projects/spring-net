@@ -161,19 +161,6 @@ partial class Build : FalloutBuild
             }
         });
 
-    Target Antlr => _ => _
-        .Executes(() =>
-        {
-            var projectDir = Solution.GetProject("Spring.Core");
-            var expressionsDir = Path.Combine(projectDir.Directory, "Expressions");
-            var antlrExecutable = Path.Combine(Solution.Directory, "build-support/tools/antlr-2.7.6/antlr-2.7.6.exe");
-            var process = StartProcess(
-                toolPath: antlrExecutable,
-                arguments: $"-o {expressionsDir}/Parser {expressionsDir}/Expression.g"
-            );
-            process.WaitForExit();
-        });
-
     Target Pack => _ => _
         .After(Test)
         .DependsOn(Restore)

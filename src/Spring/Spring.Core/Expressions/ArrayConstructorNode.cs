@@ -17,7 +17,6 @@
 using System.Collections;
 using System.Runtime.Serialization;
 using Spring.Core.TypeResolution;
-using Spring.Expressions.Parser.antlr.collections;
 
 namespace Spring.Expressions;
 
@@ -66,13 +65,13 @@ public class ArrayConstructorNode : NodeWithArguments
             }
         }
 
-        AST rankRoot = getFirstChild();
+        SpringAST rankRoot = getFirstChild();
         int dimensions = rankRoot.getNumberOfChildren();
         int[] ranks = new int[dimensions];
         if (dimensions > 0)
         {
             int i = 0;
-            AST rankNode = rankRoot.getFirstChild();
+            SpringAST rankNode = rankRoot.getFirstChild();
             while (rankNode != null)
             {
                 ranks[i++] = (int) GetValue((BaseNode) rankNode, context, evalContext);
@@ -83,7 +82,7 @@ public class ArrayConstructorNode : NodeWithArguments
         }
         else
         {
-            AST valuesRoot = getFirstChild().getNextSibling();
+            SpringAST valuesRoot = getFirstChild().getNextSibling();
             if (valuesRoot != null)
             {
                 ArrayList values = (ArrayList) GetValue(((BaseNode) valuesRoot), context, evalContext);

@@ -1,0 +1,1204 @@
+[
+  [
+    "a b c",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (PropertyOrFieldNode|33|b) (PropertyOrFieldNode|33|c))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (PropertyOrFieldNode|33|b) (PropertyOrFieldNode|33|c))"
+  ],
+  [
+    "a..b",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (PropertyOrFieldNode|33|b))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (PropertyOrFieldNode|33|b))"
+  ],
+  [
+    "a.",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "1 .a",
+    "(Expression|4|expression (IntLiteralNode|51|1) (PropertyOrFieldNode|33|a))",
+    "(Expression|4|expression (IntLiteralNode|51|1) (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "(a)",
+    "(Expression|4|expression (Expression|4|expression (PropertyOrFieldNode|33|a)))",
+    "(Expression|4|expression (Expression|4|expression (PropertyOrFieldNode|33|a)))"
+  ],
+  [
+    "((a))",
+    "(Expression|4|expression (Expression|4|expression (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "(Expression|4|expression (Expression|4|expression (Expression|4|expression (PropertyOrFieldNode|33|a))))"
+  ],
+  [
+    "(a;b)",
+    "(Expression|4|expression (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))))",
+    "(Expression|4|expression (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))))"
+  ],
+  [
+    "(a;b).c",
+    "(Expression|4|expression (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))) (PropertyOrFieldNode|33|c))",
+    "(Expression|4|expression (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))) (PropertyOrFieldNode|33|c))"
+  ],
+  [
+    "a[0](b;c)",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (IndexerNode|37|[ (Expression|4|expression (IntLiteralNode|51|0))) (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|c))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (IndexerNode|37|[ (Expression|4|expression (IntLiteralNode|51|0))) (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|c))))"
+  ],
+  [
+    "T(a)",
+    "(Expression|4|expression (TypeNode|4|a))",
+    "(Expression|4|expression (TypeNode|4|a))"
+  ],
+  [
+    "T( a . b )",
+    "(Expression|4|expression (TypeNode|4|a.b))",
+    "(Expression|4|expression (TypeNode|4|a.b))"
+  ],
+  [
+    "T(a'b'c)",
+    "(Expression|4|expression (TypeNode|4|abc))",
+    "(Expression|4|expression (TypeNode|4|abc))"
+  ],
+  [
+    "T(a,b=1.2.3)",
+    "(Expression|4|expression (TypeNode|4|a,b=1.2.3))",
+    "(Expression|4|expression (TypeNode|4|a,b=1.2.3))"
+  ],
+  [
+    "T(a<b>)",
+    "(Expression|4|expression (TypeNode|4|a<b>))",
+    "(Expression|4|expression (TypeNode|4|a<b>))"
+  ],
+  [
+    "T(int[])",
+    "(Expression|4|expression (TypeNode|4|int[]))",
+    "(Expression|4|expression (TypeNode|4|int[]))"
+  ],
+  [
+    "@(a)",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a)))",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a)))"
+  ],
+  [
+    "@(a:b)",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a) (QualifiedIdentifier|33|b)))",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a) (QualifiedIdentifier|33|b)))"
+  ],
+  [
+    "@('a b':'c d')",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|46|a b) (QualifiedIdentifier|46|c d)))",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|46|a b) (QualifiedIdentifier|46|c d)))"
+  ],
+  [
+    "@(a.b:c.d)",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a.b) (QualifiedIdentifier|33|c.d)))",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a.b) (QualifiedIdentifier|33|c.d)))"
+  ],
+  [
+    "@[a.b]",
+    "(Expression|4|expression (AttributeNode|4|a.b))",
+    "(Expression|4|expression (AttributeNode|4|a.b))"
+  ],
+  [
+    "@[a(1,x=2)]",
+    "(Expression|4|expression (AttributeNode|4|a (Expression|4|expression (IntLiteralNode|51|1)) (NamedArgumentNode|33|x (Expression|4|expression (IntLiteralNode|51|2)))))",
+    "(Expression|4|expression (AttributeNode|4|a (Expression|4|expression (IntLiteralNode|51|1)) (NamedArgumentNode|33|x (Expression|4|expression (IntLiteralNode|51|2)))))"
+  ],
+  [
+    "new a.b(1,x=2)",
+    "(Expression|4|expression (ConstructorNode|4|a.b (Expression|4|expression (IntLiteralNode|51|1)) (NamedArgumentNode|33|x (Expression|4|expression (IntLiteralNode|51|2)))))",
+    "(Expression|4|expression (ConstructorNode|4|a.b (Expression|4|expression (IntLiteralNode|51|1)) (NamedArgumentNode|33|x (Expression|4|expression (IntLiteralNode|51|2)))))"
+  ],
+  [
+    "new a[1]",
+    "(Expression|4|expression (ArrayConstructorNode|4|a (SpringAST|37|[ (Expression|4|expression (IntLiteralNode|51|1)))))",
+    "(Expression|4|expression (ArrayConstructorNode|4|a (SpringAST|37|[ (Expression|4|expression (IntLiteralNode|51|1)))))"
+  ],
+  [
+    "new a[1,2]{1,2}",
+    "(Expression|4|expression (ArrayConstructorNode|4|a (SpringAST|37|[ (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (IntLiteralNode|51|2))) (ListInitializerNode|50|{ (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (IntLiteralNode|51|2)))))",
+    "(Expression|4|expression (ArrayConstructorNode|4|a (SpringAST|37|[ (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (IntLiteralNode|51|2))) (ListInitializerNode|50|{ (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (IntLiteralNode|51|2)))))"
+  ],
+  [
+    "new a[]{1}",
+    "(Expression|4|expression (ArrayConstructorNode|4|a (SpringAST|37|[) (ListInitializerNode|50|{ (Expression|4|expression (IntLiteralNode|51|1)))))",
+    "(Expression|4|expression (ArrayConstructorNode|4|a (SpringAST|37|[) (ListInitializerNode|50|{ (Expression|4|expression (IntLiteralNode|51|1)))))"
+  ],
+  [
+    "new a[](b)",
+    "ERROR 10 Syntax Error on line 1, column 10: unexpected token: [\")\",<19>,line=1,col=10]",
+    "ERROR 10 Syntax Error on line 1, column 10: unexpected token: [\")\",<19>,line=1,col=10]"
+  ],
+  [
+    "#a",
+    "(Expression|4|expression (VariableNode|33|a))",
+    "(Expression|4|expression (VariableNode|33|a))"
+  ],
+  [
+    "#a(1)",
+    "(Expression|4|expression (FunctionNode|33|a (Expression|4|expression (IntLiteralNode|51|1))))",
+    "(Expression|4|expression (FunctionNode|33|a (Expression|4|expression (IntLiteralNode|51|1))))"
+  ],
+  [
+    "# a",
+    "(Expression|4|expression (VariableNode|33|a))",
+    "(Expression|4|expression (VariableNode|33|a))"
+  ],
+  [
+    "$a",
+    "(Expression|4|expression (LocalVariableNode|33|a))",
+    "(Expression|4|expression (LocalVariableNode|33|a))"
+  ],
+  [
+    "$a(1)",
+    "(Expression|4|expression (LocalFunctionNode|33|a (Expression|4|expression (IntLiteralNode|51|1))))",
+    "(Expression|4|expression (LocalFunctionNode|33|a (Expression|4|expression (IntLiteralNode|51|1))))"
+  ],
+  [
+    "#{a:1,b:2}",
+    "(Expression|4|expression (MapInitializerNode|50|{ (MapEntryNode|4|entry (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (IntLiteralNode|51|1))) (MapEntryNode|4|entry (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (IntLiteralNode|51|2)))))",
+    "(Expression|4|expression (MapInitializerNode|50|{ (MapEntryNode|4|entry (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (IntLiteralNode|51|1))) (MapEntryNode|4|entry (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (IntLiteralNode|51|2)))))"
+  ],
+  [
+    "{1,2}",
+    "(Expression|4|expression (ListInitializerNode|50|{ (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (IntLiteralNode|51|2))))",
+    "(Expression|4|expression (ListInitializerNode|50|{ (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (IntLiteralNode|51|2))))"
+  ],
+  [
+    "{|a,b|a}",
+    "(Expression|4|expression (LambdaExpressionNode|4|lambda (SpringAST|4|args (SpringAST|33|a) (SpringAST|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "(Expression|4|expression (LambdaExpressionNode|4|lambda (SpringAST|4|args (SpringAST|33|a) (SpringAST|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|a))))"
+  ],
+  [
+    "{|x|x}",
+    "(Expression|4|expression (LambdaExpressionNode|4|lambda (SpringAST|4|args (SpringAST|33|x)) (Expression|4|expression (PropertyOrFieldNode|33|x))))",
+    "(Expression|4|expression (LambdaExpressionNode|4|lambda (SpringAST|4|args (SpringAST|33|x)) (Expression|4|expression (PropertyOrFieldNode|33|x))))"
+  ],
+  [
+    "{||1}",
+    "(Expression|4|expression (LambdaExpressionNode|4|lambda (Expression|4|expression (IntLiteralNode|51|1))))",
+    "(Expression|4|expression (LambdaExpressionNode|4|lambda (Expression|4|expression (IntLiteralNode|51|1))))"
+  ],
+  [
+    "!{a}",
+    "(Expression|4|expression (ProjectionNode|39|!{ (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "(Expression|4|expression (ProjectionNode|39|!{ (Expression|4|expression (PropertyOrFieldNode|33|a))))"
+  ],
+  [
+    "?{a,b}",
+    "(Expression|4|expression (SelectionNode|41|?{ (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))))",
+    "(Expression|4|expression (SelectionNode|41|?{ (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))))"
+  ],
+  [
+    "^{a}",
+    "(Expression|4|expression (SelectionFirstNode|42|^{ (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "(Expression|4|expression (SelectionFirstNode|42|^{ (Expression|4|expression (PropertyOrFieldNode|33|a))))"
+  ],
+  [
+    "${a}",
+    "(Expression|4|expression (SelectionLastNode|43|${ (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "(Expression|4|expression (SelectionLastNode|43|${ (Expression|4|expression (PropertyOrFieldNode|33|a))))"
+  ],
+  [
+    "a!{b}?{c}^{d}${e}",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (ProjectionNode|39|!{ (Expression|4|expression (PropertyOrFieldNode|33|b))) (SelectionNode|41|?{ (Expression|4|expression (PropertyOrFieldNode|33|c))) (SelectionFirstNode|42|^{ (Expression|4|expression (PropertyOrFieldNode|33|d))) (SelectionLastNode|43|${ (Expression|4|expression (PropertyOrFieldNode|33|e))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (ProjectionNode|39|!{ (Expression|4|expression (PropertyOrFieldNode|33|b))) (SelectionNode|41|?{ (Expression|4|expression (PropertyOrFieldNode|33|c))) (SelectionFirstNode|42|^{ (Expression|4|expression (PropertyOrFieldNode|33|d))) (SelectionLastNode|43|${ (Expression|4|expression (PropertyOrFieldNode|33|e))))"
+  ],
+  [
+    "a^b",
+    "(OpPOWER|29|^ (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a^{b}",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (SelectionFirstNode|42|^{ (Expression|4|expression (PropertyOrFieldNode|33|b))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (SelectionFirstNode|42|^{ (Expression|4|expression (PropertyOrFieldNode|33|b))))"
+  ],
+  [
+    "a ^ {b}",
+    "(OpPOWER|29|^ (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (ListInitializerNode|50|{ (Expression|4|expression (PropertyOrFieldNode|33|b)))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a^{b,c}",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\",\",<35>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\",\",<35>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"RCURLY\", found ','",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"RCURLY\", found ','"
+  ],
+  [
+    "a^b^c",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"EOF\", found '^'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"^\",<29>,line=1,col=4]",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "-a^b",
+    "(OpPOWER|29|^ (OpUnaryMinus|25|- (Expression|4|expression (PropertyOrFieldNode|33|a))) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"-\",<25>,line=1,col=1]"
+  ],
+  [
+    "2^-3",
+    "(OpPOWER|29|^ (Expression|4|expression (IntLiteralNode|51|2)) (OpUnaryMinus|25|- (Expression|4|expression (IntLiteralNode|51|3))))",
+    "(Expression|4|expression (IntLiteralNode|51|2))"
+  ],
+  [
+    "a==b",
+    "(OpEqual|4|== (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a==b==c",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"EOF\", found '=='",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"==\",<54>,line=1,col=5]",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a<=b",
+    "(OpLessOrEqual|4|<= (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a<b<c",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"EOF\", found '<'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"<\",<56>,line=1,col=4]",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a in b",
+    "(OpIn|4|in (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a is b",
+    "(OpIs|4|is (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a between b",
+    "(OpBetween|4|between (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a like b",
+    "(OpLike|4|like (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a matches b",
+    "(OpMatches|4|matches (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a and b or c xor d",
+    "(OpOR|9|or (OpAND|8|and (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))) (OpXOR|10|xor (Expression|4|expression (PropertyOrFieldNode|33|c)) (Expression|4|expression (PropertyOrFieldNode|33|d))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a or b and c",
+    "(OpOR|9|or (Expression|4|expression (PropertyOrFieldNode|33|a)) (OpAND|8|and (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|c))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a=b",
+    "(AssignNode|20|= (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a=b=c",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"EOF\", found '='",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a??b",
+    "(DefaultNode|21|?? (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a??b??c",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"EOF\", found '??'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a?b:c",
+    "(TernaryNode|22|? (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|c)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a?b:c?d:e",
+    "(TernaryNode|22|? (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)) (TernaryNode|22|? (Expression|4|expression (PropertyOrFieldNode|33|c)) (Expression|4|expression (PropertyOrFieldNode|33|d)) (Expression|4|expression (PropertyOrFieldNode|33|e))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a?b:c=d",
+    "(TernaryNode|22|? (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)) (AssignNode|20|= (Expression|4|expression (PropertyOrFieldNode|33|c)) (Expression|4|expression (PropertyOrFieldNode|33|d))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a?b",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"COLON\", found ''",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a+b*c",
+    "(OpADD|24|+ (Expression|4|expression (PropertyOrFieldNode|33|a)) (OpMULTIPLY|26|* (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|c))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a*b+c",
+    "(OpADD|24|+ (OpMULTIPLY|26|* (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))) (Expression|4|expression (PropertyOrFieldNode|33|c)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "(a+b)*c",
+    "(OpMULTIPLY|26|* (Expression|4|expression (OpADD|24|+ (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b)))) (Expression|4|expression (PropertyOrFieldNode|33|c)))",
+    "(Expression|4|expression (OpADD|24|+ (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))))"
+  ],
+  [
+    "a-b-c",
+    "(OpSUBTRACT|25|- (OpSUBTRACT|25|- (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))) (Expression|4|expression (PropertyOrFieldNode|33|c)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a%b/c",
+    "(OpDIVIDE|27|/ (OpMODULUS|28|% (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))) (Expression|4|expression (PropertyOrFieldNode|33|c)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "1",
+    "(Expression|4|expression (IntLiteralNode|51|1))",
+    "(Expression|4|expression (IntLiteralNode|51|1))"
+  ],
+  [
+    "1.5",
+    "(Expression|4|expression (RealLiteralNode|53|1.5))",
+    "(Expression|4|expression (RealLiteralNode|53|1.5))"
+  ],
+  [
+    "1e5",
+    "(Expression|4|expression (RealLiteralNode|53|1e5))",
+    "(Expression|4|expression (RealLiteralNode|53|1e5))"
+  ],
+  [
+    "1e+5",
+    "(Expression|4|expression (RealLiteralNode|53|1e+5))",
+    "(Expression|4|expression (RealLiteralNode|53|1e+5))"
+  ],
+  [
+    "1e",
+    "(Expression|4|expression (IntLiteralNode|51|1) (PropertyOrFieldNode|33|e))",
+    "(Expression|4|expression (IntLiteralNode|51|1) (PropertyOrFieldNode|33|e))"
+  ],
+  [
+    "1.",
+    "(Expression|4|expression (IntLiteralNode|51|1))",
+    "(Expression|4|expression (IntLiteralNode|51|1))"
+  ],
+  [
+    "1.a",
+    "(Expression|4|expression (IntLiteralNode|51|1) (PropertyOrFieldNode|33|a))",
+    "(Expression|4|expression (IntLiteralNode|51|1) (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    ".5",
+    "(Expression|4|expression (RealLiteralNode|53|.5))",
+    "(Expression|4|expression (RealLiteralNode|53|.5))"
+  ],
+  [
+    "a.5",
+    "ERROR 2 Syntax Error on line 1, column 2: expecting \"EOF\", found '.5'",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\".5\",<53>,line=1,col=2]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]"
+  ],
+  [
+    "0x1F",
+    "(Expression|4|expression (HexLiteralNode|52|0x1F))",
+    "(Expression|4|expression (HexLiteralNode|52|0x1F))"
+  ],
+  [
+    "0x",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected char: 0xFFFF",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected char: 0xFFFF"
+  ],
+  [
+    "0xg",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected char: 'g'",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected char: 'g'"
+  ],
+  [
+    "0x1Fu",
+    "(Expression|4|expression (HexLiteralNode|52|0x1Fu))",
+    "(Expression|4|expression (HexLiteralNode|52|0x1Fu))"
+  ],
+  [
+    "0X1",
+    "(Expression|4|expression (IntLiteralNode|51|0) (PropertyOrFieldNode|33|X1))",
+    "(Expression|4|expression (IntLiteralNode|51|0) (PropertyOrFieldNode|33|X1))"
+  ],
+  [
+    "1L",
+    "(Expression|4|expression (IntLiteralNode|51|1L))",
+    "(Expression|4|expression (IntLiteralNode|51|1L))"
+  ],
+  [
+    "1UL",
+    "(Expression|4|expression (IntLiteralNode|51|1UL))",
+    "(Expression|4|expression (IntLiteralNode|51|1UL))"
+  ],
+  [
+    "1Ul",
+    "(Expression|4|expression (IntLiteralNode|51|1U) (PropertyOrFieldNode|33|l))",
+    "(Expression|4|expression (IntLiteralNode|51|1U) (PropertyOrFieldNode|33|l))"
+  ],
+  [
+    "1f",
+    "(Expression|4|expression (RealLiteralNode|53|1f))",
+    "(Expression|4|expression (RealLiteralNode|53|1f))"
+  ],
+  [
+    "1d",
+    "(Expression|4|expression (RealLiteralNode|53|1d))",
+    "(Expression|4|expression (RealLiteralNode|53|1d))"
+  ],
+  [
+    "1m",
+    "(Expression|4|expression (RealLiteralNode|53|1m))",
+    "(Expression|4|expression (RealLiteralNode|53|1m))"
+  ],
+  [
+    "1.5f",
+    "(Expression|4|expression (RealLiteralNode|53|1.5f))",
+    "(Expression|4|expression (RealLiteralNode|53|1.5f))"
+  ],
+  [
+    "1.5L",
+    "(Expression|4|expression (RealLiteralNode|53|1.5) (PropertyOrFieldNode|33|L))",
+    "(Expression|4|expression (RealLiteralNode|53|1.5) (PropertyOrFieldNode|33|L))"
+  ],
+  [
+    "1.5e",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected char: 0xFFFF",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected char: 0xFFFF"
+  ],
+  [
+    "1.5e+",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected char: 0xFFFF",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected char: 0xFFFF"
+  ],
+  [
+    "1.5ex",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected char: 'x'",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected char: 'x'"
+  ],
+  [
+    "'a'",
+    "(Expression|4|expression (StringLiteralNode|46|a))",
+    "(Expression|4|expression (StringLiteralNode|46|a))"
+  ],
+  [
+    "''",
+    "(Expression|4|expression (StringLiteralNode|46|))",
+    "(Expression|4|expression (StringLiteralNode|46|))"
+  ],
+  [
+    "'a''b'",
+    "(Expression|4|expression (StringLiteralNode|46|a'b))",
+    "(Expression|4|expression (StringLiteralNode|46|a'b))"
+  ],
+  [
+    "'",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"'\",<45>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"'\",<45>,line=1,col=1]"
+  ],
+  [
+    "'a",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting ''', found '<EOF>'",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting ''', found '<EOF>'"
+  ],
+  [
+    "true",
+    "(Expression|4|expression (BooleanLiteralNode|7|true))",
+    "(Expression|4|expression (BooleanLiteralNode|7|true))"
+  ],
+  [
+    "false",
+    "(Expression|4|expression (BooleanLiteralNode|6|false))",
+    "(Expression|4|expression (BooleanLiteralNode|6|false))"
+  ],
+  [
+    "null",
+    "(Expression|4|expression (NullLiteralNode|16|null))",
+    "(Expression|4|expression (NullLiteralNode|16|null))"
+  ],
+  [
+    "new",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]"
+  ],
+  [
+    "in",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"in\",<11>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"in\",<11>,line=1,col=1]"
+  ],
+  [
+    "T",
+    "(Expression|4|expression (PropertyOrFieldNode|33|T))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|T))"
+  ],
+  [
+    "T (a)",
+    "(Expression|4|expression (MethodNode|33|T (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "(Expression|4|expression (MethodNode|33|T (Expression|4|expression (PropertyOrFieldNode|33|a))))"
+  ],
+  [
+    "T(",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found ''",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found ''"
+  ],
+  [
+    "1 2",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found '2'",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"2\",<51>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"2\",<51>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"2\",<51>,line=1,col=3]"
+  ],
+  [
+    "a 'b'",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found 'b'",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"b\",<46>,line=1,col=3]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]"
+  ],
+  [
+    "a ~",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected char: '~'",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected char: '~'"
+  ],
+  [
+    "~",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected char: '~'",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected char: '~'"
+  ],
+  [
+    "a \t b ~",
+    "ERROR 12 Syntax Error on line 1, column 12: unexpected char: '~'",
+    "ERROR 12 Syntax Error on line 1, column 12: unexpected char: '~'"
+  ],
+  [
+    "a\n b ~",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected char: '~'",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected char: '~'"
+  ],
+  [
+    "a\tb\t~",
+    "ERROR 17 Syntax Error on line 1, column 17: unexpected char: '~'",
+    "ERROR 17 Syntax Error on line 1, column 17: unexpected char: '~'"
+  ],
+  [
+    "\\",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"\\\",<62>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"\\\",<62>,line=1,col=1]"
+  ],
+  [
+    "\\.",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"\\.\",<63>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"\\.\",<63>,line=1,col=1]"
+  ],
+  [
+    "`",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"`\",<61>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"`\",<61>,line=1,col=1]"
+  ],
+  [
+    "a|b",
+    "ERROR 2 Syntax Error on line 1, column 2: expecting \"EOF\", found '|'",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"|\",<48>,line=1,col=2]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"a\",<33>,line=1,col=1]"
+  ],
+  [
+    "a,b",
+    "ERROR 2 Syntax Error on line 1, column 2: expecting \"EOF\", found ','",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a;b",
+    "ERROR 2 Syntax Error on line 1, column 2: expecting \"EOF\", found ';'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    ";",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\";\",<18>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\";\",<18>,line=1,col=1]"
+  ],
+  [
+    ":",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\":\",<23>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\":\",<23>,line=1,col=1]"
+  ],
+  [
+    "a)",
+    "ERROR 2 Syntax Error on line 1, column 2: expecting \"EOF\", found ')'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "(a",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"RPAREN\", found ''",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"RPAREN\", found ''"
+  ],
+  [
+    "[a]",
+    "(Expression|4|expression (IndexerNode|37|[ (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "(Expression|4|expression (IndexerNode|37|[ (Expression|4|expression (PropertyOrFieldNode|33|a))))"
+  ],
+  [
+    "[a,b]",
+    "(Expression|4|expression (IndexerNode|37|[ (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))))",
+    "(Expression|4|expression (IndexerNode|37|[ (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))))"
+  ],
+  [
+    "a[b,c]",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (IndexerNode|37|[ (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|c))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (IndexerNode|37|[ (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|c))))"
+  ],
+  [
+    "a[]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"]\",<38>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"]\",<38>,line=1,col=3]"
+  ],
+  [
+    "a()",
+    "(Expression|4|expression (MethodNode|33|a))",
+    "(Expression|4|expression (MethodNode|33|a))"
+  ],
+  [
+    "a(b,c)",
+    "(Expression|4|expression (MethodNode|33|a (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|c))))",
+    "(Expression|4|expression (MethodNode|33|a (Expression|4|expression (PropertyOrFieldNode|33|b)) (Expression|4|expression (PropertyOrFieldNode|33|c))))"
+  ],
+  [
+    "a(b;c)",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\";\",<18>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\";\",<18>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ';'",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ';'"
+  ],
+  [
+    "#a(b;c)",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\";\",<18>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\";\",<18>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"RPAREN\", found ';'",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"RPAREN\", found ';'"
+  ],
+  [
+    "$a(b;c)",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\";\",<18>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\";\",<18>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"RPAREN\", found ';'",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"RPAREN\", found ';'"
+  ],
+  [
+    "a.b(c)(d;e)",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (MethodNode|33|b (Expression|4|expression (PropertyOrFieldNode|33|c))) (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|d)) (Expression|4|expression (PropertyOrFieldNode|33|e))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a) (MethodNode|33|b (Expression|4|expression (PropertyOrFieldNode|33|c))) (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|d)) (Expression|4|expression (PropertyOrFieldNode|33|e))))"
+  ],
+  [
+    "(a;b)(c;d)",
+    "(Expression|4|expression (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))) (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|c)) (Expression|4|expression (PropertyOrFieldNode|33|d))))",
+    "(Expression|4|expression (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (PropertyOrFieldNode|33|b))) (ExpressionListNode|4|expressionList (Expression|4|expression (PropertyOrFieldNode|33|c)) (Expression|4|expression (PropertyOrFieldNode|33|d))))"
+  ],
+  [
+    "{a}",
+    "(Expression|4|expression (ListInitializerNode|50|{ (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "(Expression|4|expression (ListInitializerNode|50|{ (Expression|4|expression (PropertyOrFieldNode|33|a))))"
+  ],
+  [
+    "{}",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"}\",<40>,line=1,col=2]",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"}\",<40>,line=1,col=2]"
+  ],
+  [
+    "#{}",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"}\",<40>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"}\",<40>,line=1,col=3]"
+  ],
+  [
+    "{|",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]"
+  ],
+  [
+    "{|a",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"PIPE\", found ''",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"PIPE\", found ''"
+  ],
+  [
+    "{|a|",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
+  ],
+  [
+    "{|a|b",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"RCURLY\", found ''",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"RCURLY\", found ''"
+  ],
+  [
+    "a=1",
+    "(AssignNode|20|= (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (IntLiteralNode|51|1)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "(a=1)",
+    "(Expression|4|expression (AssignNode|20|= (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (IntLiteralNode|51|1))))",
+    "(Expression|4|expression (AssignNode|20|= (Expression|4|expression (PropertyOrFieldNode|33|a)) (Expression|4|expression (IntLiteralNode|51|1))))"
+  ],
+  [
+    "(#x=1;#x+1)",
+    "(Expression|4|expression (ExpressionListNode|4|expressionList (AssignNode|20|= (Expression|4|expression (VariableNode|33|x)) (Expression|4|expression (IntLiteralNode|51|1))) (OpADD|24|+ (Expression|4|expression (VariableNode|33|x)) (Expression|4|expression (IntLiteralNode|51|1)))))",
+    "(Expression|4|expression (ExpressionListNode|4|expressionList (AssignNode|20|= (Expression|4|expression (VariableNode|33|x)) (Expression|4|expression (IntLiteralNode|51|1))) (OpADD|24|+ (Expression|4|expression (VariableNode|33|x)) (Expression|4|expression (IntLiteralNode|51|1)))))"
+  ],
+  [
+    "new a(x=1,y=2)",
+    "(Expression|4|expression (ConstructorNode|4|a (NamedArgumentNode|33|x (Expression|4|expression (IntLiteralNode|51|1))) (NamedArgumentNode|33|y (Expression|4|expression (IntLiteralNode|51|2)))))",
+    "(Expression|4|expression (ConstructorNode|4|a (NamedArgumentNode|33|x (Expression|4|expression (IntLiteralNode|51|1))) (NamedArgumentNode|33|y (Expression|4|expression (IntLiteralNode|51|2)))))"
+  ],
+  [
+    "new a(x=1 ?2:3)",
+    "(Expression|4|expression (ConstructorNode|4|a (NamedArgumentNode|33|x (TernaryNode|22|? (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (IntLiteralNode|51|2)) (Expression|4|expression (IntLiteralNode|51|3))))))",
+    "(Expression|4|expression (ConstructorNode|4|a (NamedArgumentNode|33|x (TernaryNode|22|? (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (IntLiteralNode|51|2)) (Expression|4|expression (IntLiteralNode|51|3))))))"
+  ],
+  [
+    "new a(x==1)",
+    "(Expression|4|expression (ConstructorNode|4|a (OpEqual|4|== (Expression|4|expression (PropertyOrFieldNode|33|x)) (Expression|4|expression (IntLiteralNode|51|1)))))",
+    "(Expression|4|expression (ConstructorNode|4|a (OpEqual|4|== (Expression|4|expression (PropertyOrFieldNode|33|x)) (Expression|4|expression (IntLiteralNode|51|1)))))"
+  ],
+  [
+    "@(a",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ''",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ''"
+  ],
+  [
+    "@(a:",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
+  ],
+  [
+    "@(a:b",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"RPAREN\", found ''",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"RPAREN\", found ''"
+  ],
+  [
+    "@[",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found ''",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found ''"
+  ],
+  [
+    "@[a",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"\",<1>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"\",<1>,line=1,col=4]"
+  ],
+  [
+    "@[a(",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
+  ],
+  [
+    "@",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"@\",<36>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"@\",<36>,line=1,col=1]"
+  ],
+  [
+    "@ (a)",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a)))",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a)))"
+  ],
+  [
+    "@ [a]",
+    "(Expression|4|expression (AttributeNode|4|a))",
+    "(Expression|4|expression (AttributeNode|4|a))"
+  ],
+  [
+    "#",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"#\",<32>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"#\",<32>,line=1,col=1]"
+  ],
+  [
+    "$",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"$\",<34>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"$\",<34>,line=1,col=1]"
+  ],
+  [
+    "#{|",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"{|\",<47>,line=1,col=2]",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"{|\",<47>,line=1,col=2]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"#\",<32>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"#\",<32>,line=1,col=1]"
+  ],
+  [
+    "#{a}",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"}\",<40>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"}\",<40>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"COLON\", found '}'",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"COLON\", found '}'"
+  ],
+  [
+    "#{a:1",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"RCURLY\", found ''",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"RCURLY\", found ''"
+  ],
+  [
+    "${",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]"
+  ],
+  [
+    "$ {a}",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"{\",<50>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"{\",<50>,line=1,col=3]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"$\",<34>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"$\",<34>,line=1,col=1]"
+  ],
+  [
+    "^{",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]"
+  ],
+  [
+    "a?{b",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"RCURLY\", found ''",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"RCURLY\", found ''"
+  ],
+  [
+    "a?",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "!{",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected end of expression",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"\",<1>,line=1,col=3]"
+  ],
+  [
+    "!",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected end of expression",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"!\",<30>,line=1,col=1]",
+    "ERROR 2 Syntax Error on line 1, column 2: unexpected token: [\"\",<1>,line=1,col=2]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"!\",<30>,line=1,col=1]"
+  ],
+  [
+    "!a",
+    "(OpNOT|30|! (Expression|4|expression (PropertyOrFieldNode|33|a)))",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"!\",<30>,line=1,col=1]"
+  ],
+  [
+    "!!a",
+    "(OpNOT|30|! (OpNOT|30|! (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"!\",<30>,line=1,col=1]"
+  ],
+  [
+    "--a",
+    "(OpUnaryMinus|25|- (OpUnaryMinus|25|- (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"-\",<25>,line=1,col=1]"
+  ],
+  [
+    "+-a",
+    "(OpUnaryPlus|24|+ (OpUnaryMinus|25|- (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"+\",<24>,line=1,col=1]"
+  ],
+  [
+    "- - a",
+    "(OpUnaryMinus|25|- (OpUnaryMinus|25|- (Expression|4|expression (PropertyOrFieldNode|33|a))))",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"-\",<25>,line=1,col=1]"
+  ],
+  [
+    "a+-b",
+    "(OpADD|24|+ (Expression|4|expression (PropertyOrFieldNode|33|a)) (OpUnaryMinus|25|- (Expression|4|expression (PropertyOrFieldNode|33|b))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a- -b",
+    "(OpSUBTRACT|25|- (Expression|4|expression (PropertyOrFieldNode|33|a)) (OpUnaryMinus|25|- (Expression|4|expression (PropertyOrFieldNode|33|b))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a--b",
+    "(OpSUBTRACT|25|- (Expression|4|expression (PropertyOrFieldNode|33|a)) (OpUnaryMinus|25|- (Expression|4|expression (PropertyOrFieldNode|33|b))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "new a",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected end of expression",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"LBRACKET\", found ''",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"LBRACKET\", found ''"
+  ],
+  [
+    "new a.",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"EOF\", found '.'",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected token: [\".\",<31>,line=1,col=6]",
+    "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found ''",
+    "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found ''"
+  ],
+  [
+    "new a.b",
+    "ERROR 8 Syntax Error on line 1, column 8: unexpected end of expression",
+    "ERROR 8 Syntax Error on line 1, column 8: unexpected end of expression",
+    "ERROR 8 Syntax Error on line 1, column 8: expecting \"LBRACKET\", found ''",
+    "ERROR 8 Syntax Error on line 1, column 8: expecting \"LBRACKET\", found ''"
+  ],
+  [
+    "new T(a)",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"T(\",<44>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"T(\",<44>,line=1,col=5]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]"
+  ],
+  [
+    "new a.T(b)",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"EOF\", found '.'",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected token: [\".\",<31>,line=1,col=6]",
+    "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found 'T('",
+    "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found 'T('"
+  ],
+  [
+    "new a.in()",
+    "ERROR 6 Syntax Error on line 1, column 6: expecting \"EOF\", found '.'",
+    "ERROR 6 Syntax Error on line 1, column 6: unexpected token: [\".\",<31>,line=1,col=6]",
+    "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found 'in'",
+    "ERROR 7 Syntax Error on line 1, column 7: expecting \"ID\", found 'in'"
+  ],
+  [
+    "new 1",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"1\",<51>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"1\",<51>,line=1,col=5]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"new\",<49>,line=1,col=1]"
+  ],
+  [
+    "a.in",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "in.a",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"in\",<11>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"in\",<11>,line=1,col=1]"
+  ],
+  [
+    "a.new",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found 'new'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"new\",<49>,line=1,col=3]",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a.true",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found 'true'",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"true\",<7>,line=1,col=3]",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "true.a",
+    "(Expression|4|expression (BooleanLiteralNode|7|true) (PropertyOrFieldNode|33|a))",
+    "(Expression|4|expression (BooleanLiteralNode|7|true) (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "1 .2",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"EOF\", found '.2'",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\".2\",<53>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\".2\",<53>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\".2\",<53>,line=1,col=3]"
+  ],
+  [
+    "1.2.3",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"EOF\", found '.3'",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\".3\",<53>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\".3\",<53>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\".3\",<53>,line=1,col=4]"
+  ],
+  [
+    "T(a):",
+    "ERROR 5 Syntax Error on line 1, column 5: expecting \"EOF\", found ':'",
+    "(Expression|4|expression (TypeNode|4|a))"
+  ],
+  [
+    "T(a:b)",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\":\",<23>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\":\",<23>,line=1,col=4]",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ':'",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ':'"
+  ],
+  [
+    "T('a')",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"a\",<46>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"a\",<46>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'a'",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'a'"
+  ],
+  [
+    "@('a')",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|46|a)))",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|46|a)))"
+  ],
+  [
+    "@('a':b)",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|46|a) (QualifiedIdentifier|33|b)))",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|46|a) (QualifiedIdentifier|33|b)))"
+  ],
+  [
+    "@(a:'b')",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a) (QualifiedIdentifier|46|b)))",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|a) (QualifiedIdentifier|46|b)))"
+  ],
+  [
+    "@(in)",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"in\",<11>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"in\",<11>,line=1,col=3]"
+  ],
+  [
+    "@(a in:b)",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|ain) (QualifiedIdentifier|33|b)))",
+    "(Expression|4|expression (ReferenceNode|4|ref (QualifiedIdentifier|33|ain) (QualifiedIdentifier|33|b)))"
+  ],
+  [
+    "T(a in b)",
+    "(Expression|4|expression (TypeNode|4|ainb))",
+    "(Expression|4|expression (TypeNode|4|ainb))"
+  ],
+  [
+    "T(in)",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"in\",<11>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"in\",<11>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'in'",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'in'"
+  ],
+  [
+    "T(T(a))",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"T(\",<44>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: unexpected token: [\"T(\",<44>,line=1,col=3]",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'T('",
+    "ERROR 3 Syntax Error on line 1, column 3: expecting \"ID\", found 'T('"
+  ],
+  [
+    "T(a T(b)",
+    "(Expression|4|expression (TypeNode|4|aT(b))",
+    "(Expression|4|expression (TypeNode|4|aT(b))"
+  ],
+  [
+    "a b[",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
+  ],
+  [
+    "a(b",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ''",
+    "ERROR 4 Syntax Error on line 1, column 4: expecting \"RPAREN\", found ''"
+  ],
+  [
+    "a +",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected end of expression",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))",
+    "ERROR 4 Syntax Error on line 1, column 4: unexpected token: [\"\",<1>,line=1,col=4]",
+    "(Expression|4|expression (PropertyOrFieldNode|33|a))"
+  ],
+  [
+    "a ?{",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected end of expression",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]",
+    "ERROR 5 Syntax Error on line 1, column 5: unexpected token: [\"\",<1>,line=1,col=5]"
+  ],
+  [
+    "android",
+    "(Expression|4|expression (PropertyOrFieldNode|33|android))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|android))"
+  ],
+  [
+    "input.x",
+    "(Expression|4|expression (PropertyOrFieldNode|33|input) (PropertyOrFieldNode|33|x))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|input) (PropertyOrFieldNode|33|x))"
+  ],
+  [
+    "and",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"and\",<8>,line=1,col=1]",
+    "ERROR 1 Syntax Error on line 1, column 1: unexpected token: [\"and\",<8>,line=1,col=1]"
+  ],
+  [
+    "Name.Length + 1",
+    "(OpADD|24|+ (Expression|4|expression (PropertyOrFieldNode|33|Name) (PropertyOrFieldNode|33|Length)) (Expression|4|expression (IntLiteralNode|51|1)))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|Name) (PropertyOrFieldNode|33|Length))"
+  ],
+  [
+    "foo.bar[0].baz(1, 'x').?{#this > 1}.!{Name}",
+    "(Expression|4|expression (PropertyOrFieldNode|33|foo) (PropertyOrFieldNode|33|bar) (IndexerNode|37|[ (Expression|4|expression (IntLiteralNode|51|0))) (MethodNode|33|baz (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (StringLiteralNode|46|x))) (SelectionNode|41|?{ (OpGreater|4|> (Expression|4|expression (VariableNode|33|this)) (Expression|4|expression (IntLiteralNode|51|1)))) (ProjectionNode|39|!{ (Expression|4|expression (PropertyOrFieldNode|33|Name))))",
+    "(Expression|4|expression (PropertyOrFieldNode|33|foo) (PropertyOrFieldNode|33|bar) (IndexerNode|37|[ (Expression|4|expression (IntLiteralNode|51|0))) (MethodNode|33|baz (Expression|4|expression (IntLiteralNode|51|1)) (Expression|4|expression (StringLiteralNode|46|x))) (SelectionNode|41|?{ (OpGreater|4|> (Expression|4|expression (VariableNode|33|this)) (Expression|4|expression (IntLiteralNode|51|1)))) (ProjectionNode|39|!{ (Expression|4|expression (PropertyOrFieldNode|33|Name))))"
+  ],
+  [
+    "T(System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib)",
+    "(Expression|4|expression (TypeNode|4|System.Collections.Generic.List`1[[System.Int32,mscorlib]],mscorlib))",
+    "(Expression|4|expression (TypeNode|4|System.Collections.Generic.List`1[[System.Int32,mscorlib]],mscorlib))"
+  ]
+]

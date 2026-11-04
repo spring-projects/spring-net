@@ -20,7 +20,7 @@ using Spring.Context.Support;
 
 namespace Spring.Benchmark;
 
-[ClrJob, CoreJob]
+[Config(typeof(FrameworkAndCoreConfig))]
 [MemoryDiagnoser]
 public class ContainerBenchmark
 {

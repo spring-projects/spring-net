@@ -24,7 +24,6 @@
     "ExecutableTarget": {
       "type": "string",
       "enum": [
-        "Antlr",
         "Ci",
         "Clean",
         "Compile",

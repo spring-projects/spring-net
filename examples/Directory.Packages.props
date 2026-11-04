@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Packages.props', '$(MSBuildThisFileDirectory)../'))" />
+  <ItemGroup>
+    <!-- The examples pin transitive packages, and their test adapters need a newer System.Memory than Spring's 4.5.5 floor. -->
+    <PackageVersion Update="System.Memory" Version="4.6.3" />
+  </ItemGroup>
+</Project>
