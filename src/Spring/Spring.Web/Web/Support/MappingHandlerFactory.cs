@@ -126,7 +126,8 @@ public class MappingHandlerFactory : AbstractHandlerFactory
             IHttpHandler handler = factory.GetHandler(context, requestType, rawUrl, physicalPath);
             lock (handlerWithFactoryTable.SyncRoot)
             {
-                handlerWithFactoryTable.Add(handler, factory);
+                // a factory may hand out the same reusable handler again before it was released
+                handlerWithFactoryTable[handler] = factory;
             }
 
             return handler;

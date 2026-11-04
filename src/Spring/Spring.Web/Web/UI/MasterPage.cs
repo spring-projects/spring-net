@@ -215,7 +215,7 @@ public class MasterPage : System.Web.UI.MasterPage, IApplicationContextAware, IS
         set
         {
             localizer = value;
-            if (localizer.ResourceCache is NullResourceCache)
+            if (localizer != null && localizer.ResourceCache is NullResourceCache)
             {
                 localizer.ResourceCache = new AspNetResourceCache();
             }
