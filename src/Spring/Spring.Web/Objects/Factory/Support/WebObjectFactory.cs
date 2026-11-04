@@ -56,16 +56,18 @@ public class WebObjectFactory : DefaultListableObjectFactory
     /// </summary>
     private readonly ObjectDictionaryCreationHandler createObjectDictionary;
 
-    static WebObjectFactory()
-    {
-        //EnsureEventHandlersRegistered();
-    }
+    private static readonly ILogger s_log = LogManager.GetLogger<WebObjectFactory>();
 
     /// <summary>
     /// Registers events handlers with <see cref="WebSupportModule"/> to ensure
     /// proper disposal of 'request'- and 'session'-scoped objects
     /// </summary>
-    private void EnsureEventHandlersRegistered()
+    /// <remarks>
+    /// The handlers are static: they only look at the object table that every factory
+    /// shares through <c>OBJECTTABLEKEY</c>, so a single registration serves all factories
+    /// and none of them is kept alive by the static events.
+    /// </remarks>
+    private static void EnsureEventHandlersRegistered()
     {
         if (!s_eventHandlersRegistered)
         {
@@ -73,7 +75,7 @@ public class WebObjectFactory : DefaultListableObjectFactory
             {
                 if (s_eventHandlersRegistered) return;
 
-                log.LogDebug("hooking up event handlers");
+                s_log.LogDebug("hooking up event handlers");
                 VirtualEnvironment.EndRequest += OnEndRequest;
                 VirtualEnvironment.EndSession += OnEndSession;
 
@@ -142,7 +144,8 @@ public class WebObjectFactory : DefaultListableObjectFactory
                 objecttable = this.Context.Items[OBJECTTABLEKEY] as IDictionary;
                 if (objecttable == null)
                 {
-                    this.Context.Items[OBJECTTABLEKEY] = CreateObjectDictionary();
+                    objecttable = CreateObjectDictionary();
+                    this.Context.Items[OBJECTTABLEKEY] = objecttable;
                 }
             }
 
@@ -163,7 +166,8 @@ public class WebObjectFactory : DefaultListableObjectFactory
                 objecttable = Context.Session[OBJECTTABLEKEY] as IDictionary;
                 if (objecttable == null)
                 {
-                    Context.Session[OBJECTTABLEKEY] = CreateObjectDictionary();
+                    objecttable = CreateObjectDictionary();
+                    Context.Session[OBJECTTABLEKEY] = objecttable;
                 }
             }
 
@@ -487,13 +491,13 @@ public class WebObjectFactory : DefaultListableObjectFactory
     /// <summary>
     /// Disposes all 'request'-scoped objects at the end of each Request
     /// </summary>
-    private void OnEndRequest(HttpContext context)
+    private static void OnEndRequest(HttpContext context)
     {
         IDictionary items = context.Items[OBJECTTABLEKEY] as IDictionary;
 
         if (items != null)
         {
-            log.LogDebug("disposing 'request'-scoped item cache");
+            s_log.LogDebug("disposing 'request'-scoped item cache");
             ArrayList keys = new ArrayList(items.Keys);
             for (int i = 0; i < keys.Count; i++)
             {
@@ -509,7 +513,7 @@ public class WebObjectFactory : DefaultListableObjectFactory
     /// <summary>
     /// Disposes all 'session'-scoped objects at the end of a session
     /// </summary>
-    private void OnEndSession(HttpSessionState session, CacheItemRemovedReason reason)
+    private static void OnEndSession(HttpSessionState session, CacheItemRemovedReason reason)
     {
         IDictionary items = null;
         try
@@ -523,7 +527,7 @@ public class WebObjectFactory : DefaultListableObjectFactory
 
         if (items != null)
         {
-            log.LogDebug("disposing 'session'-scoped item cache");
+            s_log.LogDebug("disposing 'session'-scoped item cache");
             object key = null;
             try
             {
@@ -540,7 +544,7 @@ public class WebObjectFactory : DefaultListableObjectFactory
             }
             catch (Exception ex)
             {
-                log.LogCritical(ex, "error during disposing session item with key '{Key}'", key);
+                s_log.LogCritical(ex, "error during disposing session item with key '{Key}'", key);
             }
         }
     }

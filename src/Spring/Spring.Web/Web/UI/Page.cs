@@ -1243,9 +1243,11 @@ public class Page : System.Web.UI.Page, IHttpHandler, IApplicationContextAware, 
         set
         {
             this.localizer = value;
-            if (this.localizer.ResourceCache is NullResourceCache)
+            // localizers are usually shared singletons: cache application-wide, never
+            // in the state of the (short-lived) page that happens to be the first to see it
+            if (this.localizer != null && this.localizer.ResourceCache is NullResourceCache)
             {
-                this.localizer.ResourceCache = new SharedStateResourceCache(this);
+                this.localizer.ResourceCache = new AspNetResourceCache();
             }
         }
     }

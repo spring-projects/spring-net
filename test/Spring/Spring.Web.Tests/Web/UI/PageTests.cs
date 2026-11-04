@@ -15,9 +15,12 @@
  */
 
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Web;
 using FakeItEasy;
 using NUnit.Framework;
+using Spring.Globalization;
+using Spring.Globalization.Localizers;
 using Spring.Globalization.Resolvers;
 using Spring.Objects;
 using Spring.TestSupport;
@@ -163,5 +166,62 @@ public class PageTests : TestWebContextTests
         tuc.ModelPersistenceMedium = new DictionaryModelPersistenceMedium();
         tuc.SaveModelToPersistenceMedium(this);
         Assert.That(tuc.LoadModelFromPersistenceMedium(), Is.EqualTo(this));
+    }
+
+    [Test]
+    public void LocalizerWithoutResourceCacheGetsTheApplicationWideAspNetCache()
+    {
+        ResourceSetLocalizer localizer = new ResourceSetLocalizer();
+
+        new TestPage().Localizer = localizer;
+
+        Assert.That(localizer.ResourceCache.GetType().Name, Is.EqualTo("AspNetResourceCache"));
+        Assert.That(localizer.ResourceCache, Is.Not.InstanceOf<SharedStateResourceCache>());
+    }
+
+    [Test]
+    public void LocalizerWithAnExplicitResourceCacheKeepsIt()
+    {
+        ResourceSetLocalizer localizer = new ResourceSetLocalizer();
+        IResourceCache explicitCache = A.Fake<IResourceCache>();
+        localizer.ResourceCache = explicitCache;
+
+        new TestPage().Localizer = localizer;
+
+        Assert.That(localizer.ResourceCache, Is.SameAs(explicitCache));
+    }
+
+    [Test]
+    public void LocalizerMayBeSetToNull()
+    {
+        TestPage page = new TestPage();
+        page.Localizer = new ResourceSetLocalizer();
+
+        Assert.That(() => page.Localizer = null, Throws.Nothing);
+        Assert.That(page.Localizer, Is.Null);
+    }
+
+    [Test]
+    public void SharedLocalizerDoesNotPinThePageThatFirstReceivedIt()
+    {
+        ResourceSetLocalizer sharedLocalizer = new ResourceSetLocalizer();
+
+        WeakReference firstPage = AssignLocalizerToNewPage(sharedLocalizer);
+        AssignLocalizerToNewPage(sharedLocalizer);
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
+        Assert.That(firstPage.IsAlive, Is.False, "the page is rooted by the resource cache of the shared localizer");
+        GC.KeepAlive(sharedLocalizer);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static WeakReference AssignLocalizerToNewPage(ILocalizer localizer)
+    {
+        TestPage page = new TestPage();
+        page.Localizer = localizer;
+        return new WeakReference(page);
     }
 }
