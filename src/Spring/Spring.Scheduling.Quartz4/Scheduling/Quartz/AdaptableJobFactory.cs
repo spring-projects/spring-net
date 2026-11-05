@@ -148,7 +148,7 @@ public class AdaptableJobFactory : IJobFactory
         }
 
         string message =
-            $"Unable to execute job class [{jobObject.GetType().FullName}]: only [IJob], [IThreadRunnable] and [ThreadStart] supported.";
+            $"Unable to execute job class [{jobObject.GetType().FullName}]: only [IJob], [IThreadRunnable], [ThreadStart] and [Func<Task>] supported.";
         throw new ArgumentException(message);
     }
 

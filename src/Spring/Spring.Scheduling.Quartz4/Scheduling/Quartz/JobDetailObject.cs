@@ -48,6 +48,7 @@ namespace Spring.Scheduling.Quartz;
 public class JobDetailObject : IJobDetail, IObjectNameAware, IApplicationContextAware, IInitializingObject
 {
     private Type jobType;
+    private JobType quartzJobType;
     private JobDataMap jobDataMap;
     private JobKey key;
     private string name;
@@ -111,6 +112,7 @@ public class JobDetailObject : IJobDetail, IObjectNameAware, IApplicationContext
             }
 
             jobType = value;
+            quartzJobType = new JobType(value);
             concurrentExecutionDisallowed = null;
             persistJobDataAfterExecution = null;
         }
@@ -158,7 +160,7 @@ public class JobDetailObject : IJobDetail, IObjectNameAware, IApplicationContext
         }
     }
 
-    JobType IJobDetail.JobType => jobType == null ? null : new JobType(jobType);
+    JobType IJobDetail.JobType => quartzJobType;
 
     /// <summary>
     /// Register objects in the JobDataMap via a given Map.

@@ -18,6 +18,7 @@ using System.Collections;
 using FakeItEasy;
 using NUnit.Framework;
 using Quartz;
+using Quartz.Configuration;
 using Quartz.Extensibility;
 using Quartz.Impl.Triggers;
 using Spring.Context.Support;
@@ -745,6 +746,49 @@ public class QuartzSupportTests
         {
             context.Dispose();
         }
+    }
+
+    /// <summary>
+    /// Time spans in "5s" form, set from an object definition, reach the options that the builder has.
+    /// </summary>
+    [Test]
+    public void TestTimeSpanPropertiesFromObjectDefinitionReachTheOptions()
+    {
+        StaticApplicationContext context = new StaticApplicationContext();
+        ObjectDefinitionBuilder definition = ObjectDefinitionBuilder
+            .GenericObjectDefinition(typeof(TestSchedulerFactoryObject))
+            .AddConstructorArg(TestSchedulerFactoryObject.CreateFakeScheduler())
+            .AddPropertyValue("autoStartup", false)
+            .AddPropertyValue("IdleWaitTime", "5s")
+            .AddPropertyValue("MisfireThreshold", "1m");
+        context.RegisterObjectDefinition("scheduler", definition.ObjectDefinition);
+        try
+        {
+            context.GetObject("scheduler");
+            TestSchedulerFactoryObject factory = (TestSchedulerFactoryObject) context.GetObject("&scheduler");
+
+            Assert.That(factory.GetOptions<QuartzSchedulerOptions>().IdleWaitTime, Is.EqualTo(TimeSpan.FromSeconds(5)));
+            Assert.That(factory.GetOptions<InMemoryJobStoreOptions>().MisfireThreshold, Is.EqualTo(TimeSpan.FromMinutes(1)));
+            Assert.That(factory.GetOptions<AdoJobStoreOptions>().MisfireThreshold, Is.EqualTo(TimeSpan.FromMinutes(1)));
+            factory.DisposeServices();
+        }
+        finally
+        {
+            context.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// The factory does not change the conversion of nullable time spans for the rest of the process.
+    /// </summary>
+    [Test]
+    public void TestNullableTimeSpanConverterIsNotReplaced()
+    {
+        using SchedulerFactoryObject factory = new SchedulerFactoryObject();
+
+        Assert.That(
+            Spring.Core.TypeConversion.TypeConverterRegistry.GetConverter(typeof(TimeSpan?)),
+            Is.InstanceOf<System.ComponentModel.NullableConverter>());
     }
 
     /// <summary>

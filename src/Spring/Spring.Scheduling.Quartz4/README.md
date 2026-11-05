@@ -64,12 +64,16 @@ The scheduler is built with Quartz's `QuartzSchedulerBuilder`. Where a setting c
 1. `ConfigLocation` and `QuartzProperties`: the flat `quartz.*` keys of Quartz. Quartz throws for a key that it does not know.
 2. The typed properties of `SchedulerFactoryObject`, each of which applies only when it is set: `SchedulerName`,
    `InstanceId`, `GenerateInstanceId`, `MaxConcurrency`, `MisfireThreshold`, `TablePrefix`, `Clustered`,
-   `ClusterCheckinInterval`, `IdleWaitTime`, `MaxBatchSize` and `DefaultTimeZone`. Time spans are written the Spring
-   way (`5s`, `2m`, `00:00:05`).
+   `ClusterCheckinInterval`, `IdleWaitTime`, `MaxBatchSize` and `DefaultTimeZone`. `MisfireThreshold`,
+   `ClusterCheckinInterval` and `IdleWaitTime` are `TimeSpan` properties, written the Spring way (`5s`, `2m`,
+   `00:00:05`); an option that is not set is left to Quartz.
 3. The `ConfigureQuartz` callback (`Action<IQuartzBuilder>`), which can reach everything that Quartz offers.
 
-Quartz keeps the first registration of a component, so what Spring registers for `TaskExecutor`, `JobFactory` and
-`DbProvider` is not replaced by the same component registered in the callback.
+Quartz keeps the first registration of a component. A component that you ask for with `TaskExecutor`, `JobFactory` (when
+it is set, even to `null`) or `DbProvider` is registered before the callback, so the callback cannot replace it: do not set
+both. The default job factory, `AdaptableJobFactory`, is registered after the callback, so a job factory that the callback
+registers wins when `JobFactory` is not set. That is the only default component; the thread pool and the job store are
+Quartz's own defaults unless you set `TaskExecutor`, `MaxConcurrency` or `DbProvider`.
 
 `TaskExecutor` makes a Spring `ITaskExecutor` the thread pool of the scheduler (`LocalTaskExecutorThreadPool`).
 `JobFactory` defaults to `AdaptableJobFactory`; use `SpringObjectJobFactory` to have the scheduler context, the job data

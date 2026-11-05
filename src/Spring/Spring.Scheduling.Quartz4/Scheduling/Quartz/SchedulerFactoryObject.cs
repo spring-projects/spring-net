@@ -24,7 +24,6 @@ using Quartz.Extensibility;
 using Spring.Context;
 using Spring.Context.Events;
 using Spring.Core.IO;
-using Spring.Core.TypeConversion;
 using Spring.Data.Common;
 using Spring.Objects.Factory;
 
@@ -70,9 +69,11 @@ namespace Spring.Scheduling.Quartz;
 /// configuration and so on).</description></item>
 /// </list>
 /// <p>
-/// Quartz decides a component that is registered twice in favour of the first registration. A component that Spring
-/// registers because of <see cref="TaskExecutor"/>, <see cref="JobFactory"/> or <see cref="DbProvider"/> is therefore not
-/// replaced by one that the callback registers: do not set both.
+/// Quartz decides a component that is registered twice in favour of the first registration. A component that is asked for
+/// through <see cref="TaskExecutor"/>, <see cref="JobFactory"/> (when it is set, even to null) or <see cref="DbProvider"/>
+/// is registered before the callback, and is therefore not replaced by one that the callback registers: do not set both.
+/// The default job factory (<see cref="AdaptableJobFactory"/>) is registered after the callback, so a job factory that the
+/// callback registers wins when <see cref="JobFactory"/> is not set. Nothing else is registered by default.
 /// </p>
 ///
 /// <h4>Transactions</h4>
@@ -110,16 +111,11 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
     private string quartzDbProvider;
     private Action<IQuartzBuilder> configureQuartz;
 
-    static SchedulerFactoryObject()
-    {
-        // The typed options with a time span (IdleWaitTime, MisfireThreshold, ClusterCheckinInterval) are nullable, and
-        // .NET's converter for a nullable time span knows only "00:00:05", not Spring's "5s". Unless the application has
-        // registered a converter of its own, the Spring one is used for them, as it is for TimeSpan.
-        if (TypeConverterRegistry.GetConverter(typeof(TimeSpan?)) is System.ComponentModel.NullableConverter)
-        {
-            TypeConverterRegistry.RegisterConverter(typeof(TimeSpan?), new TimeSpanConverter());
-        }
-    }
+    // The options with a time span are set-only TimeSpan properties over nullable fields, so that Spring's converter for
+    // TimeSpan ("5s", "2m") reads them in XML and an option that was not set is left to Quartz.
+    private TimeSpan? misfireThreshold;
+    private TimeSpan? clusterCheckinInterval;
+    private TimeSpan? idleWaitTime;
 
     /// <summary>
     /// Set the name of the scheduler (Quartz's <c>InstanceName</c>). Default is the object name of this factory
@@ -156,7 +152,10 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
     /// Set the time after which a trigger counts as misfired. Quartz's default is 5 seconds for the in-memory store and
     /// 1 minute for the persistent store.
     /// </summary>
-    public virtual TimeSpan? MisfireThreshold { get; set; }
+    public virtual TimeSpan MisfireThreshold
+    {
+        set => misfireThreshold = value;
+    }
 
     /// <summary>
     /// Set the prefix of the names of the tables of the persistent store. Quartz's default is <c>QRTZ_</c>.
@@ -172,13 +171,19 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
     /// Set how often a clustered scheduler checks in with the database.
     /// Quartz's default is 7.5 seconds. Needs <see cref="Clustered"/>.
     /// </summary>
-    public virtual TimeSpan? ClusterCheckinInterval { get; set; }
+    public virtual TimeSpan ClusterCheckinInterval
+    {
+        set => clusterCheckinInterval = value;
+    }
 
     /// <summary>
     /// Set how long the scheduler waits before it looks for triggers again when there is nothing to fire.
     /// Quartz's default is 30 seconds.
     /// </summary>
-    public virtual TimeSpan? IdleWaitTime { get; set; }
+    public virtual TimeSpan IdleWaitTime
+    {
+        set => idleWaitTime = value;
+    }
 
     /// <summary>
     /// Set the largest number of triggers that the scheduler acquires at once.
@@ -290,7 +295,9 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
     /// <remarks>
     /// <p>
     /// Default is Spring's <see cref="AdaptableJobFactory" />, which supports
-    /// standard Quartz Jobs and Runnables. Specify an instance of Spring's
+    /// standard Quartz Jobs and Runnables. The default is registered after the <see cref="ConfigureQuartz"/> callback, so
+    /// a job factory that the callback registers wins when this property is not set; a job factory that is set here wins
+    /// over the callback's. Specify an instance of Spring's
     /// <see cref="SpringObjectJobFactory" /> (or a subclass) to
     /// get object property population via the scheduler context, job data map and trigger data map.
     /// </p>
@@ -473,6 +480,7 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
                 exposed = false;
             }
 
+            scheduler = null;
             schedulerFactory?.Dispose();
             schedulerFactory = null;
         }
@@ -611,6 +619,16 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
         ConfigureJobStore(quartz);
 
         configureQuartz?.Invoke(quartz);
+
+        // A default, as opposed to a component that was asked for, goes in after the callback: Quartz keeps the first
+        // registration, so the callback's own job factory wins over it. The job factory is the only default that this
+        // class registers; without TaskExecutor, MaxConcurrency or DbProvider, the thread pool and the job store are
+        // Quartz's own defaults and the callback can choose them freely.
+        if (!jobFactorySet)
+        {
+            jobFactory = new AdaptableJobFactory();
+            quartz.UseJobFactory(jobFactory);
+        }
     }
 
     private void ValidateConfiguration()
@@ -622,14 +640,14 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
                 $"and is one of: {string.Join(", ", QuartzDialect.Names)}.");
         }
 
-        if (dbProvider == null && (Clustered == true || ClusterCheckinInterval.HasValue))
+        if (dbProvider == null && (Clustered == true || clusterCheckinInterval.HasValue))
         {
             throw new InvalidOperationException(
                 "Clustered and ClusterCheckinInterval configure the persistent store that DbProvider sets up. " +
                 "Set DbProvider, or configure clustering for your own store in the ConfigureQuartz callback.");
         }
 
-        if (ClusterCheckinInterval.HasValue && Clustered != true)
+        if (clusterCheckinInterval.HasValue && Clustered != true)
         {
             throw new InvalidOperationException("ClusterCheckinInterval needs Clustered to be true.");
         }
@@ -670,9 +688,9 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
                 options.GenerateInstanceId = GenerateInstanceId.Value;
             }
 
-            if (IdleWaitTime.HasValue)
+            if (idleWaitTime.HasValue)
             {
-                options.IdleWaitTime = IdleWaitTime.Value;
+                options.IdleWaitTime = idleWaitTime.Value;
             }
 
             if (MaxBatchSize.HasValue)
@@ -707,14 +725,9 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
 
     private void ConfigureJobFactory(IQuartzBuilder quartz)
     {
-        if (!jobFactorySet)
-        {
-            // Use AdaptableJobFactory as default, unless when explicitly given a null value
-            // through the "jobFactory" object property.
-            jobFactory = new AdaptableJobFactory();
-        }
-
-        if (jobFactory != null)
+        // Only a job factory that was set explicitly is registered here, before the callback. The default is registered
+        // after it (see ConfigureBuilder). An explicit null means Quartz's own job factory.
+        if (jobFactorySet && jobFactory != null)
         {
             quartz.UseJobFactory(jobFactory);
         }
@@ -724,9 +737,9 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
     {
         // The options classes are shared by every store of their kind, so these apply to the store that is chosen here,
         // by the properties or by the callback alike.
-        if (MisfireThreshold.HasValue)
+        if (misfireThreshold.HasValue)
         {
-            TimeSpan threshold = MisfireThreshold.Value;
+            TimeSpan threshold = misfireThreshold.Value;
             quartz.ConfigureOptions<InMemoryJobStoreOptions>(options => options.MisfireThreshold = threshold);
             quartz.ConfigureOptions<AdoJobStoreOptions>(options => options.MisfireThreshold = threshold);
         }
@@ -762,9 +775,9 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
             {
                 store.UseClustering(clustering =>
                 {
-                    if (ClusterCheckinInterval.HasValue)
+                    if (clusterCheckinInterval.HasValue)
                     {
-                        clustering.CheckinInterval = ClusterCheckinInterval.Value;
+                        clustering.CheckinInterval = clusterCheckinInterval.Value;
                     }
                 });
             }
@@ -857,7 +870,7 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
         }
         else
         {
-            Logger.LogInformation("Will start Quartz Scheduler [{SchedulerName}] in {StartDelaySeconds} seconds", sched.SchedulerName, startDelay);
+            Logger.LogInformation("Will start Quartz Scheduler [{SchedulerName}] in {StartDelay}", sched.SchedulerName, startDelay);
 
             await sched.StartDelayed(startDelay).ConfigureAwait(false);
         }
