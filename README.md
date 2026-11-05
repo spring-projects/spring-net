@@ -42,7 +42,11 @@ published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wro
 
 ## SUPPORTED .NET FRAMEWORK VERSIONS
 
-Spring.NET 4.0.0 supports .NET Framework 4.7.2 and .NET Standard 2.0 and later.
+Spring.NET 4.0.0 requires .NET Framework 4.7.2 or later on the full framework. Most libraries (Spring.Core, Spring.Aop,
+Spring.Data, Spring.Data.NHibernate5, Spring.Messaging, Spring.Messaging.Nms, Spring.Scheduling.Quartz3 and
+Spring.Testing.Microsoft) target `netstandard2.0`, `net472` and `net10.0`; applications on .NET 8 and .NET 9 use the
+`netstandard2.0` build. Spring.Testing.NUnit targets `net10.0` and `net472`, Spring.Scheduling.Quartz4 targets `net10.0`
+only, and the ASP.NET packages (Spring.Web, Spring.Web.Mvc5 and Spring.Web.Conversation.NHibernate5) target `net472` only.
 
 ## KNOWN ISSUES
 
