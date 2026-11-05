@@ -267,7 +267,7 @@ public class MethodInvokingJobDetailFactoryObject : ArgumentConvertingMethodInvo
         // job listeners through configuration are no longer supported
         if (jobListenerNames != null && jobListenerNames.Length > 0)
         {
-            throw new InvalidOperationException("Non-global IJobListeners not supported on Quartz 2 - " +
+            throw new InvalidOperationException("Non-global IJobListeners not supported - " +
                                                 "manually register a Matcher against the Quartz ListenerManager instead");
         }
 

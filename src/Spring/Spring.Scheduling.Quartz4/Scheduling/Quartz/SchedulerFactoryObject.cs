@@ -21,7 +21,6 @@ using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Configuration;
 using Quartz.Extensibility;
-using Quartz.Impl;
 using Spring.Context;
 using Spring.Context.Events;
 using Spring.Core.IO;
