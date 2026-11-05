@@ -24,6 +24,23 @@ updates:
       # A Quartz 5 for Spring.Scheduling.Quartz4 has to be moved by hand.
       - dependency-name: "Quartz"
         update-types: ["version-update:semver-major"]
+      # Floors that consumers of the netstandard2.0 and net472 builds inherit. Raising one makes every .NET Framework
+      # application move to that version, and usually add a binding redirect, so they move only by a deliberate change.
+      # Patch updates on the same line (security fixes) are still proposed.
+      # System.Memory stays at 4.5.5: Parlot's generated parser needs nothing newer, and the examples raise it for
+      # themselves in examples/Directory.Packages.props.
+      - dependency-name: "System.Memory"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      # Kept on the 8.0 line (BreakingChanges.txt, item 5). Microsoft.Extensions.Logging is used by the examples only,
+      # and stays on the line that matches the Logging.Abstractions floor (see Directory.Packages.props).
+      - dependency-name: "Microsoft.Extensions.Logging.Abstractions"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.Extensions.Logging"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "System.Configuration.ConfigurationManager"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "System.CodeDom"
+        update-types: ["version-update:semver-major"]
 
   # One grouped PR per week for the website instead of one PR per package.
   # Security updates are not affected by "groups" unless they match a group's applies-to,
