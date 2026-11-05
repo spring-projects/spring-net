@@ -48,7 +48,11 @@ public class MethodInvokingJob : QuartzJobObject
     /// Invoke the method via the MethodInvoker.
     /// </summary>
     /// <param name="context"></param>
+#if QUARTZ4
+    protected override ValueTask ExecuteInternal(IJobExecutionContext context, CancellationToken cancellationToken)
+#else
     protected override Task ExecuteInternal(IJobExecutionContext context)
+#endif
     {
         if (methodInvoker == null)
         {
@@ -77,6 +81,10 @@ public class MethodInvokingJob : QuartzJobObject
             throw new JobMethodInvocationFailedException(methodInvoker, ex.GetBaseException());
         }
 
+#if QUARTZ4
+        return ValueTask.CompletedTask;
+#else
         return Task.FromResult(true);
+#endif
     }
 }

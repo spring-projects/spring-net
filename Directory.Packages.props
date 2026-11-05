@@ -30,6 +30,7 @@
     <PackageVersion Include="NUnit3TestAdapter" Version="6.3.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Parlot.SourceGenerator" Version="2.2.1" />
+    <!-- The 3.x line, for Spring.Scheduling.Quartz3 (maintenance-only). Spring.Scheduling.Quartz4 overrides it with VersionOverride. -->
     <PackageVersion Include="Quartz" Version="3.22.9" />
     <PackageVersion Include="System.CodeDom" Version="8.0.0" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="8.0.1" />

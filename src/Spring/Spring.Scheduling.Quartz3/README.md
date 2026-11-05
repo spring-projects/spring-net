@@ -8,6 +8,10 @@ container, `JobDetailObject` and `MethodInvokingJobDetailFactoryObject` define j
 dotnet add package Spring.Scheduling.Quartz3
 ```
 
+> **Maintenance-only.** This package stays on Quartz.NET 3.x and receives fixes, no new features. For Quartz.NET 4.x
+> use [Spring.Scheduling.Quartz4](https://www.nuget.org/packages/Spring.Scheduling.Quartz4/) (net10.0 only), which has
+> the same namespace and the same Spring objects; its README has the list of what changes when you move.
+
 Target frameworks: netstandard2.0, net472, net10.0. Depends on Spring.Core, Spring.Data and Quartz 3.22.9 or later.
 
 ## Usage

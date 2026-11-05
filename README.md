@@ -122,8 +122,13 @@ on the .NET BCL.
 
 * __Spring.Scheduling.Quartz3__ (~44
   KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Scheduling.Quartz3.svg)](https://www.nuget.org/packages/Spring.Scheduling.Quartz3/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Scheduling.Quartz3)](#)
-    * Contents: Quartz32.x Integration
+    * Contents: Quartz 3.x Integration (maintenance-only, see Spring.Scheduling.Quartz4)
     * Dependencies: Spring.Core, Spring.Data, Quartz
+
+* __Spring.Scheduling.Quartz4__
+  [![NuGet](http://img.shields.io/nuget/v/Spring.Scheduling.Quartz4.svg)](https://www.nuget.org/packages/Spring.Scheduling.Quartz4/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Scheduling.Quartz4)](#)
+    * Contents: Quartz 4.x Integration (net10.0 only)
+    * Dependencies: Spring.Core, Spring.Aop, Spring.Data, Quartz
 
 ## WHERE TO START?
 

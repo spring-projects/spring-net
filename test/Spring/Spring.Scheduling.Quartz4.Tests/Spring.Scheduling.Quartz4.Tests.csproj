@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Test files that are the same for Quartz 3 and Quartz 4 are linked from Spring.Scheduling.Quartz3.Tests; QUARTZ4 marks where they differ. -->
+    <DefineConstants>$(DefineConstants);QUARTZ4</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Scheduling.Quartz4\Spring.Scheduling.Quartz4.csproj" />
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy" />
+    <PackageReference Include="FakeItEasy.Analyzer.CSharp" PrivateAssets="All" />
+    <!-- A driver for the persistent store tests, which build a scheduler but never connect. -->
+    <PackageReference Include="System.Data.SqlClient" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Spring.Core.Tests\TestAssemblySetup.cs" Link="TestAssemblySetup.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3.Tests\QuartzCompilerOptionsTests.cs" Link="QuartzCompilerOptionsTests.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3.Tests\Scheduling\Quartz\QuartzTestObject.cs" Link="Scheduling\Quartz\QuartzTestObject.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3.Tests\Scheduling\Quartz\TestMethodInvokingTask.cs" Link="Scheduling\Quartz\TestMethodInvokingTask.cs" />
+    <Content Include="*.xml" CopyToOutputDirectory="PreserveNewest" />
+    <!-- The README snippet is loaded by ReadmeSnippetTests. -->
+    <Content Include="..\..\..\src\Spring\Spring.Scheduling.Quartz4\README.md" Link="README.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

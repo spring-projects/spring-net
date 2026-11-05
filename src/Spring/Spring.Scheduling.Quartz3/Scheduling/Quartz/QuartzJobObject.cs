@@ -56,7 +56,11 @@ public abstract class QuartzJobObject : IJob
     /// values, and delegates to <code>ExecuteInternal</code> afterwards.
     /// </summary>
     /// <seealso cref="ExecuteInternal" />
+#if QUARTZ4
+    public ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken = default)
+#else
     public Task Execute(IJobExecutionContext context)
+#endif
     {
         try
         {
@@ -71,7 +75,11 @@ public abstract class QuartzJobObject : IJob
             throw new JobExecutionException(ex);
         }
 
+#if QUARTZ4
+        return ExecuteInternal(context, cancellationToken);
+#else
         return ExecuteInternal(context);
+#endif
     }
 
     /// <summary>
@@ -80,5 +88,9 @@ public abstract class QuartzJobObject : IJob
     /// exactly the same as for the standard Quartz execute method.
     /// </summary>
     /// <seealso cref="Execute" />
+#if QUARTZ4
+    protected abstract ValueTask ExecuteInternal(IJobExecutionContext context, CancellationToken cancellationToken);
+#else
     protected abstract Task ExecuteInternal(IJobExecutionContext context);
+#endif
 }
