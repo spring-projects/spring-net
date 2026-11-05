@@ -15,6 +15,7 @@
  */
 
 using System.Data.Common;
+using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl.AdoJobStore;
 using Quartz.Impl.AdoJobStore.Common;
@@ -63,6 +64,16 @@ public class SpringDbProviderAdapter : IDbProvider
     /// The name of the Quartz built-in database provider that describes the SQL dialect.
     /// </summary>
     public string QuartzDbProvider { get; }
+
+    /// <summary>
+    /// The driver delegate (the SQL dialect of the job store) that Quartz uses for the database provider of that name.
+    /// </summary>
+    /// <param name="quartzDbProvider">The name of the Quartz built-in database provider.</param>
+    /// <exception cref="ArgumentException">if Quartz has no description for the name.</exception>
+    public static Type GetDriverDelegateType(string quartzDbProvider)
+    {
+        return QuartzDialect.GetDriverDelegateType(quartzDbProvider);
+    }
 
     /// <summary>
     /// Creates the command.
@@ -157,37 +168,30 @@ internal static class QuartzDialect
     }
 
     /// <summary>
+    /// The driver delegate (the SQL of the job store) that Quartz uses for the provider.
+    /// </summary>
+    public static Type GetDriverDelegateType(string quartzDbProvider)
+    {
+        AssertKnown(quartzDbProvider);
+
+        return quartzDbProvider switch
+        {
+            "SqlServer" or "SystemDataSqlClient" or "MicrosoftDataSqlClient" => typeof(SqlServerDelegate),
+            "Npgsql" => typeof(PostgreSQLDelegate),
+            "MySql" or "MySqlConnector" => typeof(MySQLDelegate),
+            "SQLite" or "SQLite-Microsoft" => typeof(SQLiteDelegate),
+            "Firebird" => typeof(FirebirdDelegate),
+            _ => typeof(OracleDelegate)
+        };
+    }
+
+    /// <summary>
     /// Selects the driver delegate of the provider on the store.
     /// </summary>
     public static void UseDriverDelegate(IPersistentStoreBuilder store, string quartzDbProvider)
     {
-        AssertKnown(quartzDbProvider);
-
-        switch (quartzDbProvider)
-        {
-            case "SqlServer":
-            case "SystemDataSqlClient":
-            case "MicrosoftDataSqlClient":
-                store.UseDriverDelegate<SqlServerDelegate>();
-                break;
-            case "Npgsql":
-                store.UseDriverDelegate<PostgreSQLDelegate>();
-                break;
-            case "MySql":
-            case "MySqlConnector":
-                store.UseDriverDelegate<MySQLDelegate>();
-                break;
-            case "SQLite":
-            case "SQLite-Microsoft":
-                store.UseDriverDelegate<SQLiteDelegate>();
-                break;
-            case "Firebird":
-                store.UseDriverDelegate<FirebirdDelegate>();
-                break;
-            case "OracleODPManaged":
-                store.UseDriverDelegate<OracleDelegate>();
-                break;
-        }
+        Type delegateType = GetDriverDelegateType(quartzDbProvider);
+        store.UseDriverDelegate(provider => (IDriverDelegate) ActivatorUtilities.CreateInstance(provider, delegateType));
     }
 
     private static void AssertKnown(string quartzDbProvider)

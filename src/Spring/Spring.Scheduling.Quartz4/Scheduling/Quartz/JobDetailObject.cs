@@ -101,7 +101,8 @@ public class JobDetailObject : IJobDetail, IObjectNameAware, IApplicationContext
         get => jobType;
         set
         {
-            if (value != null && !typeof(IJob).IsAssignableFrom(value))
+            ArgumentNullException.ThrowIfNull(value);
+            if (!typeof(IJob).IsAssignableFrom(value))
             {
                 throw new SchedulerConfigException(
                     $"Job type '{value.FullName}' does not implement {typeof(IJob).FullName}. Quartz 4 accepts only IJob types: " +

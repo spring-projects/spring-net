@@ -188,7 +188,7 @@ partial class Build : FalloutBuild
             var binDirectory = RootDirectory / "bin";
             binDirectory.CreateOrCleanDirectory();
 
-            var moduleNames = new[] { "Spring.Core", "Spring.Aop", "Spring.Data", "Spring.Data.NHibernate*", "Spring.Web", "Spring.Web.Mvc5", "Spring.Testing.NUnit", "Spring.Testing.Microsoft", "Spring.Messaging.Nms", "Spring.Messaging", "Spring.Scheduling.Quartz3", "Spring.Web.Conversation.NHibernate5", };
+            var moduleNames = new[] { "Spring.Core", "Spring.Aop", "Spring.Data", "Spring.Data.NHibernate*", "Spring.Web", "Spring.Web.Mvc5", "Spring.Testing.NUnit", "Spring.Testing.Microsoft", "Spring.Messaging.Nms", "Spring.Messaging", "Spring.Scheduling.Quartz3", "Spring.Scheduling.Quartz4", "Spring.Web.Conversation.NHibernate5", };
 
             var patterns = moduleNames
                 .SelectMany(x => new[] { "**/" + Configuration + "/**/" + x + ".dll", "**/" + Configuration + "/**/" + x + ".xml", "**/" + Configuration + "/**/" + x + ".pdb" })

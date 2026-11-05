@@ -25,6 +25,7 @@ using Quartz.Impl;
 using Spring.Context;
 using Spring.Context.Events;
 using Spring.Core.IO;
+using Spring.Core.TypeConversion;
 using Spring.Data.Common;
 using Spring.Objects.Factory;
 
@@ -109,6 +110,17 @@ public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObject
     private Spring.Data.Common.IDbProvider dbProvider;
     private string quartzDbProvider;
     private Action<IQuartzBuilder> configureQuartz;
+
+    static SchedulerFactoryObject()
+    {
+        // The typed options with a time span (IdleWaitTime, MisfireThreshold, ClusterCheckinInterval) are nullable, and
+        // .NET's converter for a nullable time span knows only "00:00:05", not Spring's "5s". Unless the application has
+        // registered a converter of its own, the Spring one is used for them, as it is for TimeSpan.
+        if (TypeConverterRegistry.GetConverter(typeof(TimeSpan?)) is System.ComponentModel.NullableConverter)
+        {
+            TypeConverterRegistry.RegisterConverter(typeof(TimeSpan?), new TimeSpanConverter());
+        }
+    }
 
     /// <summary>
     /// Set the name of the scheduler (Quartz's <c>InstanceName</c>). Default is the object name of this factory
