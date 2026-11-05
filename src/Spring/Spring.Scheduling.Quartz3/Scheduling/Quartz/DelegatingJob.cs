@@ -51,9 +51,17 @@ public class DelegatingJob : IJob
     /// <summary>
     /// Delegates execution to the underlying ThreadStart.
     /// </summary>
+#if QUARTZ4
+    public virtual ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken = default)
+    {
+        delegateInstance.Invoke();
+        return ValueTask.CompletedTask;
+    }
+#else
     public virtual Task Execute(IJobExecutionContext context)
     {
         delegateInstance.Invoke();
         return Task.FromResult(true);
     }
+#endif
 }

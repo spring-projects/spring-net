@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Quartz 4 ships a net10.0 build only, so this package does too. -->
+    <TargetFramework>$(TargetModernFrameworkVersion)</TargetFramework>
+    <Description>Spring.NET Integration with the Quartz Scheduling Library 4.x</Description>
+    <PackageTags>$(PackageTags);quartz;scheduling;jobs</PackageTags>
+    <!-- Several types are compiled from the Spring.Scheduling.Quartz3 sources; the QUARTZ4 symbol marks where they differ. -->
+    <DefineConstants>$(DefineConstants);QUARTZ4</DefineConstants>
+    <!-- A new package: there is no 3.1.0 baseline to compare against. Turn package validation on when the baseline moves to 4.0.0. -->
+    <EnablePackageValidation>false</EnablePackageValidation>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\Spring.Aop\Spring.Aop.csproj" />
+    <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Directory.Packages.props keeps Quartz on the 3.x version that Spring.Scheduling.Quartz3 builds against. -->
+    <PackageReference Include="Quartz" VersionOverride="4.7.2" />
+  </ItemGroup>
+  <!-- Types that are the same for Quartz 3 and Quartz 4 are compiled from the Quartz3 project. -->
+  <ItemGroup>
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\DelegatingJob.cs" Link="Scheduling\Quartz\Linked\DelegatingJob.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\IJobDetailAwareTrigger.cs" Link="Scheduling\Quartz\Linked\IJobDetailAwareTrigger.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\ISchedulerContextAware.cs" Link="Scheduling\Quartz\Linked\ISchedulerContextAware.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\ISchedulingTaskExecutor.cs" Link="Scheduling\Quartz\Linked\ISchedulingTaskExecutor.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\ITaskExecutor.cs" Link="Scheduling\Quartz\Linked\ITaskExecutor.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\IThreadRunnable.cs" Link="Scheduling\Quartz\Linked\IThreadRunnable.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\JobMethodInvocationFailedException.cs" Link="Scheduling\Quartz\Linked\JobMethodInvocationFailedException.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\MethodInvokingJob.cs" Link="Scheduling\Quartz\Linked\MethodInvokingJob.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\MethodInvokingRunnable.cs" Link="Scheduling\Quartz\Linked\MethodInvokingRunnable.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\QuartzJobObject.cs" Link="Scheduling\Quartz\Linked\QuartzJobObject.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\SchedulingException.cs" Link="Scheduling\Quartz\Linked\SchedulingException.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\Quartz\StatefulMethodInvokingJob.cs" Link="Scheduling\Quartz\Linked\StatefulMethodInvokingJob.cs" />
+    <Compile Include="..\Spring.Scheduling.Quartz3\Scheduling\TaskRejectedException.cs" Link="Scheduling\Linked\TaskRejectedException.cs" />
+  </ItemGroup>
+</Project>
