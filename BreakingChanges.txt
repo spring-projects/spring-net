@@ -165,6 +165,17 @@ Changes (3.1 to 4.0)
    own public Clone() gets warning CS0114 and should mark it override, or the advice copies its templates
    with the base implementation.
 
+14. Spring.Scheduling.Quartz3 is maintenance-only: it stays on Quartz.NET 3.x and receives fixes, no new
+   features. Spring.Scheduling.Quartz4 is new, for Quartz.NET 4.x. It targets net10.0 only (Quartz 4 does
+   too), has the same namespace as Quartz3 (Spring.Scheduling.Quartz), and ships the same Spring objects
+   (SchedulerFactoryObject, the trigger and job detail objects, QuartzJobObject and the rest) adapted to
+   Quartz 4's API. Moving from Quartz3 means a new package, a new assembly name in type= strings, and
+   source changes where Quartz changed (IJob.Execute returns ValueTask, QuartzJobObject.ExecuteInternal
+   takes a CancellationToken, the trigger objects use Key and a typed MisfireInstruction instead of Name,
+   Group and MisfireInstructionName, JobDetailObject accepts IJob types only). Spring-managed transactions
+   for the job store are not part of it yet. See src/Spring/Spring.Scheduling.Quartz4/README.md for the
+   full list and for what to do if the job store has to take part in Spring transactions.
+
 Changes (3.0.x to 3.1)
 ========================
 

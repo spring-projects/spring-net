@@ -17,6 +17,13 @@ updates:
           - "Fallout.*"
     ignore:
       - dependency-name: "Fallout.*"
+      # Quartz is on two lines: Directory.Packages.props holds 3.x for Spring.Scheduling.Quartz3 (maintenance-only), and
+      # Spring.Scheduling.Quartz4 carries its 4.x version as VersionOverride on its own PackageReference. Dependabot reads
+      # VersionOverride, and a rule is per dependency name, not per file, so the major rule is what keeps the lines
+      # apart: 3.x is never moved to 4.x, and 4.x minor and patch updates of the Quartz4 project are still proposed.
+      # A Quartz 5 for Spring.Scheduling.Quartz4 has to be moved by hand.
+      - dependency-name: "Quartz"
+        update-types: ["version-update:semver-major"]
 
   # One grouped PR per week for the website instead of one PR per package.
   # Security updates are not affected by "groups" unless they match a group's applies-to,
