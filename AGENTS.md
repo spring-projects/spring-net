@@ -81,12 +81,16 @@ Key mechanics (defined in `src/Directory.Build.props` and `test/Directory.Build.
 
 Gatsby 5 constraints on dependency updates:
 
-- Three transitive advisories can't be fixed while the site is on Gatsby 5. Dismiss them; don't force versions.
+- Six transitive advisories can't be fixed while the site is on Gatsby 5. Dismiss them; don't force versions.
   - `sharp` 0.32: Gatsby's plugins call `sharp.simd()`, which was removed in 0.33.
   - `file-type` 16: the fixed version is ESM-only, and `gatsby-source-filesystem` `require()`s it.
   - `@parcel/reporter-dev-server` 2.8.3: parcel core 2.8.3's engine check rejects the fix.
+  - `decode-uri-component` 0.2.x: the fix (0.5.1) is ESM-only, and `query-string` 6 `require()`s it.
+  - `@graphql-tools/utils` 8 and 9: the fix (12.0.1) is three majors away, and Gatsby's `@graphql-codegen` and `@graphql-tools` packages pin `^8`/`^9`. Only the opt-in `graphqlTypegen` path uses them, which no site build exercises, so a pin can't be verified.
+  - `deepmerge` 4.3.1: no patched release exists.
 - `gatsby build` on Node ≥ 22.7 needs `msgpackr` ≥ 1.11.2 and `ordered-binary` ≥ 1.6.
 - `resolutions` in `website/package.json` hold the express-related transitive packages at patched versions. Update them; don't drop them.
+  - Two pins cross a major and were checked by hand: `webpack-dev-middleware` 7 (Gatsby 5 asks for `^5.3.4`; `gatsby build` and `gatsby develop` both work) and `**/@expo/devcert/glob` 14 (devcert asks for `^10.4.2` and only calls `glob.sync`, which 14 still exports to `require()`; it also retires `minimatch` 9). The glob pin is a path pin and needs the leading `**/`, because devcert sits under `gatsby`; without it yarn 1 ignores the pin.
 
 ## Agent hazards
 

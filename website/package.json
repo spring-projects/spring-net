@@ -45,6 +45,7 @@
     "typescript": "^7.0.2"
   },
   "resolutions": {
+    "**/@expo/devcert/glob": "^14.0.2",
     "body-parser": "^1.20.9",
     "cookie": "^0.7.2",
     "immutable": "^5.1.8",
@@ -57,6 +58,7 @@
     "tmp": "^0.2.6",
     "uuid": "^11.1.1",
     "webpack": "^5.112.2",
+    "webpack-dev-middleware": "^7.4.6",
     "ws": "^8.22.1"
   }
 }
