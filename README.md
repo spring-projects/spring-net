@@ -42,7 +42,11 @@ published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wro
 
 ## SUPPORTED .NET FRAMEWORK VERSIONS
 
-Spring.NET 4.0.0 supports .NET Framework 4.7.2 and .NET Standard 2.0 and later.
+Spring.NET 4.0.0 requires .NET Framework 4.7.2 or later on the full framework. Most libraries (Spring.Core, Spring.Aop,
+Spring.Data, Spring.Data.NHibernate5, Spring.Messaging, Spring.Messaging.Nms, Spring.Scheduling.Quartz3 and
+Spring.Testing.Microsoft) target `netstandard2.0`, `net472` and `net10.0`; applications on .NET 8 and .NET 9 use the
+`netstandard2.0` build. Spring.Testing.NUnit targets `net10.0` and `net472`, Spring.Scheduling.Quartz4 targets `net10.0`
+only, and the ASP.NET packages (Spring.Web, Spring.Web.Mvc5 and Spring.Web.Conversation.NHibernate5) target `net472` only.
 
 ## KNOWN ISSUES
 
@@ -73,12 +77,12 @@ on the .NET BCL.
 * __Spring.Core__ (~765
   KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Core.svg)](https://www.nuget.org/packages/Spring.Core/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Core)](#)
     * Contents: Inversion of control container. Collection classes.
-    * Dependencies: Common.Logging
+    * Dependencies: Microsoft.Extensions.Logging.Abstractions
 
 * __Spring.Aop__ (~150
   KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Aop.svg)](https://www.nuget.org/packages/Spring.Aop/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Aop)](#)
-    * Contents: Abstract Oriented Programming Framework.
-    * Dependencies: Spring.Core, Common.Logging
+    * Contents: Aspect Oriented Programming Framework.
+    * Dependencies: Spring.Core
 
 * __Spring.Data__ (~320
   KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Data.svg)](https://www.nuget.org/packages/Spring.Data/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Data)](#)
@@ -97,8 +101,13 @@ on the .NET BCL.
 
 * __Spring.Web.Mvc5__ (~8
   KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Web.Mvc5.svg)](https://www.nuget.org/packages/Spring.Web.Mvc5/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Web.Mvc5)](#)
-    * Contents: ASP.NET MVC5 and WebAPI Integartion
+    * Contents: ASP.NET MVC5 and WebAPI Integration
     * Dependencies: Spring.Core, Spring.Web
+
+* __Spring.Web.Conversation.NHibernate5__
+  [![NuGet](http://img.shields.io/nuget/v/Spring.Web.Conversation.NHibernate5.svg)](https://www.nuget.org/packages/Spring.Web.Conversation.NHibernate5/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Web.Conversation.NHibernate5)](#)
+    * Contents: Web conversation scope with NHibernate 5 sessions (net472 only)
+    * Dependencies: Spring.Core, Spring.Data, Spring.Data.NHibernate5, NHibernate
 
 * __Spring.Testing.NUnit__ (~24
   KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Testing.NUnit.svg)](https://www.nuget.org/packages/Spring.Testing.NUnit/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Testing.NUnit)](#)
