@@ -40,7 +40,7 @@ public class ApplicationEventArgs : EventArgs
     }
 
     /// <summary>
-    /// The date and time when the event occured.
+    /// The date and time when the event occurred.
     /// </summary>
     /// <value>
     /// The date and time when the event occured.
