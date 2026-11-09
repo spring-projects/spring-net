@@ -178,7 +178,10 @@ internal static partial class ExpressionGrammar
             .Then(static x => x.Item2.TryGetValue(out var parent) ? PrependChild(parent, x.Item1) : x.Item1);
 
         Parser<BaseNode> wholeExpression = expression.AndSkip(SkipWhiteSpace(Eof()));
-        Parser<BaseNode> primaryAlone = primary.When(static (context, x) => CanFollowPrimary(x, context.Scanner.Cursor.Buffer, context.Scanner.Cursor.Offset));
+        // The error is the token that can't follow the primary expression, while a When that rejects a value fails at its
+        // start: when it does, the expression is read again and fails after its end
+        Parser<BaseNode> primaryAlone = primary.When(static (context, x) => CanFollowPrimary(x, context.Scanner.Cursor.Buffer, context.Scanner.Cursor.Offset))
+            .Or(primary.AndSkip(Fail<BaseNode>()));
 
         return If<BaseNode>(() => rule == Rule.Expression, wholeExpression, If<BaseNode>(() => rule == Rule.Primary, primaryAlone, lambda))
             .WithWhiteSpaceSet(WhiteSpaceSet.SpaceTabCrLf);
