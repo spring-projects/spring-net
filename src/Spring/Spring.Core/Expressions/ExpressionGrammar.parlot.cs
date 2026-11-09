@@ -35,7 +35,7 @@ internal static partial class ExpressionGrammar
         var id = Terms.Scan(ScanId, IdStart);
         var qualifiedId = Terms.Scan(ScanQualifiedId, IdStart).Then(static x => TokensText(x.ToString()));
         var name = Terms.Scan(ScanName, IdStart).Then(static x => TokensText(x.ToString()));
-        var stringLiteral = Terms.Scan(ScanString, "'").Then(static x => StringText(x.ToString()));
+        var stringLiteral = Terms.String(StringLiteralQuotes.Single, StringEscapes.Sql).ToPooledString();
 
         // A name followed by '(' is a call, it can't be read again as a name followed by an expression list
         var arguments = lparen.SkipAnd(Separated(comma, expression, min: 0)).AndSkip(rparen);
