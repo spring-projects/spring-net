@@ -61,7 +61,7 @@ A PEG choice can backtrack where ANTLR committed to an alternative after looking
 
 ## Layout of the grammar
 
-`Operators()` handles the unary and the left-associative levels. The relational and power levels don't chain, and the third
-operand of `?:` is a whole expression, which a table can't express, so these are sequences. `Parse`, `ParsePrimary` and
-`ParseLambda` share one generated parser through a configuration parameter and `If`, as generating one each would triple the
-code. `ParseProperty` is a scan by hand.
+`Operators()` handles the unary and the left-associative levels. The relational and power levels don't chain, and `=`, `??`
+and `?:` apply at most once, to a logical expression, which a table can't express, so these are sequences. `Parse`,
+`ParsePrimary` and `ParseLambda` share one generated parser through a configuration parameter and `If`, as generating one
+each would triple the code. `ParseProperty` is a scan by hand.

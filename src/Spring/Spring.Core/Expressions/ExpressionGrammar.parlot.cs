@@ -167,7 +167,7 @@ internal static partial class ExpressionGrammar
             .LeftAssociative((Terms.Keyword("xor", IdPart), static (a, b) => Operator(new OpXOR(), XOR, "xor", a, b)))
             .LeftAssociative((Terms.Keyword("or", IdPart), static (a, b) => Operator(new OpOR(), OR, "or", a, b)));
 
-        // Neither do these, and the last operand of a conditional is any expression: not levels of the table either
+        // Neither do these, which apply at most once to a logical expression: not levels of the table either
         var tail = OneOf(
             assign.SkipAnd(logical).Then(static x => Operator(new AssignNode(), ASSIGN, "=", x)),
             Terms.Text("??").SkipAnd(logical).Then(static x => Operator(new DefaultNode(), DEFAULT, "??", x)),
