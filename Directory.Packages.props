@@ -29,7 +29,7 @@
     <PackageVersion Include="NUnit.Analyzers" Version="4.15.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="6.3.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageVersion Include="Parlot.SourceGenerator" Version="2.2.1" />
+    <PackageVersion Include="Parlot.SourceGenerator" Version="2.3.1" />
     <!-- The 3.x line, for Spring.Scheduling.Quartz3 (maintenance-only). Spring.Scheduling.Quartz4 overrides it with VersionOverride. -->
     <PackageVersion Include="Quartz" Version="3.22.9" />
     <PackageVersion Include="System.CodeDom" Version="8.0.0" />
@@ -41,8 +41,8 @@
     <PackageVersion Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
     <PackageVersion Include="System.Resources.Extensions" Version="10.0.14" />
     <PackageVersion Include="System.Runtime.Serialization.Formatters" Version="10.0.14" />
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
-    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.14" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.15" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.15" />
     <PackageVersion Include="Testcontainers" Version="4.16.0" />
     <PackageVersion Include="Testcontainers.MsSql" Version="4.16.0" />
     <PackageVersion Include="log4net" Version="3.5.0" />
