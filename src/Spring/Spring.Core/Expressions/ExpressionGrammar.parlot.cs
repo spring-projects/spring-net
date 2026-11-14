@@ -35,7 +35,7 @@ internal static partial class ExpressionGrammar
         var id = Terms.Scan(ScanId, IdStart);
         var qualifiedId = Terms.Scan(ScanQualifiedId, IdStart).Then(static x => TokensText(x.ToString()));
         var name = Terms.Scan(ScanName, IdStart).Then(static x => TokensText(x.ToString()));
-        var stringLiteral = Terms.Scan(ScanString, "'").Then(static x => StringText(x.ToString()));
+        var stringLiteral = Terms.String(StringLiteralQuotes.Single, StringEscapes.Sql).ToPooledString();
 
         // A name followed by '(' is a call, it can't be read again as a name followed by an expression list
         var arguments = lparen.SkipAnd(Separated(comma, expression, min: 0)).AndSkip(rparen);
@@ -167,7 +167,7 @@ internal static partial class ExpressionGrammar
             .LeftAssociative((Terms.Keyword("xor", IdPart), static (a, b) => Operator(new OpXOR(), XOR, "xor", a, b)))
             .LeftAssociative((Terms.Keyword("or", IdPart), static (a, b) => Operator(new OpOR(), OR, "or", a, b)));
 
-        // Neither do these, and the last operand of a conditional is any expression: not levels of the table either
+        // Neither do these, which apply at most once to a logical expression: not levels of the table either
         var tail = OneOf(
             assign.SkipAnd(logical).Then(static x => Operator(new AssignNode(), ASSIGN, "=", x)),
             Terms.Text("??").SkipAnd(logical).Then(static x => Operator(new DefaultNode(), DEFAULT, "??", x)),
@@ -178,7 +178,10 @@ internal static partial class ExpressionGrammar
             .Then(static x => x.Item2.TryGetValue(out var parent) ? PrependChild(parent, x.Item1) : x.Item1);
 
         Parser<BaseNode> wholeExpression = expression.AndSkip(SkipWhiteSpace(Eof()));
-        Parser<BaseNode> primaryAlone = primary.When(static (context, x) => CanFollowPrimary(x, context.Scanner.Cursor.Buffer, context.Scanner.Cursor.Offset));
+        // The error is the token that can't follow the primary expression, while a When that rejects a value fails at its
+        // start: when it does, the expression is read again and fails after its end
+        Parser<BaseNode> primaryAlone = primary.When(static (context, x) => CanFollowPrimary(x, context.Scanner.Cursor.Buffer, context.Scanner.Cursor.Offset))
+            .Or(primary.AndSkip(Fail<BaseNode>()));
 
         return If<BaseNode>(() => rule == Rule.Expression, wholeExpression, If<BaseNode>(() => rule == Rule.Primary, primaryAlone, lambda))
             .WithWhiteSpaceSet(WhiteSpaceSet.SpaceTabCrLf);
